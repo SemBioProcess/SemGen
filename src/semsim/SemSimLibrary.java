@@ -310,6 +310,15 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
+	public String getReferenceOntologyName(URI uri) {
+		String fullname = "?";
+		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
+		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
+			fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
+		}
+		return fullname;
+	}
+	
 	public String getReferenceOntologyAbbreviation(URI uri) {
 		String ontologyAbbreviation = "?";
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
@@ -320,6 +329,11 @@ public class SemSimLibrary {
 			}
 		}
 		return ontologyAbbreviation;
+	}
+	
+	public String getReferenceID(URI uri) {
+		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
+		return uri.toString().replace(namespace, "");
 	}
 	
 	public Map<String, Integer> makeUnitPrefixesAndPowersTable(){

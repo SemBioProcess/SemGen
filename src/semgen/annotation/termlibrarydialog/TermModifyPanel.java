@@ -1,8 +1,7 @@
 package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerListener;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -18,7 +17,7 @@ import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 
-public class TermModifyPanel extends JPanel implements Observer {
+public class TermModifyPanel extends JPanel implements ActionListener, Observer {
 	private static final long serialVersionUID = 1L;
 	private SemSimTermLibrary library;
 	private JPanel modpane;
@@ -40,20 +39,14 @@ public class TermModifyPanel extends JPanel implements Observer {
 		modcntrls.setBackground(SemGenSettings.lightblue);
 		modcntrls.setAlignmentX(LEFT_ALIGNMENT);
 		modcntrls.add(confirmbtn);
+		confirmbtn.addActionListener(this);
 		confirmbtn.setEnabled(false);
 		modcntrls.add(msglbl);
 	}
 	
 	public void showModifier(int index) {
 		compindex = index;
-		//Necessary to prevent memmory leaks
 		if (modpane!=null) {
-			for (ContainerListener listener : getContainerListeners()) {
-				modpane.removeContainerListener(listener);
-			}
-			for (ComponentListener listener : getComponentListeners()) {
-				modpane.removeComponentListener(listener);
-			}
 			remove(modpane);
 			remove(modcntrls);
 		}
@@ -70,13 +63,6 @@ public class TermModifyPanel extends JPanel implements Observer {
 			break;
 		default:
 			break;
-		
-		}
-		for (ContainerListener listener : getContainerListeners()) {
-			modpane.addContainerListener(listener);
-		}
-		for (ComponentListener listener : getComponentListeners()) {
-			modpane.addComponentListener(listener);
 		}
 		
 		add(modpane);
@@ -89,32 +75,59 @@ public class TermModifyPanel extends JPanel implements Observer {
 		
 	}
 	
-	private class CustomProcessPane extends CustomPhysicalProcessPanel {
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		((TermEditor)modpane).editTerm();
+	}
+	
+	private interface TermEditor {
+		public void editTerm();
+	}
+	
+	private class CustomProcessPane extends CustomPhysicalProcessPanel implements TermEditor {
 		private static final long serialVersionUID = 1L;
 
 		public CustomProcessPane(SemSimTermLibrary lib) {
 			super(lib, compindex);
 			remove(confirmpan);
+			createbtn = confirmbtn;
+			msgbox = msglbl;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {}
+
+		@Override
+		public void editTerm() {
+			modifyTerm();
+			confirmbtn.setEnabled(false);
+			msglbl.setText("Custom process modified.");
+		}
 	}
 	
-	private class CustomEntityPane extends CustomTermOptionPane  {
+	private class CustomEntityPane extends CustomTermOptionPane implements TermEditor {
 		private static final long serialVersionUID = 1L;
 
 		public CustomEntityPane(SemSimTermLibrary lib) {
 			super(lib, compindex);
 			remove(confirmpan);
+			createbtn = confirmbtn;
+			msgbox = msglbl;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {}
+
+		@Override
+		public void editTerm() {
+			modifyTerm();
+			confirmbtn.setEnabled(false);
+			msglbl.setText("Custom entity modified.");
+		}
 		
 	}
 	
-	private class CPEPanel extends JPanel {
+	private class CPEPanel extends JPanel implements TermEditor{
 		private static final long serialVersionUID = 1L;
 		private CompositeCreator cpec;
 		
@@ -123,6 +136,13 @@ public class TermModifyPanel extends JPanel implements Observer {
 			cpec = new CompositeCreator(library);
 			setBackground(SemGenSettings.lightblue);
 			add(cpec);
+		}
+		
+		@Override
+		public void editTerm() {
+			cpec.editTerm();
+			confirmbtn.setEnabled(false);
+			msglbl.setText("Composite entity modified.");
 		}
 	}
 	
@@ -150,6 +170,13 @@ public class TermModifyPanel extends JPanel implements Observer {
 				msglbl.setText("Valid composite physical entity");
 			}
 		}
+		
+		public void editTerm() {
+			library.setCompositeEntityComponents(compindex, selections);
+		}
+		
 	
 	}
+
+
 }

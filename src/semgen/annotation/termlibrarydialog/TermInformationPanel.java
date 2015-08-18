@@ -1,13 +1,16 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
@@ -25,6 +28,7 @@ public class TermInformationPanel extends JPanel {
 	private InfoPanel termpane = new InfoPanel("Affiliated Composites");
 	private InfoPanel cwpane = new InfoPanel("Affiliated Codewords");
 	private JLabel name = new JLabel("No Selection");
+	private JEditorPane description = new JEditorPane();
 	
 	public TermInformationPanel(AnnotatorWorkbench wb) {
 		library = wb.openTermLibrary();		
@@ -44,10 +48,19 @@ public class TermInformationPanel extends JPanel {
 	
 	private void makeInformationPanel() {
 		JPanel infopanel = new JPanel();
+		infopanel.setLayout(new BoxLayout(infopanel, BoxLayout.PAGE_AXIS));
 		infopanel.setBackground(SemGenSettings.lightblue);
 		
 		name.setFont(SemGenFont.Bold("Arial", 3));
+		description = new JEditorPane("text/html", "");
+		description.setEditable(false);
+		description.setOpaque(false);
+		description.setBackground(new Color(0,0,0,0));
+		description.setFont(SemGenFont.defaultPlain(-1));
+		description.setBorder(BorderFactory.createEmptyBorder(3, 30, 3, 0));
+		
 		infopanel.add(name);
+		infopanel.add(description);
 		add(infopanel);
 	}
 	
@@ -62,8 +75,10 @@ public class TermInformationPanel extends JPanel {
 			termpane.setListData(collection.getCompositeNames());
 			cwpane.setListData(collection.getCodewordNames());
 			name.setText(library.getComponentName(collection.getTermLibraryIndex()));
+			describeComponent();
 			termpane.setVisible(showCompositePane());
 		}
+		validate();
 	}
 		
 	private boolean showCompositePane() {
@@ -71,6 +86,48 @@ public class TermInformationPanel extends JPanel {
 		return !(library.getSemSimType(selection).equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS) || 
 				library.getSemSimType(selection).equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) ||
 				library.getSemSimType(selection).equals(SemSimTypes.PHYSICAL_PROPERTY));
+	}
+	
+	private void describeComponent() {
+		String desc = "<html><body>";
+		switch (library.getSemSimType(selection)) {
+		case COMPOSITE_PHYSICAL_ENTITY:
+			break;
+		case CUSTOM_PHYSICAL_ENTITY:
+			desc = describeCustomTerm();
+			break;
+		case CUSTOM_PHYSICAL_PROCESS:
+			desc = describeCustomTerm() + "<br><br>" + describeProcess();
+			break;
+		case PHYSICAL_PROPERTY:
+			desc = describeRefTerm();
+			break;
+		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			desc = describeRefTerm();
+			break;
+		case REFERENCE_PHYSICAL_ENTITY:
+			desc = describeRefTerm();
+			break;
+		case REFERENCE_PHYSICAL_PROCESS:
+			desc = describeRefTerm() + "<br><br>" + describeProcess();
+			break;
+		default:
+			break;
+		
+		}
+		description.setText("<html><body>" + desc  + "</body></html>");
+	}
+	
+	private String describeRefTerm() {
+		return "<b>Ontology:</b> " + library.getOntologyName(selection) + "<br><b>ID:</b> " + library.getReferenceID(selection);
+	}
+	
+	private String describeCustomTerm() {
+		return library.getComponentDescription(selection);
+	}
+	
+	private String describeProcess() {
+		return library.listParticipants(selection);
 	}
 	
 	private class InfoPanel extends JPanel {

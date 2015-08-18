@@ -49,7 +49,7 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
 	
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
-	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE};
+	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE, TERM_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
@@ -438,28 +438,42 @@ public class SemSimTermLibrary extends Observable {
 		
 		public void setName(int index, String name) {
 			masterlist.get(index).getObject().setName(name);
+			notifyTermChanged();
+			
 		}
 		
 		public void setDescription(int index, String description) {
 			masterlist.get(index).getObject().setName(description);
+			notifyTermChanged();
 		}
 		
 		public void clearRelations(Integer termindex, SemSimRelation relation) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			pmc.removeReferenceAnnotationsofType(relation);
+			notifyTermChanged();
 		}
 		
 		public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
 			pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getName());
+			notifyTermChanged();
 		}
 		
 		public SemSimTypes getSemSimType(int index) {
 			return masterlist.get(index).getType();
 		}
-
-//**************************************COMPOSITE DATA ENTITY RETRIEVAL METHODS *********************//
+		
+//**************************************REFERENCE TERM DATA RETRIEVAL METHODS *********************//
+		public String getOntologyName(Integer index) {
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName();
+		}
+		
+		public String getReferenceID(Integer index) {
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getTermID();
+		}
+		
+//**************************************COMPOSITE ENTITY DATA RETRIEVAL METHODS *********************//
 		public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
 			return getCompositeEntityIndicies(getComponentIndex(cpe));
 		}
@@ -484,6 +498,24 @@ public class SemSimTermLibrary extends Observable {
 		public boolean compositeEntityContainsSingular(int compindex, int singindex) {
 			return getCompositeEntityIndicies(compindex).contains(singindex);
 		}
+		
+//**************************************COMPOSITE ENTITY MODIFICATION METHODS *********************//
+		
+	public void setCompositeEntityComponents(Integer index, ArrayList<Integer> peindicies) {
+		ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
+		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
+		for (Integer i : peindicies) {
+			pes.add((PhysicalEntity)masterlist.get(i).getObject());
+			rels.add(SemSimConstants.PART_OF_RELATION);
+		}
+		if (!rels.isEmpty()) {
+			rels.remove(0);
+		}
+		CompositePhysicalEntity cpetoedit = (CompositePhysicalEntity)masterlist.get(index).getObject();
+		cpetoedit.setArrayListOfEntities(pes);
+		cpetoedit.setArrayListOfStructuralRelations(rels);
+		notifyCompositeEntityChanged();
+	}
 		
 //******************************************PROCESS DATA RETRIEVAL METHODS*********************************//
 	
@@ -538,6 +570,23 @@ public class SemSimTermLibrary extends Observable {
 	public Double getSinkMultiplier(Integer procindex, Integer partindex) {
 		LinkedHashMap<Integer, Double> map = getProcessSinksIndexMultiplierMap(procindex);
 		return map.get(partindex);
+	}
+	
+	public String listParticipants(Integer proc) {		
+		if (proc==-1) return "";
+		String pstring = "<html><body>";
+		
+		for(int source : getProcessSourcesIndexMultiplierMap(proc).keySet()){
+			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
+		}
+		for(int sink : getProcessSinksIndexMultiplierMap(proc).keySet()) {
+			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
+		}
+		for(int mediator : getProcessMediatorIndicies(proc)){
+			pstring = pstring + "<b>Mediator:</b> " + getComponentName(mediator) + "<br>";
+		}
+		
+		return pstring + "</body></html>";
 	}
 	
 //*******************************************PROCESS MODIFICATION METHODS**************************************//
@@ -645,8 +694,6 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.get(index).setRemoved(true);
 		notifyProcessChanged();
 	}
-	
-
 
 //*************************************HELPER METHODS*************************************//
 	private ArrayList<Integer> sortComponentIndiciesbyName(ArrayList<Integer> indicies) {
@@ -700,6 +747,11 @@ public class SemSimTermLibrary extends Observable {
 	private void notifyCompositeEntityChanged() {
 		setChanged();
 		notifyObservers(LibraryEvent.COMPOSITE_ENTITY_CHANGE);
+	}
+	
+	private void notifyTermChanged() {
+		setChanged();
+		notifyObservers(LibraryEvent.TERM_CHANGE);
 	}
 	
 //*********************************INDEX CARD DEFINITION************************************//

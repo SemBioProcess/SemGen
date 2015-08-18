@@ -36,6 +36,16 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 	
 	@Override
+	public String getOntologyName() {
+		return SemGen.semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
+	}
+	
+	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.REFERENCE_PHYSICAL_PROCESS_CLASS_URI;
 	}

@@ -2,9 +2,6 @@ package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -94,16 +91,6 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	}
 	
 	private void showCreator() {
-		//Necessary to prevent memmory leaks
-		if (creatorpane!=null) {
-			for (ContainerListener listener : getContainerListeners()) {
-				creatorpane.removeContainerListener(listener);
-			}
-			for (ComponentListener listener : getComponentListeners()) {
-				creatorpane.removeComponentListener(listener);
-			}
-			remove(creatorpane);
-		}
 		toggleOptionVisibility(true);
 		Integer sel = typechooser.getSelectedIndex();
 		switch (types[sel]) {
@@ -134,14 +121,6 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 			break;
 		
 		}
-		//Required to get the composite creator to display correctly
-		for (ContainerListener listener : getContainerListeners()) {
-			creatorpane.addContainerListener(listener);
-		}
-		for (ComponentListener listener : getComponentListeners()) {
-			creatorpane.addComponentListener(listener);
-		}
-		
 		add(creatorpane);
 		validate();
 	}

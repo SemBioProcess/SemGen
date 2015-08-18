@@ -81,7 +81,7 @@ public class SemGenTabToolbar extends JToolBar {
 			setPreferredSize(new Dimension(30, 30));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
 			addMouseListener(new btnbehavior(this));
-			setBorder(BorderFactory.createLineBorder(Color.BLUE));
+			setBorder(BorderFactory.createLineBorder(Color.red));
 		}
 		
 		public void toggleSelectionGraphic() {
@@ -109,7 +109,5 @@ public class SemGenTabToolbar extends JToolBar {
 	
 	private void mouseGraphics(AbstractButton button, boolean dostuff) {
 		button.setBorderPainted(dostuff);
-		button.setContentAreaFilled(dostuff);
-		button.setOpaque(dostuff);
 	}
 }

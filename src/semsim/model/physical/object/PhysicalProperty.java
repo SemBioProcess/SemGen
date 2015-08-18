@@ -54,4 +54,14 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_PROPERTY;
 	}
+
+	@Override
+	public String getOntologyName() {
+		return SemGen.semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
+	}
 }
