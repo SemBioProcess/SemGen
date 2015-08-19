@@ -43,13 +43,17 @@ public class janet_calls
 				String workspaceArray[] = parseSearchResults.splitString(workSpaceText, searchItemsFound, resultBool);
 				String fileNameSpaceArray[] = parseSearchResults.splitString(fileNameSpaceText, searchItemsFound, resultBool);
 				String variableSpaceArray[] = parseSearchResults.splitString(variableSpaceText, searchItemsFound, resultBool);
+				String httpTextSpaceArray[] = parseSearchResults.splitString(httpText, searchItemsFound, resultBool);
 				String[][] packed_Str = parseSearchResults.repack(workspaceArray, fileNameSpaceArray, variableSpaceArray, searchItemsFound);
 				
+				
+				//System.out.println(" httpTextSpaceArray = " + httpTextSpaceArray);
+				//System.exit(0);
             
 				if(searchItemsFound<=0)
 					janetSearchedStr = null;
 				else
-					janetSearchedStr = parseSearchResults.repackForSemGen(workspaceArray, fileNameSpaceArray, variableSpaceArray,searchItemsFound);
+					janetSearchedStr = parseSearchResults.repackForSemGen(workspaceArray, fileNameSpaceArray, variableSpaceArray,httpTextSpaceArray, searchItemsFound);
 			//}
 			
 		} catch (Exception e) {
@@ -59,8 +63,8 @@ public class janet_calls
 	
 		// String[] janetstrArray = new String[] {janetSearchedStr};
 		 String[] janetstrArray = janetSearchedStr.split(","); 
-		 System.out.println("janetstrArray[0] = "  + janetstrArray[0]);
-		 System.out.println("janetstrArray[1] = "  + janetstrArray[1]);
+		 //System.out.println("janetstrArray[0] = "  + janetstrArray[0]);
+		 //System.out.println("janetstrArray[1] = "  + janetstrArray[1]);
 		// Set<String> mySet = new HashSet<String>(Arrays.asList(janetstrArray));
 		 //return new SearchResultSet("PMR", mySet.toArray(new String[mySet.size()]));
 		 

@@ -1,5 +1,10 @@
 package semgen.stage.janet;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
@@ -278,45 +283,62 @@ public class parseSearchResults
      }
     
     /*repack for SemGen parsed String[] and put it into a String[][] and return it*/
-    public static String repackForSemGen(String [] workspaceArray, String[] fileNameSpaceArray, String [] variableSpaceArray, int row)
+    public static String repackForSemGen(String [] workspaceArray, String[] fileNameSpaceArray, String [] variableSpaceArray, String[] httpTextSpaceArray, int dupSearchItemsFound)
      {
       
-         int col = 2;//wsname,filename
-         String[][] string_2D_Array = new String [row+1][col+1];
+         int col = 3;//wsname,filename,HTTPurl
+         int nodupSearchItemsFound=0;
+         String[][] string_2D_Array = new String [dupSearchItemsFound+1][col+1];
          String janet_searched_models_for_semgen = "";
-         for(int i =0; i<row;i++)                   
-         {
-             string_2D_Array[i][0] = workspaceArray[i];
-             string_2D_Array[i][1] = fileNameSpaceArray[i];
-             
-             //char Wtemp = '"';
-             //String Wmastertemp = Wtemp + "W:" ;
-             if(i<row-1)
-            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +",";
-             else
-            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","");
-          }   
-         //janet_searched_models_for_semgen+="]";
-                 
-         for(int i =0; i<row;i++)
-         {
-             for(int j =0; j<col;j++)         
-             {
-                 
-                System.out.println(" " + string_2D_Array[i][j]);
-             }
-              System.out.println("\n");
-         }
-         //String searchResults;
-         //searchResults = String.join(janet_searched_models_for_semgen, "\",\"") + "\"]";
          
-         //return  searchResults;
-         janet_searched_models_for_semgen.replaceAll("\\s+","");
+         //remove duplictes
+         for(int i =0; i<dupSearchItemsFound;i++){
+        	 int dupflag = 0;
+        	 for(int j=i+1;j<dupSearchItemsFound;j++){
+        		 if(workspaceArray[i].equals(workspaceArray[j])  && fileNameSpaceArray[i].equals(fileNameSpaceArray[j]) )
+        		 	 dupflag=1;
+        	 }
+        	 if(dupflag==0){
+        		 string_2D_Array[nodupSearchItemsFound][0] = workspaceArray[i];
+                 string_2D_Array[nodupSearchItemsFound][1] = fileNameSpaceArray[i];
+                 string_2D_Array[nodupSearchItemsFound][2] = httpTextSpaceArray[i]; 
+                 nodupSearchItemsFound+=1;
+        	 }
+         }	 
+         
+         for(int i =0; i<nodupSearchItemsFound;i++){
+         	System.out.print("WorkSpacearray " + string_2D_Array[i][0]);
+         	System.out.print("FileSpacearray " + string_2D_Array[i][1]);
+         	System.out.print("HTTPSpacearray " + string_2D_Array[i][2]);
+         }
+         
+         fileSystemUpdate.makeDir(string_2D_Array,nodupSearchItemsFound);
+         janet_searched_models_for_semgen = packReturnString(string_2D_Array,janet_searched_models_for_semgen, nodupSearchItemsFound);	 
+        
          return  janet_searched_models_for_semgen;
      }
     
     
-    /*Enumerate the BFS tree and help add nodes to the tree by stopping at the correct child node*/
+   
+
+
+
+	private static String packReturnString(String[][] string_2D_Array, String janet_searched_models_for_semgen, int cleanArraySize ) {
+	
+
+		 
+		System.out.println("cleanArraySize = " + cleanArraySize);
+        for(int i =0; i< cleanArraySize;i++){
+            if(i< cleanArraySize-1)
+           	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +",";
+            else
+           	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","");
+         }   
+        janet_searched_models_for_semgen.replaceAll("\\s+","");
+        return janet_searched_models_for_semgen;
+	}
+
+	/*Enumerate the BFS tree and help add nodes to the tree by stopping at the correct child node*/
      public static DefaultMutableTreeNode BFS_Enumerate_Jtree( DefaultMutableTreeNode root, String toSearch_depth01, String toSearch_depth02)
      {
      
