@@ -283,7 +283,7 @@ public class parseSearchResults
      }
     
     /*repack for SemGen parsed String[] and put it into a String[][] and return it*/
-    public static String repackForSemGen(String [] workspaceArray, String[] fileNameSpaceArray, String [] variableSpaceArray, String[] httpTextSpaceArray, int dupSearchItemsFound)
+    public static String[][] removeDupForSemGen(String [] workspaceArray, String[] fileNameSpaceArray, String [] variableSpaceArray, String[] httpTextSpaceArray, int dupSearchItemsFound)
      {
       
          int col = 3;//wsname,filename,HTTPurl
@@ -306,30 +306,39 @@ public class parseSearchResults
         	 }
          }	 
          
-         for(int i =0; i<nodupSearchItemsFound;i++){
-         	System.out.print("WorkSpacearray " + string_2D_Array[i][0]);
-         	System.out.print("FileSpacearray " + string_2D_Array[i][1]);
-         	System.out.print("HTTPSpacearray " + string_2D_Array[i][2]);
+         for(int i =0; i<dupSearchItemsFound;i++){
+         	System.out.print("WorkSpacearray["+i+"]=" + string_2D_Array[i][0]);
+         	System.out.print("FileSpacearray["+i+"]="+ string_2D_Array[i][1]);
+         	System.out.print("HTTPSpacearray["+i+"]=" + string_2D_Array[i][2]);
+         	System.out.println("");
          }
          
-         fileSystemUpdate.makeDir(string_2D_Array,nodupSearchItemsFound);
-         janet_searched_models_for_semgen = packReturnString(string_2D_Array,janet_searched_models_for_semgen, nodupSearchItemsFound);	 
+         
+         
         
-         return  janet_searched_models_for_semgen;
+         return  string_2D_Array;
+        // return  janet_searched_models_for_semgen;
      }
     
     
-   
-
-
-
-	private static String packReturnString(String[][] string_2D_Array, String janet_searched_models_for_semgen, int cleanArraySize ) {
+	static String packReturnStringforSemGen(String[][] string_2D_Array) {
 	
-
+		int rows = string_2D_Array.length;
+		int noduprows =0;
+		String janet_searched_models_for_semgen = "";
+		System.out.println("string_2D_Array[2][0]= " + string_2D_Array[2][0]); // number of columns in first row
+		
+		for(int i =0; i<rows;i++){
+			if(string_2D_Array[i][0]== null){
+				noduprows = i;
+				break;
+			}
+		}
+			
 		 
-		System.out.println("cleanArraySize = " + cleanArraySize);
-        for(int i =0; i< cleanArraySize;i++){
-            if(i< cleanArraySize-1)
+		System.out.println(" noduprows = " +  noduprows);
+        for(int i =0; i< noduprows;i++){
+            if(i< noduprows-1)
            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","")  +",";
             else
            	 janet_searched_models_for_semgen += "W:" +string_2D_Array[i][0].replaceAll("\\s+","") + " "  + "M:" + string_2D_Array[i][1].replaceAll("\\s+","");
@@ -422,6 +431,36 @@ public class parseSearchResults
         return tuple;
         
     }
+
+	public static String modelnameToFilePath(String modelName) {
+		// TODO Auto-generated method stub
+		
+		
+		String returnfilepath;
+		String part1;
+		String part2;
+
+		//part1 = modelName.substring(modelName.indexOf(":") + 1);
+		part1 = modelName.substring(0, modelName.indexOf("M"));
+		//System.out.println("modelName = " + modelName);
+		//part1="W:"+ part1;
+		System.out.println("PART1 = " + part1);
+		
+		part2 =modelName.replace(part1, "");
+		System.out.println("PART2 AFTER REPLACE= " + part2);
+		
+		 part1 =  part1.substring(modelName.indexOf(":") + 1);
+		 part2 =  part2.substring(modelName.indexOf(":")+1);
+		System.out.println("modelName = " + modelName);
+		System.out.println("PART1 = " + part1);
+		System.out.println("PART2 = " + part2);
+		part1 =part1.replaceAll("\\s+","");
+		part2 =part2.replaceAll("\\s+","");
+		
+		returnfilepath= part1 +"/" +part2;
+		
+		return returnfilepath;
+	}
 
 
      

@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.janet.janet_calls;
+import semgen.stage.janet.parseSearchResults;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
@@ -118,11 +119,26 @@ public class StageWorkbench extends Workbench {
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+				
+				//System.out.println("file == " + file);
+				
 				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 
 				_commandSender.addModel(semsimmodel.getName());
 			}
+			//PMR
+			if(source.equals("PMR")) {
+				String filepath =parseSearchResults.modelnameToFilePath(modelName);
+				File file = new File("examples/JanetModels/" +filepath);
+				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+
+				_commandSender.addModel(semsimmodel.getName());
+			}
+			
+			
+			
 		}
 		
 		public void onTaskClicked(String modelName, String task) {

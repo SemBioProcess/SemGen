@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <units name="per_nM_s">
+    <unit exponent="-1.0" units="s" />
+    <unit exponent="-1.0" units="nM" />
+  </units>
+  <units name="nM">
+    <unit prefix="nano" units="mole" />
+    <unit exponent="-1.0" units="liter" />
+  </units>
+  <units name="per_s">
+    <unit exponent="-1.0" units="s" />
+  </units>
+  <units name="s">
+    <unit units="second" />
+  </units>
+  <units name="nM_per_s">
+    <unit units="nM" />
+    <unit exponent="-1.0" units="s" />
+  </units>
+  <component name="NFAT_Cycling" cmeta:id="">
+    <variable initial_value="0.9957805651" name="NFATp_c" units="nM" />
+    <variable initial_value="0.000361944" name="k_f3" units="per_s" />
+    <variable initial_value="0.019256" name="k_r1" units="per_s" />
+    <variable name="J1" units="nM_per_s" />
+    <variable name="J2" units="nM_per_s" />
+    <variable initial_value="0.00144192" name="k_f2" units="per_s" />
+    <variable initial_value="0.10902441" name="NFATN_n" public_interface="out" units="nM" />
+    <variable name="J4" units="nM_per_s" />
+    <variable initial_value="7.68934e-6" name="k_f1" units="per_nM_s" />
+    <variable cmeta:id="v0" initial_value="0.3" name="act_N" units="dimensionless">
+
+    </variable>
+    <variable cmeta:id="v1" name="t" units="s">
+
+    </variable>
+    <variable initial_value="4.70813e-5" name="k_r3" units="per_nM_s" />
+    <variable initial_value="0.077917275" name="NFATp_n" public_interface="out" units="nM" />
+    <variable initial_value="0.0004806012" name="NFATN_c" units="nM" />
+    <variable name="J3" units="nM_per_s" />
+    <variable cmeta:id="v2" initial_value="100" name="Ntot" units="nM">
+
+    </variable>
+    <variable initial_value="50" name="Ccn" units="dimensionless" />
+    <variable initial_value="0.000444695" name="k_f4" units="per_s" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>J1</ci>
+        <apply>
+          <minus />
+          <apply>
+            <times />
+            <ci>k_f1</ci>
+            <ci>NFATp_c</ci>
+            <ci>Ntot</ci>
+            <ci>act_N</ci>
+          </apply>
+          <apply>
+            <times />
+            <ci>k_r1</ci>
+            <ci>NFATN_c</ci>
+            <apply>
+              <minus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="dimensionless">1</cn>
+              <ci>act_N</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J2</ci>
+        <apply>
+          <times />
+          <ci>k_f2</ci>
+          <ci>NFATN_c</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J3</ci>
+        <apply>
+          <minus />
+          <apply>
+            <times />
+            <ci>k_f3</ci>
+            <ci>NFATN_n</ci>
+            <apply>
+              <minus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="dimensionless">1</cn>
+              <ci>act_N</ci>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <ci>k_r3</ci>
+            <ci>NFATp_n</ci>
+            <ci>Ntot</ci>
+            <ci>act_N</ci>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J4</ci>
+        <apply>
+          <times />
+          <ci>k_f4</ci>
+          <ci>NFATp_n</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>NFATp_c</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <divide />
+            <ci>J4</ci>
+            <ci>Ccn</ci>
+          </apply>
+          <ci>J1</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>NFATN_c</ci>
+        </apply>
+        <apply>
+          <minus />
+          <ci>J1</ci>
+          <ci>J2</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>NFATN_n</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <times />
+            <ci>J2</ci>
+            <ci>Ccn</ci>
+          </apply>
+          <ci>J3</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>NFATp_n</ci>
+        </apply>
+        <apply>
+          <minus />
+          <ci>J3</ci>
+          <ci>J4</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+</model>
+

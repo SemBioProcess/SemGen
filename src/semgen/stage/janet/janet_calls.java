@@ -18,6 +18,8 @@ public class janet_calls
 		
 		String janetResults = null;
 		String janetSearchedStr = null;
+		String janetNoDupArray[][] = null;
+		String dirPath= null;
 		
 			//janetResults = Network.fetchedData("OPB_01023");
 		try {
@@ -53,8 +55,16 @@ public class janet_calls
 				if(searchItemsFound<=0)
 					janetSearchedStr = null;
 				else
-					janetSearchedStr = parseSearchResults.repackForSemGen(workspaceArray, fileNameSpaceArray, variableSpaceArray,httpTextSpaceArray, searchItemsFound);
-			//}
+				{
+					janetNoDupArray = parseSearchResults.removeDupForSemGen(workspaceArray, fileNameSpaceArray, variableSpaceArray,httpTextSpaceArray, searchItemsFound);
+					dirPath =fileSystemUpdate.makeDir(janetNoDupArray);
+					fileSystemUpdate.downloadFiles(janetNoDupArray,dirPath);
+					janetSearchedStr = parseSearchResults.packReturnStringforSemGen(janetNoDupArray);	
+					//janetSearchedStr = parseSearchResults.removeDupForSemGen(workspaceArray, fileNameSpaceArray, variableSpaceArray,httpTextSpaceArray, searchItemsFound);
+					
+					
+				}
+			
 			
 		} catch (Exception e) {
 				// TODO Auto-generated catch block
