@@ -558,6 +558,10 @@ public class SBMLreader extends ModelReader{
 			
 			// Deal with kinetic law (need to collect local parameters)
 			String mathmlstring = libsbml.writeMathMLToString(kineticlaw.getMath());
+			
+			// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
+			mathmlstring = mathmlstring.substring(mathmlstring.indexOf("<math "), mathmlstring.length());
+			
 			ds.getComputation().setMathML(mathmlstring);
 			ds.getComputation().setComputationalCode(reaction.getId() + " = " + reaction.getKineticLaw().getFormula());
 			

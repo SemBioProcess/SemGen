@@ -174,22 +174,46 @@ public class SemSimOWLwriter extends ModelWriter {
 			SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, 
 					SemSimConstants.HAS_TRIGGER_MATHML_URI.toString(), event.getTriggerMathML(), manager);
 			
+			// Write out priority
+			if(event.getPriorityMathML()!=null)
+				SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, SemSimConstants.HAS_PRIORITY_MATHML_URI.toString(),
+					event.getPriorityMathML(), manager);
 			
+			// Write out delay
+			if(event.getDelayMathML()!=null)
+				SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, SemSimConstants.HAS_DELAY_MATHML_URI.toString(),
+						event.getDelayMathML(), manager);
+			
+			// Write out time units
+			if(event.getTimeUnit()!=null){
+				String unitname = event.getTimeUnit().getName();
+				String unituri = namespace + "UNIT_" + SemSimOWLFactory.URIencoding(unitname);
+				SemSimOWLFactory.setIndObjectProperty(ont, eventuristring, unituri, 
+						SemSimConstants.HAS_TIME_UNIT_URI.toString(), "", manager);
+			}
+				
+			
+			// Write out the event assignments
 			for(EventAssignment ssea : event.getEventAssignments()){
 				String eaname = eventname + "_assignment_" + ssea.getOutput().getName();
 				OWLClass eaparentclass = factory.getOWLClass(IRI.create(ssea.getSemSimClassURI()));
 				String eauristring = namespace + eaname;
 				String outputdsuristring = namespace + ssea.getOutput().getName();
+				
+				// Create event assignment individual and attach properties
 				SemSimOWLFactory.createSemSimIndividual(ont, eauristring, eaparentclass, "", manager);
 				SemSimOWLFactory.setIndObjectProperty(ont, eauristring, outputdsuristring,
 						SemSimConstants.HAS_OUTPUT_URI.toString(), "", manager);
 				SemSimOWLFactory.setIndDatatypeProperty(ont, eauristring, SemSimConstants.HAS_MATHML_URI.toString(),
 						ssea.getMathML(), manager);
 				
+				// Associate the assignment with the event
+				SemSimOWLFactory.setIndObjectProperty(ont, eventuristring, eauristring,
+						SemSimConstants.HAS_EVENT_ASSIGNMENT_URI.toString(),"", manager);
+				
+				// Associate the assignment with the data structure's computation that it effects
 				SemSimOWLFactory.setIndObjectProperty(ont, outputdsuristring + "_computation", 
 						eventuristring, SemSimConstants.HAS_EVENT_URI.toString(), "", manager);
-				// ... deal with priority, time units, and delay
-
 			}
 		}
 	}
@@ -255,11 +279,9 @@ public class SemSimOWLwriter extends ModelWriter {
 				// Put the hasInput and hasRolePlayer data in the SemSim model
 				for(DataStructure inputds : ds.getComputation().getInputs()){
 					String inputuri = namespace + SemSimOWLFactory.URIencoding(inputds.getName());
-					SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, base + "hasInput", base + "isInputFor", manager);
-				}
-				
-				// Store event info
-				
+					SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, 
+							SemSimConstants.HAS_INPUT_URI.toString(), SemSimConstants.IS_INPUT_FOR_URI.toString(), manager);
+				}				
 			}
 			
 			if(ds.hasSolutionDomain()){

@@ -167,35 +167,26 @@ public class MMLreader extends ModelReader {
 				}
 				else ds.setIsSolutionDomain(false);
 				
-				// find the assignment constraint for the variable & start with implicit, then event constraints
+				// find the assignment constraint for the variable
 				boolean stop = false;
 				Computation computation = ds.getComputation();
 				
-				if (realStatenames.contains(codeword)) {
-					computation.setComputationalCode(discretevarsandconstraints.get(codeword));
-
-					// get the initial condition for the discrete realState variable (in some stateTool)
-					ds.setStartValue(getIC(getToolToSolveCodeword(codeword), codeword));
-				} 
-				
-				// Get the math assignments for all other types of variables
-				else {
-					List<Element> tools = doc.getRootElement().getChild("toolList").getChildren("exprTool");
-					Iterator exprit = tools.iterator();
-					while (exprit.hasNext() && !stop) {
-						Element expr = (Element) exprit.next();
-						Iterator solvedvarsit = expr.getChild("solvedVariableList").getChildren("variableUsage").iterator();
-						while(solvedvarsit.hasNext() && !stop){
-							Element solvedvar = (Element) solvedvarsit.next();
-							if(solvedvar.getAttributeValue("id").equals(codeword)){ //&& ds.isDeclared()){
-								
-								String mmlcode = expr.getChild("expression").getChildText("debug");
-								String mathmlassignment = xmloutputter.outputString(expr.getChild("expression").getChild("math",mathmlns));
-								
-								computation.setComputationalCode(codeword + " = " + mmlcode);
-								computation.setMathML(mathmlassignment);
-								stop = true;
-							}
+				// Get the math assignments
+				List<Element> tools = doc.getRootElement().getChild("toolList").getChildren("exprTool");
+				Iterator exprit = tools.iterator();
+				while (exprit.hasNext() && !stop) {
+					Element expr = (Element) exprit.next();
+					Iterator solvedvarsit = expr.getChild("solvedVariableList").getChildren("variableUsage").iterator();
+					while(solvedvarsit.hasNext() && !stop){
+						Element solvedvar = (Element) solvedvarsit.next();
+						if(solvedvar.getAttributeValue("id").equals(codeword)){ //&& ds.isDeclared()){
+							
+							String mmlcode = expr.getChild("expression").getChildText("debug");
+							String mathmlassignment = xmloutputter.outputString(expr.getChild("expression").getChild("math",mathmlns));
+							
+							computation.setComputationalCode(codeword + " = " + mmlcode);
+							computation.setMathML(mathmlassignment);
+							stop = true;
 						}
 					}
 				}
@@ -294,7 +285,9 @@ public class MMLreader extends ModelReader {
 				String assignmentmathml = xmloutputter.outputString(action.getChild("expression").getChild("math",mathmlns));
 				ssea.setMathML(assignmentmathml);
 				String varstring = action.getAttributeValue("variableID");
-				ssea.setOutput(semsimmodel.getAssociatedDataStructure(varstring));
+				DataStructure outputds = semsimmodel.getAssociatedDataStructure(varstring);
+				ssea.setOutput(outputds);
+				outputds.getComputation().addEvent(ssevent);
 				
 				ssevent.addEventAssignment(ssea);
 				
@@ -303,6 +296,10 @@ public class MMLreader extends ModelReader {
 				discretevarsandconstraints.put(varstring, fulltext);
 				discretevarsandevents.put(varstring, ssevent);
 				realStatenames.add(varstring);
+
+				// get the initial condition for the discrete realState variable (in some stateTool)
+				outputds.setStartValue(getIC(getToolToSolveCodeword(outputds.getName()), outputds.getName()));
+				 
 			}
 			
 			semsimmodel.addEvent(ssevent);

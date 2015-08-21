@@ -202,8 +202,13 @@ public class CellMLwriter extends ModelWriter {
 			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", semsimmodel.getAssociatedDataStructures());
 			maincomponent.setAssociatedDataStructures(semsimmodel.getAssociatedDataStructures());
 			String mathml = "";
+			
 			for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
-				mathml = mathml + ds.getComputation().getMathML() + "\n";
+				if(ds.getComputation().getEvents().size()>0){
+					System.err.println("Error: Cannot convert models with discrete events into CellML");
+					break;
+				}
+				else mathml = mathml + ds.getComputation().getMathML() + "\n";
 			}
 			maincomponent.getComputation().setMathML(mathml);
 			processFunctionalSubmodel(maincomponent);
@@ -348,6 +353,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				String publicintval = null;
 				String privateintval = null;
+				
 				// If the Data Structure is a CellML-type variable
 				if(ds.isMapped()){
 					MappableVariable cellmlvar = (MappableVariable)ds;
@@ -415,6 +421,8 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
+		
+		System.out.println(xml);
 		xml = "<temp>\n" + xml + "\n</temp>";
 		Content c = makeXMLContentFromString(xml);
 		

@@ -96,6 +96,10 @@ public class SemSimConstants {
 	public static final URI HAS_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasMathML");
 	public static final URI HAS_TRIGGER_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasTriggerMathML");
 	public static final URI HAS_EVENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEvent");
+	public static final URI HAS_EVENT_ASSIGNMENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEventAssignment");
+	public static final URI HAS_PRIORITY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasPriorityMathML");
+	public static final URI HAS_DELAY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasDelayMathML");
+	public static final URI HAS_TIME_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasTimeUnit");
 	public static final URI HAS_SOLUTION_DOMAIN_URI = URI.create(SEMSIM_NAMESPACE + "hasSolutionDomain");
 	public static final URI HAS_START_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasStartValue");
 	public static final URI HAS_INPUT_URI = URI.create(SEMSIM_NAMESPACE + "hasInput");
