@@ -10,7 +10,9 @@ import javax.swing.JOptionPane;
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.janet.janet_calls;
+import semgen.stage.janet.janet_main;
 import semgen.stage.janet.parseSearchResults;
+import semgen.stage.janet.waitOnKeyStrokes;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
@@ -188,51 +190,7 @@ public class StageWorkbench extends Workbench {
 					// PMR results here
 			};
 			
-			System.out.println("resultSets length = " + resultSets.length);
-			SearchResultSet resultSetsJanet = null;
-		
-			
-			for(int i=0;i<resultSets.length;i++)
-			{
-				
-				System.out.println("resultSets[i].results.length= " + resultSets[i].results.length);
-				System.out.println("SemGen Source= " + resultSets[i].source);
-				
-				for(int j=0;j<resultSets[i].results.length;j++){
-					
-				System.out.println("SemGen Results= " + resultSets[i].results[j]);
-				}
-			}	
-			
-			String[] janetResultsArray = null;
-			if(SearchResultSet.srsIsEmpty(resultSets) && searchString.equals("OPB_01023"))
-			{
-				 resultSetsJanet  = janet_calls.TrimParsedJanetData(searchString);
-				 
-				 resultSets[0] = resultSetsJanet; 
-				//janetResultsArray =janet_calls.TrimParsedJanetData(searchString);
-
-			//System.out.println(" resultSetsJanet[0].results.toString() = " + resultSetsJanet.results.toString());
-
-			}
-			
-			if(searchString.equals("OPB_01023"))
-			{
-				
-				System.out.println("iNSSSSSSSIDEEE ");
-				for(int i=0;i<resultSets.length;i++)
-				{
-				
-					System.out.println("resultSets[i].results.length= " + resultSets[i].results.length);
-					System.out.println("Janet Source= " + resultSets[i].source);
-				
-					for(int j=0;j<resultSets[i].results.length;j++){
-					
-						System.out.println("Janet Results= " + resultSets[i].results[j]);
-					}
-				}	
-			}
-			
+			resultSets = janet_main.processSearch(resultSets,searchString);
 			
 			
 			

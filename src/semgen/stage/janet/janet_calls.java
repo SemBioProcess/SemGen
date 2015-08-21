@@ -12,7 +12,7 @@ public class janet_calls
 {
 	
 	
-	public static SearchResultSet TrimParsedJanetData(String searchString) {
+	public static SearchResultSet TrimParsedJanetData(String remoteSearchData, boolean remotequeryHasResults) {
 		
 		
 		
@@ -23,14 +23,9 @@ public class janet_calls
 		
 			//janetResults = Network.fetchedData("OPB_01023");
 		try {
-			
-			
-			janetResults = Network.fetchedData(searchString);
+				boolean resultBool = remotequeryHasResults; 
+				janetResults = remoteSearchData;
 		
-			boolean resultBool = parseSearchResults.parseSearchStatus(janetResults); //Search result exists or no
-			//if(resultBool)
-			//{
-	
 				String linksArea = parseSearchResults.linksSpace(janetResults);
 			
 				String httpText = parseSearchResults.parseHttp(linksArea, resultBool);
@@ -72,18 +67,24 @@ public class janet_calls
 			}
 	
 		// String[] janetstrArray = new String[] {janetSearchedStr};
-		 String[] janetstrArray = janetSearchedStr.split(","); 
-		 //System.out.println("janetstrArray[0] = "  + janetstrArray[0]);
-		 //System.out.println("janetstrArray[1] = "  + janetstrArray[1]);
-		// Set<String> mySet = new HashSet<String>(Arrays.asList(janetstrArray));
-		 //return new SearchResultSet("PMR", mySet.toArray(new String[mySet.size()]));
+		String[] janetstrArray = null;
+		if(janetSearchedStr!=null)
+			janetstrArray = janetSearchedStr.split(",");
 		 
 		 return new SearchResultSet("PMR", janetstrArray);
-		//return janetstrArray;
-		
-		
+	}
+
+	public static boolean boolSearchResult(String fetchedRemoteString) throws Exception {
+		boolean resultBool = false;
+		resultBool = parseSearchResults.parseSearchStatus(fetchedRemoteString); //Search result exists or no
+		return resultBool;
 	}
 	
+	public static String fetchRemoteData(String searchString) throws Exception {
+		String janetResults = Network.fetchedData(searchString);
+		return janetResults;
+	}
+
 	
 }
 	
