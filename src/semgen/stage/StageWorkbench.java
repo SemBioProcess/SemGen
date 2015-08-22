@@ -185,24 +185,24 @@ public class StageWorkbench extends Workbench {
 		}
 
 		public void onSearch(String searchString) throws FileNotFoundException {
-			SearchResultSet[] resultSets = {
+		
+	 		SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
 					// PMR results here
 			};
+	 		// Janet code goes here.
+	 		resultSets = janet_main.processSearch(resultSets,searchString);
+	 		
+	 	
+	 		
+	 		
+	 		//resultSets = t1.getR
+	 				
+	 						
+	 		_commandSender.search(resultSets);
+	    	//resultSets = janet_main.processSearch(resultSets,searchString);
+	    	
 			
-			resultSets = janet_main.processSearch(resultSets,searchString);
-			
-			
-			
-			//JsonString searchResults;
-			//if(janetResults==null)
-			//	searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
-			
-			
-			
-			
-			System.out.println("ResultSets = " + resultSets.toString() );
-			_commandSender.search(resultSets);
 		}
 		
 		public void onMerge(String modelName1, String modelName2) {
