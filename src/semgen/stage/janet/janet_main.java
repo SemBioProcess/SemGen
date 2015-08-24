@@ -43,7 +43,8 @@ public class janet_main{
 		
 		
 	    //if(SearchResultSet.srsIsEmpty(resultSets) && searchString.equals("OPB_01023"))
-	    if(SearchResultSet.srsIsEmpty(resultSets)  && keyboardTimeLapsed)
+	   // if(SearchResultSet.srsIsEmpty(resultSets)  && keyboardTimeLapsed)
+		 if(SearchResultSet.srsIsEmpty(resultSets))
 		{
 			try {
 				  System.out.println("Remote query executed");	

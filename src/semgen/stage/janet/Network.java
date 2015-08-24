@@ -121,7 +121,9 @@ public class Network {
     	    } finally {
     	    	httpClient.getConnectionManager().shutdown();
     	    }
-                        return json;
+                       
+    	    //System.out.println("json =" + json);
+    	    return json;
 			//return httpText;
 			//return parsedString;
 			
