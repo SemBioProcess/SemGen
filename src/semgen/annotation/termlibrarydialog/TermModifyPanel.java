@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,6 +31,7 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 		library = wb.openTermLibrary();
 		wb.addObserver(this);
 		createGUI();
+		setBorder(BorderFactory.createEtchedBorder());
 	}
 	
 	private void createGUI() {

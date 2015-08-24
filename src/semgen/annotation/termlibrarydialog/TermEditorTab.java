@@ -1,5 +1,6 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,7 +49,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 	private EditorToolbar toolbar= new EditorToolbar();
 	private ReplaceTermPane replacer;
 	private JPanel editpane = new JPanel();
-	private JPanel editspacer = new JPanel();
+	
 	private JPanel curpane;
 	private TermModifyPanel modifier;
 	
@@ -65,6 +66,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		workbench = wb;
 		workbench.addObserver(this);
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS)); 
+		setAlignmentX(Component.LEFT_ALIGNMENT);
+		setAlignmentY(Component.TOP_ALIGNMENT);
 		library = wb.openTermLibrary();
 		library.addObserver(this);
 		setBackground(SemGenSettings.lightblue);
@@ -78,11 +81,11 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		}
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		typechooser.setAlignmentX(Box.LEFT_ALIGNMENT);
+		typechooser.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typechooser.setAlignmentY(Component.TOP_ALIGNMENT);
 		Dimension dim = new Dimension(300,160);
 		typechooser.setMinimumSize(dim);
 		typechooser.setMaximumSize(dim);
-		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
 		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
@@ -106,20 +109,33 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
 		
+		typepane.setAlignmentY(Component.TOP_ALIGNMENT);
+		typepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		tip = new TermInformationPanel(workbench);
 		replacer = new ReplaceTermPane(workbench);
 		modifier = new TermModifyPanel(workbench);
 		
 		curpane = tip;
-		add(typepane);
-		editpane.setLayout(new BoxLayout(editpane, BoxLayout.PAGE_AXIS)); 
+
+		editpane.setLayout(new BoxLayout(editpane, BoxLayout.LINE_AXIS)); 
+		editpane.setAlignmentY(Component.TOP_ALIGNMENT);
+		editpane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editpane.setBackground(SemGenSettings.lightblue);
-		editpane.add(toolbar);
 		editpane.add(curpane);
-		editspacer.add(editpane);
+		
+		JPanel editspacer = new JPanel();
+		editspacer.setLayout(new BoxLayout(editspacer, BoxLayout.PAGE_AXIS)); 
+		editspacer.setAlignmentY(Component.TOP_ALIGNMENT);
+		editspacer.setAlignmentX(Component.LEFT_ALIGNMENT);
 		editspacer.setBackground(SemGenSettings.lightblue);
+		editspacer.add(toolbar);
+		editspacer.add(editpane);
+		editspacer.add(Box.createVerticalGlue());
+
+		add(typepane);
 		add(editspacer);
-		add(Box.createVerticalGlue());
+		
 		validate();
 	}
 	
@@ -185,8 +201,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		editpane.remove(curpane);
 		curpane = pan;
 		editpane.add(pan);
-		validate();
 		repaint();
+		validate();
 	}
 	
 	private void replaceComponent() {
@@ -194,7 +210,6 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			replacer.showReplacementPanel(affected);
 			swapEditor(replacer);
 		}
-		
 	}
 	
 	private void modifyComponent() {
@@ -232,6 +247,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		
 		public EditorToolbar() {
 			super(JToolBar.HORIZONTAL);
+			this.setMaximumSize(new Dimension(9999, 36));
+			setAlignmentX(LEFT_ALIGNMENT);
 			infobtn.addActionListener(this);
 			add(infobtn);
 			infobtn.setSelected(true);
@@ -278,7 +295,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			modifybtn.setToolTipText("Modify selected term.");
 			removebtn.setToolTipText("Remove selected term.");
 			if (!termlist.isSelectionEmpty()) {
-				if (affected.isUsed()) replacebtn.setEnabled(true);
+				replacebtn.setEnabled(affected.isUsed());
 				if (affected.targetIsReferenceTerm()) {
 					modifybtn.setEnabled(false);
 					modifybtn.setToolTipText("Reference terms cannot be modified.");

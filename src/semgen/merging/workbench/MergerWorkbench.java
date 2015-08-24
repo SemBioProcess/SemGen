@@ -118,6 +118,7 @@ public class MergerWorkbench extends Workbench {
 		if (modelselection == -1) return;
 		loadedmodels.remove(modelselection);
 		filepathlist.remove(modelselection);
+		overlapmap = null;
 		notifyModelListUpdated();
 	}
 

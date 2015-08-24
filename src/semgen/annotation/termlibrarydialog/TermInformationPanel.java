@@ -5,12 +5,12 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
@@ -32,7 +32,7 @@ public class TermInformationPanel extends JPanel {
 	
 	public TermInformationPanel(AnnotatorWorkbench wb) {
 		library = wb.openTermLibrary();		
-		
+		this.setMaximumSize(new Dimension(600, 700));
 		createGUI();
 	}
 	
@@ -52,7 +52,9 @@ public class TermInformationPanel extends JPanel {
 		infopanel.setBackground(SemGenSettings.lightblue);
 		
 		name.setFont(SemGenFont.Bold("Arial", 3));
+		name.setAlignmentX(Box.LEFT_ALIGNMENT);
 		description = new JEditorPane("text/html", "");
+		description.setAlignmentX(Box.LEFT_ALIGNMENT);
 		description.setEditable(false);
 		description.setOpaque(false);
 		description.setBackground(new Color(0,0,0,0));
@@ -61,6 +63,7 @@ public class TermInformationPanel extends JPanel {
 		
 		infopanel.add(name);
 		infopanel.add(description);
+		infopanel.setAlignmentX(Box.LEFT_ALIGNMENT);
 		add(infopanel);
 	}
 	
@@ -92,6 +95,7 @@ public class TermInformationPanel extends JPanel {
 		String desc = "<html><body>";
 		switch (library.getSemSimType(selection)) {
 		case COMPOSITE_PHYSICAL_ENTITY:
+			desc = describeCompositeEntity();
 			break;
 		case CUSTOM_PHYSICAL_ENTITY:
 			desc = describeCustomTerm();
@@ -130,6 +134,17 @@ public class TermInformationPanel extends JPanel {
 		return library.listParticipants(selection);
 	}
 	
+	private String describeCompositeEntity() {
+		ArrayList<Integer> ents = library.getCompositeEntityIndicies(selection);
+		String description = "";
+		for (int i = 0; i < (ents.size()-1); i++) {
+			description = description + "<b>" + library.getComponentName(ents.get(i)) + "</b> part of ";
+		}
+		description = description + "<b>" + library.getComponentName(ents.get(ents.size()-1)) + "</b>";
+		
+		return description;
+	}
+	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		private Dimension dim = new Dimension(400,300);
@@ -138,6 +153,7 @@ public class TermInformationPanel extends JPanel {
 		public InfoPanel(String name) {
 			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
+			setAlignmentX(Box.LEFT_ALIGNMENT);
 			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), name, TitledBorder.CENTER, 
 					TitledBorder.DEFAULT_POSITION ,SemGenFont.defaultBold(2)));
 			setBackground(SemGenSettings.lightblue);

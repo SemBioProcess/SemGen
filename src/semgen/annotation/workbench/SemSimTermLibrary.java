@@ -421,7 +421,9 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public String getComponentDescription(int index) {
-			return masterlist.get(index).getDescription();
+			String desc = masterlist.get(index).getDescription();
+			if (desc==null) desc="No description";
+			return desc;
 		}
 		
 		/** Check if a component in the library already has a given name

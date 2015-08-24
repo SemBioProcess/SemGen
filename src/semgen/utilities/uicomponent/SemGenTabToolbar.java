@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 
@@ -75,17 +77,19 @@ public class SemGenTabToolbar extends JToolBar {
 
 		public SemGenToolbarRadioButton(ImageIcon icon) {
 			super(icon);
-			
 			setSize(new Dimension(30, 30));
 			setRolloverEnabled(true);
 			setPreferredSize(new Dimension(30, 30));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
 			addMouseListener(new btnbehavior(this));
-			setBorder(BorderFactory.createLineBorder(Color.red));
+			setHorizontalAlignment(SwingConstants.CENTER);
+			setVerticalTextPosition(SwingConstants.CENTER);
+			setBorderPainted(true);
+			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		}
 		
 		public void toggleSelectionGraphic() {
-			this.setBorderPainted(isSelected());
+			radioMouseGraphics(this, isSelected());
 		}
 		
 		private class btnbehavior extends MouseAdapter {
@@ -95,13 +99,13 @@ public class SemGenTabToolbar extends JToolBar {
 			}
 			public void mouseEntered(MouseEvent e) {
 				if (!isSelected()) {
-					mouseGraphics(button, true);
+					radioMouseGraphics(button, true);
 				}
 			}
 
 			public void mouseExited(MouseEvent e) {
 				if (!isSelected()) {
-					mouseGraphics(button, false);
+					radioMouseGraphics(button, false);
 				}
 			}
 		}
@@ -109,5 +113,12 @@ public class SemGenTabToolbar extends JToolBar {
 	
 	private void mouseGraphics(AbstractButton button, boolean dostuff) {
 		button.setBorderPainted(dostuff);
+	}
+	
+	private void radioMouseGraphics(AbstractButton button, boolean dostuff) {
+		if (dostuff) {
+			button.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+		}
+		else button.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 	}
 }
