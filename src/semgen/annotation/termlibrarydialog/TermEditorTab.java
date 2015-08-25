@@ -76,7 +76,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 	}
 	
 	private void makePanel() {
-		setTypeList();
+		
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		typechooser.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -135,6 +135,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		add(typepane);
 		add(editspacer);
 		
+		setTypeList();
 		validate();
 	}
 	
