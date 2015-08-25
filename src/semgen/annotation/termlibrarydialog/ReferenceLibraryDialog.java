@@ -37,7 +37,7 @@ public class ReferenceLibraryDialog extends JFrame {
 		
 		makeTabs();
 		setContentPane(mainpane);
-		setPreferredSize(new Dimension(900, 800));
+		setPreferredSize(new Dimension(1000, 800));
 		validate();
 		pack();
 		

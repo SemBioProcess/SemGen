@@ -91,6 +91,9 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	}
 	
 	private void showCreator() {
+		if (creatorpane!=null) {
+			remove(creatorpane);
+		}
 		toggleOptionVisibility(true);
 		Integer sel = typechooser.getSelectedIndex();
 		switch (types[sel]) {

@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 
@@ -55,37 +54,26 @@ public class SemGenTabToolbar extends JToolBar {
 			setRolloverEnabled(true);
 			setPreferredSize(new Dimension(30, 30));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
-			addMouseListener(new btnbehavior(this));
-		}
-		
-		private class btnbehavior extends MouseAdapter {
-			AbstractButton button;
-			public btnbehavior(AbstractButton btn) {
-				button = btn;
-			}
-			public void mouseEntered(MouseEvent e) {
-				mouseGraphics(button, true);
-			}
-
-			public void mouseExited(MouseEvent e) {
-				mouseGraphics(button, false);
-			}
 		}
 	}
 	protected class SemGenToolbarRadioButton extends JRadioButton {
 		private static final long serialVersionUID = 1L;
+		private Color selcol = new Color(233,236,242);
 
 		public SemGenToolbarRadioButton(ImageIcon icon) {
 			super(icon);
-			setSize(new Dimension(30, 30));
+			setOpaque(false);
+			setMaximumSize(new Dimension(29, 29));
 			setRolloverEnabled(true);
-			setPreferredSize(new Dimension(30, 30));
+			setPreferredSize(new Dimension(29, 29));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
 			addMouseListener(new btnbehavior(this));
 			setHorizontalAlignment(SwingConstants.CENTER);
 			setVerticalTextPosition(SwingConstants.CENTER);
 			setBorderPainted(true);
-			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+			
+			setBackground(selcol);
 		}
 		
 		public void toggleSelectionGraphic() {
@@ -98,27 +86,24 @@ public class SemGenTabToolbar extends JToolBar {
 				button = btn;
 			}
 			public void mouseEntered(MouseEvent e) {
-				if (!isSelected()) {
+				if (!isSelected() && isEnabled()) {
 					radioMouseGraphics(button, true);
 				}
 			}
 
 			public void mouseExited(MouseEvent e) {
-				if (!isSelected()) {
+				if (!isSelected() && isEnabled()) {
 					radioMouseGraphics(button, false);
 				}
 			}
 		}
 	}
 	
-	private void mouseGraphics(AbstractButton button, boolean dostuff) {
-		button.setBorderPainted(dostuff);
-	}
-	
 	private void radioMouseGraphics(AbstractButton button, boolean dostuff) {
+		button.setOpaque(dostuff);
 		if (dostuff) {
-			button.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+			button.setBorder(BorderFactory.createRaisedBevelBorder());
 		}
-		else button.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		else button.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 	}
 }

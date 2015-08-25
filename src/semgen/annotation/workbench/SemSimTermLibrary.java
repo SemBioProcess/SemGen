@@ -756,6 +756,34 @@ public class SemSimTermLibrary extends Observable {
 		notifyObservers(LibraryEvent.TERM_CHANGE);
 	}
 	
+	public int countObjectofType(SemSimTypes type) {
+		int cnt = 0;
+		switch (type) {
+		case COMPOSITE_PHYSICAL_ENTITY:
+			cnt = cpeindexer.size();
+			break;
+		case CUSTOM_PHYSICAL_ENTITY:
+			cnt = custpeindexer.size();
+			break;
+		case PHYSICAL_PROCESS:
+			cnt = procindexer.size();
+			break;
+		case PHYSICAL_PROPERTY:
+			cnt = singppindexer.size();
+			break;
+		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			cnt = ppccompindexer.size();
+			break;
+		case REFERENCE_PHYSICAL_ENTITY:
+			cnt = rpeindexer.size();
+			break;
+		default:
+			break;
+		
+		}
+		return cnt;
+	}
+	
 //*********************************INDEX CARD DEFINITION************************************//
 	protected class IndexCard<T extends PhysicalModelComponent> {
 		private T component;

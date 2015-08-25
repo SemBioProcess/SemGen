@@ -11,6 +11,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
@@ -147,15 +148,17 @@ public class TermInformationPanel extends JPanel {
 	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		private Dimension dim = new Dimension(400,300);
+		private Dimension dim = new Dimension(440,300);
 		private JList<String> list = new JList<String>();
 		
 		public InfoPanel(String name) {
 			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 			setAlignmentX(Box.LEFT_ALIGNMENT);
-			setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), name, TitledBorder.CENTER, 
-					TitledBorder.DEFAULT_POSITION ,SemGenFont.defaultBold(2)));
+			Border title = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), name, TitledBorder.CENTER, 
+					TitledBorder.DEFAULT_POSITION ,SemGenFont.defaultBold());
+			
+			setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), title));
 			setBackground(SemGenSettings.lightblue);
 
 			list.setFont(SemGenFont.defaultPlain());
