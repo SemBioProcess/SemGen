@@ -128,7 +128,9 @@ public class TermInformationPanel extends JPanel {
 	}
 	
 	private String describeCustomTerm() {
-		return library.getComponentDescription(selection);
+		String desc = library.getComponentDescription(selection);
+		if (desc.isEmpty()) desc = "No Description";
+		return desc;
 	}
 	
 	private String describeProcess() {

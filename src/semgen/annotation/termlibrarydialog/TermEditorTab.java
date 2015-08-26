@@ -76,35 +76,38 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 	}
 	
 	private void makePanel() {
-		
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		typechooser.setAlignmentX(Component.LEFT_ALIGNMENT);
-		typechooser.setAlignmentY(Component.TOP_ALIGNMENT);
-		Dimension dim = new Dimension(360,160);
-		typechooser.setMinimumSize(dim);
-		typechooser.setMaximumSize(dim);
 		
+		Dimension dim = new Dimension(360,140);
 		typechooser.addListSelectionListener(this);
-		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
+		
+		SemGenScrollPane typechoosepane = new SemGenScrollPane(typechooser);
+		typechoosepane.setBorder(BorderFactory.createTitledBorder("Physical Types"));		
+		typechoosepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typechoosepane.setAlignmentY(Component.TOP_ALIGNMENT);
+		typechoosepane.setBackground(SemGenSettings.lightblue);
+		typechoosepane.setMinimumSize(dim);
+		typechoosepane.setMaximumSize(dim);
 		
 		termlist.addListSelectionListener(this);
 		termlist.addMouseMotionListener(new ListTooltip(termlist));
 		termlist.setFont(SemGenFont.defaultPlain());
-		termlist.setBorder(BorderFactory.createTitledBorder("Instances"));
-			
+		
 		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
 		Dimension tsdim = new Dimension(360,300);
 		termscroller.setPreferredSize(tsdim);
 		termscroller.setMaximumSize(tsdim);
 		termscroller.setAlignmentX(Box.LEFT_ALIGNMENT);
+		termscroller.setBackground(SemGenSettings.lightblue);
+		termscroller.setBorder(BorderFactory.createTitledBorder("Instances"));
 		
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
-		
-		typepane.add(typechooser);
+	
+		typepane.add(typechoosepane);
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
 		
@@ -279,6 +282,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			sels.add(infobtn);
 			sels.add(modifybtn);
 			sels.add(replacebtn);
+			
 			
 			toggleButtons();
 		}

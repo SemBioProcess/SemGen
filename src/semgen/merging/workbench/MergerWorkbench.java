@@ -102,23 +102,17 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getDSPairDescriptors(index);
 	}
 	
-	public void reloadModel(int index, boolean autoannotate) {
-		File path = filepathlist.get(index);
-		loadedmodels.set(index, loadModel(path, autoannotate));
-	}
-	
-	public void reloadAllModels(boolean autoannotate) {
-		for (int i=0; i<loadedmodels.size(); i++) {
-			reloadModel(i, autoannotate);
-		}
-		notifyModelListUpdated();
-	}
-	
 	public void removeSelectedModel() {
 		if (modelselection == -1) return;
 		loadedmodels.remove(modelselection);
 		filepathlist.remove(modelselection);
 		overlapmap = null;
+		alldslist.clear();
+		exposeddslist.clear();
+		if (!loadedmodels.isEmpty()) {
+			addDSNameList(loadedmodels.get(0).getAssociatedDataStructures());
+		}
+		
 		notifyModelListUpdated();
 	}
 
@@ -162,10 +156,6 @@ public class MergerWorkbench extends Workbench {
 			}
 		}
 		return identicalmap;
-	}
-	
-	public ModelOverlapMap getModelOverlapMap(){
-		return overlapmap;
 	}
 	
 	public Pair<String, String> getMapPairNames(int index) {

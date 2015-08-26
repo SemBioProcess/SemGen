@@ -767,7 +767,7 @@ public class SemSimOWLreader extends ModelReader {
 			label = label.replace(sub, "");
 			label = label.replace("_", " ");
 		}
-		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, label);
+		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, null);
 		
 		if(SemSimOWLFactory.getRDFComments(ont, cuperef)!=null)
 			cupe.setDescription(SemSimOWLFactory.getRDFComments(ont, cuperef)[0]);

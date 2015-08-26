@@ -46,7 +46,7 @@ public class ModelAnnotationsBench extends Observable {
 	}
 	
 	public void changeModelSourceFile() {
-		LegacyCodeChooser lc = new LegacyCodeChooser();
+		LegacyCodeChooser lc = new LegacyCodeChooser(model.getLegacyCodeLocation());
 		String loc = lc.getCodeLocation();
 		if (loc != null && !loc.equals("")) {
 			setModelSourceFile(loc);

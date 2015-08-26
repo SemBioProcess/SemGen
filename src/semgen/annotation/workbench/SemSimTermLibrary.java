@@ -422,7 +422,7 @@ public class SemSimTermLibrary extends Observable {
 		
 		public String getComponentDescription(int index) {
 			String desc = masterlist.get(index).getDescription();
-			if (desc==null) desc="No description";
+			if (desc==null) desc="";
 			return desc;
 		}
 		
@@ -442,11 +442,6 @@ public class SemSimTermLibrary extends Observable {
 			masterlist.get(index).getObject().setName(name);
 			notifyTermChanged();
 			
-		}
-		
-		public void setDescription(int index, String description) {
-			masterlist.get(index).getObject().setName(description);
-			notifyTermChanged();
 		}
 		
 		public void clearRelations(Integer termindex, SemSimRelation relation) {
