@@ -54,6 +54,7 @@ public class SemGenTabToolbar extends JToolBar {
 			setRolloverEnabled(true);
 			setPreferredSize(new Dimension(30, 30));
 			setAlignmentY(JButton.TOP_ALIGNMENT);
+			this.setFocusable(false);
 		}
 	}
 	protected class SemGenToolbarRadioButton extends JRadioButton {

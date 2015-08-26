@@ -107,6 +107,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
 	
+		typepane.add(Box.createVerticalStrut(15));
 		typepane.add(typechoosepane);
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
@@ -275,6 +276,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			replacebtn.setToolTipText("Replace selected term.");
 			replacebtn.addActionListener(this);
 			add(replacebtn);
+			add(Box.createHorizontalStrut(470));
 			removebtn.addActionListener(this);
 			add(removebtn);
 			this.setMargin(new Insets(0,0,1,0));
@@ -310,6 +312,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		}
 		
 		public void toggleButtons() {
+			infobtn.setToolTipText("Term Usage");
 			modifybtn.setToolTipText("Modify selected term.");
 			removebtn.setToolTipText("Remove selected term.");
 			if (!termlist.isSelectionEmpty()) {

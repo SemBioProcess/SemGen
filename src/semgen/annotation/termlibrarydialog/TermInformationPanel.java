@@ -32,7 +32,7 @@ public class TermInformationPanel extends JPanel {
 	private JEditorPane description = new JEditorPane();
 	
 	public TermInformationPanel(AnnotatorWorkbench wb) {
-		library = wb.openTermLibrary();		
+		library = wb.openTermLibrary();
 		this.setMaximumSize(new Dimension(600, 700));
 		createGUI();
 	}
@@ -150,14 +150,14 @@ public class TermInformationPanel extends JPanel {
 	
 	private class InfoPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
-		private Dimension dim = new Dimension(440,300);
+		private Dimension dim = new Dimension(500,300);
 		private JList<String> list = new JList<String>();
 		
 		public InfoPanel(String name) {
 			setPreferredSize(dim);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 			setAlignmentX(Box.LEFT_ALIGNMENT);
-			Border title = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), name, TitledBorder.CENTER, 
+			Border title = BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), name, TitledBorder.CENTER, 
 					TitledBorder.DEFAULT_POSITION ,SemGenFont.defaultBold());
 			
 			setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), title));
