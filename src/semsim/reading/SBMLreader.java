@@ -65,6 +65,7 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -85,6 +86,9 @@ public class SBMLreader extends ModelReader{
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
+//	private Submodel reactionssubmodel;
+	
+	private static final String timedomainname = "time";
 	
 	
 	public SBMLreader(File file) {
@@ -135,16 +139,34 @@ public class SBMLreader extends ModelReader{
 		
 		// Create submodels for compartments and species. Each reaction gets its own submodel later.
 		if(sbmlmodel.getListOfParameters().size()>0) 
-			parametersubmodel = semsimmodel.addSubmodel(new Submodel("parameters"));
+			parametersubmodel = semsimmodel.addSubmodel(new Submodel("Parameters"));
 		
 		if(sbmlmodel.getListOfCompartments().size()>0) 
-			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("compartments"));
+			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("Compartments"));
 		
 		if(sbmlmodel.getListOfSpecies().size()>0)
-			speciessubmodel = semsimmodel.addSubmodel(new Submodel("species"));
+			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
+		
+//		if(sbmlmodel.getListOfReactions().size()>0)
+//			reactionssubmodel = semsimmodel.addSubmodel(new Submodel("Reactions"));
+		
+		
 				
 		// if any errors at this point, return model
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
+		
+		// Create a data structure that represents the temporal solution domain
+		DataStructure timeds = new Decimal(timedomainname);
+		timeds.setDescription("Temporal solution domain");
+		timeds.setIsSolutionDomain(true);
+		
+		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01023"));
+		semsimmodel.addPhysicalProperty(timeprop);
+		timeds.setSingularAnnotation(timeprop);
+		
+		semsimmodel.addDataStructure(timeds);
+		speciessubmodel.addDataStructure(timeds);
+		
 		
 		setBaseUnits();
 		collectModelLevelData();
@@ -281,7 +303,7 @@ public class SBMLreader extends ModelReader{
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
 			compartmentsubmodel.addDataStructure(ds);
 			
-			String mathml = "<cn>" + sbmlc.getSize() + "</cn>";
+			String mathml = " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" + sbmlc.getSize() + "</cn>";
 			ds.getComputation().setMathML(mathml);
 			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 						
@@ -552,6 +574,7 @@ public class SBMLreader extends ModelReader{
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reactionID));
 			Submodel rxnsubmodel = new Submodel(reactionID);
 			semsimmodel.addSubmodel(rxnsubmodel);
+			//reactionssubmodel.addSubmodel(rxnsubmodel);
 			rxnsubmodel.addDataStructure(ds);
 			
 			KineticLaw kineticlaw = reaction.getKineticLaw();
@@ -647,10 +670,11 @@ public class SBMLreader extends ModelReader{
 	private void setSpeciesConservationEquations(){
 		
 		for(String speciesid : speciesAndConservation.keySet()){
-			
+	      
 			String eqstring = "";
 			String eqmathml = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
-			eqmathml = eqmathml + "\n <apply>\n  <plus/>";
+			eqmathml = eqmathml + "\n <apply>\n <eq />\n <apply>\n  <diff />\n  <bvar>\n   <ci>" 
+						+ timedomainname + "</ci>\n  </bvar>\n  <ci>" + speciesid + "</ci>\n  </apply>\n  <plus/>";
 
 			PhysicalEntity speciesent = speciesAndSemSimEntitiesMap.get(speciesid);
 			
@@ -686,7 +710,7 @@ public class SBMLreader extends ModelReader{
 			
 			if(eqstring.length()>0){
 				eqstring = eqstring.substring(2, eqstring.length());
-				eqstring = speciesid + " = " + eqstring;
+				eqstring = "d(" + speciesid + ")/d(" + timedomainname + ") = " + eqstring;
 				DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
 				speciesds.getComputation().setComputationalCode(eqstring);
 				speciesds.getComputation().setMathML(eqmathml);
@@ -863,6 +887,11 @@ public class SBMLreader extends ModelReader{
 				tempanns.remove(ann);
 				break;
 			}
+			else if(isentity)
+				semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()));
+			else
+				semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(ann.getReferenceURI(), ann.getValueDescription()));
+			
 		}
 		
 		tempanns.addAll(getModelQualifierAnnotations(sbmlobject));
@@ -919,8 +948,8 @@ public class SBMLreader extends ModelReader{
 		ds.setUnit(unitforpar);
 		
 		ds.getComputation().setComputationalCode(ID + " = " + Double.toString(p.getValue()));
-		ds.getComputation().setMathML("<cn>" + p.getValue() + "</cn>");
-
+		ds.getComputation().setMathML(" <apply>\n  <eq />\n  <ci>" + ID + "</ci>\n  <cn>" + p.getValue() + "</cn>\n </apply>");
+		
 		// Annotations, too?
 		collectSBaseData(p, ds);
 		
