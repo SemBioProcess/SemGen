@@ -1,5 +1,6 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -83,7 +84,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		typechooser.addListSelectionListener(this);
 		
 		SemGenScrollPane typechoosepane = new SemGenScrollPane(typechooser);
-		typechoosepane.setBorder(BorderFactory.createTitledBorder("Physical Types"));		
+		typechoosepane.setBorder(BorderFactory.createTitledBorder("Physical Types"));
 		typechoosepane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		typechoosepane.setAlignmentY(Component.TOP_ALIGNMENT);
 		typechoosepane.setBackground(SemGenSettings.lightblue);
@@ -93,6 +94,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		termlist.addListSelectionListener(this);
 		termlist.addMouseMotionListener(new ListTooltip(termlist));
 		termlist.setFont(SemGenFont.defaultPlain());
+		termlist.setForeground(Color.blue);
 		
 		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
 		Dimension tsdim = new Dimension(360,300);

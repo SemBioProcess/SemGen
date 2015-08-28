@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import semgen.SemGenSettings;
 import semgen.annotation.common.EntitySelectorGroup;
 import semgen.annotation.workbench.SemSimTermLibrary;
+import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 
 public class CreateCompositeDialog extends SemGenDialog implements ActionListener, ComponentListener {
@@ -35,8 +36,16 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 	}
 	
 	private void makeGUI() {
-		JPanel mainpane = new JPanel(new BorderLayout());
-		mainpane.add(esg, BorderLayout.NORTH);
+		JPanel mainpane = new JPanel();
+		mainpane.setBackground(SemGenSettings.lightblue);
+		mainpane.setLayout(new BoxLayout(mainpane, BoxLayout.PAGE_AXIS));
+		JLabel header = new JLabel("Create Composite Physical Entity");
+		header.setAlignmentY(TOP_ALIGNMENT);
+		header.setFont(SemGenFont.Bold("Arial", 3));
+		header.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 0));
+		mainpane.add(header, BorderLayout.NORTH);
+		mainpane.add(esg, BorderLayout.CENTER);
+		mainpane.setAlignmentX(LEFT_ALIGNMENT);
 		esg.addComponentListener(this);
 		createbtn.setEnabled(false);
 		createbtn.addActionListener(this);
@@ -49,6 +58,7 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 		confirmpan.add(msgbox);
 		confirmpan.add(createbtn);
 		confirmpan.add(cancelbtn);
+		confirmpan.setAlignmentX(LEFT_ALIGNMENT);
 		
 		mainpane.add(confirmpan, BorderLayout.SOUTH);
 		mainpane.add(Box.createVerticalGlue());
@@ -66,6 +76,8 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 
 		public CompositeBuilder(SemSimTermLibrary lib) {
 			super(lib);
+			setAlignmentY(TOP_ALIGNMENT);
+			setAlignmentX(LEFT_ALIGNMENT);
 		}
 
 		@Override

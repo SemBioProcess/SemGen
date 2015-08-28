@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -54,6 +56,8 @@ public class TermInformationPanel extends JPanel {
 		
 		name.setFont(SemGenFont.Bold("Arial", 3));
 		name.setAlignmentX(Box.LEFT_ALIGNMENT);
+		name.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
+		
 		description = new JEditorPane("text/html", "");
 		description.setAlignmentX(Box.LEFT_ALIGNMENT);
 		description.setEditable(false);
@@ -162,9 +166,10 @@ public class TermInformationPanel extends JPanel {
 			
 			setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0), title));
 			setBackground(SemGenSettings.lightblue);
-
 			list.setFont(SemGenFont.defaultPlain());
-			list.setEnabled(false);
+			list.setSelectionModel(new DisabledItemSelectionModel());
+			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			list.setForeground(Color.black);
 			add(new SemGenScrollPane(list));
 			validate();
 		}
@@ -175,6 +180,15 @@ public class TermInformationPanel extends JPanel {
 		public void clearList() {
 			list.clearSelection();
 			list.setListData(new String[]{});
+		}
+		
+		class DisabledItemSelectionModel extends DefaultListSelectionModel {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public void setSelectionInterval(int index0, int index1) {
+		        super.setSelectionInterval(-1, -1);
+		    }
 		}
 	}
 }
