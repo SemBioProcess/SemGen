@@ -82,7 +82,7 @@ public class TermInformationPanel extends JPanel {
 			selection = collection.getTermLibraryIndex();
 			termpane.setListData(collection.getCompositeNames());
 			cwpane.setListData(collection.getCodewordNames());
-			name.setText(library.getComponentName(collection.getTermLibraryIndex()));
+			name.setText("<html>" + library.getComponentName(collection.getTermLibraryIndex()) + "</html>");
 			describeComponent();
 			termpane.setVisible(showCompositePane());
 		}

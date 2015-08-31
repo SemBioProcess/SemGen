@@ -16,9 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
@@ -74,11 +71,13 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		namepanel.add(new JLabel("Name: "));
 		namepanel.add(mantextfield);
 		namepanel.setAlignmentY(TOP_ALIGNMENT);
+		namepanel.setMaximumSize(new Dimension(9999, 150));
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
 		descriptionpanel.setAlignmentY(TOP_ALIGNMENT);
+		descriptionpanel.setMaximumSize(new Dimension(9999, 250));
 		
 		if (termindex!=-1) {
 			mantextfield.setText(library.getComponentName(termindex));

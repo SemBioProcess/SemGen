@@ -2,9 +2,6 @@ package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,7 +17,7 @@ import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 
-public class TermModifyPanel extends JPanel implements ActionListener, Observer {
+public class TermModifyPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private SemSimTermLibrary library;
 	private JPanel modpane;
@@ -32,9 +29,7 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 	
 	public TermModifyPanel(AnnotatorWorkbench wb) {
 		library = wb.openTermLibrary();
-		wb.addObserver(this);
 		createGUI();
-		setBorder(BorderFactory.createEtchedBorder());
 	}
 	
 	private void createGUI() {
@@ -44,11 +39,13 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 		header.setFont(SemGenFont.Bold("Arial", 3));
 		header.setAlignmentX(Box.LEFT_ALIGNMENT);
 		header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+		header.setAlignmentY(Box.TOP_ALIGNMENT);
 		add(header);
 		
 		modcntrls.setLayout(new BoxLayout(modcntrls, BoxLayout.LINE_AXIS));
 		modcntrls.setBackground(SemGenSettings.lightblue);
 		modcntrls.setAlignmentX(LEFT_ALIGNMENT);
+		modcntrls.setAlignmentY(Box.BOTTOM_ALIGNMENT);
 		modcntrls.add(confirmbtn);
 		confirmbtn.addActionListener(this);
 		confirmbtn.setEnabled(false);
@@ -57,7 +54,8 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 	
 	public void showModifier(int index) {
 		compindex = index;
-		header.setText("Editing " + library.getComponentName(compindex));
+		String name = library.getComponentName(compindex);
+		header.setText("<html>Editing " + name + "</html>");
 		if (modpane!=null) {
 			remove(modpane);
 			remove(modcntrls);
@@ -80,11 +78,6 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 		add(modpane);
 		add(modcntrls);
 		validate();
-	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
 	}
 	
 	@Override

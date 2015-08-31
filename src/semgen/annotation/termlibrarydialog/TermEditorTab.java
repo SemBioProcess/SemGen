@@ -109,13 +109,14 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
 	
-		typepane.add(Box.createVerticalStrut(15));
+		typepane.add(Box.createVerticalStrut(12));
 		typepane.add(typechoosepane);
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
 		
 		typepane.setAlignmentY(Component.TOP_ALIGNMENT);
 		typepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typepane.setMaximumSize(new Dimension(360,9999));
 		
 		tip = new TermInformationPanel(workbench);
 		replacer = new ReplaceTermPane(workbench);
@@ -140,7 +141,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 
 		add(typepane);
 		add(editspacer);
-		
+		add(Box.createHorizontalGlue());
 		setTypeList();
 		validate();
 	}

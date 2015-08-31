@@ -78,6 +78,10 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
+		//Just set the (#%#$^ size!
+		typechooser.setMinimumSize(dim);
+		typechooser.setMaximumSize(dim);
+		typechooser.setPreferredSize(dim);
 
 		JPanel optionpane = new JPanel();
 		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.LINE_AXIS));
@@ -96,6 +100,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
+		typepane.add(Box.createVerticalStrut(12));
 		typepane.add(typechoosepane);
 		typepane.add(optionpane);
 		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
@@ -104,14 +109,16 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typepane.add(msgbox);
 		typepane.add(Box.createVerticalGlue());
 		typepane.setAlignmentY(Box.TOP_ALIGNMENT);
+		typepane.setMaximumSize(new Dimension(360,9999));
 		add(typepane);
 		
 		header.setFont(SemGenFont.Bold("Arial", 3));
-		header.setAlignmentX(Box.CENTER_ALIGNMENT);
+		header.setAlignmentX(Box.LEFT_ALIGNMENT);
 		header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
 		
 		rightpane.setBackground(SemGenSettings.lightblue);
 		rightpane.setAlignmentY(Box.TOP_ALIGNMENT);
+		rightpane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		rightpane.setLayout(new BoxLayout(rightpane, BoxLayout.PAGE_AXIS)); 
 		
 		rightpane.add(header);
@@ -162,6 +169,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		}
 		header.setText(title);
 		rightpane.add(creatorpane);
+		creatorpane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		validate();
 	}
 	
