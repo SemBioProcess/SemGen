@@ -174,18 +174,29 @@ public class CellMLwriter extends ModelWriter {
 	
 	private void declareUnits() {
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
+			
 			if(!sslib.isCellMLBaseUnit(uom.getName()) && !uom.isImported()){
+				
 				Element unitel = new Element("units", mainNS);
-				unitel.setAttribute("name", uom.getName());
+				unitel.setAttribute("name", uom.getName().replace(" ", "_"));
+				
 				if(uom.isFundamental()) unitel.setAttribute("base_units", "yes");
+				
 				else{
+					
 					for(UnitFactor factor : uom.getUnitFactors()){
 						Element factorel = new Element("unit", mainNS);
-						if(factor.getExponent()!=1.0)
+						
+						if(factor.getExponent()!=1.0 && factor.getExponent()!=0.0)
 							factorel.setAttribute("exponent", Double.toString(factor.getExponent()));
+						
 						if(factor.getPrefix()!=null)
 							factorel.setAttribute("prefix", factor.getPrefix());
-						factorel.setAttribute("units", factor.getBaseUnit().getName());
+						
+						if(factor.getMultiplier()!=1.0 && factor.getMultiplier()!=0.0)
+							factorel.setAttribute("multiplier", Double.toString(factor.getMultiplier()));
+						
+						factorel.setAttribute("units", factor.getBaseUnit().getName().replace(" ", "_"));
 						unitel.addContent(factorel);
 					}
 				}
@@ -211,13 +222,12 @@ public class CellMLwriter extends ModelWriter {
 				else mathml = mathml + ds.getComputation().getMathML() + "\n";
 			}
 			maincomponent.getComputation().setMathML(mathml);
-			processFunctionalSubmodel(maincomponent);
-			// PROBLEM HERE IS THAT THE MATHML CONTENT ISN"T CELLML-FORMATTED
+			processFunctionalSubmodel(maincomponent, false);
 		}
 		else{
 			for(Submodel submodel : semsimmodel.getSubmodels()){
 				if(submodel.isFunctional()){
-					processFunctionalSubmodel((FunctionalSubmodel) submodel);
+					processFunctionalSubmodel((FunctionalSubmodel) submodel, true);
 				}
 			}
 		}
@@ -329,7 +339,7 @@ public class CellMLwriter extends ModelWriter {
 	
 	//*************END WRITE PROCEDURE********************************************//
 	
-	private void processFunctionalSubmodel(FunctionalSubmodel submodel){
+	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
 		if(!((FunctionalSubmodel)submodel).isImported()){
 			Element comp = new Element("component", mainNS);
 			
@@ -348,7 +358,7 @@ public class CellMLwriter extends ModelWriter {
 				String initialval = ds.getStartValue();  // Overwritten later by getCellMLintialValue if ds is CellML-type variable
 				
 				String nameval = ds.getName();
-				if(nameval.contains("."))
+				if(truncatenames && nameval.contains("."))
 					nameval = nameval.substring(nameval.indexOf(".")+1);
 				
 				String publicintval = null;
@@ -361,14 +371,9 @@ public class CellMLwriter extends ModelWriter {
 					publicintval = cellmlvar.getPublicInterfaceValue();
 					privateintval = cellmlvar.getPrivateInterfaceValue();
 				}
-				// Otherwise, if the variable is a static parameter, get the value and store it as the initial_value
-				else if(ds.getComputation()!=null){
-					if(ds.getComputation().getInputs().isEmpty()){
-						String code = ds.getComputation().getComputationalCode();
-						if(code!=null)
-							initialval = code.substring(code.indexOf("=")+1).trim();
-					}
-				}
+				// Otherwise, if the variable has a start value store it as the initial_value
+				else if(ds.hasStartValue())
+					initialval = ds.getStartValue();
 				
 				// Add the RDF block for any singular annotation
 				createRDFforAnnotatedThing(ds, "v", variable, ds.getDescription());
@@ -386,7 +391,7 @@ public class CellMLwriter extends ModelWriter {
 				if(privateintval!=null && !privateintval.equals(""))
 					variable.setAttribute("private_interface", privateintval);
 				
-				if(ds.hasUnits()) variable.setAttribute("units", ds.getUnit().getName());
+				if(ds.hasUnits()) variable.setAttribute("units", ds.getUnit().getName().replace(" ", "_"));
 				else variable.setAttribute("units", "dimensionless");
 				
 				comp.addContent(variable);
@@ -396,7 +401,14 @@ public class CellMLwriter extends ModelWriter {
 			// Add the mathml
 			if(((FunctionalSubmodel)submodel).getComputation().getMathML()!=null)
 				comp.addContent(makeXMLContentFromStringForMathML(((FunctionalSubmodel)submodel).getComputation().getMathML()));
-			
+			else{
+				String allmathml = "";
+				for(DataStructure ds : submodel.getAssociatedDataStructures()){
+					String mathml = ds.getComputation().getMathML();
+					allmathml = allmathml + "\n" + mathml;
+				}
+				comp.addContent(makeXMLContentFromStringForMathML(allmathml));
+			}
 			root.addContent(comp);
 		}
 	}
@@ -422,7 +434,6 @@ public class CellMLwriter extends ModelWriter {
 	
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		
-		System.out.println(xml);
 		xml = "<temp>\n" + xml + "\n</temp>";
 		Content c = makeXMLContentFromString(xml);
 		

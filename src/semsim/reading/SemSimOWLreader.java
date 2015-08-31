@@ -443,9 +443,12 @@ public class SemSimOWLreader extends ModelReader {
 						
 						double exponent = 1.0;
 						String prefix = null;
+						double multiplier = 1.0;
 						
 						OWLAnnotationProperty unitfactorexpprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI));
 						OWLAnnotationProperty unitfactorprefixprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_PREFIX_URI));
+						OWLAnnotationProperty unitfactormultprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_MULTIPLIER_URI));
+						
 						
 						if(!oopaa.getAnnotations(unitfactorexpprop).isEmpty()){
 							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorexpprop).toArray(new OWLAnnotation[]{})[0].getValue();
@@ -456,7 +459,12 @@ public class SemSimOWLreader extends ModelReader {
 							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorprefixprop).toArray(new OWLAnnotation[]{})[0].getValue();
 							prefix = litval.getLiteral();
 						}
-						uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix));
+						
+						if(!oopaa.getAnnotations(unitfactormultprop).isEmpty()){
+							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactormultprop).toArray(new OWLAnnotation[]{})[0].getValue();
+							multiplier = litval.parseDouble();
+						}
+						uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix, multiplier));
 					}
 				}
 			}

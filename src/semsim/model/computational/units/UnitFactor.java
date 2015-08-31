@@ -11,6 +11,13 @@ public class UnitFactor{
 		setExponent(exponent);
 		setPrefix(prefix);
 	}
+	
+	public UnitFactor(UnitOfMeasurement baseUnit, double exponent, String prefix, double multiplier){
+		setBaseUnit(baseUnit);
+		setExponent(exponent);
+		setPrefix(prefix);
+		setMultiplier(multiplier);
+	}
 
 	public UnitOfMeasurement getBaseUnit() {
 		return baseUnit;

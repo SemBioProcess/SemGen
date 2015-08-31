@@ -30,6 +30,7 @@ import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
@@ -215,6 +216,12 @@ public class SemSimUtil {
 			String assignmentmathml = event.getEventAssignmentForOutput(outputds).getMathML();
 			Set<DataStructure> assignmentinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
 			allinputs.addAll(assignmentinputs);
+		}
+		
+		// If the DataStructure is a mapped variable, include the mappings
+		if(outputds instanceof MappableVariable){
+			MappableVariable mv = (MappableVariable)outputds;
+			allinputs.addAll(mv.getMappedFrom());
 		}
 		
 		// Assert all the inputs

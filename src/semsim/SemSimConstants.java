@@ -138,6 +138,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_EXPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorExponent");
 	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
+	public static final URI UNIT_FACTOR_MULTIPLIER_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorMultiplier");
 	
 	// Model-level relations	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");

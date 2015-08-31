@@ -733,15 +733,23 @@ public class SemSimOWLwriter extends ModelWriter {
 	// Assert a public interface annotation (for CellML-derived models)
 	private Set<OWLAnnotation> makeUnitFactorAnnotations(UnitFactor factor){
 		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
-		if(factor.getExponent()!=1.0){
+		
+		if(factor.getExponent()!=1.0 && factor.getMultiplier()!=0.0){
 			OWLLiteral explit = factory.getOWLLiteral(factor.getExponent());
 			OWLAnnotation expanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI)), explit);
 			anns.add(expanno);
 		}
+		
 		if(factor.getPrefix()!=null){
 			OWLLiteral preflit = factory.getOWLLiteral(factor.getPrefix());
 			OWLAnnotation prefanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_PREFIX_URI)), preflit);
 			anns.add(prefanno);
+		}
+		
+		if(factor.getMultiplier()!=1.0 && factor.getMultiplier()!=0.0){
+			OWLLiteral multlit = factory.getOWLLiteral(factor.getMultiplier());
+			OWLAnnotation multanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_MULTIPLIER_URI)), multlit);
+			anns.add(multanno);
 		}
 		return anns;
 	}
