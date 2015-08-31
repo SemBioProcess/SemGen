@@ -30,6 +30,7 @@ $(window).bind("cwb-initialized", function(e) {
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
 		console.log("Removing model " + modelName);
+		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
 		delete modelNodes[modelName];
 		graph.update();

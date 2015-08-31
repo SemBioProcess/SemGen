@@ -100,4 +100,15 @@ function DragToMerge(_node) {
 		// Add the dragging functionality to the node
 		_node.rootElement.call(nodeDrag);
 	});
-}
+
+};
+
+function removeFromDragList(_node) {
+
+	var NewNodes = [];
+	AllNodes.forEach(function (node) {
+		if(node != _node)
+			NewNodes.push(node);
+	});
+	AllNodes = NewNodes;
+};
