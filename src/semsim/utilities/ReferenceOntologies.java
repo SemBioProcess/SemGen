@@ -69,42 +69,57 @@ public class ReferenceOntologies {
 	public enum ReferenceOntology {
 		CHEBI("Chemical Entities of Biological Interest", "CHEBI", "1007",
 				new String[]{"http://purl.org/obo/owl/CHEBI#", "http://purl.obolibrary.org/obo/CHEBI","http://identifiers.org/chebi/",
-				"http://identifiers.org/obo.chebi/", "urn:miriam:obo.chebi:"}),
+				"http://identifiers.org/obo.chebi/", "urn:miriam:obo.chebi:"}, 
+				"Atoms and small molecules"),
 		CL("Cell Type Ontology", "CL", "1006",
-				new String[]{"http://purl.obolibrary.org/obo/CL", "http://identifiers.org/cl/"}),
+				new String[]{"http://purl.obolibrary.org/obo/CL", "http://identifiers.org/cl/"},
+				"Non-mammalian cell types"),
 		CMO("Clinical Measurement Ontology", "CMO", "1583",
-				new String[]{"http://purl.bioontology.org/ontology/CMO/", "http://purl.obolibrary.org/obo/CMO"}),
+				new String[]{"http://purl.bioontology.org/ontology/CMO/", "http://purl.obolibrary.org/obo/CMO"},
+				""),
 		FMA("Foundational Model of Anatomy", "FMA", "1053",
-				new String[]{"http://purl.org/sig/ont/fma/", "http://sig.biostr.washington.edu/fma3.0#", "http://sig.uw.edu/fma#", "http://identifiers.org/fma/"}),
+				new String[]{"http://purl.org/sig/ont/fma/", "http://sig.biostr.washington.edu/fma3.0#", "http://sig.uw.edu/fma#", "http://identifiers.org/fma/"},
+				"Macromolecular to organism-level anatomy"),
 		GO("Gene Ontology", "GO", "1070",
 				new String[]{"http://purl.org/obo/owl/GO#", "http://purl.obolibrary.org/obo/GO", "urn:miriam:obo.go:",
-				"http://identifiers.org/go/", "http://identifiers.org/obo.go/"}),
+				"http://identifiers.org/go/", "http://identifiers.org/obo.go/"},
+				"Macromolecular structures not represented in the FMA"),
 		MA("Mouse Adult Gross Anatomy Ontology", "MA", "1000",
 				new String[]{"http://purl.bioontology.org/ontology/MA", "http://purl.org/obo/owl/MA#", "http://purl.obolibrary.org/obo/MA", 
-				"http://identifiers.org/ma/"}),
-		OBI("Ontology for Biomedical Investigations", "OBI", "", new String[]{"http://purl.bioontology.org/ontology/OBI"}),
+				"http://identifiers.org/ma/"},
+				"Rodent-specific anatomy"),
+		OBI("Ontology for Biomedical Investigations", "OBI", "", new String[]{"http://purl.bioontology.org/ontology/OBI"},
+				"Laboratory materials"),
 		OPB("Ontology of Physics for Biology", "OPB", "", //1141
-				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"}),
+				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"},
+				""),
 		PATO("Phenotype and Trait Ontology", "PATO", "1107",
-				new String[]{"http://purl.org/obo/owl/PATO#", "http://purl.obolibrary.org/obo/PATO"}),
+				new String[]{"http://purl.org/obo/owl/PATO#", "http://purl.obolibrary.org/obo/PATO"},
+				""),
 		PR("Protein Ontology", "PR", "1062",
-				new String[]{"http://purl.obolibrary.org/obo/PR"}),
+				new String[]{"http://purl.obolibrary.org/obo/PR"},
+				"Proteins"),
 		SBO("Systems Biology Ontology", "SBO", "1046",
-				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#","http://purl.obolibrary.org/obo/SBO"}),
+				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#","http://purl.obolibrary.org/obo/SBO"},
+				""),
 		SNOMED("SNOMED - Clinical Terms", "SNOMEDCT", "1353",
-				new String[]{"http://purl.bioontology.org/ontology/SNOMEDCT/"}),
+				new String[]{"http://purl.bioontology.org/ontology/SNOMEDCT/"},
+				""),
 		UNIPROT("Universal Protein Resource", "UNIPROPT", "",
-				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"});
+				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"},
+				"");
 		
 		private String fullname;
 		private String nickname;
 		private String bioportalid = null;
 		private ArrayList<String> namespaces = new ArrayList<String>();
+		private String description;
 		
-		private ReferenceOntology(String name, String abrev, String bpid, String[] ns) {
+		private ReferenceOntology(String name, String abrev, String bpid, String[] ns, String desc) {
 			fullname = name;
 			nickname = abrev;
 			bioportalid = bpid;
+			description = desc;
 			for (String s : ns) {
 				namespaces.add(s);
 			}
@@ -127,6 +142,10 @@ public class ReferenceOntologies {
 		
 		public String getBioPortalID() {
 			return bioportalid;
+		}
+		
+		public String getDescription() {
+			return description;
 		}
 	}
 }

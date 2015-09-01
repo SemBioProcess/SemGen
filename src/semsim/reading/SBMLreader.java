@@ -9,16 +9,11 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.CVTerm;
 import org.sbml.libsbml.Compartment;
 import org.sbml.libsbml.CompartmentType;
 import org.sbml.libsbml.Constraint;
 import org.sbml.libsbml.Delay;
-import org.sbml.libsbml.InitialAssignment;
 import org.sbml.libsbml.KineticLaw;
 import org.sbml.libsbml.LocalParameter;
 import org.sbml.libsbml.Model;
@@ -31,7 +26,6 @@ import org.sbml.libsbml.SBMLReader;
 import org.sbml.libsbml.SBase;
 import org.sbml.libsbml.Species;
 import org.sbml.libsbml.SpeciesType;
-import org.sbml.libsbml.Trigger;
 import org.sbml.libsbml.Unit;
 import org.sbml.libsbml.UnitDefinition;
 import org.sbml.libsbml.libsbml;
@@ -96,7 +90,7 @@ public class SBMLreader extends ModelReader{
 
 	@Override
 	public SemSimModel readFromFile() throws IOException, InterruptedException,
-			OWLException, CloneNotSupportedException {
+			OWLException {
 		
 		// Load the SBML file into a new SBML model
 		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromFile(srcfile.getAbsolutePath());
@@ -368,8 +362,6 @@ public class SBMLreader extends ModelReader{
 			
 			String speciesid = species.getId();
 
-			String compartmentname = species.getCompartment();
-
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(speciesid));
 			speciessubmodel.addDataStructure(ds);
 			
@@ -397,7 +389,6 @@ public class SBMLreader extends ModelReader{
 					if(sbmlmodel.isSetSubstanceUnits()){
 						substanceunits = semsimmodel.getUnit(sbmlmodel.getSubstanceUnits());
 					}
-					else{}
 				}
 			}
 			
@@ -418,6 +409,7 @@ public class SBMLreader extends ModelReader{
 			}
 			
 			UnitOfMeasurement unitforspecies = null;
+			String compartmentname = species.getCompartment();
 			
 			// Deal with whether the species is expressed in substance units or not 
 			if(species.getHasOnlySubstanceUnits()) unitforspecies = substanceunits;
@@ -478,7 +470,7 @@ public class SBMLreader extends ModelReader{
 			// Set physical property annotation
 			ds.setAssociatedPhysicalProperty(prop);
 			
-			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
+			
 			
 			PhysicalEntity compartmentent = null;
 			
@@ -489,6 +481,7 @@ public class SBMLreader extends ModelReader{
 			
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
+			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
 			entlist.add(compartmentent);
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
@@ -1019,9 +1012,8 @@ public class SBMLreader extends ModelReader{
 	 */
 	private boolean isEntity(SBase sbmlel){
 		
-		if(sbmlel instanceof Compartment || sbmlel instanceof CompartmentType
-			|| sbmlel instanceof Species || sbmlel instanceof SpeciesType) return true;
-		else return false;
+		return (sbmlel instanceof Compartment || sbmlel instanceof CompartmentType
+			|| sbmlel instanceof Species || sbmlel instanceof SpeciesType);
 	}
 	
 	/**
@@ -1077,7 +1069,6 @@ public class SBMLreader extends ModelReader{
 		if( sbmlmodel.getLevel()==3) baseUnits.addAll(SBMLconstants.SBML_LEVEL_3_BASE_UNITS);
 		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()==4) baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_4_BASE_UNITS);
 		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()==1) baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_1_BASE_UNITS);
-		else{}
 	}
 	
 	private void addErrorToModel(String description){

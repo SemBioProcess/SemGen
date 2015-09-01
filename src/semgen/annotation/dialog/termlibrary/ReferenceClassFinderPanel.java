@@ -49,7 +49,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	
 	private JComboBox<String> ontologychooser;
 	private JComboBox<String> findchooser = new JComboBox<String>();
-
+	private JLabel ontdescription = new JLabel();
 	private JButton findbutton = new JButton("Go");
 	protected ExternalURLButton externalURLbutton;
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
@@ -169,7 +169,8 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		resultspanelright.setOpaque(false);
 
-		JComponent[] arrayright = { selectKBsourcepanel, querypanel, findpanel, resultsscrollerright, rightscrollerbuttonpanel};
+		JComponent[] arrayright = { selectKBsourcepanel, ontdescription,
+				querypanel, findpanel, resultsscrollerright, rightscrollerbuttonpanel};
 
 		for (int i = 0; i < arrayright.length; i++) {
 			this.add(arrayright[i]);
@@ -289,6 +290,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		if (o == ontologychooser) {
 			selected = domain.getDomainOntologyatIndex(ontologychooser.getSelectedIndex());
+			ontdescription.setText(selected.getDescription());
 			if(ontologychooser.getItemCount()>2){
 				library.setLastOntology(selected);
 			}

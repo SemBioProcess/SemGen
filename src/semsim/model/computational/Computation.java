@@ -47,6 +47,7 @@ public class Computation extends ComputationalModelComponent{
 			computationalCode = new String(comptocopy.computationalCode);
 		}
 		mathML = new String(comptocopy.mathML);
+		events.addAll(comptocopy.events);
 	}
 	
 	/**
