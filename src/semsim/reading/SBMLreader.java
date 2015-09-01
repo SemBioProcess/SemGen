@@ -90,7 +90,7 @@ public class SBMLreader extends ModelReader{
 	
 	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 	private static final String mathMLelementEnd = "</math>";
-	private static final String timedomainname = "time";
+	private static final String timedomainname = "t";
 	
 	
 	public SBMLreader(File file) {
@@ -164,6 +164,7 @@ public class SBMLreader extends ModelReader{
 		timeds.setIsSolutionDomain(true);
 		UnitOfMeasurement timeunits = new UnitOfMeasurement("second");
 		timeunits.setFundamental(true);
+		timeds.setUnit(timeunits);
 		semsimmodel.addUnit(timeunits);
 		
 		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01023"));
@@ -692,7 +693,6 @@ public class SBMLreader extends ModelReader{
 			}
 
 			ds.getComputation().setMathML(mathmlstring);
-			System.out.println(mathmlstring);
 			ds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getFormula());
 		
 			
