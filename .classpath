@@ -43,6 +43,12 @@
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/runtime-license-expires-5-1-2020.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xmlunit-1.6.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xalan/serializer.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xalan/xalan.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xalan/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xalan/xml-apis.jar"/>
+	<classpathentry kind="lib" path="thirdParty/xalan/xsltc.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
