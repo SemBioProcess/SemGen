@@ -299,6 +299,10 @@ public class MMLreader extends ModelReader {
 
 				// get the initial condition for the discrete realState variable (in some stateTool)
 				outputds.setStartValue(getIC(getToolToSolveCodeword(outputds.getName()), outputds.getName()));
+				
+				// For now, store the MML code that triggers the event and makes the event assignment
+				// Need to fix this hack once we can translate MathML to MML
+				outputds.getComputation().setComputationalCode(fulltext);
 				 
 			}
 			
