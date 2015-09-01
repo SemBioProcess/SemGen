@@ -19,10 +19,15 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
     @Override
     public void done() {
     	if (progframe!=null) progframe.dispose();
-    	if (isCancelled()) return;
+    	if (isCancelled()) {
+    		onError();
+    		return;
+    	}
     	endTask();
     }
 
+    public void onError() {}
+    
     public void endTask() {}
 
     public void progressUpdated(String update) {    	

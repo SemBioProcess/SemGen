@@ -1,7 +1,10 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +23,7 @@ import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessPanel;
 import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.model.SemSimTypes;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
@@ -30,8 +34,10 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	
 	private JList<String> typechooser = new JList<String>();
 	private JPanel creatorpane;
+	private JLabel header = new JLabel();
 	private JButton makebtn = new JButton("Add Component");
 	private JButton clearbtn = new JButton("Clear");
+	private JPanel rightpane = new JPanel();
 	protected JLabel msgbox = new JLabel("Select a SemSim Type");
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
@@ -48,6 +54,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		library = lib;
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS)); 
 		makePanel();
+		setBackground(SemGenSettings.lightblue);
 	}
 	
 	private void makePanel() {
@@ -55,13 +62,26 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		for (int i = 0; i<types.length; i++) {
 			names[i] = types[i].getName();
 		}
+
+		SemGenScrollPane typechoosepane = new SemGenScrollPane(typechooser);
+		typechoosepane.setBorder(BorderFactory.createTitledBorder("Physical Types"));
+		typechoosepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typechoosepane.setAlignmentY(Component.TOP_ALIGNMENT);
+		typechoosepane.setBackground(SemGenSettings.lightblue);
+		Dimension dim = new Dimension(360,140);
+		typechoosepane.setMinimumSize(dim);
+		typechoosepane.setMaximumSize(dim);
+		
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		typechooser.setAlignmentX(Box.LEFT_ALIGNMENT);
 		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
-		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
+		//Just set the (#%#$^ size!
+		typechooser.setMinimumSize(dim);
+		typechooser.setMaximumSize(dim);
+		typechooser.setPreferredSize(dim);
 
 		JPanel optionpane = new JPanel();
 		optionpane.setLayout(new BoxLayout(optionpane, BoxLayout.LINE_AXIS));
@@ -80,48 +100,76 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
-		typepane.add(typechooser);
+		typepane.add(Box.createVerticalStrut(12));
+		typepane.add(typechoosepane);
 		typepane.add(optionpane);
 		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		msgbox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
 		typepane.add(msgbox);
 		typepane.add(Box.createVerticalGlue());
+		typepane.setAlignmentY(Box.TOP_ALIGNMENT);
+		typepane.setMaximumSize(new Dimension(360,9999));
 		add(typepane);
+		
+		header.setFont(SemGenFont.Bold("Arial", 3));
+		header.setAlignmentX(Box.LEFT_ALIGNMENT);
+		header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+		
+		rightpane.setBackground(SemGenSettings.lightblue);
+		rightpane.setAlignmentY(Box.TOP_ALIGNMENT);
+		rightpane.setAlignmentX(Box.LEFT_ALIGNMENT);
+		rightpane.setLayout(new BoxLayout(rightpane, BoxLayout.PAGE_AXIS)); 
+		
+		rightpane.add(header);
+		add(rightpane);
 	}
 	
 	private void showCreator() {
+		if (creatorpane!=null) {
+			rightpane.remove(creatorpane);
+		}
 		toggleOptionVisibility(true);
 		Integer sel = typechooser.getSelectedIndex();
+		String title = "";
 		switch (types[sel]) {
 		case PHYSICAL_PROPERTY:
+			title = "Import Singular Physical Property";
 			creatorpane = new SearchPane(library, OntologyDomain.PhysicalProperty);
 			break;
 		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			title = "Import Composite Linkable Physical Property";
 			creatorpane = new SearchPane(library, OntologyDomain.AssociatePhysicalProperty);
 			break;
 		case CUSTOM_PHYSICAL_ENTITY:
+			title = "Create Custom Physical Enity";
 			creatorpane = new CustomEntityPane(library);
 			toggleOptionVisibility(false);
 			break;
 		case REFERENCE_PHYSICAL_ENTITY:
+			title = "Import Reference Physical Enity";
 			creatorpane = new SearchPane(library, OntologyDomain.PhysicalEntity);
 			break;
 		case COMPOSITE_PHYSICAL_ENTITY:
+			title = "Create Composite Physical Entity";
 			creatorpane = new CPEPanel();
 			break;
 		case CUSTOM_PHYSICAL_PROCESS:
+			title = "Create Custom Physical Process";
 			creatorpane = new CustomProcessPane(library);
 			toggleOptionVisibility(false);
 			break;
 		case REFERENCE_PHYSICAL_PROCESS:
+			title = "Create Referance Physical Process";
 			creatorpane = new SearchPane(library, OntologyDomain.PhysicalProcess);
 			break;
 		default:
 			break;
 		
 		}
-		add(creatorpane);
+		header.setText(title);
+		rightpane.add(creatorpane);
+		creatorpane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		validate();
 	}
 	
@@ -164,6 +212,10 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		public CustomEntityPane(SemSimTermLibrary lib) {
 			super(lib);
 			cancelbtn.setText("Clear");
+			setBackground(SemGenSettings.lightblue);
+			for (Component c : getComponents()) {
+				c.setBackground(SemGenSettings.lightblue);
+			}
 		}
 
 		@Override
@@ -194,6 +246,10 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		public CustomProcessPane(SemSimTermLibrary lib) {
 			super(lib);
 			cancelbtn.setText("Clear");
+			setBackground(SemGenSettings.lightblue);
+			for (Component c : getComponents()) {
+				c.setBackground(SemGenSettings.lightblue);
+			}
 		}
 
 		@Override
@@ -271,6 +327,10 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 
 		public SearchPane(SemSimTermLibrary lib, OntologyDomain dom) {
 			super(lib, dom);
+			setBackground(SemGenSettings.lightblue);
+			for (Component c : getComponents()) {
+				c.setBackground(SemGenSettings.lightblue);
+			}
 		}
 		
 		public void valueChanged(ListSelectionEvent arg0) {

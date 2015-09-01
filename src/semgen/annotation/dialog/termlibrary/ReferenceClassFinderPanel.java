@@ -161,6 +161,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		};
 		rightscrollerinfobuttonpanel.add(externalURLbutton);
 		externalURLbutton.setEnabled(false);
+		rightscrollerinfobuttonpanel.setOpaque(false);
 		rightscrollerbuttonpanel.add(rightscrollerinfobuttonpanel, BorderLayout.WEST);
 		rightscrollerbuttonpanel.add(Box.createGlue(), BorderLayout.EAST);
 		resultspanelrightheader.add(resultslabelright, BorderLayout.WEST);

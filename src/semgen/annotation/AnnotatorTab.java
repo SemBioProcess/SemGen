@@ -194,6 +194,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		if (libdialog==null) {
 			libdialog = new ReferenceLibraryDialog(settings, workbench);
 		}
+		libdialog.toFront();
 	}
 	
 	public boolean fileURIMatches(URI uri) {

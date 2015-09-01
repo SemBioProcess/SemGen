@@ -2,6 +2,7 @@ package semgen.annotation.common;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
@@ -70,10 +70,14 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		JPanel namepanel = new JPanel();
 		namepanel.add(new JLabel("Name: "));
 		namepanel.add(mantextfield);
+		namepanel.setAlignmentY(TOP_ALIGNMENT);
+		namepanel.setMaximumSize(new Dimension(9999, 150));
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
+		descriptionpanel.setAlignmentY(TOP_ALIGNMENT);
+		descriptionpanel.setMaximumSize(new Dimension(9999, 250));
 		
 		if (termindex!=-1) {
 			mantextfield.setText(library.getComponentName(termindex));
@@ -100,6 +104,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		cancelbtn.addActionListener(this);
 		
 		confirmpan.setLayout(new BoxLayout(confirmpan, BoxLayout.X_AXIS));
+		confirmpan.setAlignmentY(Box.TOP_ALIGNMENT);
 		confirmpan.add(msgbox);
 		confirmpan.add(createbtn);
 		confirmpan.add(cancelbtn);
@@ -175,6 +180,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		public CustomEntityEditor(SemSimTermLibrary lib, SemSimRelation rel,
 				ArrayList<Integer> complist) {
 			super(lib, rel, complist);
+			addActionListener(new ModificationAction());
 		}
 
 		@Override
@@ -193,6 +199,16 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 			}
 		}
 
+	}
+	
+	class ModificationAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (termindex != -1) {
+				createbtn.setEnabled(true);
+			}
+		}
 	}
 	
 }

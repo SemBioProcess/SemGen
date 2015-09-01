@@ -33,6 +33,8 @@ import semsim.model.SemSimTypes;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Event;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -86,7 +88,8 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	public OWLOntology createOWLOntologyFromModel() throws OWLException{	
 		getLocalDataStuctures();
-		addUnits();			
+		addUnits();	
+		addEvents();
 		addDataStructures();
 		setRelations();
 		addSubModels();
@@ -149,7 +152,74 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 	}
 	
+	// Add Event info to model
+	private void addEvents() throws OWLException{
+		
+		int suffix = 0;
+		for(Event event : semsimmodel.getEvents()){
+			OWLClass eventparentclass = factory.getOWLClass(IRI.create(event.getSemSimClassURI()));
+			String eventuristring = namespace + SemSimOWLFactory.URIencoding(event.getName());
+			String eventname = null;
+
+			// Use suffix integer if no name available for event
+			if(event.getName().equals("") || event.getName()==null){
+				eventname = "event_" + suffix;
+				suffix++;
+			}
+			else eventname = event.getName();
+			
+			eventuristring = namespace + eventname;
+			
+			SemSimOWLFactory.createSemSimIndividual(ont, eventuristring, eventparentclass, "", manager);
+			SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, 
+					SemSimConstants.HAS_TRIGGER_MATHML_URI.toString(), event.getTriggerMathML(), manager);
+			
+			// Write out priority
+			if(event.getPriorityMathML()!=null)
+				SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, SemSimConstants.HAS_PRIORITY_MATHML_URI.toString(),
+					event.getPriorityMathML(), manager);
+			
+			// Write out delay
+			if(event.getDelayMathML()!=null)
+				SemSimOWLFactory.setIndDatatypeProperty(ont, eventuristring, SemSimConstants.HAS_DELAY_MATHML_URI.toString(),
+						event.getDelayMathML(), manager);
+			
+			// Write out time units
+			if(event.getTimeUnit()!=null){
+				String unitname = event.getTimeUnit().getName();
+				String unituri = namespace + "UNIT_" + SemSimOWLFactory.URIencoding(unitname);
+				SemSimOWLFactory.setIndObjectProperty(ont, eventuristring, unituri, 
+						SemSimConstants.HAS_TIME_UNIT_URI.toString(), "", manager);
+			}
+				
+			
+			// Write out the event assignments
+			for(EventAssignment ssea : event.getEventAssignments()){
+				String eaname = eventname + "_assignment_" + ssea.getOutput().getName();
+				OWLClass eaparentclass = factory.getOWLClass(IRI.create(ssea.getSemSimClassURI()));
+				String eauristring = namespace + eaname;
+				String outputdsuristring = namespace + ssea.getOutput().getName();
+				
+				// Create event assignment individual and attach properties
+				SemSimOWLFactory.createSemSimIndividual(ont, eauristring, eaparentclass, "", manager);
+				SemSimOWLFactory.setIndObjectProperty(ont, eauristring, outputdsuristring,
+						SemSimConstants.HAS_OUTPUT_URI.toString(), "", manager);
+				SemSimOWLFactory.setIndDatatypeProperty(ont, eauristring, SemSimConstants.HAS_MATHML_URI.toString(),
+						ssea.getMathML(), manager);
+				
+				// Associate the assignment with the event
+				SemSimOWLFactory.setIndObjectProperty(ont, eventuristring, eauristring,
+						SemSimConstants.HAS_EVENT_ASSIGNMENT_URI.toString(),"", manager);
+				
+				// Associate the assignment with the data structure's computation that it effects
+				SemSimOWLFactory.setIndObjectProperty(ont, outputdsuristring + "_computation", 
+						eventuristring, SemSimConstants.HAS_EVENT_URI.toString(), "", manager);
+			}
+		}
+	}
+	
 	private void addDataStructures() throws OWLException {
+		
 		for(DataStructure ds : localdss){		
 			String dsuri = namespace + SemSimOWLFactory.URIencoding(ds.getName());
 			OWLNamedIndividual dsind = factory.getOWLNamedIndividual(IRI.create(dsuri));
@@ -209,8 +279,9 @@ public class SemSimOWLwriter extends ModelWriter {
 				// Put the hasInput and hasRolePlayer data in the SemSim model
 				for(DataStructure inputds : ds.getComputation().getInputs()){
 					String inputuri = namespace + SemSimOWLFactory.URIencoding(inputds.getName());
-					SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, base + "hasInput", base + "isInputFor", manager);
-				}
+					SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, 
+							SemSimConstants.HAS_INPUT_URI.toString(), SemSimConstants.IS_INPUT_FOR_URI.toString(), manager);
+				}				
 			}
 			
 			if(ds.hasSolutionDomain()){
@@ -218,7 +289,6 @@ public class SemSimOWLwriter extends ModelWriter {
 						base + "hasSolutionDomain", base + "solutionDomainFor", manager);
 			}
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString(), ds.isSolutionDomain(), manager);
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DISCRETE_URI.toString(), ds.isDiscrete(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DECLARED_URI.toString(), ds.isDeclared(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.METADATA_ID_URI.toString(), ds.getMetadataID(), manager);
 			
@@ -663,15 +733,23 @@ public class SemSimOWLwriter extends ModelWriter {
 	// Assert a public interface annotation (for CellML-derived models)
 	private Set<OWLAnnotation> makeUnitFactorAnnotations(UnitFactor factor){
 		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
-		if(factor.getExponent()!=1.0){
+		
+		if(factor.getExponent()!=1.0 && factor.getMultiplier()!=0.0){
 			OWLLiteral explit = factory.getOWLLiteral(factor.getExponent());
 			OWLAnnotation expanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI)), explit);
 			anns.add(expanno);
 		}
+		
 		if(factor.getPrefix()!=null){
 			OWLLiteral preflit = factory.getOWLLiteral(factor.getPrefix());
 			OWLAnnotation prefanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_PREFIX_URI)), preflit);
 			anns.add(prefanno);
+		}
+		
+		if(factor.getMultiplier()!=1.0 && factor.getMultiplier()!=0.0){
+			OWLLiteral multlit = factory.getOWLLiteral(factor.getMultiplier());
+			OWLAnnotation multanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_MULTIPLIER_URI)), multlit);
+			anns.add(multanno);
 		}
 		return anns;
 	}

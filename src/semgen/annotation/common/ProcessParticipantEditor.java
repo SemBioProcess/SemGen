@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import semgen.annotation.dialog.CreateCompositeDialog;
@@ -218,5 +219,9 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 			fireTableCellUpdated(row, col);
 		}
 		
+	}
+	
+	public void addTableModelListener(TableModelListener l) {
+		table.getModel().addTableModelListener(l);
 	}
 }

@@ -44,6 +44,8 @@ import semsim.annotation.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Event;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -63,6 +65,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.utilities.SemSimUtil;
 
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
@@ -96,8 +99,9 @@ public class SemSimOWLreader extends ModelReader {
 		collectDataStructures();
 		mapCellMLTypeVariables();
 		collectUnits();
+		collectRelationalConstraints();	
+		collectEvents();
 		establishIsInputRelationships();
-		collectRelationalConstraints();		
 		collectCustomAnnotations();		
 		collectSubModels();
 				
@@ -316,9 +320,6 @@ public class SemSimOWLreader extends ModelReader {
 					String isdeclared = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_DECLARED_URI.toString());
 					ds.setDeclared(Boolean.parseBoolean(isdeclared));
 					
-					String isdiscrete = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_DISCRETE_URI.toString());
-					ds.setDiscrete(Boolean.parseBoolean(isdiscrete));
-					
 					String issoldom = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString());
 					ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
 					
@@ -443,9 +444,12 @@ public class SemSimOWLreader extends ModelReader {
 						
 						double exponent = 1.0;
 						String prefix = null;
+						double multiplier = 1.0;
 						
 						OWLAnnotationProperty unitfactorexpprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI));
 						OWLAnnotationProperty unitfactorprefixprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_PREFIX_URI));
+						OWLAnnotationProperty unitfactormultprop = factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_MULTIPLIER_URI));
+						
 						
 						if(!oopaa.getAnnotations(unitfactorexpprop).isEmpty()){
 							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorexpprop).toArray(new OWLAnnotation[]{})[0].getValue();
@@ -456,7 +460,12 @@ public class SemSimOWLreader extends ModelReader {
 							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactorprefixprop).toArray(new OWLAnnotation[]{})[0].getValue();
 							prefix = litval.getLiteral();
 						}
-						uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix));
+						
+						if(!oopaa.getAnnotations(unitfactormultprop).isEmpty()){
+							OWLLiteral litval = (OWLLiteral) oopaa.getAnnotations(unitfactormultprop).toArray(new OWLAnnotation[]{})[0].getValue();
+							multiplier = litval.parseDouble();
+						}
+						uom.addUnitFactor(new UnitFactor(baseunit, exponent, prefix, multiplier));
 					}
 				}
 			}
@@ -465,15 +474,14 @@ public class SemSimOWLreader extends ModelReader {
 		
 	/** Go through existing data structures and establish the hasInput relationships */
 	private void establishIsInputRelationships() throws OWLException {
+		
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){
 			String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
-			String computationind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.IS_OUTPUT_FOR_URI.toString());
-			Set<String> compinputs = SemSimOWLFactory.getIndObjectProperty(ont, computationind, SemSimConstants.HAS_INPUT_URI.toString());
+			
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(name);
-
-			for(String in : compinputs){
-				ds.getComputation().addInput(semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(in)));
-			}
+			
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, null);
+			
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.HAS_SOLUTION_DOMAIN_URI.toString());
 			semsimmodel.getAssociatedDataStructure(name).setSolutionDomain(semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(soldom)));
@@ -485,6 +493,53 @@ public class SemSimOWLreader extends ModelReader {
 			String mmleq = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, relind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
 			String mathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, relind, SemSimConstants.HAS_MATHML_URI.toString());
 			semsimmodel.addRelationalConstraint(new RelationalConstraint(mmleq, mathml));
+		}
+	}
+	
+	private void collectEvents() throws OWLException{
+		
+		for(String eventind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.EVENT_CLASS_URI.toString())){
+			String eventname = SemSimOWLFactory.getIRIfragment(eventind);
+			Event ssevent = new Event();
+			ssevent.setName(eventname);
+			String triggermathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, eventind,
+					SemSimConstants.HAS_TRIGGER_MATHML_URI.toString());
+			ssevent.setTriggerMathML(triggermathml);
+			
+			// Get priority mathml, delay mathml and time units
+			String prioritymathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, eventind, SemSimConstants.HAS_PRIORITY_MATHML_URI.toString());
+			String delaymathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, eventind, SemSimConstants.HAS_DELAY_MATHML_URI.toString());
+			String timeunituri = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, eventind, SemSimConstants.HAS_TIME_UNIT_URI.toString());
+
+			// Set priority
+			if(! prioritymathml.equals("") && prioritymathml!=null) ssevent.setPriorityMathML(prioritymathml);
+			
+			// Set delay
+			if(! delaymathml.equals("") && delaymathml!=null) ssevent.setDelayMathML(delaymathml);
+			
+			// Set time units
+			if(! timeunituri.equals("") && timeunituri!=null){
+				String unitname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, 
+						timeunituri, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
+				UnitOfMeasurement timeunit = semsimmodel.getUnit(unitname);
+				ssevent.setTimeUnit(timeunit);
+			}
+			
+			// Process event assignments
+			for(String eaind : SemSimOWLFactory.getIndObjectProperty(ont, eventind, SemSimConstants.HAS_EVENT_ASSIGNMENT_URI.toString())){
+				EventAssignment ea = ssevent.new EventAssignment();
+				ssevent.addEventAssignment(ea);
+				String eamathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, eaind, SemSimConstants.HAS_MATHML_URI.toString());
+				ea.setMathML(eamathml);
+				String outputuri = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, eaind, SemSimConstants.HAS_OUTPUT_URI.toString());
+				String outputname = SemSimOWLFactory.getIRIfragment(outputuri);
+				DataStructure outputds = semsimmodel.getAssociatedDataStructure(outputname);
+				ea.setOutput(outputds);
+				outputds.getComputation().addEvent(ssevent);
+			}
+			
+			semsimmodel.addEvent(ssevent);
+			
 		}
 	}
 
@@ -767,7 +822,7 @@ public class SemSimOWLreader extends ModelReader {
 			label = label.replace(sub, "");
 			label = label.replace("_", " ");
 		}
-		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, label);
+		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, null);
 		
 		if(SemSimOWLFactory.getRDFComments(ont, cuperef)!=null)
 			cupe.setDescription(SemSimOWLFactory.getRDFComments(ont, cuperef)[0]);

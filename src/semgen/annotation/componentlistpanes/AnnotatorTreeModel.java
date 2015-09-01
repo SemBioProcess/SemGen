@@ -190,6 +190,11 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 					}
 				}
 			}
+			if (arg0==workbench) {
+				if (arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED) {
+					fireTreeStructureChanged();
+				}
+			}
 		}
 	}
 	

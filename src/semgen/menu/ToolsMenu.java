@@ -25,7 +25,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		// Build the AnnotatorTab menu
 		getAccessibleContext().setAccessibleDescription("Select a new SemGen Tool");
 		
-		toolsitemstage = formatMenuItem(toolsitemstage, "New stage", KeyEvent.VK_T,true,true);
+		toolsitemstage = formatMenuItem(toolsitemstage, "New Stage", KeyEvent.VK_T,true,true);
 		toolsitemstage.setToolTipText("Open a new stage");
 		add(toolsitemstage);
 		
@@ -41,7 +41,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		toolsitemmerge.setToolTipText("Open a new Merger tool");
 		add(toolsitemmerge);
 		
-		toolsitemcode = formatMenuItem(toolsitemcode, "New code generator", KeyEvent.VK_G,true,true);
+		toolsitemcode = formatMenuItem(toolsitemcode, "New Code Generator", KeyEvent.VK_G,true,true);
 		toolsitemcode.setToolTipText("Open a new code generator tool");
 		add(toolsitemcode);
 	}

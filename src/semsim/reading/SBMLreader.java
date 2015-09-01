@@ -12,15 +12,18 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.CVTerm;
 import org.sbml.libsbml.Compartment;
 import org.sbml.libsbml.CompartmentType;
 import org.sbml.libsbml.Constraint;
+import org.sbml.libsbml.Delay;
 import org.sbml.libsbml.InitialAssignment;
 import org.sbml.libsbml.KineticLaw;
 import org.sbml.libsbml.LocalParameter;
 import org.sbml.libsbml.Model;
 import org.sbml.libsbml.Parameter;
+import org.sbml.libsbml.Priority;
 import org.sbml.libsbml.Reaction;
 import org.sbml.libsbml.Rule;
 import org.sbml.libsbml.SBMLDocument;
@@ -28,6 +31,7 @@ import org.sbml.libsbml.SBMLReader;
 import org.sbml.libsbml.SBase;
 import org.sbml.libsbml.Species;
 import org.sbml.libsbml.SpeciesType;
+import org.sbml.libsbml.Trigger;
 import org.sbml.libsbml.Unit;
 import org.sbml.libsbml.UnitDefinition;
 import org.sbml.libsbml.libsbml;
@@ -45,7 +49,9 @@ import semsim.annotation.StructuralRelation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.units.UnitFactor;
@@ -56,6 +62,7 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -63,17 +70,24 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.ReferenceOntologies;
 import semsim.utilities.ReferenceOntologies.OntologyDomain;
 import semsim.utilities.ReferenceOntologies.ReferenceOntology;
+import semsim.utilities.SemSimUtil;
 
 public class SBMLreader extends ModelReader{
 
 	public Model sbmlmodel;
 	private Map<String, PhysicalEntity> compartmentAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
 	private Map<String, CompositePhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
+	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
 	public Hashtable<String, String[]> ontologycache = new  Hashtable<String, String[]>();
 	public Set<String> baseUnits = new HashSet<String>();
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
+//	private Submodel reactionssubmodel;
+	
+	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+	private static final String mathMLelementEnd = "</math>";
+	private static final String timedomainname = "t";
 	
 	
 	public SBMLreader(File file) {
@@ -119,25 +133,44 @@ public class SBMLreader extends ModelReader{
 		// Set the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
 		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
 //		collectInitialAssignments();
+		
 		if (sbmlmodel.getListOfInitialAssignments().size()>0)
 			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
-
-//		collectEvents();
-		if (sbmlmodel.getListOfEvents().size()>0)
-			addErrorToModel("SBML source model contains events but these are not yet supported in SemSim.");
 		
 		// Create submodels for compartments and species. Each reaction gets its own submodel later.
 		if(sbmlmodel.getListOfParameters().size()>0) 
-			parametersubmodel = semsimmodel.addSubmodel(new Submodel("parameters"));
+			parametersubmodel = semsimmodel.addSubmodel(new Submodel("Parameters"));
 		
 		if(sbmlmodel.getListOfCompartments().size()>0) 
-			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("compartments"));
+			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("Compartments"));
 		
 		if(sbmlmodel.getListOfSpecies().size()>0)
-			speciessubmodel = semsimmodel.addSubmodel(new Submodel("species"));
+			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
+		
+//		if(sbmlmodel.getListOfReactions().size()>0)
+//			reactionssubmodel = semsimmodel.addSubmodel(new Submodel("Reactions"));
+		
+		
 				
 		// if any errors at this point, return model
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
+		
+		// Create a data structure that represents the temporal solution domain
+		DataStructure timeds = new Decimal(timedomainname);
+		timeds.setDescription("Temporal solution domain");
+		timeds.setIsSolutionDomain(true);
+		UnitOfMeasurement timeunits = new UnitOfMeasurement("second");
+		timeunits.setFundamental(true);
+		timeds.setUnit(timeunits);
+		semsimmodel.addUnit(timeunits);
+		
+		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01023"));
+		semsimmodel.addPhysicalProperty(timeprop);
+		timeds.setSingularAnnotation(timeprop);
+		
+		semsimmodel.addDataStructure(timeds);
+		speciessubmodel.addDataStructure(timeds);
+		
 		
 		setBaseUnits();
 		collectModelLevelData();
@@ -148,6 +181,9 @@ public class SBMLreader extends ModelReader{
 		collectRules();
 		collectReactions();
 		collectConstraints();
+		collectEvents();
+		setComputationalDependencyNetwork();
+
 		
 		return semsimmodel;
 	}
@@ -168,13 +204,13 @@ public class SBMLreader extends ModelReader{
 	/**
 	 * Collect the SBML model's function definitions
 	 */
-	private void collectFunctionDefinitions(){
-				
-		for(int f=0; f<sbmlmodel.getListOfFunctionDefinitions().size(); f++){
-//			FunctionDefinition fd = sbmlmodel.getFunctionDefinition(f);
-			//... not sure how to deal with SBML functions yet. Use functional submodels?
-		}
-	}
+//	private void collectFunctionDefinitions(){
+//				
+//		for(int f=0; f<sbmlmodel.getListOfFunctionDefinitions().size(); f++){
+////			FunctionDefinition fd = sbmlmodel.getFunctionDefinition(f);
+//			//... not sure how to deal with SBML functions yet. Use functional submodels?
+//		}
+//	}
 	
 	/**
 	 * Collect the model's units
@@ -188,7 +224,7 @@ public class SBMLreader extends ModelReader{
 			
 			UnitDefinition sbmlunitdef = sbmlmodel.getUnitDefinition(u);
 			UnitOfMeasurement semsimunit = new UnitOfMeasurement(sbmlunitdef.getId());
-			
+						
 			for(int v=0; v<sbmlunitdef.getListOfUnits().size(); v++){
 				
 				Unit sbmlunit = sbmlunitdef.getUnit(v);
@@ -197,15 +233,19 @@ public class SBMLreader extends ModelReader{
 				UnitOfMeasurement baseunit = null;
 				
 				// If the base unit for the unit factor was already added to model, retrieve it. Otherwise create anew.
+				
 				if(semsimmodel.containsUnit(unitfactorname)) baseunit = semsimmodel.getUnit(unitfactorname);
-				else{
+				
+				else if(! unitfactorname.equals("dimensionless")){  // don't add factor if it's dimensionless
 					baseunit = new UnitOfMeasurement(unitfactorname);
 					baseunit.setFundamental(baseUnits.contains(unitfactorname));
 					collectSBaseData(sbmlunit, baseunit);
 					semsimmodel.addUnit(baseunit);
 				}
+				else continue;
+
 				
-				UnitFactor unitfactor = new UnitFactor(baseunit, sbmlunit.getExponentAsDouble(), unitfactorname);
+				UnitFactor unitfactor = new UnitFactor(baseunit, sbmlunit.getExponentAsDouble(), null);
 				
 				// Set the unit factor prefix based on scale value
 				for(String prefix : sslib.getUnitPrefixesAndPowersMap().keySet()){
@@ -271,26 +311,33 @@ public class SBMLreader extends ModelReader{
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
 			compartmentsubmodel.addDataStructure(ds);
 			
-			String mathml = "<cn>" + sbmlc.getSize() + "</cn>";
+			String mathml = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
+					+ sbmlc.getSize() + "</cn>\n </apply>\n" + mathMLelementEnd;
 			ds.getComputation().setMathML(mathml);
-			//ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
-						
-			if(sbmlc.isSetUnits()) 
-				ds.setUnit(semsimmodel.getUnit(sbmlc.getUnits()));
+			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 			
+			String defaultunits = null;
 			PhysicalPropertyinComposite prop = null;
 						
 			// Add physical property here
 			if(sbmlc.getSpatialDimensionsAsDouble()==3.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00154"));
+				defaultunits = "volume";
 			}
 			else if(sbmlc.getSpatialDimensionsAsDouble()==2.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00295"));
+				defaultunits = "area";
 			}
 			else if(sbmlc.getSpatialDimensionsAsDouble()==1.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01064"));
+				defaultunits = "length";
 			}
-			else{}  // what to do if zero?
+			else{}  // what to do if a point?
+			
+			// Set the units for the compartment
+			if(sbmlc.isSetUnits()) 
+				ds.setUnit(semsimmodel.getUnit(sbmlc.getUnits()));
+			else ds.setUnit(semsimmodel.getUnit(defaultunits));
 			
 			ds.setAssociatedPhysicalProperty(prop);
 			
@@ -319,9 +366,15 @@ public class SBMLreader extends ModelReader{
 		for(int s=0; s<sbmlmodel.getListOfSpecies().size(); s++){
 			Species species = sbmlmodel.getSpecies(s);
 			
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(species.getId()));
+			String speciesid = species.getId();
+
+			String compartmentname = species.getCompartment();
+
+			DataStructure ds = semsimmodel.addDataStructure(new Decimal(speciesid));
 			speciessubmodel.addDataStructure(ds);
 			
+			speciesAndConservation.put(speciesid, new SpeciesConservation());
+					
 			// Deal with equations for species concentration/amount here
 			PhysicalPropertyinComposite prop = null;
 			
@@ -334,13 +387,15 @@ public class SBMLreader extends ModelReader{
 			species' quantity is undefined.
 			*/
 			
+			UnitOfMeasurement substanceunits = null;
+			
 			if(sbmlmodel.getLevel()==3){
 				if(species.isSetSubstanceUnits()){
-					ds.setUnit(semsimmodel.getUnit(species.getSubstanceUnits()));
+					substanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
 				}
 				else{
 					if(sbmlmodel.isSetSubstanceUnits()){
-						ds.setUnit(semsimmodel.getUnit(sbmlmodel.getSubstanceUnits()));
+						substanceunits = semsimmodel.getUnit(sbmlmodel.getSubstanceUnits());
 					}
 					else{}
 				}
@@ -357,10 +412,37 @@ public class SBMLreader extends ModelReader{
 			 */
 			else if(sbmlmodel.getLevel()==2){
 				if(species.isSetSubstanceUnits())
-					ds.setUnit(semsimmodel.getUnit(species.getSubstanceUnits()));
+					substanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
 				else 
-					ds.setUnit(semsimmodel.getUnit("substance"));
+					substanceunits = semsimmodel.getUnit("substance");
 			}
+			
+			UnitOfMeasurement unitforspecies = null;
+			
+			// Deal with whether the species is expressed in substance units or not 
+			if(species.getHasOnlySubstanceUnits()) unitforspecies = substanceunits;
+			else{
+				// Make unit for concentration of species
+				UnitOfMeasurement compartmentunits = semsimmodel.getAssociatedDataStructure(compartmentname).getUnit();				
+				
+				String unitname = substanceunits.getName() + "_per_" + compartmentunits.getName();
+				
+				// If the substance/compartment unit was already added to the model, use it, otherwise create anew
+				if(semsimmodel.containsUnit(unitname)) unitforspecies = semsimmodel.getUnit(unitname);
+				else{
+					unitforspecies = new UnitOfMeasurement(unitname);
+					UnitFactor substancefactor = new UnitFactor(substanceunits, 1.0, null);
+					unitforspecies.addUnitFactor(substancefactor);
+					UnitFactor compartmentfactor = new UnitFactor(compartmentunits, -1.0, null);
+					unitforspecies.addUnitFactor(compartmentfactor);
+					semsimmodel.addUnit(unitforspecies);
+				}
+				
+				// Also re-set the start value for the species 
+			}
+			
+			ds.setUnit(unitforspecies);
+			
 			
 			// The OPB properties assigned here need to account for the different possible units for 
 			// substance units: 'dimensionless', 'mole', 'item', kilogram','gram', etc. as above.
@@ -371,13 +453,29 @@ public class SBMLreader extends ModelReader{
 				// but if substance not in model...(level 3) ...
 				
 				prop = new PhysicalPropertyinComposite("Chemical molar amount", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00425")); // Chemical molar amount
-				ds.setStartValue(Double.toString(species.getInitialAmount()));
 			}
-			else{
+			else
 				prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340")); // Chemical concentration
-				ds.setStartValue(Double.toString(species.getInitialConcentration()));
+			
+			
+			// Set initial condition
+			if(species.isSetInitialAmount())
+				if(species.getHasOnlySubstanceUnits())
+					ds.setStartValue(Double.toString(species.getInitialAmount()));
+				else{
+					double compartmentsize = sbmlmodel.getCompartment(compartmentname).getSize();
+					ds.setStartValue(Double.toString(species.getInitialAmount()/compartmentsize));
+				}
+			else if(species.isSetInitialConcentration()){
+				if(species.getHasOnlySubstanceUnits()){
+					double compartmentsize = sbmlmodel.getCompartment(compartmentname).getSize();
+					ds.setStartValue(Double.toString(species.getInitialConcentration()*compartmentsize));
+				}
+				else
+					ds.setStartValue(Double.toString(species.getInitialConcentration()));
 			}
 
+			// Set physical property annotation
 			ds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
@@ -423,15 +521,15 @@ public class SBMLreader extends ModelReader{
 	 * These are expressions that can be used set the t=0 values of compartments, species and parameters.
 	 * They override any initial values asserted in the declaration of these SBML components. 
 	 */
-	private void collectInitialAssignments(){
-		for(int i=0; i<sbmlmodel.getListOfInitialAssignments().size(); i++){
-			InitialAssignment ia = sbmlmodel.getInitialAssignment(i);
-			String symbol = ia.getSymbol();
-			DataStructure ds = semsimmodel.getAssociatedDataStructure(symbol);;
-			//ds.setStartValue(val);
-			//...
-		}
-	}
+//	private void collectInitialAssignments(){
+//		for(int i=0; i<sbmlmodel.getListOfInitialAssignments().size(); i++){
+//			InitialAssignment ia = sbmlmodel.getInitialAssignment(i);
+//			String symbol = ia.getSymbol();
+//			DataStructure ds = semsimmodel.getAssociatedDataStructure(symbol);;
+//			//ds.setStartValue(val);
+//			//...
+//		}
+//	}
 	
 	/**
 	 *  Collect the SBML model's rules
@@ -456,10 +554,12 @@ public class SBMLreader extends ModelReader{
 				semsimmodel.addDataStructure(ds);
 			}
 			
-			//ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
+			ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
 			String mathmlstring = libsbml.writeMathMLToString(sbmlrule.getMath());
+			mathmlstring = stripXMLheader(mathmlstring);
+			mathmlstring = addLHStoMathML(mathmlstring, varname);
 			ds.getComputation().setMathML(mathmlstring);
-
+			
 			collectSBaseData(sbmlrule, ds.getComputation());
 		}
 	}
@@ -472,8 +572,72 @@ public class SBMLreader extends ModelReader{
 		for(int c=0; c<sbmlmodel.getListOfConstraints().size(); c++){
 			Constraint cons = sbmlmodel.getConstraint(c);
 			String mathml = libsbml.writeMathMLToString(cons.getMath());
+			mathml = stripXMLheader(mathml);
 			RelationalConstraint rc = new RelationalConstraint("", mathml, cons.getMessageString());
 			semsimmodel.addRelationalConstraint(rc);
+		}
+	}
+	
+	/**
+	 * Collect the SBML model's discrete events
+	 */
+	private void collectEvents(){
+		
+		for(int e=0; e<sbmlmodel.getListOfEvents().size(); e++){
+			org.sbml.libsbml.Event sbmlevent = sbmlmodel.getEvent(e);
+			
+			org.sbml.libsbml.Trigger sbmltrigger = sbmlevent.getTrigger();
+			String triggermathml = libsbml.writeMathMLToString(sbmltrigger.getMath());
+			triggermathml = stripXMLheader(triggermathml);
+			
+			Event ssevent = new Event();
+			ssevent.setName(sbmlevent.getId());
+			
+			ssevent.setTriggerMathML(triggermathml);			
+			
+			// Process event assignments
+			for(int a=0; a<sbmlevent.getListOfEventAssignments().size(); a++){
+				org.sbml.libsbml.EventAssignment ea = sbmlevent.getEventAssignment(a);
+				String varname = ea.getVariable();
+				EventAssignment ssea = ssevent.new EventAssignment();
+				
+				String assignmentmathmlstring = libsbml.writeMathMLToString(ea.getMath());
+				assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
+				assignmentmathmlstring = addLHStoMathML(assignmentmathmlstring, varname);
+				ssea.setMathML(assignmentmathmlstring);
+				
+				DataStructure outputds = semsimmodel.getAssociatedDataStructure(varname);
+				ssea.setOutput(outputds);
+				
+				ssevent.addEventAssignment(ssea);
+				
+				// add Event to the output Data Structure's list of Events
+				outputds.getComputation().addEvent(ssevent);
+			}
+			
+			// Collect the delay info
+			if(sbmlevent.isSetDelay()){
+				Delay delay = sbmlevent.getDelay();
+				String delaymathml = libsbml.writeMathMLToString(delay.getMath());
+				delaymathml = stripXMLheader(delaymathml);
+				ssevent.setDelayMathML(delaymathml);
+			}
+			
+			// Collect priority (SBML level 3)
+			if(sbmlmodel.getLevel()==3 && sbmlevent.isSetPriority()){
+				Priority priority = sbmlevent.getPriority();
+				String prioritymathml = libsbml.writeMathMLToString(priority.getMath());
+				prioritymathml = stripXMLheader(prioritymathml);
+				ssevent.setPriorityMathML(prioritymathml);
+			}
+			
+			// Set the time units (SBML level 2 version 2 or version 1)
+			if(sbmlmodel.getLevel()==3 && sbmlmodel.getVersion()<3 && sbmlevent.isSetTimeUnits()){
+				String timeunitsname = sbmlevent.getTimeUnits();
+				ssevent.setTimeUnit(semsimmodel.getUnit(timeunitsname));
+			}
+			
+			semsimmodel.addEvent(ssevent);
 		}
 	}
 	
@@ -482,6 +646,17 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void collectReactions(){
 		
+		// We assume that SBML Kinetic Laws are defined in units of substance/time.
+		// Add units to model
+		UnitOfMeasurement subpertimeuom = new UnitOfMeasurement("substance_per_time");
+		
+		UnitFactor substancefactor = new UnitFactor(semsimmodel.getUnit("substance"), 1.0, null);
+		UnitFactor timefactor = new UnitFactor(semsimmodel.getUnit("time"), -1.0, null);
+		subpertimeuom.addUnitFactor(substancefactor);
+		subpertimeuom.addUnitFactor(timefactor);	
+		
+		semsimmodel.addUnit(subpertimeuom);
+		
 		for(int r=0; r<sbmlmodel.getListOfReactions().size(); r++){
 			Reaction reaction = sbmlmodel.getReaction(r);
 			String reactionID = reaction.getId();
@@ -489,42 +664,39 @@ public class SBMLreader extends ModelReader{
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reactionID));
 			Submodel rxnsubmodel = new Submodel(reactionID);
 			semsimmodel.addSubmodel(rxnsubmodel);
+			//reactionssubmodel.addSubmodel(rxnsubmodel);
 			rxnsubmodel.addDataStructure(ds);
 			
 			KineticLaw kineticlaw = reaction.getKineticLaw();
 			
-			// Deal with kinetic law (need to collect local parameters)
-			String mathmlstring = libsbml.writeMathMLToString(kineticlaw.getMath());
-			ds.getComputation().setMathML(mathmlstring);
-			//ds.getComputation().setComputationalCode(reaction.getId() + " = " + reaction.getKineticLaw().getFormula());
+			ds.setUnit(subpertimeuom);
 			
+			// Deal with kinetic law
+			String mathmlstring = libsbml.writeMathMLToString(kineticlaw.getMath());
+			
+			// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
+			mathmlstring = stripXMLheader(mathmlstring);
+			mathmlstring = addLHStoMathML(mathmlstring, reactionID);
+						
 			for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
 				LocalParameter lp = kineticlaw.getLocalParameter(l);
 				DataStructure localds = addParameter(lp, reaction.getId());
+				mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
 				rxnsubmodel.addDataStructure(localds);
 			}
-			
+				
 			// This might be unnecessary for some more recent versions of SBML models (listOfParameters might have been deprecated)
 			for(int p=0; p<kineticlaw.getListOfParameters().size(); p++){
 				Parameter par = kineticlaw.getParameter(p);
 				DataStructure localds = addParameter(par, reaction.getId());
+				mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + par.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
 				rxnsubmodel.addDataStructure(localds);
 			}
-			
-			//SBML Reaction objects are defined in units of substance/time. CHECK THIS.
-			
-			UnitDefinition ud = kineticlaw.getDerivedUnitDefinition();
-			
-			if(ud!=null){
-				
-				if(ud.isSetId()){
-					String unitid = kineticlaw.getDerivedUnitDefinition().getId();
-					UnitOfMeasurement uom = semsimmodel.getUnit(unitid);
-					ds.setUnit(uom);
-				}
-			}
-			
 
+			ds.getComputation().setMathML(mathmlstring);
+			ds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getFormula());
+		
+			
 			PhysicalPropertyinComposite prop = null;
 			
 			// Add physical property here
@@ -532,17 +704,16 @@ public class SBMLreader extends ModelReader{
 			ds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
-			collectSBaseData(reaction, process);
-			
+						
 			// Set sources (reactants)
 			for(int s=0; s<reaction.getNumReactants(); s++){
 				String reactantname = reaction.getReactant(s).getSpecies();
 				double stoich = reaction.getReactant(s).getStoichiometry();
 				PhysicalEntity reactantent = speciesAndSemSimEntitiesMap.get(reactantname);
 				process.addSource(reactantent, stoich);
-								
-				// Assert that the computation for the reactant depends on the rate of this reaction
-				semsimmodel.getAssociatedDataStructure(reactantname).getComputation().addInput(ds);
+									
+				// Store info about species conservation for use in outputting species equations
+				speciesAndConservation.get(reactantname).consumedby.add(reactionID);
 			}
 			
 			// Set sinks (products)
@@ -552,8 +723,8 @@ public class SBMLreader extends ModelReader{
 				PhysicalEntity productent = speciesAndSemSimEntitiesMap.get(productname);
 				process.addSink(productent, stoich);
 				
-				// Assert that the computation for the product depends on the rate of this reaction
-				semsimmodel.getAssociatedDataStructure(productname).getComputation().addInput(ds);
+				// Store info about species conservation for use in outputting species equations
+				speciesAndConservation.get(productname).producedby.add(reactionID);
 			}
 			
 			// Set mediators (modifiers)
@@ -564,9 +735,6 @@ public class SBMLreader extends ModelReader{
 			}
 			
 			ds.setAssociatedPhysicalModelComponent(process);
-			
-			// Set the computational inputs for the reaction
-			setComputationalInputsFromMathML(ds, mathmlstring);
 						
 			// Add process to model
 			if(process instanceof ReferencePhysicalProcess) 
@@ -575,6 +743,106 @@ public class SBMLreader extends ModelReader{
 				semsimmodel.addCustomPhysicalProcess((CustomPhysicalProcess) process);
 			
 			collectSBaseData(reaction, process);
+		}
+		
+		setSpeciesConservationEquations();
+	}
+	
+	
+	private void setSpeciesConservationEquations(){
+		
+		for(String speciesid : speciesAndConservation.keySet()){
+	      
+			// The attribute hasOnlySubstanceUnits takes on a boolean value. 
+			// In SBML Level 3, the attribute has no default value and must always
+			// be set in a model; in SBML Level 2, it has a default value of false.
+			Species sbmlspecies = sbmlmodel.getSpecies(speciesid);
+			boolean subunits = false;
+
+			if(sbmlspecies.isSetHasOnlySubstanceUnits()){
+				subunits = sbmlspecies.getHasOnlySubstanceUnits();
+			}
+			else if(sbmlmodel.getVersion()==3.0){
+				addErrorToModel("Required SBML level 3.0 attribute 'hasOnlySubstanceUnits' is unspecified for species " + speciesid + ".");
+				return;
+			}
+			
+			String compartmentid = sbmlmodel.getSpecies(speciesid).getCompartment();
+			
+			String eqstring = "";
+			String eqmathml = "";
+			String ws = subunits ? "  " : "   ";
+			
+			String RHSstart = subunits ? "" : "  <divide/>\n   <apply>\n";
+			
+			eqmathml = mathMLelementStart + " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
+						+ timedomainname + "</ci>\n   </bvar>\n   <ci>" + speciesid + "</ci>\n  </apply>\n  <apply>\n" 
+					+ RHSstart + ws + "<plus/>";
+
+			// When a Species is to be treated in terms of concentrations or density, the units of the spatial size portion of the concentration value (i.e., the denominator in the units formula substance/ size) are those indicated by the value of the 'units' attribute on the compartment in which the species is located.
+			
+			PhysicalEntity speciesent = speciesAndSemSimEntitiesMap.get(speciesid);
+			
+			for(String reactionid : speciesAndConservation.get(speciesid).producedby){
+				Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSinkStoichiometry(speciesent);
+				
+				if(stoich==1){
+					eqmathml = eqmathml + "\n" + ws +" <ci>"+ reactionid + "</ci>";
+					eqstring = eqstring + " + " + reactionid;
+				}
+				else{
+					eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>" + stoich + "</cn>\n" 
+							+ ws + "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";
+					eqstring = eqstring + " + (" + stoich + "*" + reactionid + ")";
+
+				}
+			}
+			
+			for(String reactionid : speciesAndConservation.get(speciesid).consumedby){
+				Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSourceStoichiometry(speciesent);
+				
+				if(stoich==1){
+					eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-1</cn>\n" + ws 
+							+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";					
+					eqstring = eqstring + " - " + reactionid;
+
+				}
+				else{
+					eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-" + stoich + "</cn>\n" + ws 
+							+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";	
+					eqstring = eqstring + " - (" + stoich + "*" + reactionid + ")";
+				}
+			}
+			
+			String eqmathmlend = subunits ? "" : "   <ci>" + compartmentid + "</ci>\n  </apply>\n"; // if concentration units, include the divide operation closer
+			eqmathml = eqmathml + "\n" + ws + "</apply>\n" + eqmathmlend + " </apply>\n" + mathMLelementEnd;  // end plus operation, end eq operation
+			
+			if(eqstring.length()>0){
+				eqstring = eqstring.substring(3, eqstring.length()); // Strip first + or - operator
+				eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units 
+				eqstring = "d(" + speciesid + ")/d(" + timedomainname + ") = " + eqstring; // add LHS
+				
+				DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
+				speciesds.getComputation().setComputationalCode(eqstring);
+				speciesds.getComputation().setMathML(eqmathml);
+			}
+		}
+	}
+	
+	/**
+	 * Set the computational dependency network for the semsim model.
+	 * For DataStructures that represent reactions, use the reaction name
+	 * as the prefix for local parameters.
+	 */
+	public void setComputationalDependencyNetwork(){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+			
+			String prefix = null;
+			
+			if(sbmlmodel.getReaction(ds.getName())!=null)
+				prefix = ds.getName();
+			
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
 		}
 	}
 	
@@ -725,11 +993,16 @@ public class SBMLreader extends ModelReader{
 			
 			// If there is a physical definition annotation, create reference physical component
 			if(ann.getRelation().equals(SemSimConstants.REFERS_TO_RELATION)){
-				pmc = isentity? new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()) :
-					new ReferencePhysicalProcess(ann.getReferenceURI(), ann.getValueDescription());
+				// if entity, use reference term, but don't otherwise
+				pmc = isentity ? new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()) : pmc; 
 				tempanns.remove(ann);
 				break;
 			}
+			else if(isentity)
+				semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()));
+			else
+				semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(ann.getReferenceURI(), ann.getValueDescription()));
+			
 		}
 		
 		tempanns.addAll(getModelQualifierAnnotations(sbmlobject));
@@ -785,41 +1058,15 @@ public class SBMLreader extends ModelReader{
 		UnitOfMeasurement unitforpar = semsimmodel.getUnit(p.getUnits());
 		ds.setUnit(unitforpar);
 		
-		ds.getComputation().setMathML("<cn>" + p.getValue() + "</cn>");
-		//ds.getComputation().setComputationalCode(ID + " = " + Double.toString(p.getValue()));
+		ds.getComputation().setComputationalCode(ID + " = " + Double.toString(p.getValue()));
+		String mathmlstring = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" 
+				+ ID + "</ci>\n  <cn>" + p.getValue() + "</cn>\n </apply>\n" + mathMLelementEnd;
+		ds.getComputation().setMathML(mathmlstring);
 		
 		// Annotations, too?
 		collectSBaseData(p, ds);
 		
 		return ds;
-	}
-	
-	
-	// Set all the variables in a block of mathml as inputs to a particular data structure's computation
-	private void setComputationalInputsFromMathML(DataStructure outputds, String mathmlstring){
-
-		Pattern p = Pattern.compile("<ci>.+</ci>");
-		Matcher m = p.matcher(mathmlstring);
-		boolean result = m.find();
-		
-		while(result){
-			
-			String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
-			String inputnamelocalfmt = outputds.getName() + "." + inputname;
-			String inputnametouse = inputname;
-						
-			if(! semsimmodel.containsDataStructure(inputname)){
-				if(! semsimmodel.containsDataStructure(inputnamelocalfmt)){
-					addErrorToModel("Could not set inputs for variable " + outputds.getName() + " because input called " + inputname + " was not in model.");
-					return;
-				}
-				else inputnametouse = inputnamelocalfmt;
-			}
-			
-			DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputnametouse);
-			outputds.getComputation().addInput(inputds);
-			result = m.find();
-		}
 	}
 	
 	
@@ -837,5 +1084,28 @@ public class SBMLreader extends ModelReader{
 		String errmsg = "SBML-TO-SEMSIM CONVERSION ERROR:\n" + description;
 		System.err.println(errmsg);
 		semsimmodel.addError(errmsg);
+	}
+	
+	private String stripXMLheader(String mathmlstring){
+		return mathmlstring.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", "");
+	}
+	
+	private String addLHStoMathML(String mathmlstring, String varname){
+		String LHSstart = "<apply>\n <eq />\n <ci>" + varname + " </ci>\n";
+		String LHSend = "</apply>\n";
+		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
+		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
+		return mathmlstring;
+	}
+	
+	
+	private class SpeciesConservation{
+		public ArrayList<String> consumedby;
+		public ArrayList<String> producedby;
+		
+		public SpeciesConservation(){
+			consumedby = new ArrayList<String>();
+			producedby = new ArrayList<String>();
+		}
 	}
 }

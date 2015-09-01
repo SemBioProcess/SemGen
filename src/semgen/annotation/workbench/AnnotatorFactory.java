@@ -35,8 +35,18 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
     	System.out.println("Loading " + file.getName());
     	setStatus("Creating SemSimModel");
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
-		
+		if (semsimmodel == null) {
+			errors = "Invalid model file.";
+			abort();
+			return;
+		}
 		if(!semsimmodel.getErrors().isEmpty()){
+			errors = "<html><body><b>" + file.getName() + " failed to load due to the following errors:</b><br>";
+			for (String e : semsimmodel.getErrors()) {
+				errors = errors + e + "<br>";
+			}
+			errors = errors + "</body></html>";
+			abort();
 			return;
 		}
 		

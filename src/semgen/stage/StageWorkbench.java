@@ -149,7 +149,7 @@ public class StageWorkbench extends Workbench {
 					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
 					break;
 				case "close":
-					_models.remove(model);
+					_models.remove(modelName);
 					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":

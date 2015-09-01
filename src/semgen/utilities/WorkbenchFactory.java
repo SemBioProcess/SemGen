@@ -20,6 +20,7 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
 	protected String status;
 	protected HashSet<T> workbenches = new HashSet<T>();
 	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	protected String errors = new String();
 	
 	public WorkbenchFactory() {}
 
@@ -80,5 +81,9 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
 				wb.addObserver(menu);
 			}
 		}
+	}
+	
+	public String getErrors() {
+		return errors;
 	}
 }

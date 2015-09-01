@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.Gson;
-
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;

@@ -15,6 +15,7 @@ import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -153,6 +154,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			}
 			if (!workbenchfactory.isValid()) {
 				cancel(true);
+				return null;
 			}
 			workbenchfactory.addFileMenuasBenchObserver(menu.filemenu);
 			return null;
@@ -174,6 +176,13 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				getComponentAt(tabcount - 1).repaint();
 				getComponentAt(tabcount - 1).validate();
 			}
+		}
+		
+		public void onError() {
+			if (!workbenchfactory.getErrors().isEmpty())
+				SemGenError.showError(workbenchfactory.getErrors(), "Task Initialization Error");
+			
+			new NewTaskDialog(globalactions);
 		}
 	}
 	
