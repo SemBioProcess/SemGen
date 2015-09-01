@@ -90,7 +90,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		DetailedDiff detailedDiff = new DetailedDiff(myDiff);
 		List allDifferences = detailedDiff.getAllDifferences();
 		System.out.println(allDifferences);
-		assertEquals(myDiff.toString(), 2, allDifferences.size());
+		assertEquals(myDiff.toString(), 0, allDifferences.size());
 	}
 
 	private File createTempFile() {
