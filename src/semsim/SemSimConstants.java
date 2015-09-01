@@ -59,6 +59,8 @@ public class SemSimConstants {
 	
 	// URIs
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
+	public static final URI EVENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Event");
+	public static final URI EVENT_ASSIGNMENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "EventAssignment");
 	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");
 	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
 	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
@@ -92,6 +94,12 @@ public class SemSimConstants {
 	public static final URI HAS_COMPUTATIONAL_CODE_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalCode");
 	public static final URI HAS_COMPUTATATIONAL_COMPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalComponent");
 	public static final URI HAS_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasMathML");
+	public static final URI HAS_TRIGGER_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasTriggerMathML");
+	public static final URI HAS_EVENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEvent");
+	public static final URI HAS_EVENT_ASSIGNMENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEventAssignment");
+	public static final URI HAS_PRIORITY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasPriorityMathML");
+	public static final URI HAS_DELAY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasDelayMathML");
+	public static final URI HAS_TIME_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasTimeUnit");
 	public static final URI HAS_SOLUTION_DOMAIN_URI = URI.create(SEMSIM_NAMESPACE + "hasSolutionDomain");
 	public static final URI HAS_START_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasStartValue");
 	public static final URI HAS_INPUT_URI = URI.create(SEMSIM_NAMESPACE + "hasInput");
@@ -130,6 +138,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_EXPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorExponent");
 	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
+	public static final URI UNIT_FACTOR_MULTIPLIER_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorMultiplier");
 	
 	// Model-level relations	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");

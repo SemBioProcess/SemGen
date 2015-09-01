@@ -24,6 +24,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
+import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -92,6 +93,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	// Computational model components
 	private Set<RelationalConstraint> relationalConstraints = new HashSet<RelationalConstraint>(); 
 	private Set<UnitOfMeasurement> units = new HashSet<UnitOfMeasurement>();
+	private Set<Event> events = new HashSet<Event>();
 	
 	// Physical model components
 	private Set<PhysicalEntity> physicalentities = new HashSet<PhysicalEntity>();
@@ -325,6 +327,31 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return getUnit(name)!=null;
 	}
 		
+	/**
+	 * @return The set of all {@link Events} in the model
+	 */
+	public Set<Event> getEvents(){
+		return events;
+	}
+	
+	/**
+	 * Specify the set of {@link Events} in the model
+	 * @param theevents The set of {@link Events} that will be assigned to the model
+	 */
+	public void setEvents(Set<Event> theevents){
+		this.events.clear();
+		this.events.addAll(theevents);
+	}
+	
+	
+	/**
+	 * Add an {@link Event} to the model
+	 * @param theevent The {@link Event} to add
+	 */
+	public void addEvent(Event theevent){
+		this.events.add(theevent);
+	}
+	
 	/**
 	 * @return The set of all computational and physical elements in the model.
 	 * This includes anything that is a {@link ComputationalModelComponent} or
