@@ -58,6 +58,14 @@ public class CurationalMetadata {
 		}
 	}
 	
+	public void importMetadata(CurationalMetadata toimport, boolean overwrite) {
+		for (Metadata m : Metadata.values()) {
+			if (curationmap.get(m)=="" || overwrite) {
+				curationmap.put(m, toimport.getAnnotationValue(m));
+			}
+		}
+	}
+	
 	public enum Metadata {
 		fullname("Full Name", MODEL_NAME_RELATION),
 		description("Description", MODEL_DESCRIPTION_RELATION),

@@ -13,7 +13,6 @@ import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
-import semgen.stage.StageTab;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.utilities.SemGenTask;
@@ -50,7 +49,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	private SemGenMenuBar menu;
 
 	public SemGenGUI(SemGenSettings sets,  SemGenMenuBar menubar, GlobalActions gacts){
-		settings = new SemGenSettings(sets);
+		settings = sets;
 		menu = menubar;
 		globalactions = gacts;
 		globalactions.addObserver(this);
@@ -117,16 +116,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	public void startNewStageTask(){
-		// Currently the stage isn't loading on non-Windows platforms.
-		// If we can't load the stage pop up a nice dialog containing an error message explaining why.
-		// Tracked by: https://github.com/thompsct/SemGen/issues/24
-		String errorMessage = StageTab.canCreate();
-		if(errorMessage != null)
-		{
-			JOptionPane.showMessageDialog(this, errorMessage);
-			return;
-		}
-		
 		StageWorkbenchFactory factory = new StageWorkbenchFactory();
 		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
 		addTab(factory, tabfactory);
@@ -165,6 +154,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			if (!workbenchfactory.isValid()) {
 				cancel(true);
 			}
+			workbenchfactory.addFileMenuasBenchObserver(menu.filemenu);
 			return null;
 		}
 		
@@ -176,7 +166,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				int tabcount = opentabs.size();
 				globalactions.setCurrentTab(tab);
 				tab.loadTab();
-				tab.addObservertoWorkbench(menu.filemenu);
 				setTabComponentAt(tabcount-1, tab.getTabLabel());
 				
 				tab.addMouseListenertoTabLabel(new tabClickedListener(tab));

@@ -11,22 +11,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Observable;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.ResourcesManager;
+import semsim.utilities.ResourcesManager;
 /**
  * Structure for storing and retrieving application settings during run time. A copy can
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
+	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype, autoannotatemapped}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public Hashtable<String, String[]> startsettingstable;
+	public HashMap<String, String[]> startsettingstable;
 	private final int defwidth = 1280, defheight = 1024;
 	private Dimension screensize;
 	private Boolean maximize = false;
+	private Boolean autoannmapped;
 	private int width = 1280, height = 1024;
 	private int xpos = 0, ypos = 0;
 	
@@ -34,7 +36,7 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashtableFromFile("cfg/startSettings.txt");
+			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt", true);
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
@@ -43,15 +45,17 @@ public class SemGenSettings extends Observable{
 		width = screensize.width; height = screensize.height;
 		getPreviousScreenSize();
 		getPreviousScreenPosition();
+		autoannmapped = startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
 	}
 	
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
-		startsettingstable = old.startsettingstable;
+		startsettingstable = new HashMap<String, String[]>(old.startsettingstable);
 		xpos = old.xpos;
 		ypos = old.ypos;
 		width = old.width;
 		height = old.height;
+		autoannmapped = old.autoannmapped;
 	}
 	
 	public int scaleWidthforScreen(int w) {
@@ -81,8 +85,18 @@ public class SemGenSettings extends Observable{
 		return new Dimension(width, height);
 	}
 	
+	public Dimension getAppCenter() {
+		return new Dimension(width/2, height/2);
+	}
+	
 	public void setAppSize(Dimension dim) {
 		width = dim.width; height = dim.height;
+	}
+	
+	public Point centerDialogOverApplication(Dimension dialogsize) {
+		Dimension appcenter = getAppCenter();
+		Dimension dialogcenter = new Dimension(dialogsize.width/2, dialogsize.height/2);
+		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height-100);
 	}
 	
 	public int getAppWidth() {
@@ -142,59 +156,95 @@ public class SemGenSettings extends Observable{
 		return startsettingstable.get("sortbyCompositeCompleteness")[0].trim().equals("true");
 	}
 	
+	public Boolean doAutoAnnotateMapped() {
+		return startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
+	}
+	
 	public void toggleAutoAnnotate() {
-		Boolean tog = !organizeByCompositeCompleteness();
+		Boolean tog = !doAutoAnnotate();
 		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
 	}
 	
 	public void toggleCompositeCompleteness() {
 		Boolean tog = !organizeByCompositeCompleteness();
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType() {
 		Boolean tog = !organizeByPropertyType();
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers() {
 		Boolean tog = !useDisplayMarkers();
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView() {
 		Boolean tog = !useTreeView();
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports() {
 		Boolean tog = !showImports();
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
+	}
+	
+	public void toggleAutoAnnotateMapped(){
+		Boolean tog = !doAutoAnnotateMapped();
+		startsettingstable.put("autoAnnotateMapped", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.autoannotatemapped);
 	}
 	
 	public void toggleAutoAnnotate(Boolean tog) {
 		startsettingstable.put("autoAnnotate", new String[]{tog.toString()});
 	}
 	
+	public void toggleAutoAnnotateMapped(Boolean tog){
+		startsettingstable.put("autoAnnotateMapped", new String[]{tog.toString()});
+	}
+	
 	public void toggleCompositeCompleteness(Boolean tog) {
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleByPropertyType(Boolean tog) {
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.cwsort);
 	}
 	
 	public void toggleDisplayMarkers(Boolean tog) {
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggleproptype);
 	}
 	
 	public void toggleTreeView(Boolean tog) {
 		startsettingstable.put("treeView", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.toggletree);
 	}
 	
 	public void toggleShowImports(Boolean tog) {
 		startsettingstable.put("showImports", new String[]{tog.toString()});
+		setChanged();
+		notifyObservers(SettingChange.showimports);
 	}
+	
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];
 	}
@@ -202,6 +252,7 @@ public class SemGenSettings extends Observable{
 	public void setIsMaximized(boolean maxed) {
 		maximize = maxed;
 	}
+	
 	
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
@@ -218,6 +269,7 @@ public class SemGenSettings extends Observable{
 			writer.println("sortbyCompositeCompleteness; " + organizeByCompositeCompleteness());
 			writer.println("treeView; " + useTreeView().toString());
 			writer.println("helpURL; " + getHelpURL());
+			writer.println("autoAnnotateMapped; " + doAutoAnnotateMapped().toString());
 			
 			writer.flush();
 			writer.close();

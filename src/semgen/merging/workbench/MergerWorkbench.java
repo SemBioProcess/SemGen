@@ -20,9 +20,9 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.SemSimUtil;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
@@ -78,7 +78,7 @@ public class MergerWorkbench extends Workbench {
 			model = loadModel(file, autoannotate);
 			loadedmodels.add(model);
 			filepathlist.add(file);
-			addDSNameList(model.getDataStructures());
+			addDSNameList(model.getAssociatedDataStructures());
 		}
 
 		notifyModelListUpdated();
@@ -118,6 +118,7 @@ public class MergerWorkbench extends Workbench {
 		if (modelselection == -1) return;
 		loadedmodels.remove(modelselection);
 		filepathlist.remove(modelselection);
+		overlapmap = null;
 		notifyModelListUpdated();
 	}
 
@@ -135,7 +136,7 @@ public class MergerWorkbench extends Workbench {
 	public HashMap<String, String> createIdenticalSubmodelNameMap() {
 		HashMap<String, String> namemap = new HashMap<String, String>();
 		for (String name : overlapmap.getIdenticalSubmodelNames()) {
-			namemap.put(name, "");
+			namemap.put(new String(name), "");
 		}
 		return namemap;
 	}
@@ -157,10 +158,14 @@ public class MergerWorkbench extends Workbench {
 			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
 		    // don't include in idneticalmap	
 			if (!identolnames.contains(name)) {
-				identicalmap.put(name, "");
+				identicalmap.put(new String(name), "");
 			}
 		}
 		return identicalmap;
+	}
+	
+	public ModelOverlapMap getModelOverlapMap(){
+		return overlapmap;
 	}
 	
 	public Pair<String, String> getMapPairNames(int index) {
@@ -247,7 +252,7 @@ public class MergerWorkbench extends Workbench {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				setChanged();
-				notifyObservers(MergeEvent.mergecompleted);
+				notifyObservers(MergeEvent.mergecompleted);			
 			}
 		};
 		task.execute();

@@ -41,8 +41,6 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.model.SemSimModel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -180,6 +178,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				HashMap<String, String> smnamemap = workbench.createIdenticalSubmodelNameMap();
 				for(String oldsubmodelname : smnamemap.keySet()){
 					String newsubmodelname = changeSubmodelNameDialog(oldsubmodelname);
+					if (newsubmodelname==null) return;
 					smnamemap.put(oldsubmodelname, newsubmodelname);
 				}
 				
@@ -188,9 +187,12 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap.keySet());
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
+					if (newname==null) return;
 					cwnamemap.put(name, newname);
 				}
+				
 				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
+				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
 				for (int i=0; i<unitoverlaps.size(); i++) {
 					if (!unitoverlaps.get(i)) {
@@ -202,6 +204,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 					}
 					conversionlist.add(Pair.of(1.0, "*"));
 				}
+
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
 				if (error!=null){
@@ -239,6 +242,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	private void minusButtonAction() {
 		workbench.removeSelectedModel();
+		respane.removeAll();
 		mappingpanelleft.clearPanel();
 		mappingpanelright.clearPanel();
 		primeForMerging();
@@ -298,8 +302,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		String newname = null;
 		while(true){
 			newname = JOptionPane.showInputDialog(this, "Both models contain a submodel called " + oldname + ".\n" +
-					"Enter new name for the submodel from " + workbench.getModelName(0) + ".\nNo special characters, no spaces.", "Duplicate submodel name", JOptionPane.OK_OPTION);
-			
+					"Enter new name for the submodel from " + workbench.getModelName(0) + ".\nNo special characters, no spaces.", 
+					"Duplicate submodel name", JOptionPane.OK_OPTION);
+			if (newname==null) break;
 			if(newname!=null && !newname.equals("")){
 				if(newname.equals(oldname)){
 					JOptionPane.showMessageDialog(this, "That is the existing name. Please choose a new one.");
@@ -315,9 +320,10 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		String newdsname = null;
 		while(true){
 			newdsname = JOptionPane.showInputDialog(this, "Both models contain codeword " + dsname + ".\n" +
-					"Enter new name for use in " + workbench.getOverlapMapModelNames() + " equations.\nNo special characters, no spaces.", "Duplicate codeword", JOptionPane.OK_OPTION);
-			
-			if(newdsname!=null && !newdsname.equals("")){
+					"Enter new name for use in " + workbench.getOverlapMapModelNames() + " equations.\nNo special characters, no spaces.", 
+					"Duplicate codeword", JOptionPane.OK_OPTION);
+			if (newdsname==null) break;
+			if(!newdsname.equals("")){
 				if(newdsname.equals(dsname)){
 					JOptionPane.showMessageDialog(this, "That is the existing name. Please choose a new one.");
 				}
@@ -363,11 +369,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 
 	@Override
-	public void addObservertoWorkbench(Observer obs) {
-		workbench.addObserver(obs);
-	}
-
-	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
@@ -381,10 +382,10 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			primeForMerging();
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			File file = null;
-			while (file == null) {
-				file = saveMerge();
-			}
+			File file = saveMerge();
+			
+			if (file==null) return;
+			
 			workbench.saveMergedModel(file);
 			addmanualmappingbutton.setEnabled(true);
 			try {

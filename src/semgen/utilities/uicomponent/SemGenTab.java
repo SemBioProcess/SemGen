@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
-import java.util.Observer;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -70,8 +68,6 @@ public abstract class SemGenTab extends JPanel {
 	abstract public void requestSave();
 	
 	abstract public void requestSaveAs();
-	
-	abstract public void addObservertoWorkbench(Observer obs);
 	
 	public boolean fileURIMatches(URI uri) {
 		return false;

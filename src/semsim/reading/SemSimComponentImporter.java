@@ -5,11 +5,11 @@ import java.io.File;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
+import semsim.model.collection.FunctionalSubmodel;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.FunctionalSubmodel;
 
 public class SemSimComponentImporter {
 /**
@@ -39,7 +39,7 @@ public class SemSimComponentImporter {
 		if(modeltype == ModelClassifier.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelfile).readFromFile();
-			} catch (OWLException | CloneNotSupportedException e) {
+			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -86,7 +86,7 @@ public class SemSimComponentImporter {
 	
 	
 	private static FunctionalSubmodel addImportedComponentToModel(SemSimModel model, String localsemsimname, String localsourcemodelname, String hrefValue, FunctionalSubmodel origsubmodel, FunctionalSubmodel parent) throws CloneNotSupportedException{
-		FunctionalSubmodel importedcompclone = (FunctionalSubmodel) origsubmodel.clone();
+		FunctionalSubmodel importedcompclone = new FunctionalSubmodel(origsubmodel);
 		importedcompclone.setName(localsemsimname);
 		importedcompclone.setLocalName(localsourcemodelname);
 		importedcompclone.setImported(true);
@@ -105,7 +105,7 @@ public class SemSimComponentImporter {
 			// When parsing SemSim OWL files, all Data Structures are added to model first. They may be imported, so reuse if already present.
 			if(!model.containsDataStructure(localdsname)) model.addDataStructure(ds);
 			else{
-				ds = model.getDataStructure(localdsname);
+				ds = model.getAssociatedDataStructure(localdsname);
 			}
 			if(ds.getUnit()!=null){
 				// Reuse units, if present

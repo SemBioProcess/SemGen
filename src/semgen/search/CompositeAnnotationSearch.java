@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
-import semgen.visualizations.JsonString;
+import semgen.stage.serialization.SearchResultSet;
 
 
 public class CompositeAnnotationSearch {
+	public static final String SourceName = "Examples";
+
 	// Given a keyword, do a string search on data structures from a set of annotated SemSim models.
 	// Return a list of SemSim model names containing the keyword.
-	public static JsonString compositeAnnotationSearch(String searchString) throws FileNotFoundException {
+	public static SearchResultSet compositeAnnotationSearch(String searchString) throws FileNotFoundException {
 		List<Set<String>> compareResults = new ArrayList<Set<String>>(); 
 		String queryArray[];
 		queryArray = searchString.toLowerCase().split(" ");
@@ -49,9 +49,7 @@ public class CompositeAnnotationSearch {
 			finalResults = compareResults.get(0);
 			finalResults.retainAll(resultSet);
 		}
-		
-		// Turn the set into a json array
-		return new JsonString("[\"" + StringUtils.join(finalResults, "\",\"") + "\"]");
-	}
 
+		return new SearchResultSet(SourceName, finalResults.toArray(new String[finalResults.size()]));
+	}
 }

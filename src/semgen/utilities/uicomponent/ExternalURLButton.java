@@ -14,41 +14,39 @@ import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalConstants;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
 
 	private static final long serialVersionUID = 1L;
-	private URI termuri;
 
 	public ExternalURLButton(){
 		addMouseListener(this);
 		setIcon(SemGenIcon.externalURLicon);
-		setText("");
 		setEnabled(true);
 		setToolTipText("Show term details in browser");
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 	}
-	
-	public void setTermURI(URI uri){
-		termuri = uri;
-	}
 
-	public void mouseClicked(MouseEvent arg0) {
+	public void openTerminBrowser(URI termuri) {
 		if(termuri!=null){
 			System.out.println(termuri);
 			String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri.toString());
 			String fullontname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
 			String abbrev = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(fullontname);
 			
-			// Use UNIPROT website for UNIPROT terms...
-			if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
+			// If an identifiers.org URI is used, just treat the identifier as the URL
+			if(termuri.toString().startsWith("http://identifiers.org")) BrowserLauncher.openURL(termuri.toString());
+
+			// ...else, if it's a UNIPROT term...
+			else if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
 					SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))==SemSimConstants.UNIPROT_FULLNAME){
 				String id = SemSimOWLFactory.getIRIfragment(termuri.toString());
 				String urlstring = "http://www.uniprot.org/uniprot/" + id;
 				BrowserLauncher.openURL(urlstring);				
 			}
+			
 			// ...else if we have identified the ontology and it is available through BioPortal, open the BioPortal URL
 			else if(abbrev!=null && BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(fullontname)){
 				// Special case for BRENDA
@@ -61,6 +59,10 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
 			}
 		}
+	}
+	
+	public void mouseClicked(MouseEvent arg0) {
+		
 	}
 
 	public void mouseEntered(MouseEvent arg0) {

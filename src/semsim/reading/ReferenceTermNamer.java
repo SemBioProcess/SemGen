@@ -3,29 +3,32 @@ package semsim.reading;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.jdom.JDOMException;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.model.SemSimComponent;
+import semsim.annotation.ReferenceTerm;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.SemSimModel;
 import semsim.owl.SemSimOWLFactory;
-import semsim.webservices.BioPortalConstants;
-import semsim.webservices.BioPortalSearcher;
-import semsim.webservices.KEGGsearcher;
-import semsim.webservices.UniProtSearcher;
+import semsim.utilities.webservices.BioPortalConstants;
+import semsim.utilities.webservices.BioPortalSearcher;
+import semsim.utilities.webservices.KEGGsearcher;
+import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceTermNamer {
 	
 	public static final String BioPortalOBOlibraryPrefix = "http://purl.obolibrary.org/obo/";
-	public static final String BioPortalFMAnamespace = "http://sig.uw.edu/fma#";
+	public static final String BioPortalFMAnamespace = "http://purl.org/sig/ont/fma/";
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
@@ -39,22 +42,31 @@ public class ReferenceTermNamer {
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
 		if(online){
-			for(SemSimComponent ssc : model.getAllModelComponents()){
+			for(SemSimObject ssc : model.getAllModelComponents()){
 				if(ssc instanceof Annotatable){
+
 					Annotatable annthing = (Annotatable)ssc;
+					Set<Annotation> anns = new HashSet<Annotation>();
+					anns.addAll(annthing.getAnnotations());
+					
+					if(ssc instanceof ReferenceTerm) 
+						anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+					
 					// If annotation present
-					for(Annotation ann : annthing.getAnnotations()){
+					for(Annotation ann : anns){
+
 						if(ann instanceof ReferenceOntologyAnnotation){
 							ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
 							URI uri = refann.getReferenceURI();
 							
 							// If we need to fill in the description
-							if(refann.getValueDescription()==uri.toString()){
+							if(refann.getValueDescription().equals(uri.toString()) || refann.getValueDescription().equals("")){
 								
 								System.out.println("Need to find " + uri.toString());
 								String name = null;
 								if(URInameMap.containsKey(uri.toString())){
 									name = URInameMap.get(uri.toString())[0];
+									System.out.println(uri.toString() + " was already cached: " + name);
 								}
 								else{
 									name = getNameFromURI(uri);
@@ -107,7 +119,7 @@ public class ReferenceTermNamer {
 			if(KBname.equals(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME)){
 				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
 				String edittedid = id.replace("FMA%3A", "");
-				edittedid = id.replace("FMA:", "FMA_");
+				edittedid = id.replace("FMA:", "fma");
 				edittedid = SemSimOWLFactory.URIencoding(BioPortalFMAnamespace + edittedid);
 
 				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);

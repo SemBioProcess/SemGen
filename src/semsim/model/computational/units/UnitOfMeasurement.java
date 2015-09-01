@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.Annotatable;
 import semsim.SemSimConstants;
+import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
@@ -17,9 +17,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private String computationalCode;
 	private String customDeclaration;
-	private boolean isFundamental = false;
 	private Set<UnitFactor> unitFactors = new HashSet<UnitFactor>();
 	
+	private boolean isFundamental = false;
 	private boolean isImported = false;
 	private String hrefValue;
 	private String referencedName;
@@ -30,6 +30,29 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public UnitOfMeasurement(String name){
 		setName(name);
 		setComputationalCode(name);
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param uomtocopy
+	 */
+	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
+		super(uomtocopy);
+		computationalCode = new String(uomtocopy.computationalCode);
+		if (uomtocopy.customDeclaration != null) {
+			customDeclaration = new String(uomtocopy.customDeclaration);
+		}
+		unitFactors.addAll(uomtocopy.unitFactors);
+		isFundamental = uomtocopy.isFundamental;
+		isFundamental = uomtocopy.isImported;
+		parentImport = uomtocopy.parentImport;
+		if (uomtocopy.referencedName != null) {
+			referencedName = new String(uomtocopy.referencedName);
+		}
+		if (uomtocopy.localName != null) {
+			localName = new String(uomtocopy.localName);
+		}
+		unitType = uomtocopy.unitType;
 	}
 	
 	public void addUnitFactor(UnitFactor factor){
@@ -88,7 +111,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	
-	public ReferenceOntologyAnnotation getFirstRefersToReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
 		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
 			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
@@ -109,7 +132,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	public Boolean hasRefersToAnnotation(){
-		return getFirstRefersToReferenceOntologyAnnotation()!=null;
+		return getRefersToReferenceOntologyAnnotation()!=null;
 	}
 
 	public void removeAllReferenceAnnotations() {
@@ -194,5 +217,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.UNITS_CLASS_URI;
+	}
+	
+	public URI getReferstoURI() {
+		return referenceuri;
 	}
 }

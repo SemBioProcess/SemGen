@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import semgen.menu.FileMenu;
+
 public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable {
 	protected ArrayList<File> sourcefile = new ArrayList<File>();
 	protected boolean cont = true;
@@ -72,4 +74,11 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
 		cont = false;
 	}
 	
+	public void addFileMenuasBenchObserver(FileMenu menu) {
+		for (T wb : workbenches) {
+			if (wb!=null) {
+				wb.addObserver(menu);
+			}
+		}
+	}
 }

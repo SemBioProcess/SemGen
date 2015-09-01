@@ -4,15 +4,13 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
-import semsim.model.SemSimModel;
+import semsim.model.collection.SemSimModel;
 import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
@@ -67,6 +65,7 @@ public class Encoder {
 			outwriter = new MMLwriter(model);
 		}
 		File outputfile = fc.SaveAsAction();
+		
 		if (outputfile != null) {
 			CoderTask task = new CoderTask(outwriter, outputfile);
 		
@@ -89,7 +88,7 @@ public class Encoder {
 	        	while (!isCancelled()) {
 	        		try {
 						writer.writeToFile(output);
-					} catch (OWLException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}	
 	        		break;

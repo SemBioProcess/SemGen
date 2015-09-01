@@ -14,8 +14,6 @@ import org.junit.rules.TemporaryFolder;
 
 import semgen.UnitTestBase;
 import semsim.CollateralHelper;
-import semsim.SemSimLibrary;
-import semsim.model.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.writing.CellMLwriter;
 
@@ -41,7 +39,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
-		SemSimModel model = reader.readFromFile();
+		semsim.model.collection.SemSimModel model = reader.readFromFile();
 		CellMLwriter writer = new CellMLwriter(model);
 		File newModelFile = createTempFile();
 		writer.writeToFile(newModelFile);
