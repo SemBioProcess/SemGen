@@ -24,6 +24,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -36,6 +37,7 @@ import semsim.utilities.SemSimUtil;
 public class CellMLbioRDFblock {
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
 	private Map<PhysicalModelComponent, URI> pmcsandresourceURIs = new HashMap<PhysicalModelComponent,URI>(); 
+	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
 	public String modelns;
@@ -77,7 +79,7 @@ public class CellMLbioRDFblock {
 			
 			if(ds.hasPhysicalProperty()){
 				PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
-				Resource propres = getResourceForPMCandAnnotate(rdf, prop);
+				Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, ds);
 
 				if(ds.hasAssociatedPhysicalComponent()){
 					PhysicalModelComponent propof = ds.getAssociatedPhysicalModelComponent();
@@ -220,13 +222,14 @@ public class CellMLbioRDFblock {
 				nexturi = pmcsandresourceURIs.get(lastent);
 			}
 		}
-			Property structprop = partof;
 			
-			StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-			if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		Property structprop = partof;
 			
-			Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
-			if(!rdf.contains(structst)) rdf.add(structst);
+		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
+		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		
+		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
+		if(!rdf.contains(structst)) rdf.add(structst);
 		
 		return indexuri;
 	}
@@ -238,16 +241,43 @@ public class CellMLbioRDFblock {
 		return out.toString();
 	}
 	
+	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
-		if(pmcsandresourceURIs.containsKey(pmc)){
-			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
-		}
 		
 		String typeprefix = pmc.getComponentTypeasString();
+		boolean isphysproperty = typeprefix.matches("property");
+		
+		if(pmcsandresourceURIs.containsKey(pmc) && ! isphysproperty){
+			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
+		}
 		
 		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
 			typeprefix = "unknown";
 		
+		Resource res = createResourceForPhysicalModelComponent(typeprefix);
+		
+		if(! isphysproperty) pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
+		
+		annotateReferenceOrCustomResource(pmc, res);
+		
+		return res;
+	}
+	
+	// Get the RDF resource for a data structure's associated physical property
+	protected Resource getResourceForDataStructurePropertyAndAnnotate(Model rdf, DataStructure ds){
+		
+		if(variablesAndPropertyResourceURIs.containsKey(ds)){
+			return rdf.getResource(variablesAndPropertyResourceURIs.get(ds).toString());
+		}
+		
+		Resource res = createResourceForPhysicalModelComponent("property");
+		variablesAndPropertyResourceURIs.put(ds, URI.create(res.getURI()));
+		annotateReferenceOrCustomResource(ds.getPhysicalProperty(), res);
+		return res;
+	}
+	
+	// Generate an RDF resource for a physical component
+	private Resource createResourceForPhysicalModelComponent(String typeprefix){
 		String resname = modelns;	
 		int idnum = 0;
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
@@ -258,10 +288,6 @@ public class CellMLbioRDFblock {
 		localids.add(resname);
 		
 		Resource res = rdf.createResource(resname);
-		pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
-		
-		annotateReferenceOrCustomResource(pmc, res);
-		
 		return res;
 	}
 
