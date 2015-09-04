@@ -41,7 +41,8 @@ public class LoadSemSimModel {
 			case ModelClassifier.SBML_MODEL:
 				semsimmodel = new SBMLreader(file).readFromFile();
 								
-				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
+				if(semsimmodel.getErrors().isEmpty() && autoannotate 
+						&& ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
 
 					//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
 					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
@@ -60,8 +61,11 @@ public class LoadSemSimModel {
 				
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
+				
 				if(semsimmodel.getErrors().isEmpty()){
-					if(autoannotate){
+					
+					if(autoannotate && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
+						
 						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
 						Boolean online = true;
 						

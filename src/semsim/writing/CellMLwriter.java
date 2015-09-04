@@ -497,8 +497,9 @@ public class CellMLwriter extends ModelWriter {
 					rdfblock.rdf.setNsPrefix("model", semsimmodel.getNamespace());
 						
 					Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
-					Resource propres = rdfblock.getResourceForPMCandAnnotate(rdfblock.rdf, ((DataStructure)a).getPhysicalProperty());
+					Resource propres = rdfblock.getResourceForDataStructurePropertyAndAnnotate(rdfblock.rdf, (DataStructure)a);
 					Statement st = rdfblock.rdf.createStatement(ares, iccfprop, propres);
+					
 					if(!rdfblock.rdf.contains(st)) rdfblock.rdf.add(st);
 					rdfblock.addCompositeAnnotationMetadataForVariable((DataStructure)a);
 				}

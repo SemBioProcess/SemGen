@@ -19,6 +19,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.webservices.BioPortalConstants;
 import semsim.utilities.webservices.BioPortalSearcher;
@@ -32,6 +33,43 @@ public class ReferenceTermNamer {
 	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
 	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
+	/**
+	 * @param model The SemSim model containing the SemSimObjects that will be processed
+	 * @return The set of SemSimObjects annotated with reference terms that are missing names.
+	 */
+	public static Set<SemSimObject> getModelComponentsWithUnnamedAnnotations(SemSimModel model){
+		
+		Set<SemSimObject> unnamed = new HashSet<SemSimObject>();
+		
+		for(SemSimObject ssc : model.getAllModelComponents()){
+			if(ssc instanceof Annotatable){
+
+				Annotatable annthing = (Annotatable)ssc;
+				Set<Annotation> anns = new HashSet<Annotation>();
+				anns.addAll(annthing.getAnnotations());
+				
+				if(ssc instanceof ReferenceTerm) 
+					anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+				
+				// If annotation present
+				for(Annotation ann : anns){
+
+					if(ann instanceof ReferenceOntologyAnnotation){
+						ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+						URI uri = refann.getReferenceURI();
+						
+						// If we need to fill in the description by going online
+						if(refann.getValueDescription().equals(uri.toString()) || refann.getValueDescription().equals("")){
+							unnamed.add(ssc);
+						}
+					}
+				}
+			}
+		}
+		return unnamed;
+	}
+	
+	
 	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
@@ -42,53 +80,48 @@ public class ReferenceTermNamer {
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
 		if(online){
-			for(SemSimObject ssc : model.getAllModelComponents()){
-				if(ssc instanceof Annotatable){
+			for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model)){
+				
+				Annotatable annthing = (Annotatable)ssc;
+				Set<Annotation> anns = new HashSet<Annotation>();
+				anns.addAll(annthing.getAnnotations());
+				
+				if(ssc instanceof ReferenceTerm) 
+					anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+				
+				for(Annotation ann : anns){
 
-					Annotatable annthing = (Annotatable)ssc;
-					Set<Annotation> anns = new HashSet<Annotation>();
-					anns.addAll(annthing.getAnnotations());
-					
-					if(ssc instanceof ReferenceTerm) 
-						anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
-					
-					// If annotation present
-					for(Annotation ann : anns){
-
-						if(ann instanceof ReferenceOntologyAnnotation){
-							ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
-							URI uri = refann.getReferenceURI();
+					if(ann instanceof ReferenceOntologyAnnotation){
+						ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+						URI uri = refann.getReferenceURI();
+						
+						System.out.println("Need to find " + uri.toString());
+						String name = null;
+						if(URInameMap.containsKey(uri.toString())){
+							name = URInameMap.get(uri.toString())[0];
+							System.out.println(uri.toString() + " was already cached: " + name);
+						}
+						else{
+							name = getNameFromURI(uri);
 							
-							// If we need to fill in the description
-							if(refann.getValueDescription().equals(uri.toString()) || refann.getValueDescription().equals("")){
-								
-								System.out.println("Need to find " + uri.toString());
-								String name = null;
-								if(URInameMap.containsKey(uri.toString())){
-									name = URInameMap.get(uri.toString())[0];
-									System.out.println(uri.toString() + " was already cached: " + name);
-								}
-								else{
-									name = getNameFromURI(uri);
-									
-									// If we retrieved the name
-									if(name!=null){
-										System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
-										URInameMap.put(uri.toString(), new String[]{name});
-									}
-									else{
-										name = SemSimOWLFactory.getIRIfragment(uri.toString());
-										System.out.println("Could not retrieve name for " + SemSimOWLFactory.getIRIfragment(uri.toString()));
-									}
-								}
-								
-								refann.setValueDescription(name);
-								// Set the name of the semsim component to the annotation description if it's
-								// a physical entity or physical process
-								if(ann.getRelation()==SemSimConstants.REFERS_TO_RELATION && ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess)))
-									ssc.setName(name);
+							// If we retrieved the name
+							if(name!=null){
+								System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
+								URInameMap.put(uri.toString(), new String[]{name});
+							}
+							else{
+								name = SemSimOWLFactory.getIRIfragment(uri.toString());
+								System.out.println("Could not retrieve name for " + SemSimOWLFactory.getIRIfragment(uri.toString()));
 							}
 						}
+						
+						refann.setValueDescription(name);
+						
+						// Set the name of the semsim component to the annotation description if it's
+						// a physical entity, physical process or physical property
+						if(ann.getRelation()==SemSimConstants.REFERS_TO_RELATION 
+								&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) || (ssc instanceof PhysicalProperty)))
+							ssc.setName(name);
 					}
 				}
 			}
