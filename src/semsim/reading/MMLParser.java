@@ -34,7 +34,10 @@ public class MMLParser {
 	    if (fname.endsWith(".sbml")) srcType = ASModel.TEXT_SBML;
 	    if (fname.endsWith(".cellml")) srcType = ASModel.TEXT_CELLML;
 	    if(fname.endsWith(".xml.origin")) srcType = ASModel.TEXT_SBML;
-	    if (srcType < 0) throw new Xcept("Unknown file suffix: " + fname);
+	    if (srcType < 0) {
+	    	ErrorLog.addError("Unknown file suffix: " + fname, true);
+	    	return null;
+	    }
 		
 	    String srcText = UtilIO.readText(file);
 	    

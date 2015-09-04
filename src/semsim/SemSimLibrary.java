@@ -38,8 +38,6 @@ public class SemSimLibrary {
 	public OWLOntology OPB;
 	
 	private HashMap<String, String[]> OPBClassesForUnitsTable;
-	private HashMap<String, String[]> compositeAnnRelationsTable;
-	private HashMap<String, String[]> metadataRelationsTable;
 	private HashMap<String, String[]> jsimUnitsTable;
 	
 	// Hashtable for mapping CellML base units to OPB classes.
@@ -53,7 +51,7 @@ public class SemSimLibrary {
 	private Set<String> OPBproperties = new HashSet<String>();
 	private Set<String> OPBflowProperties = new HashSet<String>();
 	private Set<String> OPBprocessProperties = new HashSet<String>();
-	private Set<String> OPBdynamicalProperties = new HashSet<String>();
+	//private Set<String> OPBdynamicalProperties = new HashSet<String>();
 	private Set<String> OPBamountProperties = new HashSet<String>();
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
@@ -65,8 +63,6 @@ public class SemSimLibrary {
 	private void loadLibrary() {
 		try {
 			loadCommonProperties();
-			compositeAnnRelationsTable = ResourcesManager.createHashMapFromFile("cfg/structuralRelations.txt", true);
-			metadataRelationsTable = ResourcesManager.createHashMapFromFile("cfg/metadataRelations.txt", true);
 			jsimUnitsTable = ResourcesManager.createHashMapFromFile("cfg/jsimUnits", true);
 			
 			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt", true);
@@ -90,7 +86,7 @@ public class SemSimLibrary {
 			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00147", false);
 			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
 			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_01151", false);
-			OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
+			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
 			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00135", false);
 			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00574", false);
 			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);
@@ -142,11 +138,7 @@ public class SemSimLibrary {
 	public boolean jsimHasUnit(String unit) {
 		return jsimUnitsTable.containsKey(unit);
 	}
-	
-	public String[] getListofMetaDataRelations() {
-		return metadataRelationsTable.keySet().toArray(new String[]{});
-	}
-	
+
 	public PhysicalPropertyinComposite getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
 		// If there is no OPB class, check base units.

@@ -179,10 +179,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		
 		public void onError() {
-			if (!workbenchfactory.getErrors().isEmpty())
-				SemGenError.showError(workbenchfactory.getErrors(), "Task Initialization Error");
-			
-			new NewTaskDialog(globalactions);
+			if (SemGenError.showSemSimErrors()) {
+				new NewTaskDialog(globalactions);
+			}
 		}
 	}
 	

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+
 import org.sbml.libsbml.CVTerm;
 import org.sbml.libsbml.Compartment;
 import org.sbml.libsbml.CompartmentType;
@@ -37,10 +38,13 @@ import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologies;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Event.EventAssignment;
@@ -61,9 +65,6 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
-import semsim.utilities.ReferenceOntologies;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
-import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.SemSimUtil;
 
 public class SBMLreader extends ModelReader{

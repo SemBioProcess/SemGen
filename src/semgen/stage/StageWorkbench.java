@@ -12,6 +12,7 @@ import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
+import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -107,6 +108,9 @@ public class StageWorkbench extends Workbench {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
 				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				if (SemGenError.showSemSimErrors()) {
+					continue;
+				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 				
 				// Tell the view to add a model
@@ -118,6 +122,9 @@ public class StageWorkbench extends Workbench {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
 				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				if (SemGenError.showSemSimErrors()) {
+					return;
+				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 
 				_commandSender.addModel(semsimmodel.getName());

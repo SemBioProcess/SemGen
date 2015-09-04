@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
+import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -76,6 +77,7 @@ public class MergerWorkbench extends Workbench {
 		SemSimModel model;
 		for (File file : files) {
 			model = loadModel(file, autoannotate);
+			if (SemGenError.showSemSimErrors()) continue;
 			loadedmodels.add(model);
 			filepathlist.add(file);
 			addDSNameList(model.getAssociatedDataStructures());

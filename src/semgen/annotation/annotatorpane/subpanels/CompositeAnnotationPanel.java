@@ -25,7 +25,7 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;

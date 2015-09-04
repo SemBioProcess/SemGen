@@ -1,4 +1,4 @@
-package semsim.utilities;
+package semsim.annotation;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class ReferenceOntologies {
 	
 	public enum OntologyDomain {
 		AssociatePhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB}),
-		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.CMO, ReferenceOntology.OPB, ReferenceOntology.PATO, 
+		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.PATO, 
 				ReferenceOntology.SBO, ReferenceOntology.SNOMED}),
 		PhysicalEntity(new ReferenceOntology[]{ReferenceOntology.CHEBI, ReferenceOntology.CL, ReferenceOntology.FMA, ReferenceOntology.GO,
 				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.PR}),
@@ -90,24 +90,24 @@ public class ReferenceOntologies {
 				"Rodent-specific anatomy"),
 		OBI("Ontology for Biomedical Investigations", "OBI", "", new String[]{"http://purl.bioontology.org/ontology/OBI"},
 				"Laboratory materials"),
-		OPB("Ontology of Physics for Biology", "OPB", "", //1141
+		OPB("Ontology of Physics for Biology", "OPB", "1141",
 				new String[]{"http://bhi.washington.edu/OPB#", "http://www.owl-ontologies.com/unnamed.owl#", "http://identifiers.org/opb/"},
-				""),
+				"physical properties and dependencies"),
 		PATO("Phenotype and Trait Ontology", "PATO", "1107",
 				new String[]{"http://purl.org/obo/owl/PATO#", "http://purl.obolibrary.org/obo/PATO"},
-				""),
+				"phenotypes and traits not represented as properties in the OPB"),
 		PR("Protein Ontology", "PR", "1062",
 				new String[]{"http://purl.obolibrary.org/obo/PR"},
 				"Proteins"),
 		SBO("Systems Biology Ontology", "SBO", "1046",
 				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#","http://purl.obolibrary.org/obo/SBO"},
-				""),
+				"physical dependencies not in the OPB"),
 		SNOMED("SNOMED - Clinical Terms", "SNOMEDCT", "1353",
 				new String[]{"http://purl.bioontology.org/ontology/SNOMEDCT/"},
-				""),
+				"clinical-domain physical properties not in the OPB"),
 		UNIPROT("Universal Protein Resource", "UNIPROPT", "",
 				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"},
-				"");
+				"protein sequences and functions");
 		
 		private String fullname;
 		private String nickname;

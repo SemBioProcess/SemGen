@@ -2,7 +2,6 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JOptionPane;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -21,6 +20,7 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
@@ -81,24 +81,25 @@ public class LoadSemSimModel {
 				break;
 				
 			default:
-				JOptionPane.showMessageDialog(null, "SemGen did not recognize the file type for " + file.getName(),
-						"Error: Unrecognized model format", JOptionPane.ERROR_MESSAGE);
-				break;
+				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), false);
+				return null;
 			}
 		}
 		catch(Exception e){e.printStackTrace();}
 		
 		if(semsimmodel!=null){
 			if(!semsimmodel.getErrors().isEmpty()){
-				String errormsg = "";
-				for(String catstr : semsimmodel.getErrors())
-					errormsg = errormsg + catstr + "\n";
-				JOptionPane.showMessageDialog(null, errormsg, "ERROR", JOptionPane.ERROR_MESSAGE);
+				for (String e : semsimmodel.getErrors()) {
+					ErrorLog.addError(e, true);
+				}
 				return semsimmodel;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
+		}
+		else {
+			ErrorLog.addError(file.getName() + " was an invalid model.", false);
 		}
 
 		return semsimmodel;
@@ -111,7 +112,7 @@ public class LoadSemSimModel {
 	
 	private static SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
 		Document doc = new MMLParser().readFromFile(file);
-		if (SemGenError.showSemSimErrors()) return null;
+		if (ErrorLog.hasErrors()) return null;
 		
 		MMLreader xmml2 = new MMLreader(file, doc);		
 		return xmml2.readFromFile();

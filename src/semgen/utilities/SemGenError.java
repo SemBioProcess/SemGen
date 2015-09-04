@@ -52,7 +52,7 @@ public class SemGenError {
 			String message = "";	
 			ArrayList<String> errors = ErrorLog.getAllErrorsandFlush();
 			for (String e : errors) {
-				message += e;
+				message += e + "\r\n";
 			}
 			JOptionPane.showMessageDialog(parent, message,
 				"SemSim Error", JOptionPane.ERROR_MESSAGE);

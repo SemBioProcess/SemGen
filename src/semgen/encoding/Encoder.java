@@ -39,8 +39,7 @@ public class Encoder {
 	
 	public void startEncoding(File afile, String filenamesuggestion){
 		SemSimModel model = LoadSemSimModel.loadSemSimModelFromFile(afile, false);
-		if(!model.getErrors().isEmpty()){
-			SemGenError.showError("Selected model had errors:", "Could not encode model");
+		if(SemGenError.showSemSimErrors()){
 			return;
 		}
 		startEncoding(model, filenamesuggestion);

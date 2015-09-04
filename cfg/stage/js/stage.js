@@ -1,5 +1,6 @@
 var sender;
 var receiver;
+var AllNodes = [];
 $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	sender = e.originalEvent.commandSender;
@@ -143,4 +144,14 @@ function makeResultSet(searchResultSet) {
 
     resultSet.append(list);
     return resultSet;
+};
+
+function removeFromDragList(_node) {
+
+	var NewNodes = [];
+	AllNodes.forEach(function (node) {
+		if(node != _node)
+			NewNodes.push(node);
+	});
+	AllNodes = NewNodes;
 };

@@ -11,6 +11,7 @@ import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.model.collection.SemSimModel;
+import semsim.utilities.ErrorLog;
 
 public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	boolean autoannotate = false;
@@ -36,20 +37,14 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
     	setStatus("Creating SemSimModel");
 		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
 		if (semsimmodel == null) {
-			errors = "Invalid model file.";
+			ErrorLog.addError("Invalid model file.", true);
 			abort();
 			return;
 		}
-		if(!semsimmodel.getErrors().isEmpty()){
-			errors = "<html><body><b>" + file.getName() + " failed to load due to the following errors:</b><br>";
-			for (String e : semsimmodel.getErrors()) {
-				errors = errors + e + "<br>";
-			}
-			errors = errors + "</body></html>";
+		if (ErrorLog.hasErrors()) {
 			abort();
 			return;
 		}
-		
 		AnnotatorWorkbench wb = new AnnotatorWorkbench(file, semsimmodel);
 		wb.initialize();
 		workbenches.add(wb);

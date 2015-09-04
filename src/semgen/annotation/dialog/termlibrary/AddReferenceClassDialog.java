@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public class AddReferenceClassDialog extends SemGenDialog implements
 		PropertyChangeListener {
@@ -42,6 +42,7 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 		optionPane.setInitialValue(options[0]);
 		setContentPane(optionPane);
 		showDialog();
+		refclasspanel.align();
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {

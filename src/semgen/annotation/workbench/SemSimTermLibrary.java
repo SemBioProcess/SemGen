@@ -15,6 +15,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
+import semsim.annotation.ReferenceOntologies.ReferenceOntology;
 import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -27,7 +28,6 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**

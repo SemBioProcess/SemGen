@@ -16,7 +16,7 @@ import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public abstract class EntitySelectorGroup extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;
