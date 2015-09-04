@@ -93,6 +93,12 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected void makeUnique() {
 		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.BQB_IS_VERSION_OF_RELATION);
 		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.BQB_IS_VERSION_OF_RELATION, versionrels));
+		
+		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.HAS_PART_RELATION);
+		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.HAS_PART_RELATION, haspartrels));
+		
+		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.PART_OF_RELATION);
+		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.PART_OF_RELATION, partofrels));
 	}
 	
 	protected void finishPanel() {

@@ -399,8 +399,8 @@ public class SemSimConstants {
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();
 		aMap4.put(0, BQB_IS_RELATION);
-		aMap4.put(1, BQB_HAS_PART_RELATION);
-		aMap4.put(2, BQB_IS_PART_OF_RELATION);
+		aMap4.put(1, HAS_PART_RELATION);  // Use RO relation, not BQB here for consistency in SemSim models
+		aMap4.put(2, PART_OF_RELATION);   // Use RO relation, not BQB here for consistency in SemSim models
 		aMap4.put(3, BQB_IS_VERSION_OF_RELATION);
 		aMap4.put(9, BQB_OCCURS_IN_RELATION);
 		BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS = Collections.unmodifiableMap(aMap4);

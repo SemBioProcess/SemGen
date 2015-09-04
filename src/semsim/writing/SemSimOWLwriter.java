@@ -456,29 +456,53 @@ public class SemSimOWLwriter extends ModelWriter {
 	 * Go through custom physical model components and assert their annotations, if present
 	 */
 	private void addPhysicalComponentAnnotations() throws OWLException {	
+		
 		Set<PhysicalModelComponent> custs = new HashSet<PhysicalModelComponent>();
 		custs.addAll(semsimmodel.getCustomPhysicalEntities());
 		custs.addAll(semsimmodel.getCustomPhysicalProcesses());
+		
+		// For each custom term in the model...
 		for(PhysicalModelComponent pmc : custs){
-			for(ReferenceOntologyAnnotation ref : pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION)){
-				OWLClass refclass = factory.getOWLClass(IRI.create(ref.getReferenceURI()));
+			
+			Set<ReferenceOntologyAnnotation> annstoprocess = new HashSet<ReferenceOntologyAnnotation>();
+			annstoprocess.addAll(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION));
+			annstoprocess.addAll(pmc.getReferenceOntologyAnnotations(SemSimConstants.HAS_PART_RELATION));
+			annstoprocess.addAll(pmc.getReferenceOntologyAnnotations(SemSimConstants.PART_OF_RELATION));
+			
+			for(ReferenceOntologyAnnotation ref : annstoprocess){
 				
+				String referenceURIstring = ref.getReferenceURI().toString();
+				OWLClass refclass = factory.getOWLClass(IRI.create(referenceURIstring));
+				
+				// Store the reference term class if not already added
 				if(!ont.getClassesInSignature().contains(refclass)){
-					String parent = pmc.getSemSimClassURI().toString();
-					SemSimOWLFactory.addClass(ont, ref.getReferenceURI().toString(), new String[]{parent}, manager);
+					String parent = (pmc instanceof PhysicalEntity) ? 
+							SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI.toString()
+							: SemSimConstants.REFERENCE_PHYSICAL_PROCESS_CLASS_URI.toString();
+							
+					SemSimOWLFactory.addClass(ont, referenceURIstring, new String[]{parent}, manager);
 					SemSimOWLFactory.setRDFLabel(ont, refclass, ref.getValueDescription(), manager);
 				}
-				if(singularPMCsAndUrisForDataStructures.containsKey(pmc)){
-					SemSimOWLFactory.subclassIndividual(ont, singularPMCsAndUrisForDataStructures.get(pmc).toString(), ref.getReferenceURI().toString(), manager);
-				}
+				
+				// Get the URI for the individual we're processing
+				String indURIstring = null;
+				
+				if(singularPMCsAndUrisForDataStructures.containsKey(pmc))
+					indURIstring = singularPMCsAndUrisForDataStructures.get(pmc).toString();
+				
 				else{
 					for(String custind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, pmc.getSemSimClassURI().toString())){
 						OWLNamedIndividual theind = factory.getOWLNamedIndividual(IRI.create(custind));
-						if(SemSimOWLFactory.getRDFLabels(ont, theind)[0].equals(pmc.getName())){
-							SemSimOWLFactory.subclassIndividual(ont, custind, ref.getReferenceURI().toString(), manager);
-						}
+						
+						if(SemSimOWLFactory.getRDFLabels(ont, theind)[0].equals(pmc.getName()))
+							indURIstring = custind;
 					}
 				}
+				
+				// Add object property restrictions on the custom individual
+				URI propertyURI = ref.getRelation().getURI();
+				SemSimOWLFactory.addExistentialObjectPropertyRestrictionOnIndividual(ont,
+						indURIstring, propertyURI.toString(), referenceURIstring, manager);
 			}
 		}
 	}

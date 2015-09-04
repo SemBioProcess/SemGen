@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -65,6 +66,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.owl.SemSimOWLFactory.RestrictionVisitor;
 import semsim.utilities.SemSimUtil;
 
 public class SemSimOWLreader extends ModelReader {
@@ -557,24 +559,56 @@ public class SemSimOWLreader extends ModelReader {
 				
 				// For each super class that is not the custom physical component class itself...
 				for(OWLClassExpression supercls : custind.asOWLNamedIndividual().getTypes(ont)){
-					URI superclsuri = supercls.asOWLClass().getIRI().toURI();
-					if(!superclsuri.toString().equals(customclassuri.toString())){
-						String label = SemSimOWLFactory.getRDFLabels(ont, supercls.asOWLClass())[0];
+					
+					// If the superclass is anonymous
+					if(supercls.isAnonymous()){
 						
-						// Add isVersionOf annotation
-						PhysicalModelComponent pmc = null;
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI) {
-							semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(superclsuri, label));
-							pmc = semsimmodel.getCustomPhysicalProcessByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
-						}
-						if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI) {
-							semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(superclsuri, label));
-							pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
-						}
-						if(pmc!=null){
-							pmc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, superclsuri, label);
-						}
-						else semsimmodel.addError("Attempt to apply reference ontology annotation (BQB:isVersionOf) to " + custstring + " failed. Could not find individual in set of processed physical model components");
+						RestrictionVisitor restrictionVisitor = new RestrictionVisitor(Collections.singleton(ont));
+				        supercls.accept(restrictionVisitor);
+				        
+				        for(OWLObjectPropertyExpression owlprop : restrictionVisitor.getPropertyFillerMap().keySet()){
+				        	
+				        	OWLClassExpression filler = restrictionVisitor.getPropertyFillerMap().get(owlprop);
+				        	
+				        	if(! filler.isAnonymous()){
+				        		
+				        		OWLClass reftermowlclass = filler.asOWLClass();
+				        		URI reftermURI = reftermowlclass.getIRI().toURI();
+				        		
+								String label = SemSimOWLFactory.getRDFLabels(ont, reftermowlclass)[0];
+								
+								// Add reference terms to model and get the physical model component for
+								// each custom object
+								PhysicalModelComponent pmc = null;
+								
+								if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI) {
+									semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(reftermURI, label));
+									pmc = semsimmodel.getCustomPhysicalProcessByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
+								}
+								
+								if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI) {
+									semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(reftermURI, label));
+									pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
+								}
+								
+								String propstring = owlprop.getNamedProperty().getIRI().toString();
+
+								// If we've got the physical model component object, add the annotations
+								if(pmc!=null){
+									
+									if(propstring.equals(SemSimConstants.BQB_IS_VERSION_OF_URI.toString()))
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, reftermURI, label);
+									
+									else if(propstring.equals(SemSimConstants.HAS_PART_URI.toString()))
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.HAS_PART_RELATION, reftermURI, label);
+									
+									else if(propstring.equals(SemSimConstants.PART_OF_URI.toString()))
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.PART_OF_RELATION, reftermURI, label);
+								}
+								else semsimmodel.addError("Attempt to apply reference ontology annotation " + propstring + " to " + custstring + " failed."
+										+ "\nCould not find individual in set of processed physical model components");
+							}
+				        }
 					}
 				}
 			}

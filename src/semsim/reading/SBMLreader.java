@@ -36,7 +36,6 @@ import semsim.SBMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
-import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologies;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -948,14 +947,14 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	// Copy annotations from SBML model elements to SemSim objects
-	private void addAnnotations(SBase sbmlobject, Annotatable semsimobject){
-		
-		Set<ReferenceOntologyAnnotation> allanns = new HashSet<ReferenceOntologyAnnotation>();
-		allanns.addAll(getBiologicalQualifierAnnotations(sbmlobject));
-		allanns.addAll(getModelQualifierAnnotations(sbmlobject));
-		
-		for(ReferenceOntologyAnnotation ann : allanns) semsimobject.addAnnotation(ann);
-	}
+//	private void addAnnotations(SBase sbmlobject, Annotatable semsimobject){
+//		
+//		Set<ReferenceOntologyAnnotation> allanns = new HashSet<ReferenceOntologyAnnotation>();
+//		allanns.addAll(getBiologicalQualifierAnnotations(sbmlobject));
+//		allanns.addAll(getModelQualifierAnnotations(sbmlobject));
+//		
+//		for(ReferenceOntologyAnnotation ann : allanns) semsimobject.addAnnotation(ann);
+//	}
 	
 	/**
 	 * Collects all biological qualifier annotations for a given SBase object and 
@@ -982,6 +981,7 @@ public class SBMLreader extends ModelReader{
 			if(term.getQualifierType()==1){
 				Integer t = Integer.valueOf(term.getBiologicalQualifierType());
 				
+				// If we know the relation
 				if(SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.containsKey(t)){
 					
 					int numidentityanns = 0;
@@ -996,15 +996,23 @@ public class SBMLreader extends ModelReader{
 							
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainhasReferenceOntology(refont)){
-								SemSimRelation relation = (t==0) ? SemSimConstants.REFERS_TO_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+								SemSimRelation relation = (t==0) ? 
+										SemSimConstants.REFERS_TO_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
 								
-								// If we haven't already applied an identity annotation for this sbml component
-								if(numidentityanns==0){
-									anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
-									numidentityanns++;
+								// If we're looking at an identity relation...
+								if(relation==SemSimConstants.REFERS_TO_RELATION){
+									
+									// And we haven't added one yet, add it
+									if(numidentityanns==0){
+										anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
+										numidentityanns++;
+									}
+									// Otherwise skip the identity annotation
+									else System.err.println("WARNING: Multiple reference annotations for " + 
+												getIDforSBaseObject(sbmlobject) + ". Ignoring annotation against " + uristring);
 								}
-								else System.err.println("WARNING: Multiple reference annotations for " + 
-											getIDforSBaseObject(sbmlobject) + ". Ignoring annotation against " + uristring);
+								// Otherwise add the non-identity annotation
+								else anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
 							}
 						}
 					}
