@@ -11,7 +11,7 @@ import javax.swing.WindowConstants;
 public abstract class SemGenDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 
-	private static JFrame location;
+	protected static JFrame location;
 	
 	public SemGenDialog(String title) {
 		super(location, title, true);
@@ -20,7 +20,7 @@ public abstract class SemGenDialog extends JDialog{
 	}
 	
 	public static void setFrame(JFrame frame) {
-		frame = location;
+		location = frame;
 	}
 	
 	/**

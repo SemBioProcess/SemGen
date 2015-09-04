@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-public class SemGenProgressBar extends SemGenDialog implements ActionListener {
+public class SemGenProgressBar extends SemGenDialog implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = -408262547613352487L;
 	private JLabel msglabel;
@@ -26,6 +28,7 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener {
 		super("");
 		setUndecorated(true);
 		createBar(msg, isindeterminant);
+		location.addWindowListener(this);
 	}
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
@@ -57,7 +60,9 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener {
 		if(isindeterminant) bar.setValue(101);
 		this.setModalityType(ModalityType.MODELESS);
 		setAlwaysOnTop(true);
+		
 		showDialog();
+		toFront();
 	}
 	
 	public void updateMessage(final String message){
@@ -90,5 +95,40 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener {
 			setChanged();
 			notifyObservers();
 		}
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		setAlwaysOnTop(true);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		dispose();
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		setAlwaysOnTop(false);
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		setAlwaysOnTop(true);
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		setAlwaysOnTop(false);
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		
 	}
 }
