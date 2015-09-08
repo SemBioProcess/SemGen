@@ -847,7 +847,12 @@ public class CellMLreader extends ModelReader {
 				else{
 					String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 					if(name==null) name = unnamedstring;
-					String description = res.getProperty(CellMLbioRDFblock.description).getString();
+					
+					String description = null;
+					
+					if(res.getProperty(CellMLbioRDFblock.description)!=null)
+						description = res.getProperty(CellMLbioRDFblock.description).getString();
+					
 					pmc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(name, description));
 				}
 			}

@@ -355,7 +355,7 @@ public class SBMLreader extends ModelReader{
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
 			
 			CompositePhysicalEntity compositeent = new CompositePhysicalEntity(entlist, rellist);
-			semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entity to the model
+			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 
 			collectSBaseData(sbmlc, compartmentent);
@@ -521,7 +521,7 @@ public class SBMLreader extends ModelReader{
 			
 			CompositePhysicalEntity compositeent = new CompositePhysicalEntity(entlist, rellist);
 						
-			semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entity to the model
+			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 			speciesAndSemSimEntitiesMap.put(species.getId(), compositeent);
 						

@@ -39,47 +39,15 @@ public class LoadSemSimModel {
 				break;
 					
 			case ModelClassifier.SBML_MODEL:
-				semsimmodel = new SBMLreader(file).readFromFile();
-								
-				if(semsimmodel.getErrors().isEmpty() && autoannotate 
-						&& ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
-
-					//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
-					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-					
-					if(!online){
-						//progframe.dispose();
-						SemGenError.showWebConnectionError("BioPortal search service");
-					}
-					else{
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-	//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-						//progframe.dispose();
-					}
-				}
+				semsimmodel = new SBMLreader(file).readFromFile();			
+				nameOntologyTerms(semsimmodel);
 				break;
 				
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
-				
-				if(semsimmodel.getErrors().isEmpty()){
-					
-					if(autoannotate && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
-						
-						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
-						Boolean online = true;
-						
-							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
-
-						
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.termcache.getOntTermsandNamesCache(), online);
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-						
-						progframe.dispose();
-					}
-				}
+				nameOntologyTerms(semsimmodel);
 				break;
+				
 			case ModelClassifier.SEMSIM_MODEL:
 				semsimmodel = loadSemSimOWL(file);	
 				break;
@@ -120,5 +88,23 @@ public class LoadSemSimModel {
 		
 		MMLreader xmml2 = new MMLreader(file, doc);		
 		return xmml2.readFromFile();
+	}
+	
+	private static void nameOntologyTerms(SemSimModel semsimmodel){
+		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
+
+			//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
+			boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
+			
+			if(!online){
+				//progframe.dispose();
+				SemGenError.showWebConnectionError("BioPortal search service");
+			}
+			else{
+				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+				//progframe.dispose();
+			}
+		}
 	}
 }
