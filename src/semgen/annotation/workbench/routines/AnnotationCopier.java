@@ -38,7 +38,7 @@ public class AnnotationCopier {
 			int pmcindex = lib.getComponentIndex(sourceds.getAssociatedPhysicalModelComponent());
 			targetds.setAssociatedPhysicalModelComponent(lib.getComponent(pmcindex));
 		}
-		if (sourceds.hasRefersToAnnotation()) {
+		if (sourceds.hasPhysicalDefinitionAnnotation()) {
 			int pmcindex = lib.getComponentIndex(sourceds.getSingularTerm());
 			targetds.setSingularAnnotation((PhysicalProperty) lib.getComponent(pmcindex));
 		}

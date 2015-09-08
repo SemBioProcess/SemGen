@@ -213,7 +213,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		// This comes into play when importing annotations from other models
 		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
 			if(!getPhysicalEntities().contains(ent)){
-				if(ent.hasRefersToAnnotation()){
+				if(ent.hasPhysicalDefinitionAnnotation()){
 					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
 				}
 				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
@@ -257,7 +257,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	
 	public PhysicalPropertyinComposite addAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
-		if(getAssociatePhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getReferstoURI());
+		if(getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
 		else{
 			associatephysicalproperties.add(pp);
 		}
@@ -265,7 +265,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
-		if(getPhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getPhysicalPropertybyURI(pp.getReferstoURI());
+		if(getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
 		else{
 			physicalproperties.add(pp);
 		}
@@ -274,14 +274,14 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	public PhysicalPropertyinComposite getAssociatePhysicalPropertybyURI(URI uri) {
 		for (PhysicalPropertyinComposite pp : associatephysicalproperties) {
-			if (pp.getReferstoURI().equals(uri)) return pp;
+			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}
 		return null;
 	}
 	
 	public PhysicalProperty getPhysicalPropertybyURI(URI uri) {
 		for (PhysicalProperty pp :physicalproperties) {
-			if (pp.getReferstoURI().equals(uri)) return pp;
+			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}
 		return null;
 	}
@@ -289,7 +289,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new ReferencePhysicalEntity to the model. ReferencePhysicalEntities are subclasses of
 	 * PhysicalEntities that are defined by their annotation against a reference ontology URI. In
-	 * other words, a {@link PhysicalEntity} that is annotated using the SemSimConstants:REFERS_TO_RELATION.
+	 * other words, a {@link PhysicalEntity} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the entity.
 	 * @param description A free-text description of the entity. Usually taken from the reference ontology.
@@ -297,7 +297,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Otherwise a new ReferencePhysicalEntity with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalEntity addReferencePhysicalEntity(ReferencePhysicalEntity rpe){
-		if(getPhysicalEntityByReferenceURI(rpe.getReferstoURI())!=null) rpe = getPhysicalEntityByReferenceURI(rpe.getReferstoURI());
+		if(getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI())!=null) rpe = getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI());
 		else{
 			physicalentities.add(rpe);
 		}
@@ -307,7 +307,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new ReferencePhysicalProcess to the model. ReferencePhysicalProcesses are subclasses of
 	 * PhysicalProcesses that are defined by their annotation against a reference ontology URI. In
-	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:REFERS_TO_RELATION.
+	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the process.
 	 * @param description A free-text description of the process. Usually taken from the reference ontology.
@@ -315,7 +315,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Otherwise a new ReferencePhysicalProcess with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalProcess addReferencePhysicalProcess(ReferencePhysicalProcess rpp){
-		if(getPhysicalProcessByReferenceURI(rpp.getReferstoURI())!=null) rpp = getPhysicalProcessByReferenceURI(rpp.getReferstoURI());
+		if(getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI())!=null) rpp = getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI());
 		else physicalprocesses.add(rpp);
 		return rpp;
 	}
@@ -534,13 +534,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * @param uri A reference term URI
-	 * @return The {@link ReferencePhysicalEntity} that is annotated against the URI using the REFERS_TO_RELATION.
+	 * @return The {@link ReferencePhysicalEntity} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
 	 * If no ReferencePhysicalEntities have been annotated against the URI, null is returned.
 	 */
 	public ReferencePhysicalEntity getPhysicalEntityByReferenceURI(URI uri){
 		for (PhysicalEntity pe : physicalentities) {
-			if (pe.hasRefersToAnnotation()) {
-				if (((ReferencePhysicalEntity)pe).getReferstoURI().toString().equals(uri.toString())) {
+			if (pe.hasPhysicalDefinitionAnnotation()) {
+				if (((ReferencePhysicalEntity)pe).getPhysicalDefinitionURI().toString().equals(uri.toString())) {
 					return (ReferencePhysicalEntity)pe;
 				}
 			}
@@ -551,13 +551,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * @param uri A reference term URI
-	 * @return The {@link ReferencePhysicalProcess} that is annotated against the URI using the REFERS_TO_RELATION.
+	 * @return The {@link ReferencePhysicalProcess} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
 	 * If no ReferencePhysicalProcess has been annotated against the URI, null is returned.
 	 */
 	public ReferencePhysicalProcess getPhysicalProcessByReferenceURI(URI uri){
 		for (PhysicalProcess pp : physicalprocesses) {
-			if (pp.hasRefersToAnnotation()) {
-					if (((ReferenceTerm)pp).getReferstoURI().equals(uri)) {
+			if (pp.hasPhysicalDefinitionAnnotation()) {
+					if (((ReferenceTerm)pp).getPhysicalDefinitionURI().equals(uri)) {
 						return (ReferencePhysicalProcess)pp;
 					}
 			}
@@ -584,7 +584,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CustomPhysicalEntity getCustomPhysicalEntityByName(String name){
 		for(PhysicalEntity apmc : getPhysicalEntities()){
-			if(!apmc.hasRefersToAnnotation()){
+			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalEntity)apmc;
 			}
 		}
@@ -598,7 +598,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Set<CustomPhysicalProcess> getCustomPhysicalProcesses(){
 		Set<CustomPhysicalProcess> custs = new HashSet<CustomPhysicalProcess>();
 		for(PhysicalProcess proc : getPhysicalProcesses()){
-			if(!proc.hasRefersToAnnotation()) custs.add((CustomPhysicalProcess) proc);
+			if(!proc.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalProcess) proc);
 		}
 		return custs;
 	}
@@ -610,7 +610,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CustomPhysicalProcess getCustomPhysicalProcessByName(String name){
 		for(PhysicalProcess apmc : getPhysicalProcesses()){
-			if(!apmc.hasRefersToAnnotation()){
+			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalProcess)apmc;
 			}
 		}
@@ -725,12 +725,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * @return All {@link PhysicalProcess}es in the model that are annotated against
-	 * a URI with the REFERS_TO_RELATION (as opposed to CustomPhysicalProcesses).
+	 * a URI with the HAS_PHYSICAL_DEFINITION_RELATION (as opposed to CustomPhysicalProcesses).
 	 */
 	public Set<ReferencePhysicalProcess> getReferencePhysicalProcesses(){
 		Set<ReferencePhysicalProcess> refprocs = new HashSet<ReferencePhysicalProcess>();
 		for(PhysicalProcess proc : getPhysicalProcesses()){
-			if(proc.hasRefersToAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
+			if(proc.hasPhysicalDefinitionAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
 		}
 		return refprocs;
 	}

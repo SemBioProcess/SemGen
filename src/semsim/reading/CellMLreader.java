@@ -677,7 +677,7 @@ public class CellMLreader extends ModelReader {
 		if(physpropres!=null){
 			Resource isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.is);
 			if(isannres==null)
-				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
 			
 			// If the property is annotated against a reference ontology term
 			if(isannres!=null){
@@ -783,7 +783,7 @@ public class CellMLreader extends ModelReader {
 	
 	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
-		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
 		Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 		
 		// If a reference entity
@@ -815,7 +815,7 @@ public class CellMLreader extends ModelReader {
 			pmc = URIandPMCmap.get(res.getURI());
 		else{
 			Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
-			if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+			if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
 			
 			boolean isentity = res.getLocalName().startsWith("entity_");
 			boolean isprocess = res.getLocalName().startsWith("process_");
@@ -979,12 +979,12 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
-	private PhysicalPropertyinComposite getPhysicalPropertyInComposite(String refersto) {
-		PhysicalModelComponent term = URIandPMCmap.get(refersto);
+	private PhysicalPropertyinComposite getPhysicalPropertyInComposite(String key) {
+		PhysicalModelComponent term = URIandPMCmap.get(key);
 		if (term==null) {
 			String description = "";
-			term = new PhysicalPropertyinComposite(description, URI.create(refersto));
-			URIandPMCmap.put(refersto, term);
+			term = new PhysicalPropertyinComposite(description, URI.create(key));
+			URIandPMCmap.put(key, term);
 			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyinComposite) term);
 		}
 		return (PhysicalPropertyinComposite)term;

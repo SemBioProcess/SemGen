@@ -231,10 +231,10 @@ public class SemSimOWLwriter extends ModelWriter {
 			
 			// If there is a singular annotation on the DataStructure, write it. Use reference annotation label as
 			// the DataStructure's label
-			if(ds.hasRefersToAnnotation()){
+			if(ds.hasPhysicalDefinitionAnnotation()){
 				ReferenceTerm refterm = ds.getSingularTerm();
 				SemSimOWLFactory.setRDFLabel(ont, dsind, refterm.getName(), manager);
-				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.REFERS_TO_URI.toString(), refterm.getReferstoURI(), manager);
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString(), refterm.getPhysicalDefinitionURI(), manager);
 			}
 			
 			// Classify the physical property under its reference ontology class
@@ -661,9 +661,9 @@ public class SemSimOWLwriter extends ModelWriter {
 		URI uri = null;
 
 		if(!(pmc instanceof PhysicalProcess)){
-			if(pmc.hasRefersToAnnotation()){
+			if(pmc.hasPhysicalDefinitionAnnotation()){
 				uritrunk = uritrunk +
-				SemSimOWLFactory.getIRIfragment(((ReferenceTerm) pmc).getReferstoURI().toString());
+				SemSimOWLFactory.getIRIfragment(((ReferenceTerm) pmc).getPhysicalDefinitionURI().toString());
 			}
 			else uritrunk = uritrunk + SemSimOWLFactory.URIencoding(pmc.getName());
 			uritrunk = uritrunk + "_";
@@ -701,19 +701,22 @@ public class SemSimOWLwriter extends ModelWriter {
 		String description = null;
 		
 		// If there is a "refers-to" reference ontology annotation
-		if(pmc.hasRefersToAnnotation()){
+		if(pmc.hasPhysicalDefinitionAnnotation()){
 			ReferenceTerm firstann = (ReferenceTerm)pmc;
-			parenturistring = firstann.getReferstoURI().toString();
+			parenturistring = firstann.getPhysicalDefinitionURI().toString();
 			label = firstann.getName();
 			
 			// Add the reference class to the semsim model if needed
 			if(!allphysmodclasses.contains(parenturistring)){
 				SemSimOWLFactory.addExternalReferenceClass(ont, parenturistring, physicaltype, label, manager);
 			}
+			
 			// Put the individual physical component in the reference class
 			SemSimOWLFactory.createSemSimIndividual(ont, uriforind, factory.getOWLClass(IRI.create(parenturistring)), "", manager);
-			// Establish "refersTo" relationship
-			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, base + "refersTo", firstann.getReferstoURI().toString(), manager);
+			
+			// Establish physical definition
+			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, 
+					SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString(), firstann.getPhysicalDefinitionURI().toString(), manager);
 		}
 		// Otherwise it's a custom entity, custom process or unspecified property
 		else if (!(pmc instanceof CompositePhysicalEntity)){

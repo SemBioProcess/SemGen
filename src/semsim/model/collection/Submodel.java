@@ -83,7 +83,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	}
 
 	@Override
-	public Boolean hasRefersToAnnotation() {
+	public Boolean hasPhysicalDefinitionAnnotation() {
 		return singularterm != null;
 	}
 	
@@ -95,15 +95,15 @@ public class Submodel extends SemSimCollection implements Importable {
 		singularterm = null;
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return singularterm.getRefersToReferenceOntologyAnnotation();
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
-		return singularterm.getReferstoURI();
+	public URI getPhysicalDefinitionURI() {
+		return singularterm.getPhysicalDefinitionURI();
 	}
 	
 	
@@ -115,7 +115,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
 	public String getNamewithOntologyAbreviation() {
-		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getReferstoURI()) + ")";
+		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getPhysicalDefinitionURI()) + ")";
 	}
 	
 	@Override

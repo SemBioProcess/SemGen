@@ -11,7 +11,6 @@ import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenError;
-import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;

@@ -94,7 +94,7 @@ public class SemSimCopy {
 			ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
 			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
 				if (!entities.containsKey(pe)) {
-					if (pe.hasRefersToAnnotation()) {
+					if (pe.hasPhysicalDefinitionAnnotation()) {
 						entities.put(pe, pe);
 					}
 					else {

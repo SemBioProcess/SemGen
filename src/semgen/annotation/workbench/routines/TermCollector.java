@@ -121,7 +121,7 @@ public class TermCollector {
 	
 	private void collectCodewordswithSingularProperty() {
 		for (DataStructure ds : drawer.getCodewords()) {
-			if (ds.hasRefersToAnnotation()) {
+			if (ds.hasPhysicalDefinitionAnnotation()) {
 				Integer si = library.getPhysicalPropertyIndex(ds.getSingularTerm());
 				if (si.equals(termindex)) {
 					containingcws.add(drawer.getIndexofComponent(ds));

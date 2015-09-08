@@ -233,7 +233,7 @@ public class SemSimLibrary {
 	public boolean checkOPBpropertyValidity(PhysicalPropertyinComposite prop, PhysicalModelComponent pmc){
 		if(pmc!=null){
 			
-			Boolean URIisprocessproperty = isOPBprocessProperty(prop.getReferstoURI());
+			Boolean URIisprocessproperty = isOPBprocessProperty(prop.getPhysicalDefinitionURI());
 			// This conditional statement makes sure that physical processes are annotated with appropriate OPB terms
 			// It only limits physical entity properties to non-process properties. It does not limit based on whether
 			// the OPB term is for a constitutive property. Not sure if it should, yet.
@@ -247,7 +247,7 @@ public class SemSimLibrary {
 	}
 	
 	public PropertyType getPropertyinCompositeType(PhysicalPropertyinComposite pp) {
-		URI roa = (pp.getReferstoURI());
+		URI roa = (pp.getPhysicalDefinitionURI());
 		
 		if(OPBhasStateProperty(roa) || OPBhasForceProperty(roa) || OPBhasAmountProperty(roa)){
 			return PropertyType.PropertyOfPhysicalEntity;

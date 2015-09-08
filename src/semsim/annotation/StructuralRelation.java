@@ -12,8 +12,8 @@ public class StructuralRelation extends SemSimRelation{
 	 * provided in SemSimConstants (PART_OF_RELATION, CONTAINED_IN_RELATION)
 	 * whenever possible, rather than construct new ones. 
 	 * @param name The name of the relation
-	 * @param refersToRelationURI The reference URI of the relation */
-	public StructuralRelation(String name, URI refersToRelationURI) {
-		super(name, refersToRelationURI);
+	 * @param referenceRelationURI The reference URI of the relation */
+	public StructuralRelation(String name, URI referenceRelationURI) {
+		super(name, referenceRelationURI);
 	}
 }

@@ -140,8 +140,8 @@ http://identifiers.org/kegg.reaction/R01512; ATP:3-phospho-D-glycerate 1-phospho
 http://bhi.washington.edu/OPB#OPB_00410; Gas constant
 http://identifiers.org/kegg.reaction/R01070; beta-D-fructose-1,6-bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
 http://identifiers.org/cl/CL:0002068; Purkinje myocyte
-http://identifiers.org/go/GO:0006172; ADP biosynthetic process
 http://purl.org/sig/ont/fma/fma9462; Myocardium
+http://identifiers.org/go/GO:0006172; ADP biosynthetic process
 http://identifiers.org/fma/FMA:70586; Type B cell of pancreatic islet
 http://identifiers.org/chebi/CHEBI:15379; dioxygen
 http://identifiers.org/kegg.compound/C00084; Acetaldehyde
@@ -203,8 +203,8 @@ http://identifiers.org/ec-code/5.3.1.1; triose-phosphate isomerase
 urn:miriam:obo.go:GO%3A0005576; extracellular region
 http://bhi.washington.edu/OPB#OPB_01023; Time
 urn:miriam:kegg.compound:C00279; D-Erythrose 4-phosphate
-http://identifiers.org/obo.go/GO:0004017; adenylate kinase activity
 http://bhi.washington.edu/OPB#OPB_00295; Area of spatial entity
+http://identifiers.org/obo.go/GO:0004017; adenylate kinase activity
 http://identifiers.org/uniprot/O76243; Body wall hemoglobin
 http://bhi.washington.edu/OPB#OPB_00293; Temperature
 http://identifiers.org/go/GO:0019683; glyceraldehyde-3-phosphate catabolic process
@@ -239,8 +239,8 @@ http://identifiers.org/obo.chebi/CHEBI:4167; D-glucopyranose
 urn:miriam:kegg.reaction:R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
 http://bhi.washington.edu/OPB#OPB_00592; Chemical molar flow rate
 http://identifiers.org/obo.go/GO:0004634; phosphopyruvate hydratase activity
-http://identifiers.org/obo.chebi/CHEBI:30915; 2-oxoglutaric acid
 http://bhi.washington.edu/OPB#OPB_00593; Chemical concentration flow rate
+http://identifiers.org/obo.chebi/CHEBI:30915; 2-oxoglutaric acid
 http://identifiers.org/obo.chebi/CHEBI:18012; fumaric acid
 http://identifiers.org/obo.chebi/CHEBI:16077; D-glucopyranose 1-phosphate
 urn:miriam:obo.chebi:CHEBI%3A17138; glyceraldehyde 3-phosphate
@@ -261,8 +261,8 @@ http://identifiers.org/obo.go/GO:0004743; pyruvate kinase activity
 urn:miriam:kegg.reaction:R01049; ATP:D-ribose-5-phosphate diphosphotransferase
 http://identifiers.org/kegg.compound/C00003; NAD+
 http://identifiers.org/kegg.compound/C00008; ADP
-http://identifiers.org/kegg.compound/C00009; Orthophosphate
 http://purl.org/sig/ont/fma/fma14067; Cardiac myocyte
+http://identifiers.org/kegg.compound/C00009; Orthophosphate
 urn:miriam:kegg.reaction:R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
 http://identifiers.org/ec-code/1.2.1.12; glyceraldehyde-3-phosphate dehydrogenase (phosphorylating)
 http://identifiers.org/ec-code/2.7.2.3; phosphoglycerate kinase
@@ -276,10 +276,10 @@ http://identifiers.org/chebi/CHEBI:15422; ATP
 http://identifiers.org/obo.go/GO:0006002; fructose 6-phosphate metabolic process
 http://identifiers.org/obo.go/GO:0009070; serine family amino acid biosynthetic process
 http://identifiers.org/kegg.compound/C00236; 3-Phospho-D-glyceroyl phosphate
-urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
 http://purl.org/sig/ont/fma/fma66836; Portion of cytosol
-http://identifiers.org/kegg.compound/C00118; D-Glyceraldehyde 3-phosphate
+urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
 http://bhi.washington.edu/OPB#OPB_01581; Nernst potential
+http://identifiers.org/kegg.compound/C00118; D-Glyceraldehyde 3-phosphate
 urn:miriam:kegg.compound:C00197; 3-Phospho-D-glycerate
 http://identifiers.org/obo.go/GO:0006114; glycerol biosynthetic process
 urn:miriam:kegg.compound:C00199; D-Ribulose 5-phosphate

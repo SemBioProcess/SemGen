@@ -118,7 +118,7 @@ public class SemSimConstants {
 	public static final URI MAPPED_FROM_URI = URI.create(SEMSIM_NAMESPACE + "mappedFrom");
 	public static final URI MAPPED_TO_URI = URI.create(SEMSIM_NAMESPACE + "mappedTo");
 	public static final URI METADATA_ID_URI = URI.create(SEMSIM_NAMESPACE + "metadataID");
-	public static final URI REFERS_TO_URI = URI.create(SEMSIM_NAMESPACE + "refersTo");
+	public static final URI HAS_PHYSICAL_DEFINITION_URI = URI.create(SEMSIM_NAMESPACE + "hasPhysicalDefinition");
 	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
 
 	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
@@ -182,7 +182,7 @@ public class SemSimConstants {
 	public static final SemSimRelation MAPPED_TO_RELATION = new SemSimRelation("Data structure value passed to another data structure", MAPPED_TO_URI);
 	public static final SemSimRelation CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION = new SemSimRelation("The type of relation between a parent and child component (either containment, encapsulation or a custom term)", CELLML_COMPONENT_SUBSUMPTION_TYPE_URI);
 	
-	public static final SemSimRelation REFERS_TO_RELATION = new SemSimRelation("Refers to ontology term", REFERS_TO_URI);
+	public static final SemSimRelation HAS_PHYSICAL_DEFINITION_RELATION = new SemSimRelation("Refers to ontology term", HAS_PHYSICAL_DEFINITION_URI);
 	public static final SemSimRelation HAS_MATHML_RELATION = new SemSimRelation("MathML for computation", HAS_MATHML_URI);
 	public static final SemSimRelation HAS_COMPUTATIONAL_COMPONENT_RELATION = new SemSimRelation("physical property has a data structure as a computational component", HAS_COMPUTATATIONAL_COMPONENT_URI);
 
@@ -243,7 +243,7 @@ public class SemSimConstants {
 		aMap0.put(ENCAPSULATES_URI, ENCAPSULATES_RELATION);
 		aMap0.put(MAPPED_FROM_URI, MAPPED_FROM_RELATION);
 		aMap0.put(MAPPED_TO_URI, MAPPED_TO_RELATION);
-		aMap0.put(REFERS_TO_URI, REFERS_TO_RELATION);
+		aMap0.put(HAS_PHYSICAL_DEFINITION_URI, HAS_PHYSICAL_DEFINITION_RELATION);
 		aMap0.put(HAS_UNIT_URI, HAS_UNIT_RELATION);
 		aMap0.put(UNIT_FOR_URI, UNIT_FOR_RELATION);
 		aMap0.put(HAS_ASSOCIATED_DATA_STRUCTURE_URI, HAS_ASSOCIATED_DATA_STRUCTURE_RELATION);
