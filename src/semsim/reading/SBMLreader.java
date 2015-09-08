@@ -457,6 +457,7 @@ public class SBMLreader extends ModelReader{
 				prop = new PhysicalPropertyinComposite(null,null);
 			}
 			
+			// Deal with amount/concentration units
 			else if(baseunitname.equals("mole")){
 				
 				if(hasonlysub){
@@ -466,6 +467,7 @@ public class SBMLreader extends ModelReader{
 				}
 				else prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340"));
 			}
+			// Deal with particle units
 			else if(baseunitname.equals("item")){
 				
 				if(hasonlysub)
@@ -473,12 +475,30 @@ public class SBMLreader extends ModelReader{
 				
 				else prop = new PhysicalPropertyinComposite("Particle concentration", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01000"));
 			}
+			// Deal with mass/density units
 			else if(baseunitname.equals("kilogram") || baseunitname.equals("gram")){
 				
 				if(hasonlysub)
 					prop = new PhysicalPropertyinComposite("Mass of solid entity", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_01226"));
 				
-				else{} // ? which terms to use for density?
+				else {
+					double compartmentdims = sbmlmodel.getCompartment(compartmentname).getSpatialDimensionsAsDouble();
+					
+					if(compartmentdims==0.0){
+						addErrorToModel("Compartment dimensions for species " + speciesid + " cannot be zero because species has mass units.");
+						prop = new PhysicalPropertyinComposite(null,null);
+					}
+					
+					else if(compartmentdims==1.0)
+						prop = new PhysicalPropertyinComposite("Mass lineal density", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00190"));
+					
+					else if(compartmentdims==2.0)
+						prop = new PhysicalPropertyinComposite("Mass areal density", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00258"));
+					
+					else if(compartmentdims==3.0)
+						prop = new PhysicalPropertyinComposite("Mass volumetric density", URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00101"));
+					
+				}
 			}
 			else prop = new PhysicalPropertyinComposite(null,null);
 
