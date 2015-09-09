@@ -84,6 +84,7 @@ Link.prototype.createTextElement = function (className) {
 
 // Limit displayName to 5 words
 var limitWords = function (text, wordLimit) {
+	if(text == null) return;
 	var finalText = "";
 	var text2 = text.replace(/\s+/g, ' ');
 	var text3 = text2.split(' ');
