@@ -47,7 +47,7 @@ public class ReferenceLibraryDialog extends JFrame {
 	
 	private void makeTabs() {
 		reftermpane = new TermEditorTab(workbench);
-		importpane = new ImportAnnotationsPanel(workbench);
+		importpane = new ImportAnnotationsPanel(workbench, this);
 		createaddpane = new AddCreateTermPanel(workbench.openTermLibrary());
 		
 		mainpane.addTab("Add/Create Term", createaddpane);

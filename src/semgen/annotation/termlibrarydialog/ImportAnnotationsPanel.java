@@ -11,6 +11,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,9 +36,11 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	ArrayList<JCheckBox> checklist = new ArrayList<JCheckBox>();
 	JButton importbtn = new JButton("Import");
 	File file = null;
+	JFrame parent;
 	
-	public ImportAnnotationsPanel(AnnotatorWorkbench wb) {
+	public ImportAnnotationsPanel(AnnotatorWorkbench wb, JFrame par) {
 		workbench = wb;
+		parent = par;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 		setBackground(SemGenSettings.lightblue);
 		makePanel();
@@ -106,8 +109,14 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		if (sgt == null) {
 			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
 		}
-		GenericWorker worker = new GenericWorker(sgt);
-		importbtn.setEnabled(false);
+		GenericWorker worker = new GenericWorker(sgt, parent) {
+			@Override
+			public void endTask() {
+				workbench.updateAllListeners();
+				importbtn.setEnabled(false);
+			}
+		};
+		
 		worker.execute();
 	}
 	

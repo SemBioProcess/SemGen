@@ -24,13 +24,6 @@ public class AnnotationImporter extends SemGenJob {
 		options = opts;
 	}
 	
-	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel, File file, SemGenJob job, Boolean[] opts) {
-		super(job);
-		sourcefile = file;
-		library = lib;
-		importingmodel = currentmodel;
-	}
-
 	@Override
 	public void run() {
 		loadSourceModel();

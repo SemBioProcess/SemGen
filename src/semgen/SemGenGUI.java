@@ -15,7 +15,6 @@ import semgen.merging.MergerTabFactory;
 import semgen.merging.workbench.MergerWorkbenchFactory;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
-import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;

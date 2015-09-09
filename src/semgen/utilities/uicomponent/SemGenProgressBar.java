@@ -12,6 +12,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -30,11 +31,14 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 		createBar(msg, isindeterminant);
 		location.addWindowListener(this);
 	}
-	
-	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
-		super("");
-		onCancel = new CancelEvent(obs);
+
+	//Consturctor adds a field to override the default parent (the main pane)
+	public SemGenProgressBar(String msg, Boolean isindeterminant, JFrame parent) {
+		super("", parent);
+		setUndecorated(true);
+
 		createBar(msg, isindeterminant);
+		
 	}
 	
 	private void createBar(String msg, Boolean isindeterminant) {			
