@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
@@ -50,37 +51,31 @@ public class StageWorkbench extends Workbench {
 	
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public File saveModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public File saveModelAs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setModelSaved(boolean val) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public String getCurrentModelName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getModelSourceFile() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -107,7 +102,9 @@ public class StageWorkbench extends Workbench {
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
-				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
@@ -121,7 +118,9 @@ public class StageWorkbench extends Workbench {
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
-				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
 					return;
 				}
@@ -194,5 +193,10 @@ public class StageWorkbench extends Workbench {
 			
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 }

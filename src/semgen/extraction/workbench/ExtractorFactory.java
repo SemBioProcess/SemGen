@@ -13,10 +13,6 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"},true);
 		for (File file : sgc.getSelectedFiles()) {
-//			if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL) {
-//				isCellMLError();
-//				continue;
-//			}
 			sourcefile.add(file);
 		}
 		if (sourcefile.size()==0) 
@@ -31,22 +27,15 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	protected void makeWorkbench(File file) {	
 		System.out.println("Loading " + file.getName());
 		
-		setStatus("Creating SemSimModel");		
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+		setStatus("Creating SemSimModel");
+		LoadSemSimModel	loader = new LoadSemSimModel(file, false, this);
+		loader.run();
+		SemSimModel semsimmodel = loader.getLoadedModel();
 		
 		if(!semsimmodel.getErrors().isEmpty()){
 			return;
 		}
-		
-//		if(ModelClassifier.classify(file)==ModelClassifier.CELLML_MODEL || semsimmodel.getFunctionalSubmodels().size()>0){
-//			isCellMLError();
-//			return;
-//		}
-		
+
 		workbenches.add(new ExtractorWorkbench(file, semsimmodel));
 	}	
-	
-//	private void isCellMLError() {
-//		SemGenError.showError("Sorry. Extraction of models with CellML-type components not yet supported.","");
-//	}
 }

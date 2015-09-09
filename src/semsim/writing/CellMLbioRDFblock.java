@@ -24,7 +24,6 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -78,7 +77,6 @@ public class CellMLbioRDFblock {
 		if(!ds.isImportedViaSubmodel()){
 			
 			if(ds.hasPhysicalProperty()){
-				PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
 				Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, ds);
 
 				if(ds.hasAssociatedPhysicalComponent()){

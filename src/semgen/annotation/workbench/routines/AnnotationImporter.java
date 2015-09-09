@@ -3,33 +3,51 @@ package semgen.annotation.workbench.routines;
 import java.io.File;
 
 import semgen.annotation.workbench.SemSimTermLibrary;
+import semgen.utilities.SemGenJob;
 import semgen.utilities.file.LoadSemSimModel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
-public class AnnotationImporter {
+public class AnnotationImporter extends SemGenJob {
 	SemSimModel importedmodel;
 	SemSimModel importingmodel;
 	SemSimTermLibrary library;
 	
-	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel) {
+	private Boolean[] options;
+	private File sourcefile;
+	
+	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel, File file, Boolean[] opts) {
+		sourcefile = file;
+		library = lib;
+		importingmodel = currentmodel;
+		options = opts;
+	}
+	
+	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel, File file, SemGenJob job, Boolean[] opts) {
+		super(job);
+		sourcefile = file;
 		library = lib;
 		importingmodel = currentmodel;
 	}
 
-	public boolean loadSourceModel(File sourcefile) {
-		importedmodel = LoadSemSimModel.loadSemSimModelFromFile(sourcefile, false);
-		if (importedmodel.getNumErrors() != 0) {
-			for(String err : importedmodel.getErrors()){
-				System.err.println(err);
-			}
-			return false;
-		}
-		return true;
+	@Override
+	public void run() {
+		loadSourceModel();
+		copyModelAnnotations();
 	}
 	
-	public boolean copyModelAnnotations(Boolean[] options) {
+	private void loadSourceModel() {
+		LoadSemSimModel loader = new LoadSemSimModel(sourcefile, this);
+		loader.run();
+		if (!loader.isValid()) {
+			abort();
+			return;
+		}
+		importedmodel = loader.getLoadedModel();
+	}
+	
+	private boolean copyModelAnnotations() {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
 		if (options[0]) {
@@ -78,4 +96,6 @@ public class AnnotationImporter {
 		} // end of data structure loop
 		return changes;
 	}
+
+
 }

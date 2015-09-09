@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -31,7 +33,6 @@ import javax.swing.event.ListSelectionListener;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
-import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
@@ -44,7 +45,7 @@ import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceClassFinderPanel extends JPanel implements
-		ActionListener, ListSelectionListener {
+		ActionListener, ListSelectionListener, ComponentListener {
 	private static final long serialVersionUID = -7884648622981159203L;
 	private SemSimTermLibrary library;
 	
@@ -68,7 +69,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		library = lib;
 		domain = dom;
 		setUpUI();
-	
+		validate();
 	}
 	
 	// Set up the interface
@@ -187,8 +188,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		JPanel toppanel = new JPanel();
 		toppanel.setLayout(new BoxLayout(toppanel, BoxLayout.PAGE_AXIS));
 		toppanel.setAlignmentX(Box.CENTER_ALIGNMENT);
-		toppanel.setBackground(SemGenSettings.lightblue);
-		toppanel.setOpaque(true);
+		toppanel.setOpaque(false);
 		toppanel.add(selectKBsourcepanel);
 		toppanel.add(descpanel);
 		
@@ -216,7 +216,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			}
 		}
 
-			ontdescription.setBorder(BorderFactory.createEmptyBorder(0, x, 5, 0));
+			ontdescription.setBorder(BorderFactory.createEmptyBorder(0, x, 10, 0));
 	}
 	
 	// Show the RDF labels for the classes in the results list instead of the class names
@@ -346,5 +346,25 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	        	externalURLbutton.setEnabled(true);
 	        }
         }
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		align();
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		align();
 	}
 }

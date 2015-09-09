@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.utilities.GenericWorker;
+import semgen.utilities.SemGenJob;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -100,10 +102,13 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		for (int i = 0; i < checklist.size(); i++) {
 			options[i] = checklist.get(i).isSelected();
 		}
-		if (!workbench.importModelAnnotations(file, options)) {
+		SemGenJob sgt = workbench.importModelAnnotations(file, options);
+		if (sgt == null) {
 			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
 		}
+		GenericWorker worker = new GenericWorker(sgt);
 		importbtn.setEnabled(false);
+		worker.execute();
 	}
 	
 	
