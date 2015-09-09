@@ -82,6 +82,7 @@ public class SBMLreader extends ModelReader{
 	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 	private static final String mathMLelementEnd = "</math>";
 	private static final String timedomainname = "t";
+	private static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement timeunits;
 	private UnitOfMeasurement substanceunits;
 	
@@ -599,10 +600,11 @@ public class SBMLreader extends ModelReader{
 				semsimmodel.addDataStructure(ds);
 			}
 			
-			ds.getComputation().setComputationalCode(varname + " = " + sbmlrule.getFormula());
+			String LHScodestart = sbmlrule.isRate() ? "d(" + varname + ")/d(" + timedomainname + ")" : varname;
+			ds.getComputation().setComputationalCode(LHScodestart + " = " + sbmlrule.getFormula());
 			String mathmlstring = libsbml.writeMathMLToString(sbmlrule.getMath());
 			mathmlstring = stripXMLheader(mathmlstring);
-			mathmlstring = addLHStoMathML(mathmlstring, varname);
+			mathmlstring = addLHStoMathML(mathmlstring, varname, sbmlrule.isRate());
 			ds.getComputation().setMathML(mathmlstring);
 			
 			collectSBaseData(sbmlrule, ds.getComputation());
@@ -648,7 +650,7 @@ public class SBMLreader extends ModelReader{
 				
 				String assignmentmathmlstring = libsbml.writeMathMLToString(ea.getMath());
 				assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
-				assignmentmathmlstring = addLHStoMathML(assignmentmathmlstring, varname);
+				assignmentmathmlstring = addLHStoMathML(assignmentmathmlstring, varname, false);
 				ssea.setMathML(assignmentmathmlstring);
 				
 				DataStructure outputds = semsimmodel.getAssociatedDataStructure(varname);
@@ -706,26 +708,28 @@ public class SBMLreader extends ModelReader{
 			Reaction reaction = sbmlmodel.getReaction(r);
 			String reactionID = reaction.getId();
 			
-			DataStructure ds = semsimmodel.addDataStructure(new Decimal(reactionID));
-			Submodel rxnsubmodel = new Submodel(reactionID);
+			DataStructure rateds = semsimmodel.addDataStructure(new Decimal(reactionID));
+			String thereactionprefix = reactionprefix + reactionID;
+			
+			Submodel rxnsubmodel = new Submodel(thereactionprefix);
 			semsimmodel.addSubmodel(rxnsubmodel);
 			//reactionssubmodel.addSubmodel(rxnsubmodel);
-			rxnsubmodel.addDataStructure(ds);
+			rxnsubmodel.addDataStructure(rateds);
 			
 			KineticLaw kineticlaw = reaction.getKineticLaw();
 			
-			ds.setUnit(subpertimeuom);
+			rateds.setUnit(subpertimeuom);
 			
 			// Deal with kinetic law
 			String mathmlstring = libsbml.writeMathMLToString(kineticlaw.getMath());
 			
 			// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
 			mathmlstring = stripXMLheader(mathmlstring);
-			mathmlstring = addLHStoMathML(mathmlstring, reactionID);
+			mathmlstring = addLHStoMathML(mathmlstring, reactionID, false);
 						
 			for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
 				LocalParameter lp = kineticlaw.getLocalParameter(l);
-				DataStructure localds = addParameter(lp, reaction.getId());
+				DataStructure localds = addParameter(lp, thereactionprefix);
 				mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
 				rxnsubmodel.addDataStructure(localds);
 			}
@@ -738,8 +742,8 @@ public class SBMLreader extends ModelReader{
 				rxnsubmodel.addDataStructure(localds);
 			}
 
-			ds.getComputation().setMathML(mathmlstring);
-			ds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getFormula());
+			rateds.getComputation().setMathML(mathmlstring);
+			rateds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getFormula());
 		
 			
 			PhysicalPropertyinComposite prop = null;
@@ -763,7 +767,7 @@ public class SBMLreader extends ModelReader{
 			}
 						
 						
-			ds.setAssociatedPhysicalProperty(prop);
+			rateds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
 						
@@ -796,7 +800,7 @@ public class SBMLreader extends ModelReader{
 				process.addMediator(mediatorent);
 			}
 			
-			ds.setAssociatedPhysicalModelComponent(process);
+			rateds.setAssociatedPhysicalModelComponent(process);
 						
 			// Add process to model
 			if(process instanceof ReferencePhysicalProcess) 
@@ -840,8 +844,7 @@ public class SBMLreader extends ModelReader{
 			
 			String LHS = "d(" + speciesid + ")/d(" + timedomainname + ")";
 			
-			eqmathml = mathMLelementStart + " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
-						+ timedomainname + "</ci>\n   </bvar>\n   <ci>" + speciesid + "</ci>\n  </apply>\n  ";
+			eqmathml = mathMLelementStart + makeLHSforStateVariable(speciesid);
 			
 			// If the species is set as a boundary condition, set RHS to zero
 			if(sbmlspecies.getBoundaryCondition()==true || sbmlspecies.getConstant()==true){
@@ -924,8 +927,10 @@ public class SBMLreader extends ModelReader{
 			
 			String prefix = null;
 			
+			// If we are looking at a reaction rate data structure, use reaction
+			// prefix so we can ID local parameters as inputs
 			if(sbmlmodel.getReaction(ds.getName())!=null)
-				prefix = ds.getName();
+				prefix = reactionprefix + ds.getName();
 			
 			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
 		}
@@ -1195,12 +1200,20 @@ public class SBMLreader extends ModelReader{
 		return mathmlstring.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", "");
 	}
 	
-	private String addLHStoMathML(String mathmlstring, String varname){
-		String LHSstart = "<apply>\n <eq />\n <ci>" + varname + " </ci>\n";
-		String LHSend = "</apply>\n";
+	private String addLHStoMathML(String mathmlstring, String varname, boolean isODE){
+		String LHSstart = null;
+		if(isODE) 
+			LHSstart = makeLHSforStateVariable(varname);
+		else LHSstart = " <apply>\n  <eq />\n  <ci>" + varname + "  </ci>\n";
+		String LHSend = " </apply>\n";
 		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
 		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
 		return mathmlstring;
+	}
+	
+	private String makeLHSforStateVariable(String varname){
+		return " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
+				+ timedomainname + "</ci>\n   </bvar>\n   <ci>" + varname + "</ci>\n  </apply>\n  ";
 	}
 	
 	
