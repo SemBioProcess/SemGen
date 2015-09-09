@@ -366,7 +366,7 @@ public class CellMLwriter extends ModelWriter {
 				String privateintval = null;
 				
 				// If the Data Structure is a CellML-type variable
-				if(ds.isMapped()){
+				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
 					initialval = cellmlvar.getCellMLinitialValue();
 					publicintval = cellmlvar.getPublicInterfaceValue();
