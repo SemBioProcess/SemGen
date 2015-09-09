@@ -54,6 +54,7 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 		JPanel confirmpan = new JPanel();
 		
 		confirmpan.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 0));
+		confirmpan.setOpaque(false);
 		confirmpan.setLayout(new BoxLayout(confirmpan, BoxLayout.X_AXIS));
 		confirmpan.add(msgbox);
 		confirmpan.add(createbtn);
