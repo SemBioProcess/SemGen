@@ -40,7 +40,8 @@ public class CollateralHelper {
 	 */
 	public class Files
 	{
-		public static final String AlbrechtColegroveFriel2002_CellML = "albrecht_colegrove_friel_2002.cellml";
+		public static final String AlbrechtColegroveFriel2002_CellML_Clean = "albrecht_colegrove_friel_2002_Clean.cellml";
+		public static final String AlbrechtColegroveFriel2002_CellML_Original = "albrecht_colegrove_friel_2002_Original.cellml";
 		public static final String Cardiovascularmodel_OWL = "CardiovascularDynamics.owl";
 	}
 }

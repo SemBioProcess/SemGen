@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" name="albrecht_colegrove_friel_2002">
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" name="albrecht_colegrove_friel_2002_Clean">
   <documentation xmlns="http://cellml.org/tmp-documentation">
     <article>
       <articleinfo>
@@ -672,7 +672,7 @@
         </rdf:Description>
       </cmeta:modification>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.cellml.org/cellml/1.0#albrecht_colegrove_friel_2002_version01">
+    <rdf:Description rdf:about="http://www.cellml.org/cellml/1.0#albrecht_colegrove_friel_2002_Clean_version01">
       <dc:title>Differential regulation of ER Ca2+ uptake and release.</dc:title>
       <cmeta:bio_entity>sympathetic neuron</cmeta:bio_entity>
       <cmeta:comment>

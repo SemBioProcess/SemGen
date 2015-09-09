@@ -17,7 +17,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 	@Test
 	public void readFromFile_readValidFile_VerifyNonNullModelReturned() {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
@@ -30,7 +30,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 	@Test
 	public void readFromFile_readValidFile_VerifyAnnotation() {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act

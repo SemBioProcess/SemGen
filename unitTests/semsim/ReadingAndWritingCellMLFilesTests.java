@@ -50,7 +50,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	@Test
 	public void readFromFile_readThenWriteValidFile_VerifyFileNotEmpty() {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
@@ -70,7 +70,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	@Test
 	 public void readFromFile_readThenWriteValidFile_VerifyFileContents() throws Exception {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 
 		// Act
