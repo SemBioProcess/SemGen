@@ -117,8 +117,7 @@ public class SemGen extends JFrame implements Observer{
 		    
 		    //Set the default location for the creation of child windows (ie: dialogs) as the center  
 			//of the main frame
-			SemGenError.setFrame(frame);
-			SemGenDialog.setFrame(frame);
+
 		    
 			frame.setVisible(true);
 			
@@ -150,7 +149,9 @@ public class SemGen extends JFrame implements Observer{
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gacts.addObserver(this);
-		 
+		SemGenError.setFrame(this);
+		SemGenDialog.setFrame(this);
+		
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);

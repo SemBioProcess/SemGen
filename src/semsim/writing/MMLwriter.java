@@ -55,7 +55,7 @@ public class MMLwriter extends ModelWriter{
 			} 
 			catch (Xcept e) {
 		    	ErrorLog.addError("Sorry. There was a problem encoding " + semsimmodel.getName() + 
-		    			"\nThe JSim API threw an exception.", true);
+		    			"\nThe JSim API threw an exception.", true, true);
 				e.printStackTrace();
 				return null;
 			}

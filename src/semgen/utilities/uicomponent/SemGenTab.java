@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -12,6 +13,8 @@ import javax.swing.JPanel;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
+import semgen.utilities.GenericWorker;
+import semgen.utilities.SemGenJob;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 
@@ -71,6 +74,11 @@ public abstract class SemGenTab extends JPanel {
 	
 	public boolean fileURIMatches(URI uri) {
 		return false;
+	}
+	
+	public void executeMonitoredThread(SemGenJob sga) {
+		GenericWorker worker = new GenericWorker(sga);
+		worker.run();
 	}
 	
 	public class TabTitle extends JPanel implements MouseListener {

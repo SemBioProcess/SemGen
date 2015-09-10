@@ -14,6 +14,7 @@ public class Computation extends ComputationalModelComponent{
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
 	private String computationalCode = null;
 	private String mathML = new String("");
+	private Set<Event> events = new HashSet<Event>();
 	
 	/**
 	 * Class constructor with no output(s) specified
@@ -46,6 +47,7 @@ public class Computation extends ComputationalModelComponent{
 			computationalCode = new String(comptocopy.computationalCode);
 		}
 		mathML = new String(comptocopy.mathML);
+		events.addAll(comptocopy.events);
 	}
 	
 	/**
@@ -126,8 +128,40 @@ public class Computation extends ComputationalModelComponent{
 		return outputs;
 	}
 	
+	/**	
+	 * @return The set of discrete events that are part of this computation
+	 */
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	/**
+	 * Assign the set of discrete events associated with this computation
+	 * @param events The events associated with this computation
+	 */
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+	
+	/**
+	 * Add a discrete event to this computation
+	 * @param event The discrete event to add
+	 */
+	public void addEvent(Event event){
+		this.getEvents().add(event);
+	}
+	
+	/**
+	 * Remove a discrete event from the set of events associated with the computation
+	 * @param event The discrete event to remove
+	 */
+	public void removeEvent(Event event){
+		this.getEvents().remove(event);
+	}
+	
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.COMPUTATION_CLASS_URI;
 	}
+
 }

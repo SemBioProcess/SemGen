@@ -1,7 +1,9 @@
 package semgen.annotation.termlibrarydialog;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -75,42 +77,46 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 	}
 	
 	private void makePanel() {
-		String[] names = new String[types.length];
-		for (int i = 0; i<types.length; i++) {
-			names[i] = types[i].getName();
-		}
 		typechooser.setFont(SemGenFont.defaultPlain());
 		typechooser.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		typechooser.setAlignmentX(Component.LEFT_ALIGNMENT);
-		typechooser.setAlignmentY(Component.TOP_ALIGNMENT);
-		Dimension dim = new Dimension(300,160);
-		typechooser.setMinimumSize(dim);
-		typechooser.setMaximumSize(dim);
-		typechooser.setListData(names);
+		
+		Dimension dim = new Dimension(360,140);
 		typechooser.addListSelectionListener(this);
-		typechooser.setBorder(BorderFactory.createTitledBorder("Physical Types"));
+		
+		SemGenScrollPane typechoosepane = new SemGenScrollPane(typechooser);
+		typechoosepane.setBorder(BorderFactory.createTitledBorder("Physical Types"));
+		typechoosepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typechoosepane.setAlignmentY(Component.TOP_ALIGNMENT);
+		typechoosepane.setBackground(SemGenSettings.lightblue);
+		typechoosepane.setMinimumSize(dim);
+		typechoosepane.setMaximumSize(dim);
 		
 		termlist.addListSelectionListener(this);
 		termlist.addMouseMotionListener(new ListTooltip(termlist));
 		termlist.setFont(SemGenFont.defaultPlain());
-			
+		termlist.setForeground(Color.blue);
+		
 		SemGenScrollPane termscroller = new SemGenScrollPane(termlist);
-		Dimension tsdim = new Dimension(300,300);
+		Dimension tsdim = new Dimension(360,300);
 		termscroller.setPreferredSize(tsdim);
 		termscroller.setMaximumSize(tsdim);
 		termscroller.setAlignmentX(Box.LEFT_ALIGNMENT);
+		termscroller.setBackground(SemGenSettings.lightblue);
+		termscroller.setBorder(BorderFactory.createTitledBorder("Instances"));
 		
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
 		typepane.setBorder(BorderFactory.createEtchedBorder());
-		
-		typepane.add(typechooser);
+	
+		typepane.add(Box.createVerticalStrut(12));
+		typepane.add(typechoosepane);
 		typepane.add(termscroller);
 		typepane.add(Box.createVerticalGlue());
 		
 		typepane.setAlignmentY(Component.TOP_ALIGNMENT);
 		typepane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		typepane.setMaximumSize(new Dimension(360,9999));
 		
 		tip = new TermInformationPanel(workbench);
 		replacer = new ReplaceTermPane(workbench);
@@ -135,8 +141,21 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 
 		add(typepane);
 		add(editspacer);
-		
+		add(Box.createHorizontalGlue());
+		setTypeList();
 		validate();
+	}
+	
+	private void setTypeList() {
+		int seli = typechooser.getSelectedIndex();
+		
+		String[] names = new String[types.length];
+		for (int i = 0; i<types.length; i++) {
+			names[i] = types[i].getName() + " (" + library.countObjectofType(types[i]) + ")";
+		}
+		typechooser.setListData(names);
+		if (seli!=-1) typechooser.setSelectedIndex(seli);
+		clearPanel();
 	}
 	
 	private void updateList() {
@@ -194,6 +213,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 				JOptionPane.YES_NO_OPTION);
 		if(JOptionPane.YES_OPTION == choice){
 			new TermModifier(workbench, affected).runRemove();
+			setTypeList();
+			updateList();
 		}
 	}
 	
@@ -234,7 +255,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			}
 			toolbar.toggleButtons();	
 			tip.updateInformation(affected);
-			
+			setTypeList();
 		}
 	}
 
@@ -247,7 +268,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		
 		public EditorToolbar() {
 			super(JToolBar.HORIZONTAL);
-			this.setMaximumSize(new Dimension(9999, 36));
+			this.setMaximumSize(new Dimension(9999, 34));
 			setAlignmentX(LEFT_ALIGNMENT);
 			infobtn.addActionListener(this);
 			add(infobtn);
@@ -258,13 +279,15 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			replacebtn.setToolTipText("Replace selected term.");
 			replacebtn.addActionListener(this);
 			add(replacebtn);
+			add(Box.createHorizontalStrut(470));
 			removebtn.addActionListener(this);
 			add(removebtn);
-			
+			this.setMargin(new Insets(0,0,1,0));
 			ButtonGroup sels = new ButtonGroup();
 			sels.add(infobtn);
 			sels.add(modifybtn);
 			sels.add(replacebtn);
+			
 			
 			toggleButtons();
 		}
@@ -292,6 +315,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		}
 		
 		public void toggleButtons() {
+			infobtn.setToolTipText("Term Usage");
 			modifybtn.setToolTipText("Modify selected term.");
 			removebtn.setToolTipText("Remove selected term.");
 			if (!termlist.isSelectionEmpty()) {

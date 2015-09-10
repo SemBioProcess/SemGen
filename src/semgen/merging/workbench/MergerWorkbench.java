@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,6 +18,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
+import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -59,7 +61,9 @@ public class MergerWorkbench extends Workbench {
 	public void initialize() {}
 	
 	private SemSimModel loadModel(File file, boolean autoannotate) {
-		SemSimModel modeltoload = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
+		LoadSemSimModel loader = new LoadSemSimModel(file, autoannotate);
+		loader.run();
+		SemSimModel modeltoload = loader.getLoadedModel();
 		return modeltoload;
 	}
 	public int getNumberofStagedModels() {
@@ -76,6 +80,7 @@ public class MergerWorkbench extends Workbench {
 		SemSimModel model;
 		for (File file : files) {
 			model = loadModel(file, autoannotate);
+			if (SemGenError.showSemSimErrors()) continue;
 			loadedmodels.add(model);
 			filepathlist.add(file);
 			addDSNameList(model.getAssociatedDataStructures());
@@ -102,23 +107,17 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getDSPairDescriptors(index);
 	}
 	
-	public void reloadModel(int index, boolean autoannotate) {
-		File path = filepathlist.get(index);
-		loadedmodels.set(index, loadModel(path, autoannotate));
-	}
-	
-	public void reloadAllModels(boolean autoannotate) {
-		for (int i=0; i<loadedmodels.size(); i++) {
-			reloadModel(i, autoannotate);
-		}
-		notifyModelListUpdated();
-	}
-	
 	public void removeSelectedModel() {
 		if (modelselection == -1) return;
 		loadedmodels.remove(modelselection);
 		filepathlist.remove(modelselection);
 		overlapmap = null;
+		alldslist.clear();
+		exposeddslist.clear();
+		if (!loadedmodels.isEmpty()) {
+			addDSNameList(loadedmodels.get(0).getAssociatedDataStructures());
+		}
+		
 		notifyModelListUpdated();
 	}
 
@@ -162,10 +161,6 @@ public class MergerWorkbench extends Workbench {
 			}
 		}
 		return identicalmap;
-	}
-	
-	public ModelOverlapMap getModelOverlapMap(){
-		return overlapmap;
 	}
 	
 	public Pair<String, String> getMapPairNames(int index) {
@@ -330,5 +325,11 @@ public class MergerWorkbench extends Workbench {
 			namelist.add(desc);
 		}
 		return namelist;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

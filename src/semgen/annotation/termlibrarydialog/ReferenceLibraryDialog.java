@@ -37,7 +37,7 @@ public class ReferenceLibraryDialog extends JFrame {
 		
 		makeTabs();
 		setContentPane(mainpane);
-		setPreferredSize(new Dimension(900, 800));
+		setPreferredSize(new Dimension(1000, 800));
 		validate();
 		pack();
 		
@@ -47,7 +47,7 @@ public class ReferenceLibraryDialog extends JFrame {
 	
 	private void makeTabs() {
 		reftermpane = new TermEditorTab(workbench);
-		importpane = new ImportAnnotationsPanel(workbench);
+		importpane = new ImportAnnotationsPanel(workbench, this);
 		createaddpane = new AddCreateTermPanel(workbench.openTermLibrary());
 		
 		mainpane.addTab("Add/Create Term", createaddpane);

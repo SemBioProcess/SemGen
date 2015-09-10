@@ -15,6 +15,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
+import semsim.annotation.ReferenceOntologies.ReferenceOntology;
 import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -27,7 +28,6 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**
@@ -422,7 +422,7 @@ public class SemSimTermLibrary extends Observable {
 		
 		public String getComponentDescription(int index) {
 			String desc = masterlist.get(index).getDescription();
-			if (desc==null) desc="No description";
+			if (desc==null) desc="";
 			return desc;
 		}
 		
@@ -442,11 +442,6 @@ public class SemSimTermLibrary extends Observable {
 			masterlist.get(index).getObject().setName(name);
 			notifyTermChanged();
 			
-		}
-		
-		public void setDescription(int index, String description) {
-			masterlist.get(index).getObject().setName(description);
-			notifyTermChanged();
 		}
 		
 		public void clearRelations(Integer termindex, SemSimRelation relation) {
@@ -754,6 +749,34 @@ public class SemSimTermLibrary extends Observable {
 	private void notifyTermChanged() {
 		setChanged();
 		notifyObservers(LibraryEvent.TERM_CHANGE);
+	}
+	
+	public int countObjectofType(SemSimTypes type) {
+		int cnt = 0;
+		switch (type) {
+		case COMPOSITE_PHYSICAL_ENTITY:
+			cnt = cpeindexer.size();
+			break;
+		case CUSTOM_PHYSICAL_ENTITY:
+			cnt = custpeindexer.size();
+			break;
+		case PHYSICAL_PROCESS:
+			cnt = procindexer.size();
+			break;
+		case PHYSICAL_PROPERTY:
+			cnt = singppindexer.size();
+			break;
+		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			cnt = ppccompindexer.size();
+			break;
+		case REFERENCE_PHYSICAL_ENTITY:
+			cnt = rpeindexer.size();
+			break;
+		default:
+			break;
+		
+		}
+		return cnt;
 	}
 	
 //*********************************INDEX CARD DEFINITION************************************//

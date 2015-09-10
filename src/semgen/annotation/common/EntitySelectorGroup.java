@@ -1,11 +1,11 @@
 package semgen.annotation.common;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,7 +16,7 @@ import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public abstract class EntitySelectorGroup extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -67,12 +67,13 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 			StructuralRelationPanel lbl = new StructuralRelationPanel();
 			relations.add(lbl); 
 			lbl.setAlignmentX(Box.LEFT_ALIGNMENT);
+			lbl.setAlignmentY(Box.TOP_ALIGNMENT);
 			add(lbl);
 		}
 		SelectorPanel esp = new SelectorPanel(editable, selections.get(selectionindex));
 		selectors.add(esp);
 		esp.setAlignmentX(Box.LEFT_ALIGNMENT);
-		add(esp, BorderLayout.NORTH);
+		add(esp);
 	}	
 	
 	private void alignAndPaint(int indent){
@@ -86,6 +87,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 			x = x + 15;
 			i++;
 		}
+		add(Box.createVerticalGlue());
 		validate();
 	}
 	
@@ -170,6 +172,7 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 				makeStaticPanel(entityindex);
 			}
 			constructSelector();
+			
 		}
 
 		@Override

@@ -2,10 +2,8 @@ package semgen.annotation.termlibrarydialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,29 +15,37 @@ import semgen.annotation.common.EntitySelectorGroup;
 import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
+import semgen.utilities.SemGenFont;
 
-public class TermModifyPanel extends JPanel implements ActionListener, Observer {
+public class TermModifyPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private SemSimTermLibrary library;
 	private JPanel modpane;
 	private Integer compindex;
+	private JLabel header = new JLabel();
 	private JPanel modcntrls = new JPanel();
 	private JLabel msglbl = new JLabel();
 	private JButton confirmbtn = new JButton("Modify");
 	
 	public TermModifyPanel(AnnotatorWorkbench wb) {
 		library = wb.openTermLibrary();
-		wb.addObserver(this);
 		createGUI();
-		setBorder(BorderFactory.createEtchedBorder());
 	}
 	
 	private void createGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 		setBackground(SemGenSettings.lightblue);
+		
+		header.setFont(SemGenFont.Bold("Arial", 3));
+		header.setAlignmentX(Box.LEFT_ALIGNMENT);
+		header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+		header.setAlignmentY(Box.TOP_ALIGNMENT);
+		add(header);
+		
 		modcntrls.setLayout(new BoxLayout(modcntrls, BoxLayout.LINE_AXIS));
 		modcntrls.setBackground(SemGenSettings.lightblue);
 		modcntrls.setAlignmentX(LEFT_ALIGNMENT);
+		modcntrls.setAlignmentY(Box.BOTTOM_ALIGNMENT);
 		modcntrls.add(confirmbtn);
 		confirmbtn.addActionListener(this);
 		confirmbtn.setEnabled(false);
@@ -48,6 +54,8 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 	
 	public void showModifier(int index) {
 		compindex = index;
+		String name = library.getComponentName(compindex);
+		header.setText("<html>Editing " + name + "</html>");
 		if (modpane!=null) {
 			remove(modpane);
 			remove(modcntrls);
@@ -73,11 +81,6 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 	}
 	
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-	}
-	
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		((TermEditor)modpane).editTerm();
 	}
@@ -93,7 +96,9 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 			super(lib, compindex);
 			remove(confirmpan);
 			createbtn = confirmbtn;
+			descriptionarea.addKeyListener(this);
 			msgbox = msglbl;
+			setAlignmentX(Box.LEFT_ALIGNMENT);
 		}
 
 		@Override
@@ -114,7 +119,11 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 			super(lib, compindex);
 			remove(confirmpan);
 			createbtn = confirmbtn;
+			setAlignmentX(Box.LEFT_ALIGNMENT);
+			descriptionarea.addKeyListener(this);
+			
 			msgbox = msglbl;
+			
 		}
 
 		@Override
@@ -123,7 +132,6 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 		@Override
 		public void editTerm() {
 			modifyTerm();
-			confirmbtn.setEnabled(false);
 			msglbl.setText("Custom entity modified.");
 		}
 		
@@ -134,10 +142,13 @@ public class TermModifyPanel extends JPanel implements ActionListener, Observer 
 		private CompositeCreator cpec;
 		
 		
-		public CPEPanel() {		
+		public CPEPanel() {
+			setAlignmentX(Box.LEFT_ALIGNMENT);
+			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 			cpec = new CompositeCreator(library);
 			setBackground(SemGenSettings.lightblue);
 			add(cpec);
+			add(Box.createVerticalGlue());
 		}
 		
 		@Override

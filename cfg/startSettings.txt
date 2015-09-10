@@ -1,7 +1,7 @@
-startDirectory; C:\Users\Christopher\Documents\SemGen Test Files
+startDirectory; /Users/max_neal/_UW/SemGenGrant/Presentations/AucklandDemo/PHNmerge_post3.0betaTerkSources
 maximize; false
-screensize; 976x1038
-screenpos; -8x0
+screensize; 1178x825
+screenpos; 0x22
 autoAnnotate; true
 showImports; true
 displayMarkers; true

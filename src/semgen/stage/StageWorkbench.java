@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
@@ -12,6 +13,7 @@ import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
+import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -49,37 +51,31 @@ public class StageWorkbench extends Workbench {
 	
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public File saveModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public File saveModelAs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setModelSaved(boolean val) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public String getCurrentModelName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getModelSourceFile() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -106,7 +102,12 @@ public class StageWorkbench extends Workbench {
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
-				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					continue;
+				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 				
 				// Tell the view to add a model
@@ -117,7 +118,12 @@ public class StageWorkbench extends Workbench {
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
-				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					return;
+				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 
 				_commandSender.addModel(semsimmodel.getName());
@@ -149,7 +155,7 @@ public class StageWorkbench extends Workbench {
 					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
 					break;
 				case "close":
-					_models.remove(model);
+					_models.remove(modelName);
 					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":
@@ -187,5 +193,10 @@ public class StageWorkbench extends Workbench {
 			
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 }
