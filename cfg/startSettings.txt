@@ -1,4 +1,4 @@
-startDirectory; /Users/max_neal/_UW/SemGenGrant/Presentations/AucklandDemo/PHNmerge_post3.0betaTerkSources
+startDirectory; /Users/max_neal/_UW/SemGenGrant/SBMLmodels/randomlySelected
 maximize; false
 screensize; 1386x794
 screenpos; 0x22
