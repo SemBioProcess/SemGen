@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
@@ -54,8 +55,13 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		if (editable) {
 			addButton = new JButton("Add Entity");
 			addButton.addActionListener(this);
-			add(addButton);
-			
+			JPanel pan = new JPanel();
+			pan.setLayout(new BoxLayout(pan, BoxLayout.LINE_AXIS));
+			pan.setOpaque(false);
+			pan.setAlignmentX(Box.LEFT_ALIGNMENT);
+			pan.add(Box.createHorizontalStrut(20));
+			pan.add(addButton);
+			add(pan);
 		}
 		alignAndPaint(15);
 		refreshLists();

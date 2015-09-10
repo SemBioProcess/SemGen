@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +37,7 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		library = lib;
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 
