@@ -106,6 +106,45 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		}
 	}
 
+	@Test
+	public void readFromFile_readThenWriteOriginalFile_VerifyFileContents() throws Exception {
+		// Arrange
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
+		CellMLreader reader = new CellMLreader(validCellMLFile);
+
+		// Act
+		semsim.model.collection.SemSimModel model = reader.readFromFile();
+		CellMLwriter writer = new CellMLwriter(model);
+		File newModelFile = createTempFile();
+		writer.writeToFile(newModelFile);
+
+		// Assert
+		{
+			// Setup XMLUnit
+			XMLUnit.setIgnoreAttributeOrder(true);
+			XMLUnit.setIgnoreComments(true);
+			XMLUnit.setIgnoreWhitespace(true);
+
+			// Parse the files we want to compare
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+			Document controlDocument = docBuilder.parse(validCellMLFile);
+			Document testDocument = docBuilder.parse(newModelFile);
+
+			// Create a diff object and only compare nodes if their name and attributes match
+			Diff myDiff = new Diff(controlDocument, testDocument);
+			myDiff.overrideElementQualifier(new ElementNameAndAttributeQualifier());
+
+			// Get detailed diff information just in case this fails
+			DetailedDiff detailedDiff = new DetailedDiff(myDiff);
+			List differences = detailedDiff.getAllDifferences();
+			System.out.println("Differences: " + differences);
+
+			// Finally, assert that there aren't any differences
+			Assert.assertTrue("Num differences should be 0", myDiff.similar());
+		}
+	}
+
 	private File createTempFile() {
 		try {
 			return _tempFolder.newFile("temp.xml");

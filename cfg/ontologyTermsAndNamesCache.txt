@@ -1,171 +1,171 @@
-http://identifiers.org/kegg.reaction/R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
-http://identifiers.org/uniprot/P62993; Growth factor receptor-bound protein 2
-http://identifiers.org/obo.go/GO:0031387; MPF complex
-urn:miriam:kegg.reaction:R01827; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glyceronetransferase
-urn:miriam:kegg.reaction:R01826; 2-carboxy-2-oxoethyl-forming)
-urn:miriam:obo.chebi:CHEBI%3A16077; D-glucopyranose 1-phosphate
-http://sig.uw.edu/fma#Articular_cartilage_of_head_of_first_rib; Articular cartilage of head of first rib
-http://identifiers.org/kegg.reaction/R00754; ethanol:NAD+ oxidoreductase
-http://purl.obolibrary.org/obo/CHEBI_17306; maltose
-http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
-http://identifiers.org/chebi/CHEBI:15846; NAD(+)
-http://identifiers.org/obo.go/GO:0005892; acetylcholine-gated channel complex
-urn:miriam:obo.go:GO%3A0044275; cellular carbohydrate catabolic process
-http://identifiers.org/obo.go/GO:0042166; acetylcholine binding
-urn:miriam:obo.go:GO%3A0009423; chorismate biosynthetic process
-urn:miriam:kegg.compound:C00117; D-Ribose 5-phosphate
-http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
-http://identifiers.org/go/GO:0005737; cytoplasm
-http://identifiers.org/obo.go/GO:0005768; endosome
-http://identifiers.org/go/GO:0046323; glucose import
-urn:miriam:kegg.reaction:R00345; phosphate:oxaloacetate carboxy-lyase (adding phosphatephosphoenolpyruvate-forming)
-urn:miriam:obo.chebi:CHEBI%3A18021; phosphoenolpyruvate
-urn:miriam:kegg.pathway:eco02060; Phosphotransferase system (PTS) - Escherichia coli K-12 MG1655
-urn:miriam:obo.chebi:CHEBI%3A16001; 3-phospho-D-glyceroyl dihydrogen phosphate
-http://identifiers.org/kegg.reaction/R00127; ATP:AMP phosphotransferase
-http://identifiers.org/chebi/CHEBI:18021; phosphoenolpyruvate
-http://identifiers.org/chebi/CHEBI:16001; 3-phospho-D-glyceroyl dihydrogen phosphate
-http://identifiers.org/chebi/CHEBI:16761; ADP
-http://identifiers.org/cl/CL:0000746; cardiac muscle cell
-http://identifiers.org/kegg.compound/C00022; Pyruvate
-http://identifiers.org/uniprot/Q02750; Dual specificity mitogen-activated protein kinase kinase 1
-http://identifiers.org/uniprot/Q07889; Son of sevenless homolog 1
-http://identifiers.org/kegg.compound/C00020; AMP
-http://identifiers.org/obo.go/GO:0030119; AP-type membrane coat adaptor complex
-http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
-urn:miriam:obo.chebi:CHEBI%3A15361; pyruvate
-urn:miriam:kegg.reaction:R01528; 6-phospho-D-gluconate:NADP+ 2-oxidoreductase (decarboxylating)
-http://identifiers.org/go/GO:0005829; cytosol
-urn:miriam:kegg.compound:C00022; Pyruvate
-http://identifiers.org/ec-code/5.3.1.9; glucose-6-phosphate isomerase
-urn:miriam:kegg.compound:C00661; DL-Glyceraldehyde 3-phosphate
-urn:miriam:kegg.reaction:R00959; alpha-D-Glucose 1-phosphate 1
-urn:miriam:obo.chebi:CHEBI%3A17665; alpha-D-glucose 6-phosphate
-http://identifiers.org/kegg.reaction/R00299; ATP:D-glucose 6-phosphotransferase
-http://identifiers.org/ec-code/2.7.4.3; adenylate kinase
-http://purl.obolibrary.org/obo/CL_0000746; cardiac muscle cell
-urn:miriam:kegg.reaction:R01529; D-Ribulose-5-phosphate 3-epimerase
-urn:miriam:obo.chebi:CHEBI%3A16332; D-xylulose 5-phosphate
-http://identifiers.org/go/GO:0006754; ATP biosynthetic process
-http://identifiers.org/chebi/CHEBI:15343; acetaldehyde
-http://identifiers.org/ec-code/4.1.2.13; fructose-bisphosphate aldolase
+http://purl.obolibrary.org/obo/CHEBI_17234; glucose
 http://identifiers.org/go/GO:0006001; fructose catabolic process
-http://identifiers.org/ec-code/4.2.1.11; phosphopyruvate hydratase
-http://identifiers.org/kegg.compound/C05345; beta-D-Fructose 6-phosphate
-urn:miriam:kegg.reaction:R01641; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
-http://identifiers.org/ec-code/5.3.1.1; triose-phosphate isomerase
-urn:miriam:obo.go:GO%3A0005576; extracellular region
-urn:miriam:kegg.reaction:R00842; sn-Glycerol-3-phosphate:NAD+ 2-oxidoreductase
-urn:miriam:kegg.compound:C00279; D-Erythrose 4-phosphate
-http://identifiers.org/obo.go/GO:0005623; cell
-urn:miriam:kegg.reaction:R01015; D-glyceraldehyde-3-phosphate aldose-ketose-isomerase
-http://identifiers.org/uniprot/O76243; Body wall hemoglobin
-http://identifiers.org/go/GO:0019683; glyceraldehyde-3-phosphate catabolic process
-http://identifiers.org/go/GO:0046187; acetaldehyde catabolic process
+urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
+http://identifiers.org/kegg.reaction/R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
+http://identifiers.org/obo.go/GO:0030119; AP-type membrane coat adaptor complex
+urn:miriam:obo.go:GO%3A0009423; chorismate biosynthetic process
+urn:miriam:kegg.reaction:R01528; 6-phospho-D-gluconate:NADP+ 2-oxidoreductase (decarboxylating)
+http://identifiers.org/uniprot/P62993; Growth factor receptor-bound protein 2
 urn:miriam:obo.chebi:CHEBI%3A16863; 6-phospho-D-gluconate
-urn:miriam:obo.chebi:CHEBI%3A17797; D-ribose 5-phosphate
-urn:miriam:kegg.reaction:R00209; pyruvate:NAD+ 2-oxidoreductase (CoA-acetylating)
-http://identifiers.org/go/GO:0006002; fructose 6-phosphate metabolic process
-urn:miriam:obo.chebi:CHEBI%3A17794; 3-phospho-D-glyceric acid
-http://identifiers.org/kegg.reaction/R00224; pyruvate carboxy-lyase (acetaldehyde-forming)
-urn:miriam:obo.go:GO%3A0019683; glyceraldehyde-3-phosphate catabolic process
-http://identifiers.org/chebi/CHEBI:17990; 1-O-(indol-3-ylacetyl)-beta-D-glucose
-http://identifiers.org/ec-code/2.7.1.11; 6-phosphofructokinase
-http://identifiers.org/chebi/CHEBI:17234; glucose
-http://identifiers.org/ec-code/1.1.1.71; alcohol dehydrogenase [NAD(P)+]
-urn:miriam:obo.chebi:CHEBI%3A16905; -bisphosphate
+http://identifiers.org/go/GO:0005737; cytoplasm
+urn:miriam:kegg.reaction:R01529; D-Ribulose-5-phosphate 3-epimerase
+urn:miriam:kegg.reaction:R00948; ATP:alpha-D-glucose-1-phosphate adenylyltransferase
+http://identifiers.org/kegg.reaction/R01518; D-phosphoglycerate 2,3-phosphomutase
+urn:miriam:kegg.reaction:R01015; D-glyceraldehyde-3-phosphate aldose-ketose-isomerase
+http://identifiers.org/uniprot/P04049; RAF proto-oncogene serine/threonine-protein kinase
+urn:miriam:obo.chebi:CHEBI%3A16077; D-glucopyranose 1-phosphate
 urn:miriam:obo.chebi:CHEBI%3A16108; glycerone phosphate
-urn:miriam:obo.chebi:CHEBI%3A17835; 2-phospho-D-glyceric acid
-http://identifiers.org/chebi/CHEBI:16027; AMP
+http://identifiers.org/chebi/CHEBI:17990; 1-O-(indol-3-ylacetyl)-beta-D-glucose
+urn:miriam:obo.go:GO%3A0019683; glyceraldehyde-3-phosphate catabolic process
+http://identifiers.org/kegg.reaction/R00771; D-glucose-6-phosphate aldose-ketose-isomerase
+urn:miriam:obo.chebi:CHEBI%3A16001; 3-phospho-D-glyceroyl dihydrogen phosphate
+http://identifiers.org/ec-code/5.4.2.1; Transferred to 5.4.2.11 and 5.4.2.12
+http://identifiers.org/kegg.reaction/R01070; beta-D-fructose-1,6-bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
+http://identifiers.org/chebi/CHEBI:16761; ADP
+urn:miriam:kegg.compound:C00354; D-Fructose 1
+http://identifiers.org/kegg.compound/C00469; Ethanol
+urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
+urn:miriam:kegg.reaction:R00209; pyruvate:NAD+ 2-oxidoreductase (CoA-acetylating)
+http://identifiers.org/uniprot/P00533; Epidermal growth factor receptor
+http://identifiers.org/obo.go/GO:0048408; epidermal growth factor binding
+http://identifiers.org/kegg.compound/C05345; beta-D-Fructose 6-phosphate
+urn:miriam:kegg.pathway:eco02060; Phosphotransferase system (PTS) - Escherichia coli K-12 MG1655
+urn:miriam:obo.chebi:CHEBI%3A16905; -bisphosphate
+urn:miriam:kegg.reaction:R00345; phosphate:oxaloacetate carboxy-lyase (adding phosphatephosphoenolpyruvate-forming)
+http://identifiers.org/go/GO:0006196; AMP catabolic process
+http://identifiers.org/obo.go/GO:0031594; neuromuscular junction
+http://identifiers.org/go/GO:0046187; acetaldehyde catabolic process
+http://identifiers.org/obo.go/GO:0005623; cell
+urn:miriam:obo.chebi:CHEBI%3A17234; glucose
+urn:miriam:obo.chebi:CHEBI%3A17797; D-ribose 5-phosphate
+http://purl.obolibrary.org/obo/GO_0007252; I-kappaB phosphorylation
+http://identifiers.org/chebi/CHEBI:17306; maltose
+urn:miriam:obo.go:GO%3A0005829; cytosol
+urn:miriam:kegg.reaction:R00200; ATP:pyruvate 2-O-phosphotransferase
+urn:miriam:obo.chebi:CHEBI%3A17794; 3-phospho-D-glyceric acid
+http://identifiers.org/kegg.reaction/R01061; D-glyceraldehyde-3-phosphate:NAD+ oxidoreductase (phosphorylating)
+urn:miriam:obo.chebi:CHEBI%3A17138; glyceraldehyde 3-phosphate
+http://identifiers.org/uniprot/P28482; Mitogen-activated protein kinase 1
+urn:miriam:kegg.compound:C00345; 6-Phospho-D-gluconate
+http://identifiers.org/kegg.reaction/R01015; D-glyceraldehyde-3-phosphate aldose-ketose-isomerase
+http://identifiers.org/go/GO:0006002; fructose 6-phosphate metabolic process
+http://identifiers.org/cl/CL:0000746; cardiac muscle cell
+http://identifiers.org/obo.go/GO:0005768; endosome
+http://identifiers.org/obo.go/GO:0031387; MPF complex
+http://identifiers.org/chebi/CHEBI:15343; acetaldehyde
+urn:miriam:obo.go:GO%3A0000162; tryptophan biosynthetic process
+http://identifiers.org/uniprot/Q02750; Dual specificity mitogen-activated protein kinase kinase 1
+http://identifiers.org/kegg.compound/C00022; Pyruvate
+http://identifiers.org/kegg.compound/C00020; AMP
+http://identifiers.org/ma/MA:0000696; tail bone
+http://purl.obolibrary.org/obo/CL_0000746; cardiac muscle cell
+urn:miriam:kegg.compound:C00236; 3-Phospho-D-glyceroyl phosphate
+http://identifiers.org/chebi/CHEBI:18021; phosphoenolpyruvate
+http://identifiers.org/chebi/CHEBI:16908; NADH
+http://identifiers.org/obo.go/GO:0005615; extracellular space
+urn:miriam:kegg.reaction:R01641; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
+urn:miriam:kegg.compound:C00231; D-Xylulose 5-phosphate
+http://identifiers.org/kegg.reaction/R00299; ATP:D-glucose 6-phosphotransferase
+http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
+http://identifiers.org/ec-code/2.7.2.3; phosphoglycerate kinase
+urn:miriam:obo.go:GO%3A0046395; carboxylic acid catabolic process
+http://identifiers.org/go/GO:0006172; ADP biosynthetic process
+http://identifiers.org/uniprot/O76243; Body wall hemoglobin
+http://identifiers.org/go/GO:0006735; NADH regeneration
+http://identifiers.org/go/GO:0030388; fructose 1,6-bisphosphate metabolic process
+http://identifiers.org/chebi/CHEBI:16905; keto-D-fructose 1,6-bisphosphate
+urn:miriam:kegg.compound:C00117; D-Ribose 5-phosphate
+http://identifiers.org/ec-code/2.7.1.11; 6-phosphofructokinase
 http://identifiers.org/obo.go/GO:0046777; protein autophosphorylation
 http://identifiers.org/chebi/CHEBI:29052; D-glyceraldehyde 3-phosphate
-urn:miriam:kegg.reaction:R00200; ATP:pyruvate 2-O-phosphotransferase
-http://identifiers.org/kegg.compound/C00562; Phosphoprotein
-urn:miriam:kegg.compound:C00668; alpha-D-Glucose 6-phosphate
-urn:miriam:obo.go:GO%3A0000162; tryptophan biosynthetic process
-http://identifiers.org/obo.go/GO:0005615; extracellular space
-http://identifiers.org/obo.go/GO:0004889; acetylcholine-activated cation-selective channel activity
-urn:miriam:obo.chebi:CHEBI%3A17363; D-ribulose 5-phosphate
-http://identifiers.org/obo.go/GO:0031623; receptor internalization
-urn:miriam:kegg.reaction:R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
-http://identifiers.org/kegg.compound/C00469; Ethanol
-http://identifiers.org/uniprot/P98077; SHC-transforming protein 2
-http://identifiers.org/go/GO:0006735; NADH regeneration
-http://identifiers.org/chebi/CHEBI:15361; pyruvate
-http://identifiers.org/obo.go/GO:0005737; cytoplasm
-urn:miriam:obo.go:GO%3A0005829; cytosol
-urn:miriam:kegg.reaction:R01061; D-glyceraldehyde-3-phosphate:NAD+ oxidoreductase (phosphorylating)
-http://identifiers.org/chebi/CHEBI:17306; maltose
-http://identifiers.org/ec-code/2.7.1.2; glucokinase
-http://identifiers.org/ma/MA:0000696; tail bone
-http://identifiers.org/ec-code/4.1.1.1; pyruvate decarboxylase
-http://identifiers.org/kegg.compound/C00074; Phosphoenolpyruvate
-urn:miriam:kegg.reaction:R00771; D-glucose-6-phosphate aldose-ketose-isomerase
-urn:miriam:kegg.reaction:R01067; D-Fructose 6-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
-http://identifiers.org/uniprot/P28482; Mitogen-activated protein kinase 1
-urn:miriam:kegg.reaction:R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
-urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
-urn:miriam:obo.chebi:CHEBI%3A17138; glyceraldehyde 3-phosphate
-urn:miriam:kegg.reaction:R00948; ATP:alpha-D-glucose-1-phosphate adenylyltransferase
-http://identifiers.org/uniprot/P04049; RAF proto-oncogene serine/threonine-protein kinase
-http://identifiers.org/go/GO:0006068; ethanol catabolic process
-urn:miriam:kegg.reaction:R01518; -phosphomutase
-http://identifiers.org/obo.go/GO:0031594; neuromuscular junction
-http://identifiers.org/kegg.reaction/R01015; D-glyceraldehyde-3-phosphate aldose-ketose-isomerase
-urn:miriam:obo.go:GO%3A0009070; serine family amino acid biosynthetic process
-urn:miriam:obo.go:GO%3A0042866; pyruvate biosynthetic process
-urn:miriam:kegg.reaction:R01070; -bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
-http://identifiers.org/go/GO:0006196; AMP catabolic process
-http://purl.obolibrary.org/obo/CHEBI_16761; ADP
-http://purl.obolibrary.org/obo/GO_0005829; cytosol
-urn:miriam:obo.go:GO%3A0006002; fructose 6-phosphate metabolic process
-http://identifiers.org/kegg.compound/C00004; NADH
-urn:miriam:kegg.compound:C00103; D-Glucose 1-phosphate
-urn:miriam:kegg.compound:C00345; 6-Phospho-D-gluconate
-http://identifiers.org/chebi/CHEBI:16908; NADH
-http://identifiers.org/kegg.compound/C00002; ATP
-urn:miriam:kegg.reaction:R01049; ATP:D-ribose-5-phosphate diphosphotransferase
-http://identifiers.org/kegg.reaction/R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
-http://identifiers.org/kegg.compound/C00003; NAD+
-http://identifiers.org/kegg.compound/C00008; ADP
-urn:miriam:kegg.reaction:R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
-http://identifiers.org/ec-code/1.2.1.12; glyceraldehyde-3-phosphate dehydrogenase (phosphorylating)
-http://identifiers.org/ec-code/2.7.2.3; phosphoglycerate kinase
-urn:miriam:obo.chebi:CHEBI%3A15721; sedoheptulose 7-phosphate
-http://identifiers.org/obo.go/GO:0048408; epidermal growth factor binding
-http://identifiers.org/kegg.reaction/R00771; D-glucose-6-phosphate aldose-ketose-isomerase
-http://identifiers.org/uniprot/P20936; Ras GTPase-activating protein 1
-http://purl.obolibrary.org/obo/GO_0007252; I-kappaB phosphorylation
-http://identifiers.org/uniprot/P00533; Epidermal growth factor receptor
-http://identifiers.org/go/GO:0007252; I-kappaB phosphorylation
-http://identifiers.org/go/GO:0008584; male gonad development
-http://identifiers.org/kegg.reaction/R01061; D-glyceraldehyde-3-phosphate:NAD+ oxidoreductase (phosphorylating)
-http://identifiers.org/chebi/CHEBI:16236; ethanol
-http://identifiers.org/chebi/CHEBI:15422; ATP
-http://identifiers.org/go/GO:0030388; fructose 1,6-bisphosphate metabolic process
-urn:miriam:obo.go:GO%3A0046395; carboxylic acid catabolic process
-urn:miriam:kegg.compound:C00354; D-Fructose 1
-http://identifiers.org/kegg.compound/C00236; 3-Phospho-D-glyceroyl phosphate
-urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
-urn:miriam:kegg.compound:C00236; 3-Phospho-D-glyceroyl phosphate
-http://identifiers.org/kegg.compound/C00118; D-Glyceraldehyde 3-phosphate
-urn:miriam:kegg.compound:C00197; 3-Phospho-D-glycerate
-http://identifiers.org/kegg.reaction/R01518; D-phosphoglycerate 2,3-phosphomutase
-urn:miriam:kegg.compound:C00231; D-Xylulose 5-phosphate
-urn:miriam:kegg.compound:C00111; Glycerone phosphate
-urn:miriam:kegg.compound:C00199; D-Ribulose 5-phosphate
-urn:miriam:kegg.compound:C00074; Phosphoenolpyruvate
-http://identifiers.org/go/GO:0009435; NAD biosynthetic process
-http://identifiers.org/go/GO:0042867; pyruvate catabolic process
-http://identifiers.org/ec-code/5.4.2.1; Transferred to 5.4.2.11 and 5.4.2.12
-http://identifiers.org/kegg.reaction/R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
-urn:miriam:obo.chebi:CHEBI%3A17234; glucose
-http://identifiers.org/kegg.reaction/R01070; beta-D-fructose-1,6-bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
-http://identifiers.org/cl/CL:0002068; Purkinje myocyte
-http://identifiers.org/go/GO:0006172; ADP biosynthetic process
-http://identifiers.org/kegg.compound/C05378; beta-D-Fructose 1,6-bisphosphate
-http://identifiers.org/kegg.compound/C00084; Acetaldehyde
-http://purl.obolibrary.org/obo/CHEBI_17234; glucose
-urn:miriam:kegg.reaction:R01056; D-ribose-5-phosphate aldose-ketose-isomerase
-http://identifiers.org/chebi/CHEBI:16905; keto-D-fructose 1,6-bisphosphate
 http://identifiers.org/opb/OPB_00340; Chemical concentration
+urn:miriam:obo.chebi:CHEBI%3A17835; 2-phospho-D-glyceric acid
+urn:miriam:kegg.reaction:R00842; sn-Glycerol-3-phosphate:NAD+ 2-oxidoreductase
+http://identifiers.org/obo.go/GO:0031623; receptor internalization
+http://sig.uw.edu/fma#Articular_cartilage_of_head_of_first_rib; Articular cartilage of head of first rib
+urn:miriam:kegg.compound:C00022; Pyruvate
+http://identifiers.org/obo.go/GO:0042166; acetylcholine binding
+urn:miriam:obo.chebi:CHEBI%3A17363; D-ribulose 5-phosphate
+urn:miriam:obo.go:GO%3A0042866; pyruvate biosynthetic process
+http://purl.obolibrary.org/obo/CHEBI_16761; ADP
+http://identifiers.org/ec-code/5.3.1.1; triose-phosphate isomerase
+urn:miriam:kegg.compound:C00103; D-Glucose 1-phosphate
+http://identifiers.org/go/GO:0046323; glucose import
+urn:miriam:obo.go:GO%3A0006002; fructose 6-phosphate metabolic process
+http://identifiers.org/kegg.reaction/R00224; pyruvate carboxy-lyase (acetaldehyde-forming)
+urn:miriam:kegg.reaction:R01049; ATP:D-ribose-5-phosphate diphosphotransferase
+http://identifiers.org/ec-code/5.3.1.9; glucose-6-phosphate isomerase
+http://identifiers.org/kegg.compound/C00084; Acetaldehyde
+http://identifiers.org/uniprot/P98077; SHC-transforming protein 2
+http://identifiers.org/ec-code/2.7.4.3; adenylate kinase
+http://identifiers.org/go/GO:0019683; glyceraldehyde-3-phosphate catabolic process
+urn:miriam:obo.go:GO%3A0005576; extracellular region
+urn:miriam:kegg.compound:C00197; 3-Phospho-D-glycerate
+http://identifiers.org/chebi/CHEBI:16236; ethanol
+http://identifiers.org/cl/CL:0002068; Purkinje myocyte
+urn:miriam:kegg.compound:C00199; D-Ribulose 5-phosphate
+urn:miriam:kegg.compound:C00661; DL-Glyceraldehyde 3-phosphate
+http://identifiers.org/kegg.reaction/R00127; ATP:AMP phosphotransferase
+urn:miriam:obo.chebi:CHEBI%3A18021; phosphoenolpyruvate
+http://identifiers.org/go/GO:0009435; NAD biosynthetic process
+http://identifiers.org/go/GO:0006754; ATP biosynthetic process
+urn:miriam:obo.go:GO%3A0044275; cellular carbohydrate catabolic process
+http://identifiers.org/ec-code/1.2.1.12; glyceraldehyde-3-phosphate dehydrogenase (phosphorylating)
+urn:miriam:kegg.compound:C00668; alpha-D-Glucose 6-phosphate
+http://identifiers.org/go/GO:0008584; male gonad development
+urn:miriam:kegg.compound:C00111; Glycerone phosphate
+urn:miriam:kegg.reaction:R01056; D-ribose-5-phosphate aldose-ketose-isomerase
+http://identifiers.org/go/GO:0007252; I-kappaB phosphorylation
+urn:miriam:kegg.reaction:R00771; D-glucose-6-phosphate aldose-ketose-isomerase
+http://identifiers.org/kegg.compound/C00003; NAD+
+http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
+http://identifiers.org/kegg.compound/C00002; ATP
+urn:miriam:obo.chebi:CHEBI%3A15361; pyruvate
+http://identifiers.org/kegg.compound/C00004; NADH
+http://identifiers.org/go/GO:0042867; pyruvate catabolic process
+http://identifiers.org/chebi/CHEBI:16027; AMP
+http://identifiers.org/kegg.compound/C00008; ADP
+http://identifiers.org/kegg.compound/C05378; beta-D-Fructose 1,6-bisphosphate
+http://identifiers.org/uniprot/P20936; Ras GTPase-activating protein 1
+urn:miriam:kegg.reaction:R01061; D-glyceraldehyde-3-phosphate:NAD+ oxidoreductase (phosphorylating)
+http://purl.obolibrary.org/obo/GO_0005829; cytosol
+urn:miriam:obo.chebi:CHEBI%3A16332; D-xylulose 5-phosphate
+http://identifiers.org/ec-code/1.1.1.71; alcohol dehydrogenase [NAD(P)+]
+http://identifiers.org/kegg.reaction/R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
+urn:miriam:kegg.reaction:R01827; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glyceronetransferase
+urn:miriam:kegg.reaction:R01067; D-Fructose 6-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
+urn:miriam:obo.chebi:CHEBI%3A17665; alpha-D-glucose 6-phosphate
+urn:miriam:kegg.reaction:R01826; 2-carboxy-2-oxoethyl-forming)
+http://identifiers.org/ec-code/4.1.2.13; fructose-bisphosphate aldolase
+http://identifiers.org/chebi/CHEBI:15846; NAD(+)
+http://identifiers.org/kegg.reaction/R00754; ethanol:NAD+ oxidoreductase
+http://identifiers.org/go/GO:0005829; cytosol
+http://identifiers.org/obo.go/GO:0004889; acetylcholine-activated cation-selective channel activity
+http://identifiers.org/kegg.compound/C00118; D-Glyceraldehyde 3-phosphate
+urn:miriam:obo.chebi:CHEBI%3A15721; sedoheptulose 7-phosphate
+http://purl.obolibrary.org/obo/CHEBI_17306; maltose
+http://identifiers.org/kegg.compound/C00562; Phosphoprotein
+http://identifiers.org/obo.go/GO:0005892; acetylcholine-gated channel complex
+http://identifiers.org/kegg.reaction/R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
+urn:miriam:kegg.compound:C00074; Phosphoenolpyruvate
+urn:miriam:kegg.reaction:R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
+urn:miriam:kegg.reaction:R01070; -bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
+http://identifiers.org/go/GO:0006068; ethanol catabolic process
+http://identifiers.org/ec-code/2.7.1.2; glucokinase
+urn:miriam:kegg.reaction:R00959; alpha-D-Glucose 1-phosphate 1
+http://identifiers.org/ec-code/4.1.1.1; pyruvate decarboxylase
+http://identifiers.org/obo.go/GO:0005737; cytoplasm
+urn:miriam:kegg.reaction:R01518; -phosphomutase
+http://identifiers.org/uniprot/Q07889; Son of sevenless homolog 1
+http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
+http://identifiers.org/chebi/CHEBI:15422; ATP
+http://identifiers.org/chebi/CHEBI:17234; glucose
+urn:miriam:kegg.compound:C00279; D-Erythrose 4-phosphate
+urn:miriam:kegg.reaction:R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
+http://identifiers.org/kegg.compound/C00236; 3-Phospho-D-glyceroyl phosphate
+urn:miriam:kegg.reaction:R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
+http://identifiers.org/chebi/CHEBI:15361; pyruvate
+http://identifiers.org/ec-code/4.2.1.11; phosphopyruvate hydratase
+http://identifiers.org/kegg.compound/C00074; Phosphoenolpyruvate
+urn:miriam:obo.go:GO%3A0009070; serine family amino acid biosynthetic process
+http://identifiers.org/chebi/CHEBI:16001; 3-phospho-D-glyceroyl dihydrogen phosphate
