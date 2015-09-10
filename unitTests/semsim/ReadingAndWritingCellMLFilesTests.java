@@ -126,7 +126,10 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 	private File createTempFile() {
 		try {
-			return _tempFolder.newFile("temp.xml");
+			File tempFile = _tempFolder.newFile("temp.xml");
+			System.out.println("New file: " + tempFile.toString());
+
+			return tempFile;
 		}
 		catch(Exception e) {
 			fail();
