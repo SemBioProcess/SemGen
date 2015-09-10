@@ -46,7 +46,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	}
 	
 	@Test
-	public void readFromFile_readThenWriteValidFile_VerifyFileNotEmpty() {
+	public void readCleanFile_writeNewFileUsingTheCellMLWriter_VerifyFileNotEmpty() {
 		// Arrange
 		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
@@ -66,16 +66,16 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	}
 
 	@Test
-	 public void readFromFile_readThenWriteCleanAndValidFile_VerifyFileContents() throws Exception {
-		readAndNewWriteFileThenCompareDifferences(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
+	 public void readCleanFile_writeNewFileUsingTheCellMLWriter_VerifyFileContents() throws Exception {
+		readFileAndWriteNewFileThenCompareDifferences(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 	}
 
 	@Test
-	public void readFromFile_readThenWriteAnOriginalAndValidFile_VerifyFileContents() throws Exception {
-		readAndNewWriteFileThenCompareDifferences(CollateralHelper.Files.Pandit_Clark_Giles_2001_Endocardial_Cell);
+	public void readOriginalPanditFile_writeNewFileUsingTheCellMLWriter_VerifyFileContents() throws Exception {
+		readFileAndWriteNewFileThenCompareDifferences(CollateralHelper.Files.Pandit_Clark_Giles_2001_Endocardial_Cell);
 	}
 
-	private void readAndNewWriteFileThenCompareDifferences(String fileName) {
+	private void readFileAndWriteNewFileThenCompareDifferences(String fileName) {
 		// Arrange
 		File validCellMLFile = CollateralHelper.GetCollateral(fileName);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
