@@ -1,10 +1,7 @@
 package semsim;
 
 import org.apache.commons.io.FileUtils;
-import org.custommonkey.xmlunit.DetailedDiff;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.ElementNameAndAttributeQualifier;
-import org.custommonkey.xmlunit.XMLUnit;
+import org.custommonkey.xmlunit.*;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
@@ -16,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -69,47 +67,17 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 	@Test
 	 public void readFromFile_readThenWriteCleanAndValidFile_VerifyFileContents() throws Exception {
-		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
-		CellMLreader reader = new CellMLreader(validCellMLFile);
-
-		// Act
-		semsim.model.collection.SemSimModel model = reader.readFromFile();
-		CellMLwriter writer = new CellMLwriter(model);
-		File newModelFile = createTempFile();
-		writer.writeToFile(newModelFile);
-
-		// Assert
-		{
-			// Setup XMLUnit
-			XMLUnit.setIgnoreAttributeOrder(true);
-			XMLUnit.setIgnoreComments(true);
-			XMLUnit.setIgnoreWhitespace(true);
-
-			// Parse the files we want to compare
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
-			Document controlDocument = docBuilder.parse(validCellMLFile);
-			Document testDocument = docBuilder.parse(newModelFile);
-
-			// Create a diff object and only compare nodes if their name and attributes match
-			Diff myDiff = new Diff(controlDocument, testDocument);
-			myDiff.overrideElementQualifier(new ElementNameAndAttributeQualifier());
-
-			// Get detailed diff information just in case this fails
-			DetailedDiff detailedDiff = new DetailedDiff(myDiff);
-			List differences = detailedDiff.getAllDifferences();
-			System.out.println("Differences: " + differences);
-
-			// Finally, assert that there aren't any differences
-			Assert.assertTrue("Num differences should be 0", myDiff.similar());
-		}
+		readAndNewWriteFileThenCompareDifferences(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 	}
 
 	@Test
 	public void readFromFile_readThenWriteAnOriginalAndValidFile_VerifyFileContents() throws Exception {
+		readAndNewWriteFileThenCompareDifferences(CollateralHelper.Files.Pandit_Clark_Giles_2001_Endocardial_Cell);
+	}
+
+	private void readAndNewWriteFileThenCompareDifferences(String fileName) {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.Pandit_Clark_Giles_2001_Endocardial_Cell);
+		File validCellMLFile = CollateralHelper.GetCollateral(fileName);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 
 		// Act
@@ -127,21 +95,32 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 			// Parse the files we want to compare
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
-			Document controlDocument = docBuilder.parse(validCellMLFile);
-			Document testDocument = docBuilder.parse(newModelFile);
+
+			Document controlDocument, testDocument;
+			try {
+				DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+				controlDocument = docBuilder.parse(validCellMLFile);
+				testDocument = docBuilder.parse(newModelFile);
+			} catch( Exception e ) {
+				System.out.println("Exception thrown while creating documents: " + e.getMessage());
+				fail();
+				return;
+			}
 
 			// Create a diff object and only compare nodes if their name and attributes match
 			Diff myDiff = new Diff(controlDocument, testDocument);
 			myDiff.overrideElementQualifier(new ElementNameAndAttributeQualifier());
 
-			// Get detailed diff information just in case this fails
-			DetailedDiff detailedDiff = new DetailedDiff(myDiff);
-			List differences = detailedDiff.getAllDifferences();
+			// Are the documents similar?
+			SemGenModelFileDifferenceListener semGenDifferenceListener = new SemGenModelFileDifferenceListener(myDiff);
+			boolean similar = semGenDifferenceListener.similar();
+
+			// What are the differences, if any?
+			List<Difference> differences = semGenDifferenceListener.getSimilarDifferences();
 			System.out.println("Differences: " + differences);
 
 			// Finally, assert that there aren't any differences
-			Assert.assertTrue("Num differences should be 0", myDiff.similar());
+			Assert.assertTrue("Num differences should be 0", similar);
 		}
 	}
 
@@ -154,5 +133,30 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		}
 		
 		return null;
+	}
+
+	private class SemGenModelFileDifferenceListener extends DetailedDiff {
+
+		private List<Difference> _similarDifferences = new ArrayList<Difference>();
+
+		public SemGenModelFileDifferenceListener(Diff prototype) {
+			super(prototype);
+		}
+
+		@Override
+		public int differenceFound(Difference difference) {
+			// Need to use base class method to set isRecoverable properly
+			int returnValue = super.differenceFound(difference);
+
+			// If this is a real difference then save it
+			if(!difference.isRecoverable())
+				_similarDifferences.add(difference);
+
+			return returnValue;
+		}
+
+		public List<Difference> getSimilarDifferences() {
+			return _similarDifferences;
+		}
 	}
 }
