@@ -2,7 +2,6 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JOptionPane;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -11,8 +10,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
-import semgen.utilities.SemGenError;
-import semgen.utilities.uicomponent.SemGenProgressBar;
+import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
@@ -21,13 +19,37 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
-public class LoadSemSimModel {
+public class LoadSemSimModel extends SemGenJob {
+	private File file;
+	private boolean autoannotate = false;
+	private SemSimModel semsimmodel;
 	
-	public static SemSimModel loadSemSimModelFromFile(File file, boolean autoannotate) {
-		SemSimModel semsimmodel = null;
+	public LoadSemSimModel(File file) {
+		this.file = file;
+	}
+	
+	public LoadSemSimModel(File file, boolean autoannotate) {
+		this.file = file;
+		this.autoannotate = autoannotate;
+	}
+	
+	public LoadSemSimModel(File file, SemGenJob sga) {
+		super(sga);
+		this.file = file;
+		
+	}
+	
+	public LoadSemSimModel(File file, boolean autoannotate, SemGenJob sga) {
+		super(sga);
+		this.file = file;
+		this.autoannotate = autoannotate;
+	}
+	
+	private void loadSemSimModelFromFile() {
 		int modeltype = ModelClassifier.classify(file);
 		try {
 			switch (modeltype){
@@ -39,81 +61,81 @@ public class LoadSemSimModel {
 				break;
 					
 			case ModelClassifier.SBML_MODEL:
-				semsimmodel = new SBMLreader(file).readFromFile();
-								
-				if((semsimmodel==null) || semsimmodel.getErrors().isEmpty() && autoannotate){
-
-					//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
-					boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-					
-					if(!online){
-						//progframe.dispose();
-						SemGenError.showWebConnectionError("BioPortal search service");
-					}
-					else{
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-	//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-						//progframe.dispose();
-					}
-				}
+				semsimmodel = new SBMLreader(file).readFromFile();			
+				nameOntologyTerms();
 				break;
 				
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
-				if(semsimmodel.getErrors().isEmpty()){
-					if(autoannotate){
-						final SemGenProgressBar progframe = new SemGenProgressBar("Annotating " + file.getName() + " with web services...",true);
-						Boolean online = true;
-						
-							online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
-							if(!online) SemGenError.showWebConnectionError("BioPortal search service");
-
-						
-						ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel,  SemGen.termcache.getOntTermsandNamesCache(), online);
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-						
-						progframe.dispose();
-					}
-				}
+				nameOntologyTerms();
 				break;
+				
 			case ModelClassifier.SEMSIM_MODEL:
 				semsimmodel = loadSemSimOWL(file);	
 				break;
 				
 			default:
-				JOptionPane.showMessageDialog(null, "SemGen did not recognize the file type for " + file.getName(),
-						"Error: Unrecognized model format", JOptionPane.ERROR_MESSAGE);
-				break;
+				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), true, false);
+				return;
 			}
 		}
-		catch(Exception e){e.printStackTrace();}
+		catch(Exception e){
+			e.printStackTrace();
+			}
 		
 		if(semsimmodel!=null){
 			if(!semsimmodel.getErrors().isEmpty()){
-				String errormsg = "";
-				for(String catstr : semsimmodel.getErrors())
-					errormsg = errormsg + catstr + "\n";
-				JOptionPane.showMessageDialog(null, errormsg, "ERROR", JOptionPane.ERROR_MESSAGE);
-				return semsimmodel;
+				for (String e : semsimmodel.getErrors()) {
+					ErrorLog.addError(e,true, true);
+				}
+				return;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
-
-		return semsimmodel;
+		else {
+			ErrorLog.addError(file.getName() + " was an invalid model.", true, false);
+		}
 	}
 	
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
 		return new SemSimOWLreader(file).readFromFile();
 	}
-
 	
-	private static SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
+	private SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
 		Document doc = new MMLParser().readFromFile(file);
-		if (SemGenError.showSemSimErrors()) return null;
+		if (ErrorLog.hasErrors()) return null;
 		
 		MMLreader xmml2 = new MMLreader(file, doc);		
 		return xmml2.readFromFile();
+	}
+	
+	private void nameOntologyTerms(){
+		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
+
+			setStatus("Annotating with web services...");
+			boolean online = WebserviceTester.testBioPortalWebservice();
+			
+			if(!online){
+				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
+			}
+				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
+//				SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+		}
+	}
+
+	@Override
+	public void run() {
+		loadSemSimModelFromFile();
+		if (semsimmodel == null || ErrorLog.errorsAreFatal()) {
+			abort();
+			return;
+		}
+		
+	}
+	
+	public SemSimModel getLoadedModel() {
+		return semsimmodel;
 	}
 }

@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationSubject;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
 import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataHasValue;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
@@ -38,6 +40,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
@@ -46,6 +49,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.RemoveAxiom;
+import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimConstants;
@@ -182,6 +186,20 @@ public class SemSimOWLFactory {
 		OWLIndividualAxiom axiom = factory.getOWLClassAssertionAxiom(refclass, pmcind);
 		AddAxiom addAxiom = new AddAxiom(ont, axiom);
 		manager.applyChange(addAxiom);
+	}
+	
+	// Add an object property restriction to use as a superclass on an individual (uses the "some" restriction type).
+	public static void addExistentialObjectPropertyRestrictionOnIndividual(OWLOntology ont, String ind, String property,
+			String value, OWLOntologyManager manager){
+				
+		OWLObjectProperty owlproperty = factory.getOWLObjectProperty(IRI.create(property));
+        OWLClass owlvalue = factory.getOWLClass(IRI.create(value));
+        OWLClassExpression owlexp = factory.getOWLObjectSomeValuesFrom(owlproperty, owlvalue);
+		OWLNamedIndividual owlind = factory.getOWLNamedIndividual(IRI.create(ind));
+
+        OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(owlexp, owlind);
+        AddAxiom addAx = new AddAxiom(ont, ax);
+        manager.applyChange(addAx);				
 	}
 
 	// Set an object property for one individual
@@ -696,5 +714,57 @@ public class SemSimOWLFactory {
 		}
 		return iritoappend;
 	}
+	
+	
+	/**
+     * Code from OWL API example on GitHub
+     * Visits existential restrictions and collects the properties which are
+     * restricted.
+     */
+    public static class RestrictionVisitor extends
+            OWLClassExpressionVisitorAdapter {
+
+        private final Set<OWLClass> processedClasses;
+        private final Map<OWLObjectPropertyExpression, OWLClassExpression> restrictedPropertiesAndFillersMap;
+        private final Set<OWLOntology> onts;
+
+        public RestrictionVisitor(Set<OWLOntology> onts) {
+            processedClasses = new HashSet<OWLClass>();
+            restrictedPropertiesAndFillersMap = new HashMap<OWLObjectPropertyExpression, OWLClassExpression>();
+            this.onts = onts;
+        }
+
+//        public Set<OWLObjectPropertyExpression> getRestrictedProperties() {
+//            return restrictedProperties;
+//        }
+        
+        public Map<OWLObjectPropertyExpression, OWLClassExpression> getPropertyFillerMap(){
+        	return restrictedPropertiesAndFillersMap;
+        }
+
+        @Override
+        public void visit(OWLClass desc) {
+            if (!processedClasses.contains(desc)) {
+                // If we are processing inherited restrictions then we
+                // recursively visit named supers. Note that we need to keep
+                // track of the classes that we have processed so that we don't
+                // get caught out by cycles in the taxonomy
+                processedClasses.add(desc);
+                for (OWLOntology ont : onts) {
+                    for (OWLSubClassOfAxiom ax : ont
+                            .getSubClassAxiomsForSubClass(desc)) {
+                        ax.getSuperClass().accept(this);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void visit(OWLObjectSomeValuesFrom desc) {
+            // This method gets called when a class expression is an existential
+            // (someValuesFrom) restriction and it asks us to visit it
+        	restrictedPropertiesAndFillersMap.put(desc.getProperty(),desc.getFiller());
+        }
+    }
 
 }

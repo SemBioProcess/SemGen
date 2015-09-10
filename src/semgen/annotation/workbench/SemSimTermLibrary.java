@@ -15,6 +15,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
+import semsim.annotation.ReferenceOntologies.ReferenceOntology;
 import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -27,7 +28,6 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.utilities.ReferenceOntologies.ReferenceOntology;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**
@@ -49,7 +49,7 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
 	
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
-	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE};
+	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE, TERM_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
@@ -170,21 +170,28 @@ public class SemSimTermLibrary extends Observable {
 		return i;
 	}
 	
-	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
-		//Avoid creating a composite with a null in the entity list
-		if (peindicies.contains(-1)) return -1;
+	private CompositePhysicalEntity makeCPE(ArrayList<Integer> peindicies) {
 		ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 		for (Integer i : peindicies) {
-			if (i==-1) pes.add(null); 
 			pes.add((PhysicalEntity)masterlist.get(i).getObject());
 			rels.add(SemSimConstants.PART_OF_RELATION);
 		}
 		if (!rels.isEmpty()) {
 			rels.remove(0);
 		}
-		
-		return addCompositePhysicalEntity(new CompositePhysicalEntity(pes, rels));
+		return new CompositePhysicalEntity(pes, rels);
+	}
+	
+	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
+		//Avoid creating a composite with a null in the entity list
+		if (peindicies.contains(-1)) return -1;
+
+		return addCompositePhysicalEntity(makeCPE(peindicies));	
+	}
+	
+	public boolean containsCompositeEntitywithTerms(ArrayList<Integer> peindicies) {
+		return getIndexofCompositePhysicalEntity(makeCPE(peindicies))!=-1;
 	}
 	
 	public int createReferencePhysicalProcess(String name, URI uri) {
@@ -414,7 +421,9 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public String getComponentDescription(int index) {
-			return masterlist.get(index).getDescription();
+			String desc = masterlist.get(index).getDescription();
+			if (desc==null) desc="";
+			return desc;
 		}
 		
 		/** Check if a component in the library already has a given name
@@ -431,28 +440,37 @@ public class SemSimTermLibrary extends Observable {
 		
 		public void setName(int index, String name) {
 			masterlist.get(index).getObject().setName(name);
-		}
-		
-		public void setDescription(int index, String description) {
-			masterlist.get(index).getObject().setName(description);
+			notifyTermChanged();
+			
 		}
 		
 		public void clearRelations(Integer termindex, SemSimRelation relation) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			pmc.removeReferenceAnnotationsofType(relation);
+			notifyTermChanged();
 		}
 		
 		public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
 			pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getName());
+			notifyTermChanged();
 		}
 		
 		public SemSimTypes getSemSimType(int index) {
 			return masterlist.get(index).getType();
 		}
-
-//**************************************COMPOSITE DATA ENTITY RETRIEVAL METHODS *********************//
+		
+//**************************************REFERENCE TERM DATA RETRIEVAL METHODS *********************//
+		public String getOntologyName(Integer index) {
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName();
+		}
+		
+		public String getReferenceID(Integer index) {
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getTermID();
+		}
+		
+//**************************************COMPOSITE ENTITY DATA RETRIEVAL METHODS *********************//
 		public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
 			return getCompositeEntityIndicies(getComponentIndex(cpe));
 		}
@@ -477,6 +495,24 @@ public class SemSimTermLibrary extends Observable {
 		public boolean compositeEntityContainsSingular(int compindex, int singindex) {
 			return getCompositeEntityIndicies(compindex).contains(singindex);
 		}
+		
+//**************************************COMPOSITE ENTITY MODIFICATION METHODS *********************//
+		
+	public void setCompositeEntityComponents(Integer index, ArrayList<Integer> peindicies) {
+		ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
+		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
+		for (Integer i : peindicies) {
+			pes.add((PhysicalEntity)masterlist.get(i).getObject());
+			rels.add(SemSimConstants.PART_OF_RELATION);
+		}
+		if (!rels.isEmpty()) {
+			rels.remove(0);
+		}
+		CompositePhysicalEntity cpetoedit = (CompositePhysicalEntity)masterlist.get(index).getObject();
+		cpetoedit.setArrayListOfEntities(pes);
+		cpetoedit.setArrayListOfStructuralRelations(rels);
+		notifyCompositeEntityChanged();
+	}
 		
 //******************************************PROCESS DATA RETRIEVAL METHODS*********************************//
 	
@@ -531,6 +567,23 @@ public class SemSimTermLibrary extends Observable {
 	public Double getSinkMultiplier(Integer procindex, Integer partindex) {
 		LinkedHashMap<Integer, Double> map = getProcessSinksIndexMultiplierMap(procindex);
 		return map.get(partindex);
+	}
+	
+	public String listParticipants(Integer proc) {		
+		if (proc==-1) return "";
+		String pstring = "<html><body>";
+		
+		for(int source : getProcessSourcesIndexMultiplierMap(proc).keySet()){
+			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
+		}
+		for(int sink : getProcessSinksIndexMultiplierMap(proc).keySet()) {
+			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
+		}
+		for(int mediator : getProcessMediatorIndicies(proc)){
+			pstring = pstring + "<b>Mediator:</b> " + getComponentName(mediator) + "<br>";
+		}
+		
+		return pstring + "</body></html>";
 	}
 	
 //*******************************************PROCESS MODIFICATION METHODS**************************************//
@@ -638,8 +691,6 @@ public class SemSimTermLibrary extends Observable {
 		masterlist.get(index).setRemoved(true);
 		notifyProcessChanged();
 	}
-	
-
 
 //*************************************HELPER METHODS*************************************//
 	private ArrayList<Integer> sortComponentIndiciesbyName(ArrayList<Integer> indicies) {
@@ -693,6 +744,39 @@ public class SemSimTermLibrary extends Observable {
 	private void notifyCompositeEntityChanged() {
 		setChanged();
 		notifyObservers(LibraryEvent.COMPOSITE_ENTITY_CHANGE);
+	}
+	
+	private void notifyTermChanged() {
+		setChanged();
+		notifyObservers(LibraryEvent.TERM_CHANGE);
+	}
+	
+	public int countObjectofType(SemSimTypes type) {
+		int cnt = 0;
+		switch (type) {
+		case COMPOSITE_PHYSICAL_ENTITY:
+			cnt = cpeindexer.size();
+			break;
+		case CUSTOM_PHYSICAL_ENTITY:
+			cnt = custpeindexer.size();
+			break;
+		case PHYSICAL_PROCESS:
+			cnt = procindexer.size();
+			break;
+		case PHYSICAL_PROPERTY:
+			cnt = singppindexer.size();
+			break;
+		case PHYSICAL_PROPERTY_IN_COMPOSITE:
+			cnt = ppccompindexer.size();
+			break;
+		case REFERENCE_PHYSICAL_ENTITY:
+			cnt = rpeindexer.size();
+			break;
+		default:
+			break;
+		
+		}
+		return cnt;
 	}
 	
 //*********************************INDEX CARD DEFINITION************************************//

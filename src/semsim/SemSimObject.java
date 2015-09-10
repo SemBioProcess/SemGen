@@ -8,6 +8,17 @@ public abstract class SemSimObject {
 	private String metadataID = new String("");
 	protected URI referenceuri = URI.create(new String(""));
 	
+	public SemSimObject() {}
+	
+	public SemSimObject(SemSimObject objtocopy) {
+		name = new String(objtocopy.name);
+		if (objtocopy.description != null) {
+			description = new String(objtocopy.description);
+		}
+		metadataID = new String(objtocopy.metadataID);
+		referenceuri = objtocopy.referenceuri;
+	}
+	
 	/**
 	 * Get the component's free-text description
 	 */

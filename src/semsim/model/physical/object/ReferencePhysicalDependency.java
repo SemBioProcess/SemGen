@@ -32,6 +32,16 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 	}
 	
 	@Override
+	public String getOntologyName() {
+		return SemGen.semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
+	}
+	
+	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((ReferencePhysicalDependency)obj).getReferstoURI().compareTo(referenceuri)==0;
 	}

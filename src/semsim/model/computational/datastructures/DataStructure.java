@@ -19,6 +19,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.utilities.SemSimCopy;
 
 /**
  * This class represents a named element in a simulation model that
@@ -36,6 +37,28 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
+	
+	public DataStructure() {}
+	
+	public DataStructure(DataStructure dstocopy) {
+		super(dstocopy);
+		computation = dstocopy.computation;
+		physicalProperty = dstocopy.physicalProperty;
+		physicalcomponent = dstocopy.physicalcomponent;
+		singularterm = dstocopy.singularterm;
+		solutionDomain = dstocopy.solutionDomain;
+		usedToCompute.addAll(dstocopy.usedToCompute);
+		annotations = SemSimCopy.copyAnnotations(dstocopy.annotations);
+		isSolutionDomain = dstocopy.isSolutionDomain;
+		isDiscrete = dstocopy.isDiscrete;
+		isDeclared = dstocopy.isDeclared;
+		isImported = dstocopy.isImported;
+		if (dstocopy.startValue!=null) {
+			startValue = new String(dstocopy.startValue);
+		}
+		unit = dstocopy.unit;
+	}
+	
 	
 	/**
 	 * Append the list of DataStructures that this DataStructure
@@ -135,7 +158,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure is solved as a non-continuous variable */
 	public Boolean isDiscrete(){
-		return isDiscrete;
+		return this.getComputation().getEvents().size()>0;
 	}
 	
 	/** @return Whether the DataStructure is a solution domain for the model */
@@ -172,11 +195,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 
 	public void setDeclared(boolean isDeclared) {
 		this.isDeclared = isDeclared;
-	}
-	
-	/** Set whether this DataStructure is solved as a non-continuous variable or not */
-	public void setDiscrete(boolean isdisc){
-		this.isDiscrete = isdisc;
 	}
 	
 	/** Set whether this DataStructure is a solution domain in the model or not */

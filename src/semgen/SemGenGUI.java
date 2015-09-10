@@ -153,6 +153,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			}
 			if (!workbenchfactory.isValid()) {
 				cancel(true);
+				return null;
 			}
 			workbenchfactory.addFileMenuasBenchObserver(menu.filemenu);
 			return null;
@@ -174,6 +175,10 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				getComponentAt(tabcount - 1).repaint();
 				getComponentAt(tabcount - 1).validate();
 			}
+		}
+		
+		public void onError() {
+			new NewTaskDialog(globalactions);
 		}
 	}
 	

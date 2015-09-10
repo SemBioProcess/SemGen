@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Set;
 
 import semgen.utilities.Workbench;
@@ -93,5 +94,10 @@ public class ExtractorWorkbench extends Workbench {
 		
 		Set<DataStructure> dsset = new HashSet<DataStructure>(dsandcollectmap.keySet());
 		return dsset;
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 }

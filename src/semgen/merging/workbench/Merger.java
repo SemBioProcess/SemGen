@@ -28,17 +28,19 @@ public class Merger {
 	private ModelOverlapMap overlapmap;
 	protected String error;
 	private ArrayList<ResolutionChoice> choicelist;
-	ArrayList<Pair<Double,String>> conversionfactors;
+	private ArrayList<Pair<Double,String>> conversionfactors;
+	private HashMap<String, String> oldnewdsnamemap;
 	
 	public static enum ResolutionChoice {
 		noselection, first, second, ignore; 
 	}
 	
-	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, 
+	public Merger(SemSimModel model1, SemSimModel model2, ModelOverlapMap modelmap, HashMap<String, String> dsnamemap,
 			ArrayList<ResolutionChoice> choices, ArrayList<Pair<Double,String>> conversions) {
 		ssm1clone = model1;
 		ssm2clone = model2;
 		overlapmap = modelmap;
+		oldnewdsnamemap =dsnamemap;
 		choicelist = choices;
 		conversionfactors = conversions;
 	}
@@ -63,14 +65,20 @@ public class Merger {
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
-				discardedds = dsp.getRight();
-				keptds = dsp.getLeft();
+				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				if (newname==null) newname=dsp.getLeft().getName();
+				keptds = ssm1clone.getAssociatedDataStructure(newname);
 				modelfordiscardedds = ssm2clone;
+				
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getRight().getName());
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
-				discardedds = dsp.getLeft();
-				keptds = dsp.getRight();
+				keptds = ssm2clone.getAssociatedDataStructure(dsp.getRight().getName());
 				modelfordiscardedds = ssm1clone;
+				
+				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				if (newname==null) newname=dsp.getLeft().getName();
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(newname);
 			}
 			
 			// If "ignore equivalency" is NOT selected
@@ -127,7 +135,11 @@ public class Merger {
 			mergedmodel.addReferencePhysicalProcess(pp);
 		}
 		
-		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = overlapmap.getEquivalentUnitPairs();
+		//Create map with units from the cloned model
+		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
+		for (UnitOfMeasurement uom : overlapmap.getEquivalentUnitPairs().keySet()) {
+			equnitsmap.put(ssm1clone.getUnit(uom.getName()), ssm2clone.getUnit(overlapmap.getEquivalentUnitPairs().get(uom).getName()));
+		}
 		
 		// Create mirror map where model 2's units are the key set and model 1's are the values
 		Map<UnitOfMeasurement,UnitOfMeasurement> mirrorunitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
@@ -267,14 +279,11 @@ public class Merger {
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
 		
-		// If we need to add in a unit conversion factor
-		String replacementtext = keptds.getName();
-		
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		
 		// if the two terms have different names, or a conversion factor is required
 		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
-			replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			String replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
 			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor.getLeft());
 		}

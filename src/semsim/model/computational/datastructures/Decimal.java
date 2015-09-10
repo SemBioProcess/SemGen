@@ -24,6 +24,10 @@ public class Decimal extends DataStructure{
 		setComputation(computation);
 	}
 	
+	public Decimal(Decimal dectocopy) {
+		super(dectocopy);
+	}
+	
 	public boolean isReal() {
 		return true;
 	}

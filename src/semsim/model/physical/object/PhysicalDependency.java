@@ -10,6 +10,11 @@ import semsim.model.physical.PhysicalModelComponent;
 public class PhysicalDependency extends PhysicalModelComponent{
 	private Computation associatedComputation;
 	
+	public PhysicalDependency() {}
+	
+	public PhysicalDependency(PhysicalDependency pdtocopy) {
+		super(pdtocopy);
+	}
 	
 	public void setAssociatedComputation(Computation associatedComputation) {
 		this.associatedComputation = associatedComputation;

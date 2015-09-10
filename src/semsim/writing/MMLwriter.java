@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -54,7 +55,7 @@ public class MMLwriter extends ModelWriter{
 			} 
 			catch (Xcept e) {
 		    	ErrorLog.addError("Sorry. There was a problem encoding " + semsimmodel.getName() + 
-		    			"\nThe JSim API threw an exception.", true);
+		    			"\nThe JSim API threw an exception.", true, true);
 				e.printStackTrace();
 				return null;
 			}
@@ -157,8 +158,9 @@ public class MMLwriter extends ModelWriter{
 				}
 				
 				// If the codeword is an extern variable
-				if(onedecimal.getComputation()!=null){
-					if(onedecimal.getComputation().getComputationalCode()==null){
+				Computation comp = onedecimal.getComputation();
+				if(comp!=null){
+					if(comp.getComputationalCode()==null){
 						declaration = "extern real";
 					}
 				}
@@ -222,8 +224,6 @@ public class MMLwriter extends ModelWriter{
 
 		// Print the Initial conditions for the state variables
 		output = output.concat("\n\n\t// Boundary conditions\n\n");
-
-		String longestcodeword = "";
 		
 		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
 		Collections.sort(alldsarray, byVarName);
@@ -233,9 +233,6 @@ public class MMLwriter extends ModelWriter{
 				output = output.concat("\twhen (" + onedatastr.getSolutionDomain().getName()
 						+ " = " + onedatastr.getSolutionDomain().getName() + ".min){ " 
 						+ onedatastr.getName() + " = " + onedatastr.getStartValue() + "; }\n");
-			}
-			if (onedatastr.getName().length() > longestcodeword.length()) {
-				longestcodeword = onedatastr.toString();
 			}
 		}
 
@@ -279,7 +276,7 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("-------------------------------\n");
 		output = output.concat("*/\n");
-		System.out.println(output);
+		//System.out.println(output);
 		return output;
 
 	}

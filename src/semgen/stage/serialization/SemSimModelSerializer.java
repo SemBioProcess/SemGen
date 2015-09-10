@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.Gson;
-
-import semgen.visualizations.JsonString;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -21,7 +18,7 @@ public class SemSimModelSerializer {
 	 * @param semSimModel - SemSim model to get dependency network from
 	 * @return Dependencies
 	 */
-	public static ArrayList<DependencyNode> getDependencyNetwork(SemSimModel semSimModel)
+	public static DependencyNode[] getDependencyNetwork(SemSimModel semSimModel)
 	{
 		// Get solution domain declarations
 		Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
@@ -44,9 +41,8 @@ public class SemSimModelSerializer {
 			
 			dependencies.add(new DependencyNode(dataStructure));
 		}
-		
-		// Turn the dependencies into a string
-		return dependencies;
+
+		return dependencies.toArray(new DependencyNode[dependencies.size()]);
 	}
 	
 	/**
@@ -57,19 +53,13 @@ public class SemSimModelSerializer {
 	 * @param semSimModel - SemSim model to get submodel network from
 	 * @return submodel network
 	 */
-	public static ArrayList<SubModelNode> getSubmodelNetwork(SemSimModel semSimModel)
+	public static SubModelNode[] getSubmodelNetwork(SemSimModel semSimModel)
 	{
 		ArrayList<SubModelNode> subModelNetwork = new ArrayList<SubModelNode>();
 		for(Submodel subModel : semSimModel.getSubmodels()){
 			subModelNetwork.add(new SubModelNode(subModel, semSimModel.getName()));
 		}
 		
-		return subModelNetwork;
-	}
-	
-	public static JsonString toJsonString(Object obj) {
-		Gson gson = new Gson();
-		String json = gson.toJson(obj);
-		return new JsonString(json);
+		return subModelNetwork.toArray(new SubModelNode[subModelNetwork.size()]);
 	}
 }

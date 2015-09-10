@@ -55,16 +55,16 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		
 		addKeyListener(this);
 		
-		String name = metadatabench.getFullModelName();
-		if (name==null || name.isEmpty()) name = wb.getCurrentModelName();
-		createBorder(name);
+		//String name = metadatabench.getFullModelName();
+		//if (name==null || name.isEmpty()) name = wb.getCurrentModelName();
+		createBorder();
 		createUI();
 	}
 	
-	private void createBorder(String name) {
+	private void createBorder() {
 		
 		setBorder(BorderFactory.createTitledBorder(
-				BorderFactory.createEtchedBorder(), name, 
+				BorderFactory.createEtchedBorder(), "Curational Metadata", 
 				TitledBorder.LEFT, 
 				TitledBorder.TOP, 
 				SemGenFont.defaultBold(2)
@@ -94,7 +94,6 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATACHANGED) {
 			int index = metadatabench.getFocusIndex();
-			if (index==0) createBorder(metadatabench.getFullModelName());
 			metadataarray.get(index).setIndicator(metadatabench.focusHasValue());
 		}
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATAIMPORTED) {
@@ -140,7 +139,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		
 		public void setIndicator(boolean checkmark) {
 			if (checkmark) indicator.setIcon(SemGenIcon.checkmarkicon);
-			else indicator.setIcon(SemGenIcon.eraseiconsmall);
+			else indicator.setIcon(SemGenIcon.officon);
 		}
 		
 	};

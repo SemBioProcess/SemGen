@@ -28,7 +28,8 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	}
 	/** Copy constructor **/
 	public CompositePhysicalEntity(CompositePhysicalEntity cpetocopy) {
-		this.setArrayListOfEntities(cpetocopy.arrayListOfPhysicalEntities);
+		super(cpetocopy);
+		setArrayListOfEntities(cpetocopy.arrayListOfPhysicalEntities);
 		setArrayListOfStructuralRelations(cpetocopy.arrayListOfStructuralRelations);
 	}
 	

@@ -25,7 +25,7 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -123,21 +123,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	}
 	
 	private String listParticipants() {
-		int proc = drawer.getIndexofModelComponent();
-		if (proc==-1) return "";
-		String pstring = "<html><body>";
-		
-		for(int source : termlib.getProcessSourcesIndexMultiplierMap(proc).keySet()){
-			pstring = pstring + "<b>Source:</b> " + termlib.getComponentName(source) + "<br>";
-		}
-		for(int sink : termlib.getProcessSinksIndexMultiplierMap(proc).keySet()) {
-			pstring = pstring + "<b>Sink:</b> " + termlib.getComponentName(sink) + "<br>";
-		}
-		for(int mediator : termlib.getProcessMediatorIndicies(proc)){
-			pstring = pstring + "<b>Mediator:</b> " + termlib.getComponentName(mediator) + "<br>";
-		}
-		
-		return pstring + "</body></html>";
+		return termlib.listParticipants(drawer.getIndexofModelComponent());
 	}
 	
 	private void setCompositeSelector() {
@@ -179,7 +165,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	}
 	
 	public void onTermUpdate(Object evt) {
-		if (evt==LibraryEvent.SINGULAR_TERM_CHANGE || evt.equals(LibraryEvent.SINGULAR_TERM_CREATED)) {
+		if (evt==LibraryEvent.SINGULAR_TERM_CHANGE || evt.equals(LibraryEvent.SINGULAR_TERM_CREATED) || evt.equals(LibraryEvent.TERM_CHANGE)) {
 			propsel.setComboList(termlib.getSortedAssociatePhysicalPropertyIndicies(), drawer.getIndexofPhysicalProperty());
 			if (esg!=null) {
 				esg.refreshLists();
@@ -188,7 +174,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		else if (evt.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) && esg!=null) {
 			esg.drawBox(true);
 		}
-		else if (pcp!=null && evt.equals(LibraryEvent.PROCESS_CHANGE)) {
+		else if (pcp!=null && evt.equals(LibraryEvent.PROCESS_CHANGE)|| evt.equals(LibraryEvent.TERM_CHANGE)) {
 			pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
 			listParticipants();
 		}

@@ -15,7 +15,7 @@ import semsim.SemSimConstants;
 
 public class WebserviceTester {
 	
-	public static Boolean testBioPortalWebservice(String custommessage){
+	public static Boolean testBioPortalWebservice(){
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {

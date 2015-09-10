@@ -34,12 +34,10 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	protected void makeWorkbench(File file) {	
     	System.out.println("Loading " + file.getName());
     	setStatus("Creating SemSimModel");
-		SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
-		
-		if(!semsimmodel.getErrors().isEmpty()){
-			return;
-		}
-		
+    	LoadSemSimModel loader = new LoadSemSimModel(file, autoannotate, this);
+    	loader.run();
+    	SemSimModel semsimmodel = loader.getLoadedModel();
+
 		AnnotatorWorkbench wb = new AnnotatorWorkbench(file, semsimmodel);
 		wb.initialize();
 		workbenches.add(wb);

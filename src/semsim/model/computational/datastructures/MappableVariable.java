@@ -25,6 +25,15 @@ public class MappableVariable extends Decimal {
 		super(name);
 	}
 	
+	public MappableVariable(MappableVariable mvtocopy) {
+		super(mvtocopy);
+		publicInterfaceValue = new String(mvtocopy.publicInterfaceValue);
+		privateInterfaceValue = new String(mvtocopy.privateInterfaceValue);
+		CellMLinitialValue = new String(mvtocopy.CellMLinitialValue);
+		mappedTo.addAll(mvtocopy.mappedTo);
+		mappedFrom.addAll(mvtocopy.mappedFrom);
+	}
+	
 	/** Adds a mapping between this variable and another
 	 * @param var The MappableVariable to which this one is mapped */
 	public void addVariableMappingTo(MappableVariable var){
@@ -92,6 +101,13 @@ public class MappableVariable extends Decimal {
 	 * In other words, the set of variables that determine this variable's value.*/
 	public Set<MappableVariable> getMappedFrom() {
 		return mappedFrom;
+	}
+	
+	public void setMappedTo(Set<MappableVariable> to) {
+		mappedTo = to;
+	}
+	public void setMappedFrom(Set<MappableVariable> from) {
+		mappedFrom = from;
 	}
 	
 	public boolean isMapped() {

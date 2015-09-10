@@ -2,7 +2,7 @@
  * Drag to merge
  * @param node
  */
-var AllNodes = [];
+
 var DropZoneSideLength = 50;
 function DragToMerge(_node) {
 	AllNodes.push(_node);
@@ -100,4 +100,6 @@ function DragToMerge(_node) {
 		// Add the dragging functionality to the node
 		_node.rootElement.call(nodeDrag);
 	});
-}
+
+};
+

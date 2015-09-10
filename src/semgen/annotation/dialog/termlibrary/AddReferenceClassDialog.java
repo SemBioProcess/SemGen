@@ -11,10 +11,10 @@ import javax.swing.JTextArea;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public class AddReferenceClassDialog extends SemGenDialog implements
-		PropertyChangeListener {
+		PropertyChangeListener  {
 
 	private static final long serialVersionUID = -3830623199860161812L;
 	protected ReferenceClassFinderPanel refclasspanel;
@@ -40,8 +40,10 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
+		this.addComponentListener(refclasspanel);
 		setContentPane(optionPane);
 		showDialog();
+		
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {

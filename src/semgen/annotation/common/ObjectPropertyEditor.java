@@ -1,11 +1,12 @@
 package semgen.annotation.common;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,11 +33,14 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 	
 	public ObjectPropertyEditor(SemSimTermLibrary lib, SemSimRelation rel, ArrayList<Integer> complist) {
 		setOpaque(false);
+		setAlignmentY(Box.TOP_ALIGNMENT);
 		relation = rel;
 		library = lib;
 		components = complist;		
 		JLabel headerlabel = new JLabel(relation.getURIFragment());
 
+		setMaximumSize(new Dimension(9999, 250));
+		
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add reference term");
 
@@ -50,14 +54,15 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 		headerpanel.add(plusbutton);
 		headerpanel.add(minusbutton);
 		
-		listcomponent.getModel().addListDataListener(this);
+		
 		listcomponent.addListSelectionListener(this);
 		SemGenScrollPane scroller = new SemGenScrollPane(listcomponent);
 		scroller.setPreferredSize(new Dimension(150, 70));
 
-		setLayout(new BorderLayout());
-		add(headerpanel, BorderLayout.NORTH);
-		add(scroller, BorderLayout.SOUTH);		
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		add(headerpanel);
+		add(scroller);	
+		add(Box.createVerticalGlue());
 		loadList();
 	}
 
@@ -67,6 +72,7 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 			names[i] = library.getComponentName(components.get(i));
 		}
 		listcomponent.setListData(names);
+		listcomponent.getModel().addListDataListener(this);
 	}
 	
 	protected void removeElement() {
@@ -128,5 +134,10 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		minusbutton.setEnabled(!listcomponent.isSelectionEmpty());
+	}
+	
+	public void addActionListener(ActionListener l) {
+		plusbutton.addActionListener(l);
+		minusbutton.addActionListener(l);
 	}
 }

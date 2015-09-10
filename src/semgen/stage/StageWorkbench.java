@@ -2,21 +2,22 @@ package semgen.stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
+import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
-import semgen.visualizations.JsonString;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.collection.SemSimModel;
 
@@ -50,37 +51,31 @@ public class StageWorkbench extends Workbench {
 	
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public File saveModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public File saveModelAs() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setModelSaved(boolean val) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public String getCurrentModelName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getModelSourceFile() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -107,7 +102,12 @@ public class StageWorkbench extends Workbench {
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
-				SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					continue;
+				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
 				
 				// Tell the view to add a model
@@ -115,12 +115,19 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
-		public void onAddModelByName(String modelName) throws FileNotFoundException {
-			File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
-			SemSimModel semsimmodel = LoadSemSimModel.loadSemSimModelFromFile(file, false);
-			_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
-			
-			_commandSender.addModel(semsimmodel.getName());
+		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
+			if(source.equals(CompositeAnnotationSearch.SourceName)) {
+				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					return;
+				}
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+
+				_commandSender.addModel(semsimmodel.getName());
+			}
 		}
 		
 		public void onTaskClicked(String modelName, String task) {
@@ -139,7 +146,7 @@ public class StageWorkbench extends Workbench {
 					break;
 				case "dependencies":
 					_commandSender.showDependencyNetwork(model.getName(),
-							SemSimModelSerializer.toJsonString(SemSimModelSerializer.getDependencyNetwork(model)));
+							SemSimModelSerializer.getDependencyNetwork(model));
 					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.Path);
@@ -148,25 +155,29 @@ public class StageWorkbench extends Workbench {
 					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
 					break;
 				case "close":
-					_models.remove(model);
+					_models.remove(modelName);
 					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":
-					ArrayList<SubModelNode> submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-					if(submodelNetwork.isEmpty())
+					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+					if(submodelNetwork.length <= 0)
 						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
 					else
-						_commandSender.showSubmodelNetwork(model.getName(), SemSimModelSerializer.toJsonString(submodelNetwork));
+						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;
 			}
 		}
-		
+
 		public void onSearch(String searchString) throws FileNotFoundException {
-			JsonString searchResults = CompositeAnnotationSearch.compositeAnnotationSearch(searchString);
-			_commandSender.search(searchResults);
+			SearchResultSet[] resultSets = {
+					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
+					// PMR results here
+			};
+
+			_commandSender.search(resultSets);
 		}
 		
 		public void onMerge(String modelName1, String modelName2) {
@@ -182,5 +193,10 @@ public class StageWorkbench extends Workbench {
 			
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
 	}
 }

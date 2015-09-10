@@ -6,21 +6,16 @@
 
 package semgen.utilities;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import semgen.menu.FileMenu;
 
-public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable {
+public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  implements Runnable {
 	protected ArrayList<File> sourcefile = new ArrayList<File>();
-	protected boolean cont = true;
-	protected String status;
+
 	protected HashSet<T> workbenches = new HashSet<T>();
-	protected final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	
 	public WorkbenchFactory() {}
 
 	public WorkbenchFactory(String initialstatus) {
@@ -48,32 +43,7 @@ public abstract class WorkbenchFactory<T extends Workbench>  implements Runnable
 		return status;
 	}
 	
-	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-       pcs.addPropertyChangeListener(listener);
-    }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        pcs.removePropertyChangeListener(listener);
-    }
-
-    public void setStatus(String newValue) {
-        String oldValue = status;
-        status = newValue;
-        pcs.firePropertyChange("status", oldValue, newValue);
-    }
-    
-    public boolean isValid() {
-		return cont;
-	}
-	
-	/** 
-	 * Stop signal for while loop
-	 */
-	protected void abort() {
-		cont = false;
-	}
-	
 	public void addFileMenuasBenchObserver(FileMenu menu) {
 		for (T wb : workbenches) {
 			if (wb!=null) {

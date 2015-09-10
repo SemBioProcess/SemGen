@@ -1,5 +1,9 @@
 package semgen.visualizations;
 
+import semgen.stage.serialization.DependencyNode;
+import semgen.stage.serialization.SearchResultSet;
+import semgen.stage.serialization.SubModelNode;
+
 /**
  * Contract for sending commands between java and javascript
  * 
@@ -26,7 +30,7 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param modelName Name of model
 	 * @param jsonDependencies Dependencies
 	 */
-	void showDependencyNetwork(String modelName, JsonString jsonDependencies);
+	void showDependencyNetwork(String modelName, DependencyNode[] jsonDependencies);
 	
 	/**
 	 * Tell the browser to render the submodel dependencies
@@ -34,7 +38,11 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param modelName name of parent model
 	 * @param jsonSubmodelNetwork submodel network
 	 */
-	void showSubmodelNetwork(String modelName, JsonString jsonSubmodelNetwork);
+	void showSubmodelNetwork(String modelName, SubModelNode[] jsonSubmodelNetwork);
 
-	void search(JsonString searchResults);
+	/**
+	 * Sends search results from multiple sources to JavaScript
+	 * @param resultSets Array containing search results from multiple sources
+	 */
+	void search(SearchResultSet[] resultSets);
 }

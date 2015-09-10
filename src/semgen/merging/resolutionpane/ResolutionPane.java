@@ -101,6 +101,11 @@ public class ResolutionPane extends JPanel implements Observer {
 			JOptionPane.showMessageDialog(this, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
 	}
 	
+	public void clear() {
+		resolvelist.clear();
+		removeAll();
+	}
+	
 	class ResPaneMouse extends MouseAdapter {
 		ResolutionPanel mousee;
 		ResPaneMouse(ResolutionPanel target) {

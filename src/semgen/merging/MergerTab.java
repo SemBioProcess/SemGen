@@ -242,6 +242,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	private void minusButtonAction() {
 		workbench.removeSelectedModel();
+		respane.clear();
 		mappingpanelleft.clearPanel();
 		mappingpanelright.clearPanel();
 		primeForMerging();

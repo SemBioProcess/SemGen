@@ -52,6 +52,16 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	}
 	
 	@Override
+	public String getOntologyName() {
+		return SemGen.semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
+	}
+	
+	@Override
 	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE;
 	}

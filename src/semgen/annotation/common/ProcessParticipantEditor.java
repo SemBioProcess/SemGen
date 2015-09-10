@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import semgen.annotation.dialog.CreateCompositeDialog;
@@ -35,6 +37,7 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		library = lib;
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 
@@ -218,5 +221,9 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 			fireTableCellUpdated(row, col);
 		}
 		
+	}
+	
+	public void addTableModelListener(TableModelListener l) {
+		table.getModel().addTableModelListener(l);
 	}
 }

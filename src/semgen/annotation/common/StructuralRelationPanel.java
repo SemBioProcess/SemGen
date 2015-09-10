@@ -17,10 +17,9 @@ public class StructuralRelationPanel extends JPanel{
 
 	public StructuralRelationPanel(){
 		setLayout(new BorderLayout());
-		
+		setMaximumSize(dims);
 		JLabel partOf = new JLabel("part_of");
 		partOf.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
 		partOf.setFont(SemGenFont.defaultItalic());
 		partOf.setPreferredSize(dims);
 		partOf.setMaximumSize(dims);

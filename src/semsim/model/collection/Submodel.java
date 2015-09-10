@@ -1,21 +1,14 @@
 package semsim.model.collection;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
-
 import semgen.SemGen;
 import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.Importable;
-import semsim.model.SemSimComponent;
-import semsim.model.computational.datastructures.DataStructure;
 
-public class Submodel extends SemSimComponent implements Cloneable, Importable, SemSimCollection, ReferenceTerm {
+public class Submodel extends SemSimCollection implements Importable {
 	
-	private Set<DataStructure> associatedDataStructures = new HashSet<DataStructure>();
-	private Set<Submodel> submodels = new HashSet<Submodel>();
 	private boolean isImported = false;
 	private ReferenceTerm singularterm;
 	private String hrefValue;
@@ -28,45 +21,22 @@ public class Submodel extends SemSimComponent implements Cloneable, Importable, 
 		setName(name);
 	}
 	
-	public DataStructure addDataStructure(DataStructure ds){
-		associatedDataStructures.add(ds);
-		return ds;
-	}
-	
-	public void addSubmodel(Submodel submodel){
-		submodels.add(submodel);
-	}
-	
-	public DataStructure getAssociatedDataStructure(String name){
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.getName().equals(name)) return ds;
+	public Submodel(Submodel ssmtocopy) {
+		super(ssmtocopy);
+		isImported = ssmtocopy.isImported;
+		functional = ssmtocopy.functional;
+		parentImport = ssmtocopy.parentImport;
+		singularterm = ssmtocopy.singularterm;
+		if (ssmtocopy.hrefValue!=null) {
+			hrefValue = new String(ssmtocopy.hrefValue);
 		}
-		return null;
-	}
-	
-	public Set<DataStructure> getAssociatedDataStructures() {
-		return associatedDataStructures;
-	}
-	
-	public void setAssociatedDataStructures(Set<DataStructure> associatedDataStructures) {
-		this.associatedDataStructures = associatedDataStructures;
-	}
+		if (ssmtocopy.referencedName!=null) {
+			referencedName = new String(ssmtocopy.referencedName);
+		}
+		if (ssmtocopy.localName!=null) {
+			localName = new String(ssmtocopy.localName);
+		}
 
-	public void setSubmodels(Set<Submodel> submodels) {
-		this.submodels.clear();
-		this.submodels.addAll(submodels);
-	}
-
-	public Set<Submodel> getSubmodels() {
-		return submodels;
-	}
-	
-	public void removeSubmodel(Submodel sub){
-			submodels.remove(sub);
-	}
-	
-	public Submodel clone() throws CloneNotSupportedException {
-        return (Submodel) super.clone();
 	}
 	
 	// For Importable interface

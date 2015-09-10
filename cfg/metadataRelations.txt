@@ -1,6 +1,0 @@
-ReferencePublicationAbstractText; 
-AnnotatorContactInfo; 
-PubMedIDofReferencePublication; 
-ReferencePublicationCitation; 
-ModelDescription; 
-occursIn; 

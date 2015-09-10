@@ -22,16 +22,19 @@ import org.semanticweb.owlapi.model.OWLException;
 import JSim.util.Xcept;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
+import semsim.model.computational.Event;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.utilities.SemSimUtil;
 
 public class MMLreader extends ModelReader {
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
-	private Hashtable<String,String> discretevarsandmathml = new Hashtable<String,String>();
+	private Hashtable<String,Event> discretevarsandevents = new Hashtable<String,Event>();
 	private Hashtable<String,String[]> discretevarsandeventtriggerinputs = new Hashtable<String,String[]>();
 	private Set<String> realStatenames = new HashSet<String>();
 	private Namespace mathmlns = Namespace.getNamespace("", "http://www.w3.org/1998/Math/MathML");
@@ -78,38 +81,7 @@ public class MMLreader extends ModelReader {
 			}
 		}
 
-		// Get the eventConstraints
-		Iterator eventiterator = doc.getRootElement().getChild("model").getChild("eventList").getChildren("event").iterator();
-		while (eventiterator.hasNext()) {
-			Element oneevent = (Element) eventiterator.next();
-			String triggertext = "event("+ oneevent.getChild("trigger").getChild("debug").getText() + ")";
-
-			// Get the inputs for the trigger equations
-			Element trigger = oneevent.getChild("trigger");
-			List<Element> triggerchildren = trigger.getChildren();
-			Iterator triggerchildreniterator = triggerchildren.iterator();
-			String[] inputsfortrigger = new String[] {};
-
-			while (triggerchildreniterator.hasNext()) {
-				Element triggerchild = (Element) triggerchildreniterator.next();
-				if (triggerchild.getName().equals("math")) {
-					inputsfortrigger = getIdentifiersInMathMLEquation(trigger.getChild("math", triggerchild.getNamespace()));
-				}
-			}
-
-			List stateactions = oneevent.getChild("actionList").getChildren("action");
-			Iterator stateactionsiterator = stateactions.iterator();
-			while (stateactionsiterator.hasNext()) {
-				Element action = (Element) stateactionsiterator.next();
-				String varstring = action.getAttributeValue("variableID");
-				String actioneq = varstring + " = " + action.getChild("expression").getChild("debug").getText();
-				String fulltext = triggertext + "{ " + actioneq + "; }";
-				discretevarsandconstraints.put(varstring, fulltext);
-				discretevarsandmathml.put(varstring,xmloutputter.outputString(action.getChild("expression").getChild("math",mathmlns)));
-				discretevarsandeventtriggerinputs.put(varstring, inputsfortrigger);
-				realStatenames.add(varstring);
-			}
-		}
+		
 
 		// Get the JSim "relations" constraints
 		Iterator relit = doc.getRootElement().getChild("model").getChild("relationList").getChildren("relation").iterator();
@@ -133,10 +105,11 @@ public class MMLreader extends ModelReader {
 
 				// Store the data type attribute
 				String vardatatype = varchild.getAttributeValue("dataType");
-				if (vardatatype.equals("real"))  ds = semsimmodel.addDataStructure(new Decimal(codeword));
-				else if (vardatatype.equals("int")) ds = semsimmodel.addDataStructure(new SemSimInteger(codeword));
-				else if(vardatatype.equals("choice")) ds = semsimmodel.addDataStructure(new MMLchoice(codeword));
+				if (vardatatype.equals("real"))  ds = new Decimal(codeword);
+				else if (vardatatype.equals("int")) ds = new SemSimInteger(codeword);
+				else if(vardatatype.equals("choice")) ds = new MMLchoice(codeword);
 				
+				semsimmodel.addDataStructure(ds);
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				
@@ -194,44 +167,27 @@ public class MMLreader extends ModelReader {
 					}
 				}
 				else ds.setIsSolutionDomain(false);
-
-				ds.setDiscrete(false);
 				
-				// Store whether the variable is discrete 
-				if (varchild.getAttributeValue("isState") != null) {
-					if(varchild.getAttributeValue("isState").equals("true")) ds.setDiscrete(true);
-				} 
-				
-				// find the assignment constraint for the variable & start with implicit, then event constraints
+				// find the assignment constraint for the variable
 				boolean stop = false;
 				Computation computation = ds.getComputation();
 				
-				if (realStatenames.contains(codeword)) {
-					computation.setComputationalCode(discretevarsandconstraints.get(codeword));
-					computation.setMathML(discretevarsandmathml.get(codeword));
-
-					// get the initial condition for the discrete realState variable (in some stateTool)
-					ds.setStartValue(getIC(getToolToSolveCodeword(codeword), codeword));
-				} 
-				
-				// Get the math assignments for all other types of variables
-				else {
-					List<Element> tools = doc.getRootElement().getChild("toolList").getChildren("exprTool");
-					Iterator exprit = tools.iterator();
-					while (exprit.hasNext() && !stop) {
-						Element expr = (Element) exprit.next();
-						Iterator solvedvarsit = expr.getChild("solvedVariableList").getChildren("variableUsage").iterator();
-						while(solvedvarsit.hasNext() && !stop){
-							Element solvedvar = (Element) solvedvarsit.next();
-							if(solvedvar.getAttributeValue("id").equals(codeword)){ //&& ds.isDeclared()){
-								
-								String mmlcode = expr.getChild("expression").getChildText("debug");
-								String mathmlassignment = xmloutputter.outputString(expr.getChild("expression").getChild("math",mathmlns));
-								
-								computation.setComputationalCode(codeword + " = " + mmlcode);
-								computation.setMathML(mathmlassignment);
-								stop = true;
-							}
+				// Get the math assignments
+				List<Element> tools = doc.getRootElement().getChild("toolList").getChildren("exprTool");
+				Iterator exprit = tools.iterator();
+				while (exprit.hasNext() && !stop) {
+					Element expr = (Element) exprit.next();
+					Iterator solvedvarsit = expr.getChild("solvedVariableList").getChildren("variableUsage").iterator();
+					while(solvedvarsit.hasNext() && !stop){
+						Element solvedvar = (Element) solvedvarsit.next();
+						if(solvedvar.getAttributeValue("id").equals(codeword)){ //&& ds.isDeclared()){
+							
+							String mmlcode = expr.getChild("expression").getChildText("debug");
+							String mathmlassignment = xmloutputter.outputString(expr.getChild("expression").getChild("math",mathmlns));
+							
+							computation.setComputationalCode(codeword + " = " + mmlcode);
+							computation.setMathML(mathmlassignment);
+							stop = true;
 						}
 					}
 				}
@@ -297,54 +253,115 @@ public class MMLreader extends ModelReader {
 			} // End of if statement that leaves out .ct vars
 		} // End of variable iterator
 		
+		
+		// Get the eventConstraints
+		Iterator eventiterator = doc.getRootElement().getChild("model").getChild("eventList").getChildren("event").iterator();
+		while (eventiterator.hasNext()) {
+			
+			Event ssevent = new Event();
+			Element oneevent = (Element) eventiterator.next();
+			String eventid = oneevent.getAttributeValue("id");
+			ssevent.setName(eventid);
+
+			Element trigger = oneevent.getChild("trigger");
+			List<Element> triggerchildren = trigger.getChildren();
+			Iterator triggerchildreniterator = triggerchildren.iterator();
+			String triggertext = "event("+ oneevent.getChild("trigger").getChild("debug").getText() + ")";
+
+			while (triggerchildreniterator.hasNext()) {
+				Element triggerchild = (Element) triggerchildreniterator.next();
+				
+				if (triggerchild.getName().equals("math")) {
+					Element triggermathel = trigger.getChild("math", mathmlns);
+					ssevent.setTriggerMathML(xmloutputter.outputString(triggermathel));
+				}
+			}
+
+			List stateactions = oneevent.getChild("actionList").getChildren("action");
+			Iterator stateactionsiterator = stateactions.iterator();
+			
+			while (stateactionsiterator.hasNext()) {
+				Element action = (Element) stateactionsiterator.next();
+				EventAssignment ssea = ssevent.new EventAssignment();
+				String assignmentmathml = xmloutputter.outputString(action.getChild("expression").getChild("math",mathmlns));
+				ssea.setMathML(assignmentmathml);
+				String varstring = action.getAttributeValue("variableID");
+				DataStructure outputds = semsimmodel.getAssociatedDataStructure(varstring);
+				ssea.setOutput(outputds);
+				outputds.getComputation().addEvent(ssevent);
+				
+				ssevent.addEventAssignment(ssea);
+				
+				String actioneq = varstring + " = " + action.getChild("expression").getChild("debug").getText();
+				String fulltext = triggertext + "{ " + actioneq + "; }";
+				discretevarsandconstraints.put(varstring, fulltext);
+				discretevarsandevents.put(varstring, ssevent);
+				realStatenames.add(varstring);
+
+				// get the initial condition for the discrete realState variable (in some stateTool)
+				outputds.setStartValue(getIC(getToolToSolveCodeword(outputds.getName()), outputds.getName()));
+				
+				// For now, store the MML code that triggers the event and makes the event assignment
+				// Need to fix this hack once we can translate MathML to MML
+				outputds.getComputation().setComputationalCode(fulltext);
+				 
+			}
+			
+			semsimmodel.addEvent(ssevent);
+		}
+
+		
 		// Set the custom units
 		setCustomUnits(srcfile);
 		
-		// find the hasInput properties for the computations and hasRolePlayer properties for the dependencies
-		for (Element tool : toolset) {
-			Iterator solvedvarit = tool.getChild("solvedVariableList").getChildren("variableUsage").iterator();
-			List invarchildren = tool.getChild("requiredVariableList").getChildren("variableUsage");
-			while(solvedvarit.hasNext()){
-				
-				Iterator invariterator = tool.getChild("requiredVariableList").getChildren("variableUsage").iterator();
-				Element solvedvar = (Element) solvedvarit.next();
-				String name = solvedvar.getAttributeValue("variableID");
-				
-				if(semsimmodel.containsDataStructure(name) && solvedvar.getAttributeValue("status").equals("CURR")){
-					DataStructure solvedds = semsimmodel.getAssociatedDataStructure(name);
-					if(!solvedds.isSolutionDomain()){
-						invariterator = invarchildren.iterator();
-	
-						// Get all the input variables
-						while (invariterator.hasNext()) {
-							Element invarchild = (Element) invariterator.next();
-							String inputname = invarchild.getAttributeValue("variableID");
-								
-							// All data structures, including the undeclared ones, should have been entered by now
-								
-							// Establish input relationships
-							if(semsimmodel.containsDataStructure(inputname)){
-								// Is ok if data structures are dependent on themselves
-								// Do not include the input relationship unless the input variable is actually in the MathML
-								// for computing the output variable
-								DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputname);
-								
-								// As long as we're not looking at an ODE tool and the input isn't the derivative of the solved var, include input
-								if(tool.getName().equals("ODETool")){
-									if(inputds.getName().startsWith(solvedds.getName() + ":")){
-										solvedds.getComputation().addInput(inputds);
-									}
-								}
-								else{
-									solvedds.getComputation().addInput(inputds);
-								}
-							}
-							else System.out.println("Cannot set input: model doesn't have " + inputname);
-						}	
-					}
-				}
-			}
-		} 
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures())
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, null);
+		
+//		// find the hasInput properties for the computations and hasRolePlayer properties for the dependencies
+//		for (Element tool : toolset) {
+//			Iterator solvedvarit = tool.getChild("solvedVariableList").getChildren("variableUsage").iterator();
+//			List invarchildren = tool.getChild("requiredVariableList").getChildren("variableUsage");
+//			while(solvedvarit.hasNext()){
+//				
+//				Iterator invariterator = tool.getChild("requiredVariableList").getChildren("variableUsage").iterator();
+//				Element solvedvar = (Element) solvedvarit.next();
+//				String name = solvedvar.getAttributeValue("variableID");
+//				
+//				if(semsimmodel.containsDataStructure(name) && solvedvar.getAttributeValue("status").equals("CURR")){
+//					DataStructure solvedds = semsimmodel.getAssociatedDataStructure(name);
+//					if(!solvedds.isSolutionDomain()){
+//						invariterator = invarchildren.iterator();
+//	
+//						// Get all the input variables
+//						while (invariterator.hasNext()) {
+//							Element invarchild = (Element) invariterator.next();
+//							String inputname = invarchild.getAttributeValue("variableID");
+//								
+//							// All data structures, including the undeclared ones, should have been entered by now
+//								
+//							// Establish input relationships
+//							if(semsimmodel.containsDataStructure(inputname)){
+//								// Is ok if data structures are dependent on themselves
+//								// Do not include the input relationship unless the input variable is actually in the MathML
+//								// for computing the output variable
+//								DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputname);
+//								
+//								// As long as we're not looking at an ODE tool and the input isn't the derivative of the solved var, include input
+//								if(tool.getName().equals("ODETool")){
+//									if(inputds.getName().startsWith(solvedds.getName() + ":")){
+//										solvedds.getComputation().addInput(inputds);
+//									}
+//								}
+//								else{
+//									solvedds.getComputation().addInput(inputds);
+//								}
+//							}
+//							else System.out.println("Cannot set input: model doesn't have " + inputname);
+//						}	
+//					}
+//				}
+//			}
+//		} 
 		
 		// Set hasInput/inputFor relationships for discrete variables and the data structures required for triggering them
 		for(String dsx : discretevarsandeventtriggerinputs.keySet()){
@@ -456,24 +473,5 @@ public class MMLreader extends ModelReader {
 			}
 		}
 		return null;
-	}
-	
-	private String[] getIdentifiersInMathMLEquation(Element rootelement) {
-		Set<String> inputs = new HashSet<String>();
-		
-		@SuppressWarnings("rawtypes")
-		Iterator descendants = rootelement.getDescendants();
-
-		while (descendants.hasNext()) {
-			Object descendant = descendants.next();
-			if (descendant instanceof Element) {
-				Element el = (Element) descendant;
-				if (el.getName().equals("ci") && !inputs.contains(el.getValue())) {
-					inputs.add(el.getValue());
-				}
-			}
-		}
-		String[] inputsarray = inputs.toArray(new String[] {});
-		return inputsarray;
 	}
 }
