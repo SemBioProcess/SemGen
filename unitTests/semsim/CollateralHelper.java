@@ -43,5 +43,6 @@ public class CollateralHelper {
 		public static final String AlbrechtColegroveFriel2002_CellML_Clean = "albrecht_colegrove_friel_2002_Clean.cellml";
 		public static final String AlbrechtColegroveFriel2002_CellML_Original = "albrecht_colegrove_friel_2002_Original.cellml";
 		public static final String Cardiovascularmodel_OWL = "CardiovascularDynamics.owl";
+		public static final String Pandit_Clark_Giles_2001_Endocardial_Cell = "pandit_clark_giles_demir_2001_endocardial_cell.cellml";
 	}
 }

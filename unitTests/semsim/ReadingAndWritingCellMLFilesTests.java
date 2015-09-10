@@ -68,7 +68,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	}
 
 	@Test
-	 public void readFromFile_readThenWriteValidFile_VerifyFileContents() throws Exception {
+	 public void readFromFile_readThenWriteCleanAndValidFile_VerifyFileContents() throws Exception {
 		// Arrange
 		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
@@ -107,9 +107,9 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	}
 
 	@Test
-	public void readFromFile_readThenWriteOriginalFile_VerifyFileContents() throws Exception {
+	public void readFromFile_readThenWriteAnOriginalAndValidFile_VerifyFileContents() throws Exception {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML_Clean);
+		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.Pandit_Clark_Giles_2001_Endocardial_Cell);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 
 		// Act
