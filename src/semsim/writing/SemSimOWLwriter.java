@@ -106,13 +106,11 @@ public class SemSimOWLwriter extends ModelWriter {
 	private void getLocalDataStuctures() throws OWLException {
 		localdss.addAll(semsimmodel.getAssociatedDataStructures());
 		
-		for(Submodel sub : semsimmodel.getSubmodels()){
-			if(sub.isFunctional()){
-				FunctionalSubmodel fsub = (FunctionalSubmodel)sub;
-				if(fsub.isImported() && fsub.getParentImport()!=null){
-					localdss.removeAll(((FunctionalSubmodel)sub).getAssociatedDataStructures());
-				}
-			}
+		for(FunctionalSubmodel sub : semsimmodel.getFunctionalSubmodels()){
+			
+			if(sub.isImported() && sub.getParentImport()!=null){
+				localdss.removeAll(sub.getAssociatedDataStructures());
+			}			
 		}
 	}
 	

@@ -110,4 +110,9 @@ public class FunctionalSubmodel extends Submodel {
 			}
 		}
 	}
+	
+	@Override
+	public boolean isFunctional(){
+		return true;
+	}
 }

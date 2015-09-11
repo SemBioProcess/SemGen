@@ -368,6 +368,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				if (tempbox.isSelected()) {
 					
 					Submodel submodel = (Submodel)tempbox.smc;
+					
 					workbench.getExtraction().addSubmodelToExtract(submodel, true);
 					
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
@@ -421,7 +422,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				for (DataStructure oneinput : tempdsset) {
 					
 					if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)) {
-						workbench.getExtraction().addDataStructureToExtraction(oneinput, true);
+						workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
 					} 
 					else if (workbench.getExtraction().getDataStructuresToExtract().get(oneinput)==false) {
 						System.out.println("Already added " + oneinput.getName() + ": leaving as is");

@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.Set;
 
 import semsim.annotation.Annotation;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
@@ -208,10 +210,16 @@ public class Extraction {
 		SemSimModel extractedmodel = new SemSimModel();
 		
 		// Copy over all the model-level information
-		for(Annotation modann : getSourceModel().getAnnotations()){
-			extractedmodel.addAnnotation(modann.clone());
+//		for(Annotation modann : getSourceModel().getAnnotations()){
+//			extractedmodel.addAnnotation(new Annotation(modann));
+//		}
+		
+		// Copy over units
+		for(UnitOfMeasurement uom : getSourceModel().getUnits()){
+			extractedmodel.addUnit(new UnitOfMeasurement(uom));
 		}
 		
+		// Copy in solution domains
 		for(DataStructure soldom : getSourceModel().getSolutionDomains()){
 			extractedmodel.addDataStructure(soldom.clone());
 		}
@@ -267,7 +275,8 @@ public class Extraction {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
 			
-			Submodel newsub = new Submodel(sub);
+			Submodel newsub = sub.isFunctional() ? new FunctionalSubmodel((FunctionalSubmodel)sub) : new Submodel(sub);
+			
 			extractedmodel.addSubmodel(newsub);
 			
 			// If we're preserving the submodel's submodels

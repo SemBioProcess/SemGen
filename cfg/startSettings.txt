@@ -1,6 +1,6 @@
-startDirectory; /Users/max_neal/_UW/SemGenGrant/SBMLmodels/randomlySelected
+startDirectory; /Users/max_neal/Dropbox/Semantic Project/Annotated CellML models/pandit_clark_giles_demir_2001
 maximize; false
-screensize; 947x628
+screensize; 1386x794
 screenpos; 0x22
 autoAnnotate; true
 showImports; true

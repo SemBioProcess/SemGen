@@ -29,6 +29,7 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.SemSimObject;
 import semsim.annotation.ReferenceTerm;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 
@@ -116,6 +117,8 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			
 			if(ssc instanceof PhysicalModelComponent)
 				checkbox = new ExtractorJCheckBox(checkboxtext, (PhysicalModelComponent)ssc, (Set<DataStructure>) termandcdwdsmap.get(ssc));
+			else if(ssc instanceof Submodel)
+				checkbox = new ExtractorJCheckBox(checkboxtext, (Submodel)ssc, (Set<DataStructure>) termandcdwdsmap.get(ssc));
 			else
 				checkbox = new ExtractorJCheckBox(checkboxtext, (Set<DataStructure>) termandcdwdsmap.get(ssc));
 			
