@@ -1,6 +1,6 @@
 startDirectory; /Users/max_neal/_UW/SemGenGrant/SBMLmodels/randomlySelected
 maximize; false
-screensize; 1386x794
+screensize; 947x628
 screenpos; 0x22
 autoAnnotate; true
 showImports; true

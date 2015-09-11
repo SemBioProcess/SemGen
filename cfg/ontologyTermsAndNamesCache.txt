@@ -311,10 +311,7 @@ http://identifiers.org/obo.go/GO:0004743; pyruvate kinase activity
 urn:miriam:kegg.reaction:R01049; ATP:D-ribose-5-phosphate diphosphotransferase
 http://identifiers.org/kegg.compound/C00003; NAD+
 http://identifiers.org/kegg.compound/C00008; ADP
-<<<<<<< HEAD
-=======
 http://identifiers.org/go/GO:0042176; regulation of protein catabolic process
->>>>>>> refs/heads/master
 http://purl.org/sig/ont/fma/fma14067; Cardiac myocyte
 http://identifiers.org/kegg.compound/C00009; Orthophosphate
 urn:miriam:kegg.reaction:R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
@@ -332,17 +329,11 @@ http://identifiers.org/obo.go/GO:0009070; serine family amino acid biosynthetic 
 http://identifiers.org/kegg.compound/C00236; 3-Phospho-D-glyceroyl phosphate
 http://purl.org/sig/ont/fma/fma66836; Portion of cytosol
 urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
-<<<<<<< HEAD
-=======
 http://identifiers.org/obo.chebi/CHEBI:29108; calcium(2+)
->>>>>>> refs/heads/master
 http://bhi.washington.edu/OPB#OPB_01581; Nernst potential
 http://identifiers.org/kegg.compound/C00118; D-Glyceraldehyde 3-phosphate
-<<<<<<< HEAD
-=======
 http://identifiers.org/go/GO:0004708; MAP kinase kinase activity
 http://identifiers.org/obo.go/GO:0007205; protein kinase C-activating G-protein coupled receptor signaling pathway
->>>>>>> refs/heads/master
 urn:miriam:kegg.compound:C00197; 3-Phospho-D-glycerate
 http://identifiers.org/obo.go/GO:0006114; glycerol biosynthetic process
 urn:miriam:kegg.compound:C00199; D-Ribulose 5-phosphate
