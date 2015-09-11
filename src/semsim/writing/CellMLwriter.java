@@ -62,14 +62,26 @@ public class CellMLwriter extends ModelWriter {
 	
 	public String writeToString(){
 		Document doc = null;
+		XMLOutputter outputter = new XMLOutputter();
+		outputter.setFormat(Format.getPrettyFormat());
+		
 		try{	
 			mainNS = CellMLconstants.cellml1_1NS;
 			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
+			// Check for events, if present write out error msg
+			if(semsimmodel.getEvents().size()>0){
+				Element eventerror = new Element("error");
+				eventerror.setAttribute("msg", "SemSim-to-CellML translation not supported for models with discrete events.");
+				return outputter.outputString(new Document(eventerror));
+			}
+						
 			createRDFBlock();
 			createRootElement();
 			
 			doc = new Document(root);
+			
+			
 			
 			declareImports();
 			
@@ -96,8 +108,6 @@ public class CellMLwriter extends ModelWriter {
 			e.printStackTrace();
 		}
 		
-		XMLOutputter outputter = new XMLOutputter();
-		outputter.setFormat(Format.getPrettyFormat());
 		return outputter.outputString(doc);
 	}
 
@@ -366,7 +376,7 @@ public class CellMLwriter extends ModelWriter {
 				String privateintval = null;
 				
 				// If the Data Structure is a CellML-type variable
-				if(ds.isMapped()){
+				if(ds instanceof MappableVariable){
 					MappableVariable cellmlvar = (MappableVariable)ds;
 					initialval = cellmlvar.getCellMLinitialValue();
 					publicintval = cellmlvar.getPublicInterfaceValue();

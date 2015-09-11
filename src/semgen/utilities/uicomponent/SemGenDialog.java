@@ -4,6 +4,8 @@
 
 package semgen.utilities.uicomponent;
 
+import java.awt.Frame;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -15,6 +17,12 @@ public abstract class SemGenDialog extends JDialog{
 	
 	public SemGenDialog(String title) {
 		super(location, title, true);
+		
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	}
+	
+	public SemGenDialog(String title, Frame parent) {
+		super(parent, title, true);
 		
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}

@@ -10,7 +10,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
-import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
@@ -23,10 +23,33 @@ import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
-public class LoadSemSimModel {
+public class LoadSemSimModel extends SemGenJob {
+	private File file;
+	private boolean autoannotate = false;
+	private SemSimModel semsimmodel;
 	
-	public static SemSimModel loadSemSimModelFromFile(File file, boolean autoannotate) {
-		SemSimModel semsimmodel = null;
+	public LoadSemSimModel(File file) {
+		this.file = file;
+	}
+	
+	public LoadSemSimModel(File file, boolean autoannotate) {
+		this.file = file;
+		this.autoannotate = autoannotate;
+	}
+	
+	public LoadSemSimModel(File file, SemGenJob sga) {
+		super(sga);
+		this.file = file;
+		
+	}
+	
+	public LoadSemSimModel(File file, boolean autoannotate, SemGenJob sga) {
+		super(sga);
+		this.file = file;
+		this.autoannotate = autoannotate;
+	}
+	
+	private void loadSemSimModelFromFile() {
 		int modeltype = ModelClassifier.classify(file);
 		try {
 			switch (modeltype){
@@ -39,12 +62,12 @@ public class LoadSemSimModel {
 					
 			case ModelClassifier.SBML_MODEL:
 				semsimmodel = new SBMLreader(file).readFromFile();			
-				nameOntologyTerms(semsimmodel);
+				nameOntologyTerms();
 				break;
 				
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
-				nameOntologyTerms(semsimmodel);
+				nameOntologyTerms();
 				break;
 				
 			case ModelClassifier.SEMSIM_MODEL:
@@ -52,36 +75,35 @@ public class LoadSemSimModel {
 				break;
 				
 			default:
-				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), false);
-				return null;
+				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), true, false);
+				return;
 			}
+			}
+		catch(Exception e){
+			e.printStackTrace();
 		}
-		catch(Exception e){e.printStackTrace();}
 		
 		if(semsimmodel!=null){
 			if(!semsimmodel.getErrors().isEmpty()){
 				for (String e : semsimmodel.getErrors()) {
-					ErrorLog.addError(e, true);
+					ErrorLog.addError(e,true, true);
 				}
-				return semsimmodel;
+				return;
 			}
 			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else {
-			ErrorLog.addError(file.getName() + " was an invalid model.", false);
+			ErrorLog.addError(file.getName() + " was an invalid model.", true, false);
 		}
-
-		return semsimmodel;
 	}
 	
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
 		return new SemSimOWLreader(file).readFromFile();
 	}
 
-	
-	private static SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
+	private SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
 		Document doc = new MMLParser().readFromFile(file);
 		if (ErrorLog.hasErrors()) return null;
 		
@@ -89,21 +111,31 @@ public class LoadSemSimModel {
 		return xmml2.readFromFile();
 	}
 	
-	private static void nameOntologyTerms(SemSimModel semsimmodel){
+	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
 
-			//SemGenProgressBar progframe = new SemGenProgressBar("Annotating with web services...",true);
-			boolean online = WebserviceTester.testBioPortalWebservice("Annotation via web services failed.");
+			setStatus("Annotating with web services...");
+			boolean online = WebserviceTester.testBioPortalWebservice();
 			
 			if(!online){
-				//progframe.dispose();
-				SemGenError.showWebConnectionError("BioPortal search service");
+				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
 			}
-			else{
 				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-				//progframe.dispose();
 			}
 		}
+
+	@Override
+	public void run() {
+		loadSemSimModelFromFile();
+		if (semsimmodel == null || ErrorLog.errorsAreFatal()) {
+			abort();
+			return;
+		}
+		
+	}
+	
+	public SemSimModel getLoadedModel() {
+		return semsimmodel;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -60,7 +61,9 @@ public class MergerWorkbench extends Workbench {
 	public void initialize() {}
 	
 	private SemSimModel loadModel(File file, boolean autoannotate) {
-		SemSimModel modeltoload = LoadSemSimModel.loadSemSimModelFromFile(file, autoannotate);
+		LoadSemSimModel loader = new LoadSemSimModel(file, autoannotate);
+		loader.run();
+		SemSimModel modeltoload = loader.getLoadedModel();
 		return modeltoload;
 	}
 	public int getNumberofStagedModels() {
@@ -322,5 +325,11 @@ public class MergerWorkbench extends Workbench {
 			namelist.add(desc);
 		}
 		return namelist;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

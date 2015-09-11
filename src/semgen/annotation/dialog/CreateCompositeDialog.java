@@ -1,6 +1,5 @@
 package semgen.annotation.dialog;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -13,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import semgen.SemGenSettings;
 import semgen.annotation.common.EntitySelectorGroup;
@@ -24,7 +24,6 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 	private static final long serialVersionUID = 1L;
 	protected JButton createbtn = new JButton("Create");
 	protected JButton cancelbtn = new JButton("Cancel");
-	protected JLabel msgbox = new JLabel("Select a Physical Entity");
 	private CompositeBuilder esg;
 	private Integer composite = -1;
 	
@@ -43,24 +42,27 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 		header.setAlignmentY(TOP_ALIGNMENT);
 		header.setFont(SemGenFont.Bold("Arial", 3));
 		header.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 0));
-		mainpane.add(header, BorderLayout.NORTH);
-		mainpane.add(esg, BorderLayout.CENTER);
+		mainpane.add(header);
+		mainpane.add(esg);
 		mainpane.setAlignmentX(LEFT_ALIGNMENT);
 		esg.addComponentListener(this);
+		esg.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		createbtn.setEnabled(false);
 		createbtn.addActionListener(this);
 		cancelbtn.addActionListener(this);
 		
 		JPanel confirmpan = new JPanel();
 		
-		confirmpan.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 0));
+		confirmpan.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+		confirmpan.setOpaque(false);
 		confirmpan.setLayout(new BoxLayout(confirmpan, BoxLayout.X_AXIS));
-		confirmpan.add(msgbox);
+		confirmpan.add(Box.createGlue());
 		confirmpan.add(createbtn);
 		confirmpan.add(cancelbtn);
 		confirmpan.setAlignmentX(LEFT_ALIGNMENT);
 		
-		mainpane.add(confirmpan, BorderLayout.SOUTH);
+		mainpane.add(new JSeparator());
+		mainpane.add(confirmpan);
 		mainpane.add(Box.createVerticalGlue());
 		
 		this.setContentPane(mainpane);
@@ -85,12 +87,8 @@ public class CreateCompositeDialog extends SemGenDialog implements ActionListene
 			ArrayList<Integer> selections = pollSelectors();
 			if (selections.contains(-1)) {
 				createbtn.setEnabled(false);
-				msgbox.setText("Composite components cannot be unspecified");
 			}
-			else {
-				createbtn.setEnabled(true);
-				msgbox.setText("");
-			}
+			else createbtn.setEnabled(true);
 		}
 		
 		protected int createComposite() {

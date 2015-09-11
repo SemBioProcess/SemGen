@@ -209,18 +209,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public boolean importModelAnnotations(File file, Boolean[] options) {
+	public AnnotationImporter importModelAnnotations(File file, Boolean[] options) {
 		validateModelComposites();
-		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
-		if (!copier.loadSourceModel(file)) {
-			return false;
-		}
-		//Notify observers if changes were made.
-		if (copier.copyModelAnnotations(options)) {
-			updateAllListeners();
-		}
+		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel, file, options);
 	
-		return true;
+		return copier;
 	}
 		
 	public void compositeChanged() {
@@ -304,7 +297,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(WBEvent.IMPORT_FREETEXT);
 	}
 	
-	private void updateAllListeners() {
+	public void updateAllListeners() {
 		setChanged();
 		notifyObservers(ModelEdit.CODEWORD_CHANGED);
 		setChanged();
@@ -326,6 +319,4 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			this.setModelSaved(false);
 		}
 	}
-	
-
 }

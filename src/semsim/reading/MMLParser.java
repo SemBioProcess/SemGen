@@ -35,7 +35,7 @@ public class MMLParser {
 	    if (fname.endsWith(".cellml")) srcType = ASModel.TEXT_CELLML;
 	    if(fname.endsWith(".xml.origin")) srcType = ASModel.TEXT_SBML;
 	    if (srcType < 0) {
-	    	ErrorLog.addError("Unknown file suffix: " + fname, true);
+	    	ErrorLog.addError("Unknown file suffix: " + fname, true, true);
 	    	return null;
 	    }
 		
@@ -51,7 +51,7 @@ public class MMLParser {
 	    String xmlstring = null;
 	    try {xmlstring = server.translateModelText(srcType, ASModel.TEXT_XMML, srcText, options);} 
 	    catch (Exception e) {
-	    	ErrorLog.addError("XMML parsing error - could not compile " + file.getName(), true);
+	    	ErrorLog.addError("XMML parsing error - could not compile " + file.getName(), true, true);
 	    	e.printStackTrace();
 	    	return null;
 	    }
@@ -62,11 +62,11 @@ public class MMLParser {
 		if(doc.hasRootElement()){
 			// If it's not XMML version 2
 			if(doc.getRootElement().getChild("model")==null){
-				ErrorLog.addError("XMML did not have a root element named 'model' - please use JSim version 2.05 or higher", true);
+				ErrorLog.addError("XMML did not have a root element named 'model' - please use JSim version 2.05 or higher", true, true);
 			}
 		}
 		// Otherwise the model didn't compile
-		else ErrorLog.addError("Conversion to SemSim failed because model did not compile", true);
+		else ErrorLog.addError("Conversion to SemSim failed because model did not compile", true, true);
 		return doc;
 	}
 }
