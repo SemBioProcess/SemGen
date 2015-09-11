@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="unitTests"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_75"/>
 	<classpathentry kind="lib" path="thirdParty/arq-2.8.7.jar"/>
 	<classpathentry kind="lib" path="thirdParty/axis.jar"/>
 	<classpathentry kind="lib" path="thirdParty/collections-generic-4.01.jar"/>
@@ -37,12 +37,12 @@
 	<classpathentry kind="lib" path="thirdParty/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="thirdParty/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/JSimServer.jar"/>
-	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-5.2.jar"/>
-	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux32-5.2.jar"/>
-	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux64-5.2.jar"/>
-	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.2.jar"/>
-	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/runtime-license-expires-5-1-2020.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-5.4.3.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux32-5.4.3.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-linux64-5.4.3.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.4.3.jar"/>
+	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

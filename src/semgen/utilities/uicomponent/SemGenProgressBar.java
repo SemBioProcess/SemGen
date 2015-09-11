@@ -38,7 +38,6 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 		setUndecorated(true);
 
 		createBar(msg, isindeterminant);
-		
 	}
 	
 	private void createBar(String msg, Boolean isindeterminant) {			
