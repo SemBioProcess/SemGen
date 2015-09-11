@@ -468,7 +468,7 @@ public class CellMLwriter extends ModelWriter {
 				hasphysprop = ((DataStructure)a).hasPhysicalProperty();
 			}
 			
-			if(a.hasRefersToAnnotation() || !freetext.equals("") || hasphysprop){
+			if(a.hasPhysicalDefinitionAnnotation() || !freetext.equals("") || hasphysprop){
 				String metaid = createMetadataIDandSetNSPrefixes(annotated, idprefix, el);
 						
 				Resource ares = rdfblock.rdf.createResource("#" + metaid);
@@ -482,8 +482,8 @@ public class CellMLwriter extends ModelWriter {
 				}
 								
 				// Add singular annotation
-				if(a.hasRefersToAnnotation()){
-					URI uri = ((DataStructure)a).getRefersToReferenceOntologyAnnotation().getReferenceURI();
+				if(a.hasPhysicalDefinitionAnnotation()){
+					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());

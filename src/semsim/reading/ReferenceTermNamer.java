@@ -49,7 +49,7 @@ public class ReferenceTermNamer {
 				anns.addAll(annthing.getAnnotations());
 				
 				if(ssc instanceof ReferenceTerm) 
-					anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+					anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
 				
 				// If annotation present
 				for(Annotation ann : anns){
@@ -87,7 +87,7 @@ public class ReferenceTermNamer {
 				anns.addAll(annthing.getAnnotations());
 				
 				if(ssc instanceof ReferenceTerm) 
-					anns.add(((ReferenceTerm)ssc).getRefersToReferenceOntologyAnnotation());
+					anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
 				
 				for(Annotation ann : anns){
 
@@ -119,7 +119,7 @@ public class ReferenceTermNamer {
 						
 						// Set the name of the semsim component to the annotation description if it's
 						// a physical entity, physical process or physical property
-						if(ann.getRelation()==SemSimConstants.REFERS_TO_RELATION 
+						if(ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION 
 								&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) || (ssc instanceof PhysicalProperty)))
 							ssc.setName(name);
 					}

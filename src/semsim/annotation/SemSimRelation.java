@@ -6,7 +6,7 @@ import semsim.model.SemSimComponent;
 import semsim.owl.SemSimOWLFactory;
 
 /** SemSimRelations describe the relationship that an annotated SemSimComponent
- * has with an annotation value. Examples include SemSimConstants.REFERS_TO_RELATION
+ * has with an annotation value. Examples include SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION
  * and SemSimConstants.PART_OF_RELATION */
 public class SemSimRelation extends SemSimComponent{	
 	private URI uri;

@@ -78,10 +78,10 @@ public class LoadSemSimModel extends SemGenJob {
 				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), true, false);
 				return;
 			}
-		}
+			}
 		catch(Exception e){
 			e.printStackTrace();
-			}
+		}
 		
 		if(semsimmodel!=null){
 			if(!semsimmodel.getErrors().isEmpty()){
@@ -102,7 +102,7 @@ public class LoadSemSimModel extends SemGenJob {
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
 		return new SemSimOWLreader(file).readFromFile();
 	}
-	
+
 	private SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
 		Document doc = new MMLParser().readFromFile(file);
 		if (ErrorLog.hasErrors()) return null;
@@ -121,9 +121,9 @@ public class LoadSemSimModel extends SemGenJob {
 				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
 			}
 				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);
-//				SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+//					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
+			}
 		}
-	}
 
 	@Override
 	public void run() {

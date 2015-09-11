@@ -220,13 +220,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		String compann = "[unspecified]";
 		if(getPhysicalProperty()!=null){
 			compann = "[unspecified property] of ";
-			if(getPhysicalProperty().hasRefersToAnnotation()){
-				compann = getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
+			if(getPhysicalProperty().hasPhysicalDefinitionAnnotation()){
+				compann = getPhysicalProperty().getPhysicalDefinitionReferenceOntologyAnnotation().getValueDescription() + " of ";
 			}
 			// if physical entity or process
 			String target = "?";
 			if(getAssociatedPhysicalModelComponent()!=null){
-				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
+				if(getAssociatedPhysicalModelComponent().hasPhysicalDefinitionAnnotation()){
 					target = getAssociatedPhysicalModelComponent().getDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
@@ -348,7 +348,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
-			if(getPhysicalProperty().hasRefersToAnnotation()){
+			if(getPhysicalProperty().hasPhysicalDefinitionAnnotation()){
 				return lib.getPropertyinCompositeType(physicalProperty);
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
@@ -383,20 +383,20 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		singularterm = null;
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return singularterm.getRefersToReferenceOntologyAnnotation();
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
 		}
 		return null;
 	}
 	
 	@Override
-	public Boolean hasRefersToAnnotation() {
+	public Boolean hasPhysicalDefinitionAnnotation() {
 		return singularterm!=null;
 	}
 	
-	public URI getReferstoURI() {
-		return singularterm.getReferstoURI();
+	public URI getPhysicalDefinitionURI() {
+		return singularterm.getPhysicalDefinitionURI();
 	}
 	
 	public PhysicalProperty getSingularTerm() {

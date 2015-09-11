@@ -106,10 +106,10 @@ public class SemSimOWLFactory {
 		AddAxiom addAxiom = new AddAxiom(destinationont, axiom);
 		manager.applyChange(addAxiom);
 
-		OWLDataProperty referstoprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "refersTo"));
+		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI));
 		OWLLiteral con2 = factory.getOWLLiteral(clsuri);
-		OWLClassExpression refersto = factory.getOWLDataHasValue(referstoprop,con2);
-		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd,refersto);
+		OWLClassExpression physdef = factory.getOWLDataHasValue(hasphysdefprop,con2);
+		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd, physdef);
 		AddAxiom addAx2 = new AddAxiom(destinationont, ax2);
 		manager.applyChange(addAx2);
 		
@@ -286,8 +286,8 @@ public class SemSimOWLFactory {
 		for (OWLDataPropertyExpression expression : datapropskeyset) {
 			if (expression.equals(prop)) {
 				if (dataprops.get(expression) != null) {
-					for (OWLLiteral referstovalue : dataprops.get(expression)) {
-						values.add(referstovalue.getLiteral());
+					for (OWLLiteral value : dataprops.get(expression)) {
+						values.add(value.getLiteral());
 					}
 				}
 			}
@@ -313,8 +313,8 @@ public class SemSimOWLFactory {
 		for (OWLObjectPropertyExpression expression : objprops.keySet()) {
 			if (expression.equals(prop)) {
 				if (objprops.get(expression) != null) {
-					for (OWLIndividual referstovalue : objprops.get(expression)) {
-						values.add(referstovalue.asOWLNamedIndividual().getIRI().toString());
+					for (OWLIndividual value : objprops.get(expression)) {
+						values.add(value.asOWLNamedIndividual().getIRI().toString());
 					}
 				}
 			}
@@ -396,24 +396,6 @@ public class SemSimOWLFactory {
 		return false;
 	}
 
-	public static Hashtable<String,String> getReferencedIRIs(OWLOntology ontology,String parent) throws OWLException {
-		Hashtable<String,String> namesanduris = new Hashtable<String,String>();
-		Set<String> leafclasses = SemSimOWLFactory.getAllSubclasses(ontology, parent, true);
-		for (String oneclass : leafclasses) {
-			OWLClass oneowlclass = factory.getOWLClass(IRI.create(oneclass));
-			for (OWLIndividual ind : oneowlclass.getIndividuals(ontology)) {
-				String uri = getFunctionalIndDatatypeProperty(ontology, ind.asOWLNamedIndividual().getIRI().toString(), SemSimConstants.SEMSIM_NAMESPACE + "refersTo");
-				String humread = getFunctionalIndDatatypeProperty(ontology, ind.asOWLNamedIndividual().getIRI().toString(), SemSimConstants.SEMSIM_NAMESPACE + "humanReadableName");
-				// If the refersTo slot is empty, assume it's a custom entity
-				// unique to this SemSim model
-				if (uri.equals("")) {
-					uri = ind.asOWLNamedIndividual().getIRI().toString();
-				}
-				namesanduris.put(humread, uri);
-			}
-		}
-		return namesanduris;
-	}
 	
 	public static String[] getRDFLabels(OWLOntology ont, OWLEntity ent) {
 		OWLLiteral val = null;

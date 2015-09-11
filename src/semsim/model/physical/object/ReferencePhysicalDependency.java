@@ -10,12 +10,12 @@ import semsim.annotation.ReferenceTerm;
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
 	public ReferencePhysicalDependency(URI uri, String description){
-		addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, description);
+		addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, uri, description);
 	}
 
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
@@ -27,7 +27,7 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
@@ -43,6 +43,6 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalDependency)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((ReferencePhysicalDependency)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 }

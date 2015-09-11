@@ -16,14 +16,14 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 		setName(description);
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
@@ -36,7 +36,7 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalEntity)obj).getReferstoURI().toString().equals(referenceuri.toString());
+		return ((ReferencePhysicalEntity)obj).getPhysicalDefinitionURI().toString().equals(referenceuri.toString());
 	}
 	
 	@Override

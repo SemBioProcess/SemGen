@@ -78,7 +78,7 @@ public abstract class SemSimObject {
 		return metadataID;
 	}
 	
-	public Boolean hasRefersToAnnotation() {
+	public Boolean hasPhysicalDefinitionAnnotation() {
 		return !referenceuri.toString().isEmpty();
 	}
 	

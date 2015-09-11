@@ -16,14 +16,14 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		setName(label);
 	}
 
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
@@ -47,7 +47,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((PhysicalProperty)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((PhysicalProperty)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 	
 	@Override

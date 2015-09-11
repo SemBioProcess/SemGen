@@ -128,7 +128,7 @@ public class SBMLreader extends ModelReader{
 		// collectInitialAssignments();
 		// Sets the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
 		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
-
+		
 		
 		if (sbmlmodel.getListOfInitialAssignments().size()>0)
 			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
@@ -512,6 +512,7 @@ public class SBMLreader extends ModelReader{
 				compartmentent = compartmentAndSemSimEntitiesMap.get(species.getCompartment());
 			else System.err.println("WARNING: unknown compartment " + species.getCompartment() + " for species " + species.getId());
 			
+			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
@@ -731,7 +732,7 @@ public class SBMLreader extends ModelReader{
 
 			rateds.getComputation().setMathML(mathmlstring);
 			rateds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getFormula());
-									
+		
 			rateds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
@@ -774,7 +775,7 @@ public class SBMLreader extends ModelReader{
 				semsimmodel.addCustomPhysicalProcess((CustomPhysicalProcess) process);
 			
 			collectSBaseData(reaction, process);
-		}		
+		}
 	}
 	
 	/**
@@ -975,10 +976,10 @@ public class SBMLreader extends ModelReader{
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainhasReferenceOntology(refont)){
 								SemSimRelation relation = (t==0) ? 
-										SemSimConstants.REFERS_TO_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+										SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
 								
 								// If we're looking at an identity relation...
-								if(relation==SemSimConstants.REFERS_TO_RELATION){
+								if(relation==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION){
 									
 									// And we haven't added one yet, add it
 									if(numidentityanns==0){
@@ -1021,7 +1022,7 @@ public class SBMLreader extends ModelReader{
 					
 					for(int h=0; h<term.getNumResources(); h++){
 						String uri = term.getResourceURI(h);
-						SemSimRelation relation = (t==0) ? SemSimConstants.REFERS_TO_RELATION : SemSimConstants.MODEL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+						SemSimRelation relation = (t==0) ? SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION : SemSimConstants.MODEL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
 						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri));
 					}
 				}
@@ -1044,7 +1045,7 @@ public class SBMLreader extends ModelReader{
 		for(ReferenceOntologyAnnotation ann : getBiologicalQualifierAnnotations(sbmlobject)){
 			
 			// If there is a physical definition annotation, create reference physical component
-			if(ann.getRelation().equals(SemSimConstants.REFERS_TO_RELATION)){
+			if(ann.getRelation().equals(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION)){
 				// if entity, use reference term, but don't otherwise
 				pmc = isentity ? new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()) : pmc; 
 				tempanns.remove(ann);
@@ -1180,7 +1181,7 @@ public class SBMLreader extends ModelReader{
 		if(isODE) 
 			LHSstart = makeLHSforStateVariable(varname);
 		else LHSstart = " <apply>\n  <eq />\n  <ci>" + varname + "  </ci>\n";
-		String LHSend = " </apply>\n";
+		String LHSend = "</apply>\n";
 		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
 		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
 		return mathmlstring;

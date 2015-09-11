@@ -349,7 +349,7 @@ public class Clusterer extends JFrame {
 					if(extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent()!=null){
 						PhysicalModelComponent pmc = extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent();
 						String name = null;
-						if(pmc.hasRefersToAnnotation()){
+						if(pmc.hasPhysicalDefinitionAnnotation()){
 							name = pmc.getDescription();
 						}
 						else{

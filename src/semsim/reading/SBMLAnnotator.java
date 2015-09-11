@@ -274,7 +274,7 @@ public class SBMLAnnotator {
 				semsimmodel.addSubmodel(sub);
 				
 				if(pmc!=null){
-					if(pmc.hasRefersToAnnotation()){
+					if(pmc.hasPhysicalDefinitionAnnotation()){
 						sub.setSingularAnnotation((ReferenceTerm) pmc);
 					}
 				}
@@ -321,7 +321,7 @@ public class SBMLAnnotator {
 									speciesent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ma.fulluri, ma.rdflabel));
 								// If the species has already been annotated against a reference term
 								// and there is another reference term that is annotated against, add the annotation
-								else if(hasisannotation) speciesent.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, ma.fulluri, ma.rdflabel);
+								else if(hasisannotation) speciesent.addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, ma.fulluri, ma.rdflabel);
 								hasisannotation = true;
 							}
 						}
@@ -428,7 +428,7 @@ public class SBMLAnnotator {
 				ratecdwd = ratecdwd + ".rate";
 			}
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(ratecdwd);
-			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"), "Chemical molar flow rate");
+			ds.getPhysicalProperty().addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00592"), "Chemical molar flow rate");
 			ds.setAssociatedPhysicalModelComponent(pproc);
 		}
 		return true;
@@ -443,10 +443,10 @@ public class SBMLAnnotator {
 		DataStructure ds = semsimmodel.getAssociatedDataStructure(cdwd);
 		ReferenceOntologyAnnotation propann = null;
 		if(!species.getHasOnlySubstanceUnits()){
-			 propann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340"), "Chemical concentration");
+			 propann = new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00340"), "Chemical concentration");
 		}
 		else{
-			propann = new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00425"), "Chemical molar amount");
+			propann = new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, URI.create(SemSimConstants.OPB_NAMESPACE + "OPB_00425"), "Chemical molar amount");
 		}
 		ds.getPhysicalProperty().addAnnotation(propann);
 
@@ -479,14 +479,14 @@ public class SBMLAnnotator {
 				
 				if(ds.getAssociatedPhysicalModelComponent()!=null){
 					PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
-					freetext = ds.getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription();
+					freetext = ds.getPhysicalProperty().getPhysicalDefinitionReferenceOntologyAnnotation().getValueDescription();
 					freetext = freetext + " of ";
 					if(pmc instanceof CompositePhysicalEntity){
 						String compentname = ((CompositePhysicalEntity)pmc).makeName();
 						((CompositePhysicalEntity)pmc).setName(compentname);
 						freetext = freetext + compentname;
 					}
-					else if(pmc.hasRefersToAnnotation())
+					else if(pmc.hasPhysicalDefinitionAnnotation())
 						freetext = freetext + pmc.getDescription();
 					else
 						freetext = freetext + "\"" + pmc.getName() + "\"";
@@ -506,8 +506,8 @@ public class SBMLAnnotator {
 		
 		// Do submodels
 		for(Submodel sub : themodel.getSubmodels()){
-			if(sub.hasRefersToAnnotation()){
-				ReferenceOntologyAnnotation refann = sub.getRefersToReferenceOntologyAnnotation();
+			if(sub.hasPhysicalDefinitionAnnotation()){
+				ReferenceOntologyAnnotation refann = sub.getPhysicalDefinitionReferenceOntologyAnnotation();
 				sub.setDescription(refann.getValueDescription());
 			}
 		}

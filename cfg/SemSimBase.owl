@@ -379,6 +379,15 @@
     
 
 
+    <!-- http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition -->
+
+    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.bhi.washington.edu/SemSim#hasStartValue -->
 
     <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasStartValue">
@@ -434,15 +443,6 @@
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.bhi.washington.edu/SemSim#refersTo -->
-
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#refersTo">
-        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 

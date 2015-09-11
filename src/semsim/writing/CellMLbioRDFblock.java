@@ -47,7 +47,7 @@ public class CellMLbioRDFblock {
 	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_ENTITY_REFERENCE_URI.toString());
 	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimConstants.HAS_MULTIPLIER_URI.toString());
 	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
-	public static Property refersto = ResourceFactory.createProperty(SemSimConstants.REFERS_TO_URI.toString());
+	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString());
 	public static Property is = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 	public static Property isversionof = ResourceFactory.createProperty(SemSimConstants.BQB_IS_VERSION_OF_URI.toString());
 	public static Property partof = ResourceFactory.createProperty(SemSimConstants.PART_OF_URI.toString());
@@ -305,9 +305,9 @@ public class CellMLbioRDFblock {
 		ReferenceOntologyAnnotation ann = null;
 		Resource refres = null;
 		
-		// If there is an "is" annotation (aka "refersTo")
-		if(pmc.hasRefersToAnnotation()){
-			ann = ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation();
+		// If there is an "is" annotation (aka "hasPhysicalDefinition", aka "refersTo")
+		if(pmc.hasPhysicalDefinitionAnnotation()){
+			ann = ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation();
 		}
 		// Else use the first "isVersionOf" annotation found
 		else if(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION).size()>0){
@@ -323,12 +323,11 @@ public class CellMLbioRDFblock {
 			refres = getReferenceResourceFromURI(ann.getReferenceURI());
 			
 			Property refprop = 
-				(ann.getRelation()==SemSimConstants.BQB_IS_RELATION || ann.getRelation()==SemSimConstants.REFERS_TO_RELATION) ? is : isversionof; 
+				(ann.getRelation()==SemSimConstants.BQB_IS_RELATION || ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION) ? is : isversionof; 
 			
-			// Use SemSim:refersTo for annotated Physical model components
 			if(refprop == is){
 				if(pmc instanceof PhysicalPropertyinComposite || pmc instanceof PhysicalEntity
-						|| pmc instanceof PhysicalProcess) refprop = refersto;
+						|| pmc instanceof PhysicalProcess) refprop = hasphysicaldefinition;
 			}
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it

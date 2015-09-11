@@ -105,8 +105,8 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 						
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;
-				if(pmc.hasRefersToAnnotation()){
-					checkboxtext = pmc.getName() + " (" + ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation().getOntologyAbbreviation() + ")";
+				if(pmc.hasPhysicalDefinitionAnnotation()){
+					checkboxtext = pmc.getName() + " (" + ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation().getOntologyAbbreviation() + ")";
 				}
 				else checkboxtext = pmc.getName();
 			}

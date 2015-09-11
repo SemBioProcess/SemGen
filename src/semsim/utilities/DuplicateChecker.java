@@ -16,7 +16,7 @@ public class DuplicateChecker {
 		for (PhysicalEntity pe2 : model2.getPhysicalEntities()) {
 			PhysicalEntity pe = pe2;
 			for (PhysicalEntity pe1 : model1.getPhysicalEntities()) {
-				if ((pe.hasRefersToAnnotation() || pe.getSemSimType().equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) && pe1.equals(pe)) {
+				if ((pe.hasPhysicalDefinitionAnnotation() || pe.getSemSimType().equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) && pe1.equals(pe)) {
 					pe = pe1;
 				}
 			}

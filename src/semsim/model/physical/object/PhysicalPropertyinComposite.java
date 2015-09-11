@@ -17,14 +17,14 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	}
 
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
@@ -48,7 +48,7 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((PhysicalPropertyinComposite)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((PhysicalPropertyinComposite)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 	
 	@Override

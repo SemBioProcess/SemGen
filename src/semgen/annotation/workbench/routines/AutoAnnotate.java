@@ -33,7 +33,7 @@ public class AutoAnnotate {
 				
 				if(pp!=null){
 					
-					URI roa = pp.getReferstoURI();
+					URI roa = pp.getPhysicalDefinitionURI();
 					// If the codeword represents an OPB:Amount property (OPB_00135)
 					if(SemGen.semsimlib.OPBhasAmountProperty(roa)) {
 						candidateamounts.add(ds);

@@ -265,7 +265,7 @@ public class SemSimTermLibrary extends Observable {
 			switch (type) {
 			case PropertyOfPhysicalEntity:
 				for (Integer i : ppccompindexer) {
-					URI ppc = ((PhysicalPropertyinComposite)masterlist.get(i).getObject()).getReferstoURI();
+					URI ppc = ((PhysicalPropertyinComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
 					if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
 						results.add(i);
 					}
@@ -274,7 +274,7 @@ public class SemSimTermLibrary extends Observable {
 			case PropertyOfPhysicalProcess:
 				for (Integer i : ppccompindexer) {
 					PhysicalPropertyinComposite ppc = (PhysicalPropertyinComposite)masterlist.get(i).getObject();
-					if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getReferstoURI())) {
+					if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
 						results.add(i);
 					}
 				}
@@ -453,7 +453,7 @@ public class SemSimTermLibrary extends Observable {
 		public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
-			pmc.addReferenceOntologyAnnotation(relation, refterm.getReferstoURI(), refterm.getName());
+			pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName());
 			notifyTermChanged();
 		}
 		
@@ -481,7 +481,7 @@ public class SemSimTermLibrary extends Observable {
 			
 			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
 				int i;
-				if (pe.hasRefersToAnnotation()) {
+				if (pe.hasPhysicalDefinitionAnnotation()) {
 					i = getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
 				}
 				else {
@@ -637,7 +637,7 @@ public class SemSimTermLibrary extends Observable {
 	public ReferenceTerm getReferenceTermbyURI(URI uri) {
 		for (Integer i : getAllReferenceTerms()) {
 			ReferenceTerm term = (ReferenceTerm) masterlist.get(i).getObject();
-			if (term.getReferstoURI().equals(uri)) return term;
+			if (term.getPhysicalDefinitionURI().equals(uri)) return term;
 		}
 		return null;
 	}
@@ -787,7 +787,7 @@ public class SemSimTermLibrary extends Observable {
 		
 		public IndexCard(T comp) {
 			component = comp;
-			reference = component.hasRefersToAnnotation();
+			reference = component.hasPhysicalDefinitionAnnotation();
 		}
 		
 		public String getDescription() {
@@ -810,7 +810,7 @@ public class SemSimTermLibrary extends Observable {
 		
 		public URI getReferenceURI() {
 			if (isReferenceTerm()) {
-				return ((ReferenceTerm)component).getReferstoURI();
+				return ((ReferenceTerm)component).getPhysicalDefinitionURI();
 			}
 			return null;
 		}

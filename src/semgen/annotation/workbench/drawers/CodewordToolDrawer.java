@@ -147,15 +147,15 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean hasSingularAnnotation(int index) {
-		return componentlist.get(index).hasRefersToAnnotation();
+		return componentlist.get(index).hasPhysicalDefinitionAnnotation();
 	}
 
 	public URI getPhysicalPropertyURI() {
-		return getFocusAssociatedProperty().getReferstoURI();
+		return getFocusAssociatedProperty().getPhysicalDefinitionURI();
 	}
 	
 	public URI getPhysicalComponentURI() {
-		return ((ReferenceTerm)getFocusComposite()).getReferstoURI();
+		return ((ReferenceTerm)getFocusComposite()).getPhysicalDefinitionURI();
 	}
 	
 	public String getLookupName(int index) {
@@ -200,7 +200,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 					getPhysicalCompositeType().equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS);
 		}
 		
-		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
+		return SemGen.semsimlib.isOPBprocessProperty(pp.getPhysicalDefinitionURI());
 	}
 
 	public void copyToMappedVariables() {
