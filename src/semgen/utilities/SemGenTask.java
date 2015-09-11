@@ -19,7 +19,6 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
 	
     @Override
     public void done() {
-    	if (progframe!=null) progframe.dispose();
     	boolean fatalerror = ErrorLog.errorsAreFatal();
 		if (SemGenError.showSemSimErrors()) { 
 			onError();
@@ -28,6 +27,7 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
     		return;
     	}
     	endTask();
+    	if (progframe!=null) progframe.dispose();
     }
 
     public void onError() {}
