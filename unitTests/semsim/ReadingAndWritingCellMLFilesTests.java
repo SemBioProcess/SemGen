@@ -2,6 +2,7 @@ package semsim;
 
 import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.*;
+import org.custommonkey.xmlunit.examples.MultiLevelElementNameAndTextQualifier;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
@@ -32,11 +33,18 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		System.setProperty("javax.xml.parsers.SAXParserFactory",
 				"org.apache.xerces.jaxp.SAXParserFactoryImpl");
 		System.setProperty("javax.xml.transform.TransformerFactory",
-				"org.apache.xalan.processor.TransformerFactoryImpl");
+				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
 	}
 
 	@Before
 	public void setup() throws IOException, NoSuchMethodException, SecurityException {
+		//XMLUnit.setIgnoreComments(Boolean.TRUE); // Not sure why, but ignoring comments causes an exception
+		XMLUnit.setIgnoreWhitespace(Boolean.TRUE);
+		XMLUnit.setNormalizeWhitespace(Boolean.TRUE);
+		XMLUnit.setIgnoreDiffBetweenTextAndCDATA(Boolean.TRUE);
+		XMLUnit.setIgnoreAttributeOrder(Boolean.TRUE);
+		XMLUnit.setCompareUnmatched(Boolean.FALSE);
+
 	    _tempFolder.create();
 	}
 	
@@ -88,11 +96,6 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 		// Assert
 		{
-			// Setup XMLUnit
-			XMLUnit.setIgnoreAttributeOrder(true);
-			XMLUnit.setIgnoreComments(true);
-			XMLUnit.setIgnoreWhitespace(true);
-
 			// Parse the files we want to compare
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
@@ -109,7 +112,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 			// Create a diff object and only compare nodes if their name and attributes match
 			Diff myDiff = new Diff(controlDocument, testDocument);
-			myDiff.overrideElementQualifier(new ElementNameAndAttributeQualifier());
+			myDiff.overrideElementQualifier(new MultiLevelElementNameAndTextQualifier());
 
 			// Are the documents similar?
 			SemGenModelFileDifferenceListener semGenDifferenceListener = new SemGenModelFileDifferenceListener(myDiff);
@@ -152,7 +155,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 			int returnValue = super.differenceFound(difference);
 
 			// If this is a real difference then save it
-			if(!difference.isRecoverable())
+			if (!difference.isRecoverable())
 				_similarDifferences.add(difference);
 
 			return returnValue;
