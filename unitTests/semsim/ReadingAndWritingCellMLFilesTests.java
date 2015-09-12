@@ -119,7 +119,11 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 			// What are the differences, if any?
 			List<Difference> differences = semGenDifferenceListener.getSimilarDifferences();
-			System.out.println("Differences: " + differences);
+			System.out.println("Differences:");
+			for(Difference diff : differences) {
+				System.out.println(diff);
+			}
+
 
 			// Finally, assert that there aren't any differences
 			Assert.assertTrue("Num differences should be 0", similar);
