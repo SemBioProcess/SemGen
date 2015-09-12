@@ -2,7 +2,6 @@ package semsim;
 
 import org.apache.commons.io.FileUtils;
 import org.custommonkey.xmlunit.*;
-import org.custommonkey.xmlunit.examples.MultiLevelElementNameAndTextQualifier;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.w3c.dom.Document;
@@ -112,7 +111,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 
 			// Create a diff object and only compare nodes if their name and attributes match
 			Diff myDiff = new Diff(controlDocument, testDocument);
-			myDiff.overrideElementQualifier(new MultiLevelElementNameAndTextQualifier());
+			myDiff.overrideElementQualifier(new ElementNameAndAttributeQualifier());
 
 			// Are the documents similar?
 			SemGenModelFileDifferenceListener semGenDifferenceListener = new SemGenModelFileDifferenceListener(myDiff);
