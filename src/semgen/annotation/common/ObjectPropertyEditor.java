@@ -16,6 +16,7 @@ import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -32,7 +33,6 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 	protected SemSimTermLibrary library;
 	
 	public ObjectPropertyEditor(SemSimTermLibrary lib, SemSimRelation rel, ArrayList<Integer> complist) {
-		setOpaque(false);
 		setAlignmentY(Box.TOP_ALIGNMENT);
 		relation = rel;
 		library = lib;
@@ -40,6 +40,7 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 		JLabel headerlabel = new JLabel(relation.getURIFragment());
 
 		setMaximumSize(new Dimension(9999, 250));
+		setBackground(SemGenSettings.lightblue);
 		
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add reference term");
@@ -49,10 +50,10 @@ public abstract class ObjectPropertyEditor extends JPanel implements ActionListe
 		minusbutton.setEnabled(false);
 		
 		JPanel headerpanel = new JPanel();
-		headerpanel.setOpaque(false);
 		headerpanel.add(headerlabel);
 		headerpanel.add(plusbutton);
 		headerpanel.add(minusbutton);
+		headerpanel.setBackground(SemGenSettings.lightblue);
 		
 		
 		listcomponent.addListSelectionListener(this);

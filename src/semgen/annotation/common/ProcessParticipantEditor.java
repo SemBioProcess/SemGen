@@ -17,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
+import semgen.SemGenSettings;
 import semgen.annotation.dialog.CreateCompositeDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenError;
@@ -35,9 +36,9 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 	
 	public ProcessParticipantEditor(String name, SemSimTermLibrary lib) {
 		library = lib;
-		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		setBackground(SemGenSettings.lightblue);
 		plusbutton.addActionListener(this);
 		plusbutton.setToolTipText("Add process participant");
 
@@ -58,8 +59,8 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		scroller.setPreferredSize(new Dimension(550, 100));
 		scroller.getViewport().setBackground(Color.white);
 		
-		add(headerpanel, BorderLayout.NORTH);
-		add(scroller, BorderLayout.SOUTH);
+		add(headerpanel);
+		add(scroller);
 	}
 	
 	public void setTableData(LinkedHashMap<Integer, Double> map) {

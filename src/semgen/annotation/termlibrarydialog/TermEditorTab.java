@@ -276,7 +276,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			infobtn.toggleSelectionGraphic();
 			modifybtn.addActionListener(this);	
 			add(modifybtn);
-			replacebtn.setToolTipText("Replace selected term.");
+			replacebtn.setToolTipText("Replace selected term");
 			replacebtn.addActionListener(this);
 			add(replacebtn);
 			add(Box.createHorizontalStrut(470));
@@ -316,8 +316,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		
 		public void toggleButtons() {
 			infobtn.setToolTipText("Term Usage");
-			modifybtn.setToolTipText("Modify selected term.");
-			removebtn.setToolTipText("Remove selected term.");
+			modifybtn.setToolTipText("Modify selected term");
+			removebtn.setToolTipText("Remove selected term");
 			if (!termlist.isSelectionEmpty()) {
 				replacebtn.setEnabled(affected.isUsed());
 				if (affected.targetIsReferenceTerm()) {

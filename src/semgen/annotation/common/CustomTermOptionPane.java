@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import semgen.SemGenSettings;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
@@ -68,16 +70,18 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		descscroller.setPreferredSize(new Dimension(450,100));
 		
 		JPanel namepanel = new JPanel();
-		namepanel.add(new JLabel("Name: "));
+		namepanel.add(new JLabel("*Name: "));
 		namepanel.add(mantextfield);
 		namepanel.setAlignmentY(TOP_ALIGNMENT);
 		namepanel.setMaximumSize(new Dimension(9999, 150));
+		namepanel.setBackground(SemGenSettings.lightblue);
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
 		descriptionpanel.setAlignmentY(TOP_ALIGNMENT);
 		descriptionpanel.setMaximumSize(new Dimension(9999, 250));
+		descriptionpanel.setBackground(SemGenSettings.lightblue);
 		
 		if (termindex!=-1) {
 			mantextfield.setText(library.getComponentName(termindex));
@@ -86,6 +90,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		}
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(SemGenSettings.lightblue);
 		add(namepanel);
 		add(descriptionpanel);
 	}
