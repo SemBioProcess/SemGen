@@ -908,6 +908,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
         }
         
         public void endTask() {
+        	progframe.dispose();
         	JOptionPane.showMessageDialog(null, "Finished clustering analysis");
         }
     }
