@@ -1,15 +1,14 @@
 package semgen.annotation.dialog.termlibrary;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-
+import javax.swing.JPanel;
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
@@ -19,31 +18,27 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 	private static final long serialVersionUID = -3830623199860161812L;
 	protected ReferenceClassFinderPanel refclasspanel;
 	protected JOptionPane optionPane;
-	protected JTextArea utilarea = new JTextArea();
 
 	public AddReferenceClassDialog(SemSimTermLibrary lib, OntologyDomain dom) {
 		super("Select reference concept");
-		
+	    
 		refclasspanel = new ReferenceClassFinderPanel(lib, dom);
-
-		utilarea.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-		utilarea.setBackground(new Color(0,0,0,0));
-		utilarea.setLineWrap(true);
-		utilarea.setWrapStyleWord(true);
-		utilarea.setEditable(false);
-		utilarea.setFont(SemGenFont.defaultBold(-1));
-
-		Object[] array = { utilarea, refclasspanel};
+	    
+		Object[] array = {refclasspanel};
 		Object[] options = new Object[]{"Annotate","Close"};
 		optionPane = new JOptionPane(array, JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION, null);
+		
+		optionPane.setBackground(SemGenSettings.lightblue);
+		
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
-		this.addComponentListener(refclasspanel);
-		setContentPane(optionPane);
-		showDialog();
 		
+		addComponentListener(refclasspanel);
+		setContentPane(optionPane);
+		this.changeBackgroundColor(this.getComponents(), SemGenSettings.lightblue);
+		showDialog();
 	}
 	
 	public void propertyChange(PropertyChangeEvent arg0) {
@@ -63,4 +58,17 @@ public class AddReferenceClassDialog extends SemGenDialog implements
 	public int getIndexofSelection() {
 		return refclasspanel.getSelectedTermIndex();
 	}
+	
+	private void changeBackgroundColor(Component[] comp, Color color)
+	  {
+	    for(int x = 0; x < comp.length; x++)
+	    {
+	      if(comp[x] instanceof Container) changeBackgroundColor(((Container)comp[x]).getComponents(), color);
+	      try
+	      {
+	    	  if(comp[x] instanceof JPanel) comp[x].setBackground(color);  
+	      }
+	      catch(Exception e){e.printStackTrace();}
+	    }
+	  }
 }

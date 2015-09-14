@@ -33,6 +33,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
@@ -75,8 +76,8 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	// Set up the interface
 	@SuppressWarnings("serial")
 	public void setUpUI(){
-		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(SemGenSettings.lightblue);
 
 		JLabel selectKBsource = new JLabel("Select ontology: ");
 		selectKBsource.setFont(SemGenFont.defaultPlain());
@@ -135,6 +136,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		JPanel findpanel = new JPanel();
 		findpanel.setLayout(new BoxLayout(findpanel, BoxLayout.X_AXIS));
+		findpanel.setOpaque(false);
 		findpanel.add(findtext);
 		findpanel.add(findchooser);
 		findpanel.add(findbox);
