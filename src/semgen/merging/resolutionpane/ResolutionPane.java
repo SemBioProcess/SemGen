@@ -73,6 +73,7 @@ public class ResolutionPane extends JPanel implements Observer {
 			addResolutionPanel(mappingcount-1);
 			validate();
 			repaint();
+
 		}
 		if (arg1 == MergeEvent.mapfocuschanged) {
 			loadCodewordMap();
