@@ -299,7 +299,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void updateAllListeners() {
 		setChanged();
-		notifyObservers(ModelEdit.CODEWORD_CHANGED);
+		notifyObservers(ModelEdit.CWLIST_CHANGED);
 		setChanged();
 		notifyObservers(ModelEdit.SUBMODEL_CHANGED);
 		openModelAnnotationsWorkbench().notifyMetaDataImported();
