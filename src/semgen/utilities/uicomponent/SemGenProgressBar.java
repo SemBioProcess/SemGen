@@ -40,7 +40,11 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 		createBar(msg, isindeterminant);
 	}
 	
-	private void createBar(String msg, Boolean isindeterminant) {			
+	private void createBar(String msg, Boolean isindeterminant) {		
+		if (msg == null) {
+			dispose();
+			return;
+		}
 		setPreferredSize(new Dimension(300, 65));
 		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));

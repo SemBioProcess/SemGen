@@ -24,6 +24,7 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
 			onError();
 		}
     	if (isCancelled() || fatalerror) {
+    		if (progframe!=null) progframe.dispose();
     		return;
     	}
     	endTask();
