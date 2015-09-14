@@ -48,6 +48,12 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		Collections.sort(componentlist, new SemSimComponentComparator());
 	}
 	
+	public void reloadCodewords() {
+		Collections.sort(componentlist, new SemSimComponentComparator());
+		setChanged();
+		notifyObservers(ModelEdit.CWLIST_CHANGED);
+	}
+	
 	public ArrayList<DataStructure> getCodewords() {
 		return new ArrayList<DataStructure>(componentlist);
 	}

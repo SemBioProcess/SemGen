@@ -65,6 +65,9 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 			if	(arg==ModelEdit.CODEWORD_CHANGED) {
 				refreshChangedButtons();
 			}
+			if	(arg==ModelEdit.CWLIST_CHANGED) {
+				update();
+			}
 	}
 	
 	private class ListButton extends CodewordButton {
