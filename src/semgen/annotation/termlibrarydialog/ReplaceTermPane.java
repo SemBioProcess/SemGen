@@ -158,6 +158,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 	private JPanel addButtonPane(Color col) {
 		JPanel btnpane = new JPanel();
 		btnpane.setLayout(new BoxLayout(btnpane, BoxLayout.LINE_AXIS));
+		btnpane.setOpaque(false);
 		btnpane.add(replaceremovebtn);
 		btnpane.add(replacebtn);
 		btnpane.setBackground(col);
