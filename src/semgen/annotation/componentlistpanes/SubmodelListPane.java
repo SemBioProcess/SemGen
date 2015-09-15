@@ -46,7 +46,7 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 		buttonpane.add(componentaddremovepanel);
 		
 		for (Integer index : numlist) {
-			SubmodelButton sbm = new ListButton(drawer.getCodewordName(index), drawer.isEditable(index));
+			SubmodelButton sbm = new ListButton(drawer.getComponentName(index), drawer.isEditable(index));
 			addButton(sbm, index);
 			btnlist.put(sbm, index);
 			sbm.toggleHumanDefinition(drawer.hasHumanReadableDef(index));

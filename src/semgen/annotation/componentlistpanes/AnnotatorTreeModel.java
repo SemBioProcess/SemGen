@@ -68,7 +68,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	
 	private void addSubModelNode(Integer index, ArrayList<Integer> dsindicies, AnnotatorTreeNode parent) {
 		SubModelTreeButton newnode = new SubModelTreeButton();
-		
+				
 		for (Integer dsi : dsindicies) {
 			addCodewordNode(dsi, newnode);
 		}
@@ -80,7 +80,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		
 	private void addCodewordNode(Integer index, AnnotatorTreeNode parent) {
 		CodewordTreeButton newnode = new CodewordTreeButton();
-		
+				
 		cwmap.put(newnode, index);
 		cwmapinv.put(index, newnode);
 		parent.add(newnode);
@@ -231,7 +231,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		public Component getButton() {
 			int index = smmap.get(this);
 			
-			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getCodewordName(index), smdrawer.isEditable(index));
+			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getComponentName(index), smdrawer.isEditable(index));
 			btn.toggleHumanDefinition(smdrawer.hasHumanReadableDef(index));
 			return btn;
 		}

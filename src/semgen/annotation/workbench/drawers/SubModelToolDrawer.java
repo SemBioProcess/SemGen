@@ -30,7 +30,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		int i = 0;
 		for (Submodel sm : componentlist) {
-			if (sm.isImported() && showimports) continue;
+			if (sm.isImported() && ! showimports) continue;
 			sms.add(i);
 			i++;
 		}
@@ -50,7 +50,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return componentlist.get(currentfocus).isImported();
 	}
 	
-	public String getCodewordName(int index) {
+	public String getComponentName(int index) {
 		return componentlist.get(index).getName();
 	}
 	

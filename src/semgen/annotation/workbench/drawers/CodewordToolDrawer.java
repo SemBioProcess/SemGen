@@ -63,7 +63,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		
 		int i = 0;
 		for (DataStructure ds : componentlist) {
-			if (ds.isImportedViaSubmodel() && options[0]) continue;
+			if (ds.isImportedViaSubmodel() && ! options[0]) continue;
 			cws.add(i);
 			i++;
 		}

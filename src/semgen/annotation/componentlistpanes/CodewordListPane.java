@@ -27,7 +27,7 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 		
 		// Associate codeword names with their buttons
 		for(Integer index : drawer.getCodewordstoDisplay(dispoptions)){
-			ListButton cbutton = new ListButton(drawer.getCodewordName(index), drawer.isEditable(index), settings.useDisplayMarkers());
+			ListButton cbutton = new ListButton(drawer.getComponentName(index), drawer.isEditable(index), settings.useDisplayMarkers());
 			addButton(cbutton, index);
 			
 			cbutton.toggleHumanDefinition(drawer.hasHumanReadableDef(index));

@@ -87,6 +87,10 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		if (esg!=null) esg = null;
 		Box btnbox = new Box(BoxLayout.X_AXIS);
 		btnbox.setAlignmentX(Box.LEFT_ALIGNMENT);
+		
+		addentbutton.setEnabled(drawer.isEditable());
+		addprocbutton.setEnabled(drawer.isEditable());
+		
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
 		btnbox.add(Box.createHorizontalGlue());

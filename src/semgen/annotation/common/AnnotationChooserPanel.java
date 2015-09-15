@@ -105,7 +105,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public void enableEraseButton(boolean isenabled) {
-		eraselabel.setEnabled(isenabled);
+		if(eraselabel != null) eraselabel.setEnabled(isenabled);
 	}
 	
 	protected void addURLButton() {
@@ -160,7 +160,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public void toggleNoneSelected(boolean noselection) {
-		eraselabel.setEnabled(!noselection);
+		if(eraselabel !=null) eraselabel.setEnabled(!noselection);
 		if (modifylabel != null) modifylabel.setEnabled(!noselection); 
 		if (urlbutton != null) urlbutton.setEnabled(!noselection); 
 	}

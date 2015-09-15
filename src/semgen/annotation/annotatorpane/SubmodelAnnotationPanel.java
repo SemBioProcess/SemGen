@@ -48,6 +48,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		}
 		if(drawer.isImported()){
 			mainheader.add(loadsourcemodelbutton);
+			loadsourcemodelbutton.addMouseListener(this);
 			codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		}
 	}
@@ -141,7 +142,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		ArrayList<Integer> dsind = cwdrawer.getCodewordstoDisplay(new Boolean[]{settings.showImports(), false, false});
 		ArrayList<String> dsnames = new ArrayList<String>();
 		for (Integer i : dsind) {
-			dsnames.add(cwdrawer.getCodewordName(i));
+			dsnames.add(cwdrawer.getComponentName(i));
 		}
 		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
 				"Select Data Structures", dsnames, workbench.getSelectedSubmodelDSIndicies());
@@ -167,20 +168,23 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-		// Activated if user selects the Annotator icon within the AnnotationDialog (used for imported submodels)
+
 		if(e.getComponent() == nestedsubmodelpane){
 			associateSubmodels();
 		}
 		if(e.getComponent() == subtitlefield){
 			associateDatastructures();
 		}
+		
+		// Activated if user selects the Annotator icon within the AnnotationDialog (used for imported submodels)
 		if(e.getComponent() == loadsourcemodelbutton){
 			File file = workbench.getSourceSubmodelFile();
-
 			if(file.exists()){
 				globalacts.NewAnnotatorTab(file);
 			}
-			else{JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);}
+			else{
+				JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
 		}
 		
 	}
@@ -188,7 +192,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	@Override
 	public void updateUnique(Observable o, Object arg) {
 		if (arg == ModelEdit.SMNAMECHANGED) {
-			codewordlabel.setText(drawer.getCodewordName());
+			codewordlabel.setText(drawer.getComponentName());
 		}
 	}
 	
@@ -204,7 +208,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		}
 		
 		public void mouseClicked(MouseEvent arg0) {
-			String currentname =  drawer.getCodewordName();
+			String currentname =  drawer.getComponentName();
 			while (true) {
 				TextChangeDialog tcd = new TextChangeDialog("Rename component", currentname, currentname);
 				String newcompname = tcd.getNewText();
