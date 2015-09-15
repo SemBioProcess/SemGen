@@ -14,6 +14,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorTreeMap;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -170,6 +171,9 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				if (focus!=null) {
 					fireNodeChanged(focus);
 				}
+			}
+			if (arg1==SettingChange.toggleproptype || arg1==SettingChange.showimports) {
+				fireTreeStructureChanged();
 			}
 			if (arg0==smdrawer) {
 				if (arg1 == ModelEdit.SMNAMECHANGED) {
