@@ -36,6 +36,7 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		drawButton();
 		namelabel.setFont(SemGenFont.defaultItalic());
 		propoflabel.addMouseListener(this);
+		propoflabel.setVisible(showmarkers);
 		indicatorssuperpanel.add(propoflabel, BorderLayout.EAST);
 	}
 	
