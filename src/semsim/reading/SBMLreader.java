@@ -1047,15 +1047,19 @@ public class SBMLreader extends ModelReader{
 			// If there is a physical definition annotation, create reference physical component
 			if(ann.getRelation().equals(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION)){
 				// if entity, use reference term, but don't otherwise
-				pmc = isentity ? new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()) : pmc; 
+				if(isentity)
+					pmc = semsimmodel.addReferencePhysicalEntity(
+							new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription())); 
+				
 				tempanns.remove(ann);
 				break;
 			}
+			// If the annotation is not a physical definition, add the reference terms from the annotation to the model but keep
+			// pmc a custom term
 			else if(isentity)
 				semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription()));
 			else
 				semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(ann.getReferenceURI(), ann.getValueDescription()));
-			
 		}
 		
 		tempanns.addAll(getModelQualifierAnnotations(sbmlobject));

@@ -221,7 +221,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if(getPhysicalProperty()!=null){
 			compann = "[unspecified property] of ";
 			if(getPhysicalProperty().hasPhysicalDefinitionAnnotation()){
-				compann = getPhysicalProperty().getPhysicalDefinitionReferenceOntologyAnnotation().getValueDescription() + " of ";
+				compann = getPhysicalProperty().getName() + " of ";
 			}
 			// if physical entity or process
 			String target = "?";
