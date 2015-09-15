@@ -108,8 +108,9 @@ public abstract class SemSimCollection extends SemSimObject{
 		return null;
 	}
 	
-	public void setAssociatedDataStructures(Set<DataStructure> associatedDataStructures) {
-		dataStructures = associatedDataStructures;
+	public void setAssociatedDataStructures(Set<DataStructure> dsset) {
+		dataStructures.clear();
+		dataStructures.addAll(dsset);
 	}
 	
 	/**
