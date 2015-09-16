@@ -57,6 +57,7 @@ public class LoadSemSimModel extends SemGenJob {
 			case ModelClassifier.MML_MODEL:
 				semsimmodel = createModel(file);
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate)
+					setStatus("Annotating Physical Properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				break;
 					
@@ -68,8 +69,10 @@ public class LoadSemSimModel extends SemGenJob {
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
 				nameOntologyTerms();
-				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate)
+				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate) {
+					setStatus("Annotating Physical Properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				}
 				break;
 				
 			case ModelClassifier.SEMSIM_MODEL:

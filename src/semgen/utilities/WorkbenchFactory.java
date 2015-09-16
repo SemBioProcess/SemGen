@@ -37,6 +37,7 @@ public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  i
 	
 	public void run() {
 		if (!makeWorkbenches()) abort();
+		setStatus("Loading Tab");
 	}
 	
 	public String getStatus() {

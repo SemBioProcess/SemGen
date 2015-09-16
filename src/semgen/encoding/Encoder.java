@@ -53,6 +53,7 @@ public class Encoder {
 		Object[] optionsarray = new Object[] {"CellML", "MML (JSim)"};
 		
 		Object selection = JOptionPane.showInputDialog(null, "Select output format", "SemGen coder", JOptionPane.PLAIN_MESSAGE, null, optionsarray, "CellML");
+		if (selection == null) return;
 		
 		ModelWriter outwriter = null;
 		SemGenSaveFileChooser fc = new SemGenSaveFileChooser("Choose Destination");

@@ -48,6 +48,8 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
 		add(new JSeparator());
 		add(fileitemexit);
+		fileitemsaveas.setEnabled(false);
+		fileitemclose.setEnabled(false);
 	}
 
 	@Override
@@ -83,6 +85,16 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		public void update(Observable o, Object arg) {
 			if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
 				fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());	
+			}
+			if (arg==GlobalActions.appactions.TABCLOSED || arg==GlobalActions.appactions.TABOPENED) {
+				if (globalactions.getNumOpenTabs()==0) {
+					fileitemsaveas.setEnabled(false);
+					fileitemclose.setEnabled(false);
+				}
+				else {
+					fileitemsaveas.setEnabled(true);
+					fileitemclose.setEnabled(true);
+				}
 			}
 		}	
 

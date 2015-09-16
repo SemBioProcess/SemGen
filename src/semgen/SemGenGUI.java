@@ -174,6 +174,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				setSelectedComponent(getComponentAt(tabcount - 1));
 				getComponentAt(tabcount - 1).repaint();
 				getComponentAt(tabcount - 1).validate();
+				globalactions.incTabCount();
 			}
 		}
 		
@@ -211,6 +212,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	
 	private void removeTab(SemGenTab component) {
 		remove(indexOfComponent(component));
+		globalactions.decTabCount();
 	}
 	
 	// When a tab is clicked make it the currently displayed tab
@@ -240,7 +242,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	// is fired, this method processes it
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg == GlobalActions.appactions.TABCLOSED) {
+		if (arg == GlobalActions.appactions.TABCLOSEREQUEST) {
 			closeTabAction(globalactions.getCurrentTab());
 		}
 		if (arg == GlobalActions.appactions.ANNOTATE) {
