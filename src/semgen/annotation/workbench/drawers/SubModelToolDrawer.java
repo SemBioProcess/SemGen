@@ -130,8 +130,12 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		refreshSubModels();
 		for (DataStructure ds : sm.getAssociatedDataStructures()) {
 			String name = ds.getName();
-			name = newname + "." + name.substring(name.lastIndexOf(".")+1);
-			ds.setName(name);
+			int i = name.lastIndexOf(".");
+			if (i!=-1) {
+				name = newname + "." + name.substring(i+1);
+				ds.setName(name);
+			}
+			
 		}
 		
 		currentfocus = componentlist.indexOf(sm);
