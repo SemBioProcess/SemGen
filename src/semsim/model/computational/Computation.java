@@ -120,6 +120,14 @@ public class Computation extends ComputationalModelComponent{
 	public void setOutputs(Set<DataStructure> outputs) {
 		this.outputs = outputs;
 	}
+	
+	/**
+	 * Add an output for the computation
+	 * @param output
+	 */
+	public void addOutput(DataStructure output){
+		this.outputs.add(output);
+	}
 
 	/**
 	 * @return The DataStructures solved by the computation
