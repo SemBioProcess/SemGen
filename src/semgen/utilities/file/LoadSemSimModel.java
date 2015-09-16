@@ -56,9 +56,10 @@ public class LoadSemSimModel extends SemGenJob {
 			
 			case ModelClassifier.MML_MODEL:
 				semsimmodel = createModel(file);
-				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate)
+				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
 					setStatus("Annotating Physical Properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				}
 				break;
 					
 			case ModelClassifier.SBML_MODEL:

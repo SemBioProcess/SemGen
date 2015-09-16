@@ -54,9 +54,13 @@ public class SemGenError {
 			String message = "";
 			boolean fatalerror = false;
 			ArrayList<ErrorEntry> errors = ErrorLog.getAllErrorsandFlush();
+			
 			for (ErrorEntry e : errors) {
-				message += e.errmsg + "\r\n";
-				if (e.isfatal) fatalerror = true;
+				
+				if(e != null){
+					message += e.errmsg + "\r\n";
+					if (e.isfatal) fatalerror = true;
+				}
 			}
 			JOptionPane.showMessageDialog(parent, message,
 				"SemSim Error", JOptionPane.ERROR_MESSAGE);
