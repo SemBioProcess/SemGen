@@ -35,6 +35,7 @@ import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.Importable;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
@@ -132,7 +133,11 @@ public class CellMLwriter extends ModelWriter {
 		root.addNamespaceDeclaration(CellMLconstants.semsimNS);
 		root.addNamespaceDeclaration(CellMLconstants.dctermsNS);
 		
-		root.setAttribute("name", semsimmodel.getName());
+		String namestring = semsimmodel.getName();
+		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
+			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
+		
+		root.setAttribute("name", namestring);
 	}
 	
 	private void declareImports() {
