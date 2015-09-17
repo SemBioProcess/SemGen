@@ -725,7 +725,7 @@ public class SBMLreader extends ModelReader{
 			// This might be unnecessary for some more recent versions of SBML models (listOfParameters might have been deprecated)
 			for(int p=0; p<kineticlaw.getListOfParameters().size(); p++){
 				Parameter par = kineticlaw.getParameter(p);
-				DataStructure localds = addParameter(par, reactionID);
+				DataStructure localds = addParameter(par, thereactionprefix);
 				mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + par.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
 				rxnsubmodel.addDataStructure(localds);
 			}

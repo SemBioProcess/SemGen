@@ -278,6 +278,7 @@ http://identifiers.org/obo.go/GO:0000162; tryptophan biosynthetic process
 urn:miriam:kegg.reaction:R00771; D-glucose-6-phosphate aldose-ketose-isomerase
 http://identifiers.org/go/GO:0032984; macromolecular complex disassembly
 urn:miriam:kegg.reaction:R01067; D-Fructose 6-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
+http://identifiers.org/obo.go/GO:0009097; isoleucine biosynthetic process
 http://identifiers.org/go/GO:0051668; localization within membrane
 http://identifiers.org/go/GO:0004725; protein tyrosine phosphatase activity
 http://identifiers.org/obo.chebi/CHEBI:4167; D-glucopyranose
@@ -297,6 +298,7 @@ urn:miriam:obo.go:GO%3A0009070; serine family amino acid biosynthetic process
 http://identifiers.org/go/GO:0006470; protein dephosphorylation
 http://identifiers.org/chebi/CHEBI:15996; GTP
 urn:miriam:obo.go:GO%3A0042866; pyruvate biosynthetic process
+http://identifiers.org/obo.go/GO:0019877; diaminopimelate biosynthetic process
 urn:miriam:kegg.reaction:R01070; -bisphosphate D-glyceraldehyde-3-phosphate-lyase (glycerone-phosphate-forming)
 http://identifiers.org/go/GO:0006351; transcription, DNA-templated
 http://identifiers.org/obo.chebi/CHEBI:16863; 6-phospho-D-gluconate
