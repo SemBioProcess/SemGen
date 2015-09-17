@@ -58,8 +58,10 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		AnnotatorTreeMap treemap = workbench.makeTreeMap(settings.showImports());
 		
 		if (!treemap.getSubmodelList().isEmpty()) {
+			int i = 0;
 			for (Integer smi : treemap.getSubmodelList()) {
-				addSubModelNode(smi, treemap.getSubmodelDSIndicies(smi), root);
+				addSubModelNode(smi, treemap.getSubmodelDSIndicies(i), root);
+				i++;
 			}
 		}
 		for (Integer dsi : treemap.getOrphanDS()) {
@@ -88,6 +90,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	}
 	
 	public void reload() {
+		clearModel();
 		loadModel();
 		fireTreeStructureChanged();
 	}
@@ -137,7 +140,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	protected void fireTreeStructureChanged() {
 		TreeModelEvent e = new TreeModelEvent(this, root.getPath());
         for (TreeModelListener tml : listeners) {
-            tml.treeNodesChanged(e);
+            tml.treeStructureChanged(e);
         }
     }
 	
@@ -180,7 +183,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				fireTreeStructureChanged();
 			}
 			if (arg1==SettingChange.SHOWIMPORTS) {
-				//destroy();
+				reload();
 			}
 			if (arg0==smdrawer) {
 				if (arg1 == ModelEdit.SMNAMECHANGED) {

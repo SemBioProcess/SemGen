@@ -30,8 +30,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		int i = 0;
 		for (Submodel sm : componentlist) {
-			if (sm.isImported() && ! showimports) continue;
-			sms.add(i);
+			if (!sm.isImported() || showimports) sms.add(i);
 			i++;
 		}
 		return sms;

@@ -154,7 +154,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			}
 		}
 		
-		if(settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+		
 	}
 	
 	@Override
@@ -219,6 +219,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 				drawer.setDatastructurePhysicalProperty(getSelection());
 				toggleNoneSelected(getSelection() == -1);
 				onPropertyChange();
+				if(settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 			}
 		}
 
@@ -228,6 +229,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			if (rcd.getIndexofSelection()!=-1) {
 				setSelection(rcd.getIndexofSelection());
 				onPropertyChange();
+				if(settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 			}
 		}
 
