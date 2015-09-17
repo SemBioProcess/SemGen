@@ -21,7 +21,7 @@ import semsim.utilities.ResourcesManager;
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
-	public enum SettingChange {toggletree, showimports, cwsort, toggleproptype, autoannotatemapped}
+	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, cwsort, toggleproptype, autoannotatemapped}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public HashMap<String, String[]> startsettingstable;
@@ -190,14 +190,14 @@ public class SemGenSettings extends Observable{
 		Boolean tog = !useTreeView();
 		startsettingstable.put("treeView", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.toggletree);
+		notifyObservers(SettingChange.TOGGLETREE);
 	}
 	
 	public void toggleShowImports() {
 		Boolean tog = !showImports();
 		startsettingstable.put("showImports", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.showimports);
+		notifyObservers(SettingChange.SHOWIMPORTS);
 	}
 	
 	public void toggleAutoAnnotateMapped(){
@@ -236,13 +236,13 @@ public class SemGenSettings extends Observable{
 	public void toggleTreeView(Boolean tog) {
 		startsettingstable.put("treeView", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.toggletree);
+		notifyObservers(SettingChange.TOGGLETREE);
 	}
 	
 	public void toggleShowImports(Boolean tog) {
 		startsettingstable.put("showImports", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.showimports);
+		notifyObservers(SettingChange.SHOWIMPORTS);
 	}
 	
 	public String getHelpURL() {

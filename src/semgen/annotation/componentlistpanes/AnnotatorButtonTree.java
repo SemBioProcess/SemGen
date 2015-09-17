@@ -21,7 +21,6 @@ import semgen.annotation.workbench.AnnotatorWorkbench;
 
 public class AnnotatorButtonTree extends JTree implements TreeSelectionListener, TreeExpansionListener{
 	private static final long serialVersionUID = 7868541704010347520L;
-	private AnnotatorTreeModel model;
 	private Renderer renderer = new Renderer();
 	
 	public AnnotatorButtonTree(AnnotatorWorkbench wb, SemGenSettings sets){
@@ -43,16 +42,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		setVisible(true);
 	}
 	
-	public void reloadTree() {	
-		model.reload();
-		getCurrentSelection();
-		validate();
-	}
-	
-	private void getCurrentSelection() {
-		setSelectionPath(model.getSelectedPath());
-	}
-	
 	class MyPainter implements Painter<Object>{
 		public void paint(Graphics2D arg0, Object arg1, int arg2, int arg3) {
 			arg0.setColor(SemGenSettings.lightblue);
@@ -65,11 +54,6 @@ public class AnnotatorButtonTree extends JTree implements TreeSelectionListener,
 		AnnotatorTreeNode node = (AnnotatorTreeNode)
                 getLastSelectedPathComponent();
 		if (node!=null) node.onSelection();
-	}
-	
-	public void destroy() {
-		clearSelection();
-		model.destroy();
 	}
 	
 	class Renderer implements TreeCellRenderer {

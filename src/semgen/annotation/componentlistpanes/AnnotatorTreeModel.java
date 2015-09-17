@@ -156,11 +156,15 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		focus = focusbutton;
 	}
 	
-	public void destroy() {
+	private void clearModel() {
 		focus = null;
 		root.removeAllChildren();
 		cwmap.clear(); cwmapinv.clear();
 		smmap.clear(); smmapinv.clear();
+	}
+	
+	public void destroy() {
+		clearModel();
 		fireTreeStructureChanged();
 	}
 
@@ -172,8 +176,11 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 					fireNodeChanged(focus);
 				}
 			}
-			if (arg1==SettingChange.toggleproptype || arg1==SettingChange.showimports) {
+			if (arg1==SettingChange.toggleproptype) {
 				fireTreeStructureChanged();
+			}
+			if (arg1==SettingChange.SHOWIMPORTS) {
+				//destroy();
 			}
 			if (arg0==smdrawer) {
 				if (arg1 == ModelEdit.SMNAMECHANGED) {

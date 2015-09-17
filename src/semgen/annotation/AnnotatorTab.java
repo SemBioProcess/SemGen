@@ -269,7 +269,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 			}
 		}
 		if (arg0==settings) {
-			if (arg1==SettingChange.toggletree) {
+			if (arg1==SettingChange.TOGGLETREE) {
 				changeComponentView();
 			}
 		}

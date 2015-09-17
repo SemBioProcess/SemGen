@@ -70,8 +70,9 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 		destroy();
 		updateButtonTable();
 		
-		if (drawer.getSelectedIndex()!=-1) {
-			changeButtonFocus(btnarray.get(drawer.getSelectedIndex()));
+		int index = drawer.getSelectedIndex();
+		if (index !=-1 && btnarray.contains(index)) {
+			changeButtonFocus(btnarray.get(index));
 		}
 
 		buttonpane.validate();
@@ -142,7 +143,7 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	
 	public void update(Observable o, Object arg) {
 		if (!settings.useTreeView()) {
-			if (arg==SettingChange.toggletree && settings.useTreeView()) {
+			if (arg==SettingChange.TOGGLETREE && settings.useTreeView()) {
 				destroy();
 			}
 			if (o==drawer) {

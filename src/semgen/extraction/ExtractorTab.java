@@ -919,7 +919,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					clusterwriter.println("(no change)");
 				}
 
-				progframe.bar.setValue(Math.round(100 * ((float)y / maxclusteringiterations)));
+				progframe.setProgressValue(Math.round(100 * ((float)y / maxclusteringiterations)));
 			}
 			clusterwriter.flush();
 			clusterwriter.close();

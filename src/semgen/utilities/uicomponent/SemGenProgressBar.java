@@ -17,30 +17,39 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+import semgen.utilities.SemGenFont;
+
 public class SemGenProgressBar extends SemGenDialog implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = -408262547613352487L;
 	private JLabel msglabel;
-	public JProgressBar bar = new JProgressBar();
+	protected JProgressBar bar = new JProgressBar();
 	private JButton cancelbutton = new JButton("Cancel");
 	private CancelEvent onCancel = null;
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant) {
 		super("");
 		setUndecorated(true);
-		createBar(msg, isindeterminant);
+		createBar(msg, isindeterminant, true);
 		location.addWindowListener(this);
 	}
 
+	public SemGenProgressBar(String msg, Boolean isindeterminant, boolean showprogbar) {
+		super("");
+		setUndecorated(true);
+		createBar(msg, isindeterminant, showprogbar);
+		location.addWindowListener(this);
+	}
+	
 	//Consturctor adds a field to override the default parent (the main pane)
 	public SemGenProgressBar(String msg, Boolean isindeterminant, JFrame parent) {
 		super("", parent);
 		setUndecorated(true);
 
-		createBar(msg, isindeterminant);
+		createBar(msg, isindeterminant, true);
 	}
 	
-	private void createBar(String msg, Boolean isindeterminant) {		
+	private void createBar(String msg, Boolean isindeterminant, boolean showbar) {		
 		if (msg == null) {
 			dispose();
 			return;
@@ -51,20 +60,29 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 		progpanel.setLayout(new BorderLayout());
 		
 		int bmar = 5;
-		bar.setIndeterminate(isindeterminant);
-		bar.setStringPainted(!isindeterminant);
-		bar.setVisible(true);
-		bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
-		
+
 		cancelbutton.addActionListener(this);
 		
 		msglabel = new JLabel(msg);
 		msglabel.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
 		progpanel.add(msglabel, BorderLayout.NORTH);
-		progpanel.add(bar, BorderLayout.SOUTH);
+		
+		if (showbar) {
+			
+			bar.setIndeterminate(isindeterminant);
+			if(isindeterminant) bar.setValue(101);
+			bar.setStringPainted(!isindeterminant);
+			bar.setVisible(true);
+			bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
+			progpanel.add(bar, BorderLayout.SOUTH);
+			
+		}
+		else {
+			msglabel.setFont(SemGenFont.defaultPlain(1));
+			msglabel.setAlignmentX(CENTER_ALIGNMENT);
+		}
 		add(progpanel);
-
-		if(isindeterminant) bar.setValue(101);
+		
 		this.setModalityType(ModalityType.MODELESS);
 		setAlwaysOnTop(true);
 		
@@ -138,4 +156,5 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 	public void windowOpened(WindowEvent arg0) {
 		
 	}
+
 }

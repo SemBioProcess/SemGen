@@ -78,7 +78,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				i++;
 			}	
 			AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
-			addTab(factory, tabfactory);
+			addTab(factory, tabfactory, true);
 		}
 	}
 	
@@ -87,45 +87,45 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		if (isOntologyOpenForEditing(existingfile.toURI())) return;
 		
 		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, true);
 
 	}
 	
 	public void startNewExtractorTask() {
 		ExtractorFactory factory = new ExtractorFactory();
 		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, true);
 	}
 	
 	public void startNewExtractorTask(final File existingfile){
 		ExtractorFactory factory = new ExtractorFactory(existingfile);
 		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, true);
 	}
 	
 	public void startNewMergerTask(){
 		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, true);
 	}
 	
 	public void startNewMergerTask(Set<File> existingFiles){
 		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
 		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions, existingFiles);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, true);
 	}
 	
 	public void startNewStageTask(){
 		StageWorkbenchFactory factory = new StageWorkbenchFactory();
 		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
-		addTab(factory, tabfactory);
+		addTab(factory, tabfactory, false);
 	}
 
 	// Initialize a new addTabTask with the provided factories and execute
 
-	private void addTab(WorkbenchFactory<? extends Workbench> workbenchmaker, TabFactory<? extends Workbench> tabmaker) {
+	private void addTab(WorkbenchFactory<? extends Workbench> workbenchmaker, TabFactory<? extends Workbench> tabmaker, boolean showbar) {
 		if (!workbenchmaker.isValid()) return;
-		AddTabTask<? extends Workbench> task = new AddTabTask(workbenchmaker, tabmaker);
+		AddTabTask<? extends Workbench> task = new AddTabTask(workbenchmaker, tabmaker, showbar);
 		task.execute();
 	}
 	
@@ -138,11 +138,12 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		WorkbenchFactory<T> workbenchfactory;
 		TabFactory<T> tabfactory;
 		SemGenTab tab = null;
-		AddTabTask(WorkbenchFactory<T> maker, TabFactory<T> tabmaker) {
+		
+		AddTabTask(WorkbenchFactory<T> maker, TabFactory<T> tabmaker, boolean disableprogbar) {
 			workbenchfactory = maker;
 			workbenchfactory.addPropertyChangeListener(this);
 			tabfactory = tabmaker;
-			progframe = new SemGenProgressBar(maker.getStatus(), true);
+			progframe = new SemGenProgressBar(maker.getStatus(), true, disableprogbar);
 		}
 		
 		@Override
