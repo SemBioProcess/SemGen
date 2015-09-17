@@ -178,7 +178,7 @@ public class CellMLwriter extends ModelWriter {
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				createRDFforAnnotatedThing((SemSimComponent)ssc, metaidprefix, importedpiece, ((SemSimComponent)ssc).getDescription());
+				createRDFforAnnotatedThing((SemSimObject)ssc, metaidprefix, importedpiece, ((SemSimObject)ssc).getDescription());
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
