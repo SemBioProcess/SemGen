@@ -759,7 +759,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	private Set<OWLAnnotation> makeUnitFactorAnnotations(UnitFactor factor){
 		Set<OWLAnnotation> anns = new HashSet<OWLAnnotation>();
 		
-		if(factor.getExponent()!=1.0 && factor.getMultiplier()!=0.0){
+		if(factor.getExponent()!=1.0 && factor.getExponent()!=0.0){
 			OWLLiteral explit = factory.getOWLLiteral(factor.getExponent());
 			OWLAnnotation expanno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(SemSimConstants.UNIT_FACTOR_EXPONENT_URI)), explit);
 			anns.add(expanno);
