@@ -12,6 +12,7 @@ import javax.swing.KeyStroke;
 
 import semgen.GlobalActions;
 import semgen.NewTaskDialog;
+import semgen.OSValidator;
 import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
 import semgen.utilities.uicomponent.SemGenMenu;
@@ -45,9 +46,12 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		add(new JSeparator());
 		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_P,true,true);
 		add(fileitemproperties);
-		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",null,true,true);
+		
+		Integer quitaccelerator = OSValidator.isMac() ? null : KeyEvent.VK_Q;
+		fileitemexit = formatMenuItem(fileitemexit, "Quit SemGen", quitaccelerator, true, true);
 		add(new JSeparator());
 		add(fileitemexit);
+		
 		fileitemsaveas.setEnabled(false);
 		fileitemclose.setEnabled(false);
 	}
