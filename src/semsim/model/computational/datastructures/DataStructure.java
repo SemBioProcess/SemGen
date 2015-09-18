@@ -266,6 +266,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return usedToCompute;
 	}
 	
+	public boolean hasComputation() {
+		return computation!=null;
+	}
 	
 	// Required by annotable interface:
 	public Set<Annotation> getAnnotations() {

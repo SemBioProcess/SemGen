@@ -9,6 +9,7 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimComponentComparator;
@@ -125,8 +126,10 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public void setSubmodelName(String newname) {
 		Submodel sm = componentlist.get(currentfocus);
+		String oldname = sm.getName();
 		sm.setName(newname);
 		sm.setLocalName(newname);
+		
 		refreshSubModels();
 		for (DataStructure ds : sm.getAssociatedDataStructures()) {
 			String name = ds.getName();
@@ -134,8 +137,20 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 			if (i!=-1) {
 				name = newname + "." + name.substring(i+1);
 				ds.setName(name);
+
 			}
-			
+			if (ds.hasComputation()) {
+				Computation comp = ds.getComputation();
+				if (comp.getComputationalCode()!=null) {
+					String eq = comp.getComputationalCode().replaceAll(oldname, newname);
+					
+					comp.setComputationalCode(eq);
+				}
+				if (comp.getMathML()!=null) {
+					String eq = comp.getMathML().replaceAll(oldname, newname);
+					comp.setMathML(eq);
+				}
+			}
 		}
 		
 		currentfocus = componentlist.indexOf(sm);
