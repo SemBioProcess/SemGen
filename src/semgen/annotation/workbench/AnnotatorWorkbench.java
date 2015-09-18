@@ -193,6 +193,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					return false;
 				}
 			}
+			if (returnval == JOptionPane.CLOSED_OPTION)
+				return false;
 		}
 		return true;
 	}
