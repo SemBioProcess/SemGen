@@ -1,6 +1,6 @@
-startDirectory; /Users/max_neal/Dropbox/Semantic Project/Annotated CellML models/pandit_clark_giles_demir_2001
+startDirectory; /Users/max_neal/junk
 maximize; false
-screensize; 1386x794
+screensize; 1000x700
 screenpos; 0x22
 autoAnnotate; true
 showImports; true
