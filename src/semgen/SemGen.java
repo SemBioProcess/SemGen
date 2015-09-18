@@ -236,7 +236,7 @@ public class SemGen extends JFrame implements Observer{
 	/** Quit - verify that it is OK to quit and store the user's current preferences
 	 * and any local ontology terms if it yes
 	 * */
-	public void quit() throws HeadlessException, OWLException {
+	public boolean quit() throws HeadlessException, OWLException {
 		
 		if(contentpane.quit()){
 			try {
@@ -244,9 +244,11 @@ public class SemGen extends JFrame implements Observer{
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();
+				return true;
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
 		}
+		return false;
 	}
 	
 	@Override

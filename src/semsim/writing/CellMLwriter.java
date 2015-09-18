@@ -37,7 +37,6 @@ import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.Importable;
-import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
