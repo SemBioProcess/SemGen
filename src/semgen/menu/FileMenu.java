@@ -45,7 +45,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		add(new JSeparator());
 		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_P,true,true);
 		add(fileitemproperties);
-		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
+		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",null,true,true);
 		add(new JSeparator());
 		add(fileitemexit);
 		fileitemsaveas.setEnabled(false);
