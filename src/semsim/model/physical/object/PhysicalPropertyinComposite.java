@@ -2,8 +2,8 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimTypes;
@@ -31,8 +31,8 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	/**
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
-	public String getNamewithOntologyAbreviation() {
-		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
+		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
 	@Override
@@ -52,8 +52,8 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	}
 	
 	@Override
-	public String getOntologyName() {
-		return SemGen.semsimlib.getReferenceOntologyName(referenceuri);
+	public String getOntologyName(SemSimLibrary semsimlib) {
+		return semsimlib.getReferenceOntologyName(referenceuri);
 	}
 
 	@Override

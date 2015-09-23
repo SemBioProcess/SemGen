@@ -2,6 +2,8 @@ package semsim.annotation;
 
 import java.net.URI;
 
+import semsim.SemSimLibrary;
+
 public interface ReferenceTerm {
 	
 	/**
@@ -22,9 +24,9 @@ public interface ReferenceTerm {
 	
 	public String getName();
 	
-	public String getNamewithOntologyAbreviation();
+	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib);
 	
-	public String getOntologyName();
+	public String getOntologyName(SemSimLibrary semsimlib);
 	
 	public String getTermID();
 	

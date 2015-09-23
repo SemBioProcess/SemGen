@@ -463,7 +463,7 @@ public class SemSimTermLibrary extends Observable {
 		
 //**************************************REFERENCE TERM DATA RETRIEVAL METHODS *********************//
 		public String getOntologyName(Integer index) {
-			return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName();
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName(SemGen.semsimlib);
 		}
 		
 		public String getReferenceID(Integer index) {
@@ -804,7 +804,7 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public String getName() {
-			if (reference) return ((ReferenceTerm)component).getNamewithOntologyAbreviation();
+			if (reference) return ((ReferenceTerm)component).getNamewithOntologyAbreviation(SemGen.semsimlib);
 			return component.getName();
 		}
 		
