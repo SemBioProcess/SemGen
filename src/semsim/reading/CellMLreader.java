@@ -829,12 +829,18 @@ public class CellMLreader extends ModelReader {
 					pmc = semsimmodel.addCompositePhysicalEntity(buildCompositePhysicalEntityfromRDFresource(res));
 				
 				// If a reference entity
-				else if(isannres!=null)
-					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
+				else {
+					if(isannres!=null) {
 				
-				// If a custom entity
-				else{
-					pmc = addCustomPhysicalEntityToModel(res);
+					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
+					}
+					// If a custom entity
+					else{
+						pmc = addCustomPhysicalEntityToModel(res);
+					}
+					ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
+					entlist.add((PhysicalEntity) pmc);
+					pmc = semsimmodel.addCompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
 				}
 			}
 			else if(isprocess){
