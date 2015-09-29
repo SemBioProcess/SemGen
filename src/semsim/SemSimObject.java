@@ -68,7 +68,9 @@ public abstract class SemSimObject {
 	 * @param metadataID The ID to apply
 	 */
 	public void setMetadataID(String metadataID) {
-		this.metadataID = metadataID;
+		if (metadataID != null) {
+			this.metadataID = metadataID;
+		}
 	}
 
 	/**

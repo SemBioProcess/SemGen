@@ -137,6 +137,13 @@ public class CellMLwriter extends ModelWriter {
 			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
 		
 		root.setAttribute("name", namestring);
+		
+		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.sourcemodelid)) {
+			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.sourcemodelid);
+			root.setAttribute("id", namestring, CellMLconstants.cmetaNS);
+		}
+		
+		
 	}
 	
 	private void declareImports() {
@@ -363,7 +370,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
-			if(submodel.getMetadataID()!=null) 
+			if(!submodel.getMetadataID().equalsIgnoreCase("")) 
 				comp.setAttribute("id", submodel.getMetadataID(), CellMLconstants.cmetaNS);  // Add ID, if present
 			
 			// Add the variables
@@ -395,7 +402,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				String metadataid = ds.getMetadataID();
 				// Add other attributes
-				if(metadataid!=null && !metadataid.equals(""))
+				if(!metadataid.equals(""))
 					variable.setAttribute("id", metadataid, CellMLconstants.cmetaNS);
 				if(initialval!=null && !initialval.equals(""))
 					variable.setAttribute("initial_value", initialval);
