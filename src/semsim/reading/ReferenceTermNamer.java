@@ -20,6 +20,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
+import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.webservices.BioPortalConstants;
 import semsim.utilities.webservices.BioPortalSearcher;
@@ -120,7 +121,8 @@ public class ReferenceTermNamer {
 						// Set the name of the semsim component to the annotation description if it's
 						// a physical entity, physical process or physical property
 						if(ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION 
-								&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) || (ssc instanceof PhysicalProperty)))
+								&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) 
+										|| (ssc instanceof PhysicalProperty) || (ssc instanceof PhysicalPropertyinComposite)))
 							ssc.setName(name);
 					}
 				}
