@@ -281,7 +281,8 @@ public class SBMLreader extends ModelReader{
 		timeds.setSingularAnnotation(timeprop);
 		
 		semsimmodel.addDataStructure(timeds);
-		speciessubmodel.addDataStructure(timeds);		
+		
+		if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);		
 	}
 
 	/**
@@ -1134,11 +1135,13 @@ public class SBMLreader extends ModelReader{
 	private String getSubstanceBaseUnits(UnitOfMeasurement substanceunits){
 		String val = "mole";
 		
-		if(substanceunits.getUnitFactors().size()==1){
-			
-			for(UnitFactor uf : substanceunits.getUnitFactors())
-				val = uf.getBaseUnit().getName();
-						
+		if(substanceunits!=null){
+			if(substanceunits.getUnitFactors().size()==1){
+				
+				for(UnitFactor uf : substanceunits.getUnitFactors())
+					val = uf.getBaseUnit().getName();
+							
+			}
 		}
 		return val;
 	}
