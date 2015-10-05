@@ -120,14 +120,6 @@ public class SemSimUtil {
 					}
 					
 					model.removeDataStructure(mv.getName());
-					
-//					MappableVariable mappedfrom = mappedfromset.toArray(new MappableVariable[]{})[0];
-//					String mathml = mathMLhead;
-//					mathml = mathml + " <apply>\n <eq/>\n <ci>" + mv.getName() + "</ci>" +
-//							"\n <ci>" + mappedfrom.getName() + "</ci>\n </apply>\n";
-//					mathml = mathml + mathMLtail;
-//					
-//					System.out.println(mv.getName() + ": " + mathml);
 				}
 				
 				mv.setPublicInterfaceValue("");
@@ -204,7 +196,6 @@ public class SemSimUtil {
 							"<apply><times /><ci>" + replacementtext + "</ci><cn>" + conversionfactor + "</cn></apply>");
 					else newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>",
 							"<ci>" + replacementtext + "</ci>");
-					System.out.println("HERE2 " + dscheck.getName());
 					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 				}
 				

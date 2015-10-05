@@ -115,7 +115,6 @@ public class Merger {
 			
 			// If "ignore equivalency" is NOT selected
 			if(keptds!=null && discardedds !=null){	
-				System.out.println("HERE-0");
 				discardeddsset.add(discardedds);
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
@@ -125,10 +124,9 @@ public class Merger {
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
 				// else we assume that we're dealing with two flattened models
-				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)){ 
-					System.out.println("HERE replacing " + discardedds.getName() + " with " + keptds.getName());
+				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i))
 					return null;
-				}
+				
 			}
 			i++;
 		}
