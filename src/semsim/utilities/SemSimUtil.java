@@ -27,6 +27,7 @@ import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
@@ -42,6 +43,114 @@ import semsim.writing.CaseInsensitiveComparator;
  * A collection of utility methods for working with SemSim models
  */
 public class SemSimUtil {
+	
+	private static final String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
+	private static final String mathMLtail = "</math>";
+	
+	
+	/**
+	 * Removes the FunctionalSubmodel structures within a model. Creates a "flattened"
+	 * model where there are no MappableVariables. For merging CellML and non-CellML models.
+	 */
+	public static Map<String,String> flattenModel(SemSimModel model){
+		
+		Map<String,String> renamingmap = new HashMap<String,String>();
+		
+		Set<FunctionalSubmodel> fsset = new HashSet<FunctionalSubmodel>();
+		fsset.addAll(model.getFunctionalSubmodels());
+		
+		// Remove functional submodel structures
+		for(FunctionalSubmodel fs : fsset) model.removeSubmodel(fs);
+		
+		// Remove mapping info on MappableVariables, set eqs. for variables that are inputs
+		Set<DataStructure> dsset = new HashSet<DataStructure>();
+		dsset.addAll(model.getAssociatedDataStructures());
+		
+		for(DataStructure ds : dsset){
+			
+			if(ds instanceof MappableVariable){
+				
+				// Need to flatten names of variables. Can we get rid 
+				// of the inputs?
+				// How to deal with solution domain resolution?
+				
+				MappableVariable mv = (MappableVariable)ds;
+								
+				if(mv.isFunctionalSubmodelInput()){
+					
+					boolean sourcefound = false;
+					
+					MappableVariable sourcemv = mv;
+					
+					// follow mappings until source variable is found
+					while(! sourcefound){						
+						sourcemv = sourcemv.getMappedFrom().toArray(new MappableVariable[]{})[0];
+						
+						if(! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
+					}
+					
+					String sourcevarglobalname = sourcemv.getName();
+					String sourcelocalname = sourcevarglobalname.substring(sourcevarglobalname.lastIndexOf(".")+1, sourcevarglobalname.length());
+					
+					String mvglobalname = mv.getName();
+					String mvlocalname = mvglobalname.substring(mvglobalname.lastIndexOf(".")+1, mvglobalname.length());
+					
+					//Remove the computational dependency between source and input var
+					sourcemv.getUsedToCompute().remove(mv);
+					
+					// Go through all the variables that are computed from the one we're going to remove
+					// and set them dependent on the source variable
+					for(DataStructure dependentmv : mv.getUsedToCompute()){
+						
+						dependentmv.getComputationInputs().remove(mv);
+						dependentmv.getComputation().addInput(sourcemv);
+						
+						// If the local name of the input doesn't match that of its source,
+						// replace all occurrences of the input's name in the equations that use it
+						if(! sourcelocalname.equals(mvlocalname)){
+							
+							String newmathml = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getMathML(), sourcelocalname, mvlocalname);
+							dependentmv.getComputation().setMathML(newmathml);
+							
+							if(dependentmv.getComputation().getComputationalCode()!=null){
+								String newcompcode = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getComputationalCode(), sourcelocalname, mvlocalname);
+								dependentmv.getComputation().setComputationalCode(newcompcode);
+							}
+						}
+					}
+					
+					model.removeDataStructure(mv.getName());
+					
+//					MappableVariable mappedfrom = mappedfromset.toArray(new MappableVariable[]{})[0];
+//					String mathml = mathMLhead;
+//					mathml = mathml + " <apply>\n <eq/>\n <ci>" + mv.getName() + "</ci>" +
+//							"\n <ci>" + mappedfrom.getName() + "</ci>\n </apply>\n";
+//					mathml = mathml + mathMLtail;
+//					
+//					System.out.println(mv.getName() + ": " + mathml);
+				}
+				
+				mv.setPublicInterfaceValue("");
+				mv.setPrivateInterfaceValue("");
+				
+				// Clear mappings
+				mv.getMappedFrom().clear();
+				mv.getMappedTo().clear();
+			}
+		}
+		
+		// Second pass through new data structures to remove the prefixes on their names
+		for(DataStructure ds : model.getAssociatedDataStructures()){
+			String oldname = ds.getName();
+			String newname = oldname.substring(oldname.lastIndexOf(".")+1, oldname.length());
+			ds.setName(newname); 
+			
+			renamingmap.put(oldname, newname);
+		}
+		
+		return renamingmap;
+	}
+	
 	
 	/**
 	 * Replace all occurrences of a codeword in a model's equations with another
@@ -90,11 +199,12 @@ public class SemSimUtil {
 				// apply conversion factors in mathml
 				String newmathml = null;
 				if(dscheck.getComputation().getMathML()!=null){
-					if(conversionfactor!=1)
+					if(conversionfactor != 1.0)
 						newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>", 
 							"<apply><times /><ci>" + replacementtext + "</ci><cn>" + conversionfactor + "</cn></apply>");
 					else newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>",
 							"<ci>" + replacementtext + "</ci>");
+					System.out.println("HERE2 " + dscheck.getName());
 					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 				}
 				
@@ -253,8 +363,7 @@ public class SemSimUtil {
 				}
 			}
 			if(hastopeqel){
-				String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
-				String mathMLtail = "</math>";
+				
 				
 				Element eqel = doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ).getChild("eq",SemSimConstants.MATHML_NAMESPACE_OBJ);
 				Element eqparentel = eqel.getParentElement();

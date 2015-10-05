@@ -60,30 +60,62 @@ public class Merger {
 		Set<DataStructure> dsdonotprune = new HashSet<DataStructure>();
 		boolean prune = true;
 		
+		// If one of the models contains functional submodels and the other doesn't,
+		// flatten the one 
+		boolean fxnalsubsinmodel1 = ssm1clone.getFunctionalSubmodels().size() > 0;
+		boolean fxnalsubsinmodel2 = ssm2clone.getFunctionalSubmodels().size() > 0;
+		Map<String,String> mod1renamemap = new HashMap<String,String>();
+		Map<String,String> mod2renamemap = new HashMap<String,String>();
+		
+		if(fxnalsubsinmodel1 && ! fxnalsubsinmodel2){ 
+			mod1renamemap = SemSimUtil.flattenModel(ssm1clone);
+		}
+		
+		else if(fxnalsubsinmodel2 && ! fxnalsubsinmodel1){
+			mod2renamemap = SemSimUtil.flattenModel(ssm2clone);
+		}
+		
+//		if(mod1renamemap!=null || mod2renamemap!=null){
+//			
+//			for(overlapmap.getDataStructurePairs()){
+				
+//			}
+//		}
+		
 		int i = 0;
 		
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
+			
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				if (newname==null) newname=dsp.getLeft().getName();
-				keptds = ssm1clone.getAssociatedDataStructure(newname);
-				modelfordiscardedds = ssm2clone;
 				
-				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getRight().getName());
+				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
+				keptds = ssm1clone.getAssociatedDataStructure(newname);
+				
+				modelfordiscardedds = ssm2clone;
+				String discardedname = dsp.getRight().getName();
+				if(mod2renamemap.containsKey(discardedname)) discardedname = mod2renamemap.get(discardedname);
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(discardedname);
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
-				keptds = ssm2clone.getAssociatedDataStructure(dsp.getRight().getName());
+				String keptname = dsp.getRight().getName();
+				if(mod2renamemap.containsKey(keptname)) keptname = mod2renamemap.get(keptname);
+				keptds = ssm2clone.getAssociatedDataStructure(keptname);
+				
 				modelfordiscardedds = ssm1clone;
 				
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				if (newname==null) newname=dsp.getLeft().getName();
+				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
+
 				discardedds = modelfordiscardedds.getAssociatedDataStructure(newname);
 			}
 			
 			// If "ignore equivalency" is NOT selected
 			if(keptds!=null && discardedds !=null){	
-				
+				System.out.println("HERE-0");
 				discardeddsset.add(discardedds);
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
@@ -92,8 +124,11 @@ public class Merger {
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
-				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
+				// else we assume that we're dealing with two flattened models
+				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)){ 
+					System.out.println("HERE replacing " + discardedds.getName() + " with " + keptds.getName());
 					return null;
+				}
 			}
 			i++;
 		}
@@ -109,12 +144,6 @@ public class Merger {
 			for(DataStructure dstoprune : runningsettoprune){
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
 				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
-				
-				// Remove equation in MathML block, if inputds is a MappableVariable
-				if(dstoprune instanceof MappableVariable){
-					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
-					fs.removeVariableEquationFromMathML((MappableVariable)dstoprune);
-				}
 			}
 		}
 			
@@ -214,6 +243,8 @@ public class Merger {
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		
+		mergedmodel.setName("model_0");
+		
 		return mergedmodel;
 	}
 	
@@ -283,7 +314,10 @@ public class Merger {
 		
 		// if the two terms have different names, or a conversion factor is required
 		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
-			String replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			
+			String replacementtext = keptds.getName();
+			if(conversionfactor.getLeft()!=1.0) replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			
 			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor.getLeft());
 		}
