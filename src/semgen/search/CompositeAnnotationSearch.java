@@ -23,7 +23,7 @@ public class CompositeAnnotationSearch {
 
 		for(String keyword : queryArray) {
 			Set<String> searchResults = new HashSet<String>();
-			Scanner annotationFile = new Scanner(new File("examples/AnnotatedModels/Annotations_FULL_LIST.txt"));
+			Scanner annotationFile = new Scanner(new File("examples/AnnotatedModels/AnnotationList_withBiomodels.txt"));
 			if(annotationFile.hasNext()) {
 				String wholeline = "";
 				String modelName = "";
