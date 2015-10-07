@@ -48,6 +48,7 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<Integer> cpeindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
 	
+	private int refsearchtype = 0;
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE, TERM_CHANGE};
 	
@@ -779,7 +780,8 @@ public class SemSimTermLibrary extends Observable {
 		return cnt;
 	}
 	
-//*********************************INDEX CARD DEFINITION************************************//
+
+	//*********************************INDEX CARD DEFINITION************************************//
 	protected class IndexCard<T extends PhysicalModelComponent> {
 		private T component;
 		private Boolean reference;
@@ -838,4 +840,20 @@ public class SemSimTermLibrary extends Observable {
 			return component.getSemSimType();
 		}
 	}
+	
+	/**
+	 * @return the refsearchtype
+	 */
+	public int getReferenceSearchType() {
+		return refsearchtype;
+	}
+
+
+	/**
+	 * @param refsearchtype the refsearchtype to set
+	 */
+	public void setReferenceSearchType(int refsearchtype) {
+		this.refsearchtype = refsearchtype;
+	}
+
 }

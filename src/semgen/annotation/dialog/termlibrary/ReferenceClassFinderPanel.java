@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -46,7 +48,7 @@ import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceClassFinderPanel extends JPanel implements
-		ActionListener, ListSelectionListener, ComponentListener {
+		ActionListener, ListSelectionListener, ComponentListener, ItemListener {
 	private static final long serialVersionUID = -7884648622981159203L;
 	private SemSimTermLibrary library;
 	
@@ -125,7 +127,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findchooser.addItem("exact match");
 		findchooser.addItem("Ontology ID");
 		findchooser.setMaximumSize(new Dimension(125, 25));
-
+		findchooser.setSelectedIndex(library.getReferenceSearchType());
+		findchooser.addItemListener(this);
+		
 		findbox.setForeground(Color.blue);
 		findbox.setBorder(BorderFactory.createBevelBorder(1));
 		findbox.setFont(SemGenFont.defaultPlain());
@@ -369,5 +373,12 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	@Override
 	public void componentShown(ComponentEvent arg0) {
 		align();
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getSource()==findchooser) {
+			library.setReferenceSearchType(findchooser.getSelectedIndex());
+		}
 	}
 }
