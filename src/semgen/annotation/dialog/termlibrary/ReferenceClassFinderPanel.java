@@ -123,6 +123,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findchooser.setFont(SemGenFont.defaultItalic(-1));
 		findchooser.addItem("contains");
 		findchooser.addItem("exact match");
+		findchooser.addItem("Ontology ID");
 		findchooser.setMaximumSize(new Dimension(125, 25));
 
 		findbox.setForeground(Color.blue);
