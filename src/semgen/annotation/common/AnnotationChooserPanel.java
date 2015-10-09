@@ -35,6 +35,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	
 	private JPanel itempanel = new JPanel();
 	private static Dimension dim = new Dimension(350,30);
+	private static Dimension choosedim = new Dimension(9999, 250);
 	private ComponentPanelLabel searchlabel;
 	private ComponentPanelLabel eraselabel;
 	private ComponentPanelLabel modifylabel;
@@ -51,10 +52,12 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		
 		combobox.setPreferredSize(dim);
 		combobox.setMaximumSize(dim);
-		
+		setAlignmentY(TOP_ALIGNMENT);
 		itempanel.setLayout(new FlowLayout(FlowLayout.LEADING, 3, 3));
 		itempanel.setBackground(SemGenSettings.lightblue);
 		itempanel.add(combobox);
+		itempanel.setAlignmentY(TOP_ALIGNMENT);
+		setMaximumSize(choosedim);
 	}
 	
 	public void makeStaticPanel(int selection) {
@@ -102,7 +105,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public void enableEraseButton(boolean isenabled) {
-		eraselabel.setEnabled(isenabled);
+		if(eraselabel != null) eraselabel.setEnabled(isenabled);
 	}
 	
 	protected void addURLButton() {
@@ -157,7 +160,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	public void toggleNoneSelected(boolean noselection) {
-		eraselabel.setEnabled(!noselection);
+		if(eraselabel !=null) eraselabel.setEnabled(!noselection);
 		if (modifylabel != null) modifylabel.setEnabled(!noselection); 
 		if (urlbutton != null) urlbutton.setEnabled(!noselection); 
 	}

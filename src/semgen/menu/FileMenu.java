@@ -12,6 +12,7 @@ import javax.swing.KeyStroke;
 
 import semgen.GlobalActions;
 import semgen.NewTaskDialog;
+import semgen.OSValidator;
 import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
 import semgen.utilities.uicomponent.SemGenMenu;
@@ -45,9 +46,14 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		add(new JSeparator());
 		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_P,true,true);
 		add(fileitemproperties);
-		fileitemexit = formatMenuItem(fileitemexit,"Quit SemGen",KeyEvent.VK_Q,true,true);
+		
+		Integer quitaccelerator = OSValidator.isMac() ? null : KeyEvent.VK_Q;
+		fileitemexit = formatMenuItem(fileitemexit, "Quit SemGen", quitaccelerator, true, true);
 		add(new JSeparator());
 		add(fileitemexit);
+		
+		fileitemsaveas.setEnabled(false);
+		fileitemclose.setEnabled(false);
 	}
 
 	@Override
@@ -83,6 +89,16 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		public void update(Observable o, Object arg) {
 			if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
 				fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());	
+			}
+			if (arg==GlobalActions.appactions.TABCLOSED || arg==GlobalActions.appactions.TABOPENED) {
+				if (globalactions.getNumOpenTabs()==0) {
+					fileitemsaveas.setEnabled(false);
+					fileitemclose.setEnabled(false);
+				}
+				else {
+					fileitemsaveas.setEnabled(true);
+					fileitemclose.setEnabled(true);
+				}
 			}
 		}	
 

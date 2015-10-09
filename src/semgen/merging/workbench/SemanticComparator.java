@@ -82,7 +82,7 @@ public class SemanticComparator {
 					Boolean match = false;
 					
 					// Test singular annotations
-					if(ds1.hasRefersToAnnotation() && ds2.hasRefersToAnnotation()) {
+					if(ds1.hasPhysicalDefinitionAnnotation() && ds2.hasPhysicalDefinitionAnnotation()) {
 						match = ds1.getSingularTerm().equals(ds2.getSingularTerm());
 					}
 					

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -31,25 +33,26 @@ import javax.swing.event.ListSelectionListener;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
+import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
-import semsim.utilities.ReferenceOntologies.ReferenceOntology;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceClassFinderPanel extends JPanel implements
-		ActionListener, ListSelectionListener {
+		ActionListener, ListSelectionListener, ComponentListener {
 	private static final long serialVersionUID = -7884648622981159203L;
 	private SemSimTermLibrary library;
 	
 	private JComboBox<String> ontologychooser;
 	private JComboBox<String> findchooser = new JComboBox<String>();
-
+	private JLabel ontdescription = new JLabel();
 	private JButton findbutton = new JButton("Go");
 	protected ExternalURLButton externalURLbutton;
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingicon);
@@ -67,13 +70,14 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		library = lib;
 		domain = dom;
 		setUpUI();
+		validate();
 	}
 	
 	// Set up the interface
 	@SuppressWarnings("serial")
 	public void setUpUI(){
-		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(SemGenSettings.lightblue);
 
 		JLabel selectKBsource = new JLabel("Select ontology: ");
 		selectKBsource.setFont(SemGenFont.defaultPlain());
@@ -92,11 +96,24 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			ontologychooser.setSelectedIndex(0);
 		}
 		
+		ontdescription.setFont(SemGenFont.defaultItalic(-1));
+		ontdescription.setForeground(Color.DARK_GRAY);
+		ontdescription.setAlignmentX(Box.LEFT_ALIGNMENT);
+
+		JPanel descpanel = new JPanel();
+		descpanel.setLayout(new BoxLayout(descpanel, BoxLayout.X_AXIS));
+		descpanel.add(ontdescription);
+		descpanel.setAlignmentX(Box.LEFT_ALIGNMENT);
+		descpanel.add(Box.createHorizontalGlue());
+		descpanel.setOpaque(false);
+
 		JPanel selectKBsourcepanel = new JPanel();
 		selectKBsourcepanel.add(selectKBsource);
 		selectKBsourcepanel.add(ontologychooser);
 		selectKBsourcepanel.setMaximumSize(new Dimension(900, 40));
-
+		selectKBsourcepanel.setAlignmentX(Box.LEFT_ALIGNMENT);
+		selectKBsourcepanel.setOpaque(false);
+		
 		JPanel querypanel = new JPanel();
 		querypanel.setLayout(new BoxLayout(querypanel, BoxLayout.X_AXIS));
 
@@ -119,6 +136,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		JPanel findpanel = new JPanel();
 		findpanel.setLayout(new BoxLayout(findpanel, BoxLayout.X_AXIS));
+		findpanel.setOpaque(false);
 		findpanel.add(findtext);
 		findpanel.add(findchooser);
 		findpanel.add(findbox);
@@ -161,6 +179,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		};
 		rightscrollerinfobuttonpanel.add(externalURLbutton);
 		externalURLbutton.setEnabled(false);
+		rightscrollerinfobuttonpanel.setOpaque(false);
 		rightscrollerbuttonpanel.add(rightscrollerinfobuttonpanel, BorderLayout.WEST);
 		rightscrollerbuttonpanel.add(Box.createGlue(), BorderLayout.EAST);
 		resultspanelrightheader.add(resultslabelright, BorderLayout.WEST);
@@ -168,12 +187,38 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		resultspanelright.setOpaque(false);
 
-		JComponent[] arrayright = { selectKBsourcepanel, querypanel, findpanel, resultsscrollerright, rightscrollerbuttonpanel};
+		JPanel toppanel = new JPanel();
+		toppanel.setLayout(new BoxLayout(toppanel, BoxLayout.PAGE_AXIS));
+		toppanel.setAlignmentX(Box.CENTER_ALIGNMENT);
+		toppanel.setOpaque(false);
+		toppanel.add(selectKBsourcepanel);
+		toppanel.add(descpanel);
+		
+		JComponent[] arrayright = { toppanel,
+				querypanel, findpanel, resultsscrollerright, rightscrollerbuttonpanel};
 
 		for (int i = 0; i < arrayright.length; i++) {
 			this.add(arrayright[i]);
 		}
 		findbox.requestFocusInWindow();
+	}
+	
+	//Align the ontology description with the ontology chooser combobox
+	public void align() {
+		int x = ontologychooser.getX();
+		if (x==0) {
+			if (domain==OntologyDomain.AssociatePhysicalProperty || domain==OntologyDomain.PhysicalProperty) {
+				x = 234;
+			}
+			else if (domain==OntologyDomain.PhysicalEntity) {
+				x = 208;
+			}
+			else {
+				x = 234;
+			}
+		}
+
+			ontdescription.setBorder(BorderFactory.createEmptyBorder(0, x, 10, 0));
 	}
 	
 	// Show the RDF labels for the classes in the results list instead of the class names
@@ -288,6 +333,8 @@ public class ReferenceClassFinderPanel extends JPanel implements
 
 		if (o == ontologychooser) {
 			selected = domain.getDomainOntologyatIndex(ontologychooser.getSelectedIndex());
+			ontdescription.setText("For annotating " + selected.getDescription());
+			align();
 			if(ontologychooser.getItemCount()>2){
 				library.setLastOntology(selected);
 			}
@@ -301,5 +348,25 @@ public class ReferenceClassFinderPanel extends JPanel implements
 	        	externalURLbutton.setEnabled(true);
 	        }
         }
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		align();
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		align();
 	}
 }

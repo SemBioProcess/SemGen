@@ -1,15 +1,19 @@
 package semsim.extraction;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import semsim.annotation.Annotation;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
@@ -50,6 +54,11 @@ public class Extraction {
 	 */
 	private SemSimModel sourcemodel;
 	
+	/**
+	 * A friendly date format for time-stamping extractions
+	 */
+	private SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+
 	public Extraction(SemSimModel sourcemodel){
 		this.setSourceModel(sourcemodel);
 		reset();
@@ -208,27 +217,70 @@ public class Extraction {
 		SemSimModel extractedmodel = new SemSimModel();
 		
 		// Copy over all the model-level information
-		for(Annotation modann : getSourceModel().getAnnotations()){
-			extractedmodel.addAnnotation(modann.clone());
+//		for(Annotation modann : getSourceModel().getAnnotations()){
+//			extractedmodel.addAnnotation(new Annotation(modann));
+//		}
+		
+		// Copy in units
+		for(UnitOfMeasurement uom : getSourceModel().getUnits()){
+			extractedmodel.addUnit(new UnitOfMeasurement(uom));
 		}
 		
+		// Copy in solution domains
 		for(DataStructure soldom : getSourceModel().getSolutionDomains()){
 			extractedmodel.addDataStructure(soldom.clone());
 		}
+		
+		// Copy in the data structures
 		for(DataStructure ds : getDataStructuresToExtract().keySet()){
 			
 			// If the data structure has been changed from a dependent variable into an input
-			DataStructure newds = null;
-			
+			DataStructure newds = ds.clone();
+						
 			if( ! getDataStructuresToExtract().get(ds) && ds.getComputation().getInputs().size()>0){
-				newds = ds.clone();
 				newds.setComputation(new Computation(newds));
 				newds.setStartValue(null);
 				newds.getAnnotations().addAll(ds.getAnnotations());
-				extractedmodel.addDataStructure(newds);
+				
+				if(newds instanceof MappableVariable) ((MappableVariable)newds).getMappedFrom().clear();
 			}
-			else{
-				extractedmodel.addDataStructure(ds.clone());
+			
+			extractedmodel.addDataStructure(newds);
+			
+			// If the variable is part of a functional submodel that wasn't explicity included
+			// in the extraction, create a parent submodel for it. Reuse, if already created.
+			if(newds instanceof MappableVariable){
+			
+				String parentname = newds.getName().substring(0, newds.getName().lastIndexOf("."));
+				MappableVariable dsasmv = (MappableVariable)ds;
+				
+				// If the parent submodel for the variable is not being explicitly extracted 
+				if( ! getSubmodelsToExtract().containsKey(sourcemodel.getSubmodel(parentname))){
+					FunctionalSubmodel copyfs = null;
+					
+					// Copy in submodel if we haven't already
+					if(extractedmodel.getSubmodel(parentname) == null){						
+						copyfs = new FunctionalSubmodel(parentname, newds);
+						copyfs.setLocalName(parentname);
+						copyfs.getComputation().setMathML(newds.getComputation().getMathML());
+						extractedmodel.addSubmodel(copyfs);
+					}
+					// Otherwise reuse existing submodel
+					else{
+						copyfs = (FunctionalSubmodel)extractedmodel.getSubmodel(parentname);
+						
+						// Add output to functional submodel's computation
+						if(dsasmv.getPublicInterfaceValue().equals("out")) copyfs.getComputation().addOutput(newds);
+						
+						// Concat mathml
+						String oldmathml = copyfs.getComputation().getMathML();
+						
+						if(newds.getComputation().getMathML() !=null)
+							copyfs.getComputation().setMathML(oldmathml + "\n" + newds.getComputation().getMathML());
+					}
+					
+					copyfs.addDataStructure(newds);
+				}
 			}
 		}
 		
@@ -255,6 +307,7 @@ public class Extraction {
 		extractedmodel.setPhysicalEntities(ents);
 		extractedmodel.setPhysicalProcesses(procs);
 		
+		extractedmodel.setDescription("Extracted from " + getSourceModel().getName() + " on " + sdf.format(new Date()));
 		return extractedmodel;
 	}
 	
@@ -267,7 +320,19 @@ public class Extraction {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
 			
-			Submodel newsub = extractedmodel.addSubmodel(sub.clone());
+			Submodel newsub = sub.isFunctional() ? new FunctionalSubmodel((FunctionalSubmodel)sub) : new Submodel(sub);
+			
+			extractedmodel.addSubmodel(newsub);
+			
+			// Associate submodel with the copies of the data structures it was previously associated with
+			Set<DataStructure> tempdsset = new HashSet<DataStructure>();
+			
+			for(DataStructure ds : newsub.getAssociatedDataStructures()){
+				String dsname = ds.getName();
+				DataStructure dscopy = extractedmodel.getAssociatedDataStructure(dsname);
+				tempdsset.add(dscopy);
+			}
+			newsub.setAssociatedDataStructures(tempdsset);
 			
 			// If we're preserving the submodel's submodels
 			if(getSubmodelsToExtract().get(sub)==true){

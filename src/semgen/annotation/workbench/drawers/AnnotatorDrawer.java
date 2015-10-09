@@ -18,11 +18,11 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		termlib = lib;
 	}
 	
-	public String getCodewordName(int index) {
+	public String getComponentName(int index) {
 		return componentlist.get(index).getName();
 	}
 	
-	public String getCodewordName() {
+	public String getComponentName() {
 		return componentlist.get(currentfocus).getName();
 	}
 	

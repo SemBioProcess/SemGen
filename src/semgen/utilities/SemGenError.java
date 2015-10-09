@@ -5,10 +5,12 @@
 package semgen.utilities;
 
 import java.util.ArrayList;
+
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import semsim.utilities.ErrorEntry;
 import semsim.utilities.ErrorLog;
 
 public class SemGenError {
@@ -49,14 +51,20 @@ public class SemGenError {
 	
 	public static boolean showSemSimErrors() {
 		if (ErrorLog.hasErrors()) {
-			String message = "";	
-			ArrayList<String> errors = ErrorLog.getAllErrorsandFlush();
-			for (String e : errors) {
-				message += e;
+			String message = "";
+			boolean fatalerror = false;
+			ArrayList<ErrorEntry> errors = ErrorLog.getAllErrorsandFlush();
+			
+			for (ErrorEntry e : errors) {
+				
+				if(e != null){
+					message += e.errmsg + "\r\n";
+					if (e.isfatal) fatalerror = true;
+				}
 			}
 			JOptionPane.showMessageDialog(parent, message,
 				"SemSim Error", JOptionPane.ERROR_MESSAGE);
-			return true;
+			return fatalerror;
 		}
 		return false;
 	}

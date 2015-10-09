@@ -17,6 +17,7 @@ public class CurationalMetadata {
 	
 	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
 	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");
+	public static final URI KEYWORDS_URI = URI.create(SEMSIM_NAMESPACE + "Keywords");
 	public static final URI MODEL_ID_URI = URI.create(SEMSIM_NAMESPACE + "modelId");
 	public static final URI ANNOTATOR_NAME_URI = URI.create(SEMSIM_NAMESPACE + "AnnotatorName");
 	public static final URI ANNOTATOR_CONTACT_INFO_URI = URI.create(SEMSIM_NAMESPACE + "AnnotatorContactInfo");
@@ -40,6 +41,7 @@ public class CurationalMetadata {
 	public static final SemSimRelation ANNOTATOR_CONTACT_RELATION = new SemSimRelation("email address of annotator", ANNOTATOR_CONTACT_INFO_URI);
 	public static final SemSimRelation MODELER_NAME_RELATION = new SemSimRelation("who to contact about the model", MODELER_NAME_URI);	
 	public static final SemSimRelation MODELER_CONTACT_RELATION = new SemSimRelation("email address of modeler", MODELER_CONTACT_INFO_URI);	
+	public static final SemSimRelation KEYWORDS_RELATION = new SemSimRelation("keywords", KEYWORDS_URI);	
 	
 	public static final SemSimRelation REFERENCE_PUBLICATION_PUBMED_ID_RELATION = new SemSimRelation("the PubMed ID of the model's reference publication", REFERENCE_PUBLICATION_PUBMED_ID_URI);
 	public static final SemSimRelation REFERENCE_PUBLICATION_ABSTRACT_TEXT_RELATION = new SemSimRelation("the abstract text of the model's reference publication", REFERENCE_PUBLICATION_ABSTRACT_TEXT_URI);
@@ -69,6 +71,7 @@ public class CurationalMetadata {
 	public enum Metadata {
 		fullname("Full Name", MODEL_NAME_RELATION),
 		description("Description", MODEL_DESCRIPTION_RELATION),
+		keywords("Keywords", KEYWORDS_RELATION),
 		annotatorauthor("Annotator Name", ANNOTATOR_NAME_RELATION),
 		annotatorcontact("Annotator Contact", ANNOTATOR_CONTACT_RELATION),
 		modelauthor("Model Author", MODELER_NAME_RELATION),

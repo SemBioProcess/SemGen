@@ -2,20 +2,20 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
 	public ReferencePhysicalDependency(URI uri, String description){
-		addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, uri, description);
+		addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, uri, description);
 	}
 
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
@@ -23,16 +23,26 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 	/**
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
-	public String getNamewithOntologyAbreviation() {
-		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
+		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
 	@Override
+	public String getOntologyName(SemSimLibrary semsimlib) {
+		return semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
+	}
+	
+	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalDependency)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((ReferencePhysicalDependency)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 }

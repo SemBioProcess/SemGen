@@ -58,13 +58,29 @@ public class FunctionalSubmodel extends Submodel {
 		computation = new Computation();
 		functional = true;
 	}
-
+	
+	public FunctionalSubmodel(FunctionalSubmodel fsmtocopy) {
+		super(fsmtocopy);
+		relationshipSubmodelMap.putAll(fsmtocopy.relationshipSubmodelMap);
+		functional = true;
+		computation = fsmtocopy.getComputation();
+	}
+	
 	public Map<String, Set<FunctionalSubmodel>> getRelationshipSubmodelMap() {
 		return relationshipSubmodelMap;
 	}
 
+	public void setRelationshipSubmodelMap(Map<String, Set<FunctionalSubmodel>> relsmmap) {
+		relationshipSubmodelMap = relsmmap;
+	}
+
+	
 	public Computation getComputation() {
 		return computation;
+	}
+	
+	public void setComputation(Computation comp) {
+		computation = comp;
 	}
 	
 	@Override
@@ -93,5 +109,10 @@ public class FunctionalSubmodel extends Submodel {
 				getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
 			}
 		}
+	}
+	
+	@Override
+	public boolean isFunctional(){
+		return true;
 	}
 }

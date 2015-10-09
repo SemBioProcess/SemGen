@@ -5,59 +5,89 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-public class SemGenProgressBar extends SemGenDialog implements ActionListener {
+import semgen.utilities.SemGenFont;
+
+public class SemGenProgressBar extends SemGenDialog implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = -408262547613352487L;
 	private JLabel msglabel;
-	public JProgressBar bar = new JProgressBar();
+	protected JProgressBar bar = new JProgressBar();
 	private JButton cancelbutton = new JButton("Cancel");
 	private CancelEvent onCancel = null;
 	
 	public SemGenProgressBar(String msg, Boolean isindeterminant) {
 		super("");
 		setUndecorated(true);
-		createBar(msg, isindeterminant);
+		createBar(msg, isindeterminant, true);
+		location.addWindowListener(this);
 	}
-	
-	public SemGenProgressBar(String msg, Boolean isindeterminant, Observer obs) {
+
+	public SemGenProgressBar(String msg, Boolean isindeterminant, boolean showprogbar) {
 		super("");
-		onCancel = new CancelEvent(obs);
-		createBar(msg, isindeterminant);
+		setUndecorated(true);
+		createBar(msg, isindeterminant, showprogbar);
+		location.addWindowListener(this);
 	}
 	
-	private void createBar(String msg, Boolean isindeterminant) {			
+	//Consturctor adds a field to override the default parent (the main pane)
+	public SemGenProgressBar(String msg, Boolean isindeterminant, JFrame parent) {
+		super("", parent);
+		setUndecorated(true);
+
+		createBar(msg, isindeterminant, true);
+	}
+	
+	private void createBar(String msg, Boolean isindeterminant, boolean showbar) {		
+		if (msg == null) {
+			dispose();
+			return;
+		}
 		setPreferredSize(new Dimension(300, 65));
 		JPanel progpanel = new JPanel();
 		progpanel.setBorder(BorderFactory.createLineBorder(Color.gray));
 		progpanel.setLayout(new BorderLayout());
 		
 		int bmar = 5;
-		bar.setIndeterminate(isindeterminant);
-		bar.setStringPainted(!isindeterminant);
-		bar.setVisible(true);
-		bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
-		
+
 		cancelbutton.addActionListener(this);
 		
 		msglabel = new JLabel(msg);
 		msglabel.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
 		progpanel.add(msglabel, BorderLayout.NORTH);
-		progpanel.add(bar, BorderLayout.SOUTH);
+		
+		if (showbar) {
+			
+			bar.setIndeterminate(isindeterminant);
+			if(isindeterminant) bar.setValue(101);
+			bar.setStringPainted(!isindeterminant);
+			bar.setVisible(true);
+			bar.setBorder(BorderFactory.createEmptyBorder(bmar, bmar, bmar, bmar));
+			progpanel.add(bar, BorderLayout.SOUTH);
+			
+		}
+		else {
+			msglabel.setFont(SemGenFont.defaultPlain(1));
+			msglabel.setAlignmentX(CENTER_ALIGNMENT);
+		}
 		add(progpanel);
-
-		if(isindeterminant) bar.setValue(101);
+		
 		this.setModalityType(ModalityType.MODELESS);
 		setAlwaysOnTop(true);
+		
 		showDialog();
+		toFront();
 	}
 	
 	public void updateMessage(final String message){
@@ -91,4 +121,40 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener {
 			notifyObservers();
 		}
 	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		setAlwaysOnTop(true);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		dispose();
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		setAlwaysOnTop(false);
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		setAlwaysOnTop(true);
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		setAlwaysOnTop(false);
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		
+	}
+
 }

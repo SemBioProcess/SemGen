@@ -14,6 +14,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.AnnotatorTreeNode;
 import semgen.annotation.workbench.AnnotatorTreeMap;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -57,8 +58,10 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		AnnotatorTreeMap treemap = workbench.makeTreeMap(settings.showImports());
 		
 		if (!treemap.getSubmodelList().isEmpty()) {
+			int i = 0;
 			for (Integer smi : treemap.getSubmodelList()) {
-				addSubModelNode(smi, treemap.getSubmodelDSIndicies(smi), root);
+				addSubModelNode(smi, treemap.getSubmodelDSIndicies(i), root);
+				i++;
 			}
 		}
 		for (Integer dsi : treemap.getOrphanDS()) {
@@ -68,7 +71,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	
 	private void addSubModelNode(Integer index, ArrayList<Integer> dsindicies, AnnotatorTreeNode parent) {
 		SubModelTreeButton newnode = new SubModelTreeButton();
-		
+				
 		for (Integer dsi : dsindicies) {
 			addCodewordNode(dsi, newnode);
 		}
@@ -80,13 +83,14 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		
 	private void addCodewordNode(Integer index, AnnotatorTreeNode parent) {
 		CodewordTreeButton newnode = new CodewordTreeButton();
-		
+				
 		cwmap.put(newnode, index);
 		cwmapinv.put(index, newnode);
 		parent.add(newnode);
 	}
 	
 	public void reload() {
+		clearModel();
 		loadModel();
 		fireTreeStructureChanged();
 	}
@@ -136,7 +140,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 	protected void fireTreeStructureChanged() {
 		TreeModelEvent e = new TreeModelEvent(this, root.getPath());
         for (TreeModelListener tml : listeners) {
-            tml.treeNodesChanged(e);
+            tml.treeStructureChanged(e);
         }
     }
 	
@@ -155,11 +159,15 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		focus = focusbutton;
 	}
 	
-	public void destroy() {
+	private void clearModel() {
 		focus = null;
 		root.removeAllChildren();
 		cwmap.clear(); cwmapinv.clear();
 		smmap.clear(); smmapinv.clear();
+	}
+	
+	public void destroy() {
+		clearModel();
 		fireTreeStructureChanged();
 	}
 
@@ -170,6 +178,12 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 				if (focus!=null) {
 					fireNodeChanged(focus);
 				}
+			}
+			if (arg1==SettingChange.toggleproptype) {
+				fireTreeStructureChanged();
+			}
+			if (arg1==SettingChange.SHOWIMPORTS) {
+				reload();
 			}
 			if (arg0==smdrawer) {
 				if (arg1 == ModelEdit.SMNAMECHANGED) {
@@ -188,6 +202,11 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 					for (Integer i : cwdrawer.getChangedComponents()) {
 						fireNodeChanged(cwmapinv.get(i));
 					}
+				}
+			}
+			if (arg0==workbench) {
+				if (arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED) {
+					fireTreeStructureChanged();
 				}
 			}
 		}
@@ -226,7 +245,7 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 		public Component getButton() {
 			int index = smmap.get(this);
 			
-			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getCodewordName(index), smdrawer.isEditable(index));
+			SubModelTreeButton btn = new SubModelTreeButton(smdrawer.getComponentName(index), smdrawer.isEditable(index));
 			btn.toggleHumanDefinition(smdrawer.hasHumanReadableDef(index));
 			return btn;
 		}

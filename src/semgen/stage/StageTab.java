@@ -31,9 +31,10 @@ public class StageTab extends SemGenTab {
 	public void loadTab() {
 		setOpaque(false);
 		setLayout(new BorderLayout());
-		
 		// Create the browser
+		
 		try {
+			
 			// BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
@@ -51,7 +52,6 @@ public class StageTab extends SemGenTab {
 			                JOptionPane.PLAIN_MESSAGE);
 			    }
 			});
-			
 			this.add(browserView, BorderLayout.CENTER);
 		} catch (InvalidNameException | IOException e) {
 			e.printStackTrace();
@@ -60,19 +60,16 @@ public class StageTab extends SemGenTab {
 
 	@Override
 	public boolean isSaved() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void requestSave() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void requestSaveAs() {
-		// TODO Auto-generated method stub
 
 	}
 }

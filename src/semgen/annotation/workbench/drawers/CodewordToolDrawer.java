@@ -48,6 +48,12 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		Collections.sort(componentlist, new SemSimComponentComparator());
 	}
 	
+	public void reloadCodewords() {
+		Collections.sort(componentlist, new SemSimComponentComparator());
+		setChanged();
+		notifyObservers(ModelEdit.CWLIST_CHANGED);
+	}
+	
 	public ArrayList<DataStructure> getCodewords() {
 		return new ArrayList<DataStructure>(componentlist);
 	}
@@ -57,8 +63,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		
 		int i = 0;
 		for (DataStructure ds : componentlist) {
-			if (ds.isImportedViaSubmodel() && options[0]) continue;
-			cws.add(i);
+			if (!ds.isImportedViaSubmodel() || options[0]) cws.add(i);
 			i++;
 		}
 		
@@ -147,15 +152,15 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean hasSingularAnnotation(int index) {
-		return componentlist.get(index).hasRefersToAnnotation();
+		return componentlist.get(index).hasPhysicalDefinitionAnnotation();
 	}
 
 	public URI getPhysicalPropertyURI() {
-		return getFocusAssociatedProperty().getReferstoURI();
+		return getFocusAssociatedProperty().getPhysicalDefinitionURI();
 	}
 	
 	public URI getPhysicalComponentURI() {
-		return ((ReferenceTerm)getFocusComposite()).getReferstoURI();
+		return ((ReferenceTerm)getFocusComposite()).getPhysicalDefinitionURI();
 	}
 	
 	public String getLookupName(int index) {
@@ -200,7 +205,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 					getPhysicalCompositeType().equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS);
 		}
 		
-		return SemGen.semsimlib.isOPBprocessProperty(pp.getReferstoURI());
+		return SemGen.semsimlib.isOPBprocessProperty(pp.getPhysicalDefinitionURI());
 	}
 
 	public void copyToMappedVariables() {

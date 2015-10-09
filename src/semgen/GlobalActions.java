@@ -22,10 +22,12 @@ public class GlobalActions extends Observable {
 		QUIT,
 		SAVED,
 		STAGE,
+		TABOPENED,
 		TABCHANGED,
-		TABCLOSED,
+		TABCLOSEREQUEST,
+		TABCLOSED
 	};
-	
+	private Integer tabsopen = 0;
 	private SemGenTab currentTab;
 	private File seed;
 	private Set<File> seeds;
@@ -40,7 +42,7 @@ public class GlobalActions extends Observable {
 
 	public void closeTab() {
 		setChanged();
-		notifyObservers(appactions.TABCLOSED);
+		notifyObservers(appactions.TABCLOSEREQUEST);
 	}
 	
 	public SemGenTab getCurrentTab() {
@@ -114,6 +116,22 @@ public class GlobalActions extends Observable {
 		getCurrentTab().requestSaveAs();
 		setChanged();
 		notifyObservers(appactions.SAVED);
+	}
+	
+	public void incTabCount() {
+		tabsopen++;
+		setChanged();
+		notifyObservers(appactions.TABOPENED);
+	}
+	
+	public void decTabCount() {
+		tabsopen--;
+		setChanged();
+		notifyObservers(appactions.TABCLOSED);
+	}
+	
+	public int getNumOpenTabs() {
+		return tabsopen;
 	}
 	
 	public void quit() {

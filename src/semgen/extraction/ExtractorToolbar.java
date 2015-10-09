@@ -11,7 +11,7 @@ import semgen.utilities.uicomponent.SemGenTabToolbar;
 public class ExtractorToolbar extends SemGenTabToolbar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	protected SemGenToolbarButton extractoritembatchcluster = new SemGenToolbarButton(SemGenIcon.extractoricon);
+	protected SemGenToolbarButton extractoritembatchcluster = new SemGenToolbarButton(SemGenIcon.clusteranalysisicon);
 	protected SemGenToolbarButton extractoritemopenann = new SemGenToolbarButton(SemGenIcon.annotatoricon);
 	
 	public ExtractorToolbar(SemGenSettings sets) {

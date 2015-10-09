@@ -8,6 +8,20 @@ public abstract class SemSimObject {
 	private String metadataID = new String("");
 	protected URI referenceuri = URI.create(new String(""));
 	
+	public SemSimObject() {}
+	
+	public SemSimObject(SemSimObject objtocopy) {
+		name = new String(objtocopy.name);
+		
+		if (objtocopy.description != null)
+			description = new String(objtocopy.description);
+		
+		if(objtocopy.metadataID != null)
+			metadataID = new String(objtocopy.metadataID);
+		
+		referenceuri = objtocopy.referenceuri;
+	}
+	
 	/**
 	 * Get the component's free-text description
 	 */
@@ -54,7 +68,9 @@ public abstract class SemSimObject {
 	 * @param metadataID The ID to apply
 	 */
 	public void setMetadataID(String metadataID) {
-		this.metadataID = metadataID;
+		if (metadataID != null) {
+			this.metadataID = metadataID;
+		}
 	}
 
 	/**
@@ -67,7 +83,7 @@ public abstract class SemSimObject {
 		return metadataID;
 	}
 	
-	public Boolean hasRefersToAnnotation() {
+	public Boolean hasPhysicalDefinitionAnnotation() {
 		return !referenceuri.toString().isEmpty();
 	}
 	

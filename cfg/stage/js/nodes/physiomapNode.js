@@ -25,12 +25,15 @@ function PhysioMapNode (graph, data, parentNode) {
 // Maps node type to group number
 var physiomapTypeToGroup = {
 	"Entity": 0,
-	"Mediator": 1,
+	"Process": 1,
+	"Mediator": 2
 };
 
 // Maps node type to node color
 var physiomapTypeToColor = {
+
 	"Entity": "#1F77B4",
+	"Process": "#2CA02C",
 	"Mediator": "#FF7F0E"
 };
 

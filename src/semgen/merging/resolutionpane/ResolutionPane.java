@@ -73,6 +73,7 @@ public class ResolutionPane extends JPanel implements Observer {
 			addResolutionPanel(mappingcount-1);
 			validate();
 			repaint();
+
 		}
 		if (arg1 == MergeEvent.mapfocuschanged) {
 			loadCodewordMap();
@@ -99,6 +100,11 @@ public class ResolutionPane extends JPanel implements Observer {
 			scroller.setPreferredSize(new Dimension(600, 600));
 			scroller.getVerticalScrollBar().setUnitIncrement(12);
 			JOptionPane.showMessageDialog(this, scroller, "Information about resolution step", JOptionPane.PLAIN_MESSAGE);
+	}
+	
+	public void clear() {
+		resolvelist.clear();
+		removeAll();
 	}
 	
 	class ResPaneMouse extends MouseAdapter {

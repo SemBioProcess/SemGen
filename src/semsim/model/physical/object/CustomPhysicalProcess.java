@@ -20,8 +20,6 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 	
 	public CustomPhysicalProcess(CustomPhysicalProcess cuproc) {
 		super(cuproc);
-		setName(cuproc.getName());
-		setDescription(cuproc.getDescription());
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package semgen.annotation.common;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import semgen.SemGenSettings;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
@@ -33,6 +35,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected JButton createbtn = new JButton("Create");
 	protected JButton cancelbtn = new JButton("Cancel");
 	protected JLabel msgbox = new JLabel("Please enter a valid name");
+	protected JPanel confirmpan = new JPanel();
 	
 	public CustomTermOptionPane(SemSimTermLibrary lib) {
 		library = lib;
@@ -67,12 +70,18 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		descscroller.setPreferredSize(new Dimension(450,100));
 		
 		JPanel namepanel = new JPanel();
-		namepanel.add(new JLabel("Name: "));
+		namepanel.add(new JLabel("*Name: "));
 		namepanel.add(mantextfield);
+		namepanel.setAlignmentY(TOP_ALIGNMENT);
+		namepanel.setMaximumSize(new Dimension(9999, 150));
+		namepanel.setBackground(SemGenSettings.lightblue);
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
+		descriptionpanel.setAlignmentY(TOP_ALIGNMENT);
+		descriptionpanel.setMaximumSize(new Dimension(9999, 250));
+		descriptionpanel.setBackground(SemGenSettings.lightblue);
 		
 		if (termindex!=-1) {
 			mantextfield.setText(library.getComponentName(termindex));
@@ -81,6 +90,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		}
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(SemGenSettings.lightblue);
 		add(namepanel);
 		add(descriptionpanel);
 	}
@@ -88,6 +98,12 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected void makeUnique() {
 		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.BQB_IS_VERSION_OF_RELATION);
 		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.BQB_IS_VERSION_OF_RELATION, versionrels));
+		
+		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.HAS_PART_RELATION);
+		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.HAS_PART_RELATION, haspartrels));
+		
+		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.PART_OF_RELATION);
+		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.PART_OF_RELATION, partofrels));
 	}
 	
 	protected void finishPanel() {
@@ -97,8 +113,9 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		createbtn.setEnabled(termindex!=-1);
 		createbtn.addActionListener(this);
 		cancelbtn.addActionListener(this);
-		JPanel confirmpan = new JPanel();
+		
 		confirmpan.setLayout(new BoxLayout(confirmpan, BoxLayout.X_AXIS));
+		confirmpan.setAlignmentY(Box.TOP_ALIGNMENT);
 		confirmpan.add(msgbox);
 		confirmpan.add(createbtn);
 		confirmpan.add(cancelbtn);
@@ -174,6 +191,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		public CustomEntityEditor(SemSimTermLibrary lib, SemSimRelation rel,
 				ArrayList<Integer> complist) {
 			super(lib, rel, complist);
+			addActionListener(new ModificationAction());
 		}
 
 		@Override
@@ -192,6 +210,16 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 			}
 		}
 
+	}
+	
+	class ModificationAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (termindex != -1) {
+				createbtn.setEnabled(true);
+			}
+		}
 	}
 	
 }

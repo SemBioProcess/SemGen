@@ -322,15 +322,29 @@ $(window).load(function() {
 				}
 			},
 			
-			addModelByName: function(modelName) {
+			addModelByName: function(source, modelName) {
+				alert("Source: " + source + ", Model name: " + modelName);
 				mockReceiver.addModel(modelName);
 			},
 			
 			search: function (searchStr) {
 				searchResults = [
-				     searchStr + "Search Result 1",
-				     searchStr + "Search Result 2",
-				     searchStr + "Search Result 3",
+					{
+						source: "Source 1",
+						results: [
+							searchStr + "Search Result 1",
+							searchStr + "Search Result 2",
+							searchStr + "Search Result 3",
+						]
+					},
+					{
+						source: "Source 2",
+						results: [
+							searchStr + "Search Result 1",
+							searchStr + "Search Result 2",
+							searchStr + "Search Result 3",
+						]
+					},
 				];
 				
 				

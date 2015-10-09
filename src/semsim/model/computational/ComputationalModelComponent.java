@@ -11,4 +11,9 @@ import semsim.model.SemSimComponent;
  * (PhysicalEntities, PhysicalProcesses, etc.).
  */
 public abstract class ComputationalModelComponent extends SemSimComponent{
+	public ComputationalModelComponent() {}
+	
+	public ComputationalModelComponent(ComputationalModelComponent pmctocopy) {
+		super(pmctocopy);
+	}
 }

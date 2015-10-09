@@ -23,14 +23,11 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
-import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
+import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.Decimal;
-import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -38,11 +35,11 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.PhysicalDependency;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.utilities.SemSimCopy;
 import semsim.writing.SemSimOWLwriter;
 
 /**
@@ -79,32 +76,31 @@ import semsim.writing.SemSimOWLwriter;
  * model aspect.
  */
 
-public class SemSimModel extends SemSimObject implements Cloneable, Annotatable, SemSimCollection {
+public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
-	private CurationalMetadata metadata = new CurationalMetadata();
+	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
+	
+	private String namespace;
+	private int sourceModelType;
+	private String sourcefilelocation;
 	private double semsimversion;
 	
+	// Model-specific data
+	private Set<Annotation> annotations = new HashSet<Annotation>();
+	private CurationalMetadata metadata = new CurationalMetadata();
+	private Set<String> errors = new HashSet<String>();
+	
 	// Computational model components
-	private Set<DataStructure> dataStructures = new HashSet<DataStructure>();
 	private Set<RelationalConstraint> relationalConstraints = new HashSet<RelationalConstraint>(); 
 	private Set<UnitOfMeasurement> units = new HashSet<UnitOfMeasurement>();
+	private Set<Event> events = new HashSet<Event>();
 	
 	// Physical model components
-	private Set<Submodel> submodels = new HashSet<Submodel>();
 	private Set<PhysicalEntity> physicalentities = new HashSet<PhysicalEntity>();
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
 	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
-	private Set<String> errors = new HashSet<String>();
-	
-	// Model-specific data
-	private String namespace;
-	private Set<Annotation> annotations = new HashSet<Annotation>();
-	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 
-	private int sourceModelType;
-	private String sourcefilelocation;
-	
 	/**
 	 * Constructor without namespace
 	 */
@@ -117,6 +113,20 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public SemSimModel(String namespace){
 		setNamespace(namespace);
+	}
+	
+	private SemSimModel(SemSimModel ssmtocopy) {
+		super(ssmtocopy);
+		namespace = new String(ssmtocopy.namespace);
+		sourcefilelocation = new String(ssmtocopy.sourcefilelocation);
+		sourceModelType = ssmtocopy.sourceModelType;
+		semsimversion = ssmtocopy.semsimversion;
+		importCurationalMetadatafromModel(ssmtocopy, true);
+		annotations = SemSimCopy.copyAnnotations(ssmtocopy.annotations);
+		physicalproperties.addAll(ssmtocopy.physicalproperties);
+		associatephysicalproperties.addAll(ssmtocopy.associatephysicalproperties);
+		
+		new SemSimCopy(ssmtocopy, this);
 	}
 	
 	public CurationalMetadata getCurationalMetadata() {
@@ -161,13 +171,16 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public void addUnit(UnitOfMeasurement unit){
 		if(!containsUnit(unit.getName())){
-			getUnits().add(unit);
+			units.add(unit);
 		}
 		else{
 			System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 		}
 	}
 	
+	public void setUnits(HashSet<UnitOfMeasurement> units) {
+		this.units = units;
+	}
 	
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
@@ -177,7 +190,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
 		return addCompositePhysicalEntity(cpe.getArrayListOfEntities(), cpe.getArrayListOfStructuralRelations());
 	}
-	
 	
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
@@ -201,7 +213,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		// This comes into play when importing annotations from other models
 		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
 			if(!getPhysicalEntities().contains(ent)){
-				if(ent.hasRefersToAnnotation()){
+				if(ent.hasPhysicalDefinitionAnnotation()){
 					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
 				}
 				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
@@ -209,7 +221,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		}
 		return newcpe;
 	}
-	
 	
 	/**
 	 * Add a new {@link CustomPhysicalEntity} to the model. 
@@ -246,7 +257,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	
 	
 	public PhysicalPropertyinComposite addAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
-		if(getAssociatePhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getReferstoURI());
+		if(getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
 		else{
 			associatephysicalproperties.add(pp);
 		}
@@ -254,7 +265,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	}
 	
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
-		if(getPhysicalPropertybyURI(pp.getReferstoURI())!=null) pp = getPhysicalPropertybyURI(pp.getReferstoURI());
+		if(getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
 		else{
 			physicalproperties.add(pp);
 		}
@@ -263,14 +274,14 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	
 	public PhysicalPropertyinComposite getAssociatePhysicalPropertybyURI(URI uri) {
 		for (PhysicalPropertyinComposite pp : associatephysicalproperties) {
-			if (pp.getReferstoURI().equals(uri)) return pp;
+			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}
 		return null;
 	}
 	
 	public PhysicalProperty getPhysicalPropertybyURI(URI uri) {
 		for (PhysicalProperty pp :physicalproperties) {
-			if (pp.getReferstoURI().equals(uri)) return pp;
+			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}
 		return null;
 	}
@@ -278,7 +289,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	/**
 	 * Add a new ReferencePhysicalEntity to the model. ReferencePhysicalEntities are subclasses of
 	 * PhysicalEntities that are defined by their annotation against a reference ontology URI. In
-	 * other words, a {@link PhysicalEntity} that is annotated using the SemSimConstants:REFERS_TO_RELATION.
+	 * other words, a {@link PhysicalEntity} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the entity.
 	 * @param description A free-text description of the entity. Usually taken from the reference ontology.
@@ -286,18 +297,17 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * Otherwise a new ReferencePhysicalEntity with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalEntity addReferencePhysicalEntity(ReferencePhysicalEntity rpe){
-		if(getPhysicalEntityByReferenceURI(rpe.getReferstoURI())!=null) rpe = getPhysicalEntityByReferenceURI(rpe.getReferstoURI());
+		if(getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI())!=null) rpe = getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI());
 		else{
 			physicalentities.add(rpe);
 		}
 		return rpe;
 	}
 	
-	
 	/**
 	 * Add a new ReferencePhysicalProcess to the model. ReferencePhysicalProcesses are subclasses of
 	 * PhysicalProcesses that are defined by their annotation against a reference ontology URI. In
-	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:REFERS_TO_RELATION.
+	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the process.
 	 * @param description A free-text description of the process. Usually taken from the reference ontology.
@@ -305,19 +315,10 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * Otherwise a new ReferencePhysicalProcess with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalProcess addReferencePhysicalProcess(ReferencePhysicalProcess rpp){
-		if(getPhysicalProcessByReferenceURI(rpp.getReferstoURI())!=null) rpp = getPhysicalProcessByReferenceURI(rpp.getReferstoURI());
+		if(getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI())!=null) rpp = getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI());
 		else physicalprocesses.add(rpp);
 		return rpp;
 	}
-	
-	
-	/**
-	 * @return True if the model contains a DataStructure with the specified name, otherwise false.
-	 */
-	public boolean containsDataStructure(String name){
-		return getAssociatedDataStructure(name)!=null;
-	}
-	
 	
 	/**
 	 * @return True if the model contains a {@link UnitOfMeasurement} with the specified name, otherwise false.
@@ -325,71 +326,30 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public boolean containsUnit(String name){
 		return getUnit(name)!=null;
 	}
-	
-	
+		
 	/**
-	 * @return The set of all {@link DataStructure}s in the model.
+	 * @return The set of all {@link Events} in the model
 	 */
-	public Set<DataStructure> getAssociatedDataStructures(){
-		return dataStructures;
+	public Set<Event> getEvents(){
+		return events;
 	}
 	
 	/**
-	 * @return The set of {@link DataStructure}s with composite entities in the model.
+	 * Specify the set of {@link Events} in the model
+	 * @param theevents The set of {@link Events} that will be assigned to the model
 	 */
-	public Set<DataStructure> getDataStructureswithCompositesEntities(){
-		Set<DataStructure> dswcpes = new HashSet<DataStructure>();
-		for (DataStructure ds : dataStructures) {
-			if (ds.hasAssociatedPhysicalComponent()) {
-				if (ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity) {
-					dswcpes.add(ds);
-				}
-			}
-		}
-		return dswcpes;
+	public void setEvents(Set<Event> theevents){
+		this.events.clear();
+		this.events.addAll(theevents);
 	}
 	
-	/**
-	 * @return The set of {@link DataStructure}s with physical properties in the model.
-	 */
-	public Set<DataStructure> getDataStructureswithPhysicalProcesses(){
-		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
-		for (DataStructure ds : dataStructures) {
-			if (ds.hasAssociatedPhysicalComponent()) {
-				if (ds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess) {
-					dswprocs.add(ds);
-				}
-			}
-		}
-		return dswprocs;
-	}
 	
 	/**
-	 * @return The set of {@link DataStructure}s with physical properties in the model.
+	 * Add an {@link Event} to the model
+	 * @param theevent The {@link Event} to add
 	 */
-	public Set<DataStructure> getDataStructureswithoutAssociatedPhysicalComponents(){
-		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
-		for (DataStructure ds : dataStructures) {
-			if (!ds.hasAssociatedPhysicalComponent()) {
-				dswprocs.add(ds);
-			}
-		}
-		return dswprocs;
-	}
-
-	/**
-	 * Add a {@link DataStructure} to the model. DataStructure is not added to model 
-	 * if one with the same name already exists.
-	 * 
-	 * @param ds The DataStructure to add
-	 * @return The DataStructure to add
-	 */
-	public DataStructure addDataStructure(DataStructure ds){
-		if(!containsDataStructure(ds.getName())){
-			dataStructures.add(ds);
-		}
-		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
-		return ds;
+	public void addEvent(Event theevent){
+		this.events.add(theevent);
 	}
 	
 	/**
@@ -397,8 +357,8 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 * This includes anything that is a {@link ComputationalModelComponent} or
 	 * a {@link PhysicalModelComponent}.
 	 */
-	public Set<SemSimComponent> getAllModelComponents(){
-		Set<SemSimComponent> set = new HashSet<SemSimComponent>();
+	public Set<SemSimObject> getAllModelComponents(){
+		Set<SemSimObject> set = new HashSet<SemSimObject>();
 		set.addAll(getComputationalModelComponents());
 		set.addAll(getPhysicalModelComponents());
 		set.addAll(getSubmodels());
@@ -420,167 +380,37 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		set.addAll(getUnits());
 		return set;
 	}
-	
-	
-	/**
-	 * @return A set of all the names of DataStructures contained in the model.
-	 */
-	public Set<String> getDataStructureNames(){
-		Set<String> set = new HashSet<String>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			set.add(ds.getName());
-		}
-		return set;
-	}
-	
-	
-	/**
-	 * Get a DataStructure in the model by its name.
-	 * @param name The name to search for.
-	 * @return The DataStructure with the specified name or null if not found.
-	 */
-	public DataStructure getAssociatedDataStructure(String name){
-		for(DataStructure dstest : getAssociatedDataStructures()){
-			if(dstest.getName().equals(name)) return dstest;
-		}
-		return null;
-	}
-	
-	
-	/**
-	 * @return All DataStructures that are explicitly declared in the model.
-	 * Some DataStructures may not be explicitly declared. For example, in MML code one can use
-	 * x:t in the RHS of an equation. This can instantiate a variable in the model called "x:t"
-	 * without an explicit declaration.
-	 */
-	public Set<DataStructure> getDeclaredDataStructures(){
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.isDeclared()) dsset.add(ds);
-		}
-		return dsset;
-	}
-	
-	
-	/**
-	 * @return All Decimals, Integers and MMLchoiceVariables in the model.
-	 */
-	public Set<DataStructure> getReals(){
-		Set<DataStructure> reals = new HashSet<DataStructure>();
-		reals.addAll(getDecimals());
-		reals.addAll(getIntegers());
-		reals.addAll(getMMLchoiceVars());
-		return reals;
-	}
-	
-	
-	/**
-	 * @return All Decimals contained in the model.
-	 */
-	public Set<DataStructure> getDecimals(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof Decimal) set.add(ds);
-		}
-		return set;
-	}
-	
-	
-	/**
-	 * @return All DataStructures that are associated with {@link FunctionalSubmodel}s.
-	 */
-	public Set<DataStructure> getDataStructuresFromFunctionalSubmodels(){
-		Set<DataStructure> dss = new HashSet<DataStructure>();
-		for(FunctionalSubmodel submodel : getFunctionalSubmodels()){
-			dss.addAll(submodel.getAssociatedDataStructures());
-		}
-		return dss;
-	}
-	
-	
-	/**
-	 * @return All {@link FunctionalSubmodel}s in the model.
-	 */
-	public Set<FunctionalSubmodel> getFunctionalSubmodels(){
-		Set<FunctionalSubmodel> fxnalsubs = new HashSet<FunctionalSubmodel>();
-		for(Submodel sub : getSubmodels()){
-			if(sub.isFunctional()) fxnalsubs.add((FunctionalSubmodel) sub);
-		}
-		return fxnalsubs;
-	}
-	
-	
+		
 	/**@return The parent FunctionalSubmodel for a MappableVariable.*/
 	public FunctionalSubmodel getParentFunctionalSubmodelForMappableVariable(MappableVariable var){
 		String compname = var.getName().substring(0, var.getName().lastIndexOf("."));
 		return (FunctionalSubmodel) getSubmodel(compname);
 	}
 	
-	
-	/**
-	 * @return All {@link SemSimInteger}s in the model.
-	 */
-	public Set<DataStructure> getIntegers(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof SemSimInteger) set.add(ds);
-		}
-		return set;
-	}
-	
-	
 	/**
 	 * @return A Map that links MatadataIDs with their associated model component.
 	 */
-	public Map<String, SemSimComponent> getMetadataIDcomponentMap(){
-		Map<String, SemSimComponent> map = new HashMap<String, SemSimComponent>();
-		for(SemSimComponent ssc : getAllModelComponents()){
+	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
+		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
+		for(SemSimObject ssc : getAllModelComponents()){
 			if(ssc.getMetadataID()!=null) map.put(ssc.getMetadataID(), ssc);
 		}
 		return map;
 	}
-	
 	
 	/**
 	 * @param ID A metadata ID used to look up a model component.
 	 * @return The model component assigned the given ID, or null if the ID is not associated with any
 	 * model component
 	 */
-	public SemSimComponent getModelComponentByMetadataID(String ID){
-		for(SemSimComponent ssc : getAllModelComponents()){
+	public SemSimObject getModelComponentByMetadataID(String ID){
+		for(SemSimObject ssc : getAllModelComponents()){
 			if(ssc.getMetadataID().equals(ID))
 				return ssc;
 		}
 		return null;
 	}
-	
-	
-	/**
-	 * @return The MMLchoiceVariables in the model. 
-	 */
-	public Set<DataStructure> getMMLchoiceVars(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof MMLchoice) set.add(ds);
-		}
-		return set;
-	}
-	
-	
-	/**
-	 * @return The solution domain DataStructures used in the model.
-	 * These are the DataStructures that specify the domain in which the model is solved. 
-	 * Popular examples include time and space.
-	 */
-	public Set<DataStructure> getSolutionDomains(){
-		Set<DataStructure> sdset = new HashSet<DataStructure>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.isSolutionDomain()) sdset.add(ds);
-		}
-		return sdset;
-	}
-	
-	
+
 	/**
 	 * Specify the set of {@link RelationalConstraint}s used in the model.
 	 * @param relationalConstraints The set of constraints.
@@ -588,7 +418,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public void setRelationalConstraints(Set<RelationalConstraint> relationalConstraints) {
 		this.relationalConstraints = relationalConstraints;
 	}
-
 	
 	/**
 	 * @return The {@link RelationalConstraint}s used in the model.
@@ -597,14 +426,12 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return relationalConstraints;
 	}
 	
-	
 	/**
 	 * Add a {@link RelationalConstraint} to the model.
 	 */
 	public void addRelationalConstraint(RelationalConstraint rel){
 		this.relationalConstraints.add(rel);
 	}
-	
 	
 	/**
 	 * 
@@ -620,7 +447,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<PhysicalEntity> getPhysicalEntities() {
 		return physicalentities;
 	}
-	
 	
 	/**
 	 * @return All PhysicalEntities in the model, except those that either are, or use, a specifically excluded entity 
@@ -703,19 +529,18 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		set.addAll(getPhysicalEntities());
 		set.addAll(getPhysicalProperties());
 		set.addAll(getPhysicalProcesses());
-		set.addAll(getPhysicalDependencies());
 		return set;
 	}
 	
 	/**
 	 * @param uri A reference term URI
-	 * @return The {@link ReferencePhysicalEntity} that is annotated against the URI using the REFERS_TO_RELATION.
+	 * @return The {@link ReferencePhysicalEntity} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
 	 * If no ReferencePhysicalEntities have been annotated against the URI, null is returned.
 	 */
 	public ReferencePhysicalEntity getPhysicalEntityByReferenceURI(URI uri){
 		for (PhysicalEntity pe : physicalentities) {
-			if (pe.hasRefersToAnnotation()) {
-				if (((ReferencePhysicalEntity)pe).getReferstoURI().toString().equals(uri.toString())) {
+			if (pe.hasPhysicalDefinitionAnnotation()) {
+				if (((ReferencePhysicalEntity)pe).getPhysicalDefinitionURI().toString().equals(uri.toString())) {
 					return (ReferencePhysicalEntity)pe;
 				}
 			}
@@ -726,13 +551,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	
 	/**
 	 * @param uri A reference term URI
-	 * @return The {@link ReferencePhysicalProcess} that is annotated against the URI using the REFERS_TO_RELATION.
+	 * @return The {@link ReferencePhysicalProcess} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
 	 * If no ReferencePhysicalProcess has been annotated against the URI, null is returned.
 	 */
 	public ReferencePhysicalProcess getPhysicalProcessByReferenceURI(URI uri){
 		for (PhysicalProcess pp : physicalprocesses) {
-			if (pp.hasRefersToAnnotation()) {
-					if (((ReferenceTerm)pp).getReferstoURI().equals(uri)) {
+			if (pp.hasPhysicalDefinitionAnnotation()) {
+					if (((ReferenceTerm)pp).getPhysicalDefinitionURI().equals(uri)) {
 						return (ReferencePhysicalProcess)pp;
 					}
 			}
@@ -759,7 +584,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public CustomPhysicalEntity getCustomPhysicalEntityByName(String name){
 		for(PhysicalEntity apmc : getPhysicalEntities()){
-			if(!apmc.hasRefersToAnnotation()){
+			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalEntity)apmc;
 			}
 		}
@@ -773,7 +598,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public Set<CustomPhysicalProcess> getCustomPhysicalProcesses(){
 		Set<CustomPhysicalProcess> custs = new HashSet<CustomPhysicalProcess>();
 		for(PhysicalProcess proc : getPhysicalProcesses()){
-			if(!proc.hasRefersToAnnotation()) custs.add((CustomPhysicalProcess) proc);
+			if(!proc.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalProcess) proc);
 		}
 		return custs;
 	}
@@ -785,7 +610,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	 */
 	public CustomPhysicalProcess getCustomPhysicalProcessByName(String name){
 		for(PhysicalProcess apmc : getPhysicalProcesses()){
-			if(!apmc.hasRefersToAnnotation()){
+			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalProcess)apmc;
 			}
 		}
@@ -804,23 +629,7 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		}
 		return null;
 	}
-	
-	/**
-	 * @param name The name of a {@link Submodel} to retrieve
-	 * @return The Submodel with the specified name or null if no Submodel found with that name. 
-	 */
-	public Submodel getSubmodel(String name){
-		Submodel sub = null;
-		for(Submodel sub1 : getSubmodels()){
-			if(sub1.getName().equals(name)){
-				sub = sub1;
-				break;
-			}
-		}
-		return sub;
-	}
-	
-	
+
 	/**
 	 * @param name The name of a {@link UnitOfMeasurement} to retrieve
 	 * @return The UnitOfMeasurement with the specified name or null if no UnitOfMeasurement found with that name. 
@@ -832,15 +641,13 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return null;
 	}
 	
-	
 	/**
 	 * @return All UnitsOfMeasurement in the model.
 	 */
 	public Set<UnitOfMeasurement> getUnits(){
 		return units;
 	}
-	
-	
+
 	/**
 	 * @param nametomatch The name to look up
 	 * @return True if the model contains a solution domain with the name specified, otherwise false.
@@ -853,7 +660,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return test;
 	}
 	
-	
 	/**
 	 * @return The names of all the solution domains in the model.
 	 */
@@ -864,7 +670,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		}
 		return sdnames;
 	}
-	
 	
 	/**
 	 * Set the namespace of the model.
@@ -891,7 +696,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return namespace;
 	}
 
-	
 	/**
 	 * @return All ReferenceOntologyAnnotations in the model.
 	 */
@@ -902,23 +706,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		}
 		return raos;
 	}
-
-	
-	/**
-	 * Specify the set of {@link Submodel}s in the model
-	 * @param submodels The new set of Submodels to include
-	 */
-	public void setSubmodels(Set<Submodel> submodels) {
-		this.submodels = submodels;
-	}
-
-	
-	/**
-	 * @return All {@link Submodel}s in the model.
-	 */
-	public Set<Submodel> getSubmodels() {
-		return submodels;
-	}
 	
 	/**
 	 * Specify the set of PhysicalProcesses in the model.
@@ -928,7 +715,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		this.physicalprocesses.clear();
 		this.physicalprocesses.addAll(physicalprocess);
 	}
-
 	
 	/**
 	 * @return All {@link PhysicalProcess}es in the model.
@@ -937,32 +723,16 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return physicalprocesses;
 	}
 	
-	
 	/**
 	 * @return All {@link PhysicalProcess}es in the model that are annotated against
-	 * a URI with the REFERS_TO_RELATION (as opposed to CustomPhysicalProcesses).
+	 * a URI with the HAS_PHYSICAL_DEFINITION_RELATION (as opposed to CustomPhysicalProcesses).
 	 */
 	public Set<ReferencePhysicalProcess> getReferencePhysicalProcesses(){
 		Set<ReferencePhysicalProcess> refprocs = new HashSet<ReferencePhysicalProcess>();
 		for(PhysicalProcess proc : getPhysicalProcesses()){
-			if(proc.hasRefersToAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
+			if(proc.hasPhysicalDefinitionAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
 		}
 		return refprocs;
-	}
-
-	
-	/**
-	 * @return All PhysicalDependencies in the model.
-	 */
-	public Set<PhysicalDependency> getPhysicalDependencies() {
-		Set<PhysicalDependency> deps = new HashSet<PhysicalDependency>();
-		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds.getComputation()!=null){
-				if(ds.getComputation().getPhysicalDependency()!=null)
-					deps.add(ds.getComputation().getPhysicalDependency());
-			}
-		}
-		return deps;
 	}
 	
 	/**
@@ -984,7 +754,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 	public void setErrors(Set<String> errors) {
 		this.errors = errors;
 	}
-
 	
 	/**
 	 * @return All errors associated with the model.
@@ -993,7 +762,6 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return errors;
 	}
 	
-	
 	/**
 	 * @return The number of errors associated with the model.
 	 */
@@ -1001,14 +769,12 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 		return errors.size();
 	}
 	
-	
 	/**
 	 * Print all the errors associated with the model to System.err.
 	 */
 	public void printErrors(){
 		for(String err : getErrors()) System.err.println("***************\n" + err + "\n");
 	}
-	
 	
 	/**
 	 * Delete a {@link DataStructure} from the model.
@@ -1066,29 +832,25 @@ public class SemSimModel extends SemSimObject implements Cloneable, Annotatable,
 			physicalprocesses.remove(ent);
 	}
 	
-	
 	/**
 	 * Delete a {@link Submodel} from the model (does not remove the Submodel's associated DataStructures, 
 	 * just the Submodel) 
 	 * @param submodel The Submodel to be deleted.
 	 */
 	public void removeSubmodel(Submodel submodel) {
-		// Remove from the model's collection of submodels
-		submodels.remove(submodel);
-
+		super.removeSubmodel(submodel);
+		
 		// If the submodel is subsumed by another submodel, remove the subsumption
 		for(Submodel sub : getSubmodels()) sub.removeSubmodel(submodel);
 	}
 	
-	
 	/**
 	 * @return A clone of the model.
 	 */
-	public SemSimModel clone() throws CloneNotSupportedException {
-        return (SemSimModel) super.clone();
+	public SemSimModel clone() {
+        return new SemSimModel(this);
 	}
 
-	
 	/**
 	 * Specify which modeling language was used for the original version of the model.
 	 * See {@link ModelClassifier} constants. 

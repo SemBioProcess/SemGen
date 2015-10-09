@@ -89,7 +89,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		codewordlabel.setBorder(BorderFactory.createEmptyBorder(5, indent, 5, 10));
 		codewordlabel.setFont(SemGenFont.defaultBold(3));
 		codewordlabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-		codewordlabel.setText(drawer.getCodewordName());
+		codewordlabel.setText(drawer.getComponentName());
 		
 		Box mainheader = Box.createHorizontalBox();
 		mainheader.setBackground(SemGenSettings.lightblue);
@@ -151,7 +151,7 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 	private void changeFreeText() {
 		String current = "";
 		if (drawer.hasHumanReadableDef()) current= drawer.getHumanReadableDef();
-		TextChangeDialog hde = new TextChangeDialog("Enter free-text description", drawer.getCodewordName(), current);
+		TextChangeDialog hde = new TextChangeDialog("Enter free-text description", drawer.getComponentName(), current);
 		if (!hde.getNewText().equals(current)) {
 			drawer.setHumanReadableDefinition(hde.getNewText(), settings.doAutoAnnotateMapped());
 		}

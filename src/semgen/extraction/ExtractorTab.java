@@ -45,6 +45,7 @@ import semsim.extraction.Extraction;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -368,16 +369,34 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				if (tempbox.isSelected()) {
 					
 					Submodel submodel = (Submodel)tempbox.smc;
+					
 					workbench.getExtraction().addSubmodelToExtract(submodel, true);
 					
+					// Add associated data structures to the extraction
+					// If the data structure is an input, don't include the variables that map to it 
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						
-						workbench.getExtraction().addDataStructureToExtraction(onedatastr, true);
-						Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
+						boolean isinputforsubmodel = false;
 						
-						for(DataStructure oneinput : requiredinputs){
-							if(!workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)){
-								workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
+						// Don't get the computational inputs if the data structure is a mappable variable
+						// with a public "in" interface. This avoids adding in unnecessary variables that are
+						// mapped to the data structure.
+						
+						if(onedatastr instanceof MappableVariable){
+							MappableVariable mv = (MappableVariable)onedatastr;
+							isinputforsubmodel = mv.getPublicInterfaceValue().equals("in");
+						}
+						
+						workbench.getExtraction().addDataStructureToExtraction(onedatastr, ! isinputforsubmodel);
+
+						if( ! isinputforsubmodel){
+							Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
+							
+							for(DataStructure oneinput : requiredinputs){
+								
+								if(!workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)){
+									workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
+								}
 							}
 						}
 					}
@@ -421,7 +440,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				for (DataStructure oneinput : tempdsset) {
 					
 					if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(oneinput)) {
-						workbench.getExtraction().addDataStructureToExtraction(oneinput, true);
+						workbench.getExtraction().addDataStructureToExtraction(oneinput, false);
 					} 
 					else if (workbench.getExtraction().getDataStructuresToExtract().get(oneinput)==false) {
 						System.out.println("Already added " + oneinput.getName() + ": leaving as is");
@@ -900,13 +919,14 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					clusterwriter.println("(no change)");
 				}
 
-				progframe.bar.setValue(Math.round(100 * ((float)y / maxclusteringiterations)));
+				progframe.setProgressValue(Math.round(100 * ((float)y / maxclusteringiterations)));
 			}
 			clusterwriter.flush();
 			clusterwriter.close();
         }
         
         public void endTask() {
+        	progframe.dispose();
         	JOptionPane.showMessageDialog(null, "Finished clustering analysis");
         }
     }

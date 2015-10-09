@@ -9,7 +9,7 @@ import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 
 public class SingularAnnotationPanel extends AnnotationChooserPanel {
 	private static final long serialVersionUID = 1L;

@@ -1,3 +1,4 @@
+
 html, body, iframe {
 	height: 100%;
 	width: 100%;
@@ -109,14 +110,26 @@ ul.modelPopover li.submenuContainer {
 	width: 500px;
 }
 
-.searchResults ul {
+.searchValueContainer ul {
 	list-style: none;
-	padding-left: 0;
+	margin: 0;
+	padding: 0;
+}
+
+ul.searchResults {
 	border: 1px solid black;
     border-top: none;
 }
 
-.searchResults li:hover {
+ul.searchResults li {
+	list-style: none;
+}
+
+li.searchResultSet {
+	padding-top: 10px;
+}
+
+li.searchResultSet li:hover {
 	background-color: #dfe3ee;
 	cursor: pointer;
 }

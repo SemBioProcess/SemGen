@@ -59,6 +59,8 @@ public class SemSimConstants {
 	
 	// URIs
 	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
+	public static final URI EVENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Event");
+	public static final URI EVENT_ASSIGNMENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "EventAssignment");
 	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");
 	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
 	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
@@ -92,6 +94,12 @@ public class SemSimConstants {
 	public static final URI HAS_COMPUTATIONAL_CODE_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalCode");
 	public static final URI HAS_COMPUTATATIONAL_COMPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalComponent");
 	public static final URI HAS_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasMathML");
+	public static final URI HAS_TRIGGER_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasTriggerMathML");
+	public static final URI HAS_EVENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEvent");
+	public static final URI HAS_EVENT_ASSIGNMENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEventAssignment");
+	public static final URI HAS_PRIORITY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasPriorityMathML");
+	public static final URI HAS_DELAY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasDelayMathML");
+	public static final URI HAS_TIME_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasTimeUnit");
 	public static final URI HAS_SOLUTION_DOMAIN_URI = URI.create(SEMSIM_NAMESPACE + "hasSolutionDomain");
 	public static final URI HAS_START_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasStartValue");
 	public static final URI HAS_INPUT_URI = URI.create(SEMSIM_NAMESPACE + "hasInput");
@@ -110,7 +118,7 @@ public class SemSimConstants {
 	public static final URI MAPPED_FROM_URI = URI.create(SEMSIM_NAMESPACE + "mappedFrom");
 	public static final URI MAPPED_TO_URI = URI.create(SEMSIM_NAMESPACE + "mappedTo");
 	public static final URI METADATA_ID_URI = URI.create(SEMSIM_NAMESPACE + "metadataID");
-	public static final URI REFERS_TO_URI = URI.create(SEMSIM_NAMESPACE + "refersTo");
+	public static final URI HAS_PHYSICAL_DEFINITION_URI = URI.create(SEMSIM_NAMESPACE + "hasPhysicalDefinition");
 	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
 
 	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
@@ -130,6 +138,7 @@ public class SemSimConstants {
 	public static final URI UNIT_FACTOR_EXPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorExponent");
 	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
 	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
+	public static final URI UNIT_FACTOR_MULTIPLIER_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorMultiplier");
 	
 	// Model-level relations	
 	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");
@@ -173,7 +182,7 @@ public class SemSimConstants {
 	public static final SemSimRelation MAPPED_TO_RELATION = new SemSimRelation("Data structure value passed to another data structure", MAPPED_TO_URI);
 	public static final SemSimRelation CELLML_COMPONENT_SUBSUMPTION_TYPE_RELATION = new SemSimRelation("The type of relation between a parent and child component (either containment, encapsulation or a custom term)", CELLML_COMPONENT_SUBSUMPTION_TYPE_URI);
 	
-	public static final SemSimRelation REFERS_TO_RELATION = new SemSimRelation("Refers to ontology term", REFERS_TO_URI);
+	public static final SemSimRelation HAS_PHYSICAL_DEFINITION_RELATION = new SemSimRelation("Refers to ontology term", HAS_PHYSICAL_DEFINITION_URI);
 	public static final SemSimRelation HAS_MATHML_RELATION = new SemSimRelation("MathML for computation", HAS_MATHML_URI);
 	public static final SemSimRelation HAS_COMPUTATIONAL_COMPONENT_RELATION = new SemSimRelation("physical property has a data structure as a computational component", HAS_COMPUTATATIONAL_COMPONENT_URI);
 
@@ -234,7 +243,7 @@ public class SemSimConstants {
 		aMap0.put(ENCAPSULATES_URI, ENCAPSULATES_RELATION);
 		aMap0.put(MAPPED_FROM_URI, MAPPED_FROM_RELATION);
 		aMap0.put(MAPPED_TO_URI, MAPPED_TO_RELATION);
-		aMap0.put(REFERS_TO_URI, REFERS_TO_RELATION);
+		aMap0.put(HAS_PHYSICAL_DEFINITION_URI, HAS_PHYSICAL_DEFINITION_RELATION);
 		aMap0.put(HAS_UNIT_URI, HAS_UNIT_RELATION);
 		aMap0.put(UNIT_FOR_URI, UNIT_FOR_RELATION);
 		aMap0.put(HAS_ASSOCIATED_DATA_STRUCTURE_URI, HAS_ASSOCIATED_DATA_STRUCTURE_RELATION);
@@ -390,8 +399,8 @@ public class SemSimConstants {
 		// BiologicalQualifierTypesAndRelations Map
 		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();
 		aMap4.put(0, BQB_IS_RELATION);
-		aMap4.put(1, BQB_HAS_PART_RELATION);
-		aMap4.put(2, BQB_IS_PART_OF_RELATION);
+		aMap4.put(1, HAS_PART_RELATION);  // Use RO relation, not BQB here for consistency in SemSim models
+		aMap4.put(2, PART_OF_RELATION);   // Use RO relation, not BQB here for consistency in SemSim models
 		aMap4.put(3, BQB_IS_VERSION_OF_RELATION);
 		aMap4.put(9, BQB_OCCURS_IN_RELATION);
 		BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS = Collections.unmodifiableMap(aMap4);

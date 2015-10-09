@@ -89,7 +89,6 @@ public class SemGen extends JFrame implements Observer{
 		
 		System.out.print("Loading SemGen...");
 		logfilewriter.println("Loading SemGen");
-		OSValidation();
 		configureSemSim();
 	}
 	
@@ -117,8 +116,7 @@ public class SemGen extends JFrame implements Observer{
 		    
 		    //Set the default location for the creation of child windows (ie: dialogs) as the center  
 			//of the main frame
-			SemGenError.setFrame(frame);
-			SemGenDialog.setFrame(frame);
+
 		    
 			frame.setVisible(true);
 			
@@ -150,7 +148,9 @@ public class SemGen extends JFrame implements Observer{
 		SemGenFont.defaultUIFont();
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gacts.addObserver(this);
-		 
+		SemGenError.setFrame(this);
+		SemGenDialog.setFrame(this);
+		
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
@@ -177,7 +177,7 @@ public class SemGen extends JFrame implements Observer{
 	}
 	
 	//Check which OS SemGen is being run under
-	private static void OSValidation() throws NoSuchMethodException, SecurityException{
+	private void OSValidation() throws NoSuchMethodException, SecurityException{
 		int OS = 0;
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
@@ -189,8 +189,9 @@ public class SemGen extends JFrame implements Observer{
 			libsbmlfile = new File("cfg/sbmlj.dll"); 
 			break;
 		case MACOSX :
-		      libsbmlfile = new File("cfg/libsbmlj.jnilib");
-		      break;
+			libsbmlfile = new File("cfg/libsbmlj.jnilib");
+			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
+			break;
 		default : 
 			libsbmlfile = new File("cfg/libsbmlj.so");
 		}
@@ -235,7 +236,7 @@ public class SemGen extends JFrame implements Observer{
 	/** Quit - verify that it is OK to quit and store the user's current preferences
 	 * and any local ontology terms if it yes
 	 * */
-	public void quit() throws HeadlessException, OWLException {
+	public boolean quit() throws HeadlessException, OWLException {
 		
 		if(contentpane.quit()){
 			try {
@@ -243,9 +244,11 @@ public class SemGen extends JFrame implements Observer{
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();
+				return true;
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
 		}
+		return false;
 	}
 	
 	@Override

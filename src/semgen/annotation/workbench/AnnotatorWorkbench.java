@@ -47,7 +47,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public static enum WBEvent {FREETEXT_REQUEST, IMPORT_FREETEXT, SMSELECTION, CWSELECTION}
 	public static enum LibraryRequest {REQUEST_IMPORT, REQUEST_LIBRARY, REQUEST_CREATOR, CLOSE_LIBRARY }
 	public static enum ModelEdit {PROPERTY_CHANGED, COMPOSITE_CHANGED, CODEWORD_CHANGED, SUBMODEL_CHANGED, MODEL_IMPORT, 
-		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED }
+		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED, CWLIST_CHANGED }
 	
 	public AnnotatorWorkbench(File file, SemSimModel model) {
 		semsimmodel = model;
@@ -193,6 +193,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					return false;
 				}
 			}
+			if (returnval == JOptionPane.CLOSED_OPTION)
+				return false;
 		}
 		return true;
 	}
@@ -209,18 +211,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public boolean importModelAnnotations(File file, Boolean[] options) {
+	public AnnotationImporter importModelAnnotations(File file, Boolean[] options) {
 		validateModelComposites();
-		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel);
-		if (!copier.loadSourceModel(file)) {
-			return false;
-		}
-		//Notify observers if changes were made.
-		if (copier.copyModelAnnotations(options)) {
-			updateAllListeners();
-		}
+		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel, file, options);
 	
-		return true;
+		return copier;
 	}
 		
 	public void compositeChanged() {
@@ -304,9 +299,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(WBEvent.IMPORT_FREETEXT);
 	}
 	
-	private void updateAllListeners() {
+	public void updateAllListeners() {
 		setChanged();
-		notifyObservers(ModelEdit.CODEWORD_CHANGED);
+		notifyObservers(ModelEdit.CWLIST_CHANGED);
 		setChanged();
 		notifyObservers(ModelEdit.SUBMODEL_CHANGED);
 		openModelAnnotationsWorkbench().notifyMetaDataImported();
@@ -319,13 +314,15 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setChanged();
 			notifyObservers(arg1);
 		}
+		if (arg1.equals(ModelEdit.SMNAMECHANGED)) {
+			cwdrawer.reloadCodewords();
+
+		}
 		if (arg1==ModelEdit.FREE_TEXT_CHANGED || arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED
 				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
 				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) || arg1.equals(ModelChangeEnum.METADATAIMPORTED)
-				|| arg1.equals(ModelChangeEnum.SOURCECHANGED)) {
+				|| arg1.equals(ModelChangeEnum.SOURCECHANGED) || arg1.equals(ModelEdit.SMNAMECHANGED)) {
 			this.setModelSaved(false);
 		}
 	}
-	
-
 }

@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.Gson;
-
-import semgen.visualizations.JsonString;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -24,7 +21,7 @@ public class SemSimModelSerializer {
 	 * @param semSimModel - SemSim model to get dependency network from
 	 * @return Dependencies
 	 */
-	public static ArrayList<DependencyNode> getDependencyNetwork(SemSimModel semSimModel)
+	public static DependencyNode[] getDependencyNetwork(SemSimModel semSimModel)
 	{
 		// Get solution domain declarations
 		Set<DataStructure> domaincodewords = new HashSet<DataStructure>();
@@ -40,16 +37,15 @@ public class SemSimModelSerializer {
 			// If the data structure is part of a solution domain declaration or
 			// it is not used to compute any other terms, ignore it.
 			if(dataStructure.isSolutionDomain() ||
-				domaincodewords.contains(dataStructure) && dataStructure.getUsedToCompute().isEmpty())
+					domaincodewords.contains(dataStructure) && dataStructure.getUsedToCompute().isEmpty())
 			{
 				continue;
 			}
-			
+
 			dependencies.add(new DependencyNode(dataStructure, semSimModel.getName()));
 		}
-		
-		// Turn the dependencies into a string
-		return dependencies;
+
+		return dependencies.toArray(new DependencyNode[dependencies.size()]);
 	}
 	
 	/**
@@ -60,14 +56,14 @@ public class SemSimModelSerializer {
 	 * @param semSimModel - SemSim model to get submodel network from
 	 * @return submodel network
 	 */
-	public static ArrayList<SubModelNode> getSubmodelNetwork(SemSimModel semSimModel)
+	public static SubModelNode[] getSubmodelNetwork(SemSimModel semSimModel)
 	{
 		ArrayList<SubModelNode> subModelNetwork = new ArrayList<SubModelNode>();
 		for(Submodel subModel : semSimModel.getSubmodels()){
 			subModelNetwork.add(new SubModelNode(subModel, semSimModel.getName()));
 		}
 		
-		return subModelNetwork;
+		return subModelNetwork.toArray(new SubModelNode[subModelNetwork.size()]);
 	}
 	
 	/**
@@ -78,7 +74,7 @@ public class SemSimModelSerializer {
 	 * @param semSimModel - SemSim model to get PhysioMap network from
 	 * @return PhysioMap network
 	 */
-	public static ArrayList<PhysioMapNode> getPhysioMapNetwork(SemSimModel semSimModel) {
+	public static PhysioMapNode[] getPhysioMapNetwork(SemSimModel semSimModel) {
 
 		HashMap<String, PhysioMapNode> nodeMap = new HashMap<String, PhysioMapNode>();
 		ArrayList<PhysioMapNode> physioMapNetwork = new ArrayList<PhysioMapNode>();
@@ -97,7 +93,7 @@ public class SemSimModelSerializer {
 		}
 
 		physioMapNetwork.addAll(nodeMap.values());
-		return physioMapNetwork;
+		return physioMapNetwork.toArray(new PhysioMapNode[physioMapNetwork.size()]);
 	}
 	
 	private static void updateNodeMapForProcess(String parentModelId, String processName, Set<PhysicalEntity> sources, Set<PhysicalEntity> sinks, Set<PhysicalEntity> mediators, HashMap<String, PhysioMapNode> nodeMap) {
@@ -139,9 +135,4 @@ public class SemSimModelSerializer {
 		return node;
 	}
 
-	public static JsonString toJsonString(Object obj) {
-		Gson gson = new Gson();
-		String json = gson.toJson(obj);
-		return new JsonString(json);
-	}
 }

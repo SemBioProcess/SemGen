@@ -25,8 +25,8 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.routines.TermCollector;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.PropertyType;
+import semsim.annotation.ReferenceOntologies.OntologyDomain;
 import semsim.model.SemSimTypes;
-import semsim.utilities.ReferenceOntologies.OntologyDomain;
 
 public class ReplaceTermPane extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -135,6 +135,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 		replacepan = importpane;
 		setBackground(new Color(216, 216, 216));
 		add(replacepan);
+		importpane.align();
 	}
 	
 	@Override
@@ -157,6 +158,7 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 	private JPanel addButtonPane(Color col) {
 		JPanel btnpane = new JPanel();
 		btnpane.setLayout(new BoxLayout(btnpane, BoxLayout.LINE_AXIS));
+		btnpane.setOpaque(false);
 		btnpane.add(replaceremovebtn);
 		btnpane.add(replacebtn);
 		btnpane.setBackground(col);
@@ -249,6 +251,8 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 				String[] resultsarray = rdflabelsanduris.keySet().toArray(new String[] {});
 				resultslistright.setListData(resultsarray);
 			}
+			
+
 		}
 
 		public void makeTerm() {
@@ -272,6 +276,8 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 			return getSelectedTermIndex();
 		}
 	}
+
+
 
 
 

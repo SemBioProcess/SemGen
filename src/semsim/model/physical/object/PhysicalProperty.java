@@ -2,8 +2,8 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimTypes;
@@ -16,23 +16,22 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		setName(label);
 	}
 
-	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
 	/**
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
-	public String getNamewithOntologyAbreviation() {
-		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
+		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
 	@Override
@@ -48,11 +47,21 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((PhysicalProperty)obj).getReferstoURI().compareTo(referenceuri)==0;
+		return ((PhysicalProperty)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 	
 	@Override
 	public SemSimTypes getSemSimType() {
 		return SemSimTypes.PHYSICAL_PROPERTY;
+	}
+
+	@Override
+	public String getOntologyName(SemSimLibrary semsimlib) {
+		return semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
 	}
 }

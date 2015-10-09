@@ -28,7 +28,8 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	}
 	/** Copy constructor **/
 	public CompositePhysicalEntity(CompositePhysicalEntity cpetocopy) {
-		this.setArrayListOfEntities(cpetocopy.arrayListOfPhysicalEntities);
+		super(cpetocopy);
+		setArrayListOfEntities(cpetocopy.arrayListOfPhysicalEntities);
 		setArrayListOfStructuralRelations(cpetocopy.arrayListOfStructuralRelations);
 	}
 	
@@ -47,7 +48,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		if(getArrayListOfEntities().size()>0) name = "";
 		for(int x=0; x<getArrayListOfEntities().size(); x++){
 			PhysicalEntity ent = getArrayListOfEntities().get(x);
-			if(ent.hasRefersToAnnotation())
+			if(ent.hasPhysicalDefinitionAnnotation())
 				name = name + ent.getName();
 			else
 				name = name + "\"" + ent.getName() + "\"";
@@ -129,8 +130,8 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		for(int y=0; y<getArrayListOfEntities().size();y++){
 			PhysicalEntity pe = getArrayListOfEntities().get(y);
 			// If a reference physical entity
-			if(pe.hasRefersToAnnotation()){
-				uristring = uristring + SemSimOWLFactory.getIRIfragment(((ReferenceTerm)pe).getReferstoURI().toString());
+			if(pe.hasPhysicalDefinitionAnnotation()){
+				uristring = uristring + SemSimOWLFactory.getIRIfragment(((ReferenceTerm)pe).getPhysicalDefinitionURI().toString());
 			}
 			// If custom physical entity
 			else{

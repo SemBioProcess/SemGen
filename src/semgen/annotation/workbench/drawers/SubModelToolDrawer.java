@@ -9,6 +9,7 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimComponentComparator;
@@ -30,8 +31,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		
 		int i = 0;
 		for (Submodel sm : componentlist) {
-			if (sm.isImported() && showimports) continue;
-			sms.add(i);
+			if (!sm.isImported() || showimports) sms.add(i);
 			i++;
 		}
 		return sms;
@@ -50,7 +50,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return componentlist.get(currentfocus).isImported();
 	}
 	
-	public String getCodewordName(int index) {
+	public String getComponentName(int index) {
 		return componentlist.get(index).getName();
 	}
 	
@@ -126,8 +126,33 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public void setSubmodelName(String newname) {
 		Submodel sm = componentlist.get(currentfocus);
+		String oldname = sm.getName();
 		sm.setName(newname);
+		sm.setLocalName(newname);
+		
 		refreshSubModels();
+		for (DataStructure ds : sm.getAssociatedDataStructures()) {
+			String name = ds.getName();
+			int i = name.lastIndexOf(".");
+			if (i!=-1) {
+				name = newname + "." + name.substring(i+1);
+				ds.setName(name);
+
+			}
+			if (ds.hasComputation()) {
+				Computation comp = ds.getComputation();
+				if (comp.getComputationalCode()!=null) {
+					String eq = comp.getComputationalCode().replaceAll(oldname, newname);
+					
+					comp.setComputationalCode(eq);
+				}
+				if (comp.getMathML()!=null) {
+					String eq = comp.getMathML().replaceAll(oldname, newname);
+					comp.setMathML(eq);
+				}
+			}
+		}
+		
 		currentfocus = componentlist.indexOf(sm);
 		setChanged();
 		notifyObservers(ModelEdit.SMNAMECHANGED);

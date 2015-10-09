@@ -3,6 +3,9 @@ package semgen.annotation.dialog.termlibrary;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.ObjectPropertyEditor;
 import semgen.annotation.common.ProcessParticipantEditor;
@@ -11,7 +14,7 @@ import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimConstants;
 import semsim.annotation.SemSimRelation;
 
-public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
+public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane implements TableModelListener {
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<ParticipantEditor> editors;
@@ -34,9 +37,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 		editors.add(new ParticipantEditor("Sink Participants", library));
 		editors.add(new ParticipantEditor("Mediator Participants", library));
 		
-		for (ParticipantEditor editor : editors) {
-			add(editor);
-		}
+		
 		setParticipants();
 	}
 	
@@ -50,6 +51,10 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 			editors.get(0).setTableData(new LinkedHashMap<Integer, Double>());
 			editors.get(1).setTableData(new LinkedHashMap<Integer, Double>());
 			editors.get(2).setTableData(new ArrayList<Integer>());
+		}
+		for (ParticipantEditor editor : editors) {
+			editor.addTableModelListener(this);
+			add(editor);
 		}
 	}
 	
@@ -118,6 +123,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 
 		public ParticipantEditor(String name, SemSimTermLibrary lib) {
 			super(name, lib);
+			
 		}
 
 		@Override
@@ -164,4 +170,12 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane {
 
 		}	
 	}
+	
+		@Override
+		public void tableChanged(TableModelEvent arg0) {
+			if (termindex!=-1) {
+				createbtn.setEnabled(true);
+			}
+		}
+		
 }

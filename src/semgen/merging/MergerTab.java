@@ -57,6 +57,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	private ResolutionPane respane;
 	private JButton mergebutton = new JButton("MERGE");
 
+	private SemGenScrollPane resolvescroller;
 	private JSplitPane resmapsplitpane;
 	private JButton addmanualmappingbutton = new JButton("Add manual mapping");
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
@@ -113,7 +114,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		
 		respane = new ResolutionPane(workbench);
 		
-		SemGenScrollPane resolvescroller = new SemGenScrollPane(respane);
+		resolvescroller = new SemGenScrollPane(respane);
 		resolvescroller.setBorder(BorderFactory.createTitledBorder("Resolution points between models"));
 		resolvescroller.setAlignmentX(LEFT_ALIGNMENT);
 	
@@ -242,6 +243,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 	private void minusButtonAction() {
 		workbench.removeSelectedModel();
+		respane.clear();
 		mappingpanelleft.clearPanel();
 		mappingpanelright.clearPanel();
 		primeForMerging();
@@ -256,11 +258,14 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			
 				if (names!=null) {
 					JOptionPane.showMessageDialog(this, 
-							names.getLeft() + " and " + names.getRight() + " are already mapped");
+							"Either " + names.getLeft() + " or " + names.getRight() + " is already mapped");
 				}
-			} else {
-				SemGenError.showError("Please select a codeword from both component models","");
-			}
+				
+				resolvescroller.validate();
+				resolvescroller.scrollToBottom();
+			} 
+		else SemGenError.showError("Please select a codeword from both component models","");
+		
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {

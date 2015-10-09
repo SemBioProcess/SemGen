@@ -33,6 +33,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
@@ -52,9 +53,11 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLbioRDFblock;
 
@@ -281,11 +284,15 @@ public class CellMLreader extends ModelReader {
 					URI termURI = collectSingularBiologicalAnnotation(doc, cvar, var);
 					
 					if(termURI!=null){
-						String label = null;
-						cvar.addReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, termURI, label);
+						
+						if(! termURI.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+							termURI = swapInOPBnamespace(termURI);
+						
+						PhysicalProperty prop = getSingularPhysicalProperty(termURI);
+						cvar.setSingularAnnotation(prop);
 					}
 					
-					collectCompositeAnnotation(doc, cvar, var);
+					collectCompositeAnnotation(cvar, var);
 					
 				}
 				semsimmodel.addDataStructure(cvar);
@@ -607,7 +614,7 @@ public class CellMLreader extends ModelReader {
 	
 	
 	// Collect the reference ontology term used to describe the model component
-	private URI collectSingularBiologicalAnnotation(Document doc, SemSimComponent toann, Element el){
+	private URI collectSingularBiologicalAnnotation(Document doc, SemSimObject toann, Element el){
 		// Look for rdf markup as child of element
 		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
 		// If not present, look for it in main RDF block
@@ -658,7 +665,7 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	private void collectCompositeAnnotation(Document doc, SemSimComponent toann, Element el){
+	private void collectCompositeAnnotation(SemSimComponent toann, Element el){
 		MappableVariable cvar = (MappableVariable)toann;
 		Resource cvarResource = rdfblock.rdf.getResource(mainNS.getURI().toString() + cvar.getMetadataID());
 		
@@ -670,22 +677,18 @@ public class CellMLreader extends ModelReader {
 		if(physpropres!=null){
 			Resource isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.is);
 			if(isannres==null)
-				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+				isannres = physpropres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
 			
 			// If the property is annotated against a reference ontology term
 			if(isannres!=null){
 				
+				URI uri = URI.create(isannres.getURI());
+
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-//				String tempuri = isannres.getURI();
-//				if(!isannres.getURI().startsWith(SemSimConstants.OPB_NAMESPACE)){
-//					tempuri = isannres.getURI();
-//					String frag = SemSimOWLFactory.getIRIfragment(tempuri);
-//					tempuri = SemSimConstants.OPB_NAMESPACE + frag;
-//				}
+				if(! uri.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+					uri = swapInOPBnamespace(uri);
 				
-				String uristring = isannres.getURI();
-				
-				PhysicalPropertyinComposite pp = getPhysicalProperty(uristring);
+				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
 				cvar.setAssociatedPhysicalProperty(pp);
 			}
 
@@ -695,7 +698,7 @@ public class CellMLreader extends ModelReader {
 			
 			// If the physical property is a property of something...
 			if(propertyofres!=null){
-				
+								
 				PhysicalModelComponent pmc = getPMCfromRDFresourceAndAnnotate(propertyofres);
 				cvar.setAssociatedPhysicalModelComponent(pmc);
 				
@@ -710,8 +713,12 @@ public class CellMLreader extends ModelReader {
 						Resource sourceres = (Resource) sourceit.next();
 						Resource physentres = sourceres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSource((PhysicalEntity) sourcepmc, multiplier.getDouble());
+						
+						if(sourceres.getProperty(CellMLbioRDFblock.hasmultiplier)!=null){
+							Literal multiplier = sourceres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+							process.addSource((PhysicalEntity) sourcepmc, multiplier.getDouble());
+						}
+						else process.addSource((PhysicalEntity) sourcepmc, 1.0);
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hassinkparticipant);
@@ -719,8 +726,12 @@ public class CellMLreader extends ModelReader {
 						Resource sinkres = (Resource) sinkit.next();
 						Resource physentres = sinkres.getPropertyResourceValue(CellMLbioRDFblock.hasphysicalentityreference);
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
-						Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
-						process.addSink((PhysicalEntity) sinkpmc, multiplier.getDouble());
+						
+						if(sinkres.getProperty(CellMLbioRDFblock.hasmultiplier)!=null){
+							Literal multiplier = sinkres.getProperty(CellMLbioRDFblock.hasmultiplier).getObject().asLiteral();
+							process.addSource((PhysicalEntity) sinkpmc, multiplier.getDouble());
+						}
+						else process.addSource((PhysicalEntity) sinkpmc, 1.0);
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdfblock.rdf.listObjectsOfProperty(propertyofres, CellMLbioRDFblock.hasmediatorparticipant);
@@ -772,7 +783,7 @@ public class CellMLreader extends ModelReader {
 	
 	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
-		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
 		Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 		
 		// If a reference entity
@@ -784,9 +795,12 @@ public class CellMLreader extends ModelReader {
 		// If a custom entity
 		else returnent = addCustomPhysicalEntityToModel(res);
 		
-		if(isversionofann!=null)
+		if(isversionofann!=null){
+			
 			returnent.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
 					URI.create(isversionofann.getURI()), isversionofann.getURI()));	
+			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isversionofann.getURI()), isversionofann.getURI()));
+		}
 		
 		return returnent;
 	}
@@ -801,9 +815,13 @@ public class CellMLreader extends ModelReader {
 			pmc = URIandPMCmap.get(res.getURI());
 		else{
 			Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
-			if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.refersto);
+			if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
+			
+			boolean isentity = res.getLocalName().startsWith("entity_");
+			boolean isprocess = res.getLocalName().startsWith("process_");
+			
 			// If a physical entity
-			if(res.getLocalName().startsWith("entity_")){
+			if(isentity){
 				
 				// If a composite entity
 				if(res.getPropertyResourceValue(CellMLbioRDFblock.containedin)!=null || 
@@ -811,15 +829,21 @@ public class CellMLreader extends ModelReader {
 					pmc = semsimmodel.addCompositePhysicalEntity(buildCompositePhysicalEntityfromRDFresource(res));
 				
 				// If a reference entity
-				else if(isannres!=null)
-					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
+				else {
+					if(isannres!=null) {
 				
-				// If a custom entity
-				else{
-					pmc = addCustomPhysicalEntityToModel(res);
+					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
+					}
+					// If a custom entity
+					else{
+						pmc = addCustomPhysicalEntityToModel(res);
+					}
+					ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
+					entlist.add((PhysicalEntity) pmc);
+					pmc = semsimmodel.addCompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
 				}
 			}
-			else if(res.getLocalName().startsWith("process_")){
+			else if(isprocess){
 				
 				// If a reference process
 				if(isannres!=null){
@@ -829,14 +853,28 @@ public class CellMLreader extends ModelReader {
 				else{
 					String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 					if(name==null) name = unnamedstring;
-					String description = res.getProperty(CellMLbioRDFblock.description).getString();
+					
+					String description = null;
+					
+					if(res.getProperty(CellMLbioRDFblock.description)!=null)
+						description = res.getProperty(CellMLbioRDFblock.description).getString();
+					
 					pmc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(name, description));
 				}
 			}
+			
 			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
-			if(isversionofann!=null)
+			if(isversionofann!=null){
+				URI isversionofannURI = URI.create(isversionofann.getURI());
 				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
-						URI.create(isversionofann.getURI()), isversionofann.getURI()));				
+						isversionofannURI, isversionofannURI.toString()));
+				if(isentity)
+					semsimmodel.addReferencePhysicalEntity(
+							new ReferencePhysicalEntity(isversionofannURI, isversionofannURI.toString()));
+				else if(isprocess)
+					semsimmodel.addReferencePhysicalProcess(
+							new ReferencePhysicalProcess(isversionofannURI, isversionofannURI.toString()));
+			}
 			
 			URIandPMCmap.put(res.getURI(), pmc);
 		}
@@ -847,7 +885,12 @@ public class CellMLreader extends ModelReader {
 	private CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
 		String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 		if(name==null) name = unnamedstring;
-		String description = res.getProperty(CellMLbioRDFblock.description).getString();
+		
+		String description = null;
+		
+		if(res.getProperty(CellMLbioRDFblock.description)!=null)
+			description = res.getProperty(CellMLbioRDFblock.description).getString();
+		
 		return semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
 	}
 		
@@ -947,17 +990,34 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
-	private PhysicalPropertyinComposite getPhysicalProperty(String refersto) {
-		PhysicalModelComponent term = URIandPMCmap.get(refersto);
+	private PhysicalPropertyinComposite getPhysicalPropertyInComposite(String key) {
+		PhysicalModelComponent term = URIandPMCmap.get(key);
 		if (term==null) {
 			String description = "";
-			term = new PhysicalPropertyinComposite(description, URI.create(refersto));
-			URIandPMCmap.put(refersto, term);
+			term = new PhysicalPropertyinComposite(description, URI.create(key));
+			URIandPMCmap.put(key, term);
 			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyinComposite) term);
 		}
 		return (PhysicalPropertyinComposite)term;
 	}
 	
+	
+	private PhysicalProperty getSingularPhysicalProperty(URI uri){
+		PhysicalModelComponent term = URIandPMCmap.get(uri.toString());
+		if (term==null) {
+			term = new PhysicalProperty("", uri);
+			URIandPMCmap.put(uri.toString(), term);
+			semsimmodel.addPhysicalProperty((PhysicalProperty) term);
+		}
+		return (PhysicalProperty)term;
+	}
+	
+	// Replace the namespace of a URI with the OPB's preferred namespace
+	private URI swapInOPBnamespace(URI uri){
+		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
+		String uristring = SemSimConstants.OPB_NAMESPACE + frag;
+		return URI.create(uristring);
+	}
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
 		
 		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
@@ -976,3 +1036,4 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 }
+

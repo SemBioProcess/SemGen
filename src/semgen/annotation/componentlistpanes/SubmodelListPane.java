@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.SemGenSettings;
+import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.componentlistpanes.buttons.SubmodelButton;
 import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
@@ -46,7 +47,7 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 		buttonpane.add(componentaddremovepanel);
 		
 		for (Integer index : numlist) {
-			SubmodelButton sbm = new ListButton(drawer.getCodewordName(index), drawer.isEditable(index));
+			SubmodelButton sbm = new ListButton(drawer.getComponentName(index), drawer.isEditable(index));
 			addButton(sbm, index);
 			btnlist.put(sbm, index);
 			sbm.toggleHumanDefinition(drawer.hasHumanReadableDef(index));
@@ -90,7 +91,7 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 	
 	@Override
 	public void updateUnique(Object arg) {
-		if ((arg == ModelEdit.SMNAMECHANGED) || (arg == ModelEdit.SMLISTCHANGED)){
+		if ((arg == ModelEdit.SMNAMECHANGED) || (arg == ModelEdit.SMLISTCHANGED) || arg==SettingChange.SHOWIMPORTS){
 			update();
 		}
 		if (focusbutton!=null) {

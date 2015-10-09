@@ -19,6 +19,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.utilities.SemSimCopy;
 
 /**
  * This class represents a named element in a simulation model that
@@ -36,6 +37,28 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
+	
+	public DataStructure() {}
+	
+	public DataStructure(DataStructure dstocopy) {
+		super(dstocopy);
+		computation = dstocopy.computation;
+		physicalProperty = dstocopy.physicalProperty;
+		physicalcomponent = dstocopy.physicalcomponent;
+		singularterm = dstocopy.singularterm;
+		solutionDomain = dstocopy.solutionDomain;
+		usedToCompute.addAll(dstocopy.usedToCompute);
+		annotations = SemSimCopy.copyAnnotations(dstocopy.annotations);
+		isSolutionDomain = dstocopy.isSolutionDomain;
+		isDiscrete = dstocopy.isDiscrete;
+		isDeclared = dstocopy.isDeclared;
+		isImported = dstocopy.isImported;
+		if (dstocopy.startValue!=null) {
+			startValue = new String(dstocopy.startValue);
+		}
+		unit = dstocopy.unit;
+	}
+	
 	
 	/**
 	 * Append the list of DataStructures that this DataStructure
@@ -135,7 +158,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure is solved as a non-continuous variable */
 	public Boolean isDiscrete(){
-		return isDiscrete;
+		return this.getComputation().getEvents().size()>0;
 	}
 	
 	/** @return Whether the DataStructure is a solution domain for the model */
@@ -174,11 +197,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		this.isDeclared = isDeclared;
 	}
 	
-	/** Set whether this DataStructure is solved as a non-continuous variable or not */
-	public void setDiscrete(boolean isdisc){
-		this.isDiscrete = isdisc;
-	}
-	
 	/** Set whether this DataStructure is a solution domain in the model or not */
 	public void setIsSolutionDomain(boolean issoldom){
 		isSolutionDomain = issoldom;
@@ -202,13 +220,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		String compann = "[unspecified]";
 		if(getPhysicalProperty()!=null){
 			compann = "[unspecified property] of ";
-			if(getPhysicalProperty().hasRefersToAnnotation()){
-				compann = getPhysicalProperty().getRefersToReferenceOntologyAnnotation().getValueDescription() + " of ";
+			if(getPhysicalProperty().hasPhysicalDefinitionAnnotation()){
+				compann = getPhysicalProperty().getName() + " of ";
 			}
 			// if physical entity or process
 			String target = "?";
 			if(getAssociatedPhysicalModelComponent()!=null){
-				if(getAssociatedPhysicalModelComponent().hasRefersToAnnotation()){
+				if(getAssociatedPhysicalModelComponent().hasPhysicalDefinitionAnnotation()){
 					target = getAssociatedPhysicalModelComponent().getDescription();
 				}
 				// otherwise it's a composite physical entity or custom term
@@ -248,6 +266,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return usedToCompute;
 	}
 	
+	public boolean hasComputation() {
+		return computation!=null;
+	}
 	
 	// Required by annotable interface:
 	public Set<Annotation> getAnnotations() {
@@ -330,7 +351,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
-			if(getPhysicalProperty().hasRefersToAnnotation()){
+			if(getPhysicalProperty().hasPhysicalDefinitionAnnotation()){
 				return lib.getPropertyinCompositeType(physicalProperty);
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
@@ -365,20 +386,20 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		singularterm = null;
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return singularterm.getRefersToReferenceOntologyAnnotation();
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
 		}
 		return null;
 	}
 	
 	@Override
-	public Boolean hasRefersToAnnotation() {
+	public Boolean hasPhysicalDefinitionAnnotation() {
 		return singularterm!=null;
 	}
 	
-	public URI getReferstoURI() {
-		return singularterm.getReferstoURI();
+	public URI getPhysicalDefinitionURI() {
+		return singularterm.getPhysicalDefinitionURI();
 	}
 	
 	public PhysicalProperty getSingularTerm() {

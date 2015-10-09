@@ -36,6 +36,7 @@ import semsim.utilities.SemSimUtil;
 public class CellMLbioRDFblock {
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
 	private Map<PhysicalModelComponent, URI> pmcsandresourceURIs = new HashMap<PhysicalModelComponent,URI>(); 
+	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
 	public String modelns;
@@ -46,7 +47,7 @@ public class CellMLbioRDFblock {
 	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_ENTITY_REFERENCE_URI.toString());
 	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimConstants.HAS_MULTIPLIER_URI.toString());
 	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
-	public static Property refersto = ResourceFactory.createProperty(SemSimConstants.REFERS_TO_URI.toString());
+	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString());
 	public static Property is = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 	public static Property isversionof = ResourceFactory.createProperty(SemSimConstants.BQB_IS_VERSION_OF_URI.toString());
 	public static Property partof = ResourceFactory.createProperty(SemSimConstants.PART_OF_URI.toString());
@@ -76,8 +77,7 @@ public class CellMLbioRDFblock {
 		if(!ds.isImportedViaSubmodel()){
 			
 			if(ds.hasPhysicalProperty()){
-				PhysicalPropertyinComposite prop = ds.getPhysicalProperty();
-				Resource propres = getResourceForPMCandAnnotate(rdf, prop);
+				Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, ds);
 
 				if(ds.hasAssociatedPhysicalComponent()){
 					PhysicalModelComponent propof = ds.getAssociatedPhysicalModelComponent();
@@ -220,13 +220,14 @@ public class CellMLbioRDFblock {
 				nexturi = pmcsandresourceURIs.get(lastent);
 			}
 		}
-			Property structprop = partof;
 			
-			StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-			if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		Property structprop = partof;
 			
-			Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
-			if(!rdf.contains(structst)) rdf.add(structst);
+		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
+		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		
+		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
+		if(!rdf.contains(structst)) rdf.add(structst);
 		
 		return indexuri;
 	}
@@ -238,16 +239,43 @@ public class CellMLbioRDFblock {
 		return out.toString();
 	}
 	
+	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
-		if(pmcsandresourceURIs.containsKey(pmc)){
-			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
-		}
 		
 		String typeprefix = pmc.getComponentTypeasString();
+		boolean isphysproperty = typeprefix.matches("property");
+		
+		if(pmcsandresourceURIs.containsKey(pmc) && ! isphysproperty){
+			return rdf.getResource(pmcsandresourceURIs.get(pmc).toString());
+		}
 		
 		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
 			typeprefix = "unknown";
 		
+		Resource res = createResourceForPhysicalModelComponent(typeprefix);
+		
+		if(! isphysproperty) pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
+		
+		annotateReferenceOrCustomResource(pmc, res);
+		
+		return res;
+	}
+	
+	// Get the RDF resource for a data structure's associated physical property
+	protected Resource getResourceForDataStructurePropertyAndAnnotate(Model rdf, DataStructure ds){
+		
+		if(variablesAndPropertyResourceURIs.containsKey(ds)){
+			return rdf.getResource(variablesAndPropertyResourceURIs.get(ds).toString());
+		}
+		
+		Resource res = createResourceForPhysicalModelComponent("property");
+		variablesAndPropertyResourceURIs.put(ds, URI.create(res.getURI()));
+		annotateReferenceOrCustomResource(ds.getPhysicalProperty(), res);
+		return res;
+	}
+	
+	// Generate an RDF resource for a physical component
+	private Resource createResourceForPhysicalModelComponent(String typeprefix){
 		String resname = modelns;	
 		int idnum = 0;
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
@@ -258,10 +286,6 @@ public class CellMLbioRDFblock {
 		localids.add(resname);
 		
 		Resource res = rdf.createResource(resname);
-		pmcsandresourceURIs.put(pmc, URI.create(res.getURI()));
-		
-		annotateReferenceOrCustomResource(pmc, res);
-		
 		return res;
 	}
 
@@ -281,9 +305,9 @@ public class CellMLbioRDFblock {
 		ReferenceOntologyAnnotation ann = null;
 		Resource refres = null;
 		
-		// If there is an "is" annotation (aka "refersTo")
-		if(pmc.hasRefersToAnnotation()){
-			ann = ((ReferenceTerm)pmc).getRefersToReferenceOntologyAnnotation();
+		// If there is an "is" annotation (aka "hasPhysicalDefinition", aka "refersTo")
+		if(pmc.hasPhysicalDefinitionAnnotation()){
+			ann = ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation();
 		}
 		// Else use the first "isVersionOf" annotation found
 		else if(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION).size()>0){
@@ -299,12 +323,11 @@ public class CellMLbioRDFblock {
 			refres = getReferenceResourceFromURI(ann.getReferenceURI());
 			
 			Property refprop = 
-				(ann.getRelation()==SemSimConstants.BQB_IS_RELATION || ann.getRelation()==SemSimConstants.REFERS_TO_RELATION) ? is : isversionof; 
+				(ann.getRelation()==SemSimConstants.BQB_IS_RELATION || ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION) ? is : isversionof; 
 			
-			// Use SemSim:refersTo for annotated Physical model components
 			if(refprop == is){
 				if(pmc instanceof PhysicalPropertyinComposite || pmc instanceof PhysicalEntity
-						|| pmc instanceof PhysicalProcess) refprop = refersto;
+						|| pmc instanceof PhysicalProcess) refprop = hasphysicaldefinition;
 			}
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it

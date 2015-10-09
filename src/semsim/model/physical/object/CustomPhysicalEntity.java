@@ -19,8 +19,7 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	 * @param cupe
 	 */
 	public CustomPhysicalEntity(CustomPhysicalEntity cupe) {
-		setName(new String(cupe.getName()));
-		setDescription(new String(cupe.getDescription()));
+		super(cupe);
 	}
 	
 	@Override

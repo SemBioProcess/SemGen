@@ -22,6 +22,10 @@ public class SemSimInteger extends DataStructure{
 		setComputation(computation);
 	}
 	
+	public SemSimInteger(SemSimInteger inttocopy) {
+		super(inttocopy);
+	}
+	
 	public boolean isReal() {
 		return true;
 	}

@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationSubject;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
 import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataHasValue;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
@@ -38,6 +40,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
@@ -46,6 +49,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.RemoveAxiom;
+import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimConstants;
@@ -102,10 +106,10 @@ public class SemSimOWLFactory {
 		AddAxiom addAxiom = new AddAxiom(destinationont, axiom);
 		manager.applyChange(addAxiom);
 
-		OWLDataProperty referstoprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "refersTo"));
+		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI));
 		OWLLiteral con2 = factory.getOWLLiteral(clsuri);
-		OWLClassExpression refersto = factory.getOWLDataHasValue(referstoprop,con2);
-		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd,refersto);
+		OWLClassExpression physdef = factory.getOWLDataHasValue(hasphysdefprop,con2);
+		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd, physdef);
 		AddAxiom addAx2 = new AddAxiom(destinationont, ax2);
 		manager.applyChange(addAx2);
 		
@@ -182,6 +186,20 @@ public class SemSimOWLFactory {
 		OWLIndividualAxiom axiom = factory.getOWLClassAssertionAxiom(refclass, pmcind);
 		AddAxiom addAxiom = new AddAxiom(ont, axiom);
 		manager.applyChange(addAxiom);
+	}
+	
+	// Add an object property restriction to use as a superclass on an individual (uses the "some" restriction type).
+	public static void addExistentialObjectPropertyRestrictionOnIndividual(OWLOntology ont, String ind, String property,
+			String value, OWLOntologyManager manager){
+				
+		OWLObjectProperty owlproperty = factory.getOWLObjectProperty(IRI.create(property));
+        OWLClass owlvalue = factory.getOWLClass(IRI.create(value));
+        OWLClassExpression owlexp = factory.getOWLObjectSomeValuesFrom(owlproperty, owlvalue);
+		OWLNamedIndividual owlind = factory.getOWLNamedIndividual(IRI.create(ind));
+
+        OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(owlexp, owlind);
+        AddAxiom addAx = new AddAxiom(ont, ax);
+        manager.applyChange(addAx);				
 	}
 
 	// Set an object property for one individual
@@ -268,8 +286,8 @@ public class SemSimOWLFactory {
 		for (OWLDataPropertyExpression expression : datapropskeyset) {
 			if (expression.equals(prop)) {
 				if (dataprops.get(expression) != null) {
-					for (OWLLiteral referstovalue : dataprops.get(expression)) {
-						values.add(referstovalue.getLiteral());
+					for (OWLLiteral value : dataprops.get(expression)) {
+						values.add(value.getLiteral());
 					}
 				}
 			}
@@ -295,8 +313,8 @@ public class SemSimOWLFactory {
 		for (OWLObjectPropertyExpression expression : objprops.keySet()) {
 			if (expression.equals(prop)) {
 				if (objprops.get(expression) != null) {
-					for (OWLIndividual referstovalue : objprops.get(expression)) {
-						values.add(referstovalue.asOWLNamedIndividual().getIRI().toString());
+					for (OWLIndividual value : objprops.get(expression)) {
+						values.add(value.asOWLNamedIndividual().getIRI().toString());
 					}
 				}
 			}
@@ -378,24 +396,6 @@ public class SemSimOWLFactory {
 		return false;
 	}
 
-	public static Hashtable<String,String> getReferencedIRIs(OWLOntology ontology,String parent) throws OWLException {
-		Hashtable<String,String> namesanduris = new Hashtable<String,String>();
-		Set<String> leafclasses = SemSimOWLFactory.getAllSubclasses(ontology, parent, true);
-		for (String oneclass : leafclasses) {
-			OWLClass oneowlclass = factory.getOWLClass(IRI.create(oneclass));
-			for (OWLIndividual ind : oneowlclass.getIndividuals(ontology)) {
-				String uri = getFunctionalIndDatatypeProperty(ontology, ind.asOWLNamedIndividual().getIRI().toString(), SemSimConstants.SEMSIM_NAMESPACE + "refersTo");
-				String humread = getFunctionalIndDatatypeProperty(ontology, ind.asOWLNamedIndividual().getIRI().toString(), SemSimConstants.SEMSIM_NAMESPACE + "humanReadableName");
-				// If the refersTo slot is empty, assume it's a custom entity
-				// unique to this SemSim model
-				if (uri.equals("")) {
-					uri = ind.asOWLNamedIndividual().getIRI().toString();
-				}
-				namesanduris.put(humread, uri);
-			}
-		}
-		return namesanduris;
-	}
 	
 	public static String[] getRDFLabels(OWLOntology ont, OWLEntity ent) {
 		OWLLiteral val = null;
@@ -696,5 +696,57 @@ public class SemSimOWLFactory {
 		}
 		return iritoappend;
 	}
+	
+	
+	/**
+     * Code from OWL API example on GitHub
+     * Visits existential restrictions and collects the properties which are
+     * restricted.
+     */
+    public static class RestrictionVisitor extends
+            OWLClassExpressionVisitorAdapter {
+
+        private final Set<OWLClass> processedClasses;
+        private final Map<OWLObjectPropertyExpression, OWLClassExpression> restrictedPropertiesAndFillersMap;
+        private final Set<OWLOntology> onts;
+
+        public RestrictionVisitor(Set<OWLOntology> onts) {
+            processedClasses = new HashSet<OWLClass>();
+            restrictedPropertiesAndFillersMap = new HashMap<OWLObjectPropertyExpression, OWLClassExpression>();
+            this.onts = onts;
+        }
+
+//        public Set<OWLObjectPropertyExpression> getRestrictedProperties() {
+//            return restrictedProperties;
+//        }
+        
+        public Map<OWLObjectPropertyExpression, OWLClassExpression> getPropertyFillerMap(){
+        	return restrictedPropertiesAndFillersMap;
+        }
+
+        @Override
+        public void visit(OWLClass desc) {
+            if (!processedClasses.contains(desc)) {
+                // If we are processing inherited restrictions then we
+                // recursively visit named supers. Note that we need to keep
+                // track of the classes that we have processed so that we don't
+                // get caught out by cycles in the taxonomy
+                processedClasses.add(desc);
+                for (OWLOntology ont : onts) {
+                    for (OWLSubClassOfAxiom ax : ont
+                            .getSubClassAxiomsForSubClass(desc)) {
+                        ax.getSuperClass().accept(this);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void visit(OWLObjectSomeValuesFrom desc) {
+            // This method gets called when a class expression is an existential
+            // (someValuesFrom) restriction and it asks us to visit it
+        	restrictedPropertiesAndFillersMap.put(desc.getProperty(),desc.getFiller());
+        }
+    }
 
 }

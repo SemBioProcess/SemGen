@@ -1,5 +1,6 @@
 var sender;
 var receiver;
+var AllNodes = [];
 $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	sender = e.originalEvent.commandSender;
@@ -30,6 +31,7 @@ $(window).bind("cwb-initialized", function(e) {
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
 		console.log("Removing model " + modelName);
+		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
 		delete modelNodes[modelName];
 		graph.update();
@@ -78,23 +80,18 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");
 
-		searchResults.sort(function (a, b) {
-		    return a.toLowerCase().localeCompare(b.toLowerCase());
+		// Remove all elements from the result list
+		var searchResultsList = $(".searchResults");
+		searchResultsList.empty();
+
+		// Create UI for the results
+		searchResults.forEach(function (searchResultSet ) {
+			searchResultSet.results.sort(function (a, b) {
+				return a.toLowerCase().localeCompare(b.toLowerCase());
+			});
+
+			searchResultsList.append(makeResultSet(searchResultSet));
 		});
-		var searchResultsList = document.getElementById("searchResultsList");
-		while(searchResultsList.firstChild) {
-			searchResultsList.removeChild(searchResultsList.firstChild);
-		};
-		searchResultsList.appendChild(makeUL(searchResults));
-	});
-	
-	// Add model when clicked
-	$('#searchResultsList').on('click', 'li', function() {
-		var modelName = $(this).text().trim();
-		sender.addModelByName(modelName);
-		
-		// Hide the search box
-		$(".stageSearch .searchValueContainer").hide();
 	});
 });
 
@@ -131,12 +128,40 @@ function addChildNodes(parentNode, data, createNode) {
 	parentNode.setChildren(nodes);
 };
 
-function makeUL(array) {
+function makeResultSet(searchResultSet) {
+	var resultSet = $(
+		"<li class='searchResultSet'>" +
+			"<label>" + searchResultSet.source + "</label>" +
+		"</li>"
+	);
+
     var list = document.createElement('ul');
-    for(var i = 0; i < array.length; i++) {
+    for(var i = 0; i < searchResultSet.results.length; i++) {
         var item = document.createElement('li');
-        item.appendChild(document.createTextNode(array[i]));
+        item.className = "searchResultSetValue";
+        item.appendChild(document.createTextNode(searchResultSet.results[i]));
         list.appendChild(item);
+        $(item).data("source", searchResultSet.source)
+        $(item).click(function() {
+			var modelName = $(this).text().trim();
+			var source = $(this).data("source");
+			sender.addModelByName(source, modelName);
+
+			// Hide the search box
+			$(".stageSearch .searchValueContainer").hide();
+		});
     }
-    return list;
+
+    resultSet.append(list);
+    return resultSet;
+};
+
+function removeFromDragList(_node) {
+
+	var NewNodes = [];
+	AllNodes.forEach(function (node) {
+		if(node != _node)
+			NewNodes.push(node);
+	});
+	AllNodes = NewNodes;
 };

@@ -11,11 +11,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.utilities.GenericWorker;
+import semgen.utilities.SemGenJob;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -33,9 +36,11 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	ArrayList<JCheckBox> checklist = new ArrayList<JCheckBox>();
 	JButton importbtn = new JButton("Import");
 	File file = null;
+	JFrame parent;
 	
-	public ImportAnnotationsPanel(AnnotatorWorkbench wb) {
+	public ImportAnnotationsPanel(AnnotatorWorkbench wb, JFrame par) {
 		workbench = wb;
+		parent = par;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 
 		setBackground(SemGenSettings.lightblue);
 		makePanel();
@@ -100,10 +105,19 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 		for (int i = 0; i < checklist.size(); i++) {
 			options[i] = checklist.get(i).isSelected();
 		}
-		if (!workbench.importModelAnnotations(file, options)) {
+		SemGenJob sgt = workbench.importModelAnnotations(file, options);
+		if (sgt == null) {
 			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
 		}
-		importbtn.setEnabled(false);
+		GenericWorker worker = new GenericWorker(sgt, parent) {
+			@Override
+			public void endTask() {
+				workbench.updateAllListeners();
+				importbtn.setEnabled(false);
+			}
+		};
+		
+		worker.execute();
 	}
 	
 	

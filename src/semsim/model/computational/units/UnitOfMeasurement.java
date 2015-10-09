@@ -17,9 +17,9 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private String computationalCode;
 	private String customDeclaration;
-	private boolean isFundamental = false;
 	private Set<UnitFactor> unitFactors = new HashSet<UnitFactor>();
 	
+	private boolean isFundamental = false;
 	private boolean isImported = false;
 	private String hrefValue;
 	private String referencedName;
@@ -30,6 +30,29 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public UnitOfMeasurement(String name){
 		setName(name);
 		setComputationalCode(name);
+	}
+	
+	/**
+	 * Copy constructor
+	 * @param uomtocopy
+	 */
+	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
+		super(uomtocopy);
+		computationalCode = new String(uomtocopy.computationalCode);
+		if (uomtocopy.customDeclaration != null) {
+			customDeclaration = new String(uomtocopy.customDeclaration);
+		}
+		unitFactors.addAll(uomtocopy.unitFactors);
+		isFundamental = uomtocopy.isFundamental;
+		isFundamental = uomtocopy.isImported;
+		parentImport = uomtocopy.parentImport;
+		if (uomtocopy.referencedName != null) {
+			referencedName = new String(uomtocopy.referencedName);
+		}
+		if (uomtocopy.localName != null) {
+			localName = new String(uomtocopy.localName);
+		}
+		unitType = uomtocopy.unitType;
 	}
 	
 	public void addUnitFactor(UnitFactor factor){
@@ -88,15 +111,15 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(!getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).isEmpty()){
-			return getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(!getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION).isEmpty()){
+			return getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
 		return null;
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotationByURI(URI uri){
-		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.REFERS_TO_RELATION)){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotationByURI(URI uri){
+		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION)){
 			if(ann.getReferenceURI().compareTo(uri)==0){
 				return ann;
 			}
@@ -108,8 +131,8 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		return !getAnnotations().isEmpty();
 	}
 	
-	public Boolean hasRefersToAnnotation(){
-		return getRefersToReferenceOntologyAnnotation()!=null;
+	public Boolean hasPhysicalDefinitionAnnotation(){
+		return getPhysicalDefinitionReferenceOntologyAnnotation()!=null;
 	}
 
 	public void removeAllReferenceAnnotations() {
@@ -196,7 +219,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		return SemSimConstants.UNITS_CLASS_URI;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return referenceuri;
 	}
 }

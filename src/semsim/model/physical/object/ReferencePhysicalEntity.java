@@ -2,8 +2,8 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semgen.SemGen;
 import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.model.SemSimTypes;
@@ -16,27 +16,37 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 		setName(description);
 	}
 	
-	public ReferenceOntologyAnnotation getRefersToReferenceOntologyAnnotation(){
-		if(hasRefersToAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.REFERS_TO_RELATION, referenceuri, getDescription());
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+		if(hasPhysicalDefinitionAnnotation()){
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
 		}
 		return null;
 	}
 	
-	public URI getReferstoURI() {
+	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
 	/**
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
-	public String getNamewithOntologyAbreviation() {
-		return getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
+		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalEntity)obj).getReferstoURI().toString().equals(referenceuri.toString());
+		return ((ReferencePhysicalEntity)obj).getPhysicalDefinitionURI().toString().equals(referenceuri.toString());
+	}
+	
+	@Override
+	public String getOntologyName(SemSimLibrary semsimlib) {
+		return semsimlib.getReferenceOntologyName(referenceuri);
+	}
+
+	@Override
+	public String getTermID() {
+		return referenceuri.getFragment();
 	}
 	
 	@Override

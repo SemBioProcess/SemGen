@@ -1,4 +1,0 @@
-composed_of; http://www.bhi.washington.edu/SemSim#composed_of
-contained_in; http://www.obofoundry.org/ro/ro.owl#contained_in
-part_of; http://www.obofoundry.org/ro/ro.owl#part_of
-

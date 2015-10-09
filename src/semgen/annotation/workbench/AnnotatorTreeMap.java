@@ -30,7 +30,7 @@ public class AnnotatorTreeMap {
 			
 			for (DataStructure ds : smdrawer.getDataStructures(sm)) {
 				int dsi = cwdrawer.getIndexofComponent(ds);
-				if (!showimports || !ds.isImportedViaSubmodel()) {
+				if (showimports || !ds.isImportedViaSubmodel()) {
 					branch.dsindicies.add(dsi);
 				}
 				removeOrphanedDataStructure(dsi);

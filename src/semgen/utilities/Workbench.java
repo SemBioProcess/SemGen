@@ -6,10 +6,13 @@
 
 package semgen.utilities;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Observable;
+import java.util.Observer;
 
-public abstract class Workbench extends Observable{
+public abstract class Workbench extends Observable implements Observer, PropertyChangeListener{
 	public abstract void initialize();
 	
 	public boolean getModelSaved() {
@@ -26,5 +29,9 @@ public abstract class Workbench extends Observable{
 	
 	public abstract String getModelSourceFile();
 	
-
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		
+	}
+	
 }

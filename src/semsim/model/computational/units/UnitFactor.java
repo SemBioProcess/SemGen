@@ -11,7 +11,23 @@ public class UnitFactor{
 		setExponent(exponent);
 		setPrefix(prefix);
 	}
+	
+	public UnitFactor(UnitOfMeasurement baseUnit, double exponent, String prefix, double multiplier){
+		setBaseUnit(baseUnit);
+		setExponent(exponent);
+		setPrefix(prefix);
+		setMultiplier(multiplier);
+	}
 
+	public UnitFactor(UnitFactor uftocopy) {
+		baseUnit = uftocopy.baseUnit;
+		exponent = uftocopy.exponent;
+		if (uftocopy.prefix!=null) {
+			prefix = new String(uftocopy.prefix);
+		}
+		multiplier = uftocopy.multiplier;
+	}
+	
 	public UnitOfMeasurement getBaseUnit() {
 		return baseUnit;
 	}

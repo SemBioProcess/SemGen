@@ -6,31 +6,26 @@ import java.util.Set;
 
 import semsim.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.physical.object.PhysicalDependency;
 
 /** A Computation represents how the value of a SemSim {@link DataStructure} is determined, computationally. */
 
 public class Computation extends ComputationalModelComponent{
-
-	private PhysicalDependency physicalDependency;
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
-	private String computationalCode;
-	private String mathML;
+	private String computationalCode = null;
+	private String mathML = new String("");
+	private Set<Event> events = new HashSet<Event>();
 	
 	/**
 	 * Class constructor with no output(s) specified
 	 */
-	public Computation(){
-		physicalDependency = new PhysicalDependency();
-	}
+	public Computation(){}
 	
 	/**
 	 * Class constructor with a single {@link DataStructure} set as the computation's output
 	 * @param output The output DataStructure of the Computation
 	 */
 	public Computation(DataStructure output){
-		physicalDependency = new PhysicalDependency();
 		outputs.add(output);
 	}
 	
@@ -41,6 +36,18 @@ public class Computation extends ComputationalModelComponent{
 	public Computation(Set<DataStructure> outputs){
 		outputs = new HashSet<DataStructure>();
 		outputs.addAll(outputs);
+	}
+	
+	public Computation(Computation comptocopy) {
+		super(comptocopy);
+		
+		outputs.addAll(comptocopy.outputs);
+		inputs.addAll(comptocopy.inputs);
+		if (comptocopy.computationalCode !=null) {
+			computationalCode = new String(comptocopy.computationalCode);
+		}
+		mathML = new String(comptocopy.mathML);
+		events.addAll(comptocopy.events);
 	}
 	
 	/**
@@ -80,13 +87,6 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	/**
-	 * @return The {@link PhysicalDependency} associated with this computation
-	 */
-	public PhysicalDependency getPhysicalDependency(){
-		return physicalDependency;
-	}
-	
-	/**
 	 * Set the string representation of the computational code used to solve
 	 * the output(s)
 	 * @param code
@@ -114,19 +114,19 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	/**
-	 * Set the {@link PhysicalDependency} associated with the computation
-	 * @param pd A PhysicalDependency
-	 */
-	public void setPhysicalDependency(PhysicalDependency pd){
-		physicalDependency = pd;
-	}
-
-	/**
 	 * Set the outputs solved by the computation
 	 * @param outputs The solved outputs
 	 */
 	public void setOutputs(Set<DataStructure> outputs) {
 		this.outputs = outputs;
+	}
+	
+	/**
+	 * Add an output for the computation
+	 * @param output
+	 */
+	public void addOutput(DataStructure output){
+		this.outputs.add(output);
 	}
 
 	/**
@@ -136,8 +136,40 @@ public class Computation extends ComputationalModelComponent{
 		return outputs;
 	}
 	
+	/**	
+	 * @return The set of discrete events that are part of this computation
+	 */
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	/**
+	 * Assign the set of discrete events associated with this computation
+	 * @param events The events associated with this computation
+	 */
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+	
+	/**
+	 * Add a discrete event to this computation
+	 * @param event The discrete event to add
+	 */
+	public void addEvent(Event event){
+		this.getEvents().add(event);
+	}
+	
+	/**
+	 * Remove a discrete event from the set of events associated with the computation
+	 * @param event The discrete event to remove
+	 */
+	public void removeEvent(Event event){
+		this.getEvents().remove(event);
+	}
+	
 	@Override
 	public URI getSemSimClassURI() {
 		return SemSimConstants.COMPUTATION_CLASS_URI;
 	}
+
 }
