@@ -13,6 +13,8 @@ ParentNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
+	this.addBehavior(parentDrag);
+	
 }
 
 ParentNode.prototype.canLink = function () {
@@ -55,7 +57,17 @@ ParentNode.prototype.setChildren = function (children) {
 			this.graph.hideNodes("Constitutive");
 	}
 	
+	if (!children) {
+		this.setNodeTextDistance(0);
+	}
+
 	$(this).triggerHandler('childrenSet', [children]);
 	
 	this.graph.update();
 }
+
+ParentNode.prototype.setNodeTextDistance = function (i) {
+		this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize + i;
+}
+
+

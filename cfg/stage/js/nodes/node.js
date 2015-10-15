@@ -21,6 +21,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.userCanHide = true;
 	this.hidden = false;
 	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
+	this.defaultcharge = charge;
 	
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
@@ -58,7 +59,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	    })
 	    .on("mouseout", function () {
 	    	graph.highlightMode(null);
-	    });;
+	    });
 	
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -78,9 +79,11 @@ Node.prototype.getLinks = function () {
 	// Don't show any inputs to this node can't link
 	if(!this.canLink())
 		return;
+
 	
 	// Build an array of links from our list of inputs
 	var links = [];
+
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
@@ -128,24 +131,33 @@ Node.prototype.getLinks = function () {
 			source: inputNode,
 			target: this,
 			type: type,
-			length: type == "external" ? 200 : 40,
+			length: type == "external" ? 300 : 60,
 			value: 1,
 		});
 	}
+
 	
 	return links;
 }
 
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
+	//Keep child nodes centered on parent
+	var forcey = 0;
+	var forcex = 0;
+	if (this.parent) {
+		var k = .0005; 
+		forcey = (this.parent.y - this.y) * k;
+		forcex = (this.parent.x - this.x) * k;
+	}
+
+	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;
+	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y)) + forcey;
 	
 	// Don't let nodes overlap their parent labels
+	
 	if(this.parent && this.y < this.parent.y)
-		this.y = this.parent.y;
-	
-	
-	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
-	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y));
+		this.parent.setNodeTextDistance(this.parent.y - this.y);
 	
 	var root = d3.select(element);
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");

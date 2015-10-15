@@ -7,6 +7,25 @@
 function Graph() {
 	var graph = this;
 	
+	// Get the stage and style it
+	var svg = d3.select("#stage")
+	    .append("svg:svg")
+	    .attr("id", "svg")
+	    .attr("pointer-events", "all")
+	    .attr("perserveAspectRatio", "xMinYMid");
+	
+	var vis = svg.append('svg:g');
+	
+	this.force = d3.layout.force()
+		.gravity(0)
+		.chargeDistance(250)
+		.friction(0.7);
+	this.color = d3.scale.category10();
+	var nodes = this.force.nodes(),
+		links = this.force.links();
+	var hiddenNodes = {};
+	var fixedMode = false;
+	
 	// Add a node to the graph
 	this.addNode = function (nodeData) {
 		if(!nodeData)
@@ -288,8 +307,21 @@ function Graph() {
 			if(!nodeLinks)
 				return;
 			
+			var visiblelinks = false;
+			nodeLinks.forEach( function (link) {
+				if (!link.source.hidden) visiblelinks = true; 
+			});
+
+//			if (visiblelinks)  {
+//				node.charge = -5;//node.defaultcharge;
+//			} 
+//			else if (node.parent!=null){
+//				node.charge = 0;
+//			}
+
 			// Add the node's links to our master list
 			links = links.concat(nodeLinks);
+			
 		}, this);
 		
 		this.force.links(links);
@@ -305,14 +337,7 @@ function Graph() {
 		};
 	};
 	
-	// Get the stage and style it
-	var svg = d3.select("#stage")
-	    .append("svg:svg")
-	    .attr("id", "svg")
-	    .attr("pointer-events", "all")
-	    .attr("perserveAspectRatio", "xMinYMid");
-	
-	var vis = svg.append('svg:g');
+
 	
 	// Set the graph's width and height
 	this.updateHeightAndWidth = function () {
@@ -324,12 +349,7 @@ function Graph() {
 	}
 	this.updateHeightAndWidth();
 
-	this.force = d3.layout.force();
-	this.color = d3.scale.category10();
-	var nodes = this.force.nodes(),
-		links = this.force.links();
-	var hiddenNodes = {};
-	var fixedMode = false;
+
 	
 	var setFixed = function (node) {
 		node.oldFixed = node.fixed;

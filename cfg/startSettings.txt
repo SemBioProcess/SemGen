@@ -1,7 +1,7 @@
-startDirectory; /Users/max_neal/junk
-maximize; false
-screensize; 1000x700
-screenpos; 0x22
+startDirectory; C:\Users\Christopher\Documents\examples
+maximize; true
+screensize; 1938x1048
+screenpos; -9x-9
 autoAnnotate; true
 showImports; true
 displayMarkers; true

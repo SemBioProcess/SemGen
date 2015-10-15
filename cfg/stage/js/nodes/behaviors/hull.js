@@ -60,8 +60,9 @@ function Hull(node) {
 				return;
 			
 			// Center the node at the top of the hull
-			node.x = centerX / vertexes.length;
-			node.y = minY;
+			
+			//node.x = centerX / vertexes.length;
+			//node.y = minY;
 			
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))
