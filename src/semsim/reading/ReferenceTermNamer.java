@@ -180,6 +180,13 @@ public class ReferenceTermNamer {
 				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
 				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
 			}
+			else if(KBname.equals(SemSimConstants.PROTEIN_ONTOLOGY_FULLNAME)){
+				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
+				String edittedid = id.replace("PR%3A", "");
+				edittedid = id.replace("PR:", "PR_");
+				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
+				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
+			}
 			else if(KBname.equals(SemSimConstants.BRENDA_TISSUE_ONTOLOGY_FULLNAME)){
 				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
 				String edittedid = id.replace("BTO%3A", "");
