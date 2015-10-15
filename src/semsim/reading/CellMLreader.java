@@ -285,7 +285,7 @@ public class CellMLreader extends ModelReader {
 					
 					if(termURI!=null){
 						
-						if(! termURI.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+						if(termURI.toString().startsWith("http:identifiers.org/opb"))
 							termURI = swapInOPBnamespace(termURI);
 						
 						PhysicalProperty prop = getSingularPhysicalProperty(termURI);
