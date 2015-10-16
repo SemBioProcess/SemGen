@@ -19,6 +19,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimConstants;
+import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -30,7 +31,6 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLbioRDFblock {
@@ -51,6 +51,7 @@ public class CellMLbioRDFblock {
 	public static Property is = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 	public static Property isversionof = ResourceFactory.createProperty(SemSimConstants.BQB_IS_VERSION_OF_URI.toString());
 	public static Property partof = ResourceFactory.createProperty(SemSimConstants.PART_OF_URI.toString());
+	public static Property haspart = ResourceFactory.createProperty(SemSimConstants.HAS_PART_URI.toString());
 	public static Property containedin = ResourceFactory.createProperty(SemSimConstants.CONTAINED_IN_URI.toString());
 	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
 	public static Property hasname = ResourceFactory.createProperty(SemSimConstants.HAS_NAME_URI.toString());
@@ -302,48 +303,66 @@ public class CellMLbioRDFblock {
 	}
 
 	private void annotateReferenceOrCustomResource(PhysicalModelComponent pmc, Resource res){
-		ReferenceOntologyAnnotation ann = null;
 		Resource refres = null;
 		
-		// If there is an "is" annotation (aka "hasPhysicalDefinition", aka "refersTo")
-		if(pmc.hasPhysicalDefinitionAnnotation()){
-			ann = ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation();
-		}
-		// Else use the first "isVersionOf" annotation found
-		else if(pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION).size()>0){
-			for(ReferenceOntologyAnnotation ann0 : pmc.getReferenceOntologyAnnotations(SemSimConstants.BQB_IS_VERSION_OF_RELATION)){
-				ann = ann0;
-				break;
-			}
-		}
-		
-		// If the physical model component has either an "is" or "is version of" annotation, 
-		// add the annotation statement to the RDF block
-		if(ann!=null){	
-			refres = getReferenceResourceFromURI(ann.getReferenceURI());
+		// If it's a reference resource
+		if(pmc instanceof ReferenceTerm){
 			
-			Property refprop = 
-				(ann.getRelation()==SemSimConstants.BQB_IS_RELATION || ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION) ? is : isversionof; 
+			URI uri = ((ReferenceTerm)pmc).getPhysicalDefinitionURI();
+			refres = getReferenceResourceFromURI(uri);
 			
-			if(refprop == is){
-				if(pmc instanceof PhysicalPropertyinComposite || pmc instanceof PhysicalEntity
-						|| pmc instanceof PhysicalProcess) refprop = hasphysicaldefinition;
-			}
+			Statement annagainstst = rdf.createStatement(res, hasphysicaldefinition, refres);
+				
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it
-			Statement annagainstst = rdf.createStatement(res, refprop, refres);
 			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
 		}
 		
-		// If it is a custom entity or process. Store the name and description
-		if((pmc instanceof CustomPhysicalProcess) || (pmc instanceof CustomPhysicalEntity)){
-			if(pmc.getName()!=null){
-				Statement namest = rdf.createStatement(res, hasname, pmc.getName());
-				if(!rdf.contains(namest)) rdf.add(namest);
+		// If it's a custom resource
+		else{
+
+			Property refprop = null;
+
+			for(Annotation ann : pmc.getAnnotations()){
+				// If the physical model component has either an "is" or "is version of" annotation, 
+				// add the annotation statement to the RDF block
+				
+				if(ann instanceof ReferenceOntologyAnnotation){	
+					
+					ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
+					refres = getReferenceResourceFromURI(roa.getReferenceURI());
+					
+					refprop = ResourceFactory.createProperty(roa.getRelation().getURI().toString());
+					
+					// Here we actually add the RDF statement on the resource
+					// but for now, we only do hasPhysicalDefinition or isVersionOf.
+					// When we figure out how to add part_of and has_part annotations, 
+					// edit the following "if" statement here.					
+					if(refprop.getURI().equals(isversionof.getURI())){
+
+						Statement annagainstst = rdf.createStatement(res, refprop, refres);
+						
+						// If we have a reference resource and the annotation statement hasn't already 
+						// been added to the RDF block, add it
+						if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+					}
+				}
 			}
-			if(pmc.getDescription()!=null){
-				Statement descst = rdf.createStatement(res, description, pmc.getDescription());
-				if(!rdf.contains(descst)) rdf.add(descst);
+			
+			// If it is a custom entity or process. Store the name and description
+			if((pmc instanceof CustomPhysicalProcess) || (pmc instanceof CustomPhysicalEntity)){
+				
+				if(pmc.getName()!=null){
+					Statement namest = rdf.createStatement(res, hasname, pmc.getName());
+					
+					if(!rdf.contains(namest)) rdf.add(namest);
+				}
+				
+				if(pmc.getDescription()!=null){
+					Statement descst = rdf.createStatement(res, description, pmc.getDescription());
+					
+					if(!rdf.contains(descst)) rdf.add(descst);
+				}
 			}
 		}
 	}
