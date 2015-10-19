@@ -20,7 +20,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
-	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
+	
 	this.defaultcharge = charge;
 	
 	if(this.parent) {
@@ -32,6 +32,10 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
+}
+
+Node.prototype.spaceBetweenTextAndNode = function() {
+	return this.r * 0.2 + this.textSize; 
 }
 
 Node.prototype.addBehavior = function (behavior) {
@@ -142,24 +146,25 @@ Node.prototype.getLinks = function () {
 
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
+	
 	//Keep child nodes centered on parent
 	var forcey = 0;
 	var forcex = 0;
+	
 	if (this.parent) {
 		var k = .0005; 
 		forcey = (this.parent.y - this.y) * k;
 		forcex = (this.parent.x - this.x) * k;
-	}
 
+	}
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;
-	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y)) + forcey;
-	
-	// Don't let nodes overlap their parent labels
-	
-	if(this.parent && this.y < this.parent.y)
-		this.parent.setNodeTextDistance(this.parent.y - this.y);
+	this.y = Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.y)) + forcey;
 	
 	var root = d3.select(element);
+	//Keep the text above hull when an parent node is opened.
+	if (this.children) {
+		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
+	}
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 	
 	$(this).triggerHandler('postTick');
@@ -178,7 +183,7 @@ Node.prototype.createTextElement = function (className) {
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
-	    .attr("y", -this.spaceBetweenTextAndNode)
+	    .attr("y", -this.spaceBetweenTextAndNode())
 	    .text(this.displayName)
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");

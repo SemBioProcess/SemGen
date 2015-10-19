@@ -312,13 +312,6 @@ function Graph() {
 				if (!link.source.hidden) visiblelinks = true; 
 			});
 
-//			if (visiblelinks)  {
-//				node.charge = -5;//node.defaultcharge;
-//			} 
-//			else if (node.parent!=null){
-//				node.charge = 0;
-//			}
-
 			// Add the node's links to our master list
 			links = links.concat(nodeLinks);
 			
@@ -336,8 +329,6 @@ function Graph() {
 	        	return i;
 		};
 	};
-	
-
 	
 	// Set the graph's width and height
 	this.updateHeightAndWidth = function () {
