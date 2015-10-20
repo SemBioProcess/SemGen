@@ -1,7 +1,7 @@
-startDirectory; C:\Users\Christopher\Documents\examples
+startDirectory; /Users/graham_kim/Documents/eclipse_workspace/SemGen/C:\Users\Christopher\Documents\examples
 maximize; true
-screensize; 1938x1048
-screenpos; -9x-9
+screensize; 1280x773
+screenpos; 0x23
 autoAnnotate; true
 showImports; true
 displayMarkers; true
