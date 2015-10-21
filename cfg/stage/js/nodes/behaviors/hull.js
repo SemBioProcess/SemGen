@@ -15,10 +15,8 @@ function Hull(node) {
 			.on("dblclick", function(d) {
 				console.log("hull click");
 				node.setChildren(null);
-				xmin = null;
-				xmax = null
-				ymin = null;
-				ymax = null;
+
+				node.rootElement.selectAll("text").attr("x", 0);
 			});
 	});
 	

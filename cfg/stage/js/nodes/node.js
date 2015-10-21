@@ -20,7 +20,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
-	
+	this.textlocx = 0;
 	this.defaultcharge = charge;
 	
 	if(this.parent) {
@@ -164,6 +164,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	//Keep the text above hull when an parent node is opened.
 	if (this.children) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
+		this.rootElement.selectAll("text").attr("x", -(this.x - (this.xmax + this.xmin)/2.0));
 	}
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 	
