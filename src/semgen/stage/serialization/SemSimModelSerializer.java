@@ -100,38 +100,54 @@ public class SemSimModelSerializer {
 		for(PhysicalEntity source : sources) {
 			for(PhysicalEntity sink : sinks) {
 				ArrayList<String> mediatorsNames = new ArrayList<String>();
-				for(PhysicalEntity mediator : mediators) {
-					mediatorsNames.add(Node.buildId(mediator.getName(), parentModelId));
-					getOrCreatePhysioMapNode(mediator.getName(), parentModelId, nodeMap, "Mediator");
-				}
 
 				// If the source or sink is not specified, set it to "Null node"
 				String sinkName = sink.getName();
 				if(sinkName == "") sinkName = "Null node";
 				String sourceName = source.getName();
 				if(sourceName == "") sourceName = "Null node";
-				
-				getOrCreatePhysioMapNode(sourceName, parentModelId, nodeMap, "Entity");
-				PhysioMapNode sinkNode = getOrCreatePhysioMapNode(sinkName, parentModelId, nodeMap, "Entity");
 
-				sinkNode.inputs.add(new Link(
-						Node.buildId(sourceName, parentModelId),
+				getOrCreatePhysioMapNode(sourceName, parentModelId, nodeMap, "Entity");
+				getOrCreatePhysioMapNode(sinkName, parentModelId, nodeMap, "Entity");
+				PhysioMapNode procNode = getOrCreatePhysioMapNode(processName, parentModelId, nodeMap, "Process");
+
+				String processId = Node.buildId(processName, parentModelId);
+
+				procNode.inputs.add(new Link(
+						processId,
 						Node.buildId(sinkName, parentModelId),
 						parentModelId,
-						processName,
-						mediatorsNames));
+						null
+				));
+
+				procNode.inputs.add(new Link(
+						Node.buildId(sourceName, parentModelId),
+						processId,
+						parentModelId,
+						null
+				));
+
+				for(PhysicalEntity mediator : mediators) {
+					getOrCreatePhysioMapNode(mediator.getName(), parentModelId, nodeMap, "Mediator");
+					procNode.inputs.add(new Link(
+							Node.buildId(mediator.getName(), parentModelId),
+							processId,
+							parentModelId,
+							null
+					));
+				}
 			}
 		}
 
 	}
-	
+
 	private static PhysioMapNode getOrCreatePhysioMapNode(String name, String parentModelId, HashMap<String, PhysioMapNode> nodeMap, String nodeType){
 		PhysioMapNode node = nodeMap.get(name);
-		if(node == null){		
+		if(node == null){
 			node = new PhysioMapNode(name, parentModelId, nodeType);
 			nodeMap.put(name, node);
 		}
-		
+
 		return node;
 	}
 

@@ -14,11 +14,10 @@ public class Link {
 		this.parentModelId = parentModelId;
 	}
 
-	public Link(String sourceId, String sinkId, String parentModelId, String label, ArrayList<String> mediators) {
+	public Link(String sourceId, String sinkId, String parentModelId, String label) {
 		this.sourceId = sourceId;
 		this.sinkId = sinkId;
 		this.parentModelId = parentModelId;
 		this.label = label;
-		this.mediators = mediators;
 	}
 }
