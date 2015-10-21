@@ -119,6 +119,8 @@ ul.modelPopover li.submenuContainer {
 ul.searchResults {
 	border: 1px solid black;
     border-top: none;
+	max-height: 30vh;
+	overflow: scroll;
 }
 
 ul.searchResults li {
