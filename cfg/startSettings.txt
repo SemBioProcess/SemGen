@@ -1,12 +1,12 @@
-startDirectory; /Users/graham_kim/Documents/eclipse_workspace/SemGen/C:\Users\Christopher\Documents\examples
-maximize; true
-screensize; 1280x773
-screenpos; 0x23
+startDirectory; /Users/max_neal/junk
+maximize; false
+screensize; 1000x750
+screenpos; 0x22
 autoAnnotate; true
 showImports; true
 displayMarkers; true
 organizeByPropertyType; true
 sortbyCompositeCompleteness; true
-treeView; true
+treeView; false
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp
 autoAnnotateMapped; true
