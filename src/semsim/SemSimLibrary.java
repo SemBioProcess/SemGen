@@ -56,19 +56,22 @@ public class SemSimLibrary {
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
 	
-	public SemSimLibrary() {
+	private String cfgpath;
+	
+	public SemSimLibrary(String pathToConfigFolder) {
+		cfgpath = pathToConfigFolder;
 		loadLibrary();
 	}
 	
 	private void loadLibrary() {
 		try {
 			loadCommonProperties();
-			jsimUnitsTable = ResourcesManager.createHashMapFromFile("cfg/jsimUnits", true);
+			jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
 			
-			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile("cfg/OPBClassesForUnits.txt", true);
-            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile("cfg/OPBClassesForBaseUnits.txt");
+			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
+            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(cfgpath + "OPBClassesForBaseUnits.txt");
 			unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
-			cellMLUnitsTable = ResourcesManager.createSetFromFile("cfg/CellMLUnits.txt");
+			cellMLUnitsTable = ResourcesManager.createSetFromFile(cfgpath + "CellMLUnits.txt");
 		} catch (FileNotFoundException e3) {
 			e3.printStackTrace();
 		}
@@ -76,8 +79,8 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			OPB = manager.loadOntologyFromOntologyDocument(new File("cfg/OPBv1.04.owl"));
-			manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl"));
+			OPB = manager.loadOntologyFromOntologyDocument(new File(cfgpath + "OPBv1.04.owl"));
+			manager.loadOntologyFromOntologyDocument(new File(cfgpath + "SemSimBase.owl"));
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
 		}
@@ -94,7 +97,7 @@ public class SemSimLibrary {
 	}
 	
 	private void loadCommonProperties() throws FileNotFoundException {
-		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile("cfg/CommonProperties.txt", true);
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile(cfgpath + "CommonProperties.txt", true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
 		}

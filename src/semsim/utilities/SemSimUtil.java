@@ -360,7 +360,7 @@ public class SemSimUtil {
 	}
 	// Used in tandem with getFundamentalBaseUnits
 	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
-		SemSimLibrary semsimlib = new SemSimLibrary();
+		SemSimLibrary semsimlib = new SemSimLibrary("cfg/");
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
 		for(UnitFactor factor : unitFactors) {

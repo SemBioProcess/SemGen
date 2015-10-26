@@ -36,7 +36,13 @@ public class SemGenSettings extends Observable{
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt", true);
+			String settingspath = SemGen.cfgwritepath + "startSettings.txt";
+			File settingsfile = new File(settingspath);
+			
+			if(settingsfile.exists())
+				startsettingstable = ResourcesManager.createHashMapFromFile(settingspath, true);
+			else
+				startsettingstable = ResourcesManager.createHashMapFromFile(SemGen.cfgreadpath + "startSettings.txt", true);
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
@@ -257,7 +263,7 @@ public class SemGenSettings extends Observable{
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(new FileWriter(new File("cfg/startSettings.txt")));
+			writer = new PrintWriter(new FileWriter(new File(SemGen.cfgwritepath + "startSettings.txt")));
 			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
 			writer.println("maximize; " + maximize.toString());
 			writer.println("screensize; " + this.getAppWidth() + "x" + this.getAppHeight());

@@ -64,12 +64,12 @@ public class SemSimOWLwriter extends ModelWriter {
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	
 	
-	public SemSimOWLwriter(SemSimModel model) throws OWLOntologyCreationException {
+	public SemSimOWLwriter(SemSimModel model, File semSimBaseFile) throws OWLOntologyCreationException {
 		super(model);
 		namespace = model.getNamespace();
 		
 		// Create a blank semsim ontology with just the base classes
-		Set<OWLAxiom> allbaseaxioms = manager.loadOntologyFromOntologyDocument(new File("cfg/SemSimBase.owl")).getAxioms();
+		Set<OWLAxiom> allbaseaxioms = manager.loadOntologyFromOntologyDocument(semSimBaseFile).getAxioms();
 		IRI ontiri = IRI.create(namespace.substring(0, namespace.length()-1));  // Gets rid of '#' at end of namespace
 		ont = manager.createOntology(allbaseaxioms, ontiri);
 	}

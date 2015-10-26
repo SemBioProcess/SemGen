@@ -21,10 +21,11 @@ public class MMLParser {
 	public int srcType = -1;
 
 	protected Document doc;
-	public String jsimBuildDir = "./cfg/jsimhome";;
+	public String jsimBuildDir;
 
-	public MMLParser(){
-		 System.setProperty("jsim.home", jsimBuildDir);
+	public MMLParser(String jsimBuildDir){
+		this.jsimBuildDir = jsimBuildDir;
+		System.setProperty("jsim.home", jsimBuildDir);
 	}
 	
 	public Document readFromFile(File file) throws JDOMException, IOException, Xcept, InterruptedException, OWLException {

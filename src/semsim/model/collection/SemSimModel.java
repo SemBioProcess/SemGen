@@ -1,5 +1,6 @@
 package semsim.model.collection;
 
+import java.io.File;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -685,7 +686,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @throws OWLException
 	 */
 	public OWLOntology toOWLOntology() throws OWLException{
-		return new SemSimOWLwriter(this).createOWLOntologyFromModel();
+		return new SemSimOWLwriter(this, new File("cfg/SemSimBase.owl")).createOWLOntologyFromModel();
 	}
 
 	/**

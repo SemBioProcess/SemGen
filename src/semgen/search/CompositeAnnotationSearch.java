@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import semgen.SemGen;
 import semgen.stage.serialization.SearchResultSet;
 
 
@@ -23,7 +24,7 @@ public class CompositeAnnotationSearch {
 
 		for(String keyword : queryArray) {
 			Set<String> searchResults = new HashSet<String>();
-			Scanner annotationFile = new Scanner(new File("examples/AnnotatedModels/Annotations_FULL_LIST.txt"));
+			Scanner annotationFile = new Scanner(new File(SemGen.examplespath + "AnnotatedModels/Annotations_FULL_LIST.txt"));
 			if(annotationFile.hasNext()) {
 				String wholeline = "";
 				String modelName = "";
