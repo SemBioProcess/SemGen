@@ -24,7 +24,7 @@ public class AutoAnnotate {
 		Set<DataStructure> candidateforces = new HashSet<DataStructure>();
 		Set<DataStructure> candidateflows = new HashSet<DataStructure>();
 		
-		fundamentalBaseUnits = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(semsimmodel);
+		fundamentalBaseUnits = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(semsimmodel, SemGen.cfgreadpath);
 		
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){

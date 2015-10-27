@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.SemGen;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -121,8 +122,8 @@ public class SemanticComparator {
 		HashMap<UnitOfMeasurement, UnitOfMeasurement> equivunitslist = 
 				new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 				
-		HashMap<String, Set<UnitFactor>> baseUnitsTableModel1 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model1);
-		HashMap<String, Set<UnitFactor>> baseUnitsTableModel2 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model2);
+		HashMap<String, Set<UnitFactor>> baseUnitsTableModel1 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model1, SemGen.cfgreadpath);
+		HashMap<String, Set<UnitFactor>> baseUnitsTableModel2 = SemSimUtil.getAllUnitsAsFundamentalBaseUnits(model2, SemGen.cfgreadpath);
 		
 		for (String unitnamemodel1 : baseUnitsTableModel1.keySet()) {
 			

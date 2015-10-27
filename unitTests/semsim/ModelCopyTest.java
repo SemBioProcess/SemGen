@@ -23,7 +23,7 @@ public class ModelCopyTest extends UnitTestBase {
 			// Act
 			semsim.model.collection.SemSimModel model = reader.readFromFile();
 			SemSimModel copy = model.clone();
-			SemSimOWLwriter writer = new SemSimOWLwriter(copy, new File("cfg/SemSimBase.owl"));
+			SemSimOWLwriter writer = new SemSimOWLwriter(copy);
 			File newModelFile = new File(System.getProperty("user.home"),"CVCopy.owl");
 			writer.writeToFile(newModelFile);
 		} catch (OWLException e) {

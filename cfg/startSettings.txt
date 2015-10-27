@@ -1,6 +1,6 @@
-startDirectory; /Users/max_neal/_UW/SemGenGrant/Presentations/COMBINE_2015/CellML_SBML_merge
+startDirectory; /Users/max_neal/_UW/SemGenGrant/Presentations/AucklandDemo/PHNmerge_post3.0betaTerkSources
 maximize; false
-screensize; 1000x750
+screensize; 1264x808
 screenpos; 0x22
 autoAnnotate; true
 showImports; true

@@ -1,7 +1,7 @@
 package semsim;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,8 +79,10 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			OPB = manager.loadOntologyFromOntologyDocument(new File(cfgpath + "OPBv1.04.owl"));
-			manager.loadOntologyFromOntologyDocument(new File(cfgpath + "SemSimBase.owl"));
+			InputStream opbin = getClass().getResourceAsStream("/semsim/owl/OPBv1.04.owl");
+			OPB = manager.loadOntologyFromOntologyDocument(opbin);
+			InputStream ssbin = getClass().getResourceAsStream("/semsim/owl/SemSimBase.owl");			
+			manager.loadOntologyFromOntologyDocument(ssbin);
 		} catch (OWLOntologyCreationException e3) {
 			e3.printStackTrace();
 		}

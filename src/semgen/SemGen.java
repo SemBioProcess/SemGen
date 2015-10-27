@@ -195,19 +195,23 @@ public class SemGen extends JFrame implements Observer{
 		case WINDOWS :
 			libsbmlfile = new File(cfgreadpath + "sbmlj.dll"); 
 			break;
+		
 		case MACOSX :
 			
+			// Set read and write paths to Mac-specific locations
 			String appbundlepath = com.apple.eio.FileManager.getPathToApplicationBundle();
 			
 			if(appbundlepath.contains("SemGen.app")){
 				cfgreadpath = appbundlepath + "/Contents/Resources/cfg/";
-				cfgwritepath = new File("~/Library/Preferences/SemGen/cfg/").getAbsolutePath();
+				String homeDir = System.getProperty("user.home");
+				cfgwritepath = new File(homeDir + "/Library/Preferences/SemGen/cfg/").getAbsolutePath() + "/";
 				examplespath = appbundlepath + "/Contents/Resources/examples/";
 			}
 			
 			libsbmlfile = new File(cfgreadpath + "libsbmlj.jnilib");
 
 			break;
+		
 		default : 
 			libsbmlfile = new File(cfgreadpath + "libsbmlj.so");
 		}
@@ -260,10 +264,14 @@ public class SemGen extends JFrame implements Observer{
 				
 				// If we haven't set up the user preferences location on Mac, do so
 				if(OSValidator.isMac()){
-					
+										
 					File cfgwritefolder = new File(cfgwritepath);
 					
-					if( ! cfgwritefolder.exists()) cfgwritefolder.mkdirs();
+					if( ! cfgwritefolder.exists()){
+						boolean madedir = cfgwritefolder.mkdirs();
+						
+						if( ! madedir) System.err.println("Could not create write directory at " + cfgwritepath);
+					}
 				}
 				
 				settings.storeSettings();
