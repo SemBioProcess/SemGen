@@ -22,6 +22,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 
 	private AnnotatorWorkbench workbench;
 	private SemGenToolbarButton autocopymappedvars;
+	public static String sourcemodelcodetooltip = "Link the SemSim model with its computational code";
 	private SemGenToolbarButton annotateitemchangesourcemodelcode = new SemGenToolbarButton(SemGenIcon.setsourceicon);
 	private SemGenToolbarButton annotateitemcopy = new SemGenToolbarButton(SemGenIcon.libraryimporticon);
 	private SemGenToolbarButton annotateitemexportcsv = new SemGenToolbarButton(SemGenIcon.exporticon);
@@ -67,7 +68,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		autocopymappedvars.setToolTipText("Auto-copy annotations to mapped variables");
 		
 		annotateitemchangesourcemodelcode.addActionListener(this);
-		annotateitemchangesourcemodelcode.setToolTipText("Link the SemSim model with its computational code");
+		annotateitemchangesourcemodelcode.setToolTipText(sourcemodelcodetooltip);
 		
 		annotateitemexportcsv.setToolTipText("Create a .csv file that tabulates model codeword annotations for use in spreadsheets, manuscript preparation, etc.");
 		annotateitemexportcsv.addActionListener(this);

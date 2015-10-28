@@ -146,7 +146,9 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					+ " at " + modelloc
 					+ "\n\nIf the file is on the web, make sure you are connected to the internet."
 					+ "\nIf the file is local, make sure it exists at the location above."
-					+ "\n\nUse the 'Change Associated Legacy Code' menu item to specify this SemSim model's legacy code.");
+					+ "\n\nUse the '" + AnnotatorToolBar.sourcemodelcodetooltip
+					+ "' toolbar \nbutton to specify the simulation code associated with this SemSim model.");
+			setCaretPosition(0);
 		}
 	}
 	
