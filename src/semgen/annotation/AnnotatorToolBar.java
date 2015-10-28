@@ -29,7 +29,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private JButton annotateitemshowimports;
 	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.libraryaddicon);
 	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.librarymodifyicon);
-	private SemGenToolbarButton annotateitemtreeview = new SemGenToolbarButton(SemGenIcon.treeicon);
+	private SemGenToolbarButton annotateitemtreeview;
 	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
 	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
 	
@@ -43,6 +43,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		workbench = wkbnch;
 		globalactions = gacts;
 
+		
 		annotateitemshowimports = new JButton(displayImportMessageToUse());
 		annotateitemshowimports.addActionListener(this);
 		annotateitemshowimports.setToolTipText("Show/hide imported codewords and submodels");
@@ -51,6 +52,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		annotateitemshowmarkers.addActionListener(this);
 		annotateitemshowmarkers.setToolTipText("Show/hide markers that indicate a codeword's property type");
 		
+		annotateitemtreeview = new SemGenToolbarButton(displayTreeIconToUse());
 		annotateitemtreeview.addActionListener(this);
 		annotateitemtreeview.setToolTipText("Display codewords and submodels within the submodel tree");
 		
@@ -109,6 +111,11 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		sortselector.setEnabled(enable);
 	}
 	
+	private ImageIcon displayTreeIconToUse() {
+		if (settings.useTreeView()) return SemGenIcon.treeicon;
+		return SemGenIcon.treeofficon;
+	}
+	
 	private ImageIcon displayMarkerIconToUse() {
 		if (settings.useDisplayMarkers()) return SemGenIcon.onicon;
 		return SemGenIcon.officon;
@@ -141,6 +148,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if(o == annotateitemtreeview){
 			settings.toggleTreeView();
+			annotateitemtreeview.setIcon(displayTreeIconToUse());
 		}
 		if (o == extractorbutton) {
 			try {
