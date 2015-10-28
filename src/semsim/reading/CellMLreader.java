@@ -881,7 +881,6 @@ public class CellMLreader extends ModelReader {
 //		allannstatements.addAll(haspartann.toSet());
 		
 		// Collect name		
-		System.out.println(res);
 		String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 		if(name==null) name = unnamedstring;
 		

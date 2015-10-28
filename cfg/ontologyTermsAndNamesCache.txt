@@ -45,7 +45,9 @@ http://identifiers.org/obo.go/GO:0005621; cellular bud scar
 http://identifiers.org/obo.go/GO:0005622; intracellular
 http://identifiers.org/obo.go/GO:0045893; positive regulation of transcription, DNA-templated
 http://identifiers.org/obo.go/GO:0019572; L-arabinose catabolic process
+http://purl.obolibrary.org/obo/PR_000004445; plasma membrane calcium-transporting ATPase 1
 http://identifiers.org/uniprot/P28482; Mitogen-activated protein kinase 1
+http://purl.obolibrary.org/obo/PR_000004443; sarcoplasmic/endoplasmic reticulum calcium ATPase 2
 http://identifiers.org/obo.go/GO:0032801; receptor catabolic process
 http://identifiers.org/obo.go/GO:0004634; phosphopyruvate hydratase activity
 http://identifiers.org/go/GO:0005615; extracellular space
@@ -123,6 +125,7 @@ http://identifiers.org/go/GO:0006950; response to stress
 http://identifiers.org/go/GO:0010519; negative regulation of phospholipase activity
 http://identifiers.org/go/GO:0004721; phosphoprotein phosphatase activity
 http://identifiers.org/obo.go/GO:0010843; obsolete promoter binding
+http://purl.obolibrary.org/obo/PR_000015207; sodium/calcium exchanger 1
 http://identifiers.org/obo.chebi/CHEBI:16541; protein polypeptide chain
 http://identifiers.org/obo.chebi/CHEBI:26536; retinoic acid
 http://identifiers.org/kegg.reaction/R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
@@ -140,6 +143,7 @@ http://identifiers.org/obo.go/GO:0008856; exodeoxyribonuclease X activity
 http://identifiers.org/chebi/CHEBI:57642; glycerone phosphate(2-)
 http://identifiers.org/obo.go/GO:0005892; acetylcholine-gated channel complex
 http://identifiers.org/kegg.compound/C00562; Phosphoprotein
+http://identifiers.org/opb/OPB_00410; Gas constant
 http://identifiers.org/chebi/CHEBI:25094; lysine
 http://identifiers.org/obo.go/GO:0005680; anaphase-promoting complex
 http://identifiers.org/go/GO:0006068; ethanol catabolic process
@@ -252,6 +256,7 @@ http://identifiers.org/go/GO:0004930; G-protein coupled receptor activity
 http://identifiers.org/chebi/CHEBI:16444; 2-acetyllactic acid
 http://identifiers.org/obo.go/GO:0008349; MAP kinase kinase kinase kinase activity
 http://identifiers.org/obo.go/GO:0043407; negative regulation of MAP kinase activity
+http://purl.obolibrary.org/obo/PR_000016502; troponin C, slow skeletal and cardiac muscles
 http://identifiers.org/go/GO:0019855; calcium channel inhibitor activity
 http://identifiers.org/go/GO:0065003; macromolecular complex assembly
 http://identifiers.org/obo.chebi/CHEBI:15651; leukotriene A4
@@ -406,6 +411,7 @@ http://identifiers.org/obo.chebi/CHEBI:17191; L-isoleucine
 http://identifiers.org/go/GO:0042325; regulation of phosphorylation
 http://identifiers.org/chebi/CHEBI:46398; UTP(4-)
 http://identifiers.org/go/GO:0043458; ethanol biosynthetic process involved in glucose fermentation to ethanol
+http://identifiers.org/opb/OPB_01023; Time
 http://identifiers.org/obo.go/GO:0004793; threonine aldolase activity
 http://identifiers.org/go/GO:0005488; binding
 http://identifiers.org/go/GO:0005487; nucleocytoplasmic transporter activity
@@ -476,6 +482,7 @@ http://identifiers.org/go/GO:0006355; regulation of transcription, DNA-templated
 http://identifiers.org/obo.go/GO:0035189; Rb-E2F complex
 http://identifiers.org/obo.go/GO:0050473; arachidonate 15-lipoxygenase activity
 http://identifiers.org/chebi/CHEBI:16192; dGMP
+http://purl.obolibrary.org/obo/PR_000014378; ryanodine receptor 2
 http://identifiers.org/fma/FMA:63841; Plasma membrane
 http://identifiers.org/go/GO:0008305; integrin complex
 http://identifiers.org/cl/CL:0000129; microglial cell
@@ -528,8 +535,8 @@ http://identifiers.org/chebi/CHEBI:17230; homocysteine
 http://identifiers.org/uniprot/P13678; Protein kinase C
 http://identifiers.org/go/GO:0043085; positive regulation of catalytic activity
 urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
-http://identifiers.org/go/GO:0016063; rhodopsin biosynthetic process
 http://identifiers.org/chebi/CHEBI:55474; N-acyl-L-homoserine lactone
+http://identifiers.org/go/GO:0016063; rhodopsin biosynthetic process
 http://identifiers.org/fma/FMA:74531; Intermediate
 http://identifiers.org/chebi/CHEBI:18189; alpha-D-ribofuranose 5-phosphate
 http://identifiers.org/go/GO:0045569; TRAIL binding
@@ -690,6 +697,7 @@ http://identifiers.org/go/GO:0043407; negative regulation of MAP kinase activity
 http://identifiers.org/obo.go/GO:0009058; biosynthetic process
 http://identifiers.org/go/GO:0005251; delayed rectifier potassium channel activity
 http://identifiers.org/obo.chebi/CHEBI:17363; D-ribulose 5-phosphate
+http://identifiers.org/opb/OPB_00089; Faraday constant
 http://identifiers.org/chebi/CHEBI:18367; phosphate(3-)
 http://identifiers.org/obo.go/GO:0009056; catabolic process
 http://identifiers.org/chebi/CHEBI:57955; 6-O-phosphonato-D-glucono-1,5-lactone(2-)
@@ -844,6 +852,7 @@ http://identifiers.org/kegg.compound/C00002; ATP
 http://identifiers.org/obo.chebi/CHEBI:15377; water
 http://identifiers.org/kegg.compound/C00005; NADPH
 http://identifiers.org/obo.go/GO:0016020; membrane
+http://purl.obolibrary.org/obo/PR_000004978; calmodulin
 http://identifiers.org/kegg.compound/C00004; NADH
 http://identifiers.org/kegg.compound/C00007; Oxygen
 http://identifiers.org/kegg.compound/C00006; NADP+
@@ -1165,6 +1174,7 @@ http://identifiers.org/go/GO:0004477; methenyltetrahydrofolate cyclohydrolase ac
 http://identifiers.org/go/GO:0005992; trehalose biosynthetic process
 http://identifiers.org/go/GO:0051390; inactivation of MAPKKK activity
 http://identifiers.org/chebi/CHEBI:17115; L-serine
+http://bhi.washington.edu/OPB#OPB_01097; Surface normal tensile stress
 http://identifiers.org/go/GO:0051395; negative regulation of nerve growth factor receptor activity
 http://identifiers.org/chebi/CHEBI:27594; carbon atom
 http://identifiers.org/go/GO:0051396; positive regulation of nerve growth factor receptor activity
