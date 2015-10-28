@@ -1174,8 +1174,8 @@ http://identifiers.org/go/GO:0004477; methenyltetrahydrofolate cyclohydrolase ac
 http://identifiers.org/go/GO:0005992; trehalose biosynthetic process
 http://identifiers.org/go/GO:0051390; inactivation of MAPKKK activity
 http://identifiers.org/chebi/CHEBI:17115; L-serine
-http://bhi.washington.edu/OPB#OPB_01097; Surface normal tensile stress
 http://identifiers.org/go/GO:0051395; negative regulation of nerve growth factor receptor activity
+http://bhi.washington.edu/OPB#OPB_01097; Surface normal tensile stress
 http://identifiers.org/chebi/CHEBI:27594; carbon atom
 http://identifiers.org/go/GO:0051396; positive regulation of nerve growth factor receptor activity
 http://identifiers.org/go/GO:0043161; proteasome-mediated ubiquitin-dependent protein catabolic process
