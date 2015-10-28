@@ -145,4 +145,19 @@ public class OSXAdapter implements InvocationHandler {
             }
         }
     }
+    
+    public static String getPathToApplicationBundle() {
+    	String path = "";
+    	try {
+			Class<?> applicationClass = Class.forName("com.apple.eawt.FileManager");
+			Method pathmethod = applicationClass.getDeclaredMethod("getPathToApplicationBundle", new Class[] {});
+			Object obj = pathmethod.invoke(null, new Object[] { });
+			if (obj.getClass()== String.class) {
+				path = (String)path;
+			}
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+    	return path;
+    }
 }

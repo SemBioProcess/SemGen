@@ -199,7 +199,7 @@ public class SemGen extends JFrame implements Observer{
 		case MACOSX :
 			
 			// Set read and write paths to Mac-specific locations
-			String appbundlepath = com.apple.eio.FileManager.getPathToApplicationBundle();
+			String appbundlepath = OSXAdapter.getPathToApplicationBundle();
 			
 			if(appbundlepath.contains("SemGen.app")){
 				cfgreadpath = appbundlepath + "/Contents/Resources/cfg/";

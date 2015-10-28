@@ -41,8 +41,8 @@
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-5.4.3.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-5.4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 7 [1.7.0_71]"/>
 	<classpathentry kind="lib" path="thirdParty/JSimClient.jar"/>
 	<classpathentry kind="lib" path="thirdParty/JSimServer.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
