@@ -97,7 +97,7 @@ public class SemGen extends JFrame implements Observer{
 		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 		// Need this for programmatic use of jsbatch
-		System.setProperty("jsim.home", "./jsimhome");
+		System.setProperty("jsim.home", "./cfg/jsimhome");
 	}
 
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/

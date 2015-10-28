@@ -15,3 +15,5 @@ function ModelNode (graph, name) {
 	this.addBehavior(ModelPopover);
 	this.addBehavior(DragToMerge);
 }
+
+

@@ -30,6 +30,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
@@ -38,6 +39,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.SemSimRelation;
 import semsim.annotation.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
@@ -285,7 +287,7 @@ public class CellMLreader extends ModelReader {
 					
 					if(termURI!=null){
 						
-						if(! termURI.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+						if(termURI.toString().startsWith("http:identifiers.org/opb"))
 							termURI = swapInOPBnamespace(termURI);
 						
 						PhysicalProperty prop = getSingularPhysicalProperty(termURI);
@@ -784,7 +786,6 @@ public class CellMLreader extends ModelReader {
 	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(CellMLbioRDFblock.is);
 		if(isannres==null) isannres = res.getPropertyResourceValue(CellMLbioRDFblock.hasphysicaldefinition);
-		Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 		
 		// If a reference entity
 		// Create a singular physical entity from a component in a composite physical entity
@@ -794,13 +795,6 @@ public class CellMLreader extends ModelReader {
 		
 		// If a custom entity
 		else returnent = addCustomPhysicalEntityToModel(res);
-		
-		if(isversionofann!=null){
-			
-			returnent.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
-					URI.create(isversionofann.getURI()), isversionofann.getURI()));	
-			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isversionofann.getURI()), isversionofann.getURI()));
-		}
 		
 		return returnent;
 	}
@@ -828,18 +822,10 @@ public class CellMLreader extends ModelReader {
 						res.getPropertyResourceValue(CellMLbioRDFblock.partof)!=null)
 					pmc = semsimmodel.addCompositePhysicalEntity(buildCompositePhysicalEntityfromRDFresource(res));
 				
-				// If a reference entity
+				// If a singular entity
 				else {
-					if(isannres!=null) {
-				
-					pmc = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
-					}
-					// If a custom entity
-					else{
-						pmc = addCustomPhysicalEntityToModel(res);
-					}
 					ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
-					entlist.add((PhysicalEntity) pmc);
+					entlist.add(getCompositeEntityComponentFromResourceAndAnnotate(res));
 					pmc = semsimmodel.addCompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
 				}
 			}
@@ -883,15 +869,41 @@ public class CellMLreader extends ModelReader {
 	
 	
 	private CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
+		
+		StmtIterator isversionofann = res.listProperties(CellMLbioRDFblock.isversionof);
+//		StmtIterator partofann = res.listProperties(CellMLbioRDFblock.partof);
+//		StmtIterator haspartann = res.listProperties(CellMLbioRDFblock.haspart);
+		
+		// Collect all annotations on custom term
+		Set<Statement> allannstatements = new HashSet<Statement>();
+		allannstatements.addAll(isversionofann.toSet());
+//		allannstatements.addAll(partofann.toSet());
+//		allannstatements.addAll(haspartann.toSet());
+		
+		// Collect name		
 		String name = res.getProperty(CellMLbioRDFblock.hasname).getString();
 		if(name==null) name = unnamedstring;
 		
+		// Collect description
 		String description = null;
-		
 		if(res.getProperty(CellMLbioRDFblock.description)!=null)
 			description = res.getProperty(CellMLbioRDFblock.description).getString();
 		
-		return semsimmodel.addCustomPhysicalEntity(new CustomPhysicalEntity(name, description));
+		// Add custom entity to SemSim model
+		CustomPhysicalEntity returnent = new CustomPhysicalEntity(name, description);
+		semsimmodel.addCustomPhysicalEntity(returnent);
+		
+		// Iterate through annotations against reference ontology terms and add them to SemSim model
+		for(Statement st : allannstatements){
+			URI propuri = URI.create(st.getPredicate().getURI());
+			SemSimRelation relation = SemSimConstants.URIS_AND_SEMSIM_RELATIONS.get(propuri);
+			String objectURI = st.getObject().asResource().getURI();
+		
+			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(objectURI), objectURI));
+			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI));	
+		}
+		
+		return returnent;
 	}
 		
 	

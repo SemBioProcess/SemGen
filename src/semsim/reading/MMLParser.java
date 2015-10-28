@@ -21,7 +21,7 @@ public class MMLParser {
 	public int srcType = -1;
 
 	protected Document doc;
-	public String jsimBuildDir = "./jsimhome";;
+	public String jsimBuildDir = "./cfg/jsimhome";;
 
 	public MMLParser(){
 		 System.setProperty("jsim.home", jsimBuildDir);

@@ -29,11 +29,23 @@ public class BioPortalSearcher {
 		
 		boolean exactmatchbool = exactmatch==1; 
 		
-		URL url = new URL(
+		URL url;
+		if (exactmatch==2) {
+			url = new URL(
+					"http://data.bioontology.org/search?q=" + bioportalID + ":"
+							+ text + "&ontologies="
+							+ bioportalID + "&format=xml" + "&include=prefLabel,synonym,definition,notation,cui,semanticType,properties"
+							+ "&apikey=" + SemSimConstants.BIOPORTAL_API_KEY + "&also_search_properties=true");
+
+		}
+		else {
+					url = new URL(
 				"http://data.bioontology.org/search?q="
 						+ text + "&ontologies="
 						+ bioportalID + "&format=xml" + "&exact_match=" + exactmatchbool
 						+ "&apikey=" + SemSimConstants.BIOPORTAL_API_KEY);
+
+		}
 		
 		System.out.println(url);
 		URLConnection yc = url.openConnection();

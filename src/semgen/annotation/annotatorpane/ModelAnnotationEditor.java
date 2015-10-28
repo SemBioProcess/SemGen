@@ -100,14 +100,14 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 			}
 		}
 		
-		private void setMetadataIndex() {
+		protected void setMetadataIndex() {
 			metadatabench.setMetadataSelectionIndex(annpanels.indexOf(this));
 		}
 				
 		protected class MAPFocusListener implements FocusListener {
 			@Override
 			public void focusGained(FocusEvent e) {
-				
+				giveFocus();
 			}
 
 			@Override
@@ -138,6 +138,7 @@ public class ModelAnnotationEditor extends JPanel implements Observer {
 		}
 		
 		public void giveFocus() {
+			setMetadataIndex();
 			setBackground(new Color(255,231,186));
 			textbox.requestFocusInWindow();
 			textbox.select(0, textbox.getText().length());

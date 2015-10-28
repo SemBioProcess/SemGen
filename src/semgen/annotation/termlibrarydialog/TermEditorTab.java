@@ -257,6 +257,9 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			tip.updateInformation(affected);
 			setTypeList();
 		}
+		if (arg1==LibraryEvent.SINGULAR_TERM_CREATED || arg1==LibraryEvent.SINGULAR_TERM_REMOVED) {
+			setTypeList();
+		}
 	}
 
 	private class EditorToolbar extends SemGenTabToolbar implements ActionListener {

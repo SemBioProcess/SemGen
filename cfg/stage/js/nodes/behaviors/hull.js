@@ -15,6 +15,8 @@ function Hull(node) {
 			.on("dblclick", function(d) {
 				console.log("hull click");
 				node.setChildren(null);
+
+				node.rootElement.selectAll("text").attr("x", 0);
 			});
 	});
 	
@@ -32,9 +34,11 @@ function Hull(node) {
 			// 2) Calculate the center of the child nodes and the top of the child nodes so 
 			// 		we can position the text and parent node appropriately
 			var vertexes = [];
-			var centerX = 0;
+
+			var minX = null;
+			var maxX = null;
 			var minY = null;
-			
+			var maxY = null;
 			// Recursively analyze all descendants
 			var analyzeChildren = function (childrenArr) {
 				childrenArr.forEach(function (child) {
@@ -48,21 +52,30 @@ function Hull(node) {
 						analyzeChildren(child.children);
 					
 					vertexes.push([child.x, child.y]);
+					//Find the most extreme node positions for each axis
+					minX = minX || child.x;
+					minX = child.x < minX ? child.x : minX;
 					
-					centerX += child.x;
+					maxX = maxX || child.x;
+					maxX = child.x > maxX ? child.x : maxX;
+					
 					minY = minY || child.y;
 					minY = child.y < minY ? child.y : minY;
+					
+					maxY = maxY || child.y;
+					maxY = child.y > maxY ? child.y : maxY;
 				});
 			};
 			analyzeChildren(children);
+			node.xmin = minX;
+			node.xmax = maxX;
+			node.ymin = minY;
+			node.ymax = maxY;
 			
 			if(!vertexes.length)
 				return;
-			
+
 			// Center the node at the top of the hull
-			node.x = centerX / vertexes.length;
-			node.y = minY;
-			
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))
 				.attr("d", function(d) { return "M" + d.join("L") + "Z"; })

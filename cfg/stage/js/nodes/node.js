@@ -20,12 +20,17 @@ function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, cha
 	this.inputs = inputs || [];
 	this.userCanHide = true;
 	this.hidden = false;
-	this.spaceBetweenTextAndNode = this.r * 0.2 + this.textSize;
+	this.textlocx = 0;
+	this.defaultcharge = charge;
 
 }
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
+}
+
+Node.prototype.spaceBetweenTextAndNode = function() {
+	return this.r * 0.2 + this.textSize; 
 }
 
 Node.prototype.addBehavior = function (behavior) {
@@ -53,7 +58,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	    })
 	    .on("mouseout", function () {
 	    	graph.highlightMode(null);
-	    });;
+	    });
 	
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -73,9 +78,11 @@ Node.prototype.getLinks = function () {
 	// Don't show any inputs to this node can't link
 	if(!this.canLink())
 		return;
+
 	
 	// Build an array of links from our list of inputs
 	var links = [];
+
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
@@ -150,9 +157,9 @@ Node.prototype.getLinks = function () {
 			continue;
 		}
 
-		if(type == "external") length = 200;
+		if(type == "external") length = 300;
 		else if(type == "physiomap") length = 100;
-		else length = 40;
+		else length = 60;
 
 		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
 		links.push(newLink);
@@ -166,6 +173,7 @@ Node.prototype.getLinks = function () {
 			}
 		}
 	}
+
 	
 	return links;
 }
@@ -173,14 +181,25 @@ Node.prototype.getLinks = function () {
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
 	
-	// Don't let nodes overlap their parent labels
-	if(this.parent && this.y < this.parent.y)
-		this.y = this.parent.y;
-			
-	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x));
-	this.y = Math.max(this.r + this.spaceBetweenTextAndNode, Math.min(graph.h - this.r, this.y));
+	//Keep child nodes centered on parent
+	var forcey = 0;
+	var forcex = 0;
+	
+	if (this.parent) {
+		var k = .0005; 
+		forcey = (this.parent.y - this.y) * k;
+		forcex = (this.parent.x - this.x) * k;
 
+	}
+	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;
+	this.y = Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.y)) + forcey;
+	
 	var root = d3.select(element);
+	//Keep the text above hull when an parent node is opened.
+	if (this.children) {
+		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
+		this.rootElement.selectAll("text").attr("x", -(this.x - (this.xmax + this.xmin)/2.0));
+	}
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
 	
 	$(this).triggerHandler('postTick');
@@ -199,7 +218,7 @@ Node.prototype.createTextElement = function (className) {
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
-	    .attr("y", -this.spaceBetweenTextAndNode)
+	    .attr("y", -this.spaceBetweenTextAndNode())
 	    .text(this.displayName)
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");
