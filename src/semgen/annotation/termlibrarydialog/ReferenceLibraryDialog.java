@@ -22,6 +22,8 @@ public class ReferenceLibraryDialog extends JFrame {
 	ImportAnnotationsPanel importpane;
 	AddCreateTermPanel createaddpane;
 	SemGenSettings settings;
+	int prefwidth = 1100;
+	int prefheight = 850;
 	
 	public ReferenceLibraryDialog(SemGenSettings sets, AnnotatorWorkbench wb) {
 		super("Annotation Reference Library");
@@ -39,7 +41,13 @@ public class ReferenceLibraryDialog extends JFrame {
 		makeTabs();
 
 		setContentPane(new JScrollPane(mainpane));
-		setPreferredSize(new Dimension(settings.scaleWidthforScreen(720), settings.scaleHeightforScreen(880)));
+		
+		float fracheight = 0.8F;
+		float fracwidth = 0.8F;
+		int height = settings.screensize.height < prefheight ? Math.round(fracheight * settings.screensize.height) : prefheight;
+		int width = settings.screensize.width < prefwidth ? Math.round(fracwidth * settings.screensize.width) : prefwidth;
+		
+		setPreferredSize(new Dimension(width, height));
 		validate();
 		pack();
 		

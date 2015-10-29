@@ -26,7 +26,7 @@ public class SemGenSettings extends Observable{
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	public HashMap<String, String[]> startsettingstable;
 	private final int defwidth = 1280, defheight = 1024;
-	private Dimension screensize;
+	public Dimension screensize;
 	private Boolean maximize = false;
 	private Boolean autoannmapped;
 	private int width = 1280, height = 1024;
