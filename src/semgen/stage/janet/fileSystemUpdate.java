@@ -6,6 +6,11 @@ import java.io.File;
 
 
 
+
+
+
+
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
@@ -57,25 +62,48 @@ public class fileSystemUpdate {
 				e.printStackTrace();
 			}
          	
-         	/*boolean dirCreated = false;
-         	if (!theDir.exists())
-         	{
-         		   dirCreated = theDir.mkdir();
-         		  System.out.println("theDir.canWrite() = " + theDir.canWrite());
-         		  if(dirCreated==false)
-         		  {
-         			 theDir.setWritable(true);
-         			//theDir.setReadOnly();
-         			 dirCreated = theDir.mkdir();
-         		  }
-         		  
-         		  System.out.println("Boolean flag returned to make a directory = " + dirCreated);
-         	}*/
-         	//File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+
          }
 		 return dirPath;
 	}
 
+ 
+ static String FinalmakeDir(String linkurl) throws IOException {
+	
+	
+	 	String wsPath =  parselinkURL(linkurl);
+      	String dirPath =  "examples/JanetModels/" + wsPath+ "/";
+              	
+      	File theDir = new File(dirPath);
+      	
+      	try {
+      		if (!theDir.exists())
+      			Files.createDirectory(theDir.toPath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+      	
+
+     
+		 return dirPath;
+	}
+ 
+ 
+ public static String parselinkURL(String linkurl)  {
+	
+	 System.out.println("linkurl = " + linkurl);
+	 String[] temp = linkurl.split("/");
+	 //for(int i =0; i < temp.length ; i++)
+	//	    System.out.println("*** here = " + temp[i]);
+	 //System.exit(0);
+	 String dirname = temp[4];
+	 
+	 return dirname;
+	 
+ }
+ 
+ 
 public static void downloadFiles(String[][] janetNoDupArray, String dirPath) throws IOException {
 	// TODO Auto-generated method stub
 	
@@ -135,5 +163,101 @@ public static void downloadFiles(String[][] janetNoDupArray, String dirPath) thr
 	}
 	
 }//end downloadFiles method
+
+
+
+
+
+
+
+
+public static void FinaldownloadFiles(String downloadURL, String dirPath) throws IOException {
+	// TODO Auto-generated method stub
+	
+	
+			
+	        //downloadURL = finalurl(downloadURL); 		
+	        System.out.println("downloadURL = " + downloadURL);
+	        String filename = findFilename(downloadURL);
+			String ws =  Finalws(downloadURL);
+			
+			System.out.println("ws = " + ws);
+			System.out.println("filename = " + filename);
+			
+			
+			URL url = new URL(downloadURL);
+			
+			File theDir = new File(dirPath);
+			
+			String absdirPath = theDir.getAbsoluteFile().getParentFile().getAbsolutePath() +"\\" + ws+ "\\" + filename;
+			
+			absdirPath = absdirPath.replaceAll("[\n\r]","");
+			//absdirPath = URLEncoder.encode(absdirPath, "UTF-8");
+			System.out.println("absdirPath= " +absdirPath);
+			File file = new File(absdirPath);
+			//File file = new File(fsPath);
+			
+			
+			FileUtils.copyURLToFile(url, file);
+			
+		
+	
+	
+}//end downloadFiles method
+
+
+
+
+static String Finalws(String downloadURL) {
+	
+	 String[] temp = downloadURL.split("/");
+	// for(int i =0; i < temp.length ; i++)
+	//	    System.out.println(temp[i]);
+	 String ws = temp[4];
+	 
+	 //System.out.println("ws = " + ws);
+	 //System.exit(0);
+	 
+	 return ws;
+	
+	
+}
+
+
+static String finalurl(String downloadURL) {
+
+	System.out.println("downloadURL = " + downloadURL);
+	String[] temp =downloadURL.split(" ");
+	return temp[temp.length-2];
+}
+
+
+public static String findFilename(String linkurl)  {
+	
+	 
+	 String[] temp = linkurl.split("/");
+	// for(int i =0; i < temp.length ; i++)
+	//	    System.out.println(temp[i]);
+	 String filename = temp[temp.length-1];
+	 String[] temp2 = filename.split(" ");
+	 filename = temp2[0];
+	 System.out.println("filename = " + filename);
+	 //System.exit(0);
+	 
+	 return filename;
+	 
+}
+
+
+
+
+
+
+
+
+
+
+
+
  
 }//end class

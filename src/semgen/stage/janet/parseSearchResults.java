@@ -346,6 +346,45 @@ public class parseSearchResults
         janet_searched_models_for_semgen.replaceAll("\\s+","");
         return janet_searched_models_for_semgen;
 	}
+	
+	
+	
+	static String FinalpackReturnStringforSemGen(String[] urlArray) {
+
+		String janet_searched_models_for_semgen = "";
+		for(int i =2; i <= urlArray.length-2 ; i++)
+		{
+			String ws = fileSystemUpdate.Finalws(urlArray[i]);
+			System.out.println("ws = " + ws);
+			
+			String fs = fileSystemUpdate.findFilename(urlArray[i]);
+			System.out.println("fs = " + fs);
+			
+			 if(i< (urlArray.length-2) )
+	           	 janet_searched_models_for_semgen += "W:" + ws.replaceAll("\\s+","") + " "  + "M:" + fs.replaceAll("\\s+","")  +",";
+	            else
+	           	 janet_searched_models_for_semgen += "W:" +ws.replaceAll("\\s+","") + " "  + "M:" + fs.replaceAll("\\s+","");
+			
+			//System.exit(0);
+			
+		}
+		 janet_searched_models_for_semgen.replaceAll("\\s+","");
+		 System.out.println("janet_searched_models_for_semgen = " + janet_searched_models_for_semgen);
+		 //System.exit(0);
+		 
+		/*System.out.println(" noduprows = " +  noduprows);
+        for(int i =0; i< noduprows;i++){
+            if(i< noduprows-1)
+           	 janet_searched_models_for_semgen += "W:" + ws[i].replaceAll("\\s+","") + " "  + "M:" + fs[i].replaceAll("\\s+","")  +",";
+            else
+           	 janet_searched_models_for_semgen += "W:" +ws[i].replaceAll("\\s+","") + " "  + "M:" + fs[i].replaceAll("\\s+","");
+         }   
+        janet_searched_models_for_semgen.replaceAll("\\s+","");*/
+        return janet_searched_models_for_semgen;
+	}
+	
+	
+	
 
 	/*Enumerate the BFS tree and help add nodes to the tree by stopping at the correct child node*/
      public static DefaultMutableTreeNode BFS_Enumerate_Jtree( DefaultMutableTreeNode root, String toSearch_depth01, String toSearch_depth02)

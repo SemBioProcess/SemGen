@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <units name="nM_per_s">
+    <unit units="nM" />
+    <unit exponent="-1.0" units="s" />
+  </units>
+  <units name="per_s">
+    <unit exponent="-1.0" units="s" />
+  </units>
+  <units name="s">
+    <unit units="second" />
+  </units>
+  <units name="nM">
+    <unit exponent="-1.0" units="liter" />
+    <unit prefix="nano" units="mole" />
+  </units>
+  <component name="geometry" cmeta:id="">
+    <variable cmeta:id="v0" name="t" public_interface="out" units="s">
+
+    </variable>
+  </component>
+  <component name="calcium" cmeta:id="">
+    <variable cmeta:id="v1" name="t" public_interface="in" units="s">
+
+    </variable>
+    <variable initial_value="1" name="dummy" units="nM" />
+    <variable name="Ca" public_interface="out" units="nM" />
+    <variable initial_value="1800" name="stimEnd" units="s" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>t</ci>
+          </bvar>
+          <ci>dummy</ci>
+        </apply>
+        <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM_per_s">1</cn>
+      </apply>
+      <apply>
+        <eq />
+        <ci>Ca</ci>
+        <piecewise>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">459</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">576</cn>
+                  </apply>
+                  <ci>t</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">576</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <geq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">0</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">406</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">459</cn>
+                  </apply>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+                  </apply>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">459</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">360</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">377</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">406</cn>
+                  </apply>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">360</cn>
+                  </apply>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">406</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">360</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">540</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">348</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">377</cn>
+                  </apply>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">540</cn>
+                  </apply>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">377</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">540</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">720</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">336</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">348</cn>
+                  </apply>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">720</cn>
+                  </apply>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">348</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">720</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">900</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <apply>
+              <plus />
+              <apply>
+                <divide />
+                <apply>
+                  <times />
+                  <apply>
+                    <minus />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">334</cn>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">336</cn>
+                  </apply>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">900</cn>
+                  </apply>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">180</cn>
+              </apply>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">336</cn>
+            </apply>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">900</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">1080</cn>
+              </apply>
+            </apply>
+          </piece>
+          <piece>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">334</cn>
+            <apply>
+              <and />
+              <apply>
+                <gt />
+                <ci>t</ci>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="s">1080</cn>
+              </apply>
+              <apply>
+                <leq />
+                <ci>t</ci>
+                <ci>stimEnd</ci>
+              </apply>
+            </apply>
+          </piece>
+          <otherwise>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="nM">60</cn>
+          </otherwise>
+        </piecewise>
+      </apply>
+    </math>
+  </component>
+  <component name="calcineurin" cmeta:id="">
+    <variable cmeta:id="v2" initial_value="1000" name="Ntot" public_interface="out" units="nM">
+
+    </variable>
+    <variable cmeta:id="v3" name="t" public_interface="in" units="s">
+
+    </variable>
+    <variable initial_value="535" name="K_mN" units="nM" />
+    <variable initial_value="1760" name="K_dN" units="nM" />
+    <variable initial_value="6000" name="M" units="nM" />
+    <variable initial_value="2.92" name="n" units="dimensionless" />
+    <variable name="Ca" public_interface="in" units="nM" />
+    <variable cmeta:id="v4" name="act_N" public_interface="out" units="dimensionless">
+
+    </variable>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>act_N</ci>
+        <apply>
+          <divide />
+          <apply>
+            <power />
+            <ci>Ca</ci>
+            <ci>n</ci>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <power />
+              <ci>Ca</ci>
+              <ci>n</ci>
+            </apply>
+            <apply>
+              <times />
+              <apply>
+                <power />
+                <ci>K_mN</ci>
+                <ci>n</ci>
+              </apply>
+              <apply>
+                <plus />
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.1#" cellml:units="dimensionless">1</cn>
+                <apply>
+                  <divide />
+                  <ci>K_dN</ci>
+                  <ci>M</ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <connection>
+    <map_components component_1="calcium" component_2="calcineurin" />
+    <map_variables variable_1="Ca" variable_2="Ca" />
+  </connection>
+  <connection>
+    <map_components component_1="geometry" component_2="calcineurin" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="geometry" component_2="calcium" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+</model>
+

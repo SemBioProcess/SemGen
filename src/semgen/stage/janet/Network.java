@@ -15,6 +15,7 @@ import org.apache.http.HttpEntity;
 //import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -137,4 +138,70 @@ public class Network {
     	
     	
     }
+    
+    
+    
+
+
+
+    public static String  FinalfetchRemoteData(String args) throws Exception
+      	{
+          	
+          	  HttpConnection c=null;
+        	  HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead 
+        	  
+        	  String json = "";
+        
+        	  Boolean resultBool;
+        	  
+        	  String linksArea = null;
+        	  String httpText = null;
+
+        	    try {
+        	    	System.out.println("Inside 1 ");
+        	    	//args = URLEncoder.encode(args, "UTF-8");
+        	    	 
+        	    	String linkURL = "http://127.0.0.1:3034/ontology/"+args; 
+        	    	linkURL = linkURL.replace(" ","%20");
+        	    	
+        	    	//String linkURL = "http://127.0.0.1:3034/ontology/left%20fem";
+    	        	System.out.println("linkURL = " + linkURL);
+        	    	//HttpGet request = new HttpGet("http://127.0.0.1:3034/ontology/left%20femur");
+        	    	HttpGet request = new HttpGet(linkURL);
+        	        request.addHeader("Accept", "application/vnd.physiome.pmr2.json.1");
+        	        
+        	        HttpResponse response = httpClient.execute(request);
+        	        HttpEntity httpEntity = response.getEntity();
+        	        
+        	        if (httpEntity != null) 
+        	        {
+        	        	System.out.println("Inside 2 ");
+        	            InputStream is = httpEntity.getContent();
+
+        	            StringBuffer buffer = new StringBuffer();
+        	            int ch = 0;
+        	            while (ch != -1) {
+        	                ch = is.read();
+        	                buffer.append((char) ch);
+        	            }
+        	           json = buffer.toString(); //eaw data returned by search
+        	        }//end if
+
+          	
+          	
+          }//end try
+        	     // handle response here...
+          catch (Exception ex) {
+              // handle exception here
+          } finally {
+          	httpClient.getConnectionManager().shutdown();
+          }//end finally
+        	   return json;
+          
+        }//end method
+
+    
+    
+    
+    
 }

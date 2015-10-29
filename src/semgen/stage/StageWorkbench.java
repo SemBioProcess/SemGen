@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.janet.janet_calls;
+import semgen.stage.janet.janet_final_main;
 import semgen.stage.janet.janet_main;
 import semgen.stage.janet.parseSearchResults;
 import semgen.stage.janet.waitOnKeyStrokes;
@@ -191,8 +192,9 @@ public class StageWorkbench extends Workbench {
 					// PMR results here
 			};
 	 		// Janet code goes here.
-	 		resultSets = janet_main.processSearch(resultSets,searchString);
-	 		
+	 		//resultSets = janet_main.processSearch(resultSets,searchString);//Donot remove, this is for single query. for e.g. opb_01023
+	 		resultSets = janet_final_main.processSearch(resultSets,searchString);
+	 		System.out.println("file## == " +searchString);
 	 	
 	 		
 	 		
