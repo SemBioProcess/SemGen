@@ -42,16 +42,22 @@ public class ReferenceLibraryDialog extends JFrame {
 
 		setContentPane(new JScrollPane(mainpane));
 		
-		float fracheight = 0.8F;
+		float fracheight = 0.85F;
 		float fracwidth = 0.8F;
-		int height = settings.screensize.height < prefheight ? Math.round(fracheight * settings.screensize.height) : prefheight;
-		int width = settings.screensize.width < prefwidth ? Math.round(fracwidth * settings.screensize.width) : prefwidth;
+		
+		boolean tootall = settings.screensize.height < prefheight;
+		boolean toowide = settings.screensize.width < prefwidth;
+		
+		int height = tootall ? Math.round(fracheight * settings.screensize.height) : prefheight;
+		int width = toowide ? Math.round(fracwidth * settings.screensize.width) : prefwidth;
 		
 		setPreferredSize(new Dimension(width, height));
 		validate();
 		pack();
 		
-		setLocation(settings.centerDialogOverApplication(getSize()));
+		if(tootall || toowide) setLocationRelativeTo(null);
+		else setLocation(settings.centerDialogOverApplication(getSize()));
+		
 		setVisible(true);
 	}
 	
