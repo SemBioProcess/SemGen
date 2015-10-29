@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import semgen.SemGenSettings;
@@ -32,12 +33,13 @@ public class ReferenceLibraryDialog extends JFrame {
 				workbench.sendTermLibraryEvent(LibraryRequest.CLOSE_LIBRARY);
 			}
 		});
-		setResizable(false);
+		//setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		makeTabs();
-		setContentPane(mainpane);
-		setPreferredSize(new Dimension(1000, 800));
+
+		setContentPane(new JScrollPane(mainpane));
+		setPreferredSize(new Dimension(settings.scaleWidthforScreen(720), settings.scaleHeightforScreen(880)));
 		validate();
 		pack();
 		
