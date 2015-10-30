@@ -88,7 +88,7 @@ public class SemGenSettings extends Observable{
 	}
 	
 	public Point getAppCenter() {
-		return new Point(framesize.width/2, framesize.height/2);
+		return new Point(framepos.x+framesize.width/2, framepos.y + framesize.height/2);
 	}
 	
 	public void setAppSize(Dimension dim) {
@@ -98,14 +98,13 @@ public class SemGenSettings extends Observable{
 	
 	public Point centerDialogOverApplication(Dimension dialogsize) {
 		Point appcenter = getAppCenter();
-		Point dialogcenter = new Point(dialogsize.width/2, dialogsize.height/2);
+		Dimension dialogradius = new Dimension(dialogsize.width/2, dialogsize.height/2);
 
-		int hdif = appcenter.y-dialogcenter.y;
-		int hloc = appcenter.y;
-		if (hdif>=100) {
-			hloc = hdif - 100;
+		int yloc = appcenter.y-dialogradius.height;
+		if (yloc - 100 >= 0) {
+			yloc -= 100;
 		}
-		return new Point(appcenter.x-dialogcenter.x, hloc);
+		return new Point(appcenter.x-dialogradius.width, yloc);
 	}
 	
 	public int getAppWidth() {
