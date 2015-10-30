@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
@@ -56,7 +57,8 @@ public class ReferenceLibraryDialog extends JFrame {
 		pack();
 		
 		if(tootall || toowide) setLocationRelativeTo(null);
-		else setLocation(settings.centerDialogOverApplication(getSize()));
+		else setLocationRelativeTo(SemGen.semGenFrame);
+		//(settings.centerDialogOverApplication(getSize()));
 		
 		setVisible(true);
 	}

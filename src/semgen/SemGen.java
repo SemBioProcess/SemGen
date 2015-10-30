@@ -44,6 +44,7 @@ import semsim.writing.ModelWriter;
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
+	public static JFrame semGenFrame;
 	public static double version = 3.0;
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
@@ -121,8 +122,7 @@ public class SemGen extends JFrame implements Observer{
 		        }
 			}
 		    
-		    JFrame frame = new SemGen();
-			frame.setVisible(true);
+		    semGenFrame = new SemGen();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,9 +160,6 @@ public class SemGen extends JFrame implements Observer{
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
 		
-		setVisible(true);
-		
-		this.pack();
 		//Maximize screen
 		if (settings.maximizeScreen()) {
 			setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -171,6 +168,11 @@ public class SemGen extends JFrame implements Observer{
 			setSize(settings.getAppSize());
 			setLocation(settings.getAppLocation());
 		}
+				
+		setVisible(true);
+		
+		this.pack();
+		
 		
 		addListeners();
 		settings.setAppSize(getSize());
