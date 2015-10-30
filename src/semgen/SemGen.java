@@ -123,6 +123,7 @@ public class SemGen extends JFrame implements Observer{
 			}
 		    
 		    semGenFrame = new SemGen();
+		    semGenFrame.setVisible(true);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -133,6 +134,8 @@ public class SemGen extends JFrame implements Observer{
 	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
 
+		setVisible(false);
+		
 		// Add the cfg folder to java.library.path (for using libSBML)
 		System.setProperty( "java.library.path", cfgreadpath );
 		Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
@@ -159,6 +162,10 @@ public class SemGen extends JFrame implements Observer{
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
+
+		setVisible(true);
+		
+		this.pack();
 		
 		//Maximize screen
 		if (settings.maximizeScreen()) {
@@ -168,14 +175,10 @@ public class SemGen extends JFrame implements Observer{
 			setSize(settings.getAppSize());
 			setLocation(settings.getAppLocation());
 		}
-				
-		setVisible(true);
-		
-		this.pack();
-		
 		
 		addListeners();
 		settings.setAppSize(getSize());
+		
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
 		
