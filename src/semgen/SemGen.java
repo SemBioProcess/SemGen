@@ -44,7 +44,6 @@ import semsim.writing.ModelWriter;
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
-	public static JFrame semGenFrame;
 	public static double version = 3.0;
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
@@ -122,9 +121,8 @@ public class SemGen extends JFrame implements Observer{
 		        }
 			}
 		    
-		    semGenFrame = new SemGen();
-		    semGenFrame.setVisible(true);
-			
+		    new SemGen();
+		    
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

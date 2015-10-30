@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
@@ -46,19 +45,17 @@ public class ReferenceLibraryDialog extends JFrame {
 		float fracheight = 0.85F;
 		float fracwidth = 0.8F;
 		
-		boolean tootall = settings.screensize.height < prefheight;
-		boolean toowide = settings.screensize.width < prefwidth;
+		boolean tootall = settings.getAppHeight() < prefheight;
+		boolean toowide = settings.getAppWidth() < prefwidth;
 		
-		int height = tootall ? Math.round(fracheight * settings.screensize.height) : prefheight;
-		int width = toowide ? Math.round(fracwidth * settings.screensize.width) : prefwidth;
+		int height = tootall ? Math.round(fracheight * settings.getAppHeight()) : prefheight;
+		int width = toowide ? Math.round(fracwidth * settings.getAppWidth()) : prefwidth;
 		
 		setPreferredSize(new Dimension(width, height));
 		validate();
 		pack();
 		
-		if(tootall || toowide) setLocationRelativeTo(null);
-		else setLocationRelativeTo(SemGen.semGenFrame);
-		//(settings.centerDialogOverApplication(getSize()));
+		setLocation(settings.centerDialogOverApplication(getSize()));
 		
 		setVisible(true);
 	}

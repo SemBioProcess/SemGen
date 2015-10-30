@@ -24,13 +24,14 @@ public class SemGenSettings extends Observable{
 	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, cwsort, toggleproptype, autoannotatemapped}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public HashMap<String, String[]> startsettingstable;
-	private final int defwidth = 1280, defheight = 1024;
-	public Dimension screensize;
+	private HashMap<String, String[]> startsettingstable;
 	private Boolean maximize = false;
 	private Boolean autoannmapped;
-	private int width = 1280, height = 1024;
-	private int xpos = 0, ypos = 0;
+	
+	private final int defwidth = 1280, defheight = 1024;
+	private Dimension screensize;
+	private Dimension framesize;
+	private Point framepos;	
 	
 	public static Color lightblue = new Color(207, 215, 252, 255);
 	
@@ -48,7 +49,6 @@ public class SemGenSettings extends Observable{
 				e3.printStackTrace();
 		}
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
-		width = screensize.width; height = screensize.height;
 		getPreviousScreenSize();
 		getPreviousScreenPosition();
 		autoannmapped = startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
@@ -57,10 +57,8 @@ public class SemGenSettings extends Observable{
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
 		startsettingstable = new HashMap<String, String[]>(old.startsettingstable);
-		xpos = old.xpos;
-		ypos = old.ypos;
-		width = old.width;
-		height = old.height;
+		framepos = old.framepos;
+		framesize = old.framesize;
 		autoannmapped = old.autoannmapped;
 	}
 	
@@ -75,62 +73,63 @@ public class SemGenSettings extends Observable{
 	public void getPreviousScreenSize() {
 		String dim = startsettingstable.get("screensize")[0];
 		String[] dims = dim.trim().split("x");
-		width = Integer.parseInt(dims[0]);
-		height = Integer.parseInt(dims[1]);
+		framesize = new Dimension(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
 		
 	}
 	
 	public void getPreviousScreenPosition() {
 		String dim = startsettingstable.get("screenpos")[0];
 		String[] dims = dim.trim().split("x");
-		xpos = Integer.parseInt(dims[0]);
-		ypos = Integer.parseInt(dims[1]);
+		framepos = new Point(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
 	}
 	
 	public Dimension getAppSize() {
-		return new Dimension(width, height);
+		return new Dimension(framesize);
 	}
 	
-	public Dimension getAppCenter() {
-		return new Dimension(width/2, height/2);
+	public Point getAppCenter() {
+		return new Point(framesize.width/2, framesize.height/2);
 	}
 	
 	public void setAppSize(Dimension dim) {
-		width = dim.width; height = dim.height;
+		framesize.width = dim.width;
+		framesize.height = dim.height;
 	}
 	
 	public Point centerDialogOverApplication(Dimension dialogsize) {
-		Dimension appcenter = getAppCenter();
-		Dimension dialogcenter = new Dimension(dialogsize.width/2, dialogsize.height/2);
-		int hloc = appcenter.height-dialogcenter.height-100;
-		if (hloc>=0) {
-			return new Point(appcenter.width-dialogcenter.width, hloc);
+		Point appcenter = getAppCenter();
+		Point dialogcenter = new Point(dialogsize.width/2, dialogsize.height/2);
+
+		int hdif = appcenter.y-dialogcenter.y;
+		int hloc = appcenter.y;
+		if (hdif>=100) {
+			hloc = hdif - 100;
 		}
-		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height);
+		return new Point(appcenter.x-dialogcenter.x, hloc);
 	}
 	
 	public int getAppWidth() {
-		return width;
+		return framesize.width;
 	}
 	
 	public int getAppHeight() {
-		return height;
+		return framesize.height;
 	}
 	
 	public Point getAppLocation() {
-		return new Point(xpos, ypos);
+		return new Point(framepos);
 	}
 	
 	public void setAppLocation(Point pt) {
-		xpos = pt.x; ypos = pt.y;
+		framepos.x = pt.x; framepos.y = pt.y;
 	}
 		
 	public int getAppXPos() {
-		return xpos;
+		return framepos.x;
 	}
 	
 	public int getAppYPos() {
-		return ypos;
+		return framepos.y;
 	}
 	public String getStartDirectory() {
 		return startsettingstable.get("startDirectory")[0];
