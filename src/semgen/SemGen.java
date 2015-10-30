@@ -133,8 +133,6 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
-
-		setVisible(false);
 		
 		// Add the cfg folder to java.library.path (for using libSBML)
 		System.setProperty( "java.library.path", cfgreadpath );
