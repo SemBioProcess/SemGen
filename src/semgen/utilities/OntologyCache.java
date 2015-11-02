@@ -6,16 +6,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+
+import semgen.SemGen;
 import semsim.utilities.ResourcesManager;
 
 public class OntologyCache {
 
-	private File ontologyTermsAndNamesCacheFile = new File("cfg/ontologyTermsAndNamesCache.txt");
+	private File ontologyTermsAndNamesCacheFile = new File(SemGen.cfgwritepath + "ontologyTermsAndNamesCache.txt");
 	private HashMap<String, String[]> ontologyTermsAndNamesCache;
 	
 	public OntologyCache() {
 		try {
-			ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile("cfg/ontologyTermsAndNamesCache.txt", false);
+			if(ontologyTermsAndNamesCacheFile.exists())
+				ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile(ontologyTermsAndNamesCacheFile.getAbsolutePath(), false);
+			else
+				ontologyTermsAndNamesCache = ResourcesManager.createHashMapFromFile(SemGen.cfgreadpath + "ontologyTermsAndNamesCache.txt", false);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

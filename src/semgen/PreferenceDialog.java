@@ -6,6 +6,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -84,7 +85,9 @@ public class PreferenceDialog extends SemGenDialog implements PropertyChangeList
 	public void drawCheckList() {
 		JPanel prefpanel = new JPanel();
 		prefpanel.setLayout(new BoxLayout(prefpanel, BoxLayout.Y_AXIS));
-		prefpanel.add(new JLabel("Choose preferences to use when opening new tabs\n"));
+		JLabel msglabel = new JLabel("Choose preferences to use when opening new tabs");
+		msglabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+		prefpanel.add(msglabel);
 		
 		
 		for (PrefCheckBox pref : checklist) {

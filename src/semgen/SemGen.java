@@ -48,7 +48,7 @@ public class SemGen extends JFrame implements Observer{
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
-	public static OntologyCache termcache = new OntologyCache();
+	public static OntologyCache termcache;
 	
 	//A class for application level events such as exiting and creating new tabs
 	public static GlobalActions gacts = new GlobalActions();
@@ -65,7 +65,12 @@ public class SemGen extends JFrame implements Observer{
 	private SemGenSettings settings; 
 	//A library of SemSim constants and definitions. This is created once and referenced
 	//without modification by the rest of the program.
-	public static SemSimLibrary semsimlib = new SemSimLibrary();
+	public static SemSimLibrary semsimlib;
+	
+	public static String cfgreadpath = "cfg/";
+	public static String cfgwritepath = "cfg/";
+	public static String examplespath = "examples/";
+	
 	private SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen 
@@ -92,12 +97,16 @@ public class SemGen extends JFrame implements Observer{
 		configureSemSim();
 	}
 	
-	private static void configureSemSim() {
+	private static void configureSemSim() throws NoSuchMethodException, SecurityException {
+
+		OSValidation();
+		
+		semsimlib = new SemSimLibrary(cfgreadpath);
 		ModelReader.pointtoSemSimLibrary(semsimlib);
 		ModelWriter.pointtoSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 		// Need this for programmatic use of jsbatch
-		System.setProperty("jsim.home", "./cfg/jsimhome");
+		System.setProperty("jsim.home", cfgreadpath + "jsimhome");
 	}
 
 	/**Set the user interface look and feel to the Nimbus Swing layout and create the frame*/
@@ -112,14 +121,8 @@ public class SemGen extends JFrame implements Observer{
 		        }
 			}
 		    
-		    JFrame frame = new SemGen();
+		    new SemGen();
 		    
-		    //Set the default location for the creation of child windows (ie: dialogs) as the center  
-			//of the main frame
-
-		    
-			frame.setVisible(true);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,18 +131,18 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
-
+		
 		// Add the cfg folder to java.library.path (for using libSBML)
-		System.setProperty( "java.library.path", "cfg" );
+		System.setProperty( "java.library.path", cfgreadpath );
 		Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
 		fieldSysPath.setAccessible( true );
 		fieldSysPath.set( null, null );
-				
-		OSValidation();
-		
+						
 		setTitle(":: S e m  G e n ::");
 		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
 		//this.setIconImages(SemGenIcon.getSemGenLogoList());
+		
+		termcache = new OntologyCache();
 		
 		settings = new SemGenSettings();
 		SemGenFileChooser.currentdirectory = new File(settings.getStartDirectory());
@@ -155,10 +158,11 @@ public class SemGen extends JFrame implements Observer{
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
-		
+
 		setVisible(true);
 		
 		this.pack();
+		
 		//Maximize screen
 		if (settings.maximizeScreen()) {
 			setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -170,14 +174,18 @@ public class SemGen extends JFrame implements Observer{
 		
 		addListeners();
 		settings.setAppSize(getSize());
+		
 		System.out.println("Loaded.");
 		logfilewriter.println("Session started on: " + sdflog.format(datenow) + "\n");
+		
+		if(OSValidator.isMac())
+			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
 		
 		new NewTaskDialog(gacts);
 	}
 	
 	//Check which OS SemGen is being run under
-	private void OSValidation() throws NoSuchMethodException, SecurityException{
+	private static void OSValidation() throws NoSuchMethodException, SecurityException{
 		int OS = 0;
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
@@ -186,14 +194,27 @@ public class SemGen extends JFrame implements Observer{
 		
 		switch (OS) { 
 		case WINDOWS :
-			libsbmlfile = new File("cfg/sbmlj.dll"); 
+			libsbmlfile = new File(cfgreadpath + "sbmlj.dll"); 
 			break;
+		
 		case MACOSX :
-			libsbmlfile = new File("cfg/libsbmlj.jnilib");
-			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
+			
+			// Set read and write paths to Mac-specific locations
+			String appbundlepath = OSXAdapter.getPathToApplicationBundle();
+			
+			if(appbundlepath.contains("SemGen.app")){
+				cfgreadpath = appbundlepath + "/Contents/Resources/cfg/";
+				String homeDir = System.getProperty("user.home");
+				cfgwritepath = new File(homeDir + "/Library/Preferences/SemGen/cfg/").getAbsolutePath() + "/";
+				examplespath = appbundlepath + "/Contents/Resources/examples/";
+			}
+			
+			libsbmlfile = new File(cfgreadpath + "libsbmlj.jnilib");
+
 			break;
+		
 		default : 
-			libsbmlfile = new File("cfg/libsbmlj.so");
+			libsbmlfile = new File(cfgreadpath + "libsbmlj.so");
 		}
 		
 		if(libsbmlfile.exists()){
@@ -241,6 +262,19 @@ public class SemGen extends JFrame implements Observer{
 		if(contentpane.quit()){
 			try {
 				settings.setIsMaximized(getExtendedState()==JFrame.MAXIMIZED_BOTH);
+				
+				// If we haven't set up the user preferences location on Mac, do so
+				if(OSValidator.isMac()){
+										
+					File cfgwritefolder = new File(cfgwritepath);
+					
+					if( ! cfgwritefolder.exists()){
+						boolean madedir = cfgwritefolder.mkdirs();
+						
+						if( ! madedir) System.err.println("Could not create write directory at " + cfgwritepath);
+					}
+				}
+				
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();

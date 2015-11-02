@@ -304,6 +304,7 @@ public class SemSimConstants {
 		aMap1.put("http://biomodels.net/SBO/", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.org/obo/owl/SBO#", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
 		aMap1.put("http://purl.obolibrary.org/obo/SBO", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
+		aMap1.put("http://purl.obolibrary.org/obo/FMA", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://purl.org/sig/ont/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.biostr.washington.edu/fma3.0#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
 		aMap1.put("http://sig.uw.edu/fma#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);

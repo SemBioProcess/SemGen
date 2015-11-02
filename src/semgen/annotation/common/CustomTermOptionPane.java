@@ -67,7 +67,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		descriptionarea.setWrapStyleWord(true);
 		
 		JScrollPane descscroller = new JScrollPane(descriptionarea);
-		descscroller.setPreferredSize(new Dimension(450,100));
+		descscroller.setPreferredSize(new Dimension(450,75));
 		
 		JPanel namepanel = new JPanel();
 		namepanel.add(new JLabel("*Name: "));

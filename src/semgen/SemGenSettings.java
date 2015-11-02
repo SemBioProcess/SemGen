@@ -24,25 +24,31 @@ public class SemGenSettings extends Observable{
 	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, cwsort, toggleproptype, autoannotatemapped}
 	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-	public HashMap<String, String[]> startsettingstable;
-	private final int defwidth = 1280, defheight = 1024;
-	private Dimension screensize;
+	private HashMap<String, String[]> startsettingstable;
 	private Boolean maximize = false;
 	private Boolean autoannmapped;
-	private int width = 1280, height = 1024;
-	private int xpos = 0, ypos = 0;
+	
+	private final int defwidth = 1280, defheight = 1024;
+	private Dimension screensize;
+	private Dimension framesize;
+	private Point framepos;	
 	
 	public static Color lightblue = new Color(207, 215, 252, 255);
 	
 	public SemGenSettings() {
 		try {
-			startsettingstable = ResourcesManager.createHashMapFromFile("cfg/startSettings.txt", true);
+			String settingspath = SemGen.cfgwritepath + "startSettings.txt";
+			File settingsfile = new File(settingspath);
+			
+			if(settingsfile.exists())
+				startsettingstable = ResourcesManager.createHashMapFromFile(settingspath, true);
+			else
+				startsettingstable = ResourcesManager.createHashMapFromFile(SemGen.cfgreadpath + "startSettings.txt", true);
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
 		}
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
-		width = screensize.width; height = screensize.height;
 		getPreviousScreenSize();
 		getPreviousScreenPosition();
 		autoannmapped = startsettingstable.get("autoAnnotateMapped")[0].trim().equals("true");
@@ -51,10 +57,8 @@ public class SemGenSettings extends Observable{
 	public SemGenSettings(SemGenSettings old) {
 		screensize = old.screensize;
 		startsettingstable = new HashMap<String, String[]>(old.startsettingstable);
-		xpos = old.xpos;
-		ypos = old.ypos;
-		width = old.width;
-		height = old.height;
+		framepos = old.framepos;
+		framesize = old.framesize;
 		autoannmapped = old.autoannmapped;
 	}
 	
@@ -69,58 +73,62 @@ public class SemGenSettings extends Observable{
 	public void getPreviousScreenSize() {
 		String dim = startsettingstable.get("screensize")[0];
 		String[] dims = dim.trim().split("x");
-		width = Integer.parseInt(dims[0]);
-		height = Integer.parseInt(dims[1]);
+		framesize = new Dimension(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
 		
 	}
 	
 	public void getPreviousScreenPosition() {
 		String dim = startsettingstable.get("screenpos")[0];
 		String[] dims = dim.trim().split("x");
-		xpos = Integer.parseInt(dims[0]);
-		ypos = Integer.parseInt(dims[1]);
+		framepos = new Point(Integer.parseInt(dims[0]), Integer.parseInt(dims[1]));
 	}
 	
 	public Dimension getAppSize() {
-		return new Dimension(width, height);
+		return new Dimension(framesize);
 	}
 	
-	public Dimension getAppCenter() {
-		return new Dimension(width/2, height/2);
+	public Point getAppCenter() {
+		return new Point(framepos.x+framesize.width/2, framepos.y + framesize.height/2);
 	}
 	
 	public void setAppSize(Dimension dim) {
-		width = dim.width; height = dim.height;
+		framesize.width = dim.width;
+		framesize.height = dim.height;
 	}
 	
 	public Point centerDialogOverApplication(Dimension dialogsize) {
-		Dimension appcenter = getAppCenter();
-		Dimension dialogcenter = new Dimension(dialogsize.width/2, dialogsize.height/2);
-		return new Point(appcenter.width-dialogcenter.width, appcenter.height-dialogcenter.height-100);
+		Point appcenter = getAppCenter();
+		Dimension dialogradius = new Dimension(dialogsize.width/2, dialogsize.height/2);
+
+		int yloc = appcenter.y-dialogradius.height;
+		if (yloc - 100 >= 0) {
+			yloc -= 100;
+		}
+		return new Point(appcenter.x-dialogradius.width, yloc);
 	}
 	
 	public int getAppWidth() {
-		return width;
+		return framesize.width;
 	}
 	
 	public int getAppHeight() {
-		return height;
+		return framesize.height;
 	}
 	
 	public Point getAppLocation() {
-		return new Point(xpos, ypos);
+		return new Point(framepos);
 	}
 	
 	public void setAppLocation(Point pt) {
-		xpos = pt.x; ypos = pt.y;
+		framepos.x = pt.x; framepos.y = pt.y;
 	}
 		
 	public int getAppXPos() {
-		return xpos;
+		return framepos.x;
 	}
 	
 	public int getAppYPos() {
-		return ypos;
+		return framepos.y;
 	}
 	public String getStartDirectory() {
 		return startsettingstable.get("startDirectory")[0];
@@ -257,7 +265,7 @@ public class SemGenSettings extends Observable{
 	public void storeSettings() throws URISyntaxException {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(new FileWriter(new File("cfg/startSettings.txt")));
+			writer = new PrintWriter(new FileWriter(new File(SemGen.cfgwritepath + "startSettings.txt")));
 			writer.println("startDirectory; " + SemGenOpenFileChooser.currentdirectory.getAbsolutePath());
 			writer.println("maximize; " + maximize.toString());
 			writer.println("screensize; " + this.getAppWidth() + "x" + this.getAppHeight());

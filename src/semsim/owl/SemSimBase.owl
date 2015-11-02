@@ -546,6 +546,22 @@
     
 
 
+    <!-- http://www.bhi.washington.edu/SemSim#Event -->
+
+    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Event">
+        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bhi.washington.edu/SemSim#EventAssignment -->
+
+    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#EventAssignment">
+        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.bhi.washington.edu/SemSim#Integer -->
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Integer">

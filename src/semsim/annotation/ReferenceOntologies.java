@@ -78,7 +78,7 @@ public class ReferenceOntologies {
 				new String[]{"http://purl.bioontology.org/ontology/CMO/", "http://purl.obolibrary.org/obo/CMO"},
 				""),
 		FMA("Foundational Model of Anatomy", "FMA", "1053",
-				new String[]{"http://purl.org/sig/ont/fma/", "http://sig.biostr.washington.edu/fma3.0#", "http://sig.uw.edu/fma#", "http://identifiers.org/fma/"},
+				new String[]{"http://purl.obolibrary.org/obo/FMA", "http://purl.org/sig/ont/fma/", "http://sig.biostr.washington.edu/fma3.0#", "http://sig.uw.edu/fma#", "http://identifiers.org/fma/"},
 				"macromolecular to organism-level anatomy"),
 		GO("Gene Ontology", "GO", "1070",
 				new String[]{"http://purl.org/obo/owl/GO#", "http://purl.obolibrary.org/obo/GO", "urn:miriam:obo.go:",

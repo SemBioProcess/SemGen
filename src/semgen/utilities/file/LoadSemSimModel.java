@@ -110,7 +110,7 @@ public class LoadSemSimModel extends SemGenJob {
 	}
 
 	private SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
-		Document doc = new MMLParser().readFromFile(file);
+		Document doc = new MMLParser(SemGen.cfgreadpath + "jsimhome").readFromFile(file);
 		if (ErrorLog.hasErrors()) return null;
 		
 		MMLreader xmml2 = new MMLreader(file, doc);		
