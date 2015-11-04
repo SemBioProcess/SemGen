@@ -2,7 +2,7 @@ package semsim.model;
 
 public enum SemSimTypes {
 	PHYSICAL_PROPERTY("Singular Physical Property"),
-	PHYSICAL_PROPERTY_IN_COMPOSITE("Physical Property of an Entity"),
+	PHYSICAL_PROPERTY_IN_COMPOSITE("Physical Property of an Entity or Process"),
 	REFERENCE_PHYSICAL_ENTITY("Reference Physical Entity"),
 	CUSTOM_PHYSICAL_ENTITY("Custom Physical Entity"),
 	COMPOSITE_PHYSICAL_ENTITY("Composite Physical Entity"),

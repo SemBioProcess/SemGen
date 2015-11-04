@@ -257,7 +257,8 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 			tip.updateInformation(affected);
 			setTypeList();
 		}
-		if (arg1==LibraryEvent.SINGULAR_TERM_CREATED || arg1==LibraryEvent.SINGULAR_TERM_REMOVED || arg1==LibraryEvent.PROCESS_CHANGE || arg1==ModelEdit.COMPOSITE_CHANGED) {
+		if (arg1==LibraryEvent.SINGULAR_TERM_CREATED || arg1==LibraryEvent.SINGULAR_TERM_REMOVED || arg1==LibraryEvent.PROCESS_CHANGE || 
+				arg1==ModelEdit.COMPOSITE_CHANGED) {
 			setTypeList();
 		}
 	}
