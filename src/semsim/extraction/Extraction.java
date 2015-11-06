@@ -264,13 +264,11 @@ public class Extraction {
 						copyfs.setLocalName(parentname);
 						copyfs.getComputation().setMathML(newds.getComputation().getMathML());
 						extractedmodel.addSubmodel(copyfs);
-						System.out.println("Copying in " + copyfs.getName());
 					}
 					// Otherwise reuse existing submodel
 					else{
 						copyfs = (FunctionalSubmodel)extractedmodel.getSubmodel(parentname);
 						
-						System.out.println("REusing " + copyfs.getName());
 						// Add output to functional submodel's computation
 						if(dsasmv.getPublicInterfaceValue().equals("out")) copyfs.getComputation().addOutput(newds);
 						
