@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -38,7 +39,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	private JButton makebtn = new JButton("Add Component");
 	private JButton clearbtn = new JButton("Clear");
 	private JPanel rightpane = new JPanel();
-	protected JLabel msgbox = new JLabel("Select a SemSim Type");
+	protected JTextArea msgbox = new JTextArea(3, 2);
 	
 	private SemSimTypes[] types = new SemSimTypes[]{
 			SemSimTypes.PHYSICAL_PROPERTY,
@@ -78,7 +79,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		typechooser.setAlignmentY(TOP_ALIGNMENT);
 		typechooser.setListData(names);
 		typechooser.addListSelectionListener(this);
-		//Just set the (#%#$^ size!
+		//Just set the #%#$^ size!
 		typechooser.setMinimumSize(dim);
 		typechooser.setMaximumSize(dim);
 		typechooser.setPreferredSize(dim);
@@ -97,15 +98,24 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		makebtn.setEnabled(false);
 		clearbtn.setEnabled(false);
 		
+		
+		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
+		msgbox.setAlignmentX(Box.LEFT_ALIGNMENT);
+		msgbox.setEditable(false);
+		msgbox.setOpaque(false);
+		msgbox.setText("Select a SemSim Type");
+		msgbox.setLineWrap(true);
+		msgbox.setWrapStyleWord(true);
+		msgbox.setBackground(SemGenSettings.lightblue);
+		msgbox.setMaximumSize(dim);
+
 		JPanel typepane = new JPanel();
 		typepane.setLayout(new BoxLayout(typepane, BoxLayout.PAGE_AXIS)); 
 		typepane.setBackground(SemGenSettings.lightblue);
+		typepane.setBorder(BorderFactory.createEtchedBorder());
 		typepane.add(Box.createVerticalStrut(12));
 		typepane.add(typechoosepane);
 		typepane.add(optionpane);
-		optionpane.setAlignmentX(Box.LEFT_ALIGNMENT);
-		msgbox.setAlignmentX(Box.LEFT_ALIGNMENT);
-		typepane.setBorder(BorderFactory.createEtchedBorder());
 		typepane.add(msgbox);
 		typepane.add(Box.createVerticalGlue());
 		typepane.setAlignmentY(Box.TOP_ALIGNMENT);
@@ -177,7 +187,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (arg0.getSource().equals(typechooser)) {
 			showCreator();
-			msgbox.setText("");
+			msgbox.setText(types[typechooser.getSelectedIndex()].getDescription());
 			makebtn.setEnabled(false);
 			clearbtn.setEnabled(true);
 		}

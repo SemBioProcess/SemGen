@@ -115,6 +115,14 @@ public class SemGenSettings extends Observable{
 		return framesize.height;
 	}
 	
+	public int getScreenWidth() {
+		return screensize.width;
+	}
+	
+	public int getScreenHeight() {
+		return screensize.height;
+	}
+	
 	public Point getAppLocation() {
 		return new Point(framepos);
 	}
