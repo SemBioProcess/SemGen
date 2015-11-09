@@ -301,6 +301,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void updateAllListeners() {
 		setChanged();
+		notifyObservers(LibraryEvent.SINGULAR_TERM_CREATED ); 
+		setChanged();
 		notifyObservers(ModelEdit.CWLIST_CHANGED);
 		setChanged();
 		notifyObservers(ModelEdit.SUBMODEL_CHANGED);

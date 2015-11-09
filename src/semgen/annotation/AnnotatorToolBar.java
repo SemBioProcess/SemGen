@@ -187,9 +187,14 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
-			if(!workbench.getModelSourceFile().isEmpty()) {
-				filenamesuggestion = workbench.getModelSourceFile().substring(0, workbench.getModelSourceFile().lastIndexOf("."));
+			
+			if(workbench.getModelSourceFile() != null){
+				
+				if(! workbench.getModelSourceFile().isEmpty()) {
+					filenamesuggestion = workbench.getModelSourceFile().substring(0, workbench.getModelSourceFile().lastIndexOf("."));
+				}
 			}
+			
 			if(workbench.unsavedChanges()){
 				new Encoder(workbench.getSemSimModel(), filenamesuggestion);
 			} 

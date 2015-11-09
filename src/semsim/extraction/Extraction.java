@@ -234,9 +234,9 @@ public class Extraction {
 		// Copy in the data structures
 		for(DataStructure ds : getDataStructuresToExtract().keySet()){
 			
-			// If the data structure has been changed from a dependent variable into an input
 			DataStructure newds = ds.clone();
 						
+			// If the data structure has been changed from a dependent variable into an input
 			if( ! getDataStructuresToExtract().get(ds) && ds.getComputation().getInputs().size()>0){
 				newds.setComputation(new Computation(newds));
 				newds.setStartValue(null);
@@ -286,6 +286,35 @@ public class Extraction {
 		
 		extractSubModels(extractedmodel);
 		
+		// Replace the mappedFrom/mappedTo info with the cloned data structures
+		for(DataStructure ds : extractedmodel.getAssociatedDataStructures()){
+			
+			if(ds.isMapped()){
+				MappableVariable mv = ((MappableVariable)ds);
+				Set<MappableVariable> newmappedfromset = new HashSet<MappableVariable>();
+				Set<MappableVariable> newmappedtoset = new HashSet<MappableVariable>();
+				
+				for(MappableVariable mappedfrommv : mv.getMappedFrom()){
+					String mappedfromname = mappedfrommv.getName();
+					
+					// Only add if the mapped variable is also in the extracted model
+					if(extractedmodel.containsDataStructure(mappedfromname))
+						newmappedfromset.add((MappableVariable) extractedmodel.getAssociatedDataStructure(mappedfromname));
+				}
+				
+				for(MappableVariable mappedtomv : mv.getMappedTo()){
+					String mappedtoname = mappedtomv.getName();
+					
+					// Only add if the mapped variable is also in the extracted model
+					if(extractedmodel.containsDataStructure(mappedtoname))
+						newmappedtoset.add((MappableVariable) extractedmodel.getAssociatedDataStructure(mappedtoname));
+				}
+				
+				mv.setMappedFrom(newmappedfromset);
+				mv.setMappedTo(newmappedtoset);	
+			}
+		}
+				
 		// Copy the physical entity and process info into the model-level entity and process sets
 		Set<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 		Set<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
@@ -319,7 +348,7 @@ public class Extraction {
 	private void extractSubModels(SemSimModel extractedmodel) throws CloneNotSupportedException {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
-			
+						
 			Submodel newsub = sub.isFunctional() ? new FunctionalSubmodel((FunctionalSubmodel)sub) : new Submodel(sub);
 			
 			extractedmodel.addSubmodel(newsub);

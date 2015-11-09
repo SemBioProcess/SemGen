@@ -59,6 +59,7 @@ import semgen.extraction.ExtractorTab;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.annotation.ReferenceTerm;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -349,8 +350,8 @@ public class Clusterer extends JFrame {
 					if(extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent()!=null){
 						PhysicalModelComponent pmc = extractor.semsimmodel.getAssociatedDataStructure(ver).getAssociatedPhysicalModelComponent();
 						String name = null;
-						if(pmc.hasPhysicalDefinitionAnnotation()){
-							name = pmc.getDescription();
+						if(pmc instanceof ReferenceTerm){
+							name = ((ReferenceTerm)pmc).getName();
 						}
 						else{
 							name = pmc.getName();
