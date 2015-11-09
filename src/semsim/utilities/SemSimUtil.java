@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -56,7 +57,7 @@ public class SemSimUtil {
 	 *  own derivative
 	 */
 	public static Boolean replaceCodewordInAllEquations(DataStructure discardedds, DataStructure keptds, 
-			SemSimModel modelfordiscardedds, String oldtext, String replacementtext, double conversionfactor){
+			SemSimModel modelfordiscardedds, String oldtext, String replacementtext, Pair<Double, String> conversionfactor){
 		
 		Boolean selfrefODE = false;
 		Set<DataStructure> dsstocheck = new HashSet<DataStructure>();
@@ -66,14 +67,16 @@ public class SemSimUtil {
 		else dsstocheck.addAll(discardedds.getUsedToCompute());
 
 		for(DataStructure dscheck : dsstocheck){
+			
 			if(discardedds!=keptds && !discardedds.isSolutionDomain()){ // Only reset the inputs if we're merging rather than renaming a DataStructure
 				dscheck.getComputation().getInputs().remove(discardedds);
 				dscheck.getComputation().addInput(keptds);
 			}
 			// If the two codeword names are actually different, perform replacements in equations, start value, and mathml
-			if(!oldtext.equals(replacementtext)){
+			if( ! oldtext.equals(replacementtext)){
 				
 				String neweq = dscheck.getComputation().getComputationalCode();
+				
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
 					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());
@@ -82,33 +85,44 @@ public class SemSimUtil {
 	
 				// Assume that if discarded cdwd is in an IC for another cdwd, the discarded cdwd is set as an input to the other cdwd
 				String newstart = dscheck.getStartValue();
+				
 				if(dscheck.hasStartValue()){
 					newstart = replaceCodewordsInString(dscheck.getStartValue(), replacementtext, oldtext);
 					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).setStartValue(newstart);
 				}
 				
 				// apply conversion factors in mathml
-				String newmathml = null;
 				if(dscheck.getComputation().getMathML()!=null){
-					if(conversionfactor!=1)
-						newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>", 
-							"<apply><times /><ci>" + replacementtext + "</ci><cn>" + conversionfactor + "</cn></apply>");
-					else newmathml = dscheck.getComputation().getMathML().replace("<ci>" + oldtext + "</ci>",
-							"<ci>" + replacementtext + "</ci>");
-					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
-				}
-				
-				// If the data structure that needs to have its computations edited is a derivative,
-				// Find the state variable and edit its computations, too.
-				if(dscheck.getName().contains(":")){
-					String statevarname = dscheck.getName().substring(0, dscheck.getName().indexOf(":"));
-					// If the data structure is used to compute it's own derivative
-					if(statevarname.equals(oldtext)){
-						selfrefODE = true;
+					
+					String oldmathml = dscheck.getComputation().getMathML();
+					String newmathml = oldmathml;
+					String olddsname = oldtext;
+					String newdsname = keptds.getName();
+					
+					if(conversionfactor.getLeft() != 1.0){
+						String operator = conversionfactor.getRight().equals("*") ? "<times />" : "<divide />";
+						
+						newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", 
+							"<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
+							"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>");
 					}
-					else{
-						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setComputationalCode(neweq);
-						modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setMathML(newmathml);
+					else newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", "<ci>" + newdsname + "</ci>");
+					
+					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
+					
+					// If the data structure that needs to have its computations edited is a derivative,
+					// Find the state variable and edit its computations, too.
+					if(dscheck.getName().contains(":")){
+						String statevarname = dscheck.getName().substring(0, dscheck.getName().indexOf(":"));
+						
+						// If the data structure is used to compute it's own derivative
+						if(statevarname.equals(oldtext)){
+							selfrefODE = true;
+						}
+						else{
+							modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setComputationalCode(neweq);
+							modelfordiscardedds.getAssociatedDataStructure(statevarname).getComputation().setMathML(newmathml);
+						}
 					}
 				}
 			}
