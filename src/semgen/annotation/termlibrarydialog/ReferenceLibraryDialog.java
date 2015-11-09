@@ -48,8 +48,8 @@ public class ReferenceLibraryDialog extends JFrame {
 		boolean tootall = settings.getScreenHeight() < prefheight;
 		boolean toowide = settings.getScreenWidth() < prefwidth;
 		
-		int height = tootall ? Math.round(fracheight * settings.getAppHeight()) : prefheight;
-		int width = toowide ? Math.round(fracwidth * settings.getAppWidth()) : prefwidth;
+		int height = tootall ? Math.round(fracheight * settings.getScreenHeight()) : prefheight;
+		int width = toowide ? Math.round(fracwidth * settings.getScreenWidth()) : prefwidth;
 		
 		setPreferredSize(new Dimension(width, height));
 		validate();
