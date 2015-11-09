@@ -101,10 +101,23 @@ public class SemGenSettings extends Observable{
 		Dimension dialogradius = new Dimension(dialogsize.width/2, dialogsize.height/2);
 
 		int yloc = appcenter.y-dialogradius.height;
-		if (yloc - 100 >= 0) {
+		if (yloc < 0) {
+			yloc = 0;
+		}
+		else if (yloc - 100 >= 0) {
 			yloc -= 100;
 		}
-		return new Point(appcenter.x-dialogradius.width, yloc);
+		if ( yloc+dialogsize.height > getScreenHeight()) {
+			yloc = getScreenHeight() - dialogsize.height;
+		}
+		int xloc = appcenter.x-dialogradius.width;
+		if (xloc < 0 ) {
+			xloc = 0;
+		}
+		else if (appcenter.x+dialogsize.width > getScreenWidth() ) {
+			xloc = getScreenWidth() - dialogsize.width;
+		}
+		return new Point(xloc, yloc);
 	}
 	
 	public int getAppWidth() {
