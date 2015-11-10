@@ -64,6 +64,7 @@ public class Merger {
 		
 		// Step through resolution points and replace/rewire codewords as needed
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
+			
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				if (newname==null) newname=dsp.getLeft().getName();
@@ -282,10 +283,10 @@ public class Merger {
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		
 		// if the two terms have different names, or a conversion factor is required
-		if(!discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
+		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
 			String replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
 			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
-					discardedds.getName(), replacementtext, conversionfactor.getLeft());
+					discardedds.getName(), replacementtext, conversionfactor);
 		}
 		// What to do about sol doms that have different units?
 		

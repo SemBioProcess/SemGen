@@ -84,13 +84,13 @@ public class MergerTask extends SemGenTask {
 			}
 			// Use the new name in all the equations
 			SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getAssociatedDataStructure(newdsname), ssm1clone.getAssociatedDataStructure(newdsname),
-					ssm1clone, dsname, newdsname, 1);
+					ssm1clone, dsname, newdsname, Pair.of(1.0, "*"));
 			
 			// IS THERE AN ISSUE WITH SELF_REF_ODEs HERE?
 			if(derivreplace){
 				SemSimUtil.replaceCodewordInAllEquations(ssm1clone.getAssociatedDataStructure(derivname.replace(dsname, newdsname)),
 						ssm1clone.getAssociatedDataStructure(derivname.replace(dsname, newdsname)),
-						ssm1clone, derivname, derivname.replace(dsname, newdsname), 1);
+						ssm1clone, derivname, derivname.replace(dsname, newdsname), Pair.of(1.0, "*"));
 			}
 		}
 		return oldnewdsnamemap;
