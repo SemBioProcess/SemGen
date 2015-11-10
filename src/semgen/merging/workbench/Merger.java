@@ -109,7 +109,7 @@ public class Merger {
 			for(DataStructure dstoprune : runningsettoprune){
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
 				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
-				
+								
 				// Remove equation in MathML block, if inputds is a MappableVariable
 				if(dstoprune instanceof MappableVariable){
 					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
@@ -201,9 +201,9 @@ public class Merger {
 		}
 		
 		// Copy in the submodels
-				for(Submodel subfrom2 : ssm2clone.getSubmodels()){
-					mergedmodel.addSubmodel(subfrom2);
-				}
+		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
+			mergedmodel.addSubmodel(subfrom2);
+		}
 		
 		// Prune empty submodels
 		if(prune) pruneSubmodels(mergedmodel);

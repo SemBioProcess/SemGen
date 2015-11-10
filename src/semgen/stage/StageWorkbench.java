@@ -118,7 +118,7 @@ public class StageWorkbench extends Workbench {
 		
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
-				File file = new File("examples/AnnotatedModels/" + modelName + ".owl");
+				File file = new File(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
 				LoadSemSimModel loader = new LoadSemSimModel(file, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();

@@ -99,7 +99,9 @@ public abstract class AnnotatorListPane<T extends AnnotationObjectButton, D exte
 	
 	public void keyPressed(KeyEvent e) {
 		int id = e.getKeyCode();
+		if (!btnarray.contains(focusbutton)) return;
 		int index = btnarray.indexOf(focusbutton);
+
 		//The scrollpane scrolls scrolls one component short of where it should when the down key is pressed
 		int scrollindex = index; 
 		// Up arrow key

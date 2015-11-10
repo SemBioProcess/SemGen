@@ -28,7 +28,7 @@ public class TermInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private SemSimTermLibrary library;
 	private Integer selection;
-	private InfoPanel termpane = new InfoPanel("Affiliated Composites");
+	private InfoPanel termpane = new InfoPanel("Affiliated Entities and Processes");
 	private InfoPanel cwpane = new InfoPanel("Affiliated Codewords");
 	private JLabel name = new JLabel("No Selection");
 	private JEditorPane description = new JEditorPane();

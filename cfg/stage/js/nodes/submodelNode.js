@@ -35,4 +35,5 @@ SubmodelNode.prototype.createVisualElement = function (element, graph) {
 		
 		d3.event.stopPropagation();
 	});
+
 }

@@ -62,10 +62,8 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 			if (arg==SettingChange.toggleproptype) {
 				toggleMarkers();
 			}
-			if	(arg==ModelEdit.CODEWORD_CHANGED) {
-				refreshChangedButtons();
-			}
-			if	(arg==ModelEdit.CWLIST_CHANGED || arg==SettingChange.cwsort || arg==SettingChange.SHOWIMPORTS) {
+			if	(arg==ModelEdit.CODEWORD_CHANGED || arg==ModelEdit.CWLIST_CHANGED || arg==SettingChange.cwsort || 
+					arg==SettingChange.SHOWIMPORTS) {
 				update();
 			}
 	}

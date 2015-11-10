@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import semgen.SemGenSettings;
@@ -21,6 +22,8 @@ public class ReferenceLibraryDialog extends JFrame {
 	ImportAnnotationsPanel importpane;
 	AddCreateTermPanel createaddpane;
 	SemGenSettings settings;
+	int prefwidth = 1100;
+	int prefheight = 850;
 	
 	public ReferenceLibraryDialog(SemGenSettings sets, AnnotatorWorkbench wb) {
 		super("Annotation Reference Library");
@@ -32,16 +35,28 @@ public class ReferenceLibraryDialog extends JFrame {
 				workbench.sendTermLibraryEvent(LibraryRequest.CLOSE_LIBRARY);
 			}
 		});
-		setResizable(false);
+		//setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		makeTabs();
-		setContentPane(mainpane);
-		setPreferredSize(new Dimension(1000, 800));
+
+		setContentPane(new JScrollPane(mainpane));
+		
+		float fracheight = 0.85F;
+		float fracwidth = 0.8F;
+		
+		boolean tootall = settings.getScreenHeight() < prefheight;
+		boolean toowide = settings.getScreenWidth() < prefwidth;
+		
+		int height = tootall ? Math.round(fracheight * settings.getScreenHeight()) : prefheight;
+		int width = toowide ? Math.round(fracwidth * settings.getScreenWidth()) : prefwidth;
+		
+		setPreferredSize(new Dimension(width, height));
 		validate();
 		pack();
 		
 		setLocation(settings.centerDialogOverApplication(getSize()));
+		
 		setVisible(true);
 	}
 	

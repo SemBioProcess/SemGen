@@ -6,8 +6,8 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 		return;
 
 	this.graph = graph;
-	this.id = name;
 	this.name = name;
+	this.id = name;
 	this.displayName = name;
 	this.r = r;
 	this.color = color;

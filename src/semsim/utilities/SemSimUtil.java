@@ -347,20 +347,20 @@ public class SemSimUtil {
 	 * @param SemSim model
 	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
 	 */
-	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel) {
+	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel, String cfgpath) {
 		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
 		HashMap<String, Set<UnitFactor>> fundamentalBaseUnits = new HashMap<String, Set<UnitFactor>>();
 		
 		for(UnitOfMeasurement uom : units) {
-			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0);
+			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0, cfgpath);
 			
 			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
 		}
 		return fundamentalBaseUnits;
 	}
 	// Used in tandem with getFundamentalBaseUnits
-	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp) {
-		SemSimLibrary semsimlib = new SemSimLibrary();
+	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, String cfgpath) {
+		SemSimLibrary semsimlib = new SemSimLibrary(cfgpath);
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
 		for(UnitFactor factor : unitFactors) {
@@ -372,7 +372,7 @@ public class SemSimUtil {
 				newUnitFactors.add(baseUnitFactor);
 			}
 			else {
-				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp));
+				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp, cfgpath));
 			}
 		}
 		return newUnitFactors;

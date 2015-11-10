@@ -259,24 +259,31 @@ public class SemSimCopy {
 	}
 	
 	private void remapSubmodels() {
+		
+		// For each submodel copy, associate it with data structure copies
 		for (Submodel newsm : smmap.values()) {
 			HashSet<DataStructure> dsset = new HashSet<DataStructure>();
 			for (DataStructure ds : newsm.getAssociatedDataStructures()) {
 				dsset.add(dsmap.get(ds));
 			}
+			
+			// Associate it with the submodel copies
 			HashSet<Submodel> smset = new HashSet<Submodel>();
 			for (Submodel assocsm : newsm.getSubmodels()) {
 				smset.add(smmap.get(assocsm));
 			}
 			newsm.setAssociatedDataStructures(dsset);
 			newsm.setSubmodels(smset);
+			
+			// If functional, establish its model subsumption map using the 
+			// submodel copies
 			if (newsm.isFunctional()) {
 				FunctionalSubmodel fsm = (FunctionalSubmodel)newsm;
 				Map<String, Set<FunctionalSubmodel>> oldrelsmmap = fsm.getRelationshipSubmodelMap();
 				Map<String, Set<FunctionalSubmodel>> relsmmap = new HashMap<String, Set<FunctionalSubmodel>>();
 				for (String rel : oldrelsmmap.keySet()) {
 					Set<FunctionalSubmodel> rsmset = new HashSet<FunctionalSubmodel>();
-					for (FunctionalSubmodel rfsm : rsmset) {
+					for (FunctionalSubmodel rfsm : oldrelsmmap.get(rel)) {
 						rsmset.add((FunctionalSubmodel) smmap.get(rfsm));
 					}
 					relsmmap.put(new String(rel), rsmset);

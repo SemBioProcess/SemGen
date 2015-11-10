@@ -422,22 +422,22 @@ public class CellMLreader extends ModelReader {
 				MappableVariable outputvar = null;
 				
 				if(var1.getPublicInterfaceValue()!=null && var2.getPublicInterfaceValue()!=null){
-					if(var1.getPublicInterfaceValue().equals("out") && var2.getPublicInterfaceValue().equals("in")){
+					if( ! var1.getPublicInterfaceValue().equals("in") && var2.getPublicInterfaceValue().equals("in")){
 						inputvar = var1;
 						outputvar = var2;
 					}
-					else if(var1.getPublicInterfaceValue().equals("in") && var2.getPublicInterfaceValue().equals("out")){
+					else if(var1.getPublicInterfaceValue().equals("in") && ! var2.getPublicInterfaceValue().equals("in")){
 						inputvar = var2;
 						outputvar = var1;
 					}
 				}
 				
 				if((inputvar == null || outputvar == null) && encapsulatedsubmodel!=null){
-					if(encapsulatedvariable.getPublicInterfaceValue().equals("out") && encapsulatingvariable.getPrivateInterfaceValue().equals("in")){
+					if( ! encapsulatedvariable.getPublicInterfaceValue().equals("in") && encapsulatingvariable.getPrivateInterfaceValue().equals("in")){
 						inputvar = encapsulatedvariable;
 						outputvar = encapsulatingvariable;
 					}
-					else if(encapsulatedvariable.getPublicInterfaceValue().equals("in") && encapsulatingvariable.getPrivateInterfaceValue().equals("out")){
+					else if(encapsulatedvariable.getPublicInterfaceValue().equals("in") && ! encapsulatingvariable.getPrivateInterfaceValue().equals("in")){
 						inputvar = encapsulatingvariable;
 						outputvar = encapsulatedvariable;
 					}
