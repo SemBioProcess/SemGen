@@ -1,12 +1,12 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, charge) {
+function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	if(!graph)
 		return;
 
 	this.graph = graph;
-	this.id = id;
+	this.id = name;
 	this.name = name;
 	this.displayName = name;
 	this.r = r;
@@ -23,6 +23,11 @@ function Node(graph, id, name, parent, inputs, r, color, textSize, nodeType, cha
 	this.textlocx = 0;
 	this.defaultcharge = charge;
 
+	if(this.parent) {
+		// We need to keep the ids of each node unique by prefixing
+		// it with its parent node's id
+		this.id = this.parent.id + this.id;
+	}
 }
 
 Node.prototype.addClassName = function (className) {
@@ -92,21 +97,21 @@ Node.prototype.getLinks = function () {
 		var linkLabel = inputData.label;
 
 		// If the linked node is in a different parent, mark it as external
+		console.log("inputData.Id: " + inputData.parentModelId + "    " + "this.parent.id: " + this.parent.id + "this.id: " + this.id);
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
 			var parent = this.graph.findNode(inputData.parentModelId);
-			
-			if(!parent) {
+			if (!parent) {
 				console.log("External link without a parent!");
 				continue;
 			}
-			
+
 			// If the parent can link add a link to it
-			if(parent.canLink())
+			if (parent.canLink())
 				inputNodeId = parent.id;
 			// Otherwise, add a link to its child
 			else
-				inputNodeId = inputData.sourceId;
+				inputNodeId = parent.id + inputData.name;
 		}
 
 		else if(linkLabel !== undefined) {
@@ -123,6 +128,7 @@ Node.prototype.getLinks = function () {
 		}
 		
 		// Get the input node
+		console.log(inputNodeId);
 		var inputNode = this.graph.findNode(inputNodeId);
 		
 		// Get the sink node

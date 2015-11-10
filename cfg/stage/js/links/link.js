@@ -34,7 +34,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 
 	this.rootElement.append("svg:path")
 			.attr("id", this.source.id + "-" + this.target.id)
-			.attr("class", "link ");
+			.attr("class", "link " + this.type);
 
 	// Create the text elements
 	this.createTextElement("shadow");

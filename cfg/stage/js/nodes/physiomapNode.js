@@ -13,7 +13,7 @@ function PhysioMapNode (graph, data, parentNode) {
 	if(this.group == "undefined")
 		throw "Invalid PhysioMap node type: " + data.nodeType;
 
-	Node.prototype.constructor.call(this, graph, data.id, data.name, parentNode, data.inputs, 5, physiomapTypeToColor[data.nodeType], 14, data.nodeType, -300);
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, physiomapTypeToColor[data.nodeType], 14, data.nodeType, -300);
 	
 	this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
 	this.displayName = limitWords(this.displayName, 5);
