@@ -194,6 +194,10 @@ public class SemGen extends JFrame implements Observer{
 		
 		switch (OS) { 
 		case WINDOWS :
+			if (!new File(cfgreadpath).canRead()) {
+				cfgreadpath = System.getProperty("user.home") + "/AppData/local/SemGen/cfg/";
+				cfgwritepath = cfgreadpath;
+			}
 			libsbmlfile = new File(cfgreadpath + "sbmlj.dll"); 
 			break;
 		
