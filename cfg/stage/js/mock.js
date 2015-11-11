@@ -246,13 +246,33 @@ $(window).load(function() {
 							nodeType: "Entity",
 					    	inputs: [
 					    	         {
-					    	        	 sourceId: modelName + "Entity 2",
+					    	        	 sourceId: modelName + "Process 2",
 										 sinkId: modelName + "Entity 1",
 					    	        	 parentModelId: modelName,
-					    	        	 label: "Process A",
+					    	        	 label: "",
 					    	         },
 					    	],
                         },
+						{
+							id: modelName + "Process 1",
+							parentModelId: modelName,
+							name: "Process 1",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 2",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
+									sourceId: modelName + "Mediator C",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
                         {
 					    	id: modelName + "Entity 2",
 					    	parentModelId: modelName,
@@ -263,18 +283,30 @@ $(window).load(function() {
 					    	        	 sourceId: modelName + "Entity 3",
 										 sinkId: modelName + "Entity 2",
 					    	        	 parentModelId: modelName,
-					    	        	 label: "Process B",
-										 mediators: [modelName + "Mediator B", modelName + "Mediator C"]
+					    	        	 label: "",
 					    	         },
 									 {
 					    	        	 sourceId: modelName + "Entity 1",
 										 sinkId: modelName + "Entity 2",
 					    	        	 parentModelId: modelName,
-					    	        	 label: "Process D",
-										 mediators: [modelName + "Mediator C"]
+					    	        	 label: "",
 					    	         },
 					    	],
                         },
+						{
+							id: modelName + "Process 2",
+							parentModelId: modelName,
+							name: "Process 2",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 3",
+									sinkId: modelName + "Process 2",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
                         {
 					    	id: modelName + "Entity 3",
 					    	parentModelId: modelName,
@@ -282,19 +314,39 @@ $(window).load(function() {
 							nodeType: "Entity",
 							inputs: [
 									{
-										 sourceId: modelName + "Entity 1",
+										 sourceId: modelName + "Process 3",
 										 sinkId: modelName + "Entity 3",
 										 parentModelId: modelName,
-										 label: "Process C",
+										 label: "",
 									},
 								{
-									sourceId: modelName + "Entity 1",
+									sourceId: modelName + "Process 1",
 									sinkId: modelName + "Entity 3",
 									parentModelId: modelName,
-									label: "Process E",
+									label: "",
 								}
 					    	],
                         },
+						{
+							id: modelName + "Process 3",
+							parentModelId: modelName,
+							name: "Process 3",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 1",
+									sinkId: modelName + "Process 3",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
+									sourceId: modelName + "Mediator B",
+									sinkId: modelName + "Process 3",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
 						{
 							id: modelName + "Mediator B",
 							parentModelId: modelName,
