@@ -37,9 +37,7 @@ public class DependencyNode extends Node {
 				
 				// Don't add self pointing links
 				if(!this.name.equals(inputName))
-					this.inputs.add(new Link(
-							Node.buildId(inputName, this.parentModelId),				// Name of the variable
-							this.parentModelId));	// These variables share the same parent model
+					this.inputs.add(new Link(inputName, this.parentModelId));
 			}
 		}
 	}

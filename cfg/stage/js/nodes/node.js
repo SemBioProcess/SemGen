@@ -97,7 +97,6 @@ Node.prototype.getLinks = function () {
 		var linkLabel = inputData.label;
 
 		// If the linked node is in a different parent, mark it as external
-		console.log("inputData.Id: " + inputData.parentModelId + "    " + "this.parent.id: " + this.parent.id + "this.id: " + this.id);
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
 			var parent = this.graph.findNode(inputData.parentModelId);
@@ -110,8 +109,10 @@ Node.prototype.getLinks = function () {
 			if (parent.canLink())
 				inputNodeId = parent.id;
 			// Otherwise, add a link to its child
-			else
-				inputNodeId = parent.id + inputData.name;
+			else {
+				type = "internal";
+				inputNodeId = this.parent.id + inputData.name;
+			}
 		}
 
 		else if(linkLabel !== undefined) {
@@ -128,11 +129,10 @@ Node.prototype.getLinks = function () {
 		}
 		
 		// Get the input node
-		console.log(inputNodeId);
 		var inputNode = this.graph.findNode(inputNodeId);
 		
 		// Get the sink node
-		var outputNode =  outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
+		var outputNode = outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
 		
 		// Get the mediator node
 		

@@ -22,12 +22,11 @@ public class SubModelDependencyNode extends DependencyNode {
 				String variableName = nameParts[VariableNamePart];
 
 				String submodelNameId = Node.buildId(submodelName, parentNode.parentModelId);
-				String variableNameId = Node.buildId(variableName, submodelNameId);
 
 				// Mapped variables are treat special in the JS code.
 				// We need to know the parent model and submodel name
 				// so we can fetch the proper "mapped from" node
-				this.inputs.add(new Link(variableNameId, submodelNameId));
+				this.inputs.add(new Link(variableName, submodelNameId));
 			}
 		}
 	}

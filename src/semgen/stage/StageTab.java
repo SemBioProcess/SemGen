@@ -1,20 +1,18 @@
 package semgen.stage;
 
-import java.awt.BorderLayout;
-import java.io.IOException;
-
-import javax.naming.InvalidNameException;
-import javax.swing.JOptionPane;
-
 import com.teamdev.jxbrowser.chromium.DialogParams;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
-
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.SemGenCommunicatingWebBrowser;
+
+import javax.naming.InvalidNameException;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 
 public class StageTab extends SemGenTab {
 	private static final long serialVersionUID = 1L;
@@ -35,11 +33,12 @@ public class StageTab extends SemGenTab {
 		
 		try {
 			
-			// BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
+//			BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
 
-			// String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+//			String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
+//			System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 			final BrowserView browserView = new BrowserView(browser);
 			
 			// Show JS alerts in java dialogs
