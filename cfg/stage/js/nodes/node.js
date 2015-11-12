@@ -92,7 +92,6 @@ Node.prototype.getLinks = function () {
 		var inputData = this.inputs[i];
 		var inputNodeId;
 		var outputNodeId;
-		var mediatorNodeIds;
 		var type;
 		var linkLabel = inputData.label;
 
@@ -119,7 +118,6 @@ Node.prototype.getLinks = function () {
 			type = "physiomap";
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
-			mediatorNodeIds = inputData.mediators;
 		}
 
 		else {
@@ -133,18 +131,6 @@ Node.prototype.getLinks = function () {
 		
 		// Get the sink node
 		var outputNode = outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
-		
-		// Get the mediator node
-		
-		var mediatorNodes = [];
-		if(mediatorNodeIds === undefined) {
-			mediatorNodes = null;
-		}
-		else {
-			for(var j = 0; j < mediatorNodeIds.length; j++) {
-				mediatorNodes.push(this.graph.findNode(mediatorNodeIds[j]));
-			}
-		}
 		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
@@ -164,20 +150,12 @@ Node.prototype.getLinks = function () {
 		}
 
 		if(type == "external") length = 300;
-		else if(type == "physiomap") length = 100;
+		else if(type == "physiomap") length = 200;
 		else length = 60;
 
 		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
 		links.push(newLink);
 
-		// Add mediator links for each mediator node
-		if(mediatorNodes !== null) {
-			for (var k = 0; k < mediatorNodes.length; k++) {
-				var mediatorNode = mediatorNodes[k];
-				var newMediatorLink = new MediatorLink(this.graph, this.parent, mediatorNode, newLink, 10, "internal");
-				links.push(newMediatorLink);
-			}
-		}
 	}
 
 	

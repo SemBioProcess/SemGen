@@ -266,6 +266,12 @@ $(window).load(function() {
 									label: "",
 								},
 								{
+									sourceId: modelName + "Entity 3",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
 									sourceId: modelName + "Mediator C",
 									sinkId: modelName + "Process 1",
 									parentModelId: modelName,
@@ -279,14 +285,8 @@ $(window).load(function() {
 					    	name: "Entity 2",
 							nodeType: "Entity",
 							inputs: [
-					    	         {
-					    	        	 sourceId: modelName + "Entity 3",
-										 sinkId: modelName + "Entity 2",
-					    	        	 parentModelId: modelName,
-					    	        	 label: "",
-					    	         },
 									 {
-					    	        	 sourceId: modelName + "Entity 1",
+					    	        	 sourceId: modelName + "Process 1",
 										 sinkId: modelName + "Entity 2",
 					    	        	 parentModelId: modelName,
 					    	        	 label: "",

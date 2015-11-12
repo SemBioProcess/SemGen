@@ -1,15 +1,15 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SemSimModelSerializer {
 
@@ -99,7 +99,6 @@ public class SemSimModelSerializer {
 	private static void updateNodeMapForProcess(String parentModelId, String processName, Set<PhysicalEntity> sources, Set<PhysicalEntity> sinks, Set<PhysicalEntity> mediators, HashMap<String, PhysioMapNode> nodeMap) {
 		for(PhysicalEntity source : sources) {
 			for(PhysicalEntity sink : sinks) {
-				ArrayList<String> mediatorsNames = new ArrayList<String>();
 
 				// If the source or sink is not specified, set it to "Null node"
 				String sinkName = sink.getName();
