@@ -167,27 +167,26 @@ function Graph() {
 		bruteForceRefresh.call(this);
 
 		// Add the links
-		path = vis.selectAll("svg > g > path")
-			.data(links, function(d) { return d.source.id + "-" + d.target.id; });
-		
-		path.enter().append("svg:path")
-			.attr("id",function(d){return d.source.id + "-" + d.target.id;})
-			.attr("class", function(d) { return "link " + d.type; });
-	    
+		path = vis.selectAll("g.link")
+			.data(links, function(d) { return d.id; });
+
+		path.enter().append("g")
+        	.each(function (d) { d.createVisualElement(this, graph); });
+
 		path.exit().remove();
 		
 		// Build the nodes
 	    node = vis.selectAll("g.node")
 	        .data(nodes, function(d) { return d.id; });
 
-	    var nodeEnter = node.enter().append("g")
+	    node.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
 	    
 	    node.exit().remove();
 	    
 	    // Define the tick function
 	    this.force.on("tick", this.tick);
-	    
+		
 	    // Restart the force layout.
 	    this.force
 	    	.charge(function (d) { return d.charge; })
@@ -206,24 +205,11 @@ function Graph() {
 	};
 	
 	this.tick = function () {
-    	// Display the links
-    	path.attr("d", function(d) {
-    	    var dx = d.target.x - d.source.x,
-    	        dy = d.target.y - d.source.y,
-    	        dr = 0,										// Lines have no arc
-    	        theta = Math.atan2(dy, dx) + Math.PI * 2,
-    	        d90 = Math.PI / 2,
-    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
-    	        dtys = d.target.y - d.target.r * Math.sin(theta),
-    	        arrowHeadWidth = 5;
-    	    return "M" + d.source.x + "," + d.source.y +
-    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
-    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
-    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-    	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-    	    		"z";
-    	  });
-    	  
+		// Execute the tick handler for each link
+		path.each(function (d) {
+			d.tickHandler(this, graph);
+		})
+		
     	// Execute the tick handler for each node
     	node.each(function (d) {
     		d.tickHandler(this, graph);
@@ -238,11 +224,17 @@ function Graph() {
 	    }
 	};
 	
-	// Highlight a node, its links, and the nodes that its linked to
+	// Highlight a node, its links, link labels, and the nodes that its linked to
 	this.highlightMode = function (highlightNode) {
 		// Remove any existing dim assignments
-		vis.selectAll(".node, path.link").each(function (d) {
+		vis.selectAll(".node, .link").each(function (d) {
 			d3.select(this).classed("dim", false);
+
+			// Replace label with display name
+			d3.select(this).selectAll("text")
+				.text(function(d) {
+					return d.displayName;
+				})
 		});
 		
 		// If no node was passed in there's nothing to dim
@@ -250,13 +242,20 @@ function Graph() {
 			return;
 		
 		// Get all the nodes that need to be highlighted
-		// and dim all the links that need to be dimmed
+		// and dim all the links and labels that need to be dimmed
 		var nodesToHighlight = {};
 		nodesToHighlight[highlightNode.index] = 1;
-		vis.selectAll("path.link").each(function (d) {
+		vis.selectAll(".link").each(function (d) {
 			if(d.source == highlightNode || d.target == highlightNode) {
 				nodesToHighlight[d.source.index] = 1;
 				nodesToHighlight[d.target.index] = 1;
+
+				// Display full name for highlighted links
+				d3.select(this).selectAll("text")
+					.text(function(d) {
+						return d.name;
+					})
+
 				return;
 			}
 			
@@ -268,6 +267,12 @@ function Graph() {
 		vis.selectAll(".node").each(function (d) {
 			if(!nodesToHighlight[d.index])
 				d3.select(this).classed("dim", true);
+			else
+				// Display full name for highlighted nodes
+				d3.select(this).selectAll("text")
+					.text(function(d) {
+						return d.name;
+					})
 		});
 	};
 	

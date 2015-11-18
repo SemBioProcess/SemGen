@@ -1469,8 +1469,7 @@ Current through the sodium/potassium pump; pandit_clark_giles_demir_2001_endocar
 Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Network sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Calcium concentration in the network regions of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
 Charge flow rate of Background potassium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the background potassium channel
-; pandit_clark_giles_demir_2001_endocardial
+Current through the background potassium channel; pandit_clark_giles_demir_2001_endocardial
 Electrical potential of Plasma membrane in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Voltage potential across the plasma membrane of the cardiomyocyte; pandit_clark_giles_demir_2001_endocardial
 Fluid volume of Portion of cytosol in "Diadic space" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
@@ -1480,8 +1479,7 @@ Current through the steady-state outward potassium channel; pandit_clark_giles_d
 Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Calcium concentration of fluid inside the junctional region of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
 Charge flow rate of Background potassium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the background potassium channel
-; pandit_clark_giles_demir_2001_endocardial
+Current through the background potassium channel; pandit_clark_giles_demir_2001_endocardial
 Temperature of Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Temperature of the cardiac myocyte and its surrounding environment; pandit_clark_giles_demir_2001_endocardial
 Electrical potential of Plasma membrane in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial

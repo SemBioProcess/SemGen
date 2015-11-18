@@ -11,27 +11,38 @@ $(window).load(function() {
 			addModel: function() {
 				mockReceiver.addModel("Test model " + modelNum++);
 			},
-			
+
 			taskClicked: function (modelName, task) {
 				if(task == "dependencies") {
 					var data = [
 					    {
+					    	id: modelName + "A",
+					    	parentModelId: modelName,
 					    	name: "A",
-					    	inputs: ["B"],
+					    	inputs: [ {sourceId: modelName + "B", parentModelId: modelName} ],
 					    	nodeType: "state",
 					    },
 					    {
+					    	id: modelName + "B",
+					    	parentModelId: modelName,
 					    	name: "B",
 					    	nodeType: "Rate",
 					    },
 					    {
+					    	id: modelName + "C",
+					    	parentModelId: modelName,
 					    	name: "C",
-					    	inputs: ["A"],
+					    	inputs: [ {sourceId: modelName + "A", parentModelId: modelName} ],
 					    	nodeType: "constitutive",
 					    },
 					    {
+					    	id: modelName + "D",
+					    	parentModelId: modelName,
 					    	name: "D",
-					    	inputs: ["A", "B", "C"],
+					    	inputs: [ 
+					    	          {sourceId: modelName + "A", parentModelId: modelName},
+					    	          {sourceId: modelName + "B", parentModelId: modelName},
+					    	          {sourceId: modelName + "C", parentModelId: modelName} ],
 					    	nodeType: "State",
 					    },
 					];
@@ -40,80 +51,318 @@ $(window).load(function() {
 				else if (task == "submodels") {
 					var data = [
 						{
+							id: modelName + "Submodel_1",
+							parentModelId: modelName,
 							name: "Submodel_1",
 							dependencies: [
 							    {
+							    	id: modelName + "Submodel_1" + "A",
+							    	parentModelId: modelName + "Submodel_1",
 							    	name: "A",
-							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_2"] }],
+							    	inputs: [
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_1" + "B",
+							    	        	 parentModelId: modelName + "Submodel_1"
+							    	         },
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_2" + "A",
+							    	        	 parentModelId: modelName + "Submodel_2"
+							    	         },
+							    	],
 							    	nodeType: "state",
 							    },
 							    {
+							    	id: modelName + "Submodel_1" + "B",
+							    	parentModelId: modelName + "Submodel_1",
 							    	name: "B",
 							    	nodeType: "Rate",
 							    },
 							    {
+							    	id: modelName + "Submodel_1" + "C",
+							    	parentModelId: modelName + "Submodel_1",
 							    	name: "C",
-							    	inputs: ["A"],
+							    	inputs: [
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_1" + "A",
+							    	        	 parentModelId: modelName + "Submodel_1"
+							    	         },
+							    	],
 							    	nodeType: "constitutive",
 							    },
 							    {
+							    	id: modelName + "Submodel_1" + "D",
+							    	parentModelId: modelName + "Submodel_1",
 							    	name: "D",
-							    	inputs: ["A", "B", "C"],
+							    	inputs: [
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_1" + "A",
+							    	        	 parentModelId: modelName + "Submodel_1"
+							    	         },
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_1" + "B",
+							    	        	 parentModelId: modelName + "Submodel_1"
+							    	         },
+							    	         {
+							    	        	 sourceId: modelName + "Submodel_1" + "C",
+							    	        	 parentModelId: modelName + "Submodel_1"
+							    	         },
+							    	],
 							    	nodeType: "State",
 							    },
 							],
 						},
 						{
+							id: modelName + "Submodel_2",
+							parentModelId: modelName,
 							name: "Submodel_2",
 							dependencies: [
-							    {
-							    	name: "A",
-							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_3"] }],
-							    	nodeType: "state",
-							    },
-							    {
-							    	name: "B",
-							    	nodeType: "Rate",
-							    },
-							    {
-							    	name: "C",
-							    	inputs: ["A"],
-							    	nodeType: "constitutive",
-							    },
-							    {
-							    	name: "D",
-							    	inputs: ["A", "B", "C"],
-							    	nodeType: "State",
-							    },
-							],
+										    {
+										    	id: modelName + "Submodel_2" + "A",
+										    	parentModelId: modelName + "Submodel_2",
+										    	name: "A",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_2" + "B",
+										    	        	 parentModelId: modelName + "Submodel_2"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "A",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	],
+										    	nodeType: "state",
+										    },
+										    {
+										    	id: modelName + "Submodel_2" + "B",
+										    	parentModelId: modelName + "Submodel_2",
+										    	name: "B",
+										    	nodeType: "Rate",
+										    },
+										    {
+										    	id: modelName + "Submodel_2" + "C",
+										    	parentModelId: modelName + "Submodel_2",
+										    	name: "C",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_2" + "A",
+										    	        	 parentModelId: modelName + "Submodel_2"
+										    	         },
+										    	],
+										    	nodeType: "constitutive",
+										    },
+										    {
+										    	id: modelName + "Submodel_2" + "D",
+										    	parentModelId: modelName + "Submodel_2",
+										    	name: "D",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_2" + "A",
+										    	        	 parentModelId: modelName + "Submodel_2"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_2" + "B",
+										    	        	 parentModelId: modelName + "Submodel_2"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_2" + "C",
+										    	        	 parentModelId: modelName + "Submodel_2"
+										    	         },
+										    	],
+										    	nodeType: "State",
+										    },
+										],
 						},
 						{
+							id: modelName + "Submodel_3",
+							parentModelId: modelName,
 							name: "Submodel_3",
 							dependencies: [
-							    {
-							    	name: "A",
-							    	inputs: ["B", { name: "A", parents: [modelName, "Submodel_1"] }],
-							    	nodeType: "state",
-							    },
-							    {
-							    	name: "B",
-							    	nodeType: "Rate",
-							    },
-							    {
-							    	name: "C",
-							    	inputs: ["A"],
-							    	nodeType: "constitutive",
-							    },
-							    {
-							    	name: "D",
-							    	inputs: ["A", "B", "C"],
-							    	nodeType: "State",
-							    },
-							],
+										    {
+										    	id: modelName + "Submodel_3" + "A",
+										    	parentModelId: modelName + "Submodel_3",
+										    	name: "A",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "B",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_1" + "A",
+										    	        	 parentModelId: modelName + "Submodel_1"
+										    	         },
+										    	],
+										    	nodeType: "state",
+										    },
+										    {
+										    	id: modelName + "Submodel_3" + "B",
+										    	parentModelId: modelName + "Submodel_3",
+										    	name: "B",
+										    	nodeType: "Rate",
+										    },
+										    {
+										    	id: modelName + "Submodel_3" + "C",
+										    	parentModelId: modelName + "Submodel_3",
+										    	name: "C",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "A",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	],
+										    	nodeType: "constitutive",
+										    },
+										    {
+										    	id: modelName + "Submodel_3" + "D",
+										    	parentModelId: modelName + "Submodel_3",
+										    	name: "D",
+										    	inputs: [
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "A",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "B",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	         {
+										    	        	 sourceId: modelName + "Submodel_3" + "C",
+										    	        	 parentModelId: modelName + "Submodel_3"
+										    	         },
+										    	],
+										    	nodeType: "State",
+										    },
+										],
 						},
 					];
 					
 					mockReceiver.showSubmodelNetwork(modelName, data);
+				}
+				else if(task == "physiomap") {
+					var data = [
+						{
+					    	id: modelName + "Entity 1",
+					    	parentModelId: modelName,
+					    	name: "Entity 1",
+							nodeType: "Entity",
+					    	inputs: [
+					    	         {
+					    	        	 sourceId: modelName + "Process 2",
+										 sinkId: modelName + "Entity 1",
+					    	        	 parentModelId: modelName,
+					    	        	 label: "",
+					    	         },
+					    	],
+                        },
+						{
+							id: modelName + "Process 1",
+							parentModelId: modelName,
+							name: "Process 1",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 2",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
+									sourceId: modelName + "Entity 3",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
+									sourceId: modelName + "Mediator C",
+									sinkId: modelName + "Process 1",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
+                        {
+					    	id: modelName + "Entity 2",
+					    	parentModelId: modelName,
+					    	name: "Entity 2",
+							nodeType: "Entity",
+							inputs: [
+									 {
+					    	        	 sourceId: modelName + "Process 1",
+										 sinkId: modelName + "Entity 2",
+					    	        	 parentModelId: modelName,
+					    	        	 label: "",
+					    	         },
+					    	],
+                        },
+						{
+							id: modelName + "Process 2",
+							parentModelId: modelName,
+							name: "Process 2",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 3",
+									sinkId: modelName + "Process 2",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
+                        {
+					    	id: modelName + "Entity 3",
+					    	parentModelId: modelName,
+					    	name: "Entity 3",
+							nodeType: "Entity",
+							inputs: [
+									{
+										 sourceId: modelName + "Process 3",
+										 sinkId: modelName + "Entity 3",
+										 parentModelId: modelName,
+										 label: "",
+									},
+								{
+									sourceId: modelName + "Process 1",
+									sinkId: modelName + "Entity 3",
+									parentModelId: modelName,
+									label: "",
+								}
+					    	],
+                        },
+						{
+							id: modelName + "Process 3",
+							parentModelId: modelName,
+							name: "Process 3",
+							nodeType: "Process",
+							inputs: [
+								{
+									sourceId: modelName + "Entity 1",
+									sinkId: modelName + "Process 3",
+									parentModelId: modelName,
+									label: "",
+								},
+								{
+									sourceId: modelName + "Mediator B",
+									sinkId: modelName + "Process 3",
+									parentModelId: modelName,
+									label: "",
+								},
+							],
+						},
+						{
+							id: modelName + "Mediator B",
+							parentModelId: modelName,
+							name: "Mediator B",
+							nodeType: "Mediator",
+							inputs: []
+						},
+						{
+							id: modelName + "Mediator C",
+							parentModelId: modelName,
+							name: "Mediator C",
+							nodeType: "Mediator",
+							inputs: []
+						}
+					];
+					mockReceiver.showPhysioMapNetwork(modelName, data);
 				}
 				else if(task == "close") {
 					mockReceiver.removeModel(modelName);
@@ -167,6 +416,8 @@ $(window).load(function() {
 			onShowDependencyNetwork: function (handler) { this.showDependencyNetwork = handler; },
 			
 			onShowSubmodelNetwork: function (handler) { this.showSubmodelNetwork = handler; },
+			
+			onShowPhysioMapNetwork: function (handler) { this.showPhysioMapNetwork = handler; },
 			
 			onSearch: function (handler) { this.search = handler; },
 			

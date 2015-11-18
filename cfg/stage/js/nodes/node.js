@@ -22,7 +22,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.hidden = false;
 	this.textlocx = 0;
 	this.defaultcharge = charge;
-	
+
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
 		// it with its parent node's id
@@ -91,36 +91,54 @@ Node.prototype.getLinks = function () {
 	for(var i = 0; i < this.inputs.length; i++) {
 		var inputData = this.inputs[i];
 		var inputNodeId;
+		var outputNodeId;
 		var type;
-		
-		// If the input is an object it specifies a parent
-		if(typeof inputData == "object") {
+		var linkLabel = inputData.label;
+
+		// If the linked node is in a different parent, mark it as external
+		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			var parent = this.graph.findNode(inputData.parents.join(''));
-			
-			if(!parent) {
+			var parent = this.graph.findNode(inputData.parentModelId);
+			if (!parent) {
 				console.log("External link without a parent!");
 				continue;
 			}
-			
+
 			// If the parent can link add a link to it
-			if(parent.canLink())
+			if (parent.canLink())
 				inputNodeId = parent.id;
 			// Otherwise, add a link to its child
-			else
-				inputNodeId = parent.id + inputData.name;
+			else {
+				type = "internal";
+				inputNodeId = this.parent.id + inputData.name;
+			}
 		}
-		// Otherwise, it is a string referring to the input node
+
+		else if(linkLabel !== undefined) {
+			type = "physiomap";
+			inputNodeId = inputData.sourceId;
+			outputNodeId = inputData.sinkId;
+		}
+
 		else {
 			type = "internal";
-			inputNodeId = this.parent.id + inputData;
+			inputNodeId = inputData.sourceId;
+			outputNodeId = inputData.sinkId;
 		}
 		
 		// Get the input node
 		var inputNode = this.graph.findNode(inputNodeId);
 		
+		// Get the sink node
+		var outputNode = outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
+		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
+			continue;
+		}
+		
+		if(!outputNode) {
+			console.log("sink node '" + outputNodeId + "' does not exist. Can't build link.");
 			continue;
 		}
 		
@@ -130,14 +148,14 @@ Node.prototype.getLinks = function () {
 			console.log("input node '" + inputNodeId + "' has its circle hidden. Can't build link.");
 			continue;
 		}
-		
-		links.push({
-			source: inputNode,
-			target: this,
-			type: type,
-			length: type == "external" ? 300 : 60,
-			value: 1,
-		});
+
+		if(type == "external") length = 300;
+		else if(type == "physiomap") length = 200;
+		else length = 60;
+
+		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
+		links.push(newLink);
+
 	}
 
 	

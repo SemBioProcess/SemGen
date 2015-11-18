@@ -66,6 +66,16 @@ $(window).bind("cwb-initialized", function(e) {
 		});
 	});
 	
+	// Adds a PhysioMap network to the d3 graph
+	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
+		console.log("Showing PhysioMap for model " + modelName);
+		
+		var modelNode = getModelNode(modelName);
+		addChildNodes(modelNode, physiomapData, function (data) {
+			return new PhysioMapNode(graph, data, modelNode);
+		});
+	});
+	
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");

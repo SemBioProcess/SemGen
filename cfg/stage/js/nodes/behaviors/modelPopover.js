@@ -24,6 +24,7 @@ function ModelPopover(node) {
 						"<ul>" +
 							"<li><a href='#' onclick='taskClicked(this);'>Submodels</a></li>" +
 							"<li><a href='#' onclick='taskClicked(this);'>Dependencies</a></li>" +
+							"<li><a href='#' onclick='taskClicked(this);'>PhysioMap</a></li>" +
 						"</ul>" +
 					"</li>" +
 				"</ul>",

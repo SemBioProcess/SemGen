@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.SubModelNode;
@@ -164,6 +165,13 @@ public class StageWorkbench extends Workbench {
 						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
 					else
 						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
+					break;
+				case "physiomap":
+					PhysioMapNode[] physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
+					if(physiomapNetwork.length <= 0)
+						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
+					else
+						_commandSender.showPhysioMapNetwork(model.getName(), physiomapNetwork);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");

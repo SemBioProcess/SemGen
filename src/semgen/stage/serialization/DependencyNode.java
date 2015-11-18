@@ -1,7 +1,5 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
 
@@ -14,25 +12,22 @@ import semsim.model.computational.datastructures.DataStructure;
 public class DependencyNode extends Node {	
 	
 	public String nodeType;
-	public ArrayList<Object> inputs;
 	
-	public DependencyNode(DataStructure dataStructure)
+	public DependencyNode(DataStructure dataStructure, String parentModelId)
 	{
-		this(dataStructure.getName(), dataStructure);
+		this(dataStructure.getName(), dataStructure, parentModelId);
 	}
 	
 	/**
 	 * Allow descendant classes to pass in a node name
-	 * @param name name of node
+	 * @param name of node
 	 * @param dataStructure node data
 	 */
-	protected DependencyNode(String name, DataStructure dataStructure)
+	protected DependencyNode(String name, DataStructure dataStructure, String parentModelId)
 	{
-		super(name);
+		super(name, parentModelId);
 		
 		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
-
-		inputs = new ArrayList<Object>();
 
 		// Are there intra-model inputs?
 		if(dataStructure.getComputation() != null) {
@@ -42,7 +37,7 @@ public class DependencyNode extends Node {
 				
 				// Don't add self pointing links
 				if(!this.name.equals(inputName))
-					this.inputs.add(inputName);
+					this.inputs.add(new Link(inputName, this.parentModelId));
 			}
 		}
 	}
