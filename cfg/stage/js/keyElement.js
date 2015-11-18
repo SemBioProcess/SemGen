@@ -32,7 +32,11 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys) {
 			var keyElement = document.createElement("li");
 			$(keyElement).text(keyInfo.nodeType);
 			keyElement.style.color = keyInfo.color;
-			
+			// Put border around "Mediator" text for consistency with node border
+			if(keyInfo.nodeType == "Mediator") {
+				keyElement.style.webkitTextStroke = ".7px black";
+			}
+
 			if(keyInfo.canShowHide) {
 				$(keyElement).click(function (e) {
 					graph[func]($(e.target).text());

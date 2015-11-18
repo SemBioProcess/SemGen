@@ -36,7 +36,7 @@ var physiomapTypeToColor = {
 
 	"Entity": "#1F77B4",
 	"Process": "#2CA02C",
-	"Mediator": "#FF7F0E"
+	"Mediator": "#1F77B4"
 };
 
 // Limit displayName to 5 words
