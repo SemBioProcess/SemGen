@@ -130,10 +130,14 @@ Node.prototype.getLinks = function () {
 			}
 		}
 
-		else if(linkLabel !== undefined) {
+		else if(this.nodeType == "Entity" || this.nodeType == "Process") {
 			type = "physiomap";
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
+			if(inputData.linkType == "Mediator") {
+				type += " mediator";
+			}
+
 		}
 
 		else {
@@ -141,7 +145,7 @@ Node.prototype.getLinks = function () {
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
 		}
-		
+
 		// Get the input node
 		var inputNode = this.graph.findNode(inputNodeId);
 		

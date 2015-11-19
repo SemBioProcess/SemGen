@@ -6,6 +6,7 @@ public class Link {
 	public String sinkId;
 	public String parentModelId;
 	public String label;
+	public String linkType;
 
 	public Link(String name, String parentModelId) {
 		this.name = name;
@@ -13,10 +14,10 @@ public class Link {
 		this.parentModelId = parentModelId;
 	}
 
-	public Link(String sourceId, String sinkId, String parentModelId, String label) {
+	public Link(String sourceId, String sinkId, String parentModelId, String linkType) {
 		this.sourceId = sourceId;
 		this.sinkId = sinkId;
 		this.parentModelId = parentModelId;
-		this.label = label;
+		this.linkType = linkType;
 	}
 }

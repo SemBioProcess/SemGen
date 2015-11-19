@@ -132,7 +132,7 @@ public class SemSimModelSerializer {
 							Node.buildId(mediator.getName(), parentModelId),
 							processId,
 							parentModelId,
-							null
+							"Mediator"
 					));
 				}
 			}
@@ -142,7 +142,14 @@ public class SemSimModelSerializer {
 
 	private static PhysioMapNode getOrCreatePhysioMapNode(String name, String parentModelId, HashMap<String, PhysioMapNode> nodeMap, String nodeType){
 		PhysioMapNode node = nodeMap.get(name);
+
 		if(node == null){
+			node = new PhysioMapNode(name, parentModelId, nodeType);
+			nodeMap.put(name, node);
+		}
+
+		// If it is a mediator node, replace non-mediator node with the mediator node
+		else if(nodeType == "Mediator") {
 			node = new PhysioMapNode(name, parentModelId, nodeType);
 			nodeMap.put(name, node);
 		}
