@@ -21,9 +21,11 @@ function Graph() {
 		.chargeDistance(250)
 		.friction(0.7);
 	this.color = d3.scale.category10();
-	var nodes = this.force.nodes(),
-		links = this.force.links();
+	var nodes = this.force.nodes();
+	var links = this.force.links();
 	var hiddenNodes = {};
+	var orphanNodes = [];
+	var hiddenLinks = {};
 	var fixedMode = false;
 	
 	// Add a node to the graph
@@ -58,6 +60,17 @@ function Graph() {
 		nodes.push(nodeData);
 		$(this).triggerHandler("nodeAdded", [nodeData]);
 	};
+
+	// Add a link to the graph
+	this.addLink = function (link) {
+		// If the link already exists don't add it again
+		if(this.findLink(link.id)) {
+			console.log("link already exists. Link id: " + link.id);
+			return;
+		}
+
+		links.push(link);
+	}
 	
 	// Remove a node from the graph
 	this.removeNode = function (id) {
@@ -66,7 +79,7 @@ function Graph() {
 	    
 	    // If we did not find the node it must be hidden
 	    if(!node) {
-	    	// Remove if from the hidden list
+	    	// Remove it from the hidden list
 	    	for(type in hiddenNodes)
 	    		for(var i = 0; i < hiddenNodes[type].length; i++)
 	    			if(hiddenNodes[type][i].id == id) {
@@ -85,6 +98,24 @@ function Graph() {
 	    }
 	    nodes.splice(findNodeIndex(id),1);
 	    $(this).triggerHandler("nodeRemoved", [node]);
+	};
+
+	// Remove a link from the graph
+	this.removeLink = function(id) {
+		var link = this.findLink(id);
+
+		// If we did not find the link it must be hidden
+		if(!link) {
+			// Remove it from the hidden list
+			for(type in hiddenLinks)
+				for(var i = 0; i < hiddenLinks[type].length; i++)
+					if(hiddenLinks[type][i].id == id) {
+						hiddenLinks[type].splice(i, 1);
+						return;
+					}
+			return;
+		}
+		links.splice(findLinkIndex(id), 1);
 	};
 	
 	// Remove all nodes
@@ -146,6 +177,67 @@ function Graph() {
 		
 		this.update();
 	}
+
+	// Hide all links of the give type
+	this.hideLinks = function (type) {
+		var linksToHide = [];
+		links.forEach(function (link) {
+			if(link.linkType == type) {
+				linksToHide.push(link);
+				link.hidden = true;
+			}
+		});
+
+		// Remove the hidden links from the graph
+		linksToHide.forEach(function (link) {
+			this.removeLink(link.id);
+			this.hideOrphanNodes();
+		}, this);
+
+		if(!hiddenLinks[type])
+			hiddenLinks[type] = [];
+
+		// Save the hidden links in case we want to add them back
+		hiddenLinks[type] = hiddenLinks[type].concat(linksToHide);
+		this.update();
+	}
+
+	// Hide nodes without links
+	this.hideOrphanNodes = function () {
+		nodes.forEach(function (node) {
+			if(node.nodeType == "Mediator" && node.inputs.length == 0) {
+				orphanNodes.push(node);
+				this.removeNode(node.id);
+			}
+		}, this);
+	}
+
+	// Add orphan nodes back
+	this.showOrphanNodes = function () {
+		orphanNodes.forEach(function (node) {
+			this.addNode(node);
+		}, this);
+	}
+
+	// Show all links of the given type
+	this.showLinks = function (type) {
+		if(!hiddenLinks[type])
+			return;
+
+		// Add all links back to the graph
+		hiddenLinks[type].forEach(function (link) {
+			link.hidden = false;
+			this.addLink(link);
+		}, this);
+
+		// These links are no longer hidden
+		delete hiddenLinks[type];
+
+		// Add orphan nodes back
+		this.showOrphanNodes();
+
+		this.update();
+	}
 	
 	// Get an array of the hidden nodes
 	this.getHiddenNodes = function () {
@@ -156,6 +248,15 @@ function Graph() {
 		return hiddenNodesArr;
 	}
 
+	// Get an array of the hidden links
+	this.getHiddenLinks = function () {
+		var hiddenLinksArr = [];
+		for(type in hiddenLinks)
+			hiddenLinksArr = hiddenLinksArr.concat(hiddenLinks[type]);
+
+		return hiddenLinksArr;
+	}
+
 	/** 
 	 * Updates the graph
 	 */
@@ -163,7 +264,7 @@ function Graph() {
 	var node;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
-		
+
 		bruteForceRefresh.call(this);
 
 		// Add the links
@@ -223,6 +324,14 @@ function Graph() {
 	        	return nodes[i];
 	    }
 	};
+
+	// Find a link by its id
+	this.findLink = function(id) {
+		for (var i in links) {
+			if (links[i].id === id)
+				return links[i];
+		}
+	}
 	
 	// Highlight a node, its links, link labels, and the nodes that its linked to
 	this.highlightMode = function (highlightNode) {
@@ -303,25 +412,23 @@ function Graph() {
 		allNodes.forEach(function (node) {
 			this.addNode(node);
 		}, this);
-		
+
 		// Process links for each node
 		nodes.forEach(function (node) {
 			var nodeLinks = node.getLinks();
-			
+
 			// If the node doesnt have any links move on
 			if(!nodeLinks)
 				return;
-			
-			var visiblelinks = false;
+
 			nodeLinks.forEach( function (link) {
-				if (!link.source.hidden) visiblelinks = true; 
+				if (!link.source.hidden && !hiddenLinks[link.linkType]) {
+					links = links.concat(link);
+				}
 			});
 
-			// Add the node's links to our master list
-			links = links.concat(nodeLinks);
-			
 		}, this);
-		
+
 		this.force.links(links);
 		
 		refreshing = false;
@@ -334,7 +441,15 @@ function Graph() {
 	        	return i;
 		};
 	};
-	
+
+	// Find a link's index
+	var findLinkIndex = function(id) {
+		for (var i in links) {
+			if (links[i].id == id)
+				return i;
+		}
+	}
+
 	// Set the graph's width and height
 	this.updateHeightAndWidth = function () {
 		this.w = $(window).width();

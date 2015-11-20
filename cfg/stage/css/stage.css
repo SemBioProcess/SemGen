@@ -162,6 +162,11 @@ li.searchResultSet li:hover {
 	opacity: .5;
 }
 
+.key ul.hiddenLinkKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
+}
+
 .modes {
 	margin-top: 10px;
 }

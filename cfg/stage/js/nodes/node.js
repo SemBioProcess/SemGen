@@ -135,7 +135,7 @@ Node.prototype.getLinks = function () {
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
 			if(inputData.linkType == "Mediator") {
-				type += " mediator";
+				type = "Mediator";
 			}
 
 		}

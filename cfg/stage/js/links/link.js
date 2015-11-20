@@ -1,22 +1,24 @@
 /**
  * Represents a link in the d3 graph
  */
- function Link(graph, name, parent, input, output, length, type) {
-	 if(!graph)
-		 return;
+function Link(graph, name, parent, input, output, length, linkType) {
+	if(!graph)
+		return;
 
-	 this.graph = graph;
-	 this.name = name;
-     this.id = input.id + "-" + output.id + "_" + name;
-	 this.displayName = limitWords(this.name, 5);
-	 this.className = "link";
-	 this.source = input;
-	 this.target = output;
-	 this.length = length;
-	 this.value = 1;
-	 this.type = type;
+	this.graph = graph;
+	this.name = name;
+	this.id = input.id + "-" + output.id + "_" + name;
+	this.displayName = limitWords(this.name, 5);
+	this.className = "link";
+	this.source = input;
+	this.target = output;
+	this.length = length;
+	this.value = 1;
+	this.linkType = linkType;
+	this.hidden = false;
+	this.userCanHide = linkType == "Mediator" ? true : false;
 
- }
+}
 
 //  Link.prototype.addBehavior = function (behavior) {
 // 	// Behaviors are just functions that take in a link as an argument
@@ -34,7 +36,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 
 	this.rootElement.append("svg:path")
 			.attr("id", this.source.id + "-" + this.target.id)
-			.attr("class", "link " + this.type);
+			.attr("class", "link " + this.linkType);
 
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -69,6 +71,13 @@ Link.prototype.tickHandler = function (element, graph) {
 	text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
 	text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
 
+}
+
+Link.prototype.getKeyInfo = function () {
+	return {
+		linkType: this.linkType,
+		canShowHide: this.userCanHide,
+	};
 }
 
 Link.prototype.createTextElement = function (className) {
