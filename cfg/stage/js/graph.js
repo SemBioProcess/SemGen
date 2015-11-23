@@ -191,7 +191,7 @@ function Graph() {
 		// Remove the hidden links from the graph
 		linksToHide.forEach(function (link) {
 			this.removeLink(link.id);
-			this.hideOrphanNodes();
+			this.hideOrphanNodes(link);
 		}, this);
 
 		if(!hiddenLinks[type])
@@ -199,13 +199,34 @@ function Graph() {
 
 		// Save the hidden links in case we want to add them back
 		hiddenLinks[type] = hiddenLinks[type].concat(linksToHide);
+
 		this.update();
 	}
 
 	// Hide nodes without links
-	this.hideOrphanNodes = function () {
-		nodes.forEach(function (node) {
-			if(node.nodeType == "Mediator" && node.inputs.length == 0) {
+	this.hideOrphanNodes = function (linkToHide) {
+		var nodesWithLink = [];
+		var nodesFromLinkToHide = [];
+
+		nodesFromLinkToHide.push(linkToHide.source);
+		nodesFromLinkToHide.push(linkToHide.target);
+
+		nodesFromLinkToHide.forEach(function (node) {
+			// Model nodes and hiddenLabel nodes don't count as orphan nodes
+			if(node.nodeType === undefined || node.nodeType == "Model") {
+				return;
+			}
+
+			for(var i = 0; i < links.length; i++) {
+				if(nodesWithLink.indexOf(links[i].source.id) == -1) {
+					nodesWithLink.push(links[i].source.id);
+				}
+				if(nodesWithLink.indexOf(links[i].target.id) == -1) {
+					nodesWithLink.push(links[i].target.id);
+				}
+			}
+
+			if(nodesWithLink.indexOf(node.id) == -1) {
 				orphanNodes.push(node);
 				this.removeNode(node.id);
 			}

@@ -244,14 +244,7 @@ $(window).load(function() {
 						parentModelId: modelName,
 						name: "Entity 1",
 						nodeType: "Entity",
-						inputs: [
-							{
-								sourceId: modelName + "Process 2",
-								sinkId: modelName + "Entity 1",
-								parentModelId: modelName,
-								linkType: "",
-							},
-						],
+						inputs: [],
 					},
 					{
 						id: modelName + "Process 1",
@@ -277,6 +270,18 @@ $(window).load(function() {
 								parentModelId: modelName,
 								linkType: "Mediator",
 							},
+							{
+								sourceId: modelName + "Process 1",
+								sinkId: modelName + "Entity 2",
+								parentModelId: modelName,
+								label: "",
+							},
+							{
+								sourceId: modelName + "Process 1",
+								sinkId: modelName + "Entity 3",
+								parentModelId: modelName,
+								linkType: "",
+							},
 						],
 					},
 					{
@@ -284,14 +289,7 @@ $(window).load(function() {
 						parentModelId: modelName,
 						name: "Entity 2",
 						nodeType: "Entity",
-						inputs: [
-							{
-								sourceId: modelName + "Process 1",
-								sinkId: modelName + "Entity 2",
-								parentModelId: modelName,
-								label: "",
-							},
-						],
+						inputs: [],
 					},
 					{
 						id: modelName + "Process 2",
@@ -305,6 +303,17 @@ $(window).load(function() {
 								parentModelId: modelName,
 								linkType: "",
 							},
+							{
+								sourceId: modelName + "Process 2",
+								sinkId: modelName + "Entity 1",
+								parentModelId: modelName,
+								linkType: "",
+							},
+							{sourceId: modelName + "Process 2",
+								sinkId: modelName + "Mediator C",
+								parentModelId: modelName,
+								linkType: "",
+							},
 						],
 					},
 					{
@@ -312,20 +321,7 @@ $(window).load(function() {
 						parentModelId: modelName,
 						name: "Entity 3",
 						nodeType: "Entity",
-						inputs: [
-							{
-								sourceId: modelName + "Process 3",
-								sinkId: modelName + "Entity 3",
-								parentModelId: modelName,
-								linkType: "",
-							},
-							{
-								sourceId: modelName + "Process 1",
-								sinkId: modelName + "Entity 3",
-								parentModelId: modelName,
-								linkType: "",
-							}
-						],
+						inputs: [],
 					},
 					{
 						id: modelName + "Process 3",
@@ -345,6 +341,12 @@ $(window).load(function() {
 								parentModelId: modelName,
 								linkType: "Mediator",
 							},
+							{
+								sourceId: modelName + "Process 3",
+								sinkId: modelName + "Entity 3",
+								parentModelId: modelName,
+								linkType: "",
+							},
 						],
 					},
 					{
@@ -359,7 +361,7 @@ $(window).load(function() {
 						parentModelId: modelName,
 						name: "Mediator C",
 						nodeType: "Mediator",
-						inputs: []
+						inputs: [],
 					}
 				];
 				mockReceiver.showPhysioMapNetwork(modelName, data);
