@@ -6,7 +6,6 @@ public abstract class SemSimObject {
 	private String name = new String("");
 	private String description = new String("");
 	private String metadataID = new String("");
-	protected URI referenceuri = URI.create(new String(""));
 	
 	public SemSimObject() {}
 	
@@ -19,7 +18,7 @@ public abstract class SemSimObject {
 		if(objtocopy.metadataID != null)
 			metadataID = new String(objtocopy.metadataID);
 		
-		referenceuri = objtocopy.referenceuri;
+
 	}
 	
 	/**
@@ -83,10 +82,7 @@ public abstract class SemSimObject {
 		return metadataID;
 	}
 	
-	public Boolean hasPhysicalDefinitionAnnotation() {
-		return !referenceuri.toString().isEmpty();
-	}
-	
+
 	public abstract URI getSemSimClassURI();
 	
 }

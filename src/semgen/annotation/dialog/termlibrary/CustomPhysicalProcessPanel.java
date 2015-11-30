@@ -11,8 +11,8 @@ import semgen.annotation.common.ObjectPropertyEditor;
 import semgen.annotation.common.ProcessParticipantEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semsim.SemSimConstants;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
 
 public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane implements TableModelListener {
 	private static final long serialVersionUID = 1L;

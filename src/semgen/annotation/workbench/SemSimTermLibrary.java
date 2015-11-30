@@ -9,13 +9,13 @@ import java.util.LinkedHashMap;
 import java.util.Observable;
 
 import semgen.SemGen;
-import semsim.PropertyType;
-import semsim.SemSimConstants;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
-import semsim.annotation.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.PropertyType;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
+import semsim.definitions.StructuralRelation;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;

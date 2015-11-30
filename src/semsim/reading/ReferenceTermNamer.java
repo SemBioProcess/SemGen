@@ -9,12 +9,13 @@ import java.util.Set;
 
 import org.jdom.JDOMException;
 
-import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -71,7 +72,7 @@ public class ReferenceTermNamer {
 	}
 	
 	
-	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, boolean online){	
+	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
 			URInameMap = new HashMap<String,String[]>();
@@ -80,54 +81,53 @@ public class ReferenceTermNamer {
 		// If we are online, get all the components of the model that can be annotated
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
-		if(online){
-			for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model)){
-				
-				Annotatable annthing = (Annotatable)ssc;
-				Set<Annotation> anns = new HashSet<Annotation>();
-				anns.addAll(annthing.getAnnotations());
-				
-				if(ssc instanceof ReferenceTerm) 
-					anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
-				
-				for(Annotation ann : anns){
+		for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model)){
+			
+			Annotatable annthing = (Annotatable)ssc;
+			Set<Annotation> anns = new HashSet<Annotation>();
+			anns.addAll(annthing.getAnnotations());
+			
+			if(ssc instanceof ReferenceTerm) 
+				anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
+			
+			for(Annotation ann : anns){
 
-					if(ann instanceof ReferenceOntologyAnnotation){
-						ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
-						URI uri = refann.getReferenceURI();
+				if(ann instanceof ReferenceOntologyAnnotation){
+					ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+					URI uri = refann.getReferenceURI();
+					
+					System.out.println("Need to find " + uri.toString());
+					String name = null;
+					if(URInameMap.containsKey(uri.toString())){
+						name = URInameMap.get(uri.toString())[0];
+						System.out.println(uri.toString() + " was already cached: " + name);
+					}
+					else{
+						name = getNameFromURI(uri);
 						
-						System.out.println("Need to find " + uri.toString());
-						String name = null;
-						if(URInameMap.containsKey(uri.toString())){
-							name = URInameMap.get(uri.toString())[0];
-							System.out.println(uri.toString() + " was already cached: " + name);
+						// If we retrieved the name
+						if(name!=null){
+							System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
+							URInameMap.put(uri.toString(), new String[]{name});
 						}
 						else{
-							name = getNameFromURI(uri);
-							
-							// If we retrieved the name
-							if(name!=null){
-								System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
-								URInameMap.put(uri.toString(), new String[]{name});
-							}
-							else{
-								name = SemSimOWLFactory.getIRIfragment(uri.toString());
-								System.out.println("Could not retrieve name for " + SemSimOWLFactory.getIRIfragment(uri.toString()));
-							}
+							name = SemSimOWLFactory.getIRIfragment(uri.toString());
+							System.out.println("Could not retrieve name for " + SemSimOWLFactory.getIRIfragment(uri.toString()));
 						}
-						
-						refann.setValueDescription(name);
-						
-						// Set the name of the semsim component to the annotation description if it's
-						// a physical entity, physical process or physical property
-						if(ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION 
-								&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) 
-										|| (ssc instanceof PhysicalProperty) || (ssc instanceof PhysicalPropertyinComposite)))
-							ssc.setName(name);
 					}
+					
+					refann.setValueDescription(name);
+					
+					// Set the name of the semsim component to the annotation description if it's
+					// a physical entity, physical process or physical property
+					if(ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION 
+							&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) 
+									|| (ssc instanceof PhysicalProperty) || (ssc instanceof PhysicalPropertyinComposite)))
+						ssc.setName(name);
 				}
 			}
 		}
+		
 		
 		// Rename the composite physical entities, given the newly named singular entities
 		for(CompositePhysicalEntity cpe : model.getCompositePhysicalEntities())
@@ -205,7 +205,7 @@ public class ReferenceTermNamer {
 				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
 				String edittedid = id.replace("OPB%3A", "");
 				edittedid = id.replace("OPB:", "OPB_");
-				edittedid = SemSimOWLFactory.URIencoding(SemSimConstants.OPB_NAMESPACE + edittedid);
+				edittedid = SemSimOWLFactory.URIencoding(RDFNamespace.OPB.getNamespace() + edittedid);
 				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
 			}
 			else if(KBname.equals(SemSimConstants.PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME)){

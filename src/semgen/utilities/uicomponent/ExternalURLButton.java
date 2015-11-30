@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.webservices.BioPortalConstants;
 

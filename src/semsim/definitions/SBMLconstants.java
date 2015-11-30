@@ -1,4 +1,4 @@
-package semsim;
+package semsim.definitions;
 
 import java.util.Collections;
 import java.util.HashMap;

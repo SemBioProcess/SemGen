@@ -8,12 +8,11 @@ import java.util.Set;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLLiteral;
 
-import semsim.SemSimConstants;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelation;
 
 public class CurationalMetadata {
-	public static final String DCTERMS_NAMESPACE = "http://purl.org/dc/terms/";
-	public static final String DCTERMS_NAMESPACE_11 = "http://purl.org/dc/elements/1.1/";
-	private static String SEMSIM_NAMESPACE = SemSimConstants.SEMSIM_NAMESPACE;
+	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespace();
 	
 	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
 	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");

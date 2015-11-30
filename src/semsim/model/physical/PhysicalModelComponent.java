@@ -7,7 +7,7 @@ import java.util.Set;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.SemSimTypes;
 import semsim.utilities.SemSimCopy;

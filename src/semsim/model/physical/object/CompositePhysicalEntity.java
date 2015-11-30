@@ -3,9 +3,9 @@ package semsim.model.physical.object;
 import java.net.URI;
 import java.util.ArrayList;
 
-import semsim.SemSimConstants;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.StructuralRelation;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.StructuralRelation;
 import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;

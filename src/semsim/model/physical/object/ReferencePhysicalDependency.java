@@ -2,10 +2,10 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.SemSimConstants;
 
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 

@@ -5,12 +5,12 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.PropertyType;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.PropertyType;
+import semsim.definitions.SemSimRelation;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;

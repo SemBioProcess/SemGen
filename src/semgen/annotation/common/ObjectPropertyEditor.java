@@ -20,7 +20,7 @@ import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimRelation;
 
 public abstract class ObjectPropertyEditor extends JPanel implements ActionListener, ListDataListener, ListSelectionListener {
 	private static final long serialVersionUID = 1L;

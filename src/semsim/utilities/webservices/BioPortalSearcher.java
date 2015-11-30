@@ -18,7 +18,7 @@ import org.jdom.input.SAXBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
 
@@ -133,5 +133,35 @@ public class BioPortalSearcher {
 			}
 		}
 		return null;
+	}
+	
+	public static Boolean testBioPortalWebservice(){
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = null;
+		try {
+			URL url = new URL(
+					"http://data.bioontology.org/ontologies/OPB?q&format=xml&apikey=" + SemSimConstants.BIOPORTAL_API_KEY);
+			System.out.println("Testing: " + url);
+			URLConnection yc = url.openConnection();
+			yc.setRequestProperty("Accept", "application/xml");
+			yc.setReadTimeout(60000); // Tiemout after a minute
+			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+			doc = builder.build(in);
+			in.close();
+		} catch (IOException | JDOMException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		// Process XML results from BioPortal REST service to see if we're online
+		if (doc!=null) {
+			if(doc.getRootElement()!=null){
+				if(doc.getRootElement().getName().equals("ontology")){
+					System.out.println("Received response from BioPortal");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

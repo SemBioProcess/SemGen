@@ -1,7 +1,9 @@
 package semsim.annotation;
 
 import java.net.URI;
-import semsim.SemSimConstants;
+
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
 import semsim.owl.SemSimOWLFactory;
 
 /**

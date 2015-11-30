@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
 public class BioPortalConstants {

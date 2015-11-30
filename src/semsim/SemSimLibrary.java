@@ -19,6 +19,9 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.definitions.PropertyType;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -32,7 +35,7 @@ import semsim.utilities.ResourcesManager;
 //Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
-	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSimVersion");
+	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespace() + "SemSimVersion");
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
@@ -88,13 +91,13 @@ public class SemSimLibrary {
 		}
 
 		try {
-			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00147", false);
-			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_01151", false);
-			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
-			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00135", false);
-			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00574", false);
-			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);
+			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00147", false);
+			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00573", false);
+			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_01151", false);
+			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00568", false);
+			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00135", false);
+			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00574", false);
+			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00569", false);
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
@@ -152,7 +155,7 @@ public class SemSimLibrary {
 		}
 		PhysicalPropertyinComposite pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
-			String term = SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0];
+			String term = RDFNamespace.OPB.getNamespace() + candidateOPBclasses[0];
 			pp = commonproperties.get(term);
 			if (pp==null) {
 				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
@@ -175,7 +178,7 @@ public class SemSimLibrary {
 	}
 	
 	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
-		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + parentclass, false);
+		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + parentclass, false);
 		return subclassset;
 	}
 	

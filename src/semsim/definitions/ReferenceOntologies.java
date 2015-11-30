@@ -1,4 +1,4 @@
-package semsim.annotation;
+package semsim.definitions;
 
 import java.util.ArrayList;
 

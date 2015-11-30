@@ -2,7 +2,7 @@ package semsim.model.computational.datastructures;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.computational.Computation;
 
 /** A {@link DataStructure} that is assigned a decimal value during simulation.*/

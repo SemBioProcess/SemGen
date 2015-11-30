@@ -13,7 +13,6 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
@@ -21,8 +20,10 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
+import semsim.definitions.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
@@ -77,7 +78,7 @@ import semsim.writing.SemSimOWLwriter;
  */
 
 public class SemSimModel extends SemSimCollection implements Annotatable  {
-	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespace() + "legacyCodeURI");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
@@ -692,7 +693,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return A new SemSim model namespace from the current date and time
 	 */
 	public String generateNamespaceFromDateAndTime(){
-		namespace = SemSimConstants.SEMSIM_NAMESPACE.replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
+		namespace = RDFNamespace.SEMSIM.getNamespace().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
 		return namespace;
 	}
 
@@ -996,5 +997,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 				}
 			}
 		}
+	}
+
+	//Required by Annotatable
+	@Override
+	public Boolean hasPhysicalDefinitionAnnotation() {
+		return false;
 	}
 }

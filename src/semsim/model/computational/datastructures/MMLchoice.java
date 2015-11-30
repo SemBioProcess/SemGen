@@ -2,7 +2,7 @@ package semsim.model.computational.datastructures;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.computational.Computation;
 
 /** This class maps to the JSim-specific data structure called a "choice" 

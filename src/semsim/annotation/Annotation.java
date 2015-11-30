@@ -2,6 +2,8 @@ package semsim.annotation;
 
 import org.apache.commons.lang3.builder.*;
 
+import semsim.definitions.SemSimRelation;
+
 /**
  * A SemSim annotation provides additional information about
  * a SemSim model or one of its components. Annotations can be used

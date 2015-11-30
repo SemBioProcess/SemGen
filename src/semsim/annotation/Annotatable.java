@@ -4,6 +4,8 @@ package semsim.annotation;
 import java.net.URI;
 import java.util.Set;
 
+import semsim.definitions.SemSimRelation;
+
 /**
  * Interface providing methods for annotating
  * SemSim model elements.

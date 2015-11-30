@@ -2,7 +2,7 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.physical.PhysicalModelComponent;

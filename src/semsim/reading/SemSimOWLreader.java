@@ -37,11 +37,11 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semsim.CellMLconstants;
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
-import semsim.annotation.StructuralRelation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -116,7 +116,7 @@ public class SemSimOWLreader extends ModelReader {
 	 * Verify the model is a valid SemSimModel
 	 */
 	private boolean verifyModel() throws OWLException {
-		OWLClass topclass = factory.getOWLClass(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSim_component"));
+		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespace() + "SemSim_component"));
 		if(!ont.getClassesInSignature().contains(topclass)){
 			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
 		}
@@ -131,8 +131,8 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void setPhysicalDefinitionURI(){
 		
-		if(ont.containsDataPropertyInSignature(IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "refersTo"))){
-			physicaldefinitionURI = URI.create(SemSimConstants.SEMSIM_NAMESPACE + "refersTo");
+		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespace() + "refersTo"))){
+			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "refersTo");
 		}
 		else if(ont.containsDataPropertyInSignature(IRI.create(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI))){
 			physicaldefinitionURI = SemSimConstants.HAS_PHYSICAL_DEFINITION_URI;
@@ -678,7 +678,7 @@ public class SemSimOWLreader extends ModelReader {
 							Document doc = builder.build(new StringReader(componentmathmlwithroot));
 							
 							if(doc.getRootElement() instanceof Element){
-								List<?> mathmllist = doc.getRootElement().getChildren("math", CellMLconstants.mathmlNS);
+								List<?> mathmllist = doc.getRootElement().getChildren("math", RDFNamespace.MATHML.createJdomNamespace());
 								
 								// Check if variable is solved using ODE, and is a CellML-type variable, set startValue to CellML intial value.
 								Boolean ode = CellMLreader.isSolvedbyODE(localvarname, mathmllist);

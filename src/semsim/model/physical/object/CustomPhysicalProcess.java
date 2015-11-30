@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.SemSimTypes;
 import semsim.model.physical.PhysicalProcess;
 

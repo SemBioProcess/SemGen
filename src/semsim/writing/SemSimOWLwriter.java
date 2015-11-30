@@ -23,12 +23,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.StructuralRelation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.StructuralRelation;
 import semsim.model.Importable;
 import semsim.model.SemSimTypes;
 import semsim.model.collection.FunctionalSubmodel;
@@ -60,7 +61,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	private Map<PhysicalModelComponent, URI> singularPMCsAndUrisForDataStructures = new HashMap<PhysicalModelComponent,URI>();
 	private Map<CompositePhysicalEntity,URI> compositeEntitiesAndIndexes = new HashMap<CompositePhysicalEntity,URI>();
-	private String base = SemSimConstants.SEMSIM_NAMESPACE;
+	private String base = RDFNamespace.SEMSIM.getNamespace();
 	private String namespace;
 	private Set<DataStructure> localdss = new HashSet<DataStructure>();
 	

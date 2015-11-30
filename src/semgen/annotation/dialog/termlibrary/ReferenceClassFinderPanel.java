@@ -42,8 +42,8 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.annotation.ReferenceOntologies.OntologyDomain;
-import semsim.annotation.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.ReferenceOntologies.OntologyDomain;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 

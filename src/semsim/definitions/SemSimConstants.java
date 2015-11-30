@@ -1,4 +1,4 @@
-package semsim;
+package semsim.definitions;
 
 
 import java.net.URI;
@@ -7,12 +7,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.jdom.Namespace;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
 
 /**
  * A set of constants for working with SemSim models
@@ -46,119 +41,109 @@ public class SemSimConstants {
 	public static final String SNOMEDCT_FULLNAME = "SNOMED - Clinical Terms";
 	public static final String UBERON_FULLNAME = "Uberon";
 	public static final String UNIPROT_FULLNAME = "Universal Protein Resource";
-		
-	// Namespaces
-	public static final String SEMSIM_NAMESPACE = "http://www.bhi.washington.edu/SemSim#";
-	public static final String OPB_NAMESPACE = "http://bhi.washington.edu/OPB#";
-	public static final String RO_NAMESPACE = "http://www.obofoundry.org/ro/ro.owl#";
-	public static final String BQB_NAMESPACE = "http://biomodels.net/biology-qualifiers/";
-	public static final String BQM_NAMESPACE = "http://biomodels.net/model-qualifiers/";
-	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	public static final String MATHML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
-	public static final Namespace MATHML_NAMESPACE_OBJ = Namespace.getNamespace(MATHML_NAMESPACE);
-	
+			
 	// URIs
-	public static final URI COMPUTATION_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Computation");
-	public static final URI EVENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Event");
-	public static final URI EVENT_ASSIGNMENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "EventAssignment");
-	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "SemSim_Model");
-	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Relational_constraint");
-	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Data_structure");
-	public static final URI DECIMAL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Decimal");
-	public static final URI SEMSIM_INTEGER_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Integer");
-	public static final URI MML_CHOICE_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "MMLchoice");
-	public static final URI PHYSICAL_MODEL_COMPONENT_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Physical_model_component");
-	public static final URI COMPOSITE_PHYSICAL_ENTITY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Composite_physical_entity");
-	public static final URI UNITS_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Unit_of_measurement");
-	public static final URI PHYSICAL_PROPERTY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Physical_property");
-	public static final URI PHYSICAL_ENTITY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Physical_entity");
-	public static final URI REFERENCE_PHYSICAL_ENTITY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Reference_physical_entity");
-	public static final URI PHYSICAL_PROCESS_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Physical_process");
-	public static final URI REFERENCE_PHYSICAL_PROCESS_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Reference_physical_process");
-	public static final URI PHYSICAL_DEPENDENCY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Physical_dependency");
-	public static final URI CUSTOM_PHYSICAL_ENTITY_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Custom_physical_entity");
-	public static final URI CUSTOM_PHYSICAL_PROCESS_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Custom_physical_process");
-	public static final URI SUBMODEL_CLASS_URI = URI.create(SEMSIM_NAMESPACE + "Submodel");
+	public static final URI COMPUTATION_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Computation");
+	public static final URI EVENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Event");
+	public static final URI EVENT_ASSIGNMENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "EventAssignment");
+	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "SemSim_Model");
+	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Relational_constraint");
+	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Data_structure");
+	public static final URI DECIMAL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Decimal");
+	public static final URI SEMSIM_INTEGER_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Integer");
+	public static final URI MML_CHOICE_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "MMLchoice");
+	public static final URI PHYSICAL_MODEL_COMPONENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_model_component");
+	public static final URI COMPOSITE_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Composite_physical_entity");
+	public static final URI UNITS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Unit_of_measurement");
+	public static final URI PHYSICAL_PROPERTY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_property");
+	public static final URI PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_entity");
+	public static final URI REFERENCE_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_entity");
+	public static final URI PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_process");
+	public static final URI REFERENCE_PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_process");
+	public static final URI PHYSICAL_DEPENDENCY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_dependency");
+	public static final URI CUSTOM_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Custom_physical_entity");
+	public static final URI CUSTOM_PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Custom_physical_process");
+	public static final URI SUBMODEL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Submodel");
 	
-	public static final URI CELLML_COMPONENT_SUBSUMPTION_TYPE_URI = URI.create(SEMSIM_NAMESPACE + "submodelSubsumptionType");
-	public static final URI DETERMINES_URI = URI.create(SEMSIM_NAMESPACE + "determines");
-	public static final URI ENCAPSULATES_URI = URI.create(SEMSIM_NAMESPACE + "encapsulates");
-	public static final URI HAS_SOURCE_URI = URI.create(SEMSIM_NAMESPACE + "hasSource");
-	public static final URI HAS_SINK_URI = URI.create(SEMSIM_NAMESPACE + "hasSink");
-	public static final URI HAS_MEDIATOR_URI = URI.create(SEMSIM_NAMESPACE + "hasMediator");
-	public static final URI HAS_SOURCE_PARTICIPANT_URI = URI.create(SEMSIM_NAMESPACE + "hasSourceParticipant");
-	public static final URI HAS_SINK_PARTICIPANT_URI = URI.create(SEMSIM_NAMESPACE + "hasSinkParticipant");
-	public static final URI HAS_MEDIATOR_PARTICIPANT_URI = URI.create(SEMSIM_NAMESPACE + "hasMediatorParticipant");
-	public static final URI HAS_PHYSICAL_ENTITY_REFERENCE_URI = URI.create(SEMSIM_NAMESPACE + "hasPhysicalEntityReference");
+	public static final URI CELLML_COMPONENT_SUBSUMPTION_TYPE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "submodelSubsumptionType");
+	public static final URI DETERMINES_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "determines");
+	public static final URI ENCAPSULATES_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "encapsulates");
+	public static final URI HAS_SOURCE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasSource");
+	public static final URI HAS_SINK_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasSink");
+	public static final URI HAS_MEDIATOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasMediator");
+	public static final URI HAS_SOURCE_PARTICIPANT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasSourceParticipant");
+	public static final URI HAS_SINK_PARTICIPANT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasSinkParticipant");
+	public static final URI HAS_MEDIATOR_PARTICIPANT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasMediatorParticipant");
+	public static final URI HAS_PHYSICAL_ENTITY_REFERENCE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasPhysicalEntityReference");
 	
-	public static final URI HAS_COMPUTATIONAL_CODE_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalCode");
-	public static final URI HAS_COMPUTATATIONAL_COMPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasComputationalComponent");
-	public static final URI HAS_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasMathML");
-	public static final URI HAS_TRIGGER_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasTriggerMathML");
-	public static final URI HAS_EVENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEvent");
-	public static final URI HAS_EVENT_ASSIGNMENT_URI = URI.create(SEMSIM_NAMESPACE + "hasEventAssignment");
-	public static final URI HAS_PRIORITY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasPriorityMathML");
-	public static final URI HAS_DELAY_MATHML_URI = URI.create(SEMSIM_NAMESPACE + "hasDelayMathML");
-	public static final URI HAS_TIME_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasTimeUnit");
-	public static final URI HAS_SOLUTION_DOMAIN_URI = URI.create(SEMSIM_NAMESPACE + "hasSolutionDomain");
-	public static final URI HAS_START_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasStartValue");
-	public static final URI HAS_INPUT_URI = URI.create(SEMSIM_NAMESPACE + "hasInput");
-	public static final URI HAS_UNIT_FACTOR_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactor");
-	public static final URI HAS_OUTPUT_URI = URI.create(SEMSIM_NAMESPACE + "hasOutput");
-	public static final URI HREF_VALUE_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "hrefValueOfImport");
-	public static final URI IMPORTED_FROM_URI = URI.create(SEMSIM_NAMESPACE + "importedFrom");
-	public static final URI IS_COMPUTATIONAL_COMPONENT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isComputationalComponentFor");
-	public static final URI IS_OUTPUT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isOutputFor");
-	public static final URI IS_INPUT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isInputFor");
-	public static final URI IS_DECLARED_URI = URI.create(SEMSIM_NAMESPACE + "isDeclared");
-	public static final URI IS_DETERMINED_BY_URI = URI.create(SEMSIM_NAMESPACE + "isDeterminedBy");
-	public static final URI IS_DISCRETE_URI = URI.create(SEMSIM_NAMESPACE + "isDiscrete");
-	public static final URI IS_FUNDAMENTAL_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "isFundamentalUnit");
-	public static final URI IS_SOLUTION_DOMAIN_URI = URI.create(SEMSIM_NAMESPACE + "isSolutionDomain");
-	public static final URI MAPPED_FROM_URI = URI.create(SEMSIM_NAMESPACE + "mappedFrom");
-	public static final URI MAPPED_TO_URI = URI.create(SEMSIM_NAMESPACE + "mappedTo");
-	public static final URI METADATA_ID_URI = URI.create(SEMSIM_NAMESPACE + "metadataID");
-	public static final URI HAS_PHYSICAL_DEFINITION_URI = URI.create(SEMSIM_NAMESPACE + "hasPhysicalDefinition");
-	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(SEMSIM_NAMESPACE + "referenceNameOfImport");
+	public static final URI HAS_COMPUTATIONAL_CODE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasComputationalCode");
+	public static final URI HAS_COMPUTATATIONAL_COMPONENT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasComputationalComponent");
+	public static final URI HAS_MATHML_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasMathML");
+	public static final URI HAS_TRIGGER_MATHML_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasTriggerMathML");
+	public static final URI HAS_EVENT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasEvent");
+	public static final URI HAS_EVENT_ASSIGNMENT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasEventAssignment");
+	public static final URI HAS_PRIORITY_MATHML_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasPriorityMathML");
+	public static final URI HAS_DELAY_MATHML_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasDelayMathML");
+	public static final URI HAS_TIME_UNIT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasTimeUnit");
+	public static final URI HAS_SOLUTION_DOMAIN_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasSolutionDomain");
+	public static final URI HAS_START_VALUE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasStartValue");
+	public static final URI HAS_INPUT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasInput");
+	public static final URI HAS_UNIT_FACTOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasUnitFactor");
+	public static final URI HAS_OUTPUT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasOutput");
+	public static final URI HREF_VALUE_OF_IMPORT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hrefValueOfImport");
+	public static final URI IMPORTED_FROM_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "importedFrom");
+	public static final URI IS_COMPUTATIONAL_COMPONENT_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isComputationalComponentFor");
+	public static final URI IS_OUTPUT_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isOutputFor");
+	public static final URI IS_INPUT_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isInputFor");
+	public static final URI IS_DECLARED_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isDeclared");
+	public static final URI IS_DETERMINED_BY_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isDeterminedBy");
+	public static final URI IS_DISCRETE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isDiscrete");
+	public static final URI IS_FUNDAMENTAL_UNIT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isFundamentalUnit");
+	public static final URI IS_SOLUTION_DOMAIN_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isSolutionDomain");
+	public static final URI MAPPED_FROM_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "mappedFrom");
+	public static final URI MAPPED_TO_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "mappedTo");
+	public static final URI METADATA_ID_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "metadataID");
+	public static final URI HAS_PHYSICAL_DEFINITION_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasPhysicalDefinition");
+	public static final URI REFERENCE_NAME_OF_IMPORT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "referenceNameOfImport");
 
-	public static final URI HAS_UNIT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnit");
-	public static final URI UNIT_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFor");
-	public static final URI HAS_ASSOCIATED_DATA_STRUCTURE_URI = URI.create(SEMSIM_NAMESPACE + "hasAssociatedDataStructure");
-	public static final URI PHYSICAL_PROPERTY_OF_URI = URI.create(SEMSIM_NAMESPACE + "physicalPropertyOf");
-	public static final URI HAS_PHYSICAL_PROPERTY_URI = URI.create(SEMSIM_NAMESPACE + "hasPhysicalProperty");
-	public static final URI PART_OF_URI = URI.create(RO_NAMESPACE + "part_of");
-	public static final URI HAS_PART_URI = URI.create(RO_NAMESPACE + "has_part");
-	public static final URI CONTAINED_IN_URI = URI.create(RO_NAMESPACE + "contained_in");
-	public static final URI CONTAINS_URI = URI.create(RO_NAMESPACE + "contains");
-	public static final URI HAS_INDEX_ENTITY_URI = URI.create(SEMSIM_NAMESPACE + "hasIndexEntity");
-	public static final URI INDEX_ENTITY_FOR_URI = URI.create(SEMSIM_NAMESPACE + "isIndexEntityFor");
-	public static final URI INCLUDES_SUBMODEL_URI = URI.create(SEMSIM_NAMESPACE + "includesSubmodel");
-	public static final URI COMPUTATIONAL_REPRESENTATION_OF_URI = URI.create(SEMSIM_NAMESPACE + "computationalRepresentationOf");
-	public static final URI HAS_MULTIPLIER_URI = URI.create(SEMSIM_NAMESPACE + "hasMultiplier");
-	public static final URI UNIT_FACTOR_EXPONENT_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorExponent");
-	public static final URI UNIT_FACTOR_FOR_URI = URI.create(SEMSIM_NAMESPACE + "unitFactorFor");
-	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorPrefix");
-	public static final URI UNIT_FACTOR_MULTIPLIER_URI = URI.create(SEMSIM_NAMESPACE + "hasUnitFactorMultiplier");
+	public static final URI HAS_UNIT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasUnit");
+	public static final URI UNIT_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "unitFor");
+	public static final URI HAS_ASSOCIATED_DATA_STRUCTURE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasAssociatedDataStructure");
+	public static final URI PHYSICAL_PROPERTY_OF_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "physicalPropertyOf");
+	public static final URI HAS_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasPhysicalProperty");
+	public static final URI PART_OF_URI = URI.create(RDFNamespace.RO.getNamespace() + "part_of");
+	public static final URI HAS_PART_URI = URI.create(RDFNamespace.RO.getNamespace() + "has_part");
+	public static final URI CONTAINED_IN_URI = URI.create(RDFNamespace.RO.getNamespace() + "contained_in");
+	public static final URI CONTAINS_URI = URI.create(RDFNamespace.RO.getNamespace() + "contains");
+	public static final URI HAS_INDEX_ENTITY_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasIndexEntity");
+	public static final URI INDEX_ENTITY_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "isIndexEntityFor");
+	public static final URI INCLUDES_SUBMODEL_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "includesSubmodel");
+	public static final URI COMPUTATIONAL_REPRESENTATION_OF_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "computationalRepresentationOf");
+	public static final URI HAS_MULTIPLIER_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasMultiplier");
+	public static final URI UNIT_FACTOR_EXPONENT_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasUnitFactorExponent");
+	public static final URI UNIT_FACTOR_FOR_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "unitFactorFor");
+	public static final URI UNIT_FACTOR_PREFIX_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasUnitFactorPrefix");
+	public static final URI UNIT_FACTOR_MULTIPLIER_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasUnitFactorMultiplier");
 	
 	// Model-level relations	
-	public static final URI BQB_HAS_PART_URI = URI.create(BQB_NAMESPACE + "hasPart");
-	public static final URI BQB_IS_PART_OF_URI = URI.create(BQB_NAMESPACE + "isPartOf");
-	public static final URI BQB_IS_URI = URI.create(BQB_NAMESPACE + "is");
-	public static final URI BQB_IS_VERSION_OF_URI = URI.create(BQB_NAMESPACE + "isVersionOf");
-	public static final URI BQB_OCCURS_IN_URI = URI.create(BQB_NAMESPACE + "occursIn");
-	public static final URI BQM_IS_URI = URI.create(BQM_NAMESPACE + "is");
-	public static final URI BQM_IS_DESCRIBED_BY_URI = URI.create(BQM_NAMESPACE + "isDescribedBy");
-	public static final URI BQM_IS_DERIVED_FROM_URI = URI.create(BQM_NAMESPACE + "isDerivedFrom");
+	public static final URI BQB_HAS_PART_URI = URI.create(RDFNamespace.BQB.getNamespace() + "hasPart");
+	public static final URI BQB_IS_PART_OF_URI = URI.create(RDFNamespace.BQB.getNamespace() + "isPartOf");
+	public static final URI BQB_IS_URI = URI.create(RDFNamespace.BQB.getNamespace() + "is");
+	public static final URI BQB_IS_VERSION_OF_URI = URI.create(RDFNamespace.BQB.getNamespace() + "isVersionOf");
+	public static final URI BQB_OCCURS_IN_URI = URI.create(RDFNamespace.BQB.getNamespace() + "occursIn");
+	public static final URI BQM_IS_URI = URI.create(RDFNamespace.BQM.getNamespace() + "is");
+	public static final URI BQM_IS_DESCRIBED_BY_URI = URI.create(RDFNamespace.BQM.getNamespace() + "isDescribedBy");
+	public static final URI BQM_IS_DERIVED_FROM_URI = URI.create(RDFNamespace.BQM.getNamespace() + "isDerivedFrom");
 	
-	public static final URI HAS_NOTES_URI = URI.create(SEMSIM_NAMESPACE + "hasNotes");
+	public static final URI HAS_NOTES_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasNotes");
 
-	public static final URI CELLML_INITIAL_VALUE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLinitialValue");
-	public static final URI CELLML_COMPONENT_PRIVATE_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLprivateInterface");
-	public static final URI CELLML_COMPONENT_PUBLIC_INTERFACE_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLpublicInterface");
-	public static final URI CELLML_DOCUMENTATION_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLdocumentation");
-	public static final URI CELLML_RDF_MARKUP_URI = URI.create(SEMSIM_NAMESPACE + "hasCellMLrdfMarkup");
-	public static final URI HAS_NAME_URI = URI.create(SEMSIM_NAMESPACE + "name");
-	public static final URI KEY_TERM_URI = URI.create(SEMSIM_NAMESPACE + "keyTerm");
+	public static final URI CELLML_INITIAL_VALUE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasCellMLinitialValue");
+	public static final URI CELLML_COMPONENT_PRIVATE_INTERFACE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasCellMLprivateInterface");
+	public static final URI CELLML_COMPONENT_PUBLIC_INTERFACE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasCellMLpublicInterface");
+	public static final URI CELLML_DOCUMENTATION_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasCellMLdocumentation");
+	public static final URI CELLML_RDF_MARKUP_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "hasCellMLrdfMarkup");
+	public static final URI HAS_NAME_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "name");
+	public static final URI KEY_TERM_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "keyTerm");
 
 	// Relations
 	public static final SemSimRelation BQB_HAS_PART_RELATION = new SemSimRelation("The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", BQB_HAS_PART_URI);
@@ -298,7 +283,7 @@ public class SemSimConstants {
 		
 		// Namespaces and Ontology Names Map
 		Hashtable<String, String> aMap1 = new Hashtable<String,String>();
-		aMap1.put(OPB_NAMESPACE, ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
+		aMap1.put(RDFNamespace.OPB.getNamespace(), ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
 		aMap1.put("http://identifiers.org/opb/", ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
 		aMap1.put("http://www.owl-ontologies.com/unnamed.owl#", ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
 		aMap1.put("http://biomodels.net/SBO/", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);

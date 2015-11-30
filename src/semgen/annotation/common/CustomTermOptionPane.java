@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semsim.SemSimConstants;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
 
 public abstract class CustomTermOptionPane extends JPanel implements ActionListener, KeyListener {
 	private static final long serialVersionUID = 1L;

@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 

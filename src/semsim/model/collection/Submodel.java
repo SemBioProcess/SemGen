@@ -1,10 +1,10 @@
 package semsim.model.collection;
 
 import java.net.URI;
+
 import semgen.SemGen;
-import semsim.SemSimConstants;
-import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.SemSimConstants;
 import semsim.model.Importable;
 
 public class Submodel extends SemSimCollection implements Importable {
@@ -81,11 +81,6 @@ public class Submodel extends SemSimCollection implements Importable {
 	public void setParentImport(Importable parent) {
 		this.parentImport = parent;
 	}
-
-	@Override
-	public Boolean hasPhysicalDefinitionAnnotation() {
-		return singularterm != null;
-	}
 	
 	public void setSingularAnnotation(ReferenceTerm refterm) {
 		singularterm = refterm;
@@ -94,14 +89,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	public void removeSingularAnnotation() {
 		singularterm = null;
 	}
-	
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
-		if(hasPhysicalDefinitionAnnotation()){
-			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
-		}
-		return null;
-	}
-	
+		
 	public URI getPhysicalDefinitionURI() {
 		return singularterm.getPhysicalDefinitionURI();
 	}

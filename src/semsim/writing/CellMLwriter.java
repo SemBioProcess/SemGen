@@ -29,13 +29,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-import semsim.CellMLconstants;
-import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -66,7 +65,7 @@ public class CellMLwriter extends ModelWriter {
 		outputter.setFormat(Format.getPrettyFormat());
 		
 		try{	
-			mainNS = CellMLconstants.cellml1_1NS;
+			mainNS = RDFNamespace.CELLML1_1.createJdomNamespace();
 			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
 			// Check for events, if present write out error msg
@@ -125,12 +124,12 @@ public class CellMLwriter extends ModelWriter {
 	
 	private void createRootElement() {		
 		root = new Element("model",mainNS);
-		root.addNamespaceDeclaration(CellMLconstants.cmetaNS);
-		root.addNamespaceDeclaration(CellMLconstants.xlinkNS);
-		root.addNamespaceDeclaration(CellMLconstants.rdfNS);
-		root.addNamespaceDeclaration(CellMLconstants.bqbNS);
-		root.addNamespaceDeclaration(CellMLconstants.semsimNS);
-		root.addNamespaceDeclaration(CellMLconstants.dctermsNS);
+		root.addNamespaceDeclaration(RDFNamespace.CMETA.createJdomNamespace());
+		root.addNamespaceDeclaration(RDFNamespace.XLINK.createJdomNamespace());
+		root.addNamespaceDeclaration(RDFNamespace.RDF.createJdomNamespace());
+		root.addNamespaceDeclaration(RDFNamespace.BQS.createJdomNamespace());
+		root.addNamespaceDeclaration(RDFNamespace.SEMSIM.createJdomNamespace());
+		root.addNamespaceDeclaration(RDFNamespace.DCTERMS.createJdomNamespace());
 		
 		String namestring = semsimmodel.getName();
 		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
@@ -140,7 +139,7 @@ public class CellMLwriter extends ModelWriter {
 		
 		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.sourcemodelid)) {
 			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.sourcemodelid);
-			root.setAttribute("id", namestring, CellMLconstants.cmetaNS);
+			root.setAttribute("id", namestring, RDFNamespace.CMETA.createJdomNamespace());
 		}
 		
 		
@@ -162,7 +161,7 @@ public class CellMLwriter extends ModelWriter {
 				// need to create a new import element for each imported piece
 				String hrefVal = ssc.getHrefValue();
 				importel = new Element("import", mainNS);
-				importel.setAttribute("href", hrefVal, CellMLconstants.xlinkNS);
+				importel.setAttribute("href", hrefVal, RDFNamespace.XLINK.createJdomNamespace());
 				importelements.add(importel); // make a set of elements
 				
 				String metaidprefix = null;
@@ -371,7 +370,7 @@ public class CellMLwriter extends ModelWriter {
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
 			if(!submodel.getMetadataID().equalsIgnoreCase("")) 
-				comp.setAttribute("id", submodel.getMetadataID(), CellMLconstants.cmetaNS);  // Add ID, if present
+				comp.setAttribute("id", submodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());  // Add ID, if present
 			
 			// Add the variables
 			for(DataStructure ds : submodel.getAssociatedDataStructures()){
@@ -403,7 +402,7 @@ public class CellMLwriter extends ModelWriter {
 				String metadataid = ds.getMetadataID();
 				// Add other attributes
 				if(!metadataid.equals(""))
-					variable.setAttribute("id", metadataid, CellMLconstants.cmetaNS);
+					variable.setAttribute("id", metadataid, RDFNamespace.CMETA.createJdomNamespace());
 				if(initialval!=null && !initialval.equals(""))
 					variable.setAttribute("initial_value", initialval);
 				if(nameval!=null && !nameval.equals(""))
@@ -460,7 +459,7 @@ public class CellMLwriter extends ModelWriter {
 		Content c = makeXMLContentFromString(xml);
 		
 		List<Content> listofmathmlels = new ArrayList<Content>();
-		Iterator<?> it = ((Element) c).getChildren("math", CellMLconstants.mathmlNS).iterator();
+		Iterator<?> it = ((Element) c).getChildren("math", RDFNamespace.MATHML.createJdomNamespace()).iterator();
 		while(it.hasNext()){
 			Element el = (Element) it.next();
 			Element clone = (Element) el.clone();
@@ -487,9 +486,9 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add free-text description, if present
 				if(!freetext.equals("")){
-					Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+					Property ftprop = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespace() + "description");
 					Statement st = localrdf.createStatement(ares, ftprop, freetext);
-					collectRDFStatement(st, "dcterms", CurationalMetadata.DCTERMS_NAMESPACE, localrdf);
+					collectRDFStatement(st, "dcterms", RDFNamespace.DCTERMS.getNamespace(), localrdf);
 				}
 								
 				// Add singular annotation
@@ -499,7 +498,7 @@ public class CellMLwriter extends ModelWriter {
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());
 					Statement st = localrdf.createStatement(ares, isprop, refres);
-					collectRDFStatement(st, "bqbiol", SemSimConstants.BQB_NAMESPACE, localrdf);
+					collectRDFStatement(st, "bqbiol", RDFNamespace.BQB.getNamespace(), localrdf);
 				}
 				
 				// Add the local RDF within the annotated CellML element
@@ -511,10 +510,10 @@ public class CellMLwriter extends ModelWriter {
 				
 				// If annotated thing is a variable, include any necessary composite annotation info
 				if(hasphysprop){
-					rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("ro", SemSimConstants.RO_NAMESPACE);
+					rdfblock.rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespace());
+					rdfblock.rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespace());
+					rdfblock.rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespace());
+					rdfblock.rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespace());
 					rdfblock.rdf.setNsPrefix("model", semsimmodel.getNamespace());
 						
 					Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
@@ -546,12 +545,12 @@ public class CellMLwriter extends ModelWriter {
 				metaid = idprefix + n;
 			}
 			metadataids.add(metaid);
-			el.setAttribute("id", metaid, CellMLconstants.cmetaNS);
+			el.setAttribute("id", metaid, RDFNamespace.CMETA.createJdomNamespace());
 		}
 		
-		rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-		rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-		rdfblock.rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
+		rdfblock.rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespace());
+		rdfblock.rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespace());
+		rdfblock.rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespace());
 		return metaid;
 	}
 	

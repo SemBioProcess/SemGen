@@ -4,11 +4,11 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelation;
 import semsim.model.Importable;
 import semsim.model.computational.ComputationalModelComponent;
 

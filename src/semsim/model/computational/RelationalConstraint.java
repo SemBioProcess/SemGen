@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimConstants;
 import semsim.model.computational.datastructures.DataStructure;
 
 /** A class to represent relational statements in simulation models that express non-equivalencies.

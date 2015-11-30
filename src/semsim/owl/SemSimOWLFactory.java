@@ -52,7 +52,8 @@ import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
-import semsim.SemSimConstants;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimConstants;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -99,7 +100,7 @@ public class SemSimOWLFactory {
 	// Add external class
 	public static void addExternalReferenceClass(OWLOntology destinationont,
 			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
-		String parentname = SemSimConstants.SEMSIM_NAMESPACE + "Reference_physical_" + physicaltype;
+		String parentname = RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_" + physicaltype;
 		OWLClass parent = factory.getOWLClass(IRI.create(parentname));
 		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsuri));
 		OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd, parent);

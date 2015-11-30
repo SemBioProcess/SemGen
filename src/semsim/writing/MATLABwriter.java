@@ -20,8 +20,8 @@ import org.jdom.output.XMLOutputter;
 import org.sbml.libsbml.ASTNode;
 import org.sbml.libsbml.libsbml;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -338,7 +338,7 @@ public class MATLABwriter extends ModelWriter{
 		try {
 			doc = saxbuilder.build(new StringReader(mathmlstring));
 			
-			Namespace mathns = SemSimConstants.MATHML_NAMESPACE_OBJ;
+			Namespace mathns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespace());
 			if(doc.getRootElement().getChild("piecewise", mathns)!=null){
 				Iterator<?> piecesit = doc.getRootElement().getChild("piecewise",mathns).getChildren("piece", mathns).iterator();
 				
