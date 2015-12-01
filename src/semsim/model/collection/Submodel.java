@@ -4,7 +4,7 @@ import java.net.URI;
 
 import semgen.SemGen;
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
 
 public class Submodel extends SemSimCollection implements Importable {
@@ -18,6 +18,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	protected boolean functional = false;
 	
 	public Submodel(String name){ 
+		super(SemSimTypes.SUBMODEL);
 		setName(name);
 	}
 	
@@ -104,11 +105,6 @@ public class Submodel extends SemSimCollection implements Importable {
 	 */
 	public String getNamewithOntologyAbreviation() {
 		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getPhysicalDefinitionURI()) + ")";
-	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SUBMODEL_CLASS_URI;
 	}
 	
 	public boolean isFunctional() {

@@ -16,7 +16,7 @@ import semsim.definitions.SemSimConstants;
 import semsim.definitions.SemSimRelation;
 import semsim.definitions.StructuralRelation;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;

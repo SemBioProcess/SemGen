@@ -26,7 +26,7 @@ import semgen.annotation.workbench.routines.TermCollector;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.definitions.PropertyType;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 
 public class ReplaceTermPane extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;

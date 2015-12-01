@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * A set of constants for working with SemSim models
  */
@@ -43,28 +41,6 @@ public class SemSimConstants {
 	public static final String UNIPROT_FULLNAME = "Universal Protein Resource";
 			
 	// URIs
-	public static final URI COMPUTATION_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Computation");
-	public static final URI EVENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Event");
-	public static final URI EVENT_ASSIGNMENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "EventAssignment");
-	public static final URI SEMSIM_MODEL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "SemSim_Model");
-	public static final URI RELATIONAL_CONSTRAINT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Relational_constraint");
-	public static final URI DATA_STRUCTURE_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Data_structure");
-	public static final URI DECIMAL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Decimal");
-	public static final URI SEMSIM_INTEGER_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Integer");
-	public static final URI MML_CHOICE_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "MMLchoice");
-	public static final URI PHYSICAL_MODEL_COMPONENT_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_model_component");
-	public static final URI COMPOSITE_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Composite_physical_entity");
-	public static final URI UNITS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Unit_of_measurement");
-	public static final URI PHYSICAL_PROPERTY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_property");
-	public static final URI PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_entity");
-	public static final URI REFERENCE_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_entity");
-	public static final URI PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_process");
-	public static final URI REFERENCE_PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_process");
-	public static final URI PHYSICAL_DEPENDENCY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Physical_dependency");
-	public static final URI CUSTOM_PHYSICAL_ENTITY_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Custom_physical_entity");
-	public static final URI CUSTOM_PHYSICAL_PROCESS_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Custom_physical_process");
-	public static final URI SUBMODEL_CLASS_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "Submodel");
-	
 	public static final URI CELLML_COMPONENT_SUBSUMPTION_TYPE_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "submodelSubsumptionType");
 	public static final URI DETERMINES_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "determines");
 	public static final URI ENCAPSULATES_URI = URI.create(RDFNamespace.SEMSIM.getNamespace() + "encapsulates");
@@ -218,7 +194,7 @@ public class SemSimConstants {
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
-	public static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
+
 	
 	static{       
         // URIsAndSemSimRelations Map

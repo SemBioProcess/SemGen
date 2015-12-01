@@ -9,6 +9,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.SemSimConstants;
 import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
 import semsim.model.computational.ComputationalModelComponent;
 
@@ -28,6 +29,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	private String unitType;
 	
 	public UnitOfMeasurement(String name){
+		super(SemSimTypes.UNIT_OF_MEASUREMENT);
 		setName(name);
 		setComputationalCode(name);
 	}
@@ -213,12 +215,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public String getUnitType() {
 		return unitType;
 	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.UNITS_CLASS_URI;
-	}
-	
+
 	public URI getPhysicalDefinitionURI() {
 		return referenceuri;
 	}

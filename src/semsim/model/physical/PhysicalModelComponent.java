@@ -8,14 +8,16 @@ import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.SemSimComponent;
-import semsim.model.SemSimTypes;
 import semsim.utilities.SemSimCopy;
 
 public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable {
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	
-	public PhysicalModelComponent() {}
+	public PhysicalModelComponent(SemSimTypes type) {
+		super(type);
+	}
 	
 	public PhysicalModelComponent(PhysicalModelComponent pmctocopy) {
 		super(pmctocopy);
@@ -87,5 +89,4 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	protected abstract boolean isEquivalent(Object obj);
-	public abstract SemSimTypes getSemSimType();
 }

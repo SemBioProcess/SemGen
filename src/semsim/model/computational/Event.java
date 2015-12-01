@@ -1,10 +1,9 @@
 package semsim.model.computational;
 
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 
@@ -18,6 +17,7 @@ public class Event extends ComputationalModelComponent{
 	
 	// Constructor
 	public Event(){
+		super(SemSimTypes.EVENT);
 		eventAssignments = new HashSet<EventAssignment>();
 	} 
 	
@@ -111,7 +111,9 @@ public class Event extends ComputationalModelComponent{
 		private DataStructure output;
 		
 		// Constructor
-		public EventAssignment(){}
+		public EventAssignment(){
+			super(SemSimTypes.EVENT_ASSIGNMENT);
+		}
 
 		public String getMathML() {
 			return mathML;
@@ -129,17 +131,6 @@ public class Event extends ComputationalModelComponent{
 			this.output = output;
 		}
 
-		@Override
-		public URI getSemSimClassURI() {
-			// TODO Auto-generated method stub
-			return SemSimConstants.EVENT_ASSIGNMENT_CLASS_URI;
-		}
-	}
-	
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.EVENT_CLASS_URI;
 	}
 
 }

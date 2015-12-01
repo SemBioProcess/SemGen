@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,12 +68,11 @@ import semsim.utilities.SemSimUtil;
 
 public class SBMLreader extends ModelReader{
 
-	public Model sbmlmodel;
+	private Model sbmlmodel;
 	private Map<String, PhysicalEntity> compartmentAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
 	private Map<String, CompositePhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
-	public Hashtable<String, String[]> ontologycache = new  Hashtable<String, String[]>();
-	public Set<String> baseUnits = new HashSet<String>();
+	private Set<String> baseUnits = new HashSet<String>();
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;

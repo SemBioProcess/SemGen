@@ -6,12 +6,13 @@ import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimConstants;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 import semsim.model.physical.PhysicalModelComponent;
 
 public class PhysicalPropertyinComposite extends PhysicalModelComponent implements ReferenceTerm{
 		
 	public PhysicalPropertyinComposite(String label, URI uri) {
+		super(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE);
 		referenceuri = uri;
 		setName(label);
 	}
@@ -39,12 +40,6 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	public String getComponentTypeasString() {
 		return "property";
 	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI;
-	}
-
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
@@ -59,10 +54,5 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	@Override
 	public String getTermID() {
 		return referenceuri.getFragment();
-	}
-	
-	@Override
-	public SemSimTypes getSemSimType() {
-		return SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE;
 	}
 }

@@ -3,6 +3,7 @@ package semsim.model;
 import java.net.URI;
 
 import semsim.SemSimObject;
+import semsim.definitions.SemSimTypes;
 
 /**
  * A SemSimComponent is a representation of a mathematical or physical element
@@ -10,7 +11,10 @@ import semsim.SemSimObject;
 public abstract class SemSimComponent extends SemSimObject {
 	
 	protected URI referenceuri = URI.create(new String(""));
-	public SemSimComponent() {}
+	public SemSimComponent(SemSimTypes type) {
+		super(type);
+		
+	}
 	
 	public SemSimComponent(SemSimComponent ssctocopy) {
 		super (ssctocopy);

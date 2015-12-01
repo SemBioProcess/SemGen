@@ -13,7 +13,7 @@ import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
 import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.PropertyType;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalModelComponent;

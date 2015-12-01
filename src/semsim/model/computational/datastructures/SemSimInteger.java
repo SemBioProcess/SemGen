@@ -1,8 +1,6 @@
 package semsim.model.computational.datastructures;
 
-import java.net.URI;
-
-import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
 
 /** A {@link DataStructure} that is assigned an integer value during simulation.*/
@@ -11,6 +9,7 @@ public class SemSimInteger extends DataStructure{
 	/** Constructor where only the name of the data structure is specified.
 	 * Automatically associates this SemSimInteger with a new {@link Computation} class.*/
 	public SemSimInteger(String name){
+		super(SemSimTypes.INTEGER);
 		setName(name);
 		setComputation(new Computation(this));
 	}
@@ -18,6 +17,7 @@ public class SemSimInteger extends DataStructure{
 	/** Constructor where the name of the data structure is specified along with the 
 	 * associated {@link Computation} that specifies how the SemSimInteger is solved.*/
 	public SemSimInteger(String name, Computation computation){
+		super(SemSimTypes.INTEGER);
 		setName(name);
 		setComputation(computation);
 	}
@@ -28,10 +28,5 @@ public class SemSimInteger extends DataStructure{
 	
 	public boolean isReal() {
 		return true;
-	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SEMSIM_INTEGER_CLASS_URI;
 	}
 }

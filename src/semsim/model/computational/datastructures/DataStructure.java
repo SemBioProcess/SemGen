@@ -11,6 +11,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.PropertyType;
 import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -38,7 +39,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	private String startValue;
 	private UnitOfMeasurement unit;
 	
-	public DataStructure() {}
+	public DataStructure(SemSimTypes type) {
+		super(type);
+	}
 	
 	public DataStructure(DataStructure dstocopy) {
 		super(dstocopy);

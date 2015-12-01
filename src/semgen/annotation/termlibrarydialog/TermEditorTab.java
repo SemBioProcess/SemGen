@@ -36,7 +36,7 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 
 public class TermEditorTab extends JPanel implements ListSelectionListener, Observer {
 	private static final long serialVersionUID = 1L;

@@ -4,9 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.SemSimConstants;
 import semsim.definitions.StructuralRelation;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 
@@ -16,6 +15,7 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	private ArrayList<StructuralRelation> arrayListOfStructuralRelations = new ArrayList<StructuralRelation>();
 
 	public CompositePhysicalEntity(ArrayList<PhysicalEntity> ents, ArrayList<StructuralRelation> rels){
+		super(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY);
 		if(ents.size()-1 != rels.size()){
 			System.err.println("Error constructing composite physical entity: " +
 					"length of relations array (" + rels.size() + 
@@ -147,15 +147,8 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	}
 
 	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI;
-	}
-	@Override
 	protected boolean isEquivalent(Object obj) {
 		return compareTo((CompositePhysicalEntity)obj)==0;
 	}
-	@Override
-	public SemSimTypes getSemSimType() {
-		return SemSimTypes.COMPOSITE_PHYSICAL_ENTITY;
-	}
+
 }

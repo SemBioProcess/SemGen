@@ -16,6 +16,7 @@ public class SemSimRelation extends SemSimComponent{
 	 * @param description A free-text description of the relation
 	 * @param relationURI A URI for the relation */
 	public SemSimRelation(String description, URI relationURI) {
+		super(SemSimTypes.RELATION);
 		String name;
 		if(relationURI.getFragment()==null){
 			name = relationURI.toString();
@@ -41,10 +42,5 @@ public class SemSimRelation extends SemSimComponent{
 	
 	public String getURIFragment() {
 		return SemSimOWLFactory.getIRIfragment(getURI().toString());
-	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return null;
 	}
 }

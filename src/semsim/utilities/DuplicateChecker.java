@@ -2,7 +2,7 @@ package semsim.utilities;
 
 import java.util.HashSet;
 
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;

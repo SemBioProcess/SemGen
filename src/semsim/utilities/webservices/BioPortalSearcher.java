@@ -17,13 +17,14 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import semsim.definitions.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
 
 public class BioPortalSearcher {
-	
+	private static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	public HashMap<String,String> search(String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
@@ -114,7 +115,7 @@ public class BioPortalSearcher {
 	        rd.close();
 	        	        
 	        // process resulting input stream
-            JsonNode root = SemSimConstants.JSON_OBJECT_MAPPER.readTree(result);
+            JsonNode root = JSON_OBJECT_MAPPER.readTree(result);
             JsonNode labelnode = root.get("prefLabel");
             if(labelnode!=null)
             	label = labelnode.textValue();

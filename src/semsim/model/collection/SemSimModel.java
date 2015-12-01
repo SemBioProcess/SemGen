@@ -21,8 +21,8 @@ import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimConstants;
 import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
@@ -106,6 +106,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Constructor without namespace
 	 */
 	public SemSimModel(){
+		super(SemSimTypes.MODEL);
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
@@ -113,6 +114,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Constructor with namespace
 	 */
 	public SemSimModel(String namespace){
+		super(SemSimTypes.MODEL);
 		setNamespace(namespace);
 	}
 	
@@ -975,10 +977,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	public void setSemsimversion(String semsimversion) {
 		this.semsimversion = Double.valueOf(semsimversion);
-	}
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
 	}
 		
 	public void replacePhysicalProperty(PhysicalPropertyinComposite tobereplaced, PhysicalPropertyinComposite toreplace) {

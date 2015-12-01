@@ -41,6 +41,7 @@ import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -122,8 +123,8 @@ public class SemSimOWLreader extends ModelReader {
 		}
 		
 		// Test if the model actually has data structures
-		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString()).isEmpty()
-				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString()).isEmpty()){
+		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString()).isEmpty()
+				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROPERTY.getURIasString()).isEmpty()){
 			semsimmodel.addError("No data structures or physical properties in model");
 		}
 		return (semsimmodel.getErrors().size() > 0);
@@ -170,7 +171,7 @@ public class SemSimOWLreader extends ModelReader {
 	}
 
 	private void collectReferenceClasses() throws OWLException {
-		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI.toString(),false)) {
+		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.PHYSICAL_PROPERTY.getURIasString(),false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
 			
@@ -180,7 +181,7 @@ public class SemSimOWLreader extends ModelReader {
 			idpropertymap.put(refuri, pp);
 		}
 
-		for (String rperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimConstants.REFERENCE_PHYSICAL_ENTITY_CLASS_URI.toString(), false)) {
+		for (String rperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.REFERENCE_PHYSICAL_ENTITY.getURIasString(), false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(rperef)))[0];
 			PhysicalEntity pe;
 			if(!rperef.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
@@ -197,13 +198,13 @@ public class SemSimOWLreader extends ModelReader {
 			identitymap.put(rperef, pe);
 		}
 
-		for (String cuperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI.toString())) {
+		for (String cuperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimTypes.CUSTOM_PHYSICAL_ENTITY.getURIasString())) {
 			makeCustomEntity(cuperef);
 		}
 	}
 	
 	private void collectCompositeEntities() throws OWLException {
-		for (String cperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimConstants.COMPOSITE_PHYSICAL_ENTITY_CLASS_URI.toString())) {		
+		for (String cperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimTypes.COMPOSITE_PHYSICAL_ENTITY.getURIasString())) {		
 			String ind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, cperef, SemSimConstants.HAS_INDEX_ENTITY_URI.toString());
 			String index = ind;
 			ArrayList<PhysicalEntity> rpes = new ArrayList<PhysicalEntity>();
@@ -234,7 +235,7 @@ public class SemSimOWLreader extends ModelReader {
 	// Deal with physical processes
 	private void createProcesses() throws OWLException {
 		// For each process instance in the class SemSim:Physical_process
-		for(String processind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.PHYSICAL_PROCESS_CLASS_URI.toString())){
+		for(String processind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROCESS.getURIasString())){
 			
 			String processlabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(processind)))[0];
 			String description = null;
@@ -294,7 +295,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void collectDataStructures() throws OWLException {
 		// Get data structures and add them to model - Decimals, Integers, MMLchoice
-				for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){
+				for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString())){
 					String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
 					String computationind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimConstants.IS_OUTPUT_FOR_URI.toString());
 					String compcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, computationind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
@@ -304,7 +305,7 @@ public class SemSimOWLreader extends ModelReader {
 					DataStructure ds = null;
 					
 					// If the data structure is a decimal
-					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimConstants.DECIMAL_CLASS_URI.toString(), ont)){
+					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.DECIMAL.getURIasString(), ont)){
 						// If it's not a CellML-type variable
 						if(SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PUBLIC_INTERFACE_URI.toString()).isEmpty()
 								&& SemSimOWLFactory.getIndDatatypeProperty(ont, dsind, SemSimConstants.CELLML_COMPONENT_PRIVATE_INTERFACE_URI.toString()).isEmpty()
@@ -317,10 +318,10 @@ public class SemSimOWLreader extends ModelReader {
 							ds = new MappableVariable(name);
 					}
 					// If an integer
-					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimConstants.SEMSIM_INTEGER_CLASS_URI.toString(), ont))
+					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.INTEGER.getURIasString(), ont))
 						ds = new SemSimInteger(name);
 					// If an MML choice variable
-					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimConstants.MML_CHOICE_CLASS_URI.toString(), ont))
+					if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.MMLCHOICE.getURIasString(), ont))
 						ds = new MMLchoice(name);
 					semsimmodel.addDataStructure(ds);
 					if(!compcode.equals("")) ds.getComputation().setComputationalCode(compcode);
@@ -386,7 +387,7 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	private void mapCellMLTypeVariables() throws OWLException {
-		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DECIMAL_CLASS_URI.toString())){
+		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DECIMAL.getURIasString())){
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind));
 			if(ds instanceof MappableVariable){
 				for(String mappedvaruri : SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimConstants.MAPPED_TO_URI.toString())){
@@ -403,7 +404,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void collectUnits() throws OWLException {
 		// Add units to model, assign to data structures, store unit factoring
-		for(String unitind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.UNITS_CLASS_URI.toString())){
+		for(String unitind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.UNIT_OF_MEASUREMENT.getURIasString())){
 			String unitcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, unitind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
 			
 			UnitOfMeasurement uom = semsimmodel.getUnit(unitcode);
@@ -490,7 +491,7 @@ public class SemSimOWLreader extends ModelReader {
 	/** Go through existing data structures and establish the hasInput relationships */
 	private void establishIsInputRelationships() throws OWLException {
 		
-		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimConstants.DATA_STRUCTURE_CLASS_URI.toString())){
+		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString())){
 			String name = SemSimOWLFactory.getURIdecodedFragmentFromIRI(dsind);
 			
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(name);
@@ -504,7 +505,7 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	private void collectRelationalConstraints() throws OWLException {
-		for(String relind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.RELATIONAL_CONSTRAINT_CLASS_URI.toString())){
+		for(String relind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.RELATIONAL_CONSTRAINT.getURIasString())){
 			String mmleq = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, relind, SemSimConstants.HAS_COMPUTATIONAL_CODE_URI.toString());
 			String mathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, relind, SemSimConstants.HAS_MATHML_URI.toString());
 			semsimmodel.addRelationalConstraint(new RelationalConstraint(mmleq, mathml));
@@ -513,7 +514,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void collectEvents() throws OWLException{
 		
-		for(String eventind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.EVENT_CLASS_URI.toString())){
+		for(String eventind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.EVENT.getURIasString())){
 			String eventname = SemSimOWLFactory.getIRIfragment(eventind);
 			Event ssevent = new Event();
 			ssevent.setName(eventname);
@@ -562,10 +563,10 @@ public class SemSimOWLreader extends ModelReader {
 	private void collectCustomAnnotations() {
 		// Get additional annotations on custom terms
 		// Make sure to get reference classes that are there to define custom classes
-		URI[] customclasses = new URI[]{SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI, SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI};
+		SemSimTypes[] customclasses = new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_ENTITY, SemSimTypes.CUSTOM_PHYSICAL_PROCESS};
 		
 		// For the two custom physical model classes...
-		for(URI customclassuri : customclasses){			
+		for(SemSimTypes customclassuri : customclasses){			
 			// For each custom term in them...
 			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclassuri.toString())){
 				OWLNamedIndividual custind = factory.getOWLNamedIndividual(IRI.create(custstring));
@@ -594,12 +595,12 @@ public class SemSimOWLreader extends ModelReader {
 								// each custom object
 								PhysicalModelComponent pmc = null;
 								
-								if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_PROCESS_CLASS_URI) {
+								if(customclassuri==SemSimTypes.CUSTOM_PHYSICAL_PROCESS) {
 									semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(reftermURI, label));
 									pmc = semsimmodel.getCustomPhysicalProcessByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
 								}
 								
-								if(customclassuri==SemSimConstants.CUSTOM_PHYSICAL_ENTITY_CLASS_URI) {
+								if(customclassuri==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
 									semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(reftermURI, label));
 									pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
 								}
@@ -630,7 +631,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void collectSubModels() throws OWLException {
 		// Collect the submodels
-		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimConstants.SUBMODEL_CLASS_URI.toString());
+		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.SUBMODEL.getURIasString());
 		
 		for(String sub : subset){
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimConstants.HAS_NAME_URI.toString());
@@ -821,12 +822,12 @@ public class SemSimOWLreader extends ModelReader {
 	
 	// Get a string value from an annotation on an datatype property axiom (individual > prop > datatype)
 	private String getStringValueFromAnnotatedDataPropertyAxiom(OWLOntology ont, String subject, URI pred, String data, URI annpropuri){
-		String val = null;
 		OWLIndividual subjectind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLDataProperty owlprop = factory.getOWLDataProperty(IRI.create(pred));
 		OWLAxiom axiom = factory.getOWLDataPropertyAssertionAxiom(owlprop, subjectind, data);
-		
 		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(IRI.create(annpropuri));
+		
+		String val = null;
 		for(OWLAxiom ax : ont.getAxioms(subjectind)){
 			if(ax.equalsIgnoreAnnotations(axiom)){
 				if(!ax.getAnnotations(annprop).isEmpty()){
