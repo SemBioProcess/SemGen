@@ -19,13 +19,15 @@ import org.jdom.input.SAXBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import semsim.SemSimLibrary;
+import semsim.annotation.Ontology;
 import semsim.definitions.SemSimConstants;
 import semsim.owl.SemSimOWLFactory;
 
 
 public class BioPortalSearcher {
 	private static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
-	public HashMap<String,String> search(String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
+	public HashMap<String,String> search(SemSimLibrary lib, String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
 		boolean exactmatchbool = exactmatch==1; 
@@ -71,19 +73,12 @@ public class BioPortalSearcher {
 					String uri = nextel.getChildText("id");
 	
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
-					String urins = SemSimOWLFactory.getNamespaceFromIRI(uri);
+					Ontology ont = lib.getOntologyfromTermURI(uri);
 					
-					if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(urins)){
-						String sourceontfullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(urins);
-						
-						if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(sourceontfullname)){
-							String sourceontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(sourceontfullname);
-													
-							if(sourceontID.equals(bioportalID)){
-								rdflabelsanduris.put(preferredLabel, uri);
-							}
-						}
+					if(ont.getNickName().equals(bioportalID)){
+						rdflabelsanduris.put(preferredLabel, uri);
 					}
+
 				}
 			}
 		}

@@ -611,13 +611,13 @@ public class SemSimOWLreader extends ModelReader {
 								if(pmc!=null){
 									
 									if(propstring.equals(SemSimConstants.BQB_IS_VERSION_OF_URI.toString()))
-										pmc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, reftermURI, label);
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, reftermURI, label, sslib);
 									
 									else if(propstring.equals(SemSimConstants.HAS_PART_URI.toString()))
-										pmc.addReferenceOntologyAnnotation(SemSimConstants.HAS_PART_RELATION, reftermURI, label);
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.HAS_PART_RELATION, reftermURI, label, sslib);
 									
 									else if(propstring.equals(SemSimConstants.PART_OF_URI.toString()))
-										pmc.addReferenceOntologyAnnotation(SemSimConstants.PART_OF_RELATION, reftermURI, label);
+										pmc.addReferenceOntologyAnnotation(SemSimConstants.PART_OF_RELATION, reftermURI, label, sslib);
 								}
 								else semsimmodel.addError("Attempt to apply reference ontology annotation " + propstring + " to " + custstring + " failed."
 										+ "\nCould not find individual in set of processed physical model components");

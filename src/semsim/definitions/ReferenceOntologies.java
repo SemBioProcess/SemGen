@@ -2,7 +2,11 @@ package semsim.definitions;
 
 import java.util.ArrayList;
 
+import semsim.annotation.Ontology;
+
 public class ReferenceOntologies {
+	public final static Ontology unknown = new Ontology(ReferenceOntology.UNKNOWN);
+	
 	public static ArrayList<ReferenceOntology> getAllOntologies() {
 		ArrayList<ReferenceOntology> allont = new ArrayList<ReferenceOntology>();
 		for (ReferenceOntology ont : ReferenceOntology.values()) {
@@ -15,14 +19,21 @@ public class ReferenceOntologies {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.getFullName().equals(name)) return ro; 
 		}
-		return null;
+		return ReferenceOntology.UNKNOWN;
 	}
 	
 	public static ReferenceOntology getReferenceOntologybyNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro;
 		}
-		return null;
+		return ReferenceOntology.UNKNOWN;
+	}
+	
+	public static Ontology getOntologybyNamespace(String namespace) {
+		for (ReferenceOntology ro : ReferenceOntology.values()) {
+			if (ro.hasNamespace(namespace)) return new Ontology(ro);
+		}
+		return unknown;
 	}
 	
 	public enum OntologyDomain {
@@ -107,7 +118,8 @@ public class ReferenceOntologies {
 				"clinical-domain physical properties not in the OPB"),
 		UNIPROT("Universal Protein Resource", "UNIPROPT", "",
 				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"},
-				"protein sequences and functions");
+				"protein sequences and functions"),
+		UNKNOWN("Unkown Ontology", "?", "", new String[]{}, "") ;
 		
 		private String fullname;
 		private String nickname;
@@ -146,6 +158,10 @@ public class ReferenceOntologies {
 		
 		public String getDescription() {
 			return description;
+		}
+		
+		public ArrayList<String> getNamespaces() {
+			return namespaces;
 		}
 	}
 }

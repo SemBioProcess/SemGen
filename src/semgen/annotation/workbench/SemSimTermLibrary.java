@@ -454,7 +454,7 @@ public class SemSimTermLibrary extends Observable {
 		public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
-			pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName());
+			pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), SemGen.semsimlib);
 			notifyTermChanged();
 		}
 		

@@ -983,7 +983,7 @@ public class SBMLreader extends ModelReader{
 									
 									// And we haven't added one yet, add it
 									if(numidentityanns==0){
-										anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
+										anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring, sslib));
 										numidentityanns++;
 									}
 									// Otherwise skip the identity annotation
@@ -991,7 +991,7 @@ public class SBMLreader extends ModelReader{
 												getIDforSBaseObject(sbmlobject) + ". Ignoring annotation against " + uristring);
 								}
 								// Otherwise add the non-identity annotation
-								else anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring));
+								else anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring, sslib));
 							}
 						}
 					}
@@ -1023,7 +1023,7 @@ public class SBMLreader extends ModelReader{
 					for(int h=0; h<term.getNumResources(); h++){
 						String uri = term.getResourceURI(h);
 						SemSimRelation relation = (t==0) ? SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION : SemSimConstants.MODEL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
-						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri));
+						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri, sslib));
 					}
 				}
 			}

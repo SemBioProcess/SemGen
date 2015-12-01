@@ -493,7 +493,7 @@ public class CellMLwriter extends ModelWriter {
 								
 				// Add singular annotation
 				if(a.hasPhysicalDefinitionAnnotation()){
-					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
+					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation(sslib).getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri);
 					Resource refres = localrdf.createResource(furi.toString());

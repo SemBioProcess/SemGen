@@ -118,7 +118,7 @@ public class LoadSemSimModel extends SemGenJob {
 	}
 	
 	private void nameOntologyTerms(){
-		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){
+		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel, SemGen.semsimlib).size()>0){
 
 			setStatus("Annotating with web services...");
 			boolean online = BioPortalSearcher.testBioPortalWebservice();
@@ -126,7 +126,7 @@ public class LoadSemSimModel extends SemGenJob {
 			if(!online){
 				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
 			}
-				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache());
+				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), SemGen.semsimlib);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 			}
 		}

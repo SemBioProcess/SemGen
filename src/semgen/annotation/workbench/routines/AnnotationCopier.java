@@ -4,6 +4,7 @@ package semgen.annotation.workbench.routines;
 import java.util.HashSet;
 import java.util.Set;
 
+import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -62,7 +63,7 @@ public class AnnotationCopier {
 		for(MappableVariable otherds : targetdsset){
 			if(!otherds.isImportedViaSubmodel()){
 				otherds.copyDescription(sourceds);
-				otherds.copySingularAnnotations(sourceds);
+				otherds.copySingularAnnotations(sourceds, SemGen.semsimlib);
 				copyCompositeAnnotation(sourceds, otherds);
 			}
 		}

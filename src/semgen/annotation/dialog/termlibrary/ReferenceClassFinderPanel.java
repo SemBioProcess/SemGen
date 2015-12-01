@@ -246,7 +246,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		if (bioportalID!=selected.getBioPortalID()) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
-				rdflabelsanduris = bps.search(text, bioportalID, findchooser.getSelectedIndex());
+				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalID, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
 				SemGenError.showWebConnectionError("BioPortal web service");

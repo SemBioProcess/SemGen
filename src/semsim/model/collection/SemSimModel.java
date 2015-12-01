@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
@@ -917,8 +918,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param description A free-text description of the reference
 	 * ontology term (obtained from the ontology itself whenever possible). 
 	 */
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
 	

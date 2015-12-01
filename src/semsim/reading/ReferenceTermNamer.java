@@ -9,12 +9,15 @@ import java.util.Set;
 
 import org.jdom.JDOMException;
 
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
+import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.RDFNamespace;
+import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimConstants;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -23,7 +26,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
-import semsim.utilities.webservices.BioPortalConstants;
 import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.KEGGsearcher;
 import semsim.utilities.webservices.UniProtSearcher;
@@ -39,7 +41,7 @@ public class ReferenceTermNamer {
 	 * @param model The SemSim model containing the SemSimObjects that will be processed
 	 * @return The set of SemSimObjects annotated with reference terms that are missing names.
 	 */
-	public static Set<SemSimObject> getModelComponentsWithUnnamedAnnotations(SemSimModel model){
+	public static Set<SemSimObject> getModelComponentsWithUnnamedAnnotations(SemSimModel model, SemSimLibrary lib){
 		
 		Set<SemSimObject> unnamed = new HashSet<SemSimObject>();
 		
@@ -51,7 +53,7 @@ public class ReferenceTermNamer {
 				anns.addAll(annthing.getAnnotations());
 				
 				if(ssc instanceof ReferenceTerm) 
-					anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
+					anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation(lib));
 				
 				// If annotation present
 				for(Annotation ann : anns){
@@ -72,7 +74,7 @@ public class ReferenceTermNamer {
 	}
 	
 	
-	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map){	
+	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, SemSimLibrary lib){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
 			URInameMap = new HashMap<String,String[]>();
@@ -81,14 +83,14 @@ public class ReferenceTermNamer {
 		// If we are online, get all the components of the model that can be annotated
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
-		for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model)){
+		for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model, lib)){
 			
 			Annotatable annthing = (Annotatable)ssc;
 			Set<Annotation> anns = new HashSet<Annotation>();
 			anns.addAll(annthing.getAnnotations());
 			
 			if(ssc instanceof ReferenceTerm) 
-				anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation());
+				anns.add(((ReferenceTerm)ssc).getPhysicalDefinitionReferenceOntologyAnnotation(lib));
 			
 			for(Annotation ann : anns){
 
@@ -103,7 +105,7 @@ public class ReferenceTermNamer {
 						System.out.println(uri.toString() + " was already cached: " + name);
 					}
 					else{
-						name = getNameFromURI(uri);
+						name = getNameFromURI(uri, lib);
 						
 						// If we retrieved the name
 						if(name!=null){
@@ -136,85 +138,78 @@ public class ReferenceTermNamer {
 		return URInameMap;
 	}
 	
-	private static String getNameFromURI(URI uri) {
+	private static String getNameFromURI(URI uri, SemSimLibrary lib) {
 		String uristring= uri.toString();
+		
+		Ontology ont = lib.getOntologyfromTermURI(uristring);
+		if (ont==ReferenceOntologies.unknown) return null;
+		
 		String id = null;
 		if(uristring.startsWith("urn:miriam:")) id = uristring.substring(uristring.lastIndexOf(":")+1);
 		else id = SemSimOWLFactory.getIRIfragment(uristring);
 		
-		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uristring);
 		String name = null;
+		String KBname = ont.getFullName();
+		System.out.println("Accessing " + KBname);
 		
-		String KBname = null;
-		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)) 
-			KBname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
-		
-		if(KBname!=null){
-			System.out.println("Accessing " + KBname);
-			if(KBname.equals(SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("FMA%3A", "");
-				edittedid = id.replace("FMA:", "fma");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalFMAnamespace + edittedid);
+		while (name==null) {
+			if (!ont.getBioPortalID().isEmpty()) {
+				String edittedid = id;
+				
+				if (ont.getNickName()==ReferenceOntology.FMA.getNickName()) {
+					edittedid = edittedid.replace("FMA%3A", "");
+					edittedid = BioPortalFMAnamespace + edittedid.replace("FMA:", "fma");
+				}
+				else if (ont.getNickName()==ReferenceOntology.GO.getNickName()) {
+					edittedid = edittedid.replace("GO%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("GO:", "GO_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.CL.getNickName()) {
+					edittedid = edittedid.replace("CL%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CL:", "CL_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.CHEBI.getNickName()) {
+					edittedid = edittedid.replace("CHEBI%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CHEBI:", "CHEBI_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.PR.getNickName()) {
+					edittedid = edittedid.replace("PR%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PR:", "PR_");
+				}
+				else if (ont.getNickName().equals("BTO")) {
+					edittedid = edittedid.replace("BTO%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("BTO:", "BTO_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.SBO.getNickName()) {
+					edittedid.replace("SBO%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("SBO:", "SBO_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.OPB.getNickName()) {
+					edittedid = edittedid.replace("OPB%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("OPB:", "OPB_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.PATO.getNickName()) {
+					edittedid = edittedid.replace("PATO%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PATO:", "PATO_");
+				}
+				else if (ont.getNickName().equals("UBERON")) {
+					edittedid = edittedid.replace("UBERON%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("UBERON:", "UBERON_");
+				}
+				else if (ont.getNickName()==ReferenceOntology.MA.getNickName()) {
+					edittedid = edittedid.replace("MA%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("MA:", "MA_");
+				}
+				else if (ont.getNickName().equals("ECG")) {
+					edittedid = BioPortalECGontNamespace + edittedid;
+				}
+				else if (ont.getNickName()==ReferenceOntology.SNOMED.getNickName()) {
+					edittedid = BioPortalSNOMEDCTnamespace + edittedid;
+				}
+				edittedid = SemSimOWLFactory.URIencoding(edittedid);
+				name = getRDFLabelUsingBioPortal(edittedid, ont.getNickName());
+			}
 
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			if(KBname.equals(SemSimConstants.GENE_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("GO%3A", "");
-				edittedid = id.replace("GO:", "GO_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("CL%3A", "");
-				edittedid = id.replace("CL:", "CL_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("CHEBI%3A", "");
-				edittedid = id.replace("CHEBI:", "CHEBI_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.PROTEIN_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("PR%3A", "");
-				edittedid = id.replace("PR:", "PR_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.BRENDA_TISSUE_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("BTO%3A", "");
-				edittedid = id.replace("BTO:", "BTO_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if (KBname.equals(SemSimConstants.SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("SBO%3A", "");
-				edittedid = id.replace("SBO:", "SBO_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if (KBname.equals(SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("OPB%3A", "");
-				edittedid = id.replace("OPB:", "OPB_");
-				edittedid = SemSimOWLFactory.URIencoding(RDFNamespace.OPB.getNamespace() + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("PATO%3A", "");
-				edittedid = id.replace("PATO:", "PATO_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
 			else if(KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME)
 					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME)
 					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME)
@@ -234,35 +229,7 @@ public class ReferenceTermNamer {
 				} catch (IOException e) {e.printStackTrace();}
 	
 			}
-			else if(KBname.equals(SemSimConstants.UBERON_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("UBERON%3A", "");
-				edittedid = id.replace("UBERON:", "UBERON_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				String edittedid = id.replace("MA%3A", "");
-				edittedid = id.replace("MA:", "MA_");
-				edittedid = SemSimOWLFactory.URIencoding(BioPortalOBOlibraryPrefix + edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.SNOMEDCT_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				id = SemSimOWLFactory.URIencoding(BioPortalSNOMEDCTnamespace + id);
-				name = getRDFLabelUsingBioPortal(id, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME)){
-				String bioportalontID = 
-					BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.get(SemSimConstants.CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME);
-				name = getRDFLabelUsingBioPortal(id, bioportalontID);
-			}
-			else if(KBname.equals(SemSimConstants.ECG_ONTOLOGY_FULLNAME)){
-				String bioportalontID = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(KBname);
-				id = SemSimOWLFactory.URIencoding(BioPortalECGontNamespace + id);
-				name = getRDFLabelUsingBioPortal(id, bioportalontID);
-			}
+
 			else if(KBname.equals(SemSimConstants.UNIPROT_FULLNAME)){
 				try {
 					name = getRDFLabelUsingUniProt(id);

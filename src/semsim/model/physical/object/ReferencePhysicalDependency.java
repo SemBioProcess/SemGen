@@ -9,13 +9,13 @@ import semsim.definitions.SemSimConstants;
 
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
-	public ReferencePhysicalDependency(URI uri, String description){
-		addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, uri, description);
+	public ReferencePhysicalDependency(URI uri, String description, SemSimLibrary lib){
+		addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, uri, description, lib);
 	}
 
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}

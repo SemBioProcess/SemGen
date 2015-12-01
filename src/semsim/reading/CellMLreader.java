@@ -853,7 +853,7 @@ public class CellMLreader extends ModelReader {
 			if(isversionofann!=null){
 				URI isversionofannURI = URI.create(isversionofann.getURI());
 				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
-						isversionofannURI, isversionofannURI.toString()));
+						isversionofannURI, isversionofannURI.toString(), sslib));
 				if(isentity)
 					semsimmodel.addReferencePhysicalEntity(
 							new ReferencePhysicalEntity(isversionofannURI, isversionofannURI.toString()));
@@ -900,7 +900,7 @@ public class CellMLreader extends ModelReader {
 			String objectURI = st.getObject().asResource().getURI();
 		
 			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(objectURI), objectURI));
-			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI));	
+			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI, sslib));	
 		}
 		
 		return returnent;

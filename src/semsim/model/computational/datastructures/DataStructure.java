@@ -287,8 +287,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
 	
@@ -369,11 +369,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return PropertyType.Unknown;
 	}
 	
-	public void copySingularAnnotations(DataStructure srcds){
+	public void copySingularAnnotations(DataStructure srcds, SemSimLibrary lib){
 		removeAllReferenceAnnotations();
 		setSingularAnnotation(srcds.getSingularTerm());
 		for(ReferenceOntologyAnnotation ann : srcds.getAllReferenceOntologyAnnotations()){
-			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription());
+			addReferenceOntologyAnnotation(ann.getRelation(), ann.getReferenceURI(), ann.getValueDescription(), lib);
 		}
 	}
 	
@@ -389,9 +389,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		singularterm = null;
 	}
 	
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
+			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation(lib);
 		}
 		return null;
 	}

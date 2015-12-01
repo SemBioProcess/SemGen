@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -38,8 +39,8 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {

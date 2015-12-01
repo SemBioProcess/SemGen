@@ -17,9 +17,9 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 		setName(description);
 	}
 	
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
+			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}

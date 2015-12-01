@@ -10,7 +10,7 @@ public interface ReferenceTerm {
 	 * Retrieve the first {@link ReferenceOntologyAnnotation} found applied to this object
 	 * that uses the SemSim:hasPhysicalDefinition relation (SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION).
 	 */
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation();
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary semsimlib);
 	
 	/**
 	 * Retrieve the reference URI.
