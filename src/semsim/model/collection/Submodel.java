@@ -2,7 +2,6 @@ package semsim.model.collection;
 
 import java.net.URI;
 
-import semgen.SemGen;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
@@ -98,13 +97,6 @@ public class Submodel extends SemSimCollection implements Importable {
 	
 	public ReferenceTerm getReferenceTerm() {
 		return singularterm;
-	}
-	
-	/**
-	 * @return The name of the knowledge base that contains the URI used as the annotation value
-	 */
-	public String getNamewithOntologyAbreviation() {
-		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getPhysicalDefinitionURI()) + ")";
 	}
 	
 	public boolean isFunctional() {

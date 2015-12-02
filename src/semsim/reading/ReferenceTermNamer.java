@@ -237,6 +237,7 @@ public class ReferenceTermNamer {
 					e.printStackTrace();
 					} 
 			}
+			return null;
 		}
 		return name; 
 	}

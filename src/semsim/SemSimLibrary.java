@@ -3,6 +3,7 @@ package semsim;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class SemSimLibrary {
 	private HashMap<String, String[]> OPBClassesForUnitsTable;
 	private HashMap<String, String[]> jsimUnitsTable;
 	
-	private HashMap<String, Ontology> ontologies = new HashMap<String, Ontology>();
+	private ArrayList<Ontology> ontologies = new ArrayList<Ontology>();
 	
 	// Hashtable for mapping CellML base units to OPB classes.
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
@@ -117,9 +118,7 @@ public class SemSimLibrary {
 	private void loadOntologyDescriptions() throws FileNotFoundException {
 		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions();
 		for (Ontology ont : onts) {
-			for (String ns : ont.getNameSpaces()) {
-				ontologies.put(ns, ont);
-			}
+			ontologies.add(ont);
 		}
 	}
 	
@@ -338,10 +337,14 @@ public class SemSimLibrary {
 	
 	private Ontology getOntologybyNamespace(String namespace) {
 		Ontology ont = ReferenceOntologies.getOntologybyNamespace(namespace);
-		if (ont == null) {
-			ontologies.get(namespace.toString());
+		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
+			for (Ontology o : ontologies) {
+				if (o.hasNamespace(namespace)) {
+					return o;
+				}
+			}
 		}
-		if (ont == null) ont = new Ontology(ReferenceOntology.UNKNOWN);
+		if (ont == null) ont = ReferenceOntology.UNKNOWN.getAsOntology();
 		return ont;
 	}
 	
