@@ -11,7 +11,7 @@ body {
 	font-family: 12px sans-serif;
 }
 
-.addModelButton {
+.dropdown-toggle {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -21,15 +21,20 @@ body {
 	border-radius:250px;
 	font-size:20px;
 	color:#fff;
-	line-height:50px;
 	text-align:center;
 	background:#3b5998;
 	opacity: .8;
 }
 
-.addModelButton:hover {
+.dropdown-toggle:hover {
 	opacity: 1;
 	cursor: pointer;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 60px;
+	left: 5px;
 }
 
 .popover-title {

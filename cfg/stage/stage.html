@@ -34,7 +34,7 @@
 		<script src="js/mock.js"></script>
 	</head>
 	<body>
-		<div class="addModelButton">+</div>
+		<!--<div class="addModelButton">+</div>-->
 		<div class="stageMenu">
 			<div class="key">
 				Node key:
@@ -78,6 +78,16 @@
 				<input name="searchString" class="searchString" type="text" placeholder="Enter search terms">
 				<ul class="searchResults"></ul>
 			</div>
+		</div>
+		<div class="dropdown">
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">+</span></button>
+			<ul class="dropdown-menu">
+				<li class="dropdown-header">Project Options</li>
+				<li><a id="addModel" href="#">Import Models</a></li>
+				<li><a href="#">Loaded Models</a></li>
+				<li class="divider"></li>
+				<li class="dropdown-header">Model Options</li>
+			</ul>
 		</div>
 		<div id="stage"></div>
 	</body>
