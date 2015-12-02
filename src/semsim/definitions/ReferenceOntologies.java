@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import semsim.annotation.Ontology;
 
 public class ReferenceOntologies {
-	public final static Ontology unknown = new Ontology(ReferenceOntology.UNKNOWN);
-	
 	public static ArrayList<ReferenceOntology> getAllOntologies() {
 		ArrayList<ReferenceOntology> allont = new ArrayList<ReferenceOntology>();
 		for (ReferenceOntology ont : ReferenceOntology.values()) {
@@ -31,9 +29,9 @@ public class ReferenceOntologies {
 	
 	public static Ontology getOntologybyNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
-			if (ro.hasNamespace(namespace)) return new Ontology(ro);
+			if (ro.hasNamespace(namespace)) return ro.getAsOntology();
 		}
-		return unknown;
+		return ReferenceOntology.UNKNOWN.getAsOntology();
 	}
 	
 	public enum OntologyDomain {
@@ -126,6 +124,7 @@ public class ReferenceOntologies {
 		private String bioportalid = null;
 		private ArrayList<String> namespaces = new ArrayList<String>();
 		private String description;
+		private Ontology ontology;
 		
 		private ReferenceOntology(String name, String abrev, String bpid, String[] ns, String desc) {
 			fullname = name;
@@ -135,6 +134,7 @@ public class ReferenceOntologies {
 			for (String s : ns) {
 				namespaces.add(s);
 			}
+			ontology = new Ontology(this);
 		}
 		
 		public boolean hasNamespace(String nspace) {
@@ -162,6 +162,10 @@ public class ReferenceOntologies {
 		
 		public ArrayList<String> getNamespaces() {
 			return namespaces;
+		}
+		
+		public Ontology getAsOntology() {
+			return ontology;
 		}
 	}
 }

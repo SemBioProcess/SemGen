@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import semsim.SemSimLibrary;
 import semsim.annotation.Ontology;
 import semsim.definitions.SemSimConstants;
-import semsim.owl.SemSimOWLFactory;
 
 
 public class BioPortalSearcher {
@@ -121,16 +120,6 @@ public class BioPortalSearcher {
 		return label;
 	}
 	
-	public static String getBioPortalIDfromTermURI(String termuri){
-		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))){
-			String fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()));
-			if(BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(fullname)){
-				return BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.get(fullname);
-			}
-		}
-		return null;
-	}
-	
 	public static Boolean testBioPortalWebservice(){
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
@@ -140,7 +129,7 @@ public class BioPortalSearcher {
 			System.out.println("Testing: " + url);
 			URLConnection yc = url.openConnection();
 			yc.setRequestProperty("Accept", "application/xml");
-			yc.setReadTimeout(60000); // Tiemout after a minute
+			yc.setReadTimeout(60000); // Timeout after a minute
 			BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 			doc = builder.build(in);
 			in.close();

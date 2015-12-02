@@ -29,12 +29,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.Ontology;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimConstants;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -119,7 +122,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
+		rdfblock = new CellMLbioRDFblock(sslib, semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
 	}
 	
 	private void createRootElement() {		
@@ -495,7 +498,7 @@ public class CellMLwriter extends ModelWriter {
 				if(a.hasPhysicalDefinitionAnnotation()){
 					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation(sslib).getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
-					URI furi = formatAsIdentifiersDotOrgURI(uri);
+					URI furi = formatAsIdentifiersDotOrgURI(uri, sslib);
 					Resource refres = localrdf.createResource(furi.toString());
 					Statement st = localrdf.createStatement(ares, isprop, refres);
 					collectRDFStatement(st, "bqbiol", RDFNamespace.BQB.getNamespace(), localrdf);
@@ -554,52 +557,39 @@ public class CellMLwriter extends ModelWriter {
 		return metaid;
 	}
 	
-	protected static URI formatAsIdentifiersDotOrgURI(URI uri){
+	protected static URI formatAsIdentifiersDotOrgURI(URI uri, SemSimLibrary lib){
 		URI newuri = uri;
-		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
+		Ontology ont = lib.getOntologyfromTermURI(uri.toString());
 
 		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if(!uri.toString().startsWith("http://identifiers.org") 
-				&& SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
+		if(!uri.toString().startsWith("http://identifiers.org") && ont!=ReferenceOntology.UNKNOWN.getAsOntology()){
 			
-			String kbname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
+			String kbname = ont.getFullName();
 			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
 			String newnamespace = null;
 			
 			// Look up new namespace
-			for(String nskey : SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.keySet()){
-				if(nskey.startsWith("http://identifiers.org") && 
-						SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(nskey)==kbname){
+			for(String nskey : ont.getNameSpaces()){
+				if(nskey.startsWith("http://identifiers.org")){
 					newnamespace = nskey;
 				}
 			}
 
 			// Replacement rules for specific knowledge bases
-			if(kbname==SemSimConstants.UNIPROT_FULLNAME){
+			if(kbname==SemSimConstants.UNIPROT_FULLNAME || ont==ReferenceOntology.OPB.getAsOntology()){
 				newuri = URI.create(newnamespace + fragment);
 			}
-			if(kbname==SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(kbname==SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME){
+			if(ont==ReferenceOntology.CHEBI.getAsOntology()
+				|| ont==ReferenceOntology.GO.getAsOntology()
+				|| ont==ReferenceOntology.CL.getAsOntology()
+				|| ont==ReferenceOntology.MA.getAsOntology()
+			){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(kbname==SemSimConstants.GENE_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(kbname==SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(kbname==SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME){
+			//if(ont==ReferenceOntology.fma.getAsOntology()){
 				// Need to figure out how to get FMAIDs!!!!
-			}
-			if(kbname==SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
+			//}
 		}
 		return newuri;
 	}

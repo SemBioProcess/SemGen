@@ -16,7 +16,6 @@ import semsim.annotation.Annotation;
 import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimConstants;
 import semsim.model.collection.SemSimModel;
@@ -142,7 +141,7 @@ public class ReferenceTermNamer {
 		String uristring= uri.toString();
 		
 		Ontology ont = lib.getOntologyfromTermURI(uristring);
-		if (ont==ReferenceOntologies.unknown) return null;
+		if (ont==ReferenceOntology.UNKNOWN.getAsOntology()) return null;
 		
 		String id = null;
 		if(uristring.startsWith("urn:miriam:")) id = uristring.substring(uristring.lastIndexOf(":")+1);
@@ -156,23 +155,31 @@ public class ReferenceTermNamer {
 			if (!ont.getBioPortalID().isEmpty()) {
 				String edittedid = id;
 				
-				if (ont.getNickName()==ReferenceOntology.FMA.getNickName()) {
+				if (ont==ReferenceOntology.FMA.getAsOntology()) {
 					edittedid = edittedid.replace("FMA%3A", "");
 					edittedid = BioPortalFMAnamespace + edittedid.replace("FMA:", "fma");
 				}
-				else if (ont.getNickName()==ReferenceOntology.GO.getNickName()) {
-					edittedid = edittedid.replace("GO%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("GO:", "GO_");
+				else if (ont==ReferenceOntology.OPB.getAsOntology()) {
+					edittedid = edittedid.replace("OPB%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("OPB:", "OPB_");
 				}
-				else if (ont.getNickName()==ReferenceOntology.CL.getNickName()) {
-					edittedid = edittedid.replace("CL%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CL:", "CL_");
-				}
-				else if (ont.getNickName()==ReferenceOntology.CHEBI.getNickName()) {
+				else if (ont==ReferenceOntology.CHEBI.getAsOntology()) {
 					edittedid = edittedid.replace("CHEBI%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CHEBI:", "CHEBI_");
 				}
-				else if (ont.getNickName()==ReferenceOntology.PR.getNickName()) {
+				else if (ont==ReferenceOntology.GO.getAsOntology()) {
+					edittedid = edittedid.replace("GO%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("GO:", "GO_");
+				}
+				else if (ont==ReferenceOntology.CL.getAsOntology()) {
+					edittedid = edittedid.replace("CL%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CL:", "CL_");
+				}
+				else if (ont==ReferenceOntology.MA.getAsOntology()) {
+					edittedid = edittedid.replace("MA%3A", "");
+					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("MA:", "MA_");
+				}
+				else if (ont==ReferenceOntology.PR.getAsOntology()) {
 					edittedid = edittedid.replace("PR%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PR:", "PR_");
 				}
@@ -180,15 +187,12 @@ public class ReferenceTermNamer {
 					edittedid = edittedid.replace("BTO%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("BTO:", "BTO_");
 				}
-				else if (ont.getNickName()==ReferenceOntology.SBO.getNickName()) {
-					edittedid.replace("SBO%3A", "");
+				else if (ont==ReferenceOntology.SBO.getAsOntology()) {
+					edittedid = edittedid.replace("SBO%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("SBO:", "SBO_");
 				}
-				else if (ont.getNickName()==ReferenceOntology.OPB.getNickName()) {
-					edittedid = edittedid.replace("OPB%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("OPB:", "OPB_");
-				}
-				else if (ont.getNickName()==ReferenceOntology.PATO.getNickName()) {
+				
+				else if (ont==ReferenceOntology.PATO.getAsOntology()) {
 					edittedid = edittedid.replace("PATO%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PATO:", "PATO_");
 				}
@@ -196,14 +200,11 @@ public class ReferenceTermNamer {
 					edittedid = edittedid.replace("UBERON%3A", "");
 					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("UBERON:", "UBERON_");
 				}
-				else if (ont.getNickName()==ReferenceOntology.MA.getNickName()) {
-					edittedid = edittedid.replace("MA%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("MA:", "MA_");
-				}
+				
 				else if (ont.getNickName().equals("ECG")) {
 					edittedid = BioPortalECGontNamespace + edittedid;
 				}
-				else if (ont.getNickName()==ReferenceOntology.SNOMED.getNickName()) {
+				else if (ont==ReferenceOntology.SNOMED.getAsOntology()) {
 					edittedid = BioPortalSNOMEDCTnamespace + edittedid;
 				}
 				edittedid = SemSimOWLFactory.URIencoding(edittedid);
@@ -216,16 +217,14 @@ public class ReferenceTermNamer {
 					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME)
 					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME)
 					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME)){
-				String edittedid = SemSimOWLFactory.getIRIfragment(uri.toString());
 				try {
-					name = KEGGsearcher.getNameForID(edittedid);
+					name = KEGGsearcher.getNameForID(id);
 				} catch (IOException e) {e.printStackTrace();}
 			}
 			else if(KBname.equals(SemSimConstants.BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME)){
 				// Use KEGG for EC codes
-				String edittedid = SemSimOWLFactory.getIRIfragment(uri.toString());
 				try {
-					name = KEGGsearcher.getNameForID("ec:" + edittedid);
+					name = KEGGsearcher.getNameForID("ec:" + id);
 				} catch (IOException e) {e.printStackTrace();}
 	
 			}

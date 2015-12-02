@@ -4,7 +4,6 @@ package semsim.definitions;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -14,30 +13,12 @@ public class SemSimConstants {
 	
 	// Full names of ontologies & knowledge bases
 	public static final String BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME = "Braunschweig Enzyme Database";
-	public static final String BRENDA_TISSUE_ONTOLOGY_FULLNAME = "Brenda Tissue Ontology";
-	public static final String CELL_TYPE_ONTOLOGY_FULLNAME = "Cell Type Ontology";
-	public static final String CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME = "Clinical Measurement Ontology";
-	public static final String CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME = "Chemical Entities of Biological Interest";
-	public static final String ECG_ONTOLOGY_FULLNAME = "Electrocardiography Ontology";
-	public static final String FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME = "Foundational Model of Anatomy";
-	public static final String GENE_ONTOLOGY_FULLNAME = "Gene Ontology";
-	public static final String HUMAN_DISEASE_ONTOLOGY_FULLNAME = "Human Disease Ontology";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Compound";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Drug";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Genes";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Orthology";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Pathway";
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Reaction";
-	// need to add interpro here: http://identifiers.org/interpro/
-	public static final String MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME = "Mouse Adult Gross Anatomy Ontology";
-	public static final String ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME = "Ontology for Biomedical Investigations";
-	public static final String ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME = "Ontology of Phyiscs for Biology";
-	public static final String PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME = "Phenotype and Trait Ontology";
-	public static final String PROTEIN_ONTOLOGY_FULLNAME = "Protein Ontology";
-	public static final String RELATIONS_ONTOLOGY_FULLNAME = "Relations Ontology";
-	public static final String SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME = "Systems Biology Ontology";
-	public static final String SNOMEDCT_FULLNAME = "SNOMED - Clinical Terms";
-	public static final String UBERON_FULLNAME = "Uberon";
 	public static final String UNIPROT_FULLNAME = "Universal Protein Resource";
 			
 	// URIs
@@ -187,14 +168,10 @@ public class SemSimConstants {
 	
 	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 
-	public static final Map<String, String> ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP;
-	public static final Map<String, String> ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
 	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
 	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
-	
-
 	
 	static{       
         // URIsAndSemSimRelations Map
@@ -256,101 +233,6 @@ public class SemSimConstants {
 		aMap0.put(CELLML_DOCUMENTATION_URI, CELLML_DOCUMENTATION_RELATION);
 		aMap0.put(CELLML_RDF_MARKUP_URI, CELLML_RDF_MARKUP_RELATION);
 		URIS_AND_SEMSIM_RELATIONS = Collections.unmodifiableMap(aMap0);
-		
-		// Namespaces and Ontology Names Map
-		Hashtable<String, String> aMap1 = new Hashtable<String,String>();
-		aMap1.put(RDFNamespace.OPB.getNamespace(), ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/opb/", ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
-		aMap1.put("http://www.owl-ontologies.com/unnamed.owl#", ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME);
-		aMap1.put("http://biomodels.net/SBO/", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/SBO#", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/SBO", SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/FMA", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
-		aMap1.put("http://purl.org/sig/ont/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
-		aMap1.put("http://sig.biostr.washington.edu/fma3.0#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
-		aMap1.put("http://sig.uw.edu/fma#", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
-		aMap1.put("http://identifiers.org/fma/", FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/GO#", GENE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/GO", GENE_ONTOLOGY_FULLNAME);
-		aMap1.put("urn:miriam:obo.go:", GENE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/go/", GENE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/obo.go/", GENE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.bioontology.org/ontology/SNOMEDCT/", SNOMEDCT_FULLNAME);
-		aMap1.put("http://www.cvrgrid.org/ECGOntology1229347266968.owl#", ECG_ONTOLOGY_FULLNAME);
-		aMap1.put("http://www.cvrgrid.org/files/ECGOntologyv0.1.7.owl#", ECG_ONTOLOGY_FULLNAME);
-		aMap1.put("http://www.cvrgrid.org/files/ECGOntologyv1.owl#", ECG_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/CHEBI#", CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/CHEBI", CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
-		aMap1.put("http://identifiers.org/chebi/", CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
-		aMap1.put("http://identifiers.org/obo.chebi/", CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
-		aMap1.put("urn:miriam:obo.chebi:", CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME);
-		aMap1.put("http://www.obofoundry.org/ro/ro.owl#", RELATIONS_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/PATO#", PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/PATO", PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/BTO#", BRENDA_TISSUE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/bto.owl#", BRENDA_TISSUE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/BTO", BRENDA_TISSUE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/ec-code/", BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/UBERON#", UBERON_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/UBERON", UBERON_FULLNAME);
-		aMap1.put("http://purl.bioontology.org/ontology/CMO/", CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/CMO", CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.uniprot.org/uniprot/", UNIPROT_FULLNAME);
-		aMap1.put("http://identifiers.org/uniprot/", UNIPROT_FULLNAME);
-		aMap1.put("http://www.uniprot.org/uniprot/", UNIPROT_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/DOID#", HUMAN_DISEASE_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.bioontology.org/ontology/MA", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.org/obo/owl/MA#", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/MA", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/ma/", MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME);
-		aMap1.put("http://purl.obolibrary.org/obo/PR", PROTEIN_ONTOLOGY_FULLNAME);
-		aMap1.put("http://identifiers.org/kegg.compound/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME);
-		aMap1.put("urn:miriam:kegg.compound:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME );
-		aMap1.put("http://identifiers.org/kegg.reaction/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME );
-		aMap1.put("urn:miriam:kegg.reaction:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME );
-		aMap1.put("http://identifiers.org/kegg.drug/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME );
-		aMap1.put("urn:miriam:kegg.drug:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME );
-		aMap1.put("http://identifiers.org/kegg.genes/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME );
-		aMap1.put("urn:miriam:kegg.genes:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME );
-		aMap1.put("http://identifiers.org/kegg.orthology/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME );
-		aMap1.put("urn:miriam:kegg.orthology:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME );
-		aMap1.put("http://identifiers.org/kegg.pathway/", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME );
-		aMap1.put("urn:miriam:kegg.pathway:", KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME );
-		aMap1.put("http://purl.obolibrary.org/obo/CL", CELL_TYPE_ONTOLOGY_FULLNAME );
-		aMap1.put("http://identifiers.org/cl/", CELL_TYPE_ONTOLOGY_FULLNAME );
-		aMap1.put("http://purl.obolibrary.org/obo/OBI", ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME);
-		ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP = Collections.unmodifiableMap(aMap1);
-		
-		// Mappings between full ontology names and nicknames
-		Hashtable<String, String> aMap6 = new Hashtable<String,String>();
-		
-		// Nicknames of ontologies & knowledge bases		
-		aMap6.put(BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME, "BRENDA");
-		aMap6.put(BRENDA_TISSUE_ONTOLOGY_FULLNAME, "BTO");
-		aMap6.put(CELL_TYPE_ONTOLOGY_FULLNAME, "CL");
-		aMap6.put(CLINICAL_MEASUREMENT_ONTOLOGY_FULLNAME, "CMO");
-		aMap6.put(CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME, "CHEBI");
-		aMap6.put(ECG_ONTOLOGY_FULLNAME, "ECG");
-		aMap6.put(FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME, "FMA");
-		aMap6.put(GENE_ONTOLOGY_FULLNAME, "GO");
-		aMap6.put(HUMAN_DISEASE_ONTOLOGY_FULLNAME, "DOID");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME, "KEGG-compound");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME, "KEGG-drug");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME, "KEGG-genes");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME, "KEGG-orthology");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME, "KEGG-pathway");
-		aMap6.put(KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME, "KEGG-reaction");
-		aMap6.put(MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME, "MA");
-		aMap6.put(ONTOLOGY_FOR_BIOMEDICAL_INVESTIGATIONS_FULLNAME, "OBI");
-		aMap6.put(ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME, "OPB");
-		aMap6.put(PHENOTYPE_AND_TRAIT_ONTOLOGY_FULLNAME, "PATO");
-		aMap6.put(PROTEIN_ONTOLOGY_FULLNAME, "PR");
-		aMap6.put(RELATIONS_ONTOLOGY_FULLNAME, "RO");
-		aMap6.put(SYSTEMS_BIOLOGY_ONTOLOGY_FULLNAME, "SBO");
-		aMap6.put(SNOMEDCT_FULLNAME, "SNOMEDCT");
-		aMap6.put(UBERON_FULLNAME, "UBERON");
-		aMap6.put(UNIPROT_FULLNAME, "UNIPROT");
-		ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP = Collections.unmodifiableMap(aMap6);
 		
 		// inverseRelations Map
 		Map<URI,URI> aMap2 = new HashMap<URI,URI>();

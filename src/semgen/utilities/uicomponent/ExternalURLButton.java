@@ -14,7 +14,6 @@ import semgen.SemGen;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semsim.annotation.Ontology;
-import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.owl.SemSimOWLFactory;
 
@@ -35,7 +34,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 		if(termuri!=null){
 			System.out.println(termuri);
 			Ontology ont = SemGen.semsimlib.getOntologyfromTermURI(termuri.toString());
-			if (ont == ReferenceOntologies.unknown) {
+			if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
 				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
 				return;
 			}
@@ -43,7 +42,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			if(termuri.toString().startsWith("http://identifiers.org")) BrowserLauncher.openURL(termuri.toString());
 
 			// ...else, if it's a UNIPROT term...
-			else if(ont.getFullName().equals(ReferenceOntology.UNIPROT.getFullName())){
+			else if(ont == ReferenceOntology.UNIPROT.getAsOntology()){
 				String id = SemSimOWLFactory.getIRIfragment(termuri.toString());
 				String urlstring = "http://www.uniprot.org/uniprot/" + id;
 				BrowserLauncher.openURL(urlstring);				

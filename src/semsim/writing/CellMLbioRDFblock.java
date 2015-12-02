@@ -18,11 +18,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
@@ -39,7 +41,8 @@ public class CellMLbioRDFblock {
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	public String modelns;
+	private SemSimLibrary sslib;
+	private String modelns;
 	
 	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
 	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SINK_PARTICIPANT_URI.toString());
@@ -59,7 +62,8 @@ public class CellMLbioRDFblock {
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	
-	public CellMLbioRDFblock(String namespace, String rdfasstring, String baseNamespace){	
+	public CellMLbioRDFblock(SemSimLibrary lib, String namespace, String rdfasstring, String baseNamespace){	
+		sslib = lib;
 		this.modelns = namespace;
 		
 		if(rdfasstring!=null){
@@ -136,7 +140,7 @@ public class CellMLbioRDFblock {
 		Resource physentrefres = null;
 		
 		// Create link between process participant and the physical entity it references
-		if(participant instanceof CompositePhysicalEntity){
+		if(participant.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 			URI physentrefuri = addCompositePhysicalEntityMetadata((CompositePhysicalEntity)participant);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
@@ -295,7 +299,7 @@ public class CellMLbioRDFblock {
 		if(refURIsandresources.containsKey(uri))
 			refres = refURIsandresources.get(uri);
 		else{
-			URI furi = CellMLwriter.formatAsIdentifiersDotOrgURI(uri);
+			URI furi = CellMLwriter.formatAsIdentifiersDotOrgURI(uri, sslib);
 			refres = rdf.createResource(furi.toString());
 			refURIsandresources.put(furi, refres);
 		}
