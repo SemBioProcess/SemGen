@@ -11,7 +11,7 @@ body {
 	font-family: 12px sans-serif;
 }
 
-.dropdown-toggle {
+.modelDropdown-toggle {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -180,4 +180,13 @@ li.searchResultSet li:hover {
 	list-style: none;
 	padding: 0;
 	margin: 0 0 0 5px;
+}
+
+
+.nodeInfoPanel {
+	position: absolute;
+	top: 270px;
+	right: 5px;
+	max-width: 250px;
+	opacity: 1;
 }
