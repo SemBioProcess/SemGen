@@ -36,12 +36,13 @@ import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SBMLconstants;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.SemSimRelation;
-import semsim.definitions.StructuralRelation;
+import semsim.definitions.SemSimRelations;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
@@ -518,7 +519,7 @@ public class SBMLreader extends ModelReader{
 			entlist.add(speciesent);
 			entlist.add(compartmentent);
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-			rellist.add(SemSimConstants.PART_OF_RELATION);
+			rellist.add(StructuralRelation.PART_OF);
 			
 			CompositePhysicalEntity compositeent = new CompositePhysicalEntity(entlist, rellist);
 						
@@ -961,7 +962,7 @@ public class SBMLreader extends ModelReader{
 				Integer t = Integer.valueOf(term.getBiologicalQualifierType());
 				
 				// If we know the relation
-				if(SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.containsKey(t)){
+				if(SemSimRelations.getBiologicalQualifierRelation(t)!=null){
 					
 					int numidentityanns = 0;
 					
@@ -975,11 +976,11 @@ public class SBMLreader extends ModelReader{
 							
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainhasReferenceOntology(refont)){
-								SemSimRelation relation = (t==0) ? 
-										SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION : SemSimConstants.BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+								Relation relation = (t==0) ? 
+										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getBiologicalQualifierRelation(t);
 								
 								// If we're looking at an identity relation...
-								if(relation==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION){
+								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION){
 									
 									// And we haven't added one yet, add it
 									if(numidentityanns==0){
@@ -1018,11 +1019,11 @@ public class SBMLreader extends ModelReader{
 			if(term.getQualifierType()==0){
 				Integer t = Integer.valueOf(term.getModelQualifierType());
 				
-				if(SemSimConstants.MODEL_QUALIFIER_TYPES_AND_RELATIONS.containsKey(t)){
+				if(SemSimRelations.getModelQualifierRelation(t)!= null){
 					
 					for(int h=0; h<term.getNumResources(); h++){
 						String uri = term.getResourceURI(h);
-						SemSimRelation relation = (t==0) ? SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION : SemSimConstants.MODEL_QUALIFIER_TYPES_AND_RELATIONS.get(t);
+						Relation relation = (t==0) ? SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getModelQualifierRelation(t);
 						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri, sslib));
 					}
 				}
@@ -1045,7 +1046,7 @@ public class SBMLreader extends ModelReader{
 		for(ReferenceOntologyAnnotation ann : getBiologicalQualifierAnnotations(sbmlobject)){
 			
 			// If there is a physical definition annotation, create reference physical component
-			if(ann.getRelation().equals(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION)){
+			if(ann.getRelation().equals(SemSimRelation.HAS_PHYSICAL_DEFINITION)){
 				// if entity, use reference term, but don't otherwise
 				if(isentity)
 					pmc = semsimmodel.addReferencePhysicalEntity(

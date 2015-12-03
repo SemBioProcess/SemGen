@@ -5,8 +5,8 @@ import java.net.URI;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.SemSimConstants;
 import semsim.definitions.SemSimTypes;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.physical.PhysicalEntity;
 
 public class ReferencePhysicalEntity extends PhysicalEntity implements ReferenceTerm{
@@ -19,7 +19,7 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription(), lib);
+			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}

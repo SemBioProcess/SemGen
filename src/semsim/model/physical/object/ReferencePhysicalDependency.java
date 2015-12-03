@@ -5,17 +5,17 @@ import java.net.URI;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
 	public ReferencePhysicalDependency(URI uri, String description, SemSimLibrary lib){
-		addReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, uri, description, lib);
+		addReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, uri, description, lib);
 	}
 
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription(), lib);
+			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}

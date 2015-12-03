@@ -9,8 +9,8 @@ import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.Relation;
 import semsim.definitions.PropertyType;
-import semsim.definitions.SemSimRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
@@ -287,7 +287,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
@@ -303,7 +303,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(ReferenceOntologyAnnotation ann : getAllReferenceOntologyAnnotations()){
 			if(ann.getRelation()==relation){

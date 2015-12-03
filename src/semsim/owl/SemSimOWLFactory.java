@@ -52,8 +52,10 @@ import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimConstants;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -107,7 +109,7 @@ public class SemSimOWLFactory {
 		AddAxiom addAxiom = new AddAxiom(destinationont, axiom);
 		manager.applyChange(addAxiom);
 
-		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI));
+		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI());
 		OWLLiteral con2 = factory.getOWLLiteral(clsuri);
 		OWLClassExpression physdef = factory.getOWLDataHasValue(hasphysdefprop,con2);
 		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd, physdef);
@@ -200,28 +202,28 @@ public class SemSimOWLFactory {
 
         OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(owlexp, owlind);
         AddAxiom addAx = new AddAxiom(ont, ax);
-        manager.applyChange(addAx);				
+        manager.applyChange(addAx);	
 	}
 
 	// Set an object property for one individual
-	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, String rel, String invrel, OWLOntologyManager manager)
+	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, Relation rel, Relation invrel, OWLOntologyManager manager)
 			throws OWLException {
 
 		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, null, manager));
 		manager.applyChange(addAxiom);
-		OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
-		if(!invrel.equals("") && invrel!=null){
+		if(invrel!=null){
+			OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
 			AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
 			manager.applyChange(addinvAxiom);
 		}
 	}
 	
 	public static OWLAxiom createIndObjectPropertyAxiom(OWLOntology ont, String subject,
-			String object, String rel, Set<OWLAnnotation> anns, OWLOntologyManager manager)
+			String object, Relation rel, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLIndividual value = factory.getOWLNamedIndividual(IRI.create(object));
-		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(rel));
+		OWLObjectProperty prop = factory.getOWLObjectProperty(rel.getIRI());
 		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(prop, ind,value);
 		if(anns!=null)
 			axiom = axiom.getAnnotatedAxiom(anns);
@@ -229,7 +231,7 @@ public class SemSimOWLFactory {
 	}
 	
 	public static void setIndObjectPropertyWithAnnotations(OWLOntology ont, String subject,
-		String object, String rel, String invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
+		String object, Relation rel, Relation invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
 		throws OWLException{
 		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, annsforrel, manager));
 		manager.applyChange(addAxiom);
@@ -241,11 +243,11 @@ public class SemSimOWLFactory {
 		}
 	}
 
-	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, String rel,
+	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, Relation rel,
 			Object val, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
-		OWLDataProperty prop = factory.getOWLDataProperty(IRI.create(rel));
+		OWLDataProperty prop = factory.getOWLDataProperty(rel.getIRI());
 		OWLLiteral valueconstant;
 
 		Set<String> rangeset = new HashSet<String>();
@@ -263,7 +265,7 @@ public class SemSimOWLFactory {
 		return axiom;
 	}
 
-	public static void setIndDatatypeProperty(OWLOntology ont, String induri, String rel, Object val, OWLOntologyManager manager) throws OWLException {
+	public static void setIndDatatypeProperty(OWLOntology ont, String induri, Relation rel, Object val, OWLOntologyManager manager) throws OWLException {
 		if(val!=null && !val.equals("")){
 			OWLAxiom axiom = createIndDatatypePropertyAxiom(ont, induri, rel, val, null, manager);
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
@@ -271,7 +273,7 @@ public class SemSimOWLFactory {
 		}
 	}
 	
-	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String induri, String rel, Object val,
+	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String induri, Relation rel, Object val,
 			Set<OWLAnnotation> anns, OWLOntologyManager manager) throws OWLException{
 		AddAxiom addAxiom = new AddAxiom(ont, createIndDatatypePropertyAxiom(ont, induri, rel, val, anns, manager));
 		manager.applyChange(addAxiom);
@@ -299,7 +301,7 @@ public class SemSimOWLFactory {
 	// // Retrieve a functional datatype property value for one individuals (returns a single string)
 	public static String getFunctionalIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		// The hashtable keys are individual IRIs, values are relations (as IRIs)
-		Set<String> values = SemSimOWLFactory.getIndDatatypeProperty(ont, indname, propname);
+		Set<String> values = getIndDatatypeProperty(ont, indname, propname);
 		String[] valuearray = values.toArray(new String[] {});
 		
 		return (valuearray.length == 1)  ? valuearray[0] : "";

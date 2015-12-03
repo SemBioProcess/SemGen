@@ -11,8 +11,7 @@ import semgen.annotation.common.ObjectPropertyEditor;
 import semgen.annotation.common.ProcessParticipantEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 
 public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane implements TableModelListener {
 	private static final long serialVersionUID = 1L;
@@ -31,8 +30,8 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 	@Override
 	protected void makeUnique() {
 		editors = new ArrayList<ParticipantEditor>();
-		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.BQB_IS_VERSION_OF_RELATION);
-		objecteditors.add(new ProcessEditor(library, SemSimConstants.BQB_IS_VERSION_OF_RELATION, versionrels));
+		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimRelation.BQB_IS_VERSION_OF);
+		objecteditors.add(new ProcessEditor(library, SemSimRelation.BQB_IS_VERSION_OF, versionrels));
 		editors.add(new ParticipantEditor("Source Participants", library));
 		editors.add(new ParticipantEditor("Sink Participants", library));
 		editors.add(new ParticipantEditor("Mediator Participants", library));
@@ -109,7 +108,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 				preselected.add(entities.indexOf(i));
 			}
 			
-			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getURIFragment() + " relations.";
+			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getName() + " relations.";
 			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(entities), preselected);
 			if (seldialog.isConfirmed()) {
 				preselected = seldialog.getSelections();	

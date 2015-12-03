@@ -38,6 +38,8 @@ import semsim.annotation.Ontology;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimConstants;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.SemSimRelations;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -89,7 +91,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Add the documentation element
 			for(Annotation ann : semsimmodel.getAnnotations()){
-				if(ann.getRelation()==SemSimConstants.CELLML_DOCUMENTATION_RELATION){
+				if(ann.getRelation()==SemSimRelations.SemSimRelation.CELLML_DOCUMENTATION){
 					root.addContent(makeXMLContentFromString((String)ann.getValue()));
 				}
 			}
@@ -116,7 +118,7 @@ public class CellMLwriter extends ModelWriter {
 	private void createRDFBlock() {
 		String rdfstring = null;
 		for(Annotation ann : semsimmodel.getAnnotations()){
-			if(ann.getRelation()==SemSimConstants.CELLML_RDF_MARKUP_RELATION){
+			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP){
 				rdfstring = (String) ann.getValue();
 				break;
 			}
@@ -497,7 +499,7 @@ public class CellMLwriter extends ModelWriter {
 				// Add singular annotation
 				if(a.hasPhysicalDefinitionAnnotation()){
 					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation(sslib).getReferenceURI();
-					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
+					Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
 					URI furi = formatAsIdentifiersDotOrgURI(uri, sslib);
 					Resource refres = localrdf.createResource(furi.toString());
 					Statement st = localrdf.createStatement(ares, isprop, refres);
@@ -519,7 +521,7 @@ public class CellMLwriter extends ModelWriter {
 					rdfblock.rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespace());
 					rdfblock.rdf.setNsPrefix("model", semsimmodel.getNamespace());
 						
-					Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
+					Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 					Resource propres = rdfblock.getResourceForDataStructurePropertyAndAnnotate(rdfblock.rdf, (DataStructure)a);
 					Statement st = rdfblock.rdf.createStatement(ares, iccfprop, propres);
 					

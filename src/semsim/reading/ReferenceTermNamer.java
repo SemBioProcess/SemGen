@@ -17,6 +17,7 @@ import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimConstants;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -121,7 +122,7 @@ public class ReferenceTermNamer {
 					
 					// Set the name of the semsim component to the annotation description if it's
 					// a physical entity, physical process or physical property
-					if(ann.getRelation()==SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION 
+					if(ann.getRelation()==SemSimRelation.HAS_PHYSICAL_DEFINITION
 							&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) 
 									|| (ssc instanceof PhysicalProperty) || (ssc instanceof PhysicalPropertyinComposite)))
 						ssc.setName(name);

@@ -11,10 +11,9 @@ import java.util.Observable;
 import semgen.SemGen;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.Relation;
 import semsim.definitions.PropertyType;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.SemSimRelation;
-import semsim.definitions.StructuralRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
@@ -176,7 +175,7 @@ public class SemSimTermLibrary extends Observable {
 		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 		for (Integer i : peindicies) {
 			pes.add((PhysicalEntity)masterlist.get(i).getObject());
-			rels.add(SemSimConstants.PART_OF_RELATION);
+			rels.add(StructuralRelation.PART_OF);
 		}
 		if (!rels.isEmpty()) {
 			rels.remove(0);
@@ -445,13 +444,13 @@ public class SemSimTermLibrary extends Observable {
 			
 		}
 		
-		public void clearRelations(Integer termindex, SemSimRelation relation) {
+		public void clearRelations(Integer termindex, Relation relation) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			pmc.removeReferenceAnnotationsofType(relation);
 			notifyTermChanged();
 		}
 		
-		public void addRelationship(Integer termindex, SemSimRelation relation, Integer reftermindex) {
+		public void addRelationship(Integer termindex, Relation relation, Integer reftermindex) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
 			pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), SemGen.semsimlib);
@@ -504,7 +503,7 @@ public class SemSimTermLibrary extends Observable {
 		ArrayList<StructuralRelation> rels = new ArrayList<StructuralRelation>();
 		for (Integer i : peindicies) {
 			pes.add((PhysicalEntity)masterlist.get(i).getObject());
-			rels.add(SemSimConstants.PART_OF_RELATION);
+			rels.add(StructuralRelation.PART_OF);
 		}
 		if (!rels.isEmpty()) {
 			rels.remove(0);
@@ -643,7 +642,7 @@ public class SemSimTermLibrary extends Observable {
 		return null;
 	}
 	
-	public ArrayList<Integer> getIndiciesofReferenceRelations(int indexcard, SemSimRelation rel) {
+	public ArrayList<Integer> getIndiciesofReferenceRelations(int indexcard, Relation rel) {
 		ArrayList<Integer> indicies = new ArrayList<Integer>();
 		if (indexcard!=-1) {
 			ArrayList<URI> uris = masterlist.get(indexcard).getAnnotationObjectsbyRelation(rel);
@@ -817,7 +816,7 @@ public class SemSimTermLibrary extends Observable {
 			return null;
 		}
 		
-		public ArrayList<URI> getAnnotationObjectsbyRelation(SemSimRelation rel) {
+		public ArrayList<URI> getAnnotationObjectsbyRelation(Relation rel) {
 			ArrayList<URI> uris = new ArrayList<URI>();
 			
 			for (ReferenceOntologyAnnotation ann : component.getReferenceOntologyAnnotations(rel)) {

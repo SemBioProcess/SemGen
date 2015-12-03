@@ -34,13 +34,13 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.SemSimRelation;
-import semsim.definitions.StructuralRelation;
+import semsim.definitions.SemSimRelations;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -456,7 +456,7 @@ public class CellMLreader extends ModelReader {
 		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.CELLML_RDF_MARKUP_RELATION, CellMLbioRDFblock.getRDFAsString(rdfblock.rdf)));
+		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, CellMLbioRDFblock.getRDFAsString(rdfblock.rdf)));
 		
 		return semsimmodel;
 	}
@@ -563,7 +563,7 @@ public class CellMLreader extends ModelReader {
 			// end documentation processing
 		}
 		if(ab!=null && !ab.equals(""))
-			semsimmodel.addAnnotation(new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
+			semsimmodel.setModelAnnotation(Metadata.pubmedid, ab);
 	}
 	
 	
@@ -571,7 +571,7 @@ public class CellMLreader extends ModelReader {
 		Element docel = doc.getRootElement().getChild("documentation", RDFNamespace.DOC.createJdomNamespace());
 		if(docel!=null){
 			String text = getUTFformattedString(xmloutputter.outputString(docel));
-			semsimmodel.addAnnotation(new Annotation(SemSimConstants.CELLML_DOCUMENTATION_RELATION, text));
+			semsimmodel.addAnnotation(new Annotation(SemSimRelations.SemSimRelation.CELLML_DOCUMENTATION, text));
 		}
 	}
 	
@@ -769,8 +769,8 @@ public class CellMLreader extends ModelReader {
 			if(entityres!=null){
 				PhysicalEntity nextent = getCompositeEntityComponentFromResourceAndAnnotate(entityres);
 				entlist.add(nextent);
-				if(containedinlink) rellist.add(SemSimConstants.CONTAINED_IN_RELATION);
-				else rellist.add(SemSimConstants.PART_OF_RELATION);
+				if(containedinlink) rellist.add(StructuralRelation.CONTAINED_IN);
+				else rellist.add(StructuralRelation.PART_OF);
 				
 				curres = entityres;
 			}
@@ -852,7 +852,7 @@ public class CellMLreader extends ModelReader {
 			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 			if(isversionofann!=null){
 				URI isversionofannURI = URI.create(isversionofann.getURI());
-				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
+				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimRelation.BQB_IS_VERSION_OF, 
 						isversionofannURI, isversionofannURI.toString(), sslib));
 				if(isentity)
 					semsimmodel.addReferencePhysicalEntity(
@@ -896,7 +896,7 @@ public class CellMLreader extends ModelReader {
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
 			URI propuri = URI.create(st.getPredicate().getURI());
-			SemSimRelation relation = SemSimConstants.URIS_AND_SEMSIM_RELATIONS.get(propuri);
+			Relation relation = SemSimRelations.getRelationFromURI(propuri);
 			String objectURI = st.getObject().asResource().getURI();
 		
 			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(objectURI), objectURI));

@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import semsim.annotation.ReferenceTerm;
-import semsim.definitions.StructuralRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;

@@ -3,7 +3,6 @@ package semsim.annotation;
 import java.net.URI;
 
 import semsim.SemSimLibrary;
-import semsim.definitions.SemSimRelation;
 
 /**
  * A type of Annotation where the annotation value is a URI
@@ -20,7 +19,7 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	 * @param uri The URI annotation value
 	 * @param description A free-text description of the resource corresponding to the URI
 	 */
-	public ReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String valueDescription, SemSimLibrary lib){
+	public ReferenceOntologyAnnotation(Relation relation, URI uri, String valueDescription, SemSimLibrary lib){
 		super(relation, uri);
 		refontology = lib.getOntologyfromTermURI(uri.toString());
 		setReferenceURI(uri);

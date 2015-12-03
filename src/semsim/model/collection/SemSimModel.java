@@ -21,10 +21,11 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimTypes;
-import semsim.definitions.StructuralRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
@@ -918,7 +919,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param description A free-text description of the reference
 	 * ontology term (obtained from the ontology itself whenever possible). 
 	 */
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
@@ -930,7 +931,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param relation The {@link SemSimRelation} that filters the annotations 
 	 * to return  
 	 */
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation)

@@ -27,7 +27,7 @@ import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
-import semsim.definitions.SemSimRelation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelClassifier;

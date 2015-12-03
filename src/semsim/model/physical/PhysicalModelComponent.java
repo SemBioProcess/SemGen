@@ -8,7 +8,7 @@ import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.definitions.SemSimRelation;
+import semsim.annotation.Relation;
 import semsim.definitions.SemSimTypes;
 import semsim.model.SemSimComponent;
 import semsim.utilities.SemSimCopy;
@@ -39,11 +39,11 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description, SemSimLibrary lib){
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation){
@@ -68,7 +68,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.addAll(newset);
 	}
 	
-	public void removeReferenceAnnotationsofType(SemSimRelation relation) {
+	public void removeReferenceAnnotationsofType(Relation relation) {
 		Set<ReferenceOntologyAnnotation> refs = getReferenceOntologyAnnotations(relation);
 		for (ReferenceOntologyAnnotation ref : refs) {
 			annotations.remove(ref);
