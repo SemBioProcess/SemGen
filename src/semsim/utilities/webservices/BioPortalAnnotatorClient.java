@@ -28,7 +28,7 @@ public class BioPortalAnnotatorClient {
 	public String mappingTypes;
 	
 		/* NEEDS TO BE REWRITTEN FOR NEW BIOPORTAL REST SERVICES */
-		public static final String annotatorUrl = "http://rest.bioontology.org/obs/annotator";
+		private static final String annotatorUrl = "http://rest.bioontology.org/obs/annotator";
 		public String text;
 	    public BioPortalAnnotatorClient(String text, Set<String> ontologyids, Hashtable<String,String[]> annotatorsettings) throws FileNotFoundException {
 	    	this.text = text;

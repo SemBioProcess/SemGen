@@ -1,21 +1,12 @@
 package semsim.owl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
-import java.io.IOException;
-
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddOntologyAnnotation;
@@ -54,7 +45,6 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimConstants;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -62,8 +52,6 @@ import semsim.model.computational.datastructures.DataStructure;
 
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 public class SemSimOWLFactory {
 
@@ -235,9 +223,9 @@ public class SemSimOWLFactory {
 		throws OWLException{
 		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, annsforrel, manager));
 		manager.applyChange(addAxiom);
-		OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
-		
-		if(!invrel.equals("") && invrel!=null){
+		if(invrel!=null){
+			OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
+
 			AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
 			manager.applyChange(addinvAxiom);
 		}
@@ -655,36 +643,7 @@ public class SemSimOWLFactory {
 		}
 		return commentstring;
 	}
-	
-	/**
-	 * @deprecated
-	 */
-	public static String getLatestVersionIDForBioPortalOntology(String bioportalID){
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = new Document();
-		String versionid = null;
-		try {
-			URL url = new URL(
-					"http://rest.bioontology.org/bioportal/virtual/ontology/" + bioportalID + "?apikey=" + SemSimConstants.BIOPORTAL_API_KEY);
-			URLConnection yc = url.openConnection();
-			yc.setReadTimeout(60000); // Tiemout after a minute
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					yc.getInputStream()));
-			doc = builder.build(in);
-			in.close();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Returned error: " + e.getLocalizedMessage()+ "\n\nPlease make sure you are online,\notherwise BioPortal may be experiencing problems",
-					"Problem searching BioPortal",JOptionPane.ERROR_MESSAGE);
-			return null;
-		} catch (JDOMException e) {e.printStackTrace();}
-
-		if (doc.hasRootElement()) {
-			versionid = doc.getRootElement().getChild("data").getChild("ontologyBean").getChildText("id");
-		}
-		return versionid;
-	}
-	
+		
 	public static String generateUniqueIRIwithNumber(String iritoappend, Set<String> existingmembers) {
 		int x = 0;
 		iritoappend = iritoappend + x;

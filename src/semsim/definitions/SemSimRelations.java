@@ -101,7 +101,7 @@ public class SemSimRelations {
 		COMPUTATIONAL_REPRESENTATION_OF("computationalRepresentationOf", RDFNamespace.SEMSIM.getNamespace(), "a data structure or submodel represents something from the real world", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_MATHML("hasMathML", RDFNamespace.SEMSIM.getNamespace(), "MathML for computation", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_COMPUTATIONAL_CODE("hasComputationalCode", RDFNamespace.SEMSIM.getNamespace(), "", RDFNamespace.SEMSIM.getOWLid()),
-		IS_OUTPUT_FOR("data structure is output for computation", RDFNamespace.SEMSIM.getNamespace(), "isOutputFor", RDFNamespace.SEMSIM.getOWLid()),
+		IS_OUTPUT_FOR("isOutputFor", RDFNamespace.SEMSIM.getNamespace(), "data structure is output for computation", RDFNamespace.SEMSIM.getOWLid()),
 		IS_INPUT_FOR("isInputFor", RDFNamespace.SEMSIM.getNamespace(), "data structure is input for computation", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_ASSOCIATED_DATA_STRUCTURE("hasAssociatedDataStructure", RDFNamespace.SEMSIM.getNamespace(), "submodel includes data structure", RDFNamespace.SEMSIM.getOWLid()),		
 		HAS_TRIGGER_MATHML("hasTriggerMathML", RDFNamespace.SEMSIM.getNamespace(), "", RDFNamespace.SEMSIM.getOWLid()),

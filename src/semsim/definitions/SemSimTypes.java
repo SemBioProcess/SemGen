@@ -33,8 +33,7 @@ public enum SemSimTypes {
 	RELATIONAL_CONSTRAINT("Relational Constraint", RDFNamespace.SEMSIM.getNamespace() + "Relational_constraint", "", "semsim:Relational_constraint"),
 	EVENT("Event", RDFNamespace.SEMSIM.getNamespace() + "Event", "", "semsim:Event"),
 	EVENT_ASSIGNMENT("Event Assignment", RDFNamespace.SEMSIM.getNamespace() + "EventAssignment", "", "semsim:EventAssignment"),
-	UNIT_OF_MEASUREMENT("Unit of Measurement", RDFNamespace.SEMSIM.getNamespace() + "Unit_of_measurement", "", "semsim:Unit_of_measurement"),
-	RELATION("Relation", "", "", "");
+	UNIT_OF_MEASUREMENT("Unit of Measurement", RDFNamespace.SEMSIM.getNamespace() + "Unit_of_measurement", "", "semsim:Unit_of_measurement");
 	
 	private String name;
 	private String uri;

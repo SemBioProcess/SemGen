@@ -15,6 +15,6 @@ public class SemSimConstants {
 	public static final String KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME = "Kyoto Encyclopedia of Genes and Genomes - Reaction";
 	public static final String UNIPROT_FULLNAME = "Universal Protein Resource";
 			
-	public static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
+
 
 }

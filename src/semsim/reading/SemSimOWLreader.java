@@ -266,7 +266,7 @@ public class SemSimOWLreader extends ModelReader {
 					srcent = createSingularComposite(src);
 				}
 				Double m = getMultiplierForProcessParticipant(ont, processind, 
-						SemSimRelation.HAS_SOURCE.getURIasString(), src);
+						SemSimRelation.HAS_SOURCE, src);
 				pproc.addSource(srcent, m);
 			}
 			// Enter sink info
@@ -277,7 +277,7 @@ public class SemSimOWLreader extends ModelReader {
 					sinkent = createSingularComposite(sink);
 				}
 				Double m = getMultiplierForProcessParticipant(ont, processind, 
-						SemSimRelation.HAS_SINK.getURIasString(), sink);
+						SemSimRelation.HAS_SINK, sink);
 				pproc.addSink(sinkent, m);
 			}
 			// Enter mediator info
@@ -569,9 +569,9 @@ public class SemSimOWLreader extends ModelReader {
 		SemSimTypes[] customclasses = new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_ENTITY, SemSimTypes.CUSTOM_PHYSICAL_PROCESS};
 		
 		// For the two custom physical model classes...
-		for(SemSimTypes customclassuri : customclasses){			
+		for(SemSimTypes customclass : customclasses){			
 			// For each custom term in them...
-			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclassuri.toString())){
+			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclass.toString())){
 				OWLNamedIndividual custind = factory.getOWLNamedIndividual(IRI.create(custstring));
 				
 				// For each super class that is not the custom physical component class itself...
@@ -598,12 +598,12 @@ public class SemSimOWLreader extends ModelReader {
 								// each custom object
 								PhysicalModelComponent pmc = null;
 								
-								if(customclassuri==SemSimTypes.CUSTOM_PHYSICAL_PROCESS) {
+								if(customclass==SemSimTypes.CUSTOM_PHYSICAL_PROCESS) {
 									semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(reftermURI, label));
 									pmc = semsimmodel.getCustomPhysicalProcessByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
 								}
 								
-								if(customclassuri==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
+								if(customclass==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
 									semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(reftermURI, label));
 									pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
 								}
@@ -612,15 +612,10 @@ public class SemSimOWLreader extends ModelReader {
 
 								// If we've got the physical model component object, add the annotations
 								if(pmc!=null){
-									
-									if(propstring.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString()))
-										pmc.addReferenceOntologyAnnotation(SemSimRelation.BQB_IS_VERSION_OF, reftermURI, label, sslib);
-									
-									else if(propstring.equals(StructuralRelation.HAS_PART.getURIasString()))
-										pmc.addReferenceOntologyAnnotation(StructuralRelation.HAS_PART, reftermURI, label, sslib);
-									
-									else if(propstring.equals(StructuralRelation.PART_OF.getURIasString()))
-										pmc.addReferenceOntologyAnnotation(StructuralRelation.PART_OF, reftermURI, label, sslib);
+									Relation rel = SemSimRelations.getRelationFromURI(URI.create(propstring));
+									if (rel!=SemSimRelation.UNKNOWN) {
+										pmc.addReferenceOntologyAnnotation(rel, reftermURI, label, sslib);
+									}
 								}
 								else semsimmodel.addError("Attempt to apply reference ontology annotation " + propstring + " to " + custstring + " failed."
 										+ "\nCould not find individual in set of processed physical model components");
@@ -757,7 +752,7 @@ public class SemSimOWLreader extends ModelReader {
 				Submodel subsubmodel = semsimmodel.getSubmodel(subsubname);
 				
 				// Assign the subsumption type (for CellML-type submodels)
-				Set<String> reltypes = getSubmodelSubsumptionRelationship(ont, sub, SemSimRelation.INCLUDES_SUBMODEL.getURIasString(), subsub);
+				Set<String> reltypes = getSubmodelSubsumptionRelationship(ont, sub, SemSimRelation.INCLUDES_SUBMODEL, subsub);
 				for(String reltype : reltypes){
 					if(reltype!=null){
 						FunctionalSubmodel fxnalsub = (FunctionalSubmodel)semsimmodel.getSubmodel(subname);
@@ -778,11 +773,11 @@ public class SemSimOWLreader extends ModelReader {
 	//*****************************HELPER METHODS*************************//
 
 	// Get the multiplier for a process participant
-	private Double getMultiplierForProcessParticipant(OWLOntology ont, String process, String prop, String ent){
+	private Double getMultiplierForProcessParticipant(OWLOntology ont, String process, Relation prop, String ent){
 		Double val = 1.0;
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
 		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(ent));
-		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
+		OWLObjectProperty owlprop = factory.getOWLObjectProperty(prop.getIRI());
 		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, procind, entind);
 		
 		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(SemSimRelation.HAS_MULTIPLIER.getIRI());
@@ -801,11 +796,11 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	// Get the relationship for a submodel subsumption
-	private Set<String> getSubmodelSubsumptionRelationship(OWLOntology ont, String submodel, String prop, String subsubmodel){
+	private Set<String> getSubmodelSubsumptionRelationship(OWLOntology ont, String submodel, Relation prop, String subsubmodel){
 		Set<String> vals = new HashSet<String>();
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(submodel));
 		OWLIndividual entind = factory.getOWLNamedIndividual(IRI.create(subsubmodel));
-		OWLObjectProperty owlprop = factory.getOWLObjectProperty(IRI.create(prop));
+		OWLObjectProperty owlprop = factory.getOWLObjectProperty(prop.getIRI());
 		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(owlprop, procind, entind);
 		
 		OWLAnnotationProperty annprop = factory.getOWLAnnotationProperty(SemSimRelation.CELLML_COMPONENT_SUBSUMPTION_TYPE.getIRI());
