@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import semsim.annotation.Ontology;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
+
 public class ResourcesManager {
 	
 	public static Set<String> createSetFromFile(String path) throws FileNotFoundException {
@@ -134,6 +137,31 @@ public class ResourcesManager {
 			}		 
 			unitsfilescanner.close();
 			return null;
+		}
+		
+		public static HashSet<Ontology> loadOntologyDescriptions() throws FileNotFoundException {
+			HashSet<Ontology> ontologies = new HashSet<Ontology>();
+			for (ReferenceOntology ro : ReferenceOntology.values()) {
+				ontologies.add(new Ontology(ro));
+			}
+			Set<String> buffer = createSetFromFile("cfg/local_ontologies.txt");
+			
+			for (String rawont : buffer) {
+				rawont.trim();
+				rawont.replace(".", "");
+				String[] split = rawont.split(",");
+				split[2].replace("{", "");
+				split[2].replace("}", "");
+				String[] nspaces = split[2].split(" ");
+				if (split.length==5) {
+					ontologies.add(new Ontology(split[0].trim(), split[1].trim(), nspaces, split[3], split[4]));
+				}
+				else {
+					ontologies.add(new Ontology(split[0].trim(), split[1].trim(), nspaces, split[3]));
+				}
+			}
+			
+			return ontologies;
 		}
 }
 

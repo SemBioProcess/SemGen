@@ -1,5 +1,6 @@
 package semsim.model.computational;
 
+import semsim.definitions.SemSimTypes;
 import semsim.model.SemSimComponent;
 
 /**
@@ -11,7 +12,9 @@ import semsim.model.SemSimComponent;
  * (PhysicalEntities, PhysicalProcesses, etc.).
  */
 public abstract class ComputationalModelComponent extends SemSimComponent{
-	public ComputationalModelComponent() {}
+	public ComputationalModelComponent(SemSimTypes type) {
+		super(type);
+	}
 	
 	public ComputationalModelComponent(ComputationalModelComponent pmctocopy) {
 		super(pmctocopy);

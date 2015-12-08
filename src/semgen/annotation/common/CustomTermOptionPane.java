@@ -20,8 +20,9 @@ import javax.swing.JTextField;
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
-import semsim.SemSimConstants;
-import semsim.annotation.SemSimRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 
 public abstract class CustomTermOptionPane extends JPanel implements ActionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -96,14 +97,14 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	}
 	
 	protected void makeUnique() {
-		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.BQB_IS_VERSION_OF_RELATION);
-		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.BQB_IS_VERSION_OF_RELATION, versionrels));
+		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimRelation.BQB_IS_VERSION_OF);
+		objecteditors.add(new CustomEntityEditor(library, SemSimRelation.BQB_IS_VERSION_OF, versionrels));
 		
-		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.HAS_PART_RELATION);
-		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.HAS_PART_RELATION, haspartrels));
+		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.HAS_PART);
+		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.HAS_PART, haspartrels));
 		
-		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, SemSimConstants.PART_OF_RELATION);
-		objecteditors.add(new CustomEntityEditor(library, SemSimConstants.PART_OF_RELATION, partofrels));
+		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.PART_OF);
+		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.PART_OF, partofrels));
 	}
 	
 	protected void finishPanel() {
@@ -188,7 +189,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	private class CustomEntityEditor extends ObjectPropertyEditor {
 		private static final long serialVersionUID = 1L;
 
-		public CustomEntityEditor(SemSimTermLibrary lib, SemSimRelation rel,
+		public CustomEntityEditor(SemSimTermLibrary lib, Relation rel,
 				ArrayList<Integer> complist) {
 			super(lib, rel, complist);
 			addActionListener(new ModificationAction());
@@ -202,7 +203,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 				preselected.add(entities.indexOf(i));
 			}
 			
-			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getURIFragment() + " relations.";
+			String dialogname = "Annotate " + mantextfield.getText() + " with " + relation.getName() + " relations.";
 			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(entities), preselected);
 			if (seldialog.isConfirmed()) {
 				preselected = seldialog.getSelections();

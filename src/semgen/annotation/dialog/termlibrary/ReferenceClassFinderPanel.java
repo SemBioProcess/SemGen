@@ -42,8 +42,8 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
-import semsim.annotation.ReferenceOntologies.OntologyDomain;
-import semsim.annotation.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.ReferenceOntologies.OntologyDomain;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
@@ -246,7 +246,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		if (bioportalID!=selected.getBioPortalID()) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
-				rdflabelsanduris = bps.search(text, bioportalID, findchooser.getSelectedIndex());
+				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalID, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
 				SemGenError.showWebConnectionError("BioPortal web service");

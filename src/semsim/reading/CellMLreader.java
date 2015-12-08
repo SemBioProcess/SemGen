@@ -32,15 +32,15 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import semsim.CellMLconstants;
-import semsim.SemSimConstants;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -114,7 +114,7 @@ public class CellMLreader extends ModelReader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
+		rdfblock = new CellMLbioRDFblock(sslib, semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");
@@ -125,7 +125,7 @@ public class CellMLreader extends ModelReader {
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
 		while(importsit.hasNext()){
 			Element importel = (Element) importsit.next();
-			String hrefValue = importel.getAttributeValue("href", CellMLconstants.xlinkNS);
+			String hrefValue = importel.getAttributeValue("href", RDFNamespace.XLINK.createJdomNamespace());
 			
 			// Load in the referenced units
 			Iterator<?> importedunitsit = importel.getChildren("units", mainNS).iterator();
@@ -143,7 +143,7 @@ public class CellMLreader extends ModelReader {
 				String origcompname = importedcompel.getAttributeValue("component_ref");
 				FunctionalSubmodel instantiatedsubmodel = 
 						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, localcompname, origcompname, hrefValue, sslib);
-				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
+				String metadataid = importedcompel.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 				instantiatedsubmodel.setMetadataID(metadataid);
 
 				collectSingularBiologicalAnnotationForSubmodel(doc, instantiatedsubmodel, importedcompel);
@@ -200,7 +200,7 @@ public class CellMLreader extends ModelReader {
 		while(componentit.hasNext()){
 			Element comp = (Element) componentit.next();
 			String compname = comp.getAttributeValue("name");
-			String metadataid = comp.getAttributeValue("id", CellMLconstants.cmetaNS);
+			String metadataid = comp.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 			
 			String submodelname = compname;
 
@@ -211,9 +211,9 @@ public class CellMLreader extends ModelReader {
 			}
 			
 			String mathmltext = null;
-			List<?> compMathMLelements = comp.getChildren("math", CellMLconstants.mathmlNS);
+			List<?> compMathMLelements = comp.getChildren("math", RDFNamespace.MATHML.createJdomNamespace());
 			if(compMathMLelements!=null){
-				mathmltext = xmloutputter.outputString(comp.getChildren("math", CellMLconstants.mathmlNS));
+				mathmltext = xmloutputter.outputString(comp.getChildren("math", RDFNamespace.MATHML.createJdomNamespace()));
 			}
 
 			// Iterate through variables to find the outputs
@@ -277,7 +277,7 @@ public class CellMLreader extends ModelReader {
 				}
 				
 				cvar.setDeclared(true);
-				String varmetaID = var.getAttributeValue("id", CellMLconstants.cmetaNS);
+				String varmetaID = var.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 				
 				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
 
@@ -456,7 +456,7 @@ public class CellMLreader extends ModelReader {
 		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
-		semsimmodel.addAnnotation(new Annotation(SemSimConstants.CELLML_RDF_MARKUP_RELATION, CellMLbioRDFblock.getRDFAsString(rdfblock.rdf)));
+		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, CellMLbioRDFblock.getRDFAsString(rdfblock.rdf)));
 		
 		return semsimmodel;
 	}
@@ -502,22 +502,22 @@ public class CellMLreader extends ModelReader {
 		String ab = "";
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
-			String id = doc.getRootElement().getAttributeValue("id", CellMLconstants.cmetaNS);
+			String id = doc.getRootElement().getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, name);
 			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
 			
 			// Try to get pubmed ID from RDF tags
-			if(doc.getRootElement().getChild("RDF", CellMLconstants.rdfNS)!=null){
-				if(doc.getRootElement().getChild("RDF", CellMLconstants.rdfNS).getChildren("Description", CellMLconstants.rdfNS)!=null){
-					Iterator<?> descit = doc.getRootElement().getChild("RDF",CellMLconstants.rdfNS).getChildren("Description", CellMLconstants.rdfNS).iterator();
+			if(doc.getRootElement().getChild("RDF", RDFNamespace.RDF.createJdomNamespace())!=null){
+				if(doc.getRootElement().getChild("RDF", RDFNamespace.RDF.createJdomNamespace()).getChildren("Description", RDFNamespace.RDF.createJdomNamespace())!=null){
+					Iterator<?> descit = doc.getRootElement().getChild("RDF",RDFNamespace.RDF.createJdomNamespace()).getChildren("Description", RDFNamespace.RDF.createJdomNamespace()).iterator();
 					while(descit.hasNext()){
 						Element nextdesc = (Element) descit.next();
-						if(nextdesc.getChildren("reference", CellMLconstants.bqsNS)!=null){
-							Iterator<?> refit = nextdesc.getChildren("reference", CellMLconstants.bqsNS).iterator();
+						if(nextdesc.getChildren("reference", RDFNamespace.BQS.createJdomNamespace())!=null){
+							Iterator<?> refit = nextdesc.getChildren("reference", RDFNamespace.BQS.createJdomNamespace()).iterator();
 							while(refit.hasNext()){
 								Element nextref = (Element) refit.next();
-								if(nextref.getChild("Pubmed_id", CellMLconstants.bqsNS)!=null){
-									String pubmedid = nextref.getChild("Pubmed_id", CellMLconstants.bqsNS).getText();
+								if(nextref.getChild("Pubmed_id", RDFNamespace.BQS.createJdomNamespace())!=null){
+									String pubmedid = nextref.getChild("Pubmed_id", RDFNamespace.BQS.createJdomNamespace()).getText();
 									if(!pubmedid.equals("") && pubmedid!=null){
 										ab = pubmedid;
 									}
@@ -529,7 +529,7 @@ public class CellMLreader extends ModelReader {
 			}
 			Boolean process = false;
 			try{
-				doc.getRootElement().getChild("documentation",CellMLconstants.docNS).getChild("article",CellMLconstants.docNS).getChildren("sect1",CellMLconstants.docNS);
+				doc.getRootElement().getChild("documentation",RDFNamespace.DOC.createJdomNamespace()).getChild("article",RDFNamespace.DOC.createJdomNamespace()).getChildren("sect1",RDFNamespace.DOC.createJdomNamespace());
 				process = true;
 			}
 			catch(NullPointerException e){
@@ -537,16 +537,16 @@ public class CellMLreader extends ModelReader {
 			}
 			// Try to get ID from documentation tags if not in RDF
 			if(process){
-				Iterator<?> sect1it = doc.getRootElement().getChild("documentation",CellMLconstants.docNS).getChild("article",CellMLconstants.docNS).getChildren("sect1",CellMLconstants.docNS).iterator();
+				Iterator<?> sect1it = doc.getRootElement().getChild("documentation",RDFNamespace.DOC.createJdomNamespace()).getChild("article",RDFNamespace.DOC.createJdomNamespace()).getChildren("sect1",RDFNamespace.DOC.createJdomNamespace()).iterator();
 				while(sect1it.hasNext()){
 					Element nextsect1 = (Element) sect1it.next();
 					if(nextsect1.getAttributeValue("id").equals("sec_structure")){
-						if(nextsect1.getChildren("para",CellMLconstants.docNS)!=null){
-							Iterator<?> it = nextsect1.getChildren("para",CellMLconstants.docNS).iterator();
+						if(nextsect1.getChildren("para",RDFNamespace.DOC.createJdomNamespace())!=null){
+							Iterator<?> it = nextsect1.getChildren("para",RDFNamespace.DOC.createJdomNamespace()).iterator();
 							while(it.hasNext()){
 								Element nextel = (Element) it.next();
-								if(nextel.getChildren("ulink",CellMLconstants.docNS).size()!=0){
-									Iterator<?> ulinkit = nextel.getChildren("ulink",CellMLconstants.docNS).iterator();
+								if(nextel.getChildren("ulink",RDFNamespace.DOC.createJdomNamespace()).size()!=0){
+									Iterator<?> ulinkit = nextel.getChildren("ulink",RDFNamespace.DOC.createJdomNamespace()).iterator();
 									while(ulinkit.hasNext()){
 										Element nextulink = (Element) ulinkit.next();
 										if(nextulink.getText().toLowerCase().contains("pubmed id") || nextulink.getText().toLowerCase().contains("pubmedid")){
@@ -563,21 +563,21 @@ public class CellMLreader extends ModelReader {
 			// end documentation processing
 		}
 		if(ab!=null && !ab.equals(""))
-			semsimmodel.addAnnotation(new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, ab));
+			semsimmodel.setModelAnnotation(Metadata.pubmedid, ab);
 	}
 	
 	
 	private void getDocumentation(Document doc, SemSimModel semsimmodel){
-		Element docel = doc.getRootElement().getChild("documentation", CellMLconstants.docNS);
+		Element docel = doc.getRootElement().getChild("documentation", RDFNamespace.DOC.createJdomNamespace());
 		if(docel!=null){
 			String text = getUTFformattedString(xmloutputter.outputString(docel));
-			semsimmodel.addAnnotation(new Annotation(SemSimConstants.CELLML_DOCUMENTATION_RELATION, text));
+			semsimmodel.addAnnotation(new Annotation(SemSimRelations.SemSimRelation.CELLML_DOCUMENTATION, text));
 		}
 	}
 	
 	
 	private Element getRDFmarkupForElement(Element el, SemSimModel semsimmodel){
-		return el.getChild("RDF", CellMLconstants.rdfNS);
+		return el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
 	}
 	
 	
@@ -606,7 +606,7 @@ public class CellMLreader extends ModelReader {
 				}
 			Property pred = st.getPredicate();
 			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(SemSimConstants.SEMSIM_NAMESPACE)){
+				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespace())){
 					listofremovedstatements.add(st);
 				}
 			}
@@ -618,19 +618,19 @@ public class CellMLreader extends ModelReader {
 	// Collect the reference ontology term used to describe the model component
 	private URI collectSingularBiologicalAnnotation(Document doc, SemSimObject toann, Element el){
 		// Look for rdf markup as child of element
-		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
+		Element mainrdfel = el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
 		// If not present, look for it in main RDF block
 		if(mainrdfel==null)
 			mainrdfel = rdfblockelement;
 		
 		URI singularannURI = null;
 		if(mainrdfel!=null){
-			Iterator<?> descit = mainrdfel.getChildren("Description", CellMLconstants.rdfNS).iterator();
+			Iterator<?> descit = mainrdfel.getChildren("Description", RDFNamespace.RDF.createJdomNamespace()).iterator();
 			
 			while(descit.hasNext()){
 				Element rdfdesc = (Element) descit.next();
-				String about = rdfdesc.getAttributeValue("about", CellMLconstants.rdfNS);
-				String ID = rdfdesc.getAttributeValue("ID", CellMLconstants.rdfNS);
+				String about = rdfdesc.getAttributeValue("about", RDFNamespace.RDF.createJdomNamespace());
+				String ID = rdfdesc.getAttributeValue("ID", RDFNamespace.RDF.createJdomNamespace());
 				String ref = null;
 				
 				if(about!=null) ref = about.replace("#", "");
@@ -638,16 +638,16 @@ public class CellMLreader extends ModelReader {
 				
 				if(ref!=null){				
 					if(ref.equals(toann.getMetadataID())){
-						Element relel = rdfdesc.getChild("is", CellMLconstants.bqbNS);
-						Element freeel = rdfdesc.getChild("description", CellMLconstants.dctermsNS);
+						Element relel = rdfdesc.getChild("is", RDFNamespace.BQB.createJdomNamespace());
+						Element freeel = rdfdesc.getChild("description", RDFNamespace.DCTERMS.createJdomNamespace());
 						
 						// If there is a singular annotation
 						if(relel!=null){
-							String term = relel.getAttributeValue("resource", CellMLconstants.rdfNS);
+							String term = relel.getAttributeValue("resource", RDFNamespace.RDF.createJdomNamespace());
 							if(term==null){
-								Element objectdescel = relel.getChild("Description", CellMLconstants.rdfNS);
+								Element objectdescel = relel.getChild("Description", RDFNamespace.RDF.createJdomNamespace());
 								if(objectdescel!=null){
-									term = objectdescel.getAttributeValue("about", CellMLconstants.rdfNS);
+									term = objectdescel.getAttributeValue("about", RDFNamespace.RDF.createJdomNamespace());
 									singularannURI = URI.create(term);
 								}
 							}
@@ -687,7 +687,7 @@ public class CellMLreader extends ModelReader {
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespace()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -769,8 +769,8 @@ public class CellMLreader extends ModelReader {
 			if(entityres!=null){
 				PhysicalEntity nextent = getCompositeEntityComponentFromResourceAndAnnotate(entityres);
 				entlist.add(nextent);
-				if(containedinlink) rellist.add(SemSimConstants.CONTAINED_IN_RELATION);
-				else rellist.add(SemSimConstants.PART_OF_RELATION);
+				if(containedinlink) rellist.add(StructuralRelation.CONTAINED_IN);
+				else rellist.add(StructuralRelation.PART_OF);
 				
 				curres = entityres;
 			}
@@ -852,8 +852,8 @@ public class CellMLreader extends ModelReader {
 			Resource isversionofann = res.getPropertyResourceValue(CellMLbioRDFblock.isversionof);
 			if(isversionofann!=null){
 				URI isversionofannURI = URI.create(isversionofann.getURI());
-				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
-						isversionofannURI, isversionofannURI.toString()));
+				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimRelation.BQB_IS_VERSION_OF, 
+						isversionofannURI, isversionofannURI.toString(), sslib));
 				if(isentity)
 					semsimmodel.addReferencePhysicalEntity(
 							new ReferencePhysicalEntity(isversionofannURI, isversionofannURI.toString()));
@@ -896,11 +896,11 @@ public class CellMLreader extends ModelReader {
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
 			URI propuri = URI.create(st.getPredicate().getURI());
-			SemSimRelation relation = SemSimConstants.URIS_AND_SEMSIM_RELATIONS.get(propuri);
+			Relation relation = SemSimRelations.getRelationFromURI(propuri);
 			String objectURI = st.getObject().asResource().getURI();
 		
 			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(objectURI), objectURI));
-			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI));	
+			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI, sslib));	
 		}
 		
 		return returnent;
@@ -909,7 +909,7 @@ public class CellMLreader extends ModelReader {
 	
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
-		Element mathmlheadel = new Element("math", CellMLconstants.mathmlNS);
+		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.createJdomNamespace());
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
 		Element childel = getElementForOutputVariableFromComponentMathML(cvarname, compmathmlit);
 		if(childel!=null){
@@ -925,14 +925,14 @@ public class CellMLreader extends ModelReader {
 		Element childel = null;
 		while(compmathmlit.hasNext()){
 			Element MathMLelement = (Element) compmathmlit.next();
-			Iterator<?> applyit = MathMLelement.getChildren("apply", CellMLconstants.mathmlNS).iterator();
+			Iterator<?> applyit = MathMLelement.getChildren("apply", RDFNamespace.MATHML.createJdomNamespace()).iterator();
 			
 			while(applyit.hasNext()){
 				childel = (Element) applyit.next();
 				Element subappel = (Element) childel.getChildren().get(1);
 				
 				if(subappel.getName().equals("apply")){
-					Element ciel = subappel.getChild("ci", CellMLconstants.mathmlNS);
+					Element ciel = subappel.getChild("ci", RDFNamespace.MATHML.createJdomNamespace());
 					if(ciel.getText().trim().equals(cvarname)){
 						return childel;
 					}
@@ -953,15 +953,15 @@ public class CellMLreader extends ModelReader {
 
 		while(compmathmlit.hasNext()){
 			Element MathMLelement = (Element) compmathmlit.next();
-			Iterator<?> applyit = MathMLelement.getChildren("apply", CellMLconstants.mathmlNS).iterator();
+			Iterator<?> applyit = MathMLelement.getChildren("apply", RDFNamespace.MATHML.createJdomNamespace()).iterator();
 			
 			while(applyit.hasNext()){
 				childel = (Element) applyit.next();
 				Element subappel = (Element) childel.getChildren().get(1);
 				
 				if(subappel.getName().equals("apply")){
-					Element ciel = subappel.getChild("ci", CellMLconstants.mathmlNS);
-					Element diffeq = subappel.getChild("diff", CellMLconstants.mathmlNS);
+					Element ciel = subappel.getChild("ci", RDFNamespace.MATHML.createJdomNamespace());
+					Element diffeq = subappel.getChild("diff", RDFNamespace.MATHML.createJdomNamespace());
 					if(ciel.getText().trim().equals(cvarname) && diffeq != null){
 						return true;
 					}
@@ -1027,7 +1027,7 @@ public class CellMLreader extends ModelReader {
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	private URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = SemSimConstants.OPB_NAMESPACE + frag;
+		String uristring = RDFNamespace.OPB.getNamespace() + frag;
 		return URI.create(uristring);
 	}
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){

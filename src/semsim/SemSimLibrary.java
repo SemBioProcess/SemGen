@@ -3,6 +3,7 @@ package semsim;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,7 +19,12 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.annotation.workbench.routines.AutoAnnotate;
+import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.definitions.PropertyType;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -32,13 +38,15 @@ import semsim.utilities.ResourcesManager;
 //Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
-	public static final IRI SEMSIM_VERSION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "SemSimVersion");
+	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespace() + "SemSimVersion");
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
 	
 	private HashMap<String, String[]> OPBClassesForUnitsTable;
 	private HashMap<String, String[]> jsimUnitsTable;
+	
+	private ArrayList<Ontology> ontologies = new ArrayList<Ontology>();
 	
 	// Hashtable for mapping CellML base units to OPB classes.
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
@@ -66,6 +74,7 @@ public class SemSimLibrary {
 	private void loadLibrary() {
 		try {
 			loadCommonProperties();
+			loadOntologyDescriptions();
 			jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
 			
 			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
@@ -88,13 +97,13 @@ public class SemSimLibrary {
 		}
 
 		try {
-			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00147", false);
-			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00573", false);
-			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_01151", false);
-			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00568", false);
-			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00135", false);
-			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00574", false);
-			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + "OPB_00569", false);
+			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00147", false);
+			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00573", false);
+			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_01151", false);
+			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00568", false);
+			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00135", false);
+			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00574", false);
+			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00569", false);
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
@@ -102,6 +111,14 @@ public class SemSimLibrary {
 		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile(cfgpath + "CommonProperties.txt", true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
+		}
+	}
+	
+	//Map ontology namespaces to ontologies
+	private void loadOntologyDescriptions() throws FileNotFoundException {
+		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions();
+		for (Ontology ont : onts) {
+			ontologies.add(ont);
 		}
 	}
 	
@@ -152,7 +169,7 @@ public class SemSimLibrary {
 		}
 		PhysicalPropertyinComposite pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
-			String term = SemSimConstants.OPB_NAMESPACE + candidateOPBclasses[0];
+			String term = RDFNamespace.OPB.getNamespace() + candidateOPBclasses[0];
 			pp = commonproperties.get(term);
 			if (pp==null) {
 				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
@@ -175,7 +192,7 @@ public class SemSimLibrary {
 	}
 	
 	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
-		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, SemSimConstants.OPB_NAMESPACE + parentclass, false);
+		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + parentclass, false);
 		return subclassset;
 	}
 	
@@ -308,25 +325,34 @@ public class SemSimLibrary {
 	}
 	
 	public String getReferenceOntologyName(URI uri) {
-		String fullname = "?";
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
-		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
-			fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
-		}
-		return fullname;
+		return getOntologybyNamespace(namespace).getFullName();
 	}
 	
 	public String getReferenceOntologyAbbreviation(URI uri) {
-		String ontologyAbbreviation = "?";
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
-		if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
-			String fullname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
-			if(SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.containsKey(fullname)){
-				ontologyAbbreviation = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(fullname);
+		
+		return getOntologybyNamespace(namespace).getNickName();
+	}
+	
+	private Ontology getOntologybyNamespace(String namespace) {
+		Ontology ont = ReferenceOntologies.getOntologybyNamespace(namespace);
+		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
+			for (Ontology o : ontologies) {
+				if (o.hasNamespace(namespace)) {
+					return o;
+				}
 			}
 		}
-		return ontologyAbbreviation;
+		if (ont == null) ont = ReferenceOntology.UNKNOWN.getAsOntology();
+		return ont;
 	}
+	
+	public Ontology getOntologyfromTermURI(String termuri) {
+		String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri);
+		return getOntologybyNamespace(namespace);
+	}
+	
 	
 	public String getReferenceID(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());

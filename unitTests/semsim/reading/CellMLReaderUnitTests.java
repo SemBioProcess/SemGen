@@ -8,8 +8,7 @@ import org.junit.Test;
 
 import semgen.UnitTestBase;
 import semsim.CollateralHelper;
-import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.collection.SemSimModel;
 
 public class CellMLReaderUnitTests extends UnitTestBase {
@@ -39,7 +38,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 		// Assert
 		
 		// Look for the pubmed id
-		Annotation expectedAnnotation = new Annotation(CurationalMetadata.REFERENCE_PUBLICATION_PUBMED_ID_RELATION, "11865019");
-		assertTrue("Verify the expected annotation is present", model.getAnnotations().contains(expectedAnnotation));
+		String pubmedid = model.getCurationalMetadata().getAnnotationValue(Metadata.pubmedid);
+		assertTrue("Verify the expected annotation is present", pubmedid.equals("11865019"));
 	}
 }

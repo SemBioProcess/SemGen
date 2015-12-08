@@ -4,11 +4,13 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
 import semsim.model.computational.ComputationalModelComponent;
 
@@ -28,6 +30,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	private String unitType;
 	
 	public UnitOfMeasurement(String name){
+		super(SemSimTypes.UNIT_OF_MEASUREMENT);
 		setName(name);
 		setComputationalCode(name);
 	}
@@ -93,14 +96,14 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		if(getName()==null){
 			setDescription(description);
 		}
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation){
@@ -112,14 +115,14 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	
 	
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
-		if(!getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION).isEmpty()){
-			return getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION).toArray(new ReferenceOntologyAnnotation[]{})[0];
+		if(!getReferenceOntologyAnnotations(SemSimRelation.HAS_PHYSICAL_DEFINITION).isEmpty()){
+			return getReferenceOntologyAnnotations(SemSimRelation.HAS_PHYSICAL_DEFINITION).toArray(new ReferenceOntologyAnnotation[]{})[0];
 		}
 		return null;
 	}
 	
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotationByURI(URI uri){
-		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION)){
+		for(ReferenceOntologyAnnotation ann : getReferenceOntologyAnnotations(SemSimRelation.HAS_PHYSICAL_DEFINITION)){
 			if(ann.getReferenceURI().compareTo(uri)==0){
 				return ann;
 			}
@@ -213,12 +216,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public String getUnitType() {
 		return unitType;
 	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.UNITS_CLASS_URI;
-	}
-	
+
 	public URI getPhysicalDefinitionURI() {
 		return referenceuri;
 	}

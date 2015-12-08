@@ -1,10 +1,9 @@
 package semsim.model.collection;
 
 import java.net.URI;
-import semgen.SemGen;
-import semsim.SemSimConstants;
-import semsim.annotation.ReferenceOntologyAnnotation;
+
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
 
 public class Submodel extends SemSimCollection implements Importable {
@@ -18,6 +17,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	protected boolean functional = false;
 	
 	public Submodel(String name){ 
+		super(SemSimTypes.SUBMODEL);
 		setName(name);
 	}
 	
@@ -81,11 +81,6 @@ public class Submodel extends SemSimCollection implements Importable {
 	public void setParentImport(Importable parent) {
 		this.parentImport = parent;
 	}
-
-	@Override
-	public Boolean hasPhysicalDefinitionAnnotation() {
-		return singularterm != null;
-	}
 	
 	public void setSingularAnnotation(ReferenceTerm refterm) {
 		singularterm = refterm;
@@ -94,14 +89,7 @@ public class Submodel extends SemSimCollection implements Importable {
 	public void removeSingularAnnotation() {
 		singularterm = null;
 	}
-	
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
-		if(hasPhysicalDefinitionAnnotation()){
-			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation();
-		}
-		return null;
-	}
-	
+		
 	public URI getPhysicalDefinitionURI() {
 		return singularterm.getPhysicalDefinitionURI();
 	}
@@ -109,18 +97,6 @@ public class Submodel extends SemSimCollection implements Importable {
 	
 	public ReferenceTerm getReferenceTerm() {
 		return singularterm;
-	}
-	
-	/**
-	 * @return The name of the knowledge base that contains the URI used as the annotation value
-	 */
-	public String getNamewithOntologyAbreviation() {
-		return singularterm.getName() + " (" + SemGen.semsimlib.getReferenceOntologyAbbreviation(singularterm.getPhysicalDefinitionURI()) + ")";
-	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SUBMODEL_CLASS_URI;
 	}
 	
 	public boolean isFunctional() {

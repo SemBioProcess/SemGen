@@ -1,6 +1,8 @@
-package semsim.annotation;
+package semsim.definitions;
 
 import java.util.ArrayList;
+
+import semsim.annotation.Ontology;
 
 public class ReferenceOntologies {
 	public static ArrayList<ReferenceOntology> getAllOntologies() {
@@ -15,14 +17,21 @@ public class ReferenceOntologies {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.getFullName().equals(name)) return ro; 
 		}
-		return null;
+		return ReferenceOntology.UNKNOWN;
 	}
 	
 	public static ReferenceOntology getReferenceOntologybyNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro;
 		}
-		return null;
+		return ReferenceOntology.UNKNOWN;
+	}
+	
+	public static Ontology getOntologybyNamespace(String namespace) {
+		for (ReferenceOntology ro : ReferenceOntology.values()) {
+			if (ro.hasNamespace(namespace)) return ro.getAsOntology();
+		}
+		return ReferenceOntology.UNKNOWN.getAsOntology();
 	}
 	
 	public enum OntologyDomain {
@@ -107,13 +116,15 @@ public class ReferenceOntologies {
 				"clinical-domain physical properties not in the OPB"),
 		UNIPROT("Universal Protein Resource", "UNIPROPT", "",
 				new String[]{"http://purl.uniprot.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"},
-				"protein sequences and functions");
+				"protein sequences and functions"),
+		UNKNOWN("Unkown Ontology", "?", "", new String[]{}, "") ;
 		
 		private String fullname;
 		private String nickname;
 		private String bioportalid = null;
 		private ArrayList<String> namespaces = new ArrayList<String>();
 		private String description;
+		private Ontology ontology;
 		
 		private ReferenceOntology(String name, String abrev, String bpid, String[] ns, String desc) {
 			fullname = name;
@@ -123,6 +134,7 @@ public class ReferenceOntologies {
 			for (String s : ns) {
 				namespaces.add(s);
 			}
+			ontology = new Ontology(this);
 		}
 		
 		public boolean hasNamespace(String nspace) {
@@ -146,6 +158,14 @@ public class ReferenceOntologies {
 		
 		public String getDescription() {
 			return description;
+		}
+		
+		public ArrayList<String> getNamespaces() {
+			return namespaces;
+		}
+		
+		public Ontology getAsOntology() {
+			return ontology;
 		}
 	}
 }

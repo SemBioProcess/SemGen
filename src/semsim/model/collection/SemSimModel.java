@@ -13,7 +13,7 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
@@ -21,8 +21,11 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimTypes;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
@@ -77,7 +80,7 @@ import semsim.writing.SemSimOWLwriter;
  */
 
 public class SemSimModel extends SemSimCollection implements Annotatable  {
-	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(SemSimConstants.SEMSIM_NAMESPACE + "legacyCodeURI");
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespace() + "legacyCodeURI");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
@@ -105,6 +108,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Constructor without namespace
 	 */
 	public SemSimModel(){
+		super(SemSimTypes.MODEL);
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
@@ -112,6 +116,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Constructor with namespace
 	 */
 	public SemSimModel(String namespace){
+		super(SemSimTypes.MODEL);
 		setNamespace(namespace);
 	}
 	
@@ -692,7 +697,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return A new SemSim model namespace from the current date and time
 	 */
 	public String generateNamespaceFromDateAndTime(){
-		namespace = SemSimConstants.SEMSIM_NAMESPACE.replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
+		namespace = RDFNamespace.SEMSIM.getNamespace().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
 		return namespace;
 	}
 
@@ -914,8 +919,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param description A free-text description of the reference
 	 * ontology term (obtained from the ontology itself whenever possible). 
 	 */
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
 	
@@ -926,7 +931,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param relation The {@link SemSimRelation} that filters the annotations 
 	 * to return  
 	 */
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation)
@@ -975,10 +980,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void setSemsimversion(String semsimversion) {
 		this.semsimversion = Double.valueOf(semsimversion);
 	}
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.SEMSIM_MODEL_CLASS_URI;
-	}
 		
 	public void replacePhysicalProperty(PhysicalPropertyinComposite tobereplaced, PhysicalPropertyinComposite toreplace) {
 		Set<PhysicalPropertyinComposite> pps = new HashSet<PhysicalPropertyinComposite>();
@@ -996,5 +997,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 				}
 			}
 		}
+	}
+
+	//Required by Annotatable
+	@Override
+	public Boolean hasPhysicalDefinitionAnnotation() {
+		return false;
 	}
 }
