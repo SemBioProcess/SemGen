@@ -18,12 +18,14 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-import semsim.SemSimConstants;
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.StructuralRelation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimTypes;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -39,27 +41,29 @@ public class CellMLbioRDFblock {
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	public String modelns;
+	private SemSimLibrary sslib;
+	private String modelns;
 	
-	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
-	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SINK_PARTICIPANT_URI.toString());
-	public static Property hasmediatorparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_MEDIATOR_PARTICIPANT_URI.toString());
-	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_ENTITY_REFERENCE_URI.toString());
-	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimConstants.HAS_MULTIPLIER_URI.toString());
-	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
-	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString());
-	public static Property is = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
-	public static Property isversionof = ResourceFactory.createProperty(SemSimConstants.BQB_IS_VERSION_OF_URI.toString());
-	public static Property partof = ResourceFactory.createProperty(SemSimConstants.PART_OF_URI.toString());
-	public static Property haspart = ResourceFactory.createProperty(SemSimConstants.HAS_PART_URI.toString());
-	public static Property containedin = ResourceFactory.createProperty(SemSimConstants.CONTAINED_IN_URI.toString());
-	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
-	public static Property hasname = ResourceFactory.createProperty(SemSimConstants.HAS_NAME_URI.toString());
-	public static Property description = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_SOURCE_PARTICIPANT.getURIasString());
+	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_SINK_PARTICIPANT.getURIasString());
+	public static Property hasmediatorparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getURIasString());
+	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getURIasString());
+	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimRelation.HAS_MULTIPLIER.getURIasString());
+	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimRelation.PHYSICAL_PROPERTY_OF.getURIasString());
+	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.toString());
+	public static Property is = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
+	public static Property isversionof = ResourceFactory.createProperty(SemSimRelation.BQB_IS_VERSION_OF.getURIasString());
+	public static Property partof = ResourceFactory.createProperty(StructuralRelation.PART_OF.getURIasString());
+	public static Property haspart = ResourceFactory.createProperty(StructuralRelation.HAS_PART.getURIasString());
+	public static Property containedin = ResourceFactory.createProperty(StructuralRelation.CONTAINED_IN.getURIasString());
+	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
+	public static Property hasname = ResourceFactory.createProperty(SemSimRelation.HAS_NAME.getURIasString());
+	public static Property description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespace() + "description");
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	
-	public CellMLbioRDFblock(String namespace, String rdfasstring, String baseNamespace){	
+	public CellMLbioRDFblock(SemSimLibrary lib, String namespace, String rdfasstring, String baseNamespace){	
+		sslib = lib;
 		this.modelns = namespace;
 		
 		if(rdfasstring!=null){
@@ -136,7 +140,7 @@ public class CellMLbioRDFblock {
 		Resource physentrefres = null;
 		
 		// Create link between process participant and the physical entity it references
-		if(participant instanceof CompositePhysicalEntity){
+		if(participant.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 			URI physentrefuri = addCompositePhysicalEntityMetadata((CompositePhysicalEntity)participant);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
@@ -225,7 +229,7 @@ public class CellMLbioRDFblock {
 		Property structprop = partof;
 			
 		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		if(rel==StructuralRelation.CONTAINED_IN) structprop = containedin;
 		
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 		if(!rdf.contains(structst)) rdf.add(structst);
@@ -295,7 +299,7 @@ public class CellMLbioRDFblock {
 		if(refURIsandresources.containsKey(uri))
 			refres = refURIsandresources.get(uri);
 		else{
-			URI furi = CellMLwriter.formatAsIdentifiersDotOrgURI(uri);
+			URI furi = CellMLwriter.formatAsIdentifiersDotOrgURI(uri, sslib);
 			refres = rdf.createResource(furi.toString());
 			refURIsandresources.put(furi, refres);
 		}

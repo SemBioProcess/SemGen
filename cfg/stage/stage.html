@@ -15,11 +15,15 @@
 		<script src="js/nodes/parentNode.js"></script>
 		<script src="js/nodes/modelNode.js"></script>
 		<script src="js/nodes/submodelNode.js"></script>
+		<script src="js/nodes/physiomapNode.js"></script>
 		<script src="js/nodes/behaviors/dragToMerge.js"></script>
 		<script src="js/nodes/behaviors/hull.js"></script>
 		<script src="js/nodes/behaviors/hiddenLabelNodeGenerator.js"></script>
 		<script src="js/nodes/behaviors/modelPopover.js"></script>
 		<script src="js/nodes/behaviors/columns.js"></script>
+		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
+		<script src="js/links/link.js"></script>
+		<script src="js/links/mediatorLink.js"></script>
 		<script src="js/stage.js"></script>
 		
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
@@ -30,12 +34,15 @@
 		<script src="js/mock.js"></script>
 	</head>
 	<body>
-		<div class="addModelButton">+</div>
+		<!--<div class="addModelButton">+</div>-->
 		<div class="stageMenu">
 			<div class="key">
 				Node key:
 				<ul class="visibleNodeKeys"></ul>
 				<ul class="hiddenNodeKeys"></ul>
+				Link key:
+				<ul class="visibleLinkKeys"></ul>
+				<ul class="hiddenLinkKeys"></ul>
 			</div>
 			<div class="modes">
 				Graph:
@@ -70,6 +77,26 @@
 			<div class="searchValueContainer">
 				<input name="searchString" class="searchString" type="text" placeholder="Enter search terms">
 				<ul class="searchResults"></ul>
+			</div>
+		</div>
+		<div class="modelDropdown">
+			<button class="btn btn-primary modelDropdown-toggle" type="button" data-toggle="dropdown">+</button>
+			<ul class="dropdown-menu">
+				<li class="dropdown-header">Project Options</li>
+				<li><a id="addModel" href="#">Import Models</a></li>
+				<li><a href="#">Loaded Models</a></li>
+				<li class="divider"></li>
+				<li class="dropdown-header">Model Options</li>
+			</ul>
+		</div>
+		<div class="nodeInfoPanel">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<a data-toggle="collapse" href="#collapse1">Node Info<span class="caret"></span></a>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse">
+					<div class="panel-body">Information about selected node goes here</div>
+				</div>
 			</div>
 		</div>
 		<div id="stage"></div>

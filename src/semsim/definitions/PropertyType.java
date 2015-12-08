@@ -1,4 +1,4 @@
-package semsim;
+package semsim.definitions;
 
 public enum PropertyType {
 	Unknown ("Constitutive"),

@@ -14,6 +14,8 @@ function HiddenLabelNode(anchorNode, percentageFromLeftOfLabel, charge) {
 	
 	// Create a visual element if we're showing the hidden node
 	this.createVisualElement = function (element, graph) {
+		d3.select(element).attr("class", "node");
+		
 		if(!ShowHiddenNodes)
 			return;
 

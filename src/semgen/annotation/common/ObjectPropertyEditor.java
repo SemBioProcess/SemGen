@@ -20,24 +20,24 @@ import semgen.SemGenSettings;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
-import semsim.annotation.SemSimRelation;
+import semsim.annotation.Relation;
 
 public abstract class ObjectPropertyEditor extends JPanel implements ActionListener, ListDataListener, ListSelectionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton plusbutton = new JButton(SemGenIcon.plusicon);
 	private JButton minusbutton = new JButton(SemGenIcon.minusicon);
 	private JList<String> listcomponent = new JList<String>();
-	protected SemSimRelation relation;
+	protected Relation relation;
 	
 	protected ArrayList<Integer> components; 
 	protected SemSimTermLibrary library;
 	
-	public ObjectPropertyEditor(SemSimTermLibrary lib, SemSimRelation rel, ArrayList<Integer> complist) {
+	public ObjectPropertyEditor(SemSimTermLibrary lib, Relation rel, ArrayList<Integer> complist) {
 		setAlignmentY(Box.TOP_ALIGNMENT);
 		relation = rel;
 		library = lib;
 		components = complist;		
-		JLabel headerlabel = new JLabel(relation.getURIFragment());
+		JLabel headerlabel = new JLabel(relation.getName());
 
 		setMaximumSize(new Dimension(9999, 250));
 		setBackground(SemGenSettings.lightblue);

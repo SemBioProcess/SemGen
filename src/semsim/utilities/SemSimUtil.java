@@ -22,12 +22,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
+import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
@@ -255,14 +256,15 @@ public class SemSimUtil {
 	 */
 	public static String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
 		SAXBuilder saxbuilder = new SAXBuilder();
-
+		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespace());
+		
 		try {
 			Document doc = saxbuilder.build(new StringReader(mathmlstring));
 			
 			// Get the <eq> element if there is one...
 			Boolean hastopeqel = false;
-			if(doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ)!=null){
-				if(doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ).getChild("eq", SemSimConstants.MATHML_NAMESPACE_OBJ)!=null){
+			if(doc.getRootElement().getChild("apply",mmlns)!=null){
+				if(doc.getRootElement().getChild("apply",mmlns).getChild("eq", mmlns)!=null){
 					hastopeqel = true;
 				}
 			}
@@ -270,7 +272,7 @@ public class SemSimUtil {
 				String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
 				String mathMLtail = "</math>";
 				
-				Element eqel = doc.getRootElement().getChild("apply",SemSimConstants.MATHML_NAMESPACE_OBJ).getChild("eq",SemSimConstants.MATHML_NAMESPACE_OBJ);
+				Element eqel = doc.getRootElement().getChild("apply",mmlns).getChild("eq",mmlns);
 				Element eqparentel = eqel.getParentElement();
 				
 				// Iterate over the <eq> element's siblings by getting its parent's children

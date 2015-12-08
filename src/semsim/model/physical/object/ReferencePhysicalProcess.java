@@ -2,24 +2,25 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.physical.PhysicalProcess;
 
 public class ReferencePhysicalProcess extends PhysicalProcess implements ReferenceTerm{
 	
 	public ReferencePhysicalProcess(URI uri, String description){
+		super(SemSimTypes.REFERENCE_PHYSICAL_PROCESS);
 		referenceuri = uri;
 		setName(description);
 	}
 	
 	
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
+			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}
@@ -44,19 +45,9 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	public String getTermID() {
 		return referenceuri.getFragment();
 	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.REFERENCE_PHYSICAL_PROCESS_CLASS_URI;
-	}
-	
+
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((ReferencePhysicalProcess)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
-	}
-	
-	@Override
-	public SemSimTypes getSemSimType() {
-		return SemSimTypes.REFERENCE_PHYSICAL_PROCESS;
 	}
 }

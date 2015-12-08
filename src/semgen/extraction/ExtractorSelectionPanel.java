@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import semgen.SemGen;
 import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
@@ -107,7 +108,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 			if(ssc instanceof PhysicalModelComponent){
 				PhysicalModelComponent pmc  = (PhysicalModelComponent)ssc;
 				if(pmc.hasPhysicalDefinitionAnnotation()){
-					checkboxtext = pmc.getName() + " (" + ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation().getOntologyAbbreviation() + ")";
+					checkboxtext = pmc.getName() + " (" + ((ReferenceTerm)pmc).getPhysicalDefinitionReferenceOntologyAnnotation(SemGen.semsimlib).getOntologyAbbreviation() + ")";
 				}
 				else checkboxtext = pmc.getName();
 			}

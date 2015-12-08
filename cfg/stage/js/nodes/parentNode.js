@@ -7,12 +7,28 @@ function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, ch
 	Node.prototype.constructor.call(this, graph, name, parent, links, r, group, textSize, nodeType, charge);
 	this.userCanHide = false;
 	this.children = null;
+
+	this.xmin = null;
+	this.xmax = null;
+	this.ymin = null;
+	this.ymax = null;
 }
 
 ParentNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	
 	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
+	this.addBehavior(parentDrag);
+	
+}
+
+//If children are displayed, keep text above the highest node.
+ParentNode.prototype.spaceBetweenTextAndNode = function() {
+	var dist = this.r * 0.2 + this.textSize; 
+	if (this.children && this.ymin) {
+		dist += (this.y - this.ymin)+4; 
+	}
+	return dist
 }
 
 ParentNode.prototype.canLink = function () {
@@ -55,7 +71,10 @@ ParentNode.prototype.setChildren = function (children) {
 			this.graph.hideNodes("Constitutive");
 	}
 	
+
 	$(this).triggerHandler('childrenSet', [children]);
 	
 	this.graph.update();
 }
+
+

@@ -9,13 +9,10 @@ public class SubModelDependencyNode extends DependencyNode {
 	// we'll need to index into the array to get the correct parts
 	public final static int SubmodelNamePart = 0;
 	public final static int VariableNamePart = 1;
-	
-	private String _parentModelName;
-	
-	public SubModelDependencyNode(DataStructure dataStructure, String parentModelName) {
-		super(getDataStructureVariableName(dataStructure), dataStructure);
-		_parentModelName = parentModelName;
-		
+
+	public SubModelDependencyNode(DataStructure dataStructure, SubModelNode parentNode) {
+		super(getDataStructureVariableName(dataStructure), dataStructure, parentNode.parentModelId);
+
 		// Are there inputs from other models?
 		if(dataStructure instanceof MappableVariable) {
 			for(MappableVariable input : ((MappableVariable)dataStructure).getMappedFrom())
@@ -23,15 +20,17 @@ public class SubModelDependencyNode extends DependencyNode {
 				String[] nameParts = getNodeNameParts(input);
 				String submodelName = nameParts[SubmodelNamePart];
 				String variableName = nameParts[VariableNamePart];
-				
+
+				String submodelNameId = Node.buildId(submodelName, parentNode.parentModelId);
+
 				// Mapped variables are treat special in the JS code.
 				// We need to know the parent model and submodel name
 				// so we can fetch the proper "mapped from" node
-				this.inputs.add(new MappableVariableDependency(variableName, new String[] { _parentModelName, submodelName }));
+				this.inputs.add(new Link(variableName, submodelNameId));
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the data structure's name (without the submodel prefix).
 	 * If the data structure is a child of a submodel the submodel name will need to be removed.

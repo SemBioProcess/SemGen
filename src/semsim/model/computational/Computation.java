@@ -1,10 +1,9 @@
 package semsim.model.computational;
 
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
-import semsim.SemSimConstants;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 
 /** A Computation represents how the value of a SemSim {@link DataStructure} is determined, computationally. */
@@ -19,13 +18,16 @@ public class Computation extends ComputationalModelComponent{
 	/**
 	 * Class constructor with no output(s) specified
 	 */
-	public Computation(){}
+	public Computation(){
+		super(SemSimTypes.COMPUTATION);
+	}
 	
 	/**
 	 * Class constructor with a single {@link DataStructure} set as the computation's output
 	 * @param output The output DataStructure of the Computation
 	 */
 	public Computation(DataStructure output){
+		super(SemSimTypes.COMPUTATION);
 		outputs.add(output);
 	}
 	
@@ -34,6 +36,7 @@ public class Computation extends ComputationalModelComponent{
 	 * @param outputs The output DataStructures of the Computation
 	 */
 	public Computation(Set<DataStructure> outputs){
+		super(SemSimTypes.COMPUTATION);
 		outputs = new HashSet<DataStructure>();
 		outputs.addAll(outputs);
 	}
@@ -165,11 +168,6 @@ public class Computation extends ComputationalModelComponent{
 	 */
 	public void removeEvent(Event event){
 		this.getEvents().remove(event);
-	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.COMPUTATION_CLASS_URI;
 	}
 
 }

@@ -8,6 +8,10 @@ path.link.external {
 	stroke-dasharray: 5;
 }
 
+path.link.Mediator {
+	stroke-dasharray: 1, 5;
+}
+
 .node {
 	cursor: move;
 	stroke: none;

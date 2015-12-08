@@ -11,7 +11,7 @@ $(window).bind("cwb-initialized", function(e) {
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 	
-	$(".addModelButton").click(function() {
+	$("#addModel").click(function() {
 		sender.addModel();
 	});
 	
@@ -63,6 +63,16 @@ $(window).bind("cwb-initialized", function(e) {
 		var modelNode = getModelNode(modelName);
 		addChildNodes(modelNode, submodelData, function (data) {
 			return new SubmodelNode(graph, data, modelNode);
+		});
+	});
+	
+	// Adds a PhysioMap network to the d3 graph
+	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
+		console.log("Showing PhysioMap for model " + modelName);
+		
+		var modelNode = getModelNode(modelName);
+		addChildNodes(modelNode, physiomapData, function (data) {
+			return new PhysioMapNode(graph, data, modelNode);
 		});
 	});
 	

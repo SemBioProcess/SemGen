@@ -14,7 +14,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 	
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", -1000);
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", -300);
 	this.dependencies = data.dependencies;
 	
 	this.addClassName("submodelNode");
@@ -26,7 +26,7 @@ function SubmodelNode (graph, data, parent) {
 SubmodelNode.prototype.createVisualElement = function (element, graph) {
 	ParentNode.prototype.createVisualElement.call(this, element, graph);
 	
-	// When the submodel is clicked created dependency nodes from it's dependency data
+	// When the submodel is clicked create dependency nodes from it's dependency data
 	this.rootElement.select("circle").on("dblclick", function (node) {
 		// Create dependency nodes from the submodel's dependency data
 		addChildNodes(node, node.dependencies, function (data) {
@@ -35,4 +35,5 @@ SubmodelNode.prototype.createVisualElement = function (element, graph) {
 		
 		d3.event.stopPropagation();
 	});
+
 }

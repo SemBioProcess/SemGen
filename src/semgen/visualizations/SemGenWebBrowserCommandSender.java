@@ -1,6 +1,7 @@
 package semgen.visualizations;
 
 import semgen.stage.serialization.DependencyNode;
+import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SubModelNode;
 
@@ -45,4 +46,12 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param resultSets Array containing search results from multiple sources
 	 */
 	void search(SearchResultSet[] resultSets);
+
+	/**
+	 * Tell the browser to render the PhysioMap
+	 * 
+	 * @param modelName name of model
+	 * @param jsonPhysioMap PhysioMap
+	 */
+	void showPhysioMapNetwork(String modelName, PhysioMapNode[] jsonPhysioMap);
 }
