@@ -170,10 +170,12 @@ Node.prototype.getLinks = function () {
 		}
 
 		if(type == "external") length = 300;
-		else if(type == "physiomap") length = 200;
+		else if(type == "physiomap") length = 100;
 		else length = 60;
 
-		var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
+		if(type == "Mediator")
+			var newLink = new MediatorLink(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
+		else var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
 		links.push(newLink);
 
 	}

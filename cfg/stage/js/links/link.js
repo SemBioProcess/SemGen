@@ -16,7 +16,7 @@ function Link(graph, name, parent, input, output, length, linkType) {
 	this.value = 1;
 	this.linkType = linkType;
 	this.hidden = false;
-	this.userCanHide = linkType == "Mediator" ? true : false;
+	this.userCanHide = false;
 
 }
 
