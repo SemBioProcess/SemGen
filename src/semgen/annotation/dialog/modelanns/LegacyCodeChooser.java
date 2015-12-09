@@ -38,7 +38,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
-		if (!current.isEmpty()) txtfld.setText(current);
+		if (current != null) txtfld.setText(current);
 		
 		setContentPane(optionPane);
 		showDialog();
