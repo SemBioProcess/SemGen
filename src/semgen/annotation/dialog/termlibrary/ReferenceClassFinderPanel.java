@@ -258,7 +258,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				rdflabelsanduris = SemGen.semsimlib.removeNonPropertiesFromOPB(rdflabelsanduris);
 			}
 			else if (domain.equals(OntologyDomain.PhysicalProperty) ) {
-				rdflabelsanduris = SemGen.semsimlib.removeOPBAttributeProperties(rdflabelsanduris);
+				//rdflabelsanduris = SemGen.semsimlib.removeOPBAttributeProperties(rdflabelsanduris);
 			}
 		}
 		else if(selected.getFullName().startsWith(ReferenceOntology.UNIPROT.getFullName())){
