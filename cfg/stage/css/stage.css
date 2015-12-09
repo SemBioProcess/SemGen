@@ -11,24 +11,37 @@ body {
 	font-family: 12px sans-serif;
 }
 
-.modelDropdown-toggle {
+.addModelButton {
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 50px;
 	margin: 5px;
 	width:50px;
 	height:50px;
 	border-radius:250px;
 	font-size:20px;
 	color:#fff;
+	line-height:45px;
 	text-align:center;
 	background:#3b5998;
 	opacity: .8;
 }
 
-.dropdown-toggle:hover {
+.addModelButton:hover {
 	opacity: 1;
 	cursor: pointer;
+}
+
+.btn-default {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 5px;
+	width: 50px;
+	height: 50px;
+	font-size: 25px;
+	border: hidden;
+
 }
 
 .dropdown-menu {
@@ -94,7 +107,7 @@ ul.modelPopover li.submenuContainer {
 	position: absolute;
 	margin: 1px;
 	top: 6px;
-	left: 50px;
+	left: 100px;
 	padding: 10px;
 	opacity: 1;
 }

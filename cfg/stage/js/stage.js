@@ -10,7 +10,11 @@ $(window).bind("cwb-initialized", function(e) {
 		
 	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
-	
+
+	$(".addModelButton").click(function() {
+		sender.addModel();
+	});
+
 	$("#addModel").click(function() {
 		sender.addModel();
 	});
