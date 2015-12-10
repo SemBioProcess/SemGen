@@ -29,7 +29,7 @@ public class UnitTestBase {
 		if(_isSetup)
 			return;
 		
-		SemGen.setup();
+		SemGen.setup(new String[]{});
 		_isSetup = true;
 	}
 }
