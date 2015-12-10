@@ -1,9 +1,12 @@
 package semgen.stage;
 
+import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.DialogParams;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
+
 import semgen.GlobalActions;
+import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -11,6 +14,7 @@ import semgen.visualizations.SemGenCommunicatingWebBrowser;
 
 import javax.naming.InvalidNameException;
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.IOException;
 
@@ -32,13 +36,17 @@ public class StageTab extends SemGenTab {
 		// Create the browser
 		
 		try {
-			
-//			BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
+			if (SemGen.debug) {
+				BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
+			}
 			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSender());
-
-//			String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
-//			System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+			
+			if (SemGen.debug) {
+				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
+				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+			}
+			
 			final BrowserView browserView = new BrowserView(browser);
 			
 			// Show JS alerts in java dialogs

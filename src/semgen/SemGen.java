@@ -49,6 +49,8 @@ public class SemGen extends JFrame implements Observer{
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache;
+	public static boolean debug = false;
+	private static boolean openstage = false;
 	
 	//A class for application level events such as exiting and creating new tabs
 	public static GlobalActions gacts = new GlobalActions();
@@ -70,14 +72,14 @@ public class SemGen extends JFrame implements Observer{
 	public static String cfgreadpath = "cfg/";
 	public static String cfgwritepath = "cfg/";
 	public static String examplespath = "examples/";
-	
+
 	private SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen 
 	 * @throws SecurityException 
 	 * @throws NoSuchMethodException */
 	public static void main(String[] args) throws NoSuchMethodException, SecurityException {
-		setup();
+		setup(args);
 		 SwingUtilities.invokeLater(new Runnable() {
 		     public void run() {
 		        createAndShowGUI();
@@ -85,7 +87,15 @@ public class SemGen extends JFrame implements Observer{
 		  });
 	}
 	
-	public static void setup() throws NoSuchMethodException, SecurityException {
+	public static void setup(String[] args) throws NoSuchMethodException, SecurityException {
+		for (String arg : args) {
+			if (arg.equals("-debug") || arg.equals("-Debug") || arg.equals("-d")) {
+				debug = true;
+			}
+			if (arg.equals("-stage")) {
+				openstage = true;
+			}
+		}
 		try {
 			logfilewriter = new PrintWriter(new FileWriter(logfile));
 		} catch (IOException e4) {
@@ -181,7 +191,12 @@ public class SemGen extends JFrame implements Observer{
 		if(OSValidator.isMac())
 			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
 		
-		new NewTaskDialog(gacts);
+		if (openstage) {
+				contentpane.startNewStageTask();
+		}
+		else {
+			new NewTaskDialog(gacts);
+		}
 	}
 	
 	//Check which OS SemGen is being run under
