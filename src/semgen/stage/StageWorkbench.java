@@ -179,6 +179,7 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 
+
 		public void onSearch(String searchString) throws FileNotFoundException {
 			SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
@@ -201,6 +202,21 @@ public class StageWorkbench extends Workbench {
 			
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
 		}
+		
+		public void onQueryModel(String modelName, String query) {
+			ModelInfo modelInfo = _models.get(modelName);
+			switch (query) {
+			case "hassubmodels":
+				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
+				_commandSender.receiveReply(hassubmodels.toString());
+				break;
+			case "hasdependencies":
+				Boolean hasdependencies = !modelInfo.Model.getAssociatedDataStructures().isEmpty();
+				_commandSender.receiveReply(hasdependencies.toString());
+				break;
+			}
+		}
+		
 	}
 
 	@Override

@@ -48,36 +48,6 @@ body {
 	padding: 0;
 }
 
-ul.modelPopover li {				
-	list-style: none;
-	padding: 5px 10px;
-}
-
-ul.modelPopover li a {
-	display: block;
-	width: 100%;
-	padding: 7px;
-	text-align: center;
-	font-weight: normal;
-	color: inherit;
-	text-decoration: none;
-	border: 1px solid black;
-	background-color: #FFFFFF;
-}
-
-ul.modelPopover li a:hover {
-	background-color: #DFE3EE;
-	cursor: pointer;
-}
-
-ul.modelPopover li:last-child {
-	border: none;
-}
-
-ul.modelPopover li.submenuContainer {
-	background-color: #F8F8F8;
-}
-
 .stageSearch {
 	position: absolute;
 	margin: 1px;
@@ -129,77 +99,15 @@ li.searchResultSet li:hover {
 	cursor: pointer;
 }
 
-.key {
-	font-size: 14px;
-}
-
-.key ul {
-	list-style: none;
-	margin: 0 5px;
-	padding: 0;
-}
-
-.key ul li {
-	margin: 5px 0;
-	font-weight: bold;
-	padding-left: 1em; 
-    text-indent: -.7em;
-}
-
-.key ul li.canClick:hover {
-	cursor: pointer;
-}
-
-.key ul.hiddenNodeKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
-.key ul.hiddenLinkKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
-.modes {
-	margin-top: 10px;
-}
-
-.modes ul {
-	list-style: none;
-	padding: 0;
-	margin: 0 0 0 5px;
-}
-
-
-.panel.panel-default.sidepanel {
+.panel.panel-default.sidebar {
 	position: absolute;
 	max-width: 250px;
 	opacity: 1;
 }
 
-.panel.panel-default.sidepanel a{
+.panel.panel-default.sidebar a{
 	color: inherit;
 	text-decoration: none;
 	border: none;
 }
 
-
-#projPanel {
-	top: 100px;
-	left: 5px;
-}
-
-#modelPanel {
-	top: 370px;
-	left: 5px;
-}
-
-#stagePanel {
-	top: 100px;
-	right: 5px;
-}
-
-#nodePanel {
-	top: 370px;
-	right: 5px;
-}

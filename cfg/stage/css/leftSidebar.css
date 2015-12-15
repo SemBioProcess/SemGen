@@ -1,0 +1,36 @@
+@CHARSET "ISO-8859-1";
+
+#leftSidebar {
+	top: 100px;
+	left: 5px;
+}
+
+ul.modelPopover li {				
+	list-style: none;
+	padding: 5px 10px;
+}
+
+ul.modelPopover li a {
+	display: block;
+	width: 100%;
+	padding: 7px;
+	text-align: center;
+	font-weight: normal;
+	color: inherit;
+	text-decoration: none;
+	border: 1px solid black;
+	background-color: #FFFFFF;
+}
+
+ul.modelPopover li a:hover {
+	background-color: #DFE3EE;
+	cursor: pointer;
+}
+
+ul.modelPopover li:last-child {
+	border: none;
+}
+
+ul.modelPopover li.submenuContainer {
+	background-color: #F8F8F8;
+}

@@ -1,6 +1,13 @@
 var sender;
 var receiver;
+
 var AllNodes = [];
+var SelectedModels = [];
+var SelectedNodes = [];
+
+//Variable for holding functions awaiting a response from Java
+var CallWaiting;
+
 $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	sender = e.originalEvent.commandSender;
@@ -97,6 +104,10 @@ $(window).bind("cwb-initialized", function(e) {
 			searchResultsList.append(makeResultSet(searchResultSet));
 		});
 	});
+	
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
+	});
 });
 
 $(window).load(function() {
@@ -168,4 +179,22 @@ function removeFromDragList(_node) {
 			NewNodes.push(node);
 	});
 	AllNodes = NewNodes;
+};
+
+function selectNode(node) {
+	if (node.nodeType=="Model") {
+		SelectedModels.forEach(function(node) {
+			
+		});
+		SelectedModels = [];
+		SelectedModels.push(this);
+	}
+	else {
+		SelectedNodes.forEach(function(node) {
+			
+		});
+		SelectedNodes = [];
+		SelectedNodes.push(this);
+	}
+	node.highlight();
 };

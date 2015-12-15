@@ -229,3 +229,23 @@ Node.prototype.createTextElement = function (className) {
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");
 }
+
+SelectionManager.getInstance().onSelected(function (e, element, node) {
+	selectNode(node);
+});
+
+Node.prototype.highlight = function () {
+	this.rootElement.append("svg:circle")
+		.attr("r", this.r + 2)
+		.attr("id", "Node;"+this.id)
+		.attr("stroke", "yellow")
+		.attr("stroke-width", "2")
+		.attr("class","highlight")
+		.on("mouseover", function (d) {
+			graph.highlightMode(d);
+		})
+		.on("mouseout", function () {
+			graph.highlightMode(null);
+		});
+
+}
