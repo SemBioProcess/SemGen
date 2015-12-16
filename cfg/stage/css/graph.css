@@ -9,7 +9,8 @@ path.link.external {
 }
 
 path.link.Mediator {
-	stroke-dasharray: 1, 5;
+	stroke-dasharray: 2, 5;
+	stroke-width: 2;
 }
 
 .node {

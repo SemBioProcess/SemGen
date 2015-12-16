@@ -65,22 +65,6 @@ Node.prototype.createVisualElement = function (element, graph) {
 				graph.highlightMode(null);
 			});
 
-	//Blue circle with black border to indicate mediator entities
-	if(this.nodeType == "Mediator") {
-		this.rootElement.append("svg:circle")
-				.attr("r", this.r)
-				.attr("stroke", "black")
-				.attr("stroke-width", "2")
-				.attr("id", "Node;"+this.id)
-				.attr("class","nodeStrokeClass")
-				.on("mouseover", function (d) {
-					graph.highlightMode(d);
-				})
-				.on("mouseout", function () {
-					graph.highlightMode(null);
-				});
-	}
-	
 	// Create the text elements
 	this.createTextElement("shadow");
 	this.createTextElement("real");

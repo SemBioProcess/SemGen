@@ -21,7 +21,7 @@ body {
 	border-radius:250px;
 	font-size:20px;
 	color:#fff;
-	line-height:25px;
+	line-height:22px;
 	text-align:center;
 	background:#3b5998;
 	opacity: .8;
@@ -198,7 +198,7 @@ li.searchResultSet li:hover {
 
 .nodeInfoPanel {
 	position: absolute;
-	top: 270px;
+	top: 450px;
 	right: 5px;
 	max-width: 250px;
 	opacity: 1;
