@@ -10,29 +10,25 @@ function ModelNode (graph, name) {
 	
 	this.addClassName("modelNode");
 	this.x = (Math.random() * (graph.w-graph.w/3))+graph.w/6;
-	this.y = (Math.random() * (graph.h-graph.h/3))+graph.h/6;
+	this.y = (Math.random() * (graph.h-graph.h/2))+graph.h/6;
 	this.addBehavior(Hull);
 	this.addBehavior(DragToMerge);
 }
 
-ModelNode.prototype.createVisualElement = function (element, graph) {
-	ParentNode.prototype.createVisualElement.call(this, element, graph);
-	
-	this.rootElement.select("circle").on("dblclick", function (node) {
-		CallWaiting = function(hassubmodels) {
-			if (hassubmodels=="true") {
-				// Create submodel nodes from the model's dependency data
-				sender.taskClicked(node.id, "submodels");		
-			}
-			else {
-				sender.taskClicked(node.id, "dependencies");	
-			}
-			
+ModelNode.prototype.onDoubleClick = function (node) {
+	sender.consoleOut(node.id + " double clicked")
+	CallWaiting = function(hassubmodels) {
+		if (hassubmodels=="true") {
+			// Create submodel nodes from the model's dependency data
+			sender.taskClicked(node.id, "submodels");		
 		}
-		sender.queryModel(node.name, "hassubmodels");	
-		d3.event.stopPropagation();
-	});
-	
-	
+		else {
+			sender.taskClicked(node.id, "dependencies");	
+		}
+		
+	}
+	sender.queryModel(node.name, "hassubmodels");	
 }
+
+
 

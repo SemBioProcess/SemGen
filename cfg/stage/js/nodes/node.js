@@ -179,7 +179,6 @@ Node.prototype.getLinks = function () {
 		links.push(newLink);
 
 	}
-
 	
 	return links;
 }
@@ -230,17 +229,14 @@ Node.prototype.createTextElement = function (className) {
 	    .attr("text-anchor", "middle");
 }
 
-SelectionManager.getInstance().onSelected(function (e, element, node) {
-	selectNode(node);
-});
 
 Node.prototype.highlight = function () {
-	this.rootElement.append("svg:circle")
+	this.rootElement.append("circle")
 		.attr("r", this.r + 2)
 		.attr("id", "Node;"+this.id)
 		.attr("stroke", "yellow")
 		.attr("stroke-width", "2")
-		.attr("class","highlight")
+		//.attr("class","highlight")
 		.on("mouseover", function (d) {
 			graph.highlightMode(d);
 		})
@@ -249,3 +245,17 @@ Node.prototype.highlight = function () {
 		});
 
 }
+
+Node.prototype.removeHighlight = function () {
+	//this.removeElement.select("circle").removeAttribute("highlight");
+}
+
+Node.prototype.onDoubleClick = function (node) {}
+
+SelectionManager.getInstance().onSelected(function (e, element, node) {
+	selectNode(node);
+});
+
+SelectionManager.getInstance().onDoubleClick(function (e, element, node) {
+	node.onDoubleClick(node);
+});

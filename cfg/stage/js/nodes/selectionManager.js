@@ -2,7 +2,13 @@
  * Manages node selection
  */
 function SelectionManager () {
-
+	var DELAY = 500,
+    clicks = 0,
+    timer = null;
+	
+	var selectionHandlers = [];
+	var dblclickHandlers = [];
+	
 	// Listen for clicks when the graph is updated
 	this.initialize = function (graph) {
 		$(graph).on("preupdate", function () {
@@ -21,13 +27,34 @@ function SelectionManager () {
 		selectionHandlers.push(handler);
 	};
 	
-	var selectionHandlers = [];
+	// Register selection handlers
+	this.onDoubleClick = function (handler) {
+		dblclickHandlers.push(handler);
+	};
 	
+	//Handler for sensing single and 
 	var clickHandler = function (e) {
-		// Execute selection handlers
-		selectionHandlers.forEach(function(handler) {
-			handler(e, e.target, e.target.__data__);
-		})
+		clicks++;  //count clicks
+		
+	        // Execute selection handlers
+	        if(clicks == 1) {
+	        	timer = setTimeout(function() {
+                selectionHandlers.forEach(function(handler) {
+                	handler(e, e.target, e.target.__data__);
+                });
+    	        clicks = 0;             //after action performed, reset counter
+            }, DELAY);
+
+	        } else {
+	        	dblclickHandlers.forEach(function(handler) {
+        			handler(e, e.target, e.target.__data__);
+        		});
+	            clearTimeout(timer);    //prevent single-click action
+		        clicks = 0;             //after action performed, reset counter
+
+	        }
+		        //d3.event.stopPropagation();
+		
 	};
 }
 

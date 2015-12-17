@@ -183,15 +183,17 @@ function removeFromDragList(_node) {
 
 function selectNode(node) {
 	if (node.nodeType=="Model") {
-		SelectedModels.forEach(function(node) {
-			
+		SelectedModels.forEach(function(selnode) {
+			//if (selnode == node) { return; }
+			//selnode.removeHighlight();
 		});
 		SelectedModels = [];
 		SelectedModels.push(this);
 	}
 	else {
-		SelectedNodes.forEach(function(node) {
-			
+		SelectedNodes.forEach(function(selnode) {
+			//if (selnode == node) { return; }
+			//selnode.removeHighlight();
 		});
 		SelectedNodes = [];
 		SelectedNodes.push(this);

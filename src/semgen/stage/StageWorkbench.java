@@ -217,6 +217,9 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 		
+		public void onConsoleOut(String msg) {
+			System.out.println(msg);
+		}
 	}
 
 	@Override
