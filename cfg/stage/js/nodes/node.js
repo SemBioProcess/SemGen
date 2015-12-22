@@ -1,6 +1,9 @@
 /**
  * Represents a node in the d3 graph
  */
+
+
+    
 function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	if(!graph)
 		return;
@@ -22,7 +25,9 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.hidden = false;
 	this.textlocx = 0;
 	this.defaultcharge = charge;
-
+	
+	this.timer = null;
+	this.clicks = 0;
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
 		// it with its parent node's id
@@ -53,10 +58,11 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
     	.style("fill", this.color)
-
+    	.attr("id", "Node;"+this.id);
+    	
 	this.rootElement.append("svg:circle")
 			.attr("r", this.r)
-			.attr("id", "Node;"+this.id)
+			
 			.attr("class","nodeStrokeClass")
 			.on("mouseover", function (d) {
 				graph.highlightMode(d);
@@ -64,22 +70,16 @@ Node.prototype.createVisualElement = function (element, graph) {
 			.on("mouseout", function () {
 				graph.highlightMode(null);
 			});
+		
+	this.rootElement.on("click", function (node) {
+		node.onClick();
+	});
 
-	//Blue circle with black border to indicate mediator entities
-	if(this.nodeType == "Mediator") {
-		this.rootElement.append("svg:circle")
-				.attr("r", this.r)
-				.attr("stroke", "black")
-				.attr("stroke-width", "2")
-				.attr("id", "Node;"+this.id)
-				.attr("class","nodeStrokeClass")
-				.on("mouseover", function (d) {
-					graph.highlightMode(d);
-				})
-				.on("mouseout", function () {
-					graph.highlightMode(null);
-				});
-	}
+	this.rootElement.append("svg:circle")
+		.attr("class", "highlight")
+		.attr("r", this.r + 2)
+		.attr("stroke", "yellow")
+		.attr("stroke-width", "2");
 	
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -231,31 +231,35 @@ Node.prototype.createTextElement = function (className) {
 
 
 Node.prototype.highlight = function () {
-	this.rootElement.append("circle")
-		.attr("r", this.r + 2)
-		.attr("id", "Node;"+this.id)
-		.attr("stroke", "yellow")
-		.attr("stroke-width", "2")
-		//.attr("class","highlight")
-		.on("mouseover", function (d) {
-			graph.highlightMode(d);
-		})
-		.on("mouseout", function () {
-			graph.highlightMode(null);
-		});
-
+	this.rootElement.classed("selected", true);
 }
 
 Node.prototype.removeHighlight = function () {
-	//this.removeElement.select("circle").removeAttribute("highlight");
+	this.rootElement.classed("selected", false);
 }
 
-Node.prototype.onDoubleClick = function (node) {}
+Node.prototype.onClick = function () {
+	this.clicks++;
+	
+	if(this.clicks == 1) {
 
-SelectionManager.getInstance().onSelected(function (e, element, node) {
-	selectNode(node);
-});
+		node = this;
+		this.timer = setTimeout(function() {
+			node.clicks = 0;             //after action performed, reset counter
+			sender.consoleOut("One click");
+	        node.graph.selectNode(node);
+	    }, 500);
+		
+	}
+    else {
+    	sender.consoleOut("Two clicks");
+        clearTimeout(this.timer);    //prevent single-click action
+        this.clicks = 0;             //after action performed, reset counter
+    	this.onDoubleClick();
+       
+    }
+        //d3.event.stopPropagation();
 
-SelectionManager.getInstance().onDoubleClick(function (e, element, node) {
-	node.onDoubleClick(node);
-});
+}
+
+Node.prototype.onDoubleClick = function () {}

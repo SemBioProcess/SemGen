@@ -220,6 +220,10 @@ public class StageWorkbench extends Workbench {
 		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}
+		
+		public void onConsoleOut(Number msg) {
+			System.out.println(msg.toString());
+		}
 	}
 
 	@Override

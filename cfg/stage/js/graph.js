@@ -25,6 +25,8 @@ function Graph() {
 	var links = this.force.links();
 	var hiddenNodes = {};
 	var orphanNodes = [];
+	var selectedModels = [];
+	var selectedNodes = [];
 	var hiddenLinks = {};
 	var fixedMode = false;
 	
@@ -481,7 +483,28 @@ function Graph() {
 	}
 	this.updateHeightAndWidth();
 
-
+	this.selectNode = function(node) {
+		if (node.nodeType=="Model") {
+			selectedModels.forEach(function(selnode) {
+				//if (selnode == node) { return; }
+				selnode.removeHighlight();
+				
+			});
+			
+			selectedModels = [];
+			selectedModels.push(node);
+		}
+		else {
+			selectedNodes.forEach(function(selnode) {
+				//if (selnode == node) { return; }
+				selnode.removeHighlight();
+			});
+			selectedNodes = [];
+			selectedNodes.push(node);
+		}
+		
+		node.highlight();
+	};
 	
 	var setFixed = function (node) {
 		node.oldFixed = node.fixed;

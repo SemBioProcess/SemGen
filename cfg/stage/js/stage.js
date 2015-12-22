@@ -2,8 +2,6 @@ var sender;
 var receiver;
 
 var AllNodes = [];
-var SelectedModels = [];
-var SelectedNodes = [];
 
 //Variable for holding functions awaiting a response from Java
 var CallWaiting;
@@ -15,7 +13,6 @@ $(window).bind("cwb-initialized", function(e) {
 	var graph = new Graph();
 	var modelNodes = {};
 		
-	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 
 	$("#addModelButton").click(function() {
@@ -181,22 +178,3 @@ function removeFromDragList(_node) {
 	AllNodes = NewNodes;
 };
 
-function selectNode(node) {
-	if (node.nodeType=="Model") {
-		SelectedModels.forEach(function(selnode) {
-			//if (selnode == node) { return; }
-			//selnode.removeHighlight();
-		});
-		SelectedModels = [];
-		SelectedModels.push(this);
-	}
-	else {
-		SelectedNodes.forEach(function(selnode) {
-			//if (selnode == node) { return; }
-			//selnode.removeHighlight();
-		});
-		SelectedNodes = [];
-		SelectedNodes.push(this);
-	}
-	node.highlight();
-};

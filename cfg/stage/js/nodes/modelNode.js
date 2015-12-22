@@ -15,8 +15,8 @@ function ModelNode (graph, name) {
 	this.addBehavior(DragToMerge);
 }
 
-ModelNode.prototype.onDoubleClick = function (node) {
-	sender.consoleOut(node.id + " double clicked")
+ModelNode.prototype.onDoubleClick = function () {
+	node = this;
 	CallWaiting = function(hassubmodels) {
 		if (hassubmodels=="true") {
 			// Create submodel nodes from the model's dependency data

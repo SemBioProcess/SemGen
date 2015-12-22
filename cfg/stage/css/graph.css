@@ -18,6 +18,14 @@ path.link.Mediator {
 	stroke-width: 1.5px;
 }
 
+.node .highlight {
+	display: none;
+}
+
+.node.selected .highlight {
+	display: inherit;
+}
+
 .node text {
 	fill: #000;
 }
@@ -32,10 +40,6 @@ path.link.Mediator {
 	opacity: 0.2;
 }
 
-.modelNode.dim {
-	opacity: 1;
-}
-
 
 #stage svg {
 	overflow: hidden;
@@ -44,6 +48,10 @@ path.link.Mediator {
 .hull {
   stroke-width: 32px;
   stroke-linejoin: round;
+}
+
+.modelNode.dim {
+	opacity: 1;
 }
 
 .modelNode .dropZoneRect {

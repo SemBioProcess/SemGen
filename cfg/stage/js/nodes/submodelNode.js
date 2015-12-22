@@ -23,10 +23,10 @@ function SubmodelNode (graph, data, parent) {
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
 
-SubmodelNode.prototype.onDoubleClick = function (node) {
-
+SubmodelNode.prototype.onDoubleClick = function () {
+		node = this;
 		// Create dependency nodes from the submodel's dependency data
-		addChildNodes(node, node.dependencies, function (data) {
+		addChildNodes(this, this.dependencies, function (data) {
 			return new DependencyNode(node.graph, data, node);
 		});
 		
