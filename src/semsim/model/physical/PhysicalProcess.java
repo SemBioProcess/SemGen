@@ -139,7 +139,8 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		PhysicalProcess proc = (PhysicalProcess)obj;
-		if ((sources.size()!=proc.getSources().size()) || 
+		if (	(getParticipants().isEmpty() || proc.getParticipants().isEmpty()) ||
+				(sources.size()!=proc.getSources().size()) || 
 				(sinks.size()!=proc.getSinks().size()) || 
 				(mediators.size()!=proc.getMediators().size())) {
 			return false;
