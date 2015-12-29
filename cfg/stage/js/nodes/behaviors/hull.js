@@ -23,7 +23,7 @@ function Hull(node) {
 	$(node).on('childrenSet', function (e, newChildren) {
 		children = newChildren;
 		
-		// If there are children show the hull. Otherwise, show the hull
+		// If there are children show the hull. Otherwise, show the node
 		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
 	});
 	

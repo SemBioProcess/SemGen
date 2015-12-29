@@ -231,7 +231,7 @@ Node.prototype.createTextElement = function (className) {
 
 
 Node.prototype.highlight = function () {
-	this.rootElement.classed("selected", true);
+		this.rootElement.classed("selected", this.rootElement.select("circle").style("display")!="none");
 }
 
 Node.prototype.removeHighlight = function () {
@@ -246,20 +246,21 @@ Node.prototype.onClick = function () {
 		node = this;
 		this.timer = setTimeout(function() {
 			node.clicks = 0;             //after action performed, reset counter
-			sender.consoleOut("One click");
 	        node.graph.selectNode(node);
 	    }, 500);
 		
 	}
     else {
-    	sender.consoleOut("Two clicks");
         clearTimeout(this.timer);    //prevent single-click action
         this.clicks = 0;             //after action performed, reset counter
     	this.onDoubleClick();
        
     }
-        //d3.event.stopPropagation();
+      d3.event.stopPropagation();
 
 }
 
-Node.prototype.onDoubleClick = function () {}
+Node.prototype.onDoubleClick = function () {
+
+	
+}

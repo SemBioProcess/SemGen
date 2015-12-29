@@ -518,7 +518,7 @@ function Graph() {
 	
 	// Fix all nodes when ctrl + M is pressed
 	$(".modes .fixedNodes").bind('change', function(){        
-		Columns.columnModeOn = this.checked;
+		//Columns.columnModeOn = this.checked;
 		if(this.checked)
 		{
 			nodes.forEach(setFixed);

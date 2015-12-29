@@ -16,7 +16,7 @@ function DependencyNode (graph, data, parentNode) {
 	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 14, data.nodeType, -300);
 	
 	this.addClassName("dependencyNode");
-	this.addBehavior(Columns);
+	//this.addBehavior(Columns);
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
 

@@ -24,11 +24,15 @@ function SubmodelNode (graph, data, parent) {
 }
 
 SubmodelNode.prototype.onDoubleClick = function () {
+	sender.consoleOut(this.dependencies.length);
 		node = this;
-		// Create dependency nodes from the submodel's dependency data
-		addChildNodes(this, this.dependencies, function (data) {
-			return new DependencyNode(node.graph, data, node);
-		});
+		
+		if (node.dependencies) {
+			// Create dependency nodes from the submodel's dependency data
+			addChildNodes(node, node.dependencies, function (data) {
+				return new DependencyNode(node.graph, data, node);
+			});
+		}
 		
 		
 }
