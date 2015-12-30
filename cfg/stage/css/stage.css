@@ -203,3 +203,22 @@ li.searchResultSet li:hover {
 	max-width: 250px;
 	opacity: 1;
 }
+
+#panel, #activeTaskTray {
+	position: fixed;
+	width: 100%;
+	padding: 5px;
+	text-align: center;
+	background-color: #e4e4e4;
+	border: solid 1px #c3c3c3;
+}
+#activeTaskTray {
+	bottom: 0;
+	height: 30px;
+}
+
+#panel {
+	bottom: 30px;
+	padding: 30px;
+	display: none;
+}

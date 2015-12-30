@@ -119,6 +119,11 @@ $(window).load(function() {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
+
+	// Slide up panel for Active Task Tray
+	$("#activeTaskTray").click(function() {
+		$("#panel").slideToggle();
+	});
 });
 
 // Add child nodes to a model node
