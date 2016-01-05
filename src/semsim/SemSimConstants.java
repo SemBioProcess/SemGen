@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.jdom.Namespace;
+import org.sbml.jsbml.CVTerm.Qualifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -230,8 +231,8 @@ public class SemSimConstants {
 	public static final Map<String, String> ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP;
 	public static final Map<URI, SemSimRelation> URIS_AND_SEMSIM_RELATIONS;
 	public static final Map<URI,URI> INVERSE_STRUCTURAL_RELATIONS_MAP;
-	public static final Map<Integer, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
-	public static final Map<Integer, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
+	public static final Map<Qualifier, SemSimRelation> BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS;
+	public static final Map<Qualifier, SemSimRelation> MODEL_QUALIFIER_TYPES_AND_RELATIONS;
 	
 	public static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	
@@ -398,19 +399,19 @@ public class SemSimConstants {
 		INVERSE_STRUCTURAL_RELATIONS_MAP = Collections.unmodifiableMap(aMap2);
 		
 		// BiologicalQualifierTypesAndRelations Map
-		Map<Integer, SemSimRelation> aMap4 = new HashMap<Integer, SemSimRelation>();
-		aMap4.put(0, BQB_IS_RELATION);
-		aMap4.put(1, HAS_PART_RELATION);  // Use RO relation, not BQB here for consistency in SemSim models
-		aMap4.put(2, PART_OF_RELATION);   // Use RO relation, not BQB here for consistency in SemSim models
-		aMap4.put(3, BQB_IS_VERSION_OF_RELATION);
-		aMap4.put(9, BQB_OCCURS_IN_RELATION);
+		Map<Qualifier, SemSimRelation> aMap4 = new HashMap<Qualifier, SemSimRelation>();
+		aMap4.put(Qualifier.BQB_IS, BQB_IS_RELATION);
+		aMap4.put(Qualifier.BQB_HAS_PART, HAS_PART_RELATION);  // Use RO relation, not BQB here for consistency in SemSim models
+		aMap4.put(Qualifier.BQB_IS_PART_OF, PART_OF_RELATION);   // Use RO relation, not BQB here for consistency in SemSim models
+		aMap4.put(Qualifier.BQB_IS_VERSION_OF, BQB_IS_VERSION_OF_RELATION);
+		aMap4.put(Qualifier.BQB_OCCURS_IN, BQB_OCCURS_IN_RELATION);
 		BIOLOGICAL_QUALIFIER_TYPES_AND_RELATIONS = Collections.unmodifiableMap(aMap4);
 		
 		//ModelQualifierTypesAndRelations Map
-		Map<Integer, SemSimRelation> aMap5 = new HashMap<Integer, SemSimRelation>();
-		aMap5.put(0, BQM_IS_RELATION);
-		aMap5.put(1, BQM_IS_DESCRIBED_BY_RELATION);
-		aMap5.put(2, BQM_IS_DERIVED_FROM_RELATION);
+		Map<Qualifier, SemSimRelation> aMap5 = new HashMap<Qualifier, SemSimRelation>();
+		aMap5.put(Qualifier.BQM_IS, BQM_IS_RELATION);
+		aMap5.put(Qualifier.BQM_IS_DESCRIBED_BY, BQM_IS_DESCRIBED_BY_RELATION);
+		aMap5.put(Qualifier.BQM_IS_DERIVED_FROM, BQM_IS_DERIVED_FROM_RELATION);
 		MODEL_QUALIFIER_TYPES_AND_RELATIONS = Collections.unmodifiableMap(aMap5);
 	}
 	

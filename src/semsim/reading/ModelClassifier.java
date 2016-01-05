@@ -7,8 +7,8 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
-import org.sbml.libsbml.SBMLDocument;
-import org.sbml.libsbml.SBMLReader;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLReader;
 
 public class ModelClassifier {
 	
@@ -48,10 +48,10 @@ public class ModelClassifier {
 	private static Boolean isValidSBML(File file){
 		System.out.println("Testing SBML validity");
 		try{
-			SBMLDocument sbmldoc = new SBMLReader().readSBMLFromFile(file.getAbsolutePath());
+			SBMLDocument sbmldoc = SBMLReader.read(file);
 			if (sbmldoc.getNumErrors()>0){
 			      System.err.println(file.getName() + " is not valid SBML");
-			      sbmldoc.printErrors();
+			      sbmldoc.printErrors(System.err);
 			}
 			else {
 				return true;
