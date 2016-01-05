@@ -12,7 +12,6 @@ import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.sbml.jsbml.Assignment;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -25,6 +24,7 @@ import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.Priority;
 import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.ExplicitRule;
 import org.sbml.jsbml.Rule;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -176,7 +176,7 @@ public class SBMLreader extends ModelReader{
 		sbmlmodel.getVersion();
 		collectSBaseData(sbmlmodel, semsimmodel);
 		semsimmodel.setName(sbmlmodel.getId());
-		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getId());
+		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
 		
 		// TODO: collect model-level annotations here, too.		
 	}
@@ -555,8 +555,8 @@ public class SBMLreader extends ModelReader{
 		for(int r=0; r<sbmlmodel.getListOfRules().size(); r++){
 			Rule sbmlrule = sbmlmodel.getRule(r);
 			
-			if(sbmlrule.isAssignment()){
-				String varname = ((Assignment) sbmlrule).getVariable();
+			if(((ExplicitRule)sbmlrule).isSetVariable()){
+				String varname = ((ExplicitRule) sbmlrule).getVariable();
 				
 				DataStructure ds = null;
 				if(semsimmodel.containsDataStructure(varname)) 
@@ -950,11 +950,14 @@ public class SBMLreader extends ModelReader{
 	 * @param semsimobject
 	 */
 	private void addNotes(SBase sbmlobject, SemSimObject semsimobject){
-		try {
-			if(sbmlobject.getNotesString()!=null && ! sbmlobject.getNotesString().equals(""))
+				
+		if(sbmlobject.isSetNotes()){
+				
+			try {
 				semsimobject.setDescription(sbmlobject.getNotesString());
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
+			} catch (XMLStreamException e) {
+//				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 
+			}
 		}
 	}
 	
