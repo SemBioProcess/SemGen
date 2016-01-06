@@ -115,7 +115,7 @@ public class SBMLreader extends ModelReader{
 			return semsimmodel;
 		}
 		
-		semsimmodel.setSemsimversion(SemSimLibrary.SEMSIM_VERSION);
+		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);
 		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
 		
 		// Collect function definitions. Not used in SBML level 1.
@@ -569,15 +569,18 @@ public class SBMLreader extends ModelReader{
 				String LHScodestart = sbmlrule.isRate() ? "d(" + varname + ")/d(" + timedomainname + ")" : varname;
 				ds.getComputation().setComputationalCode(LHScodestart + " = " + sbmlrule.getMath().toFormula());
 				
-				String mathmlstring = "";
+				String mathmlstring = null;
+				
 				try {
 					mathmlstring = JSBML.writeMathMLToString(sbmlrule.getMath());
+					mathmlstring = stripXMLheader(mathmlstring);
+					mathmlstring = addLHStoMathML(mathmlstring, varname, sbmlrule.isRate());
+					ds.getComputation().setMathML(mathmlstring);
+					
 				} catch (SBMLException | XMLStreamException e) {
 					e.printStackTrace();
 				}
-				mathmlstring = stripXMLheader(mathmlstring);
-				mathmlstring = addLHStoMathML(mathmlstring, varname, sbmlrule.isRate());
-				ds.getComputation().setMathML(mathmlstring);
+				
 				
 				// Remove start value if we are overwriting the computation for a species
 				if(sbmlmodel.getSpecies(varname)!=null && ! sbmlrule.isRate()) ds.setStartValue(null);
@@ -734,7 +737,7 @@ public class SBMLreader extends ModelReader{
 			rateds.setUnit(subpertimeuom);
 			
 			// Deal with kinetic law
-			String mathmlstring = "";
+			String mathmlstring = null;
 			try {
 				mathmlstring = JSBML.writeMathMLToString(kineticlaw.getMath());
 			
@@ -746,14 +749,6 @@ public class SBMLreader extends ModelReader{
 					LocalParameter lp = kineticlaw.getLocalParameter(l);
 					DataStructure localds = addParameter(lp, thereactionprefix);
 					mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
-					rxnsubmodel.addDataStructure(localds);
-				}
-					
-				// This might be unnecessary for some more recent versions of SBML models (listOfParameters might have been deprecated)
-				for(int p=0; p<kineticlaw.getListOfLocalParameters().size(); p++){
-					LocalParameter par = kineticlaw.getLocalParameter(p);
-					DataStructure localds = addParameter(par, thereactionprefix);
-					mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + par.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
 					rxnsubmodel.addDataStructure(localds);
 				}
 	
@@ -825,7 +820,7 @@ public class SBMLreader extends ModelReader{
 			if(sbmlspecies.isSetHasOnlySubstanceUnits()){
 				subunits = sbmlspecies.getHasOnlySubstanceUnits();
 			}
-			else if(sbmlmodel.getVersion()==3.0){
+			else if(sbmlmodel.getLevel()==3.0){
 				addErrorToModel("Required SBML level 3.0 attribute 'hasOnlySubstanceUnits' is unspecified for species " + speciesid + ".");
 				return;
 			}
@@ -1210,7 +1205,9 @@ public class SBMLreader extends ModelReader{
 	 * @return The MathML string stripped of the XML declaration header
 	 */
 	private String stripXMLheader(String mathmlstring){
-		return mathmlstring.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", "");
+		mathmlstring = mathmlstring.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", "");
+		mathmlstring = mathmlstring.replace("<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n", ""); // For single quotes
+		return mathmlstring;
 	}
 	
 	/**

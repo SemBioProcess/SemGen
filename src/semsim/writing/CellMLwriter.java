@@ -40,6 +40,7 @@ import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -421,8 +422,9 @@ public class CellMLwriter extends ModelWriter {
 			}
 		
 			// Add the mathml
-			if(((FunctionalSubmodel)submodel).getComputation().getMathML()!=null)
-				comp.addContent(makeXMLContentFromStringForMathML(((FunctionalSubmodel)submodel).getComputation().getMathML()));
+			Computation cmptn = ((FunctionalSubmodel)submodel).getComputation();
+			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty())
+				comp.addContent(makeXMLContentFromStringForMathML(cmptn.getMathML()));
 			else{
 				String allmathml = "";
 				for(DataStructure ds : submodel.getAssociatedDataStructures()){

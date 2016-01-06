@@ -97,7 +97,7 @@ public class CellMLreader extends ModelReader {
 
 		// Add model-level metadata
 		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
-		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
 		mainNS = doc.getRootElement().getNamespace();
