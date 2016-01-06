@@ -1,5 +1,6 @@
 var sender;
 var receiver;
+var graph;
 
 var AllNodes = [];
 
@@ -10,7 +11,7 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	sender = e.originalEvent.commandSender;
 
-	var graph = new Graph();
+	graph = new Graph();
 	var modelNodes = {};
 		
 	KeyElement.getInstance().initialize(graph);
@@ -42,6 +43,7 @@ $(window).bind("cwb-initialized", function(e) {
 		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
 		delete modelNodes[modelName];
+		ModelPanel(null);
 		graph.update();
 	});
 	
@@ -178,3 +180,7 @@ function removeFromDragList(_node) {
 	AllNodes = NewNodes;
 };
 
+function taskClicked(element) {
+	var task = element.innerHTML.toLowerCase();
+	sender.taskClicked(graph.getFirstSelectedModel().id, task);
+};

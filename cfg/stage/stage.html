@@ -6,9 +6,9 @@
 		<script src="js/lib/d3.v3.min.js"></script>
 		<script src="js/lib/bootstrap.min.js"></script>
 		<script src="js/classExtensions.js"></script>
+		<script src="js/leftSidebar.js"></script>
 		<script src="js/graph.js"></script>
 		<script src="js/keyElement.js"></script>
-		<script src="js/nodes/selectionManager.js"></script>
 		<script src="js/nodes/hiddenLabelNode.js"></script>
 		<script src="js/nodes/node.js"></script>
 		<script src="js/nodes/dependencyNode.js"></script>
@@ -23,6 +23,7 @@
 		<script src="js/links/link.js"></script>
 		<script src="js/links/mediatorLink.js"></script>
 		<script src="js/stage.js"></script>
+
 		
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 		<link type="text/css" rel="stylesheet" href="css/stage.css" />
@@ -78,6 +79,9 @@
 				</div>
 				<div class="panel-heading">
 					<a data-toggle="collapse" href="#modelmenu">Model Options<span class="caret"></span></a>
+					<div id="modelinfo" class="panel">
+						No model selected
+					</div>
 				</div>
 				<div id="modelmenu" class="panel-collapse collapse">
 					

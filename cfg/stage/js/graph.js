@@ -493,6 +493,8 @@ function Graph() {
 			
 			selectedModels = [];
 			selectedModels.push(node);
+			
+			ModelPanel(node);
 		}
 		else {
 			selectedNodes.forEach(function(selnode) {
@@ -538,5 +540,12 @@ function Graph() {
 	window.onresize = function () {
 		graph.updateHeightAndWidth();
 		graph.update();
+	};
+	
+	this.getFirstSelectedModel = function () {
+		if (selectedModels.length > 0) {
+			return selectedModels[0];
+		}
+		return null;
 	};
 }
