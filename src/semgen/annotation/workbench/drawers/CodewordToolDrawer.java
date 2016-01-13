@@ -256,7 +256,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	private void setDataStructureComposite(Integer cwindex, Integer compindex) {
 		DataStructure ds = componentlist.get(cwindex);
 		//If the new selection is equivalent to the old, do nothing
-		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent())==compindex)) {
+		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true)==compindex)) {
 			return;
 		}
 		if (compindex==-1) {
@@ -315,7 +315,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public Integer getSingularAnnotationLibraryIndex(int index) {
-		return termlib.getComponentIndex((PhysicalModelComponent)componentlist.get(index).getSingularTerm());
+		return termlib.getPhysicalPropertyIndex(componentlist.get(index).getSingularTerm());
 	}
 	
 	@Override
@@ -329,7 +329,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public int getIndexofModelComponent() {
-		return termlib.getComponentIndex(getFocus().getAssociatedPhysicalModelComponent());
+		return termlib.getComponentIndex(getFocus().getAssociatedPhysicalModelComponent(), true);
 	}
 	
 	public void batchSetSingularAnnotation(ArrayList<Integer> cws, int selectedIndex) {
@@ -398,7 +398,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		HashSet<Integer> associated = new HashSet<Integer>();
 		for (DataStructure ds : componentlist) {
 			if (ds.hasAssociatedPhysicalComponent()) {
-				associated.add(termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent()));
+				associated.add(termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true));
 			}
 		}
 		return associated;

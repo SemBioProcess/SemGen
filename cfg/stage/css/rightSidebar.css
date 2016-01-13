@@ -1,0 +1,47 @@
+@CHARSET "ISO-8859-1";
+
+#rightSidebar {
+	top: 100px;
+	right: 5px;
+}
+
+.key {
+	font-size: 14px;
+}
+
+.key ul {
+	list-style: none;
+	margin: 0 5px;
+	padding: 0;
+}
+
+.key ul li {
+	margin: 5px 0;
+	font-weight: bold;
+	padding-left: 1em; 
+    text-indent: -.7em;
+}
+
+.key ul li.canClick:hover {
+	cursor: pointer;
+}
+
+.key ul.hiddenNodeKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
+}
+
+.key ul.hiddenLinkKeys li {
+	background-color: #D0D0D0;
+	opacity: .5;
+}
+
+.modes {
+	margin-top: 10px;
+}
+
+.modes ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0 5px;
+}

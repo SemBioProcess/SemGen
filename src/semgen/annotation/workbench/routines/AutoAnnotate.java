@@ -28,6 +28,7 @@ public class AutoAnnotate {
 		
 		// If units present, set up physical property connected to each data structure
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+			
 			if(ds.hasUnits()){
 				PhysicalPropertyinComposite pp = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);			
 				
@@ -56,38 +57,61 @@ public class AutoAnnotate {
 		// ID the amounts
 		Set<DataStructure> unconfirmedamounts = new HashSet<DataStructure>();
 		Set<DataStructure> confirmedamounts = new HashSet<DataStructure>();
+		
 		for(DataStructure camount : candidateamounts){
 			Boolean hasinitval = camount.hasStartValue();
+			
 			if((camount instanceof MappableVariable)) {
 				hasinitval = (((MappableVariable)camount).getCellMLinitialValue()!=null);
 			}
 			
 			if(hasinitval && !camount.isDiscrete() 
 					&& !camount.hasPhysicalProperty()){
+				
 				camount.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(camount));
 				confirmedamounts.add(camount);
+			
+
+				// Copy OPB annotation to mapped variables
+				if(camount.isMapped()){
+					Set<MappableVariable> mappedset = 
+						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) camount);
+					confirmedamounts.addAll(mappedset);
+				}
+				
 			}
-			else unconfirmedamounts.add(camount);
+			else if( ! confirmedamounts.contains(camount)) unconfirmedamounts.add(camount);
 		}
+		
 		// second pass at amounts
 		Set<DataStructure> temp = new HashSet<DataStructure>();
 		temp.addAll(confirmedamounts);
 		for(DataStructure camount : temp){
+			
 			for(DataStructure newcamount : camount.getDownstreamDataStructures(unconfirmedamounts, null)){
 				confirmedamounts.add(newcamount);
+				
 				if (!newcamount.hasPhysicalProperty()) {
 					newcamount.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcamount));
+					
+					// Copy OPB annotation to mapped variables
+					if(newcamount.isMapped()) 
+						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcamount);
 				}
 			}
 		}
 		// ID the forces
 		Set<DataStructure> unconfirmedforces = new HashSet<DataStructure>();
 		Set<DataStructure> confirmedforces = new HashSet<DataStructure>();
+		
 		for(DataStructure cforce : candidateforces){
 			Boolean annotate = false;
 			// If the candidate force is solved using a confirmed amount, annotate it
+			
 			if(cforce.getComputation()!=null){
+				
 				for(DataStructure cforceinput : cforce.getComputation().getInputs()){
+					
 					if(confirmedamounts.contains(cforceinput)){ 
 						annotate=true; 
 						break;
@@ -98,18 +122,32 @@ public class AutoAnnotate {
 			if((cforce.hasStartValue() || annotate) && !cforce.isDiscrete() 
 					&& !cforce.hasPhysicalProperty()) {
 				cforce.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cforce));
+				confirmedforces.add(cforce);
+				
+				// Copy OPB annotation to mapped variables
+				if(cforce.isMapped()){
+					Set<MappableVariable> mappedset = 
+							AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) cforce);
+					confirmedforces.addAll(mappedset);
+				}
 			}
-			else unconfirmedforces.add(cforce);
+			else if( ! confirmedforces.contains(cforce)) unconfirmedforces.add(cforce);
 		}
 		
 		// Second pass at forces
 		temp.clear();
 		temp.addAll(confirmedforces);
 		for(DataStructure cforce : temp){
+			
 			for(DataStructure newcforce : cforce.getDownstreamDataStructures(unconfirmedforces, null)){
 				confirmedforces.add(newcforce);
+				
 				if(!newcforce.hasPhysicalProperty()){
 					newcforce.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcforce));
+					
+					// Copy OPB annotation to mapped variables
+					if(newcforce.isMapped()) 
+						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcforce);
 				}
 			}
 		}
@@ -119,27 +157,45 @@ public class AutoAnnotate {
 		Set<DataStructure> confirmedflows = new HashSet<DataStructure>();
 		for(DataStructure cflow : candidateflows){
 			Boolean annotate = false;
+			
 			// If the candidate flow is solved using a confirmed amount or force, annotate it
 			if(cflow.getComputation()!=null){
+				
 				for(DataStructure cflowinput : cflow.getComputation().getInputs()){
+					
 					if(confirmedamounts.contains(cflowinput) || confirmedforces.contains(cflowinput)){ annotate=true; break;}
 				}
 			}
+			
 			// If already decided to annotate, or the candidate is solved with an ODE and it's not a discrete variable, annotate it
 			if((cflow.hasStartValue() || annotate || cflow.getName().contains(":")) && !cflow.isDiscrete()
 					&& !cflow.hasPhysicalProperty()){
 				cflow.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(cflow));
+				confirmedflows.add(cflow);
+				
+				// Copy OPB annotation to mapped variables
+				if(cflow.isMapped()){ 
+					Set<MappableVariable> mappedset = 
+						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) cflow);
+					confirmedflows.addAll(mappedset);
+				}
 			}
-			else unconfirmedflows.add(cflow);
+			else if( ! confirmedflows.contains(cflow)) unconfirmedflows.add(cflow);
 		}
 		// Second pass at flows
 		temp.clear();
 		temp.addAll(confirmedflows);
 		for(DataStructure cflow : temp){
+			
 			for(DataStructure newcflow : cflow.getDownstreamDataStructures(unconfirmedflows, null)){
-				confirmedforces.add(newcflow);
+				confirmedflows.add(newcflow);
+				
 				if(!newcflow.hasPhysicalProperty()){
 					newcflow.setAssociatedPhysicalProperty(SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(newcflow));
+					
+					// Copy OPB annotation to mapped variables
+					if(newcflow.isMapped()) 
+						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcflow);
 				}
 			}
 		}

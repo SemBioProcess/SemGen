@@ -23,17 +23,16 @@ function SubmodelNode (graph, data, parent) {
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
 
-SubmodelNode.prototype.createVisualElement = function (element, graph) {
-	ParentNode.prototype.createVisualElement.call(this, element, graph);
-	
-	// When the submodel is clicked create dependency nodes from it's dependency data
-	this.rootElement.select("circle").on("dblclick", function (node) {
-		// Create dependency nodes from the submodel's dependency data
-		addChildNodes(node, node.dependencies, function (data) {
-			return new DependencyNode(node.graph, data, node);
-		});
+SubmodelNode.prototype.onDoubleClick = function () {
+	sender.consoleOut(this.dependencies.length);
+		node = this;
 		
-		d3.event.stopPropagation();
-	});
-
+		if (node.dependencies) {
+			// Create dependency nodes from the submodel's dependency data
+			addChildNodes(node, node.dependencies, function (data) {
+				return new DependencyNode(node.graph, data, node);
+			});
+		}
+		
+		
 }

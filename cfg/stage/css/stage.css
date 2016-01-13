@@ -8,10 +8,10 @@ html, body, iframe {
 }
 
 body {
-	font-family: 12px sans-serif;
+	font-family: sans-serif;
 }
 
-.addModelButton {
+#addModelButton {
 	position: absolute;
 	top: 15px;
 	left: 57px;
@@ -27,7 +27,7 @@ body {
 	opacity: .8;
 }
 
-.addModelButton:hover {
+#addModelButton:hover {
 	opacity: 1;
 	cursor: pointer;
 }
@@ -44,12 +44,6 @@ body {
 
 }
 
-.dropdown-menu {
-	position: absolute;
-	top: 60px;
-	left: 5px;
-}
-
 .popover-title {
 	font-size: 18px;
 }
@@ -57,50 +51,6 @@ body {
 .popover-content ul {
 	margin: 0;
 	padding: 0;
-}
-
-ul.modelPopover li {				
-	list-style: none;
-	padding: 5px 10px;
-}
-
-ul.modelPopover li a {
-	display: block;
-	width: 100%;
-	padding: 7px;
-	text-align: center;
-	font-weight: normal;
-	color: inherit;
-	text-decoration: none;
-	border: 1px solid black;
-	background-color: #FFFFFF;
-}
-
-ul.modelPopover li a:hover {
-	background-color: #DFE3EE;
-	cursor: pointer;
-}
-
-ul.modelPopover li:last-child {
-	border: none;
-}
-
-ul.modelPopover li.submenuContainer {
-	background-color: #F8F8F8;
-}
-
-.stageMenu {
-	position: absolute;
-	margin: 5px;
-	top: 0;
-	right: 0;
-	padding: 10px;
-	border: 1px solid black;
-	opacity: .2;
-}
-
-.stageMenu:hover {
-	opacity: 1;
 }
 
 .stageSearch {
@@ -154,54 +104,15 @@ li.searchResultSet li:hover {
 	cursor: pointer;
 }
 
-.key {
-	font-size: 14px;
-}
-
-.key ul {
-	list-style: none;
-	margin: 0 5px;
-	padding: 0;
-}
-
-.key ul li {
-	margin: 5px 0;
-	font-weight: bold;
-	padding-left: 1em; 
-    text-indent: -.7em;
-}
-
-.key ul li.canClick:hover {
-	cursor: pointer;
-}
-
-.key ul.hiddenNodeKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
-.key ul.hiddenLinkKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
-.modes {
-	margin-top: 10px;
-}
-
-.modes ul {
-	list-style: none;
-	padding: 0;
-	margin: 0 0 0 5px;
-}
-
-
-.nodeInfoPanel {
+.panel.panel-default.sidebar {
 	position: absolute;
-	top: 450px;
-	right: 5px;
 	max-width: 250px;
 	opacity: 1;
+}
+.panel.panel-default.sidebar a {
+	color: inherit;
+	text-decoration: none;
+	border: none;
 }
 
 #panel, #activeTaskTray {
@@ -212,6 +123,7 @@ li.searchResultSet li:hover {
 	background-color: #e4e4e4;
 	border: solid 1px #c3c3c3;
 }
+
 #activeTaskTray {
 	bottom: 0;
 	height: 30px;

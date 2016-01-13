@@ -1,17 +1,22 @@
 var sender;
 var receiver;
+var graph;
+
 var AllNodes = [];
+
+//Variable for holding functions awaiting a response from Java
+var CallWaiting;
+
 $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	sender = e.originalEvent.commandSender;
 
-	var graph = new Graph();
+	graph = new Graph();
 	var modelNodes = {};
 		
-	SelectionManager.getInstance().initialize(graph);
 	KeyElement.getInstance().initialize(graph);
 
-	$(".addModelButton").click(function() {
+	$("#addModelButton").click(function() {
 		sender.addModel();
 	});
 
@@ -38,6 +43,7 @@ $(window).bind("cwb-initialized", function(e) {
 		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
 		delete modelNodes[modelName];
+		ModelPanel(null);
 		graph.update();
 	});
 	
@@ -96,6 +102,10 @@ $(window).bind("cwb-initialized", function(e) {
 
 			searchResultsList.append(makeResultSet(searchResultSet));
 		});
+	});
+	
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
 	});
 });
 
@@ -173,4 +183,9 @@ function removeFromDragList(_node) {
 			NewNodes.push(node);
 	});
 	AllNodes = NewNodes;
+};
+
+function taskClicked(element) {
+	var task = element.innerHTML.toLowerCase();
+	sender.taskClicked(graph.getFirstSelectedModel().id, task);
 };

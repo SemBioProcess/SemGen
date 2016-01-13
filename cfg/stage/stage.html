@@ -6,9 +6,9 @@
 		<script src="js/lib/d3.v3.min.js"></script>
 		<script src="js/lib/bootstrap.min.js"></script>
 		<script src="js/classExtensions.js"></script>
+		<script src="js/leftSidebar.js"></script>
 		<script src="js/graph.js"></script>
 		<script src="js/keyElement.js"></script>
-		<script src="js/nodes/selectionManager.js"></script>
 		<script src="js/nodes/hiddenLabelNode.js"></script>
 		<script src="js/nodes/node.js"></script>
 		<script src="js/nodes/dependencyNode.js"></script>
@@ -19,43 +19,24 @@
 		<script src="js/nodes/behaviors/dragToMerge.js"></script>
 		<script src="js/nodes/behaviors/hull.js"></script>
 		<script src="js/nodes/behaviors/hiddenLabelNodeGenerator.js"></script>
-		<script src="js/nodes/behaviors/modelPopover.js"></script>
-		<script src="js/nodes/behaviors/columns.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
 		<script src="js/links/link.js"></script>
 		<script src="js/links/mediatorLink.js"></script>
 		<script src="js/stage.js"></script>
+
 		
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 		<link type="text/css" rel="stylesheet" href="css/stage.css" />
 		<link type="text/css" rel="stylesheet" href="css/graph.css" />
+		<link type="text/css" rel="stylesheet" href="css/leftSidebar.css" />
+		<link type="text/css" rel="stylesheet" href="css/rightSidebar.css" />
 		
 		<!--  Loads a mock sender and receiver if we're loading outside of SemGen -->
 		<script src="js/mock.js"></script>
 	</head>
 	<body>
-		<div class="addModelButton">+</div>
-		<div class="stageMenu">
-			<div class="key">
-				Node key:
-				<ul class="visibleNodeKeys"></ul>
-				<ul class="hiddenNodeKeys"></ul>
-				Link key:
-				<ul class="visibleLinkKeys"></ul>
-				<ul class="hiddenLinkKeys"></ul>
-			</div>
-			<div class="modes">
-				Graph:
-				<ul>
-					<li>
-						<input type="checkbox" class="fixedNodes"> Fix Nodes</input>
-					</li>
-					<!--   <li>
-						//<input type="checkbox" class="columnView"> Column View</input>
-					</li>-->
-				</ul>
-			</div>
-		</div>
+		<div id="addModelButton" class="btn-default">+</div>
+
 		<div class="stageSearch">
 			<div class="searchIcon">
 				<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300">
@@ -79,24 +60,71 @@
 				<ul class="searchResults"></ul>
 			</div>
 		</div>
-		<div class="modelDropdown">
-			<button class="btn btn-default modelDropdown-toggle" type="button" data-toggle="dropdown">☰</button>
-			<ul class="dropdown-menu">
-				<li class="dropdown-header">Project Options</li>
-				<li><a id="addModel" href="#">Import Models</a></li>
-				<li><a href="#">Loaded Models</a></li>
-				<li class="divider"></li>
-				<li class="dropdown-header">Model Options</li>
-			</ul>
-		</div>
-		<div class="nodeInfoPanel">
-			<div class="panel panel-default">
+
+<!-- Sidebars -->
+	<!-- Left Sidebar -->
+		<div id="leftSidebar" class="panel panel-default sidebar">
+			<div class="panel-heading">
+				<a data-toggle="collapse" href="#leftmenu"><span class="caret-left"></span></a>
+			</div>
+			<div id="leftmenu" class="panel-collapse collapse in">
 				<div class="panel-heading">
-					<a data-toggle="collapse" href="#collapse1">Node Info<span class="caret"></span></a>
+					<a data-toggle="collapse" href="#projmenu">Project<span class="caret"></span></a>
 				</div>
-				<div id="collapse1" class="panel-collapse collapse">
-					<div class="panel-body">Information about selected node goes here</div>
+				<div id="projmenu" class="panel-collapse collapse">
+					<ul>
+						<li><a id="addModel" href="#">Import Models</a></li>
+						<li><a href="#">Loaded Models</a></li>
+					</ul>
 				</div>
+				<div class="panel-heading">
+					<a data-toggle="collapse" href="#modelmenu">Model Options<span class="caret"></span></a>
+					<div id="modelinfo" class="panel">
+						No model selected
+					</div>
+				</div>
+				<div id="modelmenu" class="panel-collapse collapse">
+					
+				</div>
+			</div>
+		</div>
+		
+	<!-- Right Sidebar -->
+	<div id="rightSidebar" class="panel panel-default sidebar on">
+			<div class="panel-heading">
+				<a data-toggle="collapse" href="#rightmenu"><span class="caret-left"></span></a>
+			</div>
+			<div id="rightmenu" class="panel-collapse collapse in">
+				<div class="panel-heading">
+					<a data-toggle="collapse" href="#stagemenu">Stage Options<span class="caret"></span></a>
+				</div>
+				<div id="stagemenu" class="panel-collapse collapse">
+					<div class="key">
+						Node key:
+						<ul class="visibleNodeKeys"></ul>
+						<ul class="hiddenNodeKeys"></ul>
+						Link key:
+						<ul class="visibleLinkKeys"></ul>
+						<ul class="hiddenLinkKeys"></ul>
+					</div>
+					<div class="modes">
+						Graph:
+						<ul>
+							<li>
+								<input type="checkbox" class="fixedNodes"> Fix Nodes</input>
+							</li>
+							<!--   <li>
+								//<input type="checkbox" class="columnView"> Column View</input>
+							</li>-->
+						</ul>
+					</div>
+				</div>
+					<div class="panel-heading">
+						<a data-toggle="collapse" href="#nodemenu">Node Options<span class="caret"></span></a>
+					</div>
+					<div id="nodemenu" class="panel-collapse collapse">
+						<div class="panel-body">Information about selected node goes here</div>
+					</div>
 			</div>
 		</div>
 		<div id="activeTaskTray">Active Tasks</div>
