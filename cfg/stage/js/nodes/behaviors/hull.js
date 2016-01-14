@@ -9,7 +9,7 @@ function Hull(node) {
 	$(node).on('createVisualization', function (e, root) {
 		hull = root.append("path")
 			.attr("class", "hull")
-			.style("opacity", .2)
+			.style("opacity", .1)
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {

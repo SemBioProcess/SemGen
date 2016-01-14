@@ -19,7 +19,9 @@ function Graph() {
 	this.force = d3.layout.force()
 		.gravity(0)
 		.chargeDistance(250)
-		.friction(0.7);
+		.friction(0.7)
+		.charge(function (d) { return d.charge; })
+	    .linkDistance(function (d) { return d.length; });
 	this.color = d3.scale.category10();
 	var nodes = this.force.nodes();
 	var links = this.force.links();
@@ -313,10 +315,9 @@ function Graph() {
 		
 	    // Restart the force layout.
 	    this.force
-	    	.charge(function (d) { return d.charge; })
-	    	.linkDistance(function (d) { return d.length; })
 		    .size([this.w, this.h])
 		    .start();
+	    
 	    
 	    $(this).triggerHandler("postupdate");
 	    
@@ -548,4 +549,27 @@ function Graph() {
 		}
 		return null;
 	};
+	
+	this.setNodeCharge = function(charge) {
+		if (isNaN(charge)) return;
+		nodes.forEach(function(node) {
+			if(node.nodeType != "Model") {
+				node.charge = charge;
+			}
+		});
+		defaultcharge = charge;
+		update();
+		
+	}
+	
+	this.toggleGravity = function(enabled) {
+		if (enabled) {
+			force.gravity(1.0);
+		}
+		else {
+			force.gravity(0.0);
+		}
+		update();
+		
+	}
 }

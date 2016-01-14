@@ -95,6 +95,6 @@ KeyElement.getInstance = function () {
 }
 
 $(window).load(function () {
-	KeyElement.instance = new KeyElement($("#stagemenu .key ul.visibleNodeKeys"), $("#stagemenu .key ul.hiddenNodeKeys"),
-			$("#stagemenu .key ul.visibleLinkKeys"), $("#stagemenu .key ul.hiddenLinkKeys"));
+	KeyElement.instance = new KeyElement($("#stagemenu #stagekey ul.visibleNodeKeys"), $("#stagemenu #stagekey ul.hiddenNodeKeys"),
+			$("#stagemenu #stagekey ul.visibleLinkKeys"), $("#stagemenu #stagekey ul.hiddenLinkKeys"));
 });

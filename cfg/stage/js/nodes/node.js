@@ -2,7 +2,7 @@
  * Represents a node in the d3 graph
  */
 
-
+var defaultcharge = -300;
     
 function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	if(!graph)
@@ -75,11 +75,12 @@ Node.prototype.createVisualElement = function (element, graph) {
 		node.onClick();
 	});
 
+	//Append highlight circle
 	this.rootElement.append("svg:circle")
 		.attr("class", "highlight")
-		.attr("r", this.r + 2)
+		.attr("r", this.r + 4)
 		.attr("stroke", "yellow")
-		.attr("stroke-width", "2");
+		.attr("stroke-width", "4");
 	
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -256,6 +257,7 @@ Node.prototype.onClick = function () {
     	this.onDoubleClick();
        
     }
+	sender.consoleOut(this.charge);
       d3.event.stopPropagation();
 
 }

@@ -14,7 +14,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 	
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", -300);
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", defaultcharge);
 	this.dependencies = data.dependencies;
 	
 	this.addClassName("submodelNode");
@@ -27,7 +27,7 @@ SubmodelNode.prototype.onDoubleClick = function () {
 	sender.consoleOut(this.dependencies.length);
 		node = this;
 		
-		if (node.dependencies) {
+		if (node.dependencies.length > 0) {
 			// Create dependency nodes from the submodel's dependency data
 			addChildNodes(node, node.dependencies, function (data) {
 				return new DependencyNode(node.graph, data, node);

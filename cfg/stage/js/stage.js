@@ -39,7 +39,7 @@ $(window).bind("cwb-initialized", function(e) {
 	
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
-		console.log("Removing model " + modelName);
+		sender.consoleOut("Removing model " + modelName);
 		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
 		delete modelNodes[modelName];
@@ -129,18 +129,24 @@ $(window).load(function() {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
-});
-
-// Add child nodes to a model node
-function addChildNodes(parentNode, data, createNode) {
-	// Create nodes from the data
-	var nodes = [];
-	data.forEach(function (d) {
-		nodes.push(createNode(d));
-	});
 	
-	parentNode.setChildren(nodes);
-};
+	$("#nodecharge").change(function() {
+		var charge = $("#nodecharge").val() + ".0";
+		//graph.setNodeCharge(charge);
+		
+	});
+	$("#friction").change(function() {
+		var friction = $("#friction").val();
+		//graph.setFriction(friction);
+		
+	});
+	$("#gravity").change(function() {
+		sender.outConsole("hi");
+		var gravity = $("#gravity").checked();
+		graph.toggleGravity(gravity);
+		
+	});
+});
 
 function makeResultSet(searchResultSet) {
 	var resultSet = $(
@@ -168,6 +174,17 @@ function makeResultSet(searchResultSet) {
 
     resultSet.append(list);
     return resultSet;
+};
+
+// Add child nodes to a model node
+function addChildNodes(parentNode, data, createNode) {
+	// Create nodes from the data
+	var nodes = [];
+	data.forEach(function (d) {
+		nodes.push(createNode(d));
+	});
+	
+	parentNode.setChildren(nodes);
 };
 
 function removeFromDragList(_node) {

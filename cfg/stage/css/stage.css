@@ -100,14 +100,27 @@ li.searchResultSet li:hover {
 }
 
 .panel.panel-default.sidebar {
+	list-style-type:none;
 	position: absolute;
 	max-width: 250px;
 	opacity: 1;
+	background-color: whitesmoke;
 }
 
 .panel.panel-default.sidebar a{
-	color: inherit;
+
 	text-decoration: none;
 	border: none;
 }
 
+.panel-heading{
+	font-size: 18px;
+}
+
+.panel .subpanel ul{
+	list-style-type:none;
+}
+
+.panel .subpanel {
+	background-color: white;
+}
