@@ -1,28 +1,15 @@
-var sender;
-var receiver;
-var graph;
 
-var AllNodes = [];
+Stage.prototype = new Task();
+Stage.prototype.constructor = Stage;
+function Stage(graph) {
+	Task.prototype.constructor.call(this, graph);
+	AllNodes = this.AllNodes;
+	modelNodes = this.modelNodes;
 
-//Variable for holding functions awaiting a response from Java
-var CallWaiting;
-
-$(window).bind("cwb-initialized", function(e) {
-	receiver = e.originalEvent.commandReceiver;
-	sender = e.originalEvent.commandSender;
-
-	graph = new Graph();
-	var modelNodes = {};
-		
-	KeyElement.getInstance().initialize(graph);
-
-	$("#addModelButton").click(function() {
-		sender.addModel();
-	});
-
-	$("#addModel").click(function() {
-		sender.addModel();
-	});
+	this.leftsidebar = new LeftSidebar(graph);
+	this.rightsidebar = new RightSidebar(graph);
+	
+	var leftsidebar = this.leftsidebar;
 	
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
@@ -37,32 +24,27 @@ $(window).bind("cwb-initialized", function(e) {
 		graph.update();
 	});
 	
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
+	});
+	
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
 		sender.consoleOut("Removing model " + modelName);
 		removeFromDragList(graph.findNode(modelName));
 		graph.removeNode(modelName);
-		delete modelNodes[modelName];
-		ModelPanel(null);
+		delete this.modelNodes[modelName];
+		leftsidebar.updateModelPanel(null);
 		graph.update();
 	});
-	
-	// Get a model node
-	var getModelNode = function (modelName) {
-		var modelNode = modelNodes[modelName];
-		if(!modelNode)
-			throw "model doesn't exist";
-		
-		return modelNode;
-	};
-	
+
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
 		
-		var modelNode = getModelNode(modelName);
-		addChildNodes(modelNode, dependencyNodeData, function (data) {
-			return new DependencyNode(graph, data, modelNode);
+		var modelNode = main.task.getModelNode(modelName);
+		main.task.addChildNodes(modelNode, dependencyNodeData, function (data) {
+			return new DependencyNode(main.graph, data, modelNode);
 		});
 	});
 	
@@ -70,9 +52,9 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
 		
-		var modelNode = getModelNode(modelName);
-		addChildNodes(modelNode, submodelData, function (data) {
-			return new SubmodelNode(graph, data, modelNode);
+		var modelNode = main.task.getModelNode(modelName);
+		main.task.addChildNodes(modelNode, submodelData, function (data) {
+			return new SubmodelNode(main.graph, data, modelNode);
 		});
 	});
 	
@@ -80,9 +62,9 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
 		console.log("Showing PhysioMap for model " + modelName);
 		
-		var modelNode = getModelNode(modelName);
-		addChildNodes(modelNode, physiomapData, function (data) {
-			return new PhysioMapNode(graph, data, modelNode);
+		var modelNode = main.task.getModelNode(modelName);
+		main.task.addChildNodes(modelNode, physiomapData, function (data) {
+			return new PhysioMapNode(main.graph, data, modelNode);
 		});
 	});
 	
@@ -104,12 +86,14 @@ $(window).bind("cwb-initialized", function(e) {
 		});
 	});
 	
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
+	$("#addModelButton").click(function() {
+		sender.addModel();
 	});
-});
 
-$(window).load(function() {
+	$("#addModel").click(function() {
+		sender.addModel();
+	});
+
 	// When you mouseover the search element show the search box and results
 	$(".stageSearch").mouseover(function (){
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
@@ -129,24 +113,12 @@ $(window).load(function() {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
-	
-	$("#nodecharge").change(function() {
-		var charge = $("#nodecharge").val() + ".0";
-		//graph.setNodeCharge(charge);
-		
-	});
-	$("#friction").change(function() {
-		var friction = $("#friction").val();
-		//graph.setFriction(friction);
-		
-	});
-	$("#gravity").change(function() {
-		sender.outConsole("hi");
-		var gravity = $("#gravity").checked();
-		graph.toggleGravity(gravity);
-		
-	});
-});
+}
+
+Stage.prototype.onModelSelection = function(node) {
+	this.leftsidebar.updateModelPanel(node);
+}
+
 
 function makeResultSet(searchResultSet) {
 	var resultSet = $(
@@ -176,16 +148,7 @@ function makeResultSet(searchResultSet) {
     return resultSet;
 };
 
-// Add child nodes to a model node
-function addChildNodes(parentNode, data, createNode) {
-	// Create nodes from the data
-	var nodes = [];
-	data.forEach(function (d) {
-		nodes.push(createNode(d));
-	});
-	
-	parentNode.setChildren(nodes);
-};
+
 
 function removeFromDragList(_node) {
 
@@ -197,7 +160,4 @@ function removeFromDragList(_node) {
 	AllNodes = NewNodes;
 };
 
-function taskClicked(element) {
-	var task = element.innerHTML.toLowerCase();
-	sender.taskClicked(graph.getFirstSelectedModel().id, task);
-};
+

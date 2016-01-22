@@ -27,11 +27,11 @@ function Graph() {
 	var links = this.force.links();
 	var hiddenNodes = {};
 	var orphanNodes = [];
-	var selectedModels = [];
-	var selectedNodes = [];
+
 	var hiddenLinks = {};
 	var fixedMode = false;
 	
+
 	// Add a node to the graph
 	this.addNode = function (nodeData) {
 		if(!nodeData)
@@ -64,7 +64,11 @@ function Graph() {
 		nodes.push(nodeData);
 		$(this).triggerHandler("nodeAdded", [nodeData]);
 	};
-
+	
+	this.getNodes = function() {
+		return nodes;
+	}
+	
 	// Add a link to the graph
 	this.addLink = function (link) {
 		// If the link already exists don't add it again
@@ -325,7 +329,7 @@ function Graph() {
 	    // There's a delay so the forces can equalize
 	    setTimeout(function () {
 	    	if(fixedMode)
-	    		nodes.forEach(setFixed);
+	    		nodes.forEach(toggleFixedMode);
 	    }, 7000);
 	};
 	
@@ -409,6 +413,15 @@ function Graph() {
 		});
 	};
 	
+	// Set the graph's width and height
+	this.updateHeightAndWidth = function () {
+		this.w = $(window).width();
+		this.h = $(window).height();
+		svg.attr("width", this.w)
+	    	.attr("height", this.h)
+	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
+	}
+	
 	// Brute force redraw
 	// Motivation:
 	//	The z-index in SVG relies on the order of elements in html.
@@ -474,82 +487,6 @@ function Graph() {
 		}
 	}
 
-	// Set the graph's width and height
-	this.updateHeightAndWidth = function () {
-		this.w = $(window).width();
-		this.h = $(window).height();
-		svg.attr("width", this.w)
-	    	.attr("height", this.h)
-	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
-	}
-	this.updateHeightAndWidth();
-
-	this.selectNode = function(node) {
-		if (node.nodeType=="Model") {
-			selectedModels.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
-				
-			});
-			
-			selectedModels = [];
-			selectedModels.push(node);
-			
-			ModelPanel(node);
-		}
-		else {
-			selectedNodes.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
-			});
-			selectedNodes = [];
-			selectedNodes.push(node);
-		}
-		
-		node.highlight();
-	};
-	
-	var setFixed = function (node) {
-		node.oldFixed = node.fixed;
-		node.fixed = true;
-	};
-	
-	var resetFixed = function (node) {
-		node.fixed = node.oldFixed || false;
-		node.oldFixed = undefined;
-	};
-	
-	// Fix all nodes when ctrl + M is pressed
-	$(".modes .fixedNodes").bind('change', function(){        
-		//Columns.columnModeOn = this.checked;
-		if(this.checked)
-		{
-			nodes.forEach(setFixed);
-			fixedMode = true;
-		}
-		// Un-fix all nodes
-		else
-		{
-			nodes.forEach(resetFixed);
-			fixedMode = false;
-		}
-	});
-	
-	// Run it
-	this.update();
-	
-	window.onresize = function () {
-		graph.updateHeightAndWidth();
-		graph.update();
-	};
-	
-	this.getFirstSelectedModel = function () {
-		if (selectedModels.length > 0) {
-			return selectedModels[0];
-		}
-		return null;
-	};
-	
 	this.setNodeCharge = function(charge) {
 		if (isNaN(charge)) return;
 		nodes.forEach(function(node) {
@@ -562,6 +499,21 @@ function Graph() {
 		
 	}
 	
+	this.toggleFixedMode = function(setfixed) {
+		fixedMode = setfixed;
+		nodes.forEach(setFixed);
+	}
+	
+	var setFixed = function (node) {
+		node.oldFixed = node.fixed;
+		node.fixed = fixedMode;
+	};
+	
+	var resetFixed = function () {
+		node.fixed = node.oldFixed || false;
+		node.oldFixed = undefined;
+	};
+	
 	this.toggleGravity = function(enabled) {
 		if (enabled) {
 			force.gravity(1.0);
@@ -572,4 +524,8 @@ function Graph() {
 		update();
 		
 	}
+
+	this.updateHeightAndWidth();
+	// Run it
+	this.update();
 }

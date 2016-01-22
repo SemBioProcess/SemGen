@@ -60,6 +60,8 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 	// Javascript needs to listen for this event to learn when the javascript is loaded
 	private final String InitializationEventName = "cwb-initialized";
 	
+	private final String javajsbridgeid = "javaJSBridge";
+	
 	// This function is called to let javascript developers know when the browser has initialized.
 	private final String TriggerInitializationEventScript =
 			"function cwb_triggerInitialized(receiver, sender) {" + CommunicationHelpers.NLJS +
@@ -103,7 +105,29 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 	
 	public CommunicatingWebBrowser(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		super();
+		createBrowserListeners(commandSenderInterface, commandReceiver);
 		
+		// Insert the adapter that facilitates communication
+		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
+	}
+	
+	public void setBrowserListeners(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+		createBrowserListeners(commandSenderInterface, commandReceiver);
+		executeJavaScript(CommunicationHelpers.removeScriptbyID(javajsbridgeid));
+		
+		String scriptInnerHtml = generateReceiverandSenderHtml() +
+				TriggerInitializationEventScript + CommunicationHelpers.NLJS +
+				ExecuteJavascriptAndHandleErrorsScript;
+		
+		// Insert a script element into the page header that defines an object that receives commands.
+		// the page is responsible for registering handlers for those commands
+		String initializationScript = CommunicationHelpers.appendScript(scriptInnerHtml, javajsbridgeid) +
+				"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
+		
+		executeJavascriptAndHandleErrors(initializationScript);
+	}
+	
+	private void createBrowserListeners(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		_commandSenderGenerator = new WebBrowserCommandSenderGenerator<TSender>(commandSenderInterface,
 				this,
 				JavascriptCommandReceiverVariableName);
@@ -113,15 +137,12 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 			_commandReceiver.validate();
 			_commandReceiver.listenForBrowserCommands(this);
 		}
-		
-		// Insert the adapter that facilitates communication
-		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
 	}
 	
 	public TSender getCommandSender() {
 		return _commandSenderGenerator.getSender();
 	}
-	
+
 	/**
 	 * Executes the given javascript and handles errors.
 	 * @param javascript Javasript to execute
@@ -131,6 +152,23 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 		javascript = String.format("executeAndHandleErrors(function () { %s });", javascript);
 		executeJavaScript(javascript);
 	}
+	
+	private String generateReceiverandSenderHtml() {
+		// Get the script for the command receiver
+		String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
+		
+		// If there's a command receiver get it's corresponding sender in javascript
+		// Otherwise, use a dummy object
+		String javascriptCommandSender = "var " + JavascriptCommandSenderVariableName + " = null;";
+		if(_commandReceiver != null)
+			javascriptCommandSender = _commandReceiver.generateJavascriptSender(JavascriptCommandSenderVariableName);
+		
+		// Stitch together the script html
+		return	javascriptCommandReceiver + CommunicationHelpers.NLJS +
+				javascriptCommandSender + CommunicationHelpers.NLJS;
+	}
+	
+
 	
 	/**
 	 * Inserts an initialization script into the page header while the page is loading.
@@ -155,34 +193,19 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 			// We don't need to listen for anymore events
 			e.getBrowser().removeLoadListener(this);
 			
-			// Get the script for the command receiver
-			String javascriptCommandReceiver = _commandSenderGenerator.generateJavascriptReceiver();
-			
-			// If there's a command receiver get it's corresponding sender in javascript
-			// Otherwise, use a dummy object
-			String javascriptCommandSender = "var " + JavascriptCommandSenderVariableName + " = null;";
-			if(_commandReceiver != null)
-				javascriptCommandSender = _commandReceiver.generateJavascriptSender(JavascriptCommandSenderVariableName);
-			
 			// Stitch together the script html
-			String scriptInnerHtml = 
-					javascriptCommandReceiver + CommunicationHelpers.NLJS +
-					javascriptCommandSender + CommunicationHelpers.NLJS +
+			String scriptInnerHtml = generateReceiverandSenderHtml() +
 					TriggerInitializationEventScript + CommunicationHelpers.NLJS +
 					ExecuteJavascriptAndHandleErrorsScript;
 			
 			// Insert a script element into the page header that defines an object that receives commands.
 			// the page is responsible for registering handlers for those commands
-			String initializationScript = 
-					"var head = document.getElementsByTagName('head')[0];" + CommunicationHelpers.NL +
-					"var script = document.createElement('script');" + CommunicationHelpers.NL +
-					"script.type = 'text/javascript';" + CommunicationHelpers.NL +
-					"script.innerHTML = \"" + scriptInnerHtml + "\";" + CommunicationHelpers.NL +
-					"head.appendChild(script);" + CommunicationHelpers.NL +
+			String initializationScript = CommunicationHelpers.appendScript(scriptInnerHtml, javajsbridgeid) +
 					"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
-			
+
 			// Execute the initialization script
 			e.getBrowser().executeJavaScript(initializationScript);
 		}
 	}
+	
 }

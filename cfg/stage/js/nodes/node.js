@@ -33,7 +33,10 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
 	}
+
 }
+
+
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
@@ -247,7 +250,7 @@ Node.prototype.onClick = function () {
 		node = this;
 		this.timer = setTimeout(function() {
 			node.clicks = 0;             //after action performed, reset counter
-	        node.graph.selectNode(node);
+	        main.task.selectNode(node);
 	    }, 500);
 		
 	}
@@ -262,7 +265,6 @@ Node.prototype.onClick = function () {
 
 }
 
-Node.prototype.onDoubleClick = function () {
 
-	
-}
+
+Node.prototype.onDoubleClick = function () {}

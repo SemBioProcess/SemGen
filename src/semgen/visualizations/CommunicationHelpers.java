@@ -31,6 +31,7 @@ public class CommunicationHelpers {
 		if(methodName == null)
 			throw new NullPointerException(methodName);
 		
+		
 		if(methodName.isEmpty())
 			return "";
 		
@@ -40,5 +41,19 @@ public class CommunicationHelpers {
 		return "on" +
 				capitalizedFirstLetter +
 				restOfMethodName;
+	}
+	
+	public static String appendScript(String scriptInnerHtml, String scriptid) {
+		return "var head = document.getElementsByTagName('head')[0];" + CommunicationHelpers.NL +
+			"var script = document.createElement('script');" + CommunicationHelpers.NL +
+			"script.id = " + "\"" + scriptid + "\";" + CommunicationHelpers.NL +
+			"script.type = 'text/javascript';" + CommunicationHelpers.NL +
+			"script.innerHTML = \"" + scriptInnerHtml + "\";" + CommunicationHelpers.NL +
+			"head.appendChild(script);" + CommunicationHelpers.NL;
+	}
+	
+	
+	public static String removeScriptbyID(String id) {
+		return "(elem=document.getElementById(\"" + id +"\")).parentNode.removeChild(elem);";
 	}
 }

@@ -49,7 +49,7 @@ public class SemGen extends JFrame implements Observer{
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private static boolean openstage = false;
 	
 	//A class for application level events such as exiting and creating new tabs

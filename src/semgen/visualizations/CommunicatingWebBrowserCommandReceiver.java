@@ -64,6 +64,7 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 			javascriptMethodName = WordUtils.uncapitalize(javascriptMethodName.substring(0,1)) + 	// capitalize the first letter
 					javascriptMethodName.substring(1); 												// get the rest of method name
 				
+			
 			// Each javascript method will send a command to java with arguments
 			javascriptSenderMethods += String.format(
 					"%s: function () {" + CommunicationHelpers.NLJS +
@@ -137,4 +138,6 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 		    }
 		});
 	}
+	
+
 }
