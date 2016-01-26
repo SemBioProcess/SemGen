@@ -135,13 +135,18 @@ li.searchResultSet li:hover {
 	width: 100%;
 	padding: 5px;
 	text-align: center;
-	background-color: #e4e4e4;
-	border: solid 1px #c3c3c3;
 }
 
 #activeTaskTray {
 	bottom: 0;
 	height: 30px;
+	background-color: #627AAC;
+	opacity: 0.8;
+}
+
+#activeTaskTray:hover {
+	opacity: 1;
+	cursor: pointer;
 }
 
 #activeTaskPanel {
