@@ -5,42 +5,42 @@
 	right: 5px;
 }
 
-.key {
+#stagekey {
 	font-size: 14px;
 }
 
-.key ul {
+#stagekey ul {
 	list-style: none;
 	margin: 0 5px;
 	padding: 0;
 }
 
-.key ul li {
+#stagekey  ul li {
 	margin: 5px 0;
 	font-weight: bold;
-	padding-left: 1em; 
+	padding-left: 1em;
     text-indent: -.7em;
 }
 
-.key ul li.canClick:hover {
+#stagekey  ul li.canClick:hover {
 	cursor: pointer;
 }
 
-.key ul.hiddenNodeKeys li {
+#stagekey  ul.hiddenNodeKeys li {
 	background-color: #D0D0D0;
 	opacity: .5;
 }
 
-.key ul.hiddenLinkKeys li {
+#stagekey  ul.hiddenLinkKeys li {
 	background-color: #D0D0D0;
 	opacity: .5;
 }
 
-.modes {
+#modes {
 	margin-top: 10px;
 }
 
-.modes ul {
+#modes ul {
 	list-style: none;
 	padding: 0;
 	margin: 0 0 0 5px;

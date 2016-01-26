@@ -2,7 +2,7 @@
  * Represents a node in the d3 graph
  */
 
-
+var defaultcharge = -300;
     
 function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
 	if(!graph)
@@ -33,7 +33,10 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
 	}
+
 }
+
+
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
@@ -75,11 +78,12 @@ Node.prototype.createVisualElement = function (element, graph) {
 		node.onClick();
 	});
 
+	//Append highlight circle
 	this.rootElement.append("svg:circle")
 		.attr("class", "highlight")
-		.attr("r", this.r + 2)
+		.attr("r", this.r + 4)
 		.attr("stroke", "yellow")
-		.attr("stroke-width", "2");
+		.attr("stroke-width", "4");
 	
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -246,7 +250,7 @@ Node.prototype.onClick = function () {
 		node = this;
 		this.timer = setTimeout(function() {
 			node.clicks = 0;             //after action performed, reset counter
-	        node.graph.selectNode(node);
+	        main.task.selectNode(node);
 	    }, 500);
 		
 	}
@@ -256,11 +260,11 @@ Node.prototype.onClick = function () {
     	this.onDoubleClick();
        
     }
+	sender.consoleOut(this.charge);
       d3.event.stopPropagation();
 
 }
 
-Node.prototype.onDoubleClick = function () {
 
-	
-}
+
+Node.prototype.onDoubleClick = function () {}

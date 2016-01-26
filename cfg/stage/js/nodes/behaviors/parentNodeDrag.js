@@ -8,7 +8,7 @@ function parentDrag (parent) {
 					// Set children to fixed if not already
 					if(!d.graph.fixedMode && d.children) {
 						d.children.forEach(function (child) {
-							child.setFixed(true);
+							child.fixed = true;
 						});
 						
 					}
@@ -71,7 +71,7 @@ function translateChildren(parent) {
 }
 
 function fixateChildren(node) { 
-	node.setFixed(false);
+	node.fixed = false;
 	if (node.children) {
 		fixateChildren(node);
 	}

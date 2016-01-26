@@ -1,32 +1,35 @@
 /**
  * 
  */
-
-function ModelPanel(model) {
-	var pane = $("#modelinfo");
+function LeftSidebar(graph) {
+	this.graph = graph;
 	
-	pane.empty();
-	
-	if (model==null) {
-		pane.append("No model selected");
-		return;
+	this.updateModelPanel = function(model) {
+		var pane = $("#modelinfo");
+		
+		pane.empty();
+		
+		if (model==null) {
+			pane.append("No model selected");
+			return;
+		}
+		
+		pane.append(
+			"<h5>" + model.id + "</h5>" +
+			"<ul>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>Annotate</a></li>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>Extract</a></li>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>Close</a></li>" +
+			"</ul>" +
+			"Visualize" +
+			"<ul>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>Submodels</a></li>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>Dependencies</a></li>" +
+				"<li><a href='#' onclick='main.task.taskClicked(this);'>PhysioMap</a></li>" +
+			"</ul>"
+			
+		);
 	}
 	
-	pane.append(
-			model.id +
-		"<ul>" +
-			"<li><a href='#' onclick='taskClicked(this);'>Annotate</a></li>" +
-			"<li><a href='#' onclick='taskClicked(this);'>Extract</a></li>" +
-			"<li><a href='#' onclick='taskClicked(this);'>Close</a></li>" +
-			"<div class='submenuContainer'>" +
-				"Visualize" +
-				"<ul>" +
-					"<li><a href='#' onclick='taskClicked(this);'>Submodels</a></li>" +
-					"<li><a href='#' onclick='taskClicked(this);'>Dependencies</a></li>" +
-					"<li><a href='#' onclick='taskClicked(this);'>PhysioMap</a></li>" +
-				"</ul>" +
-			"</div>" +
-		"</ul>"
-	);
 }
 
