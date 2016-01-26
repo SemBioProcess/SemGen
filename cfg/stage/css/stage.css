@@ -85,10 +85,14 @@ body {
 }
 
 ul.searchResults {
+	position: absolute;
+	width: 500px;
 	border: 1px solid black;
     border-top: none;
 	max-height: 30vh;
+	background-color: white;
 	overflow: scroll;
+	z-index: 99;
 }
 
 ul.searchResults li {
