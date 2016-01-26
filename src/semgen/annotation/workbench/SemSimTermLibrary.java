@@ -610,10 +610,14 @@ public class SemSimTermLibrary extends Observable {
 		String pstring = "<html><body>";
 		
 		for(int source : getProcessSourcesIndexMultiplierMap(proc).keySet()){
-			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
+			Double mult = getProcessSourcesIndexMultiplierMap(proc).get(source);
+			String multstring = (mult==1.0) ? "" : " (X" + Double.toString(mult) + ")";
+			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + multstring + "<br>";
 		}
 		for(int sink : getProcessSinksIndexMultiplierMap(proc).keySet()) {
-			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
+			Double mult = getProcessSinksIndexMultiplierMap(proc).get(sink);
+			String multstring = (mult==1.0) ? "" : " (X" + Double.toString(mult) + ")";
+			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + multstring + "<br>";
 		}
 		for(int mediator : getProcessMediatorIndicies(proc)){
 			pstring = pstring + "<b>Mediator:</b> " + getComponentName(mediator) + "<br>";
