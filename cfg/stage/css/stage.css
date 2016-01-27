@@ -32,18 +32,6 @@ body {
 	cursor: pointer;
 }
 
-.btn-default {
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin: 5px;
-	width: 50px;
-	height: 50px;
-	font-size: 25px;
-	border: hidden;
-
-}
-
 .popover-title {
 	font-size: 18px;
 }
@@ -157,4 +145,8 @@ li.searchResultSet li:hover {
 	bottom: 30px;
 	padding: 30px;
 	display: none;
+}
+
+.modal-body {
+	height: 80vh;
 }
