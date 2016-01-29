@@ -2,36 +2,37 @@ package semsim.definitions;
 
 import java.net.URI;
 
+import org.sbml.jsbml.CVTerm.Qualifier;
 import org.semanticweb.owlapi.model.IRI;
 
 import semsim.annotation.Relation;
 
 public class SemSimRelations {
 
-	public static Relation getBiologicalQualifierRelation(int id) {
-		switch (id) {
-		case 0:
+	public static Relation getBiologicalQualifierRelation(Qualifier q) {
+		switch (q) {
+		case BQB_IS:
 			return SemSimRelation.BQB_IS;
-		case 1:
+		case BQB_HAS_PART:
 			return StructuralRelation.HAS_PART;
-		case 2:
+		case BQB_IS_PART_OF:
 			return StructuralRelation.PART_OF;
-		case 3:
+		case BQB_IS_VERSION_OF:
 			return SemSimRelation.BQB_IS_VERSION_OF;
-		case 9:
+		case BQB_OCCURS_IN:
 			return SemSimRelation.BQB_OCCURS_IN;
 		default:
 			return null;
 		}
 	}
 	
-	public static Relation getModelQualifierRelation(int id) {
+	public static Relation getModelQualifierRelation(Qualifier id) {
 		switch (id) {
-		case 0:
+		case BQM_IS:
 			return SemSimRelation.BQM_IS;
-		case 1:
+		case BQM_IS_DESCRIBED_BY:
 			return SemSimRelation.BQM_IS_DESCRIBED_BY;
-		case 2:
+		case BQM_IS_DERIVED_FROM:
 			return SemSimRelation.BQM_IS_DERIVED_FROM;
 		default:
 			return null;

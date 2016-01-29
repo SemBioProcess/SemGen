@@ -137,7 +137,7 @@ public class TermCollector {
 				if (si.equals(termindex)) {
 					containingcws.add(drawer.getIndexofComponent(ds));
 					if (ds.hasAssociatedPhysicalComponent()) {
-						Integer i = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent());
+						Integer i = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true);
 						if (!containingindicies.contains(i)) {
 							containingindicies.add(i);
 						}
@@ -176,7 +176,7 @@ public class TermCollector {
 	
 	private void collectDataStructureComposite(DataStructure ds) {
 		if (ds.hasAssociatedPhysicalComponent()) {
-				Integer pmci = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent());
+				Integer pmci = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true);
 				if (containingindicies.contains(pmci)) {
 					containingcws.add(drawer.getIndexofComponent(ds));
 				}

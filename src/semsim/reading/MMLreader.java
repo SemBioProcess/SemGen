@@ -371,7 +371,7 @@ public class MMLreader extends ModelReader {
 				
 		// Add the model-level annotations
 		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
-		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
 		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
