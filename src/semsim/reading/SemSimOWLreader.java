@@ -863,17 +863,21 @@ public class SemSimOWLreader extends ModelReader {
 	/** Make Custom Entity **/
 	private CustomPhysicalEntity makeCustomEntity(String cuperef) {
 		String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(cuperef)))[0];
+		
+		String sub = cuperef.subSequence(cuperef.lastIndexOf("_"), cuperef.length()).toString();
+		cuperef = cuperef.replace(sub, "");
+		if (identitymap.containsKey(cuperef)) return (CustomPhysicalEntity) identitymap.get(cuperef);
+		
 		if (label.isEmpty()) { 
-			String sub = cuperef.subSequence(cuperef.lastIndexOf("_"), cuperef.length()).toString();
 			label = cuperef.subSequence(cuperef.lastIndexOf("/"), cuperef.length()).toString();
-			label = label.replace(sub, "");
 			label = label.replace("_", " ");
 		}
 		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, null);
 		
 		if(SemSimOWLFactory.getRDFComments(ont, cuperef)!=null)
 			cupe.setDescription(SemSimOWLFactory.getRDFComments(ont, cuperef)[0]);
-		String sub = cuperef.subSequence(cuperef.lastIndexOf("_"), cuperef.length()).toString();
+		label = cuperef.replace(sub, "");
+		
 		identitymap.put(cuperef.replace(sub, ""), cupe);
 		return semsimmodel.addCustomPhysicalEntity(cupe);
 	}
