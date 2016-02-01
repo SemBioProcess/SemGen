@@ -20,8 +20,8 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.sbml.libsbml.ASTNode;
-import org.sbml.libsbml.libsbml;
+import org.sbml.jsbml.ASTNode;
+import org.sbml.jsbml.JSBML;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -97,7 +97,7 @@ public class CellMLreader extends ModelReader {
 
 		// Add model-level metadata
 		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
-		semsimmodel.setSemsimversion(sslib.getSemSimVersion());
+		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
 		mainNS = doc.getRootElement().getNamespace();
@@ -1033,9 +1033,9 @@ public class CellMLreader extends ModelReader {
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
 		
 		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
-		ASTNode ast_result = libsbml.readMathMLFromString(varmathmlRHS);
+		ASTNode ast_result = JSBML.readMathMLFromString(varmathmlRHS);
 		
-		return libsbml.formulaToString(ast_result);
+		return JSBML.formulaToString(ast_result);
 	}
 	
 	

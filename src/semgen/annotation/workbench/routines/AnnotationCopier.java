@@ -36,11 +36,11 @@ public class AnnotationCopier {
 			targetds.setAssociatedPhysicalProperty(lib.getAssociatePhysicalProperty(ppindex));
 		}
 		if (sourceds.hasAssociatedPhysicalComponent()) {
-			int pmcindex = lib.getComponentIndex(sourceds.getAssociatedPhysicalModelComponent());
+			int pmcindex = lib.getComponentIndex(sourceds.getAssociatedPhysicalModelComponent(), true);
 			targetds.setAssociatedPhysicalModelComponent(lib.getComponent(pmcindex));
 		}
 		if (sourceds.hasPhysicalDefinitionAnnotation()) {
-			int pmcindex = lib.getComponentIndex(sourceds.getSingularTerm());
+			int pmcindex = lib.getPhysicalPropertyIndex(sourceds.getSingularTerm());
 			targetds.setSingularAnnotation((PhysicalProperty) lib.getComponent(pmcindex));
 		}
 	}

@@ -973,7 +973,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return semsimversion;
 	}
 
-	public void setSemsimversion(double semsimversion) {
+	public void setSemSimVersion(double semsimversion) {
 		this.semsimversion = semsimversion;
 	}
 	
