@@ -9,14 +9,14 @@ function DependencyNode (graph, data, parentNode) {
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 	
 	// Get the correct group from the node type
-	this.group = typeToGroup[data.nodeType];
+	this.group = data.id;
 	if(this.group == "undefined")
 		throw "invalid dependency node type: " + data.nodeType;
 
-	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 14, data.nodeType, -300);
-	
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, typeToColor[data.nodeType], 14, data.nodeType, defaultcharge);
+
 	this.addClassName("dependencyNode");
-	this.addBehavior(Columns);
+	//this.addBehavior(Columns);
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
 

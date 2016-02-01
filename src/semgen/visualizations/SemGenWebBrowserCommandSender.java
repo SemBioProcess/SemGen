@@ -54,4 +54,10 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param jsonPhysioMap PhysioMap
 	 */
 	void showPhysioMapNetwork(String modelName, PhysioMapNode[] jsonPhysioMap);
+
+	/**
+	 * 
+	 * @param Answer query
+	 */
+	void receiveReply(String reply);
 }

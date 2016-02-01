@@ -23,6 +23,8 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.textlocx = 0;
 	this.defaultcharge = charge;
 
+	this.timer = null;
+	this.clicks = 0;
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
 		// it with its parent node's id
@@ -53,10 +55,11 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
     	.style("fill", this.color)
-
+    	.attr("id", "Node;"+this.id);
+    	
 	this.rootElement.append("svg:circle")
 			.attr("r", this.r)
-			.attr("id", "Node;"+this.id)
+			
 			.attr("class","nodeStrokeClass")
 			.on("mouseover", function (d) {
 				graph.highlightMode(d);
@@ -64,6 +67,18 @@ Node.prototype.createVisualElement = function (element, graph) {
 			.on("mouseout", function () {
 				graph.highlightMode(null);
 			});
+		
+	this.rootElement.on("click", function (node) {
+		node.onClick();
+	});
+
+	//Append highlight circle
+	this.rootElement.append("svg:circle")
+		.attr("class", "highlight")
+		.attr("r", this.r + 4)
+		.attr("stroke", "yellow")
+		.attr("stroke-width", "4");
+	
 
 	// Create the text elements
 	this.createTextElement("shadow");
@@ -213,3 +228,38 @@ Node.prototype.createTextElement = function (className) {
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");
 }
+
+
+Node.prototype.highlight = function () {
+		this.rootElement.classed("selected", this.rootElement.select("circle").style("display")!="none");
+}
+
+Node.prototype.removeHighlight = function () {
+	this.rootElement.classed("selected", false);
+}
+
+Node.prototype.onClick = function () {
+	this.clicks++;
+	
+	if(this.clicks == 1) {
+
+		node = this;
+		this.timer = setTimeout(function() {
+			node.clicks = 0;             //after action performed, reset counter
+	        main.task.selectNode(node);
+	    }, 500);
+		
+	}
+    else {
+        clearTimeout(this.timer);    //prevent single-click action
+        this.clicks = 0;             //after action performed, reset counter
+    	this.onDoubleClick();
+       
+    }
+      d3.event.stopPropagation();
+
+}
+
+
+
+Node.prototype.onDoubleClick = function () {}

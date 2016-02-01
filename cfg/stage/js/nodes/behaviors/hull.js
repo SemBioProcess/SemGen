@@ -9,7 +9,7 @@ function Hull(node) {
 	$(node).on('createVisualization', function (e, root) {
 		hull = root.append("path")
 			.attr("class", "hull")
-			.style("opacity", .2)
+			.style("opacity", .1)
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
@@ -23,7 +23,7 @@ function Hull(node) {
 	$(node).on('childrenSet', function (e, newChildren) {
 		children = newChildren;
 		
-		// If there are children show the hull. Otherwise, show the hull
+		// If there are children show the hull. Otherwise, show the node
 		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
 	});
 	
@@ -39,6 +39,7 @@ function Hull(node) {
 			var maxX = null;
 			var minY = null;
 			var maxY = null;
+
 			// Recursively analyze all descendants
 			var analyzeChildren = function (childrenArr) {
 				childrenArr.forEach(function (child) {
@@ -46,7 +47,7 @@ function Hull(node) {
 					// by hidden models
 					if(child.hidden)
 						return;
-					
+
 					// If the child has children analyze them as well
 					if(child.children)
 						analyzeChildren(child.children);
@@ -67,6 +68,21 @@ function Hull(node) {
 				});
 			};
 			analyzeChildren(children);
+			
+						//If there is only one visible child, make the hull a circle with a radius of 6
+			if (minX == maxX) {
+				
+				minX = minX - 6;
+				maxX = maxX + 6;
+				minY = minY - 6;
+				maxY = maxY + 6;
+				vertexes.push([minX, minY]);
+				vertexes.push([maxX, minY]);
+				vertexes.push([minX, maxY]);
+				vertexes.push([maxX, maxY]);
+
+			}
+			
 			node.xmin = minX;
 			node.xmax = maxX;
 			node.ymin = minY;

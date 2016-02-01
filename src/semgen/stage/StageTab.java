@@ -8,6 +8,7 @@ import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
+import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.visualizations.SemGenCommunicatingWebBrowser;
@@ -45,6 +46,8 @@ public class StageTab extends SemGenTab {
 			if (SemGen.debug) {
 				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
 				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
 			
 			final BrowserView browserView = new BrowserView(browser);

@@ -36,4 +36,14 @@ public abstract class Node {
 	public static String buildId(String name, String parentModelId) {
 		return parentModelId + name;
 	}
+	//Dependency type map
+	protected static ArrayList<String> deptypes;
+	
+	static {
+		ArrayList<String> dtarray = new ArrayList<String>();
+		dtarray.add("State");
+		dtarray.add("Rate");
+		dtarray.add("Constitutive");
+		deptypes = dtarray;
+	}
 }
