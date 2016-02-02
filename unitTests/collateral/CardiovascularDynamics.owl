@@ -11,10 +11,10 @@
         <SemSim:SemSimVersion xml:lang="en">0.1</SemSim:SemSimVersion>
         <SemSim:legacyCodeURI xml:lang="en">http://www.bhi.washington.edu/research/SemBioProcess/SemGen/models/MML/CV.mod</SemSim:legacyCodeURI>
     </owl:Ontology>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Annotation properties
@@ -22,16 +22,16 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasMultiplier -->
 
     <owl:AnnotationProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasMultiplier"/>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Object Properties
@@ -39,7 +39,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#MMLDerivativeOf -->
@@ -49,13 +49,13 @@
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#component_in -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#component_in"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#composed_of -->
@@ -63,7 +63,7 @@
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#composed_of">
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#component_in"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#determines -->
@@ -72,7 +72,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasComputationalComponent -->
@@ -89,7 +89,7 @@
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasIndexEntity -->
@@ -108,7 +108,7 @@
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasInput -->
@@ -117,7 +117,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasMMLDerivative -->
@@ -127,13 +127,13 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasMediator -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasMediator"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasOutput -->
@@ -142,7 +142,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasParticipant -->
@@ -151,7 +151,7 @@
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasPhysicalProperty -->
@@ -168,7 +168,7 @@
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasRolePlayer -->
@@ -177,13 +177,13 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasSink -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasSink"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasSolutionDomain -->
@@ -192,13 +192,13 @@
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasSource -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasSource"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasUnit -->
@@ -208,7 +208,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isComputationalComponentFor -->
@@ -224,7 +224,7 @@
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isDeterminedBy -->
@@ -234,7 +234,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#determines"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isIndexEntityFor -->
@@ -253,7 +253,7 @@
             </owl:Class>
         </rdfs:domain>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isInputFor -->
@@ -263,7 +263,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasInput"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isOutputFor -->
@@ -273,7 +273,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasOutput"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#physicalPropertyOf -->
@@ -289,7 +289,7 @@
             </owl:Class>
         </rdfs:range>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#rolePlayerIn -->
@@ -299,7 +299,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasRolePlayer"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#solutionDomainFor -->
@@ -309,7 +309,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasSolutionDomain"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#unitFor -->
@@ -319,7 +319,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnit"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.obofoundry.org/ro/ro.owl#adjacent_to -->
@@ -330,7 +330,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:inverseOf rdf:resource="http://www.obofoundry.org/ro/ro.owl#adjacent_to"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.obofoundry.org/ro/ro.owl#contained_in -->
@@ -340,7 +340,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:inverseOf rdf:resource="http://www.obofoundry.org/ro/ro.owl#contains"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.obofoundry.org/ro/ro.owl#contains -->
@@ -349,7 +349,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.obofoundry.org/ro/ro.owl#has_part -->
@@ -358,7 +358,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
     </owl:ObjectProperty>
-    
+
 
 
     <!-- http://www.obofoundry.org/ro/ro.owl#part_of -->
@@ -368,10 +368,10 @@
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:inverseOf rdf:resource="http://www.obofoundry.org/ro/ro.owl#has_part"/>
     </owl:ObjectProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Data properties
@@ -379,7 +379,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasComputationalCode -->
@@ -389,7 +389,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasCustomDeclaration -->
@@ -399,13 +399,13 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasMathML -->
 
     <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasMathML"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasStartValue -->
@@ -415,7 +415,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#humanReadableName -->
@@ -424,7 +424,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isDeclared -->
@@ -434,7 +434,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isDiscrete -->
@@ -444,7 +444,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isSolutionDomain -->
@@ -454,7 +454,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#nonCompositeAnnotationHumanReadableName -->
@@ -464,7 +464,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#nonCompositeAnnotationReferenceOntologyURI -->
@@ -474,7 +474,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#nonCompositeAnnotationRefersTo -->
@@ -484,7 +484,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#referenceOntologyURI -->
@@ -494,7 +494,7 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#referencePublication -->
@@ -503,7 +503,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#refersTo -->
@@ -513,10 +513,10 @@
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Classes
@@ -524,7 +524,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00045 -->
@@ -539,7 +539,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00076 -->
@@ -554,7 +554,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00154 -->
@@ -569,7 +569,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00160 -->
@@ -584,7 +584,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00299 -->
@@ -599,7 +599,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00331 -->
@@ -614,7 +614,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://bhi.washington.edu/OPB#OPB_00509 -->
@@ -629,7 +629,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://purl.obolibrary.org/obo/GO_0060047 -->
@@ -644,7 +644,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Cavity_of_left_atrium -->
@@ -659,7 +659,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Cavity_of_left_ventricle -->
@@ -674,7 +674,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Cavity_of_right_atrium -->
@@ -689,7 +689,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Cavity_of_right_ventricle -->
@@ -704,7 +704,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Lumen_of_aorta -->
@@ -719,7 +719,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Lumen_of_cardiovascular_system -->
@@ -734,7 +734,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Lumen_of_pulmonary_venous_tree_organ -->
@@ -749,7 +749,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Lumen_of_systemic_venous_tree_organ -->
@@ -764,7 +764,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://sig.uw.edu/fma#Portion_of_blood -->
@@ -779,7 +779,7 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Composite_physical_entity -->
@@ -789,7 +789,7 @@
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Custom_physical_entity"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Computation -->
@@ -798,7 +798,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Computational_model_component -->
@@ -807,7 +807,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#SemSim_component"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_dependency -->
@@ -816,7 +816,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_dependency"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_entity -->
@@ -825,7 +825,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_process -->
@@ -834,7 +834,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_process"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_property -->
@@ -843,7 +843,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_property"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Data_structure -->
@@ -851,7 +851,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Data_structure">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Decimal -->
@@ -860,7 +860,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Integer"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Integer -->
@@ -868,7 +868,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Integer">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#MMLchoice -->
@@ -876,7 +876,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#MMLchoice">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_dependency -->
@@ -887,7 +887,7 @@
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_entity -->
@@ -897,7 +897,7 @@
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_model_component -->
@@ -905,7 +905,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_model_component">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#SemSim_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_process -->
@@ -914,7 +914,7 @@
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
         <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_property -->
@@ -922,7 +922,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_property">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Real -->
@@ -930,7 +930,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Real">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_dependency -->
@@ -938,7 +938,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_dependency">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_entity -->
@@ -946,7 +946,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_entity">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_process -->
@@ -954,7 +954,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_process">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_property -->
@@ -962,7 +962,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_property">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Relational_constraint -->
@@ -970,13 +970,13 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Relational_constraint">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#SemSim_component -->
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SemSim_component"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Submodel -->
@@ -984,7 +984,7 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Submodel">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
     </owl:Class>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim#Unit_of_measurement -->
@@ -992,10 +992,10 @@
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Unit_of_measurement">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
     </owl:Class>
-    
 
 
-    <!-- 
+
+    <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
     // Individuals
@@ -1003,7 +1003,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria -->
@@ -1023,7 +1023,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_computation -->
@@ -1092,7 +1092,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_dependency -->
@@ -1102,7 +1102,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_property -->
@@ -1112,7 +1112,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles -->
@@ -1132,7 +1132,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_computation -->
@@ -1214,7 +1214,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_dependency -->
@@ -1224,7 +1224,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_property -->
@@ -1234,7 +1234,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_aortic_valve -->
@@ -1266,7 +1266,7 @@
         <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_aortic_valve"/>
         <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_0"/>
     </owl:Axiom>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_mitral_valve -->
@@ -1276,7 +1276,7 @@
         <rdfs:label xml:lang="en">Blood flow through mitral valve</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_pulmonary_arteries_and_capillaries -->
@@ -1286,7 +1286,7 @@
         <rdfs:label xml:lang="en">Blood flow through pulmonary arteries and capillaries</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_pulmonary_valve -->
@@ -1296,7 +1296,7 @@
         <rdfs:label xml:lang="en">Blood flow through pulmonary valve</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_pulmonary_veins -->
@@ -1306,7 +1306,7 @@
         <rdfs:label xml:lang="en">Blood flow through pulmonary veins</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_systemic_arteries_and_capillaries -->
@@ -1316,7 +1316,7 @@
         <rdfs:label xml:lang="en">Blood flow through systemic arteries and capillaries</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_systemic_veins -->
@@ -1326,7 +1326,7 @@
         <rdfs:label xml:lang="en">Blood flow through systemic veins</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Blood_flow_through_tricuspid_valve -->
@@ -1336,7 +1336,7 @@
         <rdfs:label xml:lang="en">Blood flow through tricuspid valve</rdfs:label>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps -->
@@ -1352,7 +1352,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_computation"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2FmmHg"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_computation -->
@@ -1366,7 +1366,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_dependency -->
@@ -1376,7 +1376,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_property -->
@@ -1388,7 +1388,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins -->
@@ -1404,7 +1404,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_computation"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2FmmHg"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_computation -->
@@ -1418,7 +1418,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_dependency -->
@@ -1428,7 +1428,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_property -->
@@ -1440,7 +1440,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps -->
@@ -1456,7 +1456,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_computation"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2FmmHg"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_computation -->
@@ -1470,7 +1470,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_dependency -->
@@ -1480,7 +1480,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_property -->
@@ -1492,7 +1492,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins -->
@@ -1508,7 +1508,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_computation"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2FmmHg"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_computation -->
@@ -1522,7 +1522,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_dependency -->
@@ -1532,7 +1532,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_property -->
@@ -1544,7 +1544,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput -->
@@ -1562,7 +1562,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_L%2Fmin"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At -->
@@ -1579,7 +1579,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_L%2Fmin%2Fsec"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_computation -->
@@ -1611,7 +1611,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_dependency"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_dependency -->
@@ -1621,7 +1621,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_property -->
@@ -1631,7 +1631,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_computation -->
@@ -1662,7 +1662,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_dependency -->
@@ -1672,7 +1672,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_property -->
@@ -1685,7 +1685,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Cavity_of_left_atrium_0 -->
@@ -1696,7 +1696,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cavity_of_left_atrium</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_6"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Cavity_of_left_ventricle_0 -->
@@ -1707,7 +1707,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cavity_of_left_ventricle</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_1"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Cavity_of_right_atrium_0 -->
@@ -1718,7 +1718,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cavity_of_right_atrium</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_3"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Cavity_of_right_ventricle_0 -->
@@ -1729,7 +1729,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cavity_of_right_ventricle</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_2"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV -->
@@ -1747,7 +1747,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_computation -->
@@ -1766,7 +1766,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_dependency -->
@@ -1776,7 +1776,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_property -->
@@ -1786,7 +1786,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV -->
@@ -1804,7 +1804,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_computation -->
@@ -1823,7 +1823,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_dependency -->
@@ -1833,7 +1833,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_property -->
@@ -1843,7 +1843,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EDVRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA -->
@@ -1860,7 +1860,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_computation -->
@@ -1889,7 +1889,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_dependency -->
@@ -1899,7 +1899,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_property -->
@@ -1911,7 +1911,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV -->
@@ -1928,7 +1928,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_computation -->
@@ -1957,7 +1957,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_dependency -->
@@ -1967,7 +1967,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_property -->
@@ -1979,7 +1979,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ELV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA -->
@@ -1996,7 +1996,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_computation -->
@@ -2025,7 +2025,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_dependency -->
@@ -2035,7 +2035,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_property -->
@@ -2047,7 +2047,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV -->
@@ -2064,7 +2064,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_computation -->
@@ -2093,7 +2093,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_dependency -->
@@ -2103,7 +2103,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_property -->
@@ -2115,7 +2115,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ERV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA -->
@@ -2131,7 +2131,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_computation -->
@@ -2145,7 +2145,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_dependency -->
@@ -2155,7 +2155,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_property -->
@@ -2165,7 +2165,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV -->
@@ -2181,7 +2181,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_computation -->
@@ -2195,7 +2195,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_dependency -->
@@ -2205,7 +2205,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_property -->
@@ -2215,7 +2215,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA -->
@@ -2231,7 +2231,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_computation -->
@@ -2245,7 +2245,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_dependency -->
@@ -2255,7 +2255,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_property -->
@@ -2265,7 +2265,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV -->
@@ -2281,7 +2281,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_computation -->
@@ -2295,7 +2295,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_dependency -->
@@ -2305,7 +2305,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_property -->
@@ -2315,7 +2315,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EmaxRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA -->
@@ -2331,7 +2331,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_computation -->
@@ -2345,7 +2345,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_dependency -->
@@ -2355,7 +2355,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_property -->
@@ -2365,7 +2365,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV -->
@@ -2381,7 +2381,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_computation -->
@@ -2395,7 +2395,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_dependency -->
@@ -2405,7 +2405,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_property -->
@@ -2415,7 +2415,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA -->
@@ -2431,7 +2431,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_computation -->
@@ -2445,7 +2445,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_dependency -->
@@ -2455,7 +2455,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_property -->
@@ -2465,7 +2465,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV -->
@@ -2481,7 +2481,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_computation -->
@@ -2495,7 +2495,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_dependency -->
@@ -2505,7 +2505,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_property -->
@@ -2515,7 +2515,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve -->
@@ -2534,7 +2534,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_computation -->
@@ -2571,7 +2571,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_dependency -->
@@ -2581,7 +2581,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_property -->
@@ -2594,7 +2594,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FAorticValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve -->
@@ -2612,7 +2612,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_computation -->
@@ -2649,7 +2649,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_dependency -->
@@ -2659,7 +2659,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_property -->
@@ -2672,7 +2672,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FMitralValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps -->
@@ -2690,7 +2690,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_computation -->
@@ -2715,7 +2715,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_dependency -->
@@ -2725,7 +2725,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_property -->
@@ -2738,7 +2738,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve -->
@@ -2756,7 +2756,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_computation -->
@@ -2793,7 +2793,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_dependency -->
@@ -2803,7 +2803,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_property -->
@@ -2816,7 +2816,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins -->
@@ -2834,7 +2834,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_computation -->
@@ -2859,7 +2859,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_dependency -->
@@ -2869,7 +2869,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_property -->
@@ -2882,7 +2882,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps -->
@@ -2900,7 +2900,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_computation -->
@@ -2925,7 +2925,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_dependency -->
@@ -2935,7 +2935,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_property -->
@@ -2948,7 +2948,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins -->
@@ -2966,7 +2966,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_computation -->
@@ -2991,7 +2991,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_dependency -->
@@ -3001,7 +3001,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_property -->
@@ -3014,7 +3014,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve -->
@@ -3032,7 +3032,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_computation -->
@@ -3069,7 +3069,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_dependency -->
@@ -3079,7 +3079,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_property -->
@@ -3092,7 +3092,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#FTricuspidValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR -->
@@ -3111,7 +3111,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_1%2Fmin"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_computation -->
@@ -3125,7 +3125,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_dependency -->
@@ -3135,7 +3135,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_property -->
@@ -3148,7 +3148,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#heart_contraction"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_aorta_0 -->
@@ -3159,7 +3159,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Lumen_of_aorta</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_9"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_cardiovascular_system_0 -->
@@ -3170,7 +3170,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Lumen_of_cardiovascular_system</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_7"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_pulmonary_arteries_and_capillaries_0 -->
@@ -3180,7 +3180,7 @@
         <rdfs:label xml:lang="en">Lumen of pulmonary arteries and capillaries</rdfs:label>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_5"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_pulmonary_venous_tree_organ_0 -->
@@ -3191,7 +3191,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Lumen_of_pulmonary_venous_tree_organ</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_4"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_systemic_arteries_and_capillaries_0 -->
@@ -3201,7 +3201,7 @@
         <rdfs:label xml:lang="en">Lumen of systemic arteries and capillaries</rdfs:label>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_0"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Lumen_of_systemic_venous_tree_organ_0 -->
@@ -3212,7 +3212,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Lumen_of_systemic_venous_tree_organ</SemSim:refersTo>
         <ro:contains rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_8"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA -->
@@ -3230,7 +3230,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_computation -->
@@ -3255,7 +3255,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_dependency -->
@@ -3265,7 +3265,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_property -->
@@ -3278,7 +3278,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLA_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_6"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV -->
@@ -3296,7 +3296,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_computation -->
@@ -3321,7 +3321,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_dependency -->
@@ -3331,7 +3331,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_property -->
@@ -3344,7 +3344,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PLV_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_1"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps -->
@@ -3362,7 +3362,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_computation -->
@@ -3387,7 +3387,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_dependency -->
@@ -3397,7 +3397,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_property -->
@@ -3410,7 +3410,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulArtCaps_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_5"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins -->
@@ -3428,7 +3428,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_computation -->
@@ -3453,7 +3453,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_dependency -->
@@ -3463,7 +3463,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_property -->
@@ -3476,7 +3476,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PPulVeins_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_4"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA -->
@@ -3494,7 +3494,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_computation -->
@@ -3519,7 +3519,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_dependency -->
@@ -3529,7 +3529,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_property -->
@@ -3542,7 +3542,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRA_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_3"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV -->
@@ -3560,7 +3560,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_computation -->
@@ -3585,7 +3585,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_dependency -->
@@ -3595,7 +3595,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_property -->
@@ -3608,7 +3608,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRV_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_2"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint -->
@@ -3628,7 +3628,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_sec"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_computation -->
@@ -3642,7 +3642,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_dependency -->
@@ -3652,7 +3652,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_property -->
@@ -3662,7 +3662,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PRint_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins -->
@@ -3680,7 +3680,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_computation -->
@@ -3705,7 +3705,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_dependency -->
@@ -3715,7 +3715,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_property -->
@@ -3728,7 +3728,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_8"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta -->
@@ -3746,7 +3746,7 @@
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_computation -->
@@ -3771,7 +3771,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_dependency -->
@@ -3781,7 +3781,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_property -->
@@ -3794,7 +3794,7 @@
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_dependency"/>
         <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_9"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_0 -->
@@ -3807,7 +3807,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_systemic_arteries_and_capillaries"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_1 -->
@@ -3821,7 +3821,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_left_ventricle"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_2 -->
@@ -3835,7 +3835,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_right_ventricle"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_3 -->
@@ -3849,7 +3849,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_right_atrium"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_4 -->
@@ -3863,7 +3863,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_pulmonary_venous_tree_organ"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_5 -->
@@ -3877,7 +3877,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_pulmonary_arteries_and_capillaries"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_6 -->
@@ -3891,7 +3891,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_left_atrium"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_7 -->
@@ -3904,7 +3904,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_cardiovascular_system"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_8 -->
@@ -3918,7 +3918,7 @@
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_systemic_venous_tree_organ"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_9 -->
@@ -3931,7 +3931,7 @@
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta_property"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_aorta"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_left_atrium -->
@@ -3940,7 +3940,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_6"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_left_ventricle -->
@@ -3949,7 +3949,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_1"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_right_atrium -->
@@ -3958,7 +3958,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_3"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Cavity_of_right_ventricle -->
@@ -3967,7 +3967,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_2"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_aorta -->
@@ -3976,7 +3976,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_9"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_cardiovascular_system -->
@@ -3985,7 +3985,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_7"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_pulmonary_arteries_and_capillaries -->
@@ -3994,7 +3994,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_5"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_pulmonary_venous_tree_organ -->
@@ -4003,7 +4003,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_4"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_systemic_arteries_and_capillaries -->
@@ -4012,7 +4012,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_0"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_contained_in_Lumen_of_systemic_venous_tree_organ -->
@@ -4021,7 +4021,7 @@
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
         <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Portion_of_blood_8"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve -->
@@ -4037,7 +4037,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_computation -->
@@ -4051,7 +4051,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_dependency -->
@@ -4061,7 +4061,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_property -->
@@ -4073,7 +4073,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RAorticValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve -->
@@ -4089,7 +4089,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_computation -->
@@ -4103,7 +4103,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_dependency -->
@@ -4113,7 +4113,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_property -->
@@ -4125,7 +4125,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RMitralValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps -->
@@ -4141,7 +4141,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_computation -->
@@ -4155,7 +4155,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_dependency -->
@@ -4165,7 +4165,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_property -->
@@ -4177,7 +4177,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve -->
@@ -4193,7 +4193,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_computation -->
@@ -4207,7 +4207,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_dependency -->
@@ -4217,7 +4217,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_property -->
@@ -4229,7 +4229,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins -->
@@ -4245,7 +4245,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_computation -->
@@ -4259,7 +4259,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_dependency -->
@@ -4269,7 +4269,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_property -->
@@ -4281,7 +4281,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins -->
@@ -4297,7 +4297,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_computation -->
@@ -4311,7 +4311,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_dependency -->
@@ -4321,7 +4321,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_property -->
@@ -4333,7 +4333,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve -->
@@ -4349,7 +4349,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_computation -->
@@ -4363,7 +4363,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_dependency -->
@@ -4373,7 +4373,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_property -->
@@ -4385,7 +4385,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap -->
@@ -4401,7 +4401,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_property"/>
         <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_computation -->
@@ -4415,7 +4415,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_dependency -->
@@ -4425,7 +4425,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_property -->
@@ -4437,7 +4437,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_1%2Fmin -->
@@ -4447,7 +4447,7 @@
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1/min</SemSim:hasComputationalCode>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_L%2Fmin -->
@@ -4457,7 +4457,7 @@
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">L/min</SemSim:hasComputationalCode>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_L%2Fmin%2Fsec -->
@@ -4467,7 +4467,7 @@
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">L/min/sec</SemSim:hasComputationalCode>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CardiacOutput%3At"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_dimensionless -->
@@ -4478,7 +4478,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncAtria"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#ActFuncVentricles"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml -->
@@ -4514,7 +4514,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2FmmHg -->
@@ -4527,7 +4527,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysArtCaps"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#CSysVeins"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_ml%2Fsec -->
@@ -4552,7 +4552,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg -->
@@ -4569,7 +4569,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#PSysVeins"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Paorta"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Asec%2Fml -->
@@ -4586,7 +4586,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#RTricuspidValve"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Rartcap"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_mmHg%2Fml -->
@@ -4607,7 +4607,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRA"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#EminRV"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#UNIT_sec -->
@@ -4621,7 +4621,7 @@
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max"/>
         <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA -->
@@ -4640,7 +4640,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At -->
@@ -4656,7 +4656,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_computation -->
@@ -4676,7 +4676,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_dependency -->
@@ -4686,7 +4686,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_property -->
@@ -4698,7 +4698,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_computation -->
@@ -4717,7 +4717,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_dependency -->
@@ -4727,7 +4727,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_property -->
@@ -4740,7 +4740,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV -->
@@ -4759,7 +4759,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At -->
@@ -4775,7 +4775,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_computation -->
@@ -4795,7 +4795,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_dependency -->
@@ -4805,7 +4805,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_property -->
@@ -4817,7 +4817,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_computation -->
@@ -4836,7 +4836,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_dependency -->
@@ -4846,7 +4846,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_property -->
@@ -4859,7 +4859,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps -->
@@ -4878,7 +4878,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At -->
@@ -4894,7 +4894,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_computation -->
@@ -4914,7 +4914,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_dependency -->
@@ -4924,7 +4924,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_property -->
@@ -4936,7 +4936,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_computation -->
@@ -4955,7 +4955,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_dependency -->
@@ -4965,7 +4965,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_property -->
@@ -4978,7 +4978,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins -->
@@ -4997,7 +4997,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At -->
@@ -5013,7 +5013,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_computation -->
@@ -5033,7 +5033,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_dependency -->
@@ -5043,7 +5043,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_property -->
@@ -5055,7 +5055,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_computation -->
@@ -5074,7 +5074,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_dependency -->
@@ -5084,7 +5084,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_property -->
@@ -5097,7 +5097,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA -->
@@ -5116,7 +5116,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At -->
@@ -5132,7 +5132,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_computation -->
@@ -5152,7 +5152,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_dependency -->
@@ -5162,7 +5162,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_property -->
@@ -5174,7 +5174,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_computation -->
@@ -5193,7 +5193,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_dependency -->
@@ -5203,7 +5203,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_property -->
@@ -5216,7 +5216,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV -->
@@ -5235,7 +5235,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At -->
@@ -5251,7 +5251,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_computation -->
@@ -5271,7 +5271,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_dependency -->
@@ -5281,7 +5281,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_property -->
@@ -5293,7 +5293,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_computation -->
@@ -5312,7 +5312,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_dependency -->
@@ -5322,7 +5322,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_property -->
@@ -5335,7 +5335,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps -->
@@ -5354,7 +5354,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At -->
@@ -5370,7 +5370,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_computation -->
@@ -5390,7 +5390,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_dependency -->
@@ -5400,7 +5400,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_property -->
@@ -5412,7 +5412,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_computation -->
@@ -5431,7 +5431,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_dependency -->
@@ -5441,7 +5441,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_property -->
@@ -5454,7 +5454,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins -->
@@ -5473,7 +5473,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At -->
@@ -5489,7 +5489,7 @@
         <SemSim:isInputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_computation"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_computation -->
@@ -5509,7 +5509,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_dependency -->
@@ -5519,7 +5519,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_property -->
@@ -5531,7 +5531,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_computation -->
@@ -5550,7 +5550,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins%3At"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_dependency -->
@@ -5560,7 +5560,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_property -->
@@ -5573,7 +5573,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA -->
@@ -5590,7 +5590,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_property"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_computation -->
@@ -5623,7 +5623,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_dependency -->
@@ -5633,7 +5633,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_property -->
@@ -5643,7 +5643,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd -->
@@ -5659,7 +5659,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_computation -->
@@ -5673,7 +5673,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_dependency -->
@@ -5683,7 +5683,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_property -->
@@ -5693,7 +5693,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs -->
@@ -5709,7 +5709,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_computation -->
@@ -5723,7 +5723,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_dependency -->
@@ -5733,7 +5733,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_property -->
@@ -5743,7 +5743,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLAs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV -->
@@ -5760,7 +5760,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_property"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_computation -->
@@ -5793,7 +5793,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_dependency -->
@@ -5803,7 +5803,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_property -->
@@ -5813,7 +5813,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd -->
@@ -5829,7 +5829,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_computation -->
@@ -5843,7 +5843,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_dependency -->
@@ -5853,7 +5853,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_property -->
@@ -5863,7 +5863,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs -->
@@ -5879,7 +5879,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_computation -->
@@ -5893,7 +5893,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_dependency -->
@@ -5903,7 +5903,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_property -->
@@ -5913,7 +5913,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestLVs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps -->
@@ -5929,7 +5929,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_computation -->
@@ -5943,7 +5943,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_dependency -->
@@ -5953,7 +5953,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_property -->
@@ -5963,7 +5963,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins -->
@@ -5979,7 +5979,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_computation -->
@@ -5993,7 +5993,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_dependency -->
@@ -6003,7 +6003,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_property -->
@@ -6013,7 +6013,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestPulVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA -->
@@ -6030,7 +6030,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_property"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_computation -->
@@ -6063,7 +6063,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_dependency -->
@@ -6073,7 +6073,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_property -->
@@ -6083,7 +6083,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRA_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd -->
@@ -6099,7 +6099,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_computation -->
@@ -6113,7 +6113,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_dependency -->
@@ -6123,7 +6123,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_property -->
@@ -6133,7 +6133,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs -->
@@ -6149,7 +6149,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_computation -->
@@ -6163,7 +6163,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_dependency -->
@@ -6173,7 +6173,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_property -->
@@ -6183,7 +6183,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRAs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV -->
@@ -6200,7 +6200,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_property"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_computation -->
@@ -6233,7 +6233,7 @@
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd"/>
         <SemSim:hasInput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_dependency -->
@@ -6243,7 +6243,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_property -->
@@ -6253,7 +6253,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRV_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd -->
@@ -6269,7 +6269,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_computation -->
@@ -6283,7 +6283,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_dependency -->
@@ -6293,7 +6293,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_property -->
@@ -6303,7 +6303,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVd_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs -->
@@ -6319,7 +6319,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_computation -->
@@ -6333,7 +6333,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_dependency -->
@@ -6343,7 +6343,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_property -->
@@ -6353,7 +6353,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestRVs_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps -->
@@ -6369,7 +6369,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_computation -->
@@ -6383,7 +6383,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_dependency -->
@@ -6393,7 +6393,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_property -->
@@ -6403,7 +6403,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysArtCaps_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins -->
@@ -6419,7 +6419,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_computation -->
@@ -6433,7 +6433,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_dependency -->
@@ -6443,7 +6443,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_property -->
@@ -6453,7 +6453,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#VrestSysVeins_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal -->
@@ -6469,7 +6469,7 @@
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_property"/>
         <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation -->
@@ -6519,7 +6519,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_dependency -->
@@ -6529,7 +6529,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_property -->
@@ -6542,13 +6542,13 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#Vtotal_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#_0"/>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#heart_contraction -->
@@ -6559,7 +6559,7 @@
         <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.obolibrary.org/obo/GO_0060047</SemSim:refersTo>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#HR_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t -->
@@ -6625,7 +6625,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta -->
@@ -6642,7 +6642,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_computation -->
@@ -6656,7 +6656,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_dependency -->
@@ -6666,7 +6666,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_property -->
@@ -6676,7 +6676,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.delta_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max -->
@@ -6691,7 +6691,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_computation -->
@@ -6705,7 +6705,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_dependency -->
@@ -6715,7 +6715,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_property -->
@@ -6725,7 +6725,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.max_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min -->
@@ -6740,7 +6740,7 @@
         <SemSim:isOutputFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_computation"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_computation -->
@@ -6754,7 +6754,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_dependency -->
@@ -6764,7 +6764,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_property -->
@@ -6774,7 +6774,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min"/>
         <SemSim:isDeterminedBy rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t.min_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_computation -->
@@ -6784,7 +6784,7 @@
         <SemSim:hasOutput rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t"/>
         <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_dependency"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_dependency -->
@@ -6794,7 +6794,7 @@
         <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_computation"/>
         <SemSim:determines rdf:resource="http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_property"/>
     </owl:NamedIndividual>
-    
+
 
 
     <!-- http://www.bhi.washington.edu/SemSim/04042013092358408m0700#t_property -->
@@ -6809,4 +6809,3 @@
 
 
 <!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
-
