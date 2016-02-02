@@ -143,10 +143,20 @@ li.searchResultSet li:hover {
 
 #activeTaskPanel {
 	bottom: 30px;
-	padding: 30px;
+	height: 30px;
 	display: none;
+	background-color: #D3D3D3;
 }
 
 .modal-body {
 	height: 80vh;
+}
+
+.blink {
+	color: white;
+	animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+	50% { opacity: 0.0; }
 }

@@ -114,11 +114,23 @@ function Stage(graph) {
 		}
 	});
 
-
 	// Slide up panel for Active Task Tray
 	$("#activeTaskTray").click(function() {
 		$("#activeTaskPanel").slideToggle();
 	});
+
+	// Preview merge resolutions
+	$("#previewMergeBtn").click(function() {
+		$("#activeTaskText").addClass('blink');
+		$("#activeTaskPanel").append('<img id="mergerIcon" src="../../src/semgen/icons/mergeicon2020.png" />')
+	});
+
+	// Quit merger
+	$("#quitMergerBtn").click(function() {
+		// TODO Warning dialog before quitting
+		$("#activeTaskText").removeClass('blink');
+		$("#mergerIcon").remove();
+	})
 
 }
 

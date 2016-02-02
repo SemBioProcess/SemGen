@@ -146,8 +146,8 @@
 		</div>
 
 		<!-- Active Task Tray -->
-		<div id="activeTaskTray">Active Tasks</div>
-		<div id="activeTaskPanel">Currently active tasks will be displayed here.</div>
+		<div id="activeTaskTray"><span id="activeTaskText">Active Tasks</span></div>
+		<div id="activeTaskPanel"></div>
 
 		<!-- Merger mode modal -->
 		<div id="mergerModal" class="modal fade" data-keyboard="false" data-backdrop="static">
@@ -156,7 +156,6 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title">Merger</h4>
 					</div>
 					<div class="modal-body">
@@ -167,7 +166,8 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Hide</button>
+						<button id="previewMergeBtn" type="button" class="btn btn-default" data-dismiss="modal">Preview merge</button>
+						<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
 					</div>
 				</div>
 
