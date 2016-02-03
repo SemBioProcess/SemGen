@@ -331,11 +331,13 @@ public class SemSimOWLreader extends ModelReader {
 					String startval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.HAS_START_VALUE_URI.toString());
 					if(!startval.equals("")) ds.setStartValue(startval);
 					
+					ds.setDeclared(true);
 					String isdeclared = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_DECLARED_URI.toString());
-					ds.setDeclared(Boolean.parseBoolean(isdeclared));
+					if( ! Boolean.parseBoolean(isdeclared)) ds.setDeclared(false);
 					
+					ds.setIsSolutionDomain(false);
 					String issoldom = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString());
-					ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
+					if( Boolean.parseBoolean(issoldom)) ds.setIsSolutionDomain(true);
 					
 					String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimConstants.METADATA_ID_URI.toString());
 					if(!metadataid.equals("")) ds.setMetadataID(metadataid);

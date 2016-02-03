@@ -288,8 +288,15 @@ public class SemSimOWLwriter extends ModelWriter {
 				SemSimOWLFactory.setIndObjectProperty(ont, dsuri, namespace + SemSimOWLFactory.URIencoding(ds.getSolutionDomain().getName()),
 						base + "hasSolutionDomain", base + "solutionDomainFor", manager);
 			}
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString(), ds.isSolutionDomain(), manager);
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DECLARED_URI.toString(), ds.isDeclared(), manager);
+			
+			// Only write out solution domain info if the data structure is a solution domain
+			if(ds.isSolutionDomain())
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_SOLUTION_DOMAIN_URI.toString(), ds.isSolutionDomain(), manager);
+			
+			// Only write out isDeclared info if the data structure is NOT declared
+			if( ! ds.isDeclared())
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.IS_DECLARED_URI.toString(), ds.isDeclared(), manager);
+			
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimConstants.METADATA_ID_URI.toString(), ds.getMetadataID(), manager);
 			
 			// Assert CellML-type mappings between data structures
@@ -371,8 +378,10 @@ public class SemSimOWLwriter extends ModelWriter {
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			Boolean toplevelimport = false;
 			Boolean sublevelimport = false;
+			
 			if(sub.isFunctional()){
 				FunctionalSubmodel fsub = (FunctionalSubmodel)sub;
+				
 				if(fsub.isImported() && fsub.getParentImport()==null){
 					toplevelimport = true;
 				}
@@ -381,7 +390,8 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 			}
 			
-			if(!sublevelimport){
+			if(! sublevelimport){
+				
 				// Create the individual
 				String indstr = namespace + SemSimOWLFactory.URIencoding(sub.getName());
 				SemSimOWLFactory.createSemSimIndividual(ont, indstr, factory.getOWLClass(IRI.create(SemSimConstants.SUBMODEL_CLASS_URI)), "", manager);
@@ -397,6 +407,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 				
 				if(!toplevelimport){
+					
 					// If a functional sub-model, store computation.
 					if(sub instanceof FunctionalSubmodel){
 						SemSimOWLFactory.createSemSimIndividual(ont, indstr + "_computation", factory.getOWLClass(IRI.create(SemSimConstants.COMPUTATION_CLASS_URI)), "", manager);

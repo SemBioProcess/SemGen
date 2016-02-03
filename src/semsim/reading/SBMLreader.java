@@ -32,7 +32,6 @@ import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.Unit;
-import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.JSBML;
 import org.semanticweb.owlapi.model.OWLException;

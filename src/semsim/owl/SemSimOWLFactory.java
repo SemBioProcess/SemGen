@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
@@ -550,7 +551,7 @@ public class SemSimOWLFactory {
 	public static Set<Submodel> traverseNestedComponentTreeForDataStructures(Submodel sub) {
 	    // traverse all nodes that belong to the parent
 		Set<Submodel> nodes  = new HashSet<Submodel>();
-		Set<Submodel> set = sub.getSubmodels();
+		ArrayList<Submodel> set = sub.getSubmodels();
 	    for(Submodel node : set){
 		    // store node information
 		    nodes.add(node);

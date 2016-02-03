@@ -1,6 +1,7 @@
 package semsim.extraction;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -354,7 +355,7 @@ public class Extraction {
 			extractedmodel.addSubmodel(newsub);
 			
 			// Associate submodel with the copies of the data structures it was previously associated with
-			Set<DataStructure> tempdsset = new HashSet<DataStructure>();
+			ArrayList<DataStructure> tempdsset = new ArrayList<DataStructure>();
 			
 			for(DataStructure ds : newsub.getAssociatedDataStructures()){
 				String dsname = ds.getName();
