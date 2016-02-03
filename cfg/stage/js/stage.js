@@ -122,7 +122,8 @@ function Stage(graph) {
 	// Preview merge resolutions
 	$("#previewMergeBtn").click(function() {
 		$("#activeTaskText").addClass('blink');
-		$("#activeTaskPanel").append('<img id="mergerIcon" src="../../src/semgen/icons/mergeicon2020.png" />')
+		if($("#mergerIcon").length == 0	)
+			$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	});
 
 	// Quit merger
