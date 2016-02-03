@@ -36,7 +36,7 @@ public abstract class Node {
 	public static String buildId(String name, String parentModelId) {
 		return parentModelId + name;
 	}
-	//Dependency type map
+	//Dependency type array
 	protected static ArrayList<String> deptypes;
 	
 	static {

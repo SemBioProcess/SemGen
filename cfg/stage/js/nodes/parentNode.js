@@ -3,6 +3,8 @@
  */
 ParentNode.prototype = new Node();
 ParentNode.prototype.constructor = ParentNode;
+ParentNode.prototype.color = "";
+
 function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, charge) {
 	Node.prototype.constructor.call(this, graph, name, parent, links, r, group, textSize, nodeType, charge);
 	this.userCanHide = false;

@@ -6,9 +6,12 @@
 
 	var defaultcharge = -300;
 
+	var ShowSubmodels = 0;
+	var ShowDependencies = 1;
+	var ShowPhysioMap = 2;
+	
 function Graph() {
 	var graph = this;
-	
 
 	// Get the stage and style it
 	var svg = d3.select("#stage")
@@ -38,7 +41,9 @@ function Graph() {
 	//array for storing which dependency node types are currently shown
 	//State, rate, constituative
 	this.activedeptypes = [true, true, false];
-
+	this.activephysmaptypes = [true, true, true];
+	this.vismode = ShowSubmodels;
+	
 	// Add a node to the graph
 	this.addNode = function (nodeData) {
 		if(!nodeData)
@@ -155,6 +160,7 @@ function Graph() {
 	
 	// Hide all nodes of the given type
 	this.hideNodes = function (type) {
+		sender.consoleOut("fire");
 		this.activedeptypes[typeToGroup[type]] = false;
 		var nodesToHide = [];
 		nodes.forEach(function (node) {

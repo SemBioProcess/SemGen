@@ -41,7 +41,7 @@ function Stage(graph) {
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
-		
+		graph.vismode = ShowDependencies;
 		var modelNode = main.task.getModelNode(modelName);
 		main.task.addChildNodes(modelNode, dependencyNodeData, function (data) {
 			return new DependencyNode(main.graph, data, modelNode);
@@ -51,7 +51,7 @@ function Stage(graph) {
 	// Adds a submodel network to the d3 graph
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
-		
+		graph.vismode = ShowSubmodels;
 		var modelNode = main.task.getModelNode(modelName);
 		main.task.addChildNodes(modelNode, submodelData, function (data) {
 			return new SubmodelNode(main.graph, data, modelNode);
@@ -61,6 +61,7 @@ function Stage(graph) {
 	// Adds a PhysioMap network to the d3 graph
 	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
 		console.log("Showing PhysioMap for model " + modelName);
+		graph.vismode = ShowPhysioMap;
 		
 		var modelNode = main.task.getModelNode(modelName);
 		main.task.addChildNodes(modelNode, physiomapData, function (data) {

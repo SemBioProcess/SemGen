@@ -2,6 +2,7 @@
  * 
  */
 
+//Global objects
 var sender;
 var receiver;
 var main;
@@ -36,4 +37,5 @@ $(window).bind("cwb-initialized", function(e) {
 	
 
 });
+
 

@@ -1,7 +1,9 @@
 /**
  * Represents a node in the d3 graph
  */
-function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
+Node.prototype.color = "";
+
+function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	if(!graph)
 		return;
 
@@ -10,7 +12,6 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.id = name;
 	this.displayName = name;
 	this.r = r;
-	this.color = color;
 	this.textSize = textSize;
 	this.nodeType = nodeType;
 	this.charge = charge;
@@ -32,6 +33,8 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	}
 }
 
+
+
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
 }
@@ -51,7 +54,6 @@ Node.prototype.addBehavior = function (behavior) {
 
 Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
-
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
     	.style("fill", this.color)

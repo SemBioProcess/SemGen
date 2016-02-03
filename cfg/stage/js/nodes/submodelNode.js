@@ -3,6 +3,7 @@
  */
 SubmodelNode.prototype = new ParentNode();
 SubmodelNode.prototype.constructor = ParentNode;
+SubmodelNode.prototype.color = "#CA9485";
 function SubmodelNode (graph, data, parent) {
 	// Add all dependency node inputs to this node
 	// so it references the correct nodes
@@ -14,7 +15,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 	
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, "#CA9485", 16, "Submodel", defaultcharge);
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, 16, "Submodel", defaultcharge);
 	this.dependencies = data.dependencies;
 	this.dependencytypecount = data.deptypecounts;
 
@@ -44,6 +45,7 @@ SubmodelNode.prototype.onDoubleClick = function () {
 				return new DependencyNode(node.graph, data, node);
 			});
 		}
-		
-
+	
 }
+
+var submodelKey = {nodeType: "Submodel", color: SubmodelNode.prototype.color, canShowHide: false};
