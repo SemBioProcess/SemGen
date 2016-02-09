@@ -119,8 +119,10 @@ function Stage(graph) {
 		$("#activeTaskPanel").slideToggle();
 	});
 
+	//TODO: Move these out to a separate mergerMode.js file
 	// Preview merge resolutions
 	$("#previewMergeBtn").click(function() {
+		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 		$("#activeTaskText").addClass('blink');
 		if($("#mergerIcon").length == 0	)
 			$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
@@ -128,7 +130,7 @@ function Stage(graph) {
 
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
-		// TODO Warning dialog before quitting
+		// TODO: Warning dialog before quitting
 		$("#activeTaskText").removeClass('blink');
 		$("#mergerIcon").remove();
 	})

@@ -148,8 +148,12 @@ li.searchResultSet li:hover {
 	background-color: #D3D3D3;
 }
 
+.modal-dialog {
+	width: 90vw;
+}
+
 .modal-body {
-	height: 80vh;
+	height: 75vh;
 }
 
 .blink {
