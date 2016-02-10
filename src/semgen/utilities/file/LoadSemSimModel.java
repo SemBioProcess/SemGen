@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jdom.Document;
-import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.UtilIO;
@@ -133,7 +132,7 @@ public class LoadSemSimModel extends SemGenJob {
 
 	// Convert MML model string to SemSim model
 	private SemSimModel loadMML(String srcText, String modelname) throws Xcept, IOException, InterruptedException, OWLException{
-		Document doc = new MMLParser(SemGen.cfgreadpath + "jsimhome").readFromMMLstring(srcText, modelname);
+		Document doc = new MMLParser().readFromMMLstring(srcText, modelname);
 		
 		if (ErrorLog.hasErrors()) return null;
 		
