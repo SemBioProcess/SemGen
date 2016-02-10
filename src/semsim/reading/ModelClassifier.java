@@ -16,13 +16,17 @@ public class ModelClassifier {
 	public static final int SBML_MODEL = 1;
 	public static final int CELLML_MODEL = 2;
 	public static final int MML_MODEL = 3;
+	public static final int PROJ_FILE = 4;
 	
 	public static int classify(File file){
 		int type = -1;
 		try{
-			// get the model's language (SBML, CellML, MML, etc.)
+			
 			if (file.toString().toLowerCase().endsWith(".mod")){
 				type = MML_MODEL;
+			}
+			else if (isJSimProjectFile(file)){
+				type = PROJ_FILE;
 			}
 			else if (file.toString().endsWith(".owl")) {
 				type =  SEMSIM_MODEL;
@@ -39,10 +43,25 @@ public class ModelClassifier {
 					if(isCellMLmodel(file)) type =  CELLML_MODEL;
 			}
 		}
-		catch(Exception e) {
+		catch(JDOMException | IOException e) {
 			e.printStackTrace();
 		} 
 		return type;
+	}
+	
+	private static Boolean isJSimProjectFile(File file){
+		SAXBuilder builder = new SAXBuilder();
+		try{
+			Document doc = builder.build(file);
+			String rootname = doc.getRootElement().getName();
+			if(rootname.equals("JSim")){
+				return true;
+			}
+		}
+		catch(JDOMException | IOException e){
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	private static Boolean isValidSBML(File file){

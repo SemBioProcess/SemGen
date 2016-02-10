@@ -2,19 +2,22 @@ package semgen.utilities.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
+import JSim.util.UtilIO;
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
+import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLParser;
-import semsim.reading.MMLreader;
+import semsim.reading.XMMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
@@ -54,19 +57,10 @@ public class LoadSemSimModel extends SemGenJob {
 		try {
 			switch (modeltype){
 			
-			case ModelClassifier.MML_MODEL:
-				semsimmodel = createModel(file);
-				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
-					setStatus("Annotating Physical Properties");
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-				}
+			case ModelClassifier.SEMSIM_MODEL:
+				semsimmodel = loadSemSimOWL(file);	
 				break;
-					
-			case ModelClassifier.SBML_MODEL:
-				semsimmodel = new SBMLreader(file).readFromFile();			
-				nameOntologyTerms();
-				break;
-				
+			
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(file).readFromFile();
 				nameOntologyTerms();
@@ -76,15 +70,42 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				break;
 				
-			case ModelClassifier.SEMSIM_MODEL:
-				semsimmodel = loadSemSimOWL(file);	
+			case ModelClassifier.SBML_MODEL:
+				semsimmodel = new SBMLreader(file).readFromFile();			
+				nameOntologyTerms();
+				break;
+				
+			case ModelClassifier.MML_MODEL:
+				semsimmodel = loadMML(file);
+				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
+					setStatus("Annotating Physical Properties");
+					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				}
+				break;
+				
+			case ModelClassifier.PROJ_FILE:
+				JSimProjectFileReader projreader = new JSimProjectFileReader(file);
+				ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
+				ProjectFileModelSelectorDialog pfmsd = 
+						new ProjectFileModelSelectorDialog("Select model(s) to open", modelnames);
+
+				for(String modelname : pfmsd.getSelectedModelNames()){
+					String mmlcode = projreader.getModelCode(modelname);
+					semsimmodel = loadMML(mmlcode, modelname);
+					
+					if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
+						setStatus("Annotating Physical Properties");
+						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					}
+					// Need to make this work for multiple models in one PROJ
+				}
 				break;
 				
 			default:
 				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), true, false);
 				return;
 			}
-			}
+		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
@@ -104,17 +125,26 @@ public class LoadSemSimModel extends SemGenJob {
 			ErrorLog.addError(file.getName() + " was an invalid model.", true, false);
 		}
 	}
+
 	
 	public static SemSimModel loadSemSimOWL(File file) throws Exception {
 		return new SemSimOWLreader(file).readFromFile();
 	}
 
-	private SemSimModel createModel(File file) throws Xcept, IOException, InterruptedException, OWLException, JDOMException {
-		Document doc = new MMLParser(SemGen.cfgreadpath + "jsimhome").readFromFile(file);
+	// Convert MML model string to SemSim model
+	private SemSimModel loadMML(String srcText, String modelname) throws Xcept, IOException, InterruptedException, OWLException{
+		Document doc = new MMLParser(SemGen.cfgreadpath + "jsimhome").readFromMMLstring(srcText, modelname);
+		
 		if (ErrorLog.hasErrors()) return null;
 		
-		MMLreader xmml2 = new MMLreader(file, doc);		
-		return xmml2.readFromFile();
+		XMMLreader xmmlreader = new XMMLreader(file, doc, srcText);		
+		return xmmlreader.readFromDocument();
+	}
+	
+	// Convert MML file into SemSim model
+	private SemSimModel loadMML(File file) throws Xcept, IOException, InterruptedException, OWLException {
+	    String srcText = UtilIO.readText(file);
+	    return loadMML(srcText, file.getName());
 	}
 	
 	private void nameOntologyTerms(){

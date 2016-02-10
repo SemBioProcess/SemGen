@@ -13,8 +13,9 @@ public class SemGenFileChooser extends JFileChooser {
 	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, .xml)", "cellml", "xml");
 	public static final FileNameExtensionFilter sbmlfilter = new FileNameExtensionFilter("SBML (*.sbml, .xml)", "sbml", "xml");
 	public static final FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
+	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("PROJ (*.proj)", "proj");
 	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
-	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod"});
+	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj"});
 	
 	private static HashMap<String, FileNameExtensionFilter> filtermap = new HashMap<String, FileNameExtensionFilter>(); 
 	
@@ -40,7 +41,8 @@ public class SemGenFileChooser extends JFileChooser {
 		filtermap.put("cellml", cellmlfilter);
 		filtermap.put("sbml", sbmlfilter);
 		filtermap.put("mml", mmlfilter);
-		filtermap.put("csv", csvfilter);				
+		filtermap.put("proj", projfilter);
+		filtermap.put("csv", csvfilter);
 	}
 	
 	protected FileNameExtensionFilter getFilter(String key) {
