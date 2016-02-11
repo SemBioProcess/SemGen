@@ -3,18 +3,14 @@
  */
 package semgen.annotation.workbench;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
-import semgen.utilities.file.ProjectFileModelSelectorDialog;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelingFileClassifier;
 
 public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	boolean autoannotate = false;
@@ -23,23 +19,8 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 		super("Loading File");
 		autoannotate = aannotate;
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate", true);
+		setModelAccessorsFromSelectedFiles(sgc.getSelectedFiles());
 		
-		for (File file : sgc.getSelectedFiles()) {
-			
-			if(file.getName().toLowerCase().endsWith(".proj")){
-				
-				JSimProjectFileReader projreader = new JSimProjectFileReader(file);
-
-				ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
-				ProjectFileModelSelectorDialog pfmsd = 
-						new ProjectFileModelSelectorDialog("Select model(s) to open", modelnames);
-
-				for(String modelname : pfmsd.getSelectedModelNames()){
-					modelaccessors.add(new ModelAccessor(file, modelname));
-				}
-			}
-			else modelaccessors.add(new ModelAccessor(file));
-		}
 		if (modelaccessors.size()==0) 
 			abort();
 	}
