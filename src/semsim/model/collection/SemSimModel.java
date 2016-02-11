@@ -39,6 +39,7 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.reading.ModelAccessor;
 import semsim.utilities.SemSimCopy;
 import semsim.writing.SemSimOWLwriter;
 
@@ -82,7 +83,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	private String namespace;
 	private int sourceModelType;
-	private String sourcefilelocation;
+	private ModelAccessor sourcefilelocation;
 	private double semsimversion;
 	
 	// Model-specific data
@@ -118,7 +119,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private SemSimModel(SemSimModel ssmtocopy) {
 		super(ssmtocopy);
 		namespace = new String(ssmtocopy.namespace);
-		sourcefilelocation = new String(ssmtocopy.sourcefilelocation);
+		sourcefilelocation = new ModelAccessor(ssmtocopy.sourcefilelocation);
 		sourceModelType = ssmtocopy.sourceModelType;
 		semsimversion = ssmtocopy.semsimversion;
 		importCurationalMetadatafromModel(ssmtocopy, true);
@@ -739,11 +740,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The location of the raw computer source code associated with this model.
 	 */
 	
-	public String getLegacyCodeLocation() {
+	public ModelAccessor getLegacyCodeLocation() {
 		return sourcefilelocation;
 	}
 
-	public void setSourceFileLocation(String sourcefilelocation) {
+	public void setSourceFileLocation(ModelAccessor sourcefilelocation) {
 		this.sourcefilelocation = sourcefilelocation;
 	}
 	

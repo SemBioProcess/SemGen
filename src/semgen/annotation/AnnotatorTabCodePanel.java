@@ -38,6 +38,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTextArea;
+import semsim.reading.ModelAccessor;
 
 public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -58,24 +59,26 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		addMouseListener(new PopupListener());
 		
 		try {
-			setCodeView(workbench.getModelSourceFile());
+			setCodeView(workbench.getModelSourceLocation());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 	
-	public void setCodeView(String modelloc) throws IOException {
+	public void setCodeView(ModelAccessor modelaccessor) throws IOException {
 		Boolean cont = true;
 		setText("");
-		if(modelloc!=null && !modelloc.equals("")){
-			File modelfile = null;
+		String modelloc = "";
+		
+		if(modelaccessor != null){
+			
+			modelloc = modelaccessor.getFullLocation();
+			
 			// If the legacy model code is on the web
-			if (modelloc.startsWith("http://")) {
-				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving legacy code...", false);
+			if (modelaccessor.getFullLocation().startsWith("http://")) {
+				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving code...", false);
 
-				modelfile = new File(modelloc);
-	
-				URL url = new URL(modelloc);
+				URL url = new URL(modelaccessor.getFullLocation());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -96,6 +99,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					urlcon.setDoInput(true);
 					urlcon.setUseCaches(false);
 					urlcon.setReadTimeout(60000);
+					
 					// If there's no file at the URL
 					if(urlcon.getContentLength()>0){
 						BufferedReader d = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
@@ -117,27 +121,21 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				else cont = false;
 				progframe.dispose();
 			}
-			// Otherwise it's a local file
+			
+			// Otherwise it's a local file or within a local file
 			else {
-				modelfile = new File(modelloc);
-				if (modelfile.exists()) {
-					// Read in the model code and append it to the codearea
-					// JTextArea in the top pane
-					String filename = modelfile.getAbsolutePath();
-					Scanner importfilescanner = new Scanner(new File(filename));
-					
-					String nextline;
-					while (importfilescanner.hasNextLine()) {
-						nextline = importfilescanner.nextLine();
-						append(nextline);
-						append("\n");
-						setCaretPosition(0);
-					}
-					importfilescanner.close();
-				} else cont = false;
+				String modelcode = modelaccessor.getModelTextAsString();
+				
+				if (modelcode != null && ! modelcode.equals("")){
+					append(modelcode);
+					append("\n");
+					setCaretPosition(0);
+				} 
+				else cont = false;
 			}
-		} else { 
-			modelloc = "<file location not specified>";
+		} 
+		else { 
+			modelloc = "<model location not specified>";
 			cont = false; 
 		}
 
@@ -283,7 +281,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
 			try {
-				setCodeView(workbench.getModelSourceFile());
+				setCodeView(workbench.getModelSourceLocation());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

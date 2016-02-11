@@ -122,7 +122,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 
 	@Override
-	public String getModelSourceFile() {
+	public ModelAccessor getModelSourceLocation() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
 	
@@ -152,7 +152,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					//TODO: new JSimProjectFileWriter();
 //				}
 			} catch (Exception e) {e.printStackTrace();}		
-			SemGen.logfilewriter.println(modelaccessor.toString() + " was saved");
+			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
 			setModelSaved(true);
 		}
 		else{
@@ -193,7 +193,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			String title = "[unsaved file]";
 			URI fileURI = modelaccessor.getFileThatContainsModel().toURI();
 			if(fileURI!=null){
-				title = modelaccessor.toString();
+				title = modelaccessor.getShortLocation();
 			}
 			int returnval= JOptionPane.showConfirmDialog(null,
 					"Save changes?", title + " has unsaved changes",
@@ -215,8 +215,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return modelaccessor;
 	}
 
-	public void changeModelSourceFile() {
-		modanns.changeModelSourceFile();
+	public void changeModelSourceLocation() {
+		modanns.changeModelSourceLocation();
 	}
 	
 	public void addModelAnnotation(SemSimRelation rel, String ann) {

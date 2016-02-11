@@ -14,7 +14,18 @@ public class ModelAccessor {
 	private File archiveFile;
 	private String modelNameInArchive; 
 	private File standAloneFile;
+	private static final String separator = "#";
 
+	// Copy constructor
+	public ModelAccessor(ModelAccessor matocopy) {
+		
+		if(matocopy.modelIsInStandAloneFile()) this.standAloneFile = matocopy.getStandAloneFile();
+		else if(matocopy.modelIsPartOfArchive()){
+			this.archiveFile = matocopy.archiveFile;
+			this.modelNameInArchive = matocopy.modelNameInArchive;
+		}
+	}
+		
 	// Use this constructor for models that are stored as standalone files
 	public ModelAccessor(File standAloneFile){
 		this.standAloneFile = standAloneFile;
@@ -26,6 +37,18 @@ public class ModelAccessor {
 		this.modelNameInArchive = modelNameInArchive;
 	}
 	
+	// This constructor parses a string input and assigns values to the object's fields
+	public ModelAccessor(String location){
+		if(location.toLowerCase().contains(".proj" + separator)){
+			String archiveloc = location.substring(0, location.indexOf(separator));
+		
+			this.archiveFile = new File(archiveloc);
+			this.modelNameInArchive = location.substring(location.indexOf(separator)+1, location.length());
+			
+			System.out.println(archiveloc + " : " + this.modelNameInArchive);
+		}
+	}
+
 	private File getArchiveFile(){
 		return archiveFile;
 	}
@@ -124,11 +147,20 @@ public class ModelAccessor {
 	
 	// If the model is in a standalone file, the name of the file is returned
 	// otherwise a string with format [name of archive] > [name of model] is returned
-	@Override
-	public String toString(){
+	public String getShortLocation(){
 		
 		if(modelIsInStandAloneFile()) return getStandAloneFile().getName();
-		else if(modelIsPartOfArchive()) return getArchiveFile().getName() + " > " + getModelNameInArchive();
+		else if(modelIsPartOfArchive()) return getArchiveFile().getName() + separator + getModelNameInArchive();
+		
+		return null;
+	}
+	
+	// If the model is in a standalone file, the full path to the file is returned
+    // otherwise a string with format [path to archive] > [name of model] is returned
+	public String getFullLocation(){
+		
+		if(modelIsInStandAloneFile()) return getStandAloneFile().getAbsolutePath();
+		else if(modelIsPartOfArchive()) return getArchiveFile().getAbsolutePath() + separator + getModelNameInArchive();
 		
 		return null;
 	}

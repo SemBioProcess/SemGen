@@ -401,7 +401,7 @@ public class XMMLreader extends ModelReader {
 				
 		// Add the model-level annotations
 		//TODO: change next line so it works
-		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
+		semsimmodel.setSourceFileLocation(modelaccessor);
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error

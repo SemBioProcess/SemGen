@@ -6,13 +6,10 @@
 
 package semgen.utilities;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import semgen.menu.FileMenu;
-import semgen.utilities.file.ProjectFileModelSelectorDialog;
-import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 
 public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  implements Runnable {
@@ -31,26 +28,6 @@ public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  i
 		}
 		return (workbenches.size() > 0);
 	}
-	
-	protected void setModelAccessorsFromSelectedFiles(File[] files){
-		
-		for (File file : files) {
-			
-			if(file.getName().toLowerCase().endsWith(".proj")){
-				
-				JSimProjectFileReader projreader = new JSimProjectFileReader(file);
-				ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
-				ProjectFileModelSelectorDialog pfmsd = 
-						new ProjectFileModelSelectorDialog("Select model(s) to open", modelnames);
-	
-				for(String modelname : pfmsd.getSelectedModelNames()){
-					modelaccessors.add(new ModelAccessor(file, modelname));
-				}
-			}
-			else modelaccessors.add(new ModelAccessor(file));
-		}
-	}
-	
 	
 	abstract protected void makeWorkbench(ModelAccessor modelaccessor);
 	

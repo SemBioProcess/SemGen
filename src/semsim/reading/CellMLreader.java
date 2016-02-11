@@ -106,7 +106,7 @@ public class CellMLreader extends ModelReader {
 
 		// Add model-level metadata
 		// TODO: Fix next line so it works
-		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
+		semsimmodel.setSourceFileLocation(modelaccessor);
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model

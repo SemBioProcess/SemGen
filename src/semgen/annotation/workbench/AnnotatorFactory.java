@@ -3,6 +3,7 @@
  */
 package semgen.annotation.workbench;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -19,7 +20,8 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 		super("Loading File");
 		autoannotate = aannotate;
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy code or SemSim model to annotate", true);
-		setModelAccessorsFromSelectedFiles(sgc.getSelectedFiles());
+		File[] files = sgc.getSelectedFiles();
+		modelaccessors.addAll(sgc.convertFilesToModelAccessors(files));
 		
 		if (modelaccessors.size()==0) 
 			abort();
@@ -31,7 +33,7 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	}
 	
 	protected void makeWorkbench(ModelAccessor modelaccessor) {	
-    	System.out.println("Loading " + modelaccessor.toString());
+    	System.out.println("Loading " + modelaccessor.getShortLocation());
     	
     	LoadSemSimModel loader = new LoadSemSimModel(modelaccessor, autoannotate, this);
     	loader.run();

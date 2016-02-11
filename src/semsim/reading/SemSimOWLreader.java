@@ -2,12 +2,8 @@ package semsim.reading;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -172,7 +168,8 @@ public class SemSimOWLreader extends ModelReader {
 				annstoremove.add(named);
 			};
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
-				semsimmodel.setSourceFileLocation(((OWLLiteral)named.getValue()).getLiteral());
+				ModelAccessor ma = new ModelAccessor(((OWLLiteral)named.getValue()).getLiteral());
+				semsimmodel.setSourceFileLocation(ma);
 				annstoremove.add(named);
 			};
 		}

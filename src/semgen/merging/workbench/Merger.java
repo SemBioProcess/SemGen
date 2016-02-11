@@ -210,7 +210,8 @@ public class Merger {
 		if(prune) pruneSubmodels(mergedmodel);
 		
 		// Remove legacy code info
-		mergedmodel.setSourceFileLocation("");
+		//TODO: Check next line
+		mergedmodel.setSourceFileLocation(null);
 		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());

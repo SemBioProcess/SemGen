@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.reading.ModelAccessor;
 
 public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		PropertyChangeListener {
@@ -22,9 +23,9 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	public JOptionPane optionPane;
 	public JTextField txtfld = new JTextField();
 	public JButton locbutton = new JButton("or choose local file");
-	private String urltoadd = "";
+	private String locationtoadd = "";
 	
-	public LegacyCodeChooser(String current) {
+	public LegacyCodeChooser(ModelAccessor current) {
 		super("Enter URL of legacy code or choose a local file");
 		JPanel srcmodpanel = new JPanel();
 		txtfld.setPreferredSize(new Dimension(250, 25));
@@ -38,7 +39,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
-		if (current != null) txtfld.setText(current);
+		if (current != null) txtfld.setText(current.getFullLocation());
 		
 		setContentPane(optionPane);
 		showDialog();
@@ -48,24 +49,27 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		if (e.getPropertyName().equals("value")) {
 			String value = optionPane.getValue().toString();
 			if (value == "OK") {
-				urltoadd = txtfld.getText();
+				locationtoadd = txtfld.getText();
 			} 
 			dispose();
 		}
 	}
 
-	public String getCodeLocation() {
-		return urltoadd;
+	public ModelAccessor getCodeLocation() {
+		return new ModelAccessor(locationtoadd);
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if (o == locbutton) {
-			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy model code", false); //null
+			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select legacy model code", false);
 			File file = sgc.getSelectedFile();
-			if (file!=null) txtfld.setText(file.getAbsolutePath());
+			if (file!=null){
+				
+				ModelAccessor ma = sgc.convertFileToModelAccessor(file);
+				txtfld.setText(ma.getFullLocation());
+			}
 		}
-		
 	}
 		
 }

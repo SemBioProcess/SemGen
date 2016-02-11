@@ -122,7 +122,7 @@ public class SBMLreader extends ModelReader{
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);
 		
 		// TODO: fix next line 
-		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
+		semsimmodel.setSourceFileLocation(modelaccessor);
 		
 		// Collect function definitions. Not used in SBML level 1.
 		// collectFunctionDefinitions();

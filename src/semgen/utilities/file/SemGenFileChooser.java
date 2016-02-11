@@ -2,10 +2,14 @@ package semgen.utilities.file;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import semsim.reading.JSimProjectFileReader;
+import semsim.reading.ModelAccessor;
 
 public class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
@@ -69,5 +73,41 @@ public class SemGenFileChooser extends JFileChooser {
 	
 	public int getFileType() {
 		return modeltype;
+	}
+	
+	public ModelAccessor convertFileToModelAccessor(File file){
+		
+		ModelAccessor modelaccessor = null;
+		
+		if(file.getName().toLowerCase().endsWith(".proj")){
+			
+			JSimProjectFileReader projreader = new JSimProjectFileReader(file);
+			ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
+			
+			if(modelnames.size()==1) 
+				modelaccessor = new ModelAccessor(file, modelnames.get(0));
+			else{
+				ProjectFileModelSelectorDialog pfmsd = 
+						new ProjectFileModelSelectorDialog("Select model(s) in archive", modelnames);
+	
+				for(String modelname : pfmsd.getSelectedModelNames()){
+					modelaccessor = new ModelAccessor(file, modelname);
+				}
+			}
+		}
+		else modelaccessor = new ModelAccessor(file);
+		
+		return modelaccessor;
+	}
+	
+	public ArrayList<ModelAccessor> convertFilesToModelAccessors(File[] files){
+		
+		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
+		
+		for (File file : files) {
+			modelaccessors.add(convertFileToModelAccessor(file));
+		}
+		
+		return modelaccessors;
 	}
 }

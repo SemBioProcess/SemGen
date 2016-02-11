@@ -24,6 +24,7 @@ import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.reading.ModelAccessor;
 import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
@@ -31,7 +32,7 @@ public class MergerWorkbench extends Workbench {
 	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
 	private SemSimModel mergedmodel;
-	private ArrayList<File> filepathlist = new ArrayList<File>();
+	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
@@ -60,8 +61,8 @@ public class MergerWorkbench extends Workbench {
 	@Override
 	public void initialize() {}
 	
-	private SemSimModel loadModel(File file, boolean autoannotate) {
-		LoadSemSimModel loader = new LoadSemSimModel(file, autoannotate);
+	private SemSimModel loadModel(ModelAccessor modelaccessor, boolean autoannotate) {
+		LoadSemSimModel loader = new LoadSemSimModel(modelaccessor, autoannotate);
 		loader.run();
 		SemSimModel modeltoload = loader.getLoadedModel();
 		return modeltoload;
@@ -70,7 +71,7 @@ public class MergerWorkbench extends Workbench {
 		return loadedmodels.size();
 	}
 	
-	public boolean addModels(Set<File> files, boolean autoannotate) {
+	public boolean addModels(Set<ModelAccessor> modelaccessors, boolean autoannotate) {
 		if (loadedmodels.size() == 2) {
 			setChanged();
 			notifyObservers(MergeEvent.threemodelerror);
@@ -78,11 +79,11 @@ public class MergerWorkbench extends Workbench {
 		}
 		
 		SemSimModel model;
-		for (File file : files) {
-			model = loadModel(file, autoannotate);
+		for (ModelAccessor modelaccessor : modelaccessors) {
+			model = loadModel(modelaccessor, autoannotate);
 			if (SemGenError.showSemSimErrors()) continue;
 			loadedmodels.add(model);
-			filepathlist.add(file);
+			modelaccessorlist.add(modelaccessor);
 			addDSNameList(model.getAssociatedDataStructures());
 		}
 
@@ -110,7 +111,7 @@ public class MergerWorkbench extends Workbench {
 	public void removeSelectedModel() {
 		if (modelselection == -1) return;
 		loadedmodels.remove(modelselection);
-		filepathlist.remove(modelselection);
+		modelaccessorlist.remove(modelselection);
 		overlapmap = null;
 		alldslist.clear();
 		exposeddslist.clear();
@@ -281,7 +282,7 @@ public class MergerWorkbench extends Workbench {
 	}
 
 	@Override
-	public String getModelSourceFile() {
+	public ModelAccessor getModelSourceLocation() {
 		if (modelselection == -1) return null;
 		return loadedmodels.get(modelselection).getLegacyCodeLocation();
 	}
@@ -329,7 +330,5 @@ public class MergerWorkbench extends Workbench {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
 	}
 }

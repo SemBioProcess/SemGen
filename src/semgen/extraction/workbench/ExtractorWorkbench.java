@@ -37,7 +37,7 @@ public class ExtractorWorkbench extends Workbench {
 	}
 
 	@Override
-	public String getModelSourceFile() {
+	public ModelAccessor getModelSourceLocation() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
 	

@@ -50,7 +50,7 @@ public class LoadSemSimModel extends SemGenJob {
 	
 	private void loadSemSimModelFromFile() {
 		
-    	setStatus("Reading " + modelaccessor.toString());
+    	setStatus("Reading " + modelaccessor.getShortLocation());
 
 		int modeltype = ModelClassifier.classify(modelaccessor);
 		try {

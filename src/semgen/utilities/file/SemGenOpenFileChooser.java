@@ -5,7 +5,9 @@ import java.net.URL;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
+
 import semgen.SemGen;
+import semsim.reading.ModelAccessor;
 import semsim.utilities.SemSimUtil;
 
 public class SemGenOpenFileChooser extends SemGenFileChooser {
@@ -26,11 +28,11 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 		openFile();
 	}
 	
-	public SemGenOpenFileChooser(Set<File> file, String title, String[] filters){
+	public SemGenOpenFileChooser(Set<ModelAccessor> modelaccessors, String title, String[] filters){
 		super(title, filters);
 		setMultiSelectionEnabled(true);
 		initialize();
-		openFile(file);
+		openFile(modelaccessors);
 	}
 	
 	private void initialize(){
@@ -41,16 +43,15 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 
 	}
 		
-	private void openFile(Set<File> files) {
+	private void openFile(Set<ModelAccessor> modelaccessors) {
 		if (showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
-			for (File file : getSelectedFiles()) {
-				files.add(file);
-			}
+			File[] files = getSelectedFiles();
+			modelaccessors.addAll(convertFilesToModelAccessors(files));
 		}
 		else {
-			this.setSelectedFiles(null);
-			this.setSelectedFile(null);
+			setSelectedFiles(null);
+			setSelectedFile(null);
 		}
 	}
 	
@@ -60,8 +61,8 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 			currentdirectory = getCurrentDirectory();
 		}
 		else {
-			this.setSelectedFiles(null);
-			this.setSelectedFile(null);	}
+			setSelectedFiles(null);
+			setSelectedFile(null);	}
 	}
 	
 	public void closeAndWriteStringAsModelContent(URL url, String content){
