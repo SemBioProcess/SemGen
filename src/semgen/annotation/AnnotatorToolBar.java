@@ -154,7 +154,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == extractorbutton) {
 			try {
 				if(workbench.unsavedChanges()){
-					globalactions.NewExtractorTab(workbench.getFile());
+					globalactions.NewExtractorTab(workbench.getModelAccessor());
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();}

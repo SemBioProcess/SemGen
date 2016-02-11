@@ -1,8 +1,7 @@
 package semgen.merging.workbench;
 
-import java.io.File;
-
 import semgen.utilities.WorkbenchFactory;
+import semsim.reading.ModelAccessor;
 
 public class MergerWorkbenchFactory extends WorkbenchFactory<MergerWorkbench>{
 	
@@ -13,7 +12,7 @@ public class MergerWorkbenchFactory extends WorkbenchFactory<MergerWorkbench>{
 	}
 	
 	@Override
-	protected void makeWorkbench(File file) {
+	protected void makeWorkbench(ModelAccessor modelaccessor) {
 		workbenches.add(new MergerWorkbench());
 	}
 }

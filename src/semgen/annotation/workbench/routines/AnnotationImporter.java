@@ -8,6 +8,7 @@ import semgen.utilities.file.LoadSemSimModel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.reading.ModelAccessor;
 
 public class AnnotationImporter extends SemGenJob {
 	SemSimModel importedmodel;
@@ -31,7 +32,7 @@ public class AnnotationImporter extends SemGenJob {
 	}
 	
 	private void loadSourceModel() {
-		LoadSemSimModel loader = new LoadSemSimModel(sourcefile, this);
+		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(sourcefile), this);
 		loader.run();
 		if (!loader.isValid()) {
 			abort();

@@ -1,8 +1,7 @@
 package semgen.stage;
 
-import java.io.File;
-
 import semgen.utilities.WorkbenchFactory;
+import semsim.reading.ModelAccessor;
 
 public class StageWorkbenchFactory extends WorkbenchFactory<StageWorkbench> {
 
@@ -19,7 +18,7 @@ public class StageWorkbenchFactory extends WorkbenchFactory<StageWorkbench> {
 	}
 	
 	@Override
-	protected void makeWorkbench(File file) {
+	protected void makeWorkbench(ModelAccessor modelaccessor) {
 		workbenches.add(new StageWorkbench());
 	}
 }

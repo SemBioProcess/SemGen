@@ -1,23 +1,20 @@
 package semgen.utilities.file;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.jdom.Document;
 import org.semanticweb.owlapi.model.OWLException;
 
-import JSim.util.UtilIO;
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
-import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLParser;
+import semsim.reading.ModelAccessor;
 import semsim.reading.XMMLreader;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelingFileClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
@@ -26,42 +23,48 @@ import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
 
 public class LoadSemSimModel extends SemGenJob {
-	private File file;
+	private ModelAccessor modelaccessor;
 	private boolean autoannotate = false;
 	private SemSimModel semsimmodel;
 	
-	public LoadSemSimModel(File file) {
-		this.file = file;
+	public LoadSemSimModel(ModelAccessor modelaccessor) {
+		this.modelaccessor = modelaccessor;
 	}
 	
-	public LoadSemSimModel(File file, boolean autoannotate) {
-		this.file = file;
+	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate) {
+		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
 	}
 	
-	public LoadSemSimModel(File file, SemGenJob sga) {
+	public LoadSemSimModel(ModelAccessor modelaccessor, SemGenJob sga) {
 		super(sga);
-		this.file = file;
+		this.modelaccessor = modelaccessor;
 		
 	}
 	
-	public LoadSemSimModel(File file, boolean autoannotate, SemGenJob sga) {
+	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
 		super(sga);
-		this.file = file;
+		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
 	}
 	
 	private void loadSemSimModelFromFile() {
-		int modeltype = ModelClassifier.classify(file);
+		
+    	setStatus("Reading " + modelaccessor.toString());
+
+		int modeltype = ModelingFileClassifier.classify(modelaccessor);
 		try {
 			switch (modeltype){
 			
-			case ModelClassifier.SEMSIM_MODEL:
-				semsimmodel = loadSemSimOWL(file);	
+			case ModelingFileClassifier.SEMSIM_MODEL:
+				if(modelaccessor.modelIsInStandAloneFile())
+					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
+				else
+					ErrorLog.addError("Cannot load a SemSim model from within an archive file.", true, false);
 				break;
 			
-			case ModelClassifier.CELLML_MODEL:
-				semsimmodel = new CellMLreader(file).readFromFile();
+			case ModelingFileClassifier.CELLML_MODEL:
+				semsimmodel = new CellMLreader(modelaccessor).read();
 				nameOntologyTerms();
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate) {
 					setStatus("Annotating Physical Properties");
@@ -69,39 +72,22 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				break;
 				
-			case ModelClassifier.SBML_MODEL:
-				semsimmodel = new SBMLreader(file).readFromFile();			
+			case ModelingFileClassifier.SBML_MODEL:
+				semsimmodel = new SBMLreader(modelaccessor).read();			
 				nameOntologyTerms();
 				break;
 				
-			case ModelClassifier.MML_MODEL:
-				semsimmodel = loadMML(file);
+			case ModelingFileClassifier.MML_MODEL:
+				semsimmodel = loadMML(modelaccessor.getModelTextAsString(), modelaccessor.getModelName());
+				
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
 					setStatus("Annotating Physical Properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				}
 				break;
 				
-			case ModelClassifier.PROJ_FILE:
-				JSimProjectFileReader projreader = new JSimProjectFileReader(file);
-				ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
-				ProjectFileModelSelectorDialog pfmsd = 
-						new ProjectFileModelSelectorDialog("Select model(s) to open", modelnames);
-
-				for(String modelname : pfmsd.getSelectedModelNames()){
-					String mmlcode = projreader.getModelCode(modelname);
-					semsimmodel = loadMML(mmlcode, modelname);
-					
-					if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
-						setStatus("Annotating Physical Properties");
-						semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-					}
-					// Need to make this work for multiple models in one PROJ
-				}
-				break;
-				
 			default:
-				ErrorLog.addError("SemGen did not recognize the file type for " + file.getName(), true, false);
+				ErrorLog.addError("SemGen did not recognize the model type for " + modelaccessor.toString(), true, false);
 				return;
 			}
 		}
@@ -116,19 +102,15 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				return;
 			}
-			semsimmodel.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
+			semsimmodel.setName(modelaccessor.getModelName());
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else {
-			ErrorLog.addError(file.getName() + " was an invalid model.", true, false);
+			ErrorLog.addError(modelaccessor.getModelName() + " was an invalid model.", true, false);
 		}
 	}
 
-	
-	public static SemSimModel loadSemSimOWL(File file) throws Exception {
-		return new SemSimOWLreader(file).readFromFile();
-	}
 
 	// Convert MML model string to SemSim model
 	private SemSimModel loadMML(String srcText, String modelname) throws Xcept, IOException, InterruptedException, OWLException{
@@ -136,14 +118,8 @@ public class LoadSemSimModel extends SemGenJob {
 		
 		if (ErrorLog.hasErrors()) return null;
 		
-		XMMLreader xmmlreader = new XMMLreader(file, doc, srcText);		
+		XMMLreader xmmlreader = new XMMLreader(modelaccessor, doc, srcText);		
 		return xmmlreader.readFromDocument();
-	}
-	
-	// Convert MML file into SemSim model
-	private SemSimModel loadMML(File file) throws Xcept, IOException, InterruptedException, OWLException {
-	    String srcText = UtilIO.readText(file);
-	    return loadMML(srcText, file.getName());
 	}
 	
 	private void nameOntologyTerms(){

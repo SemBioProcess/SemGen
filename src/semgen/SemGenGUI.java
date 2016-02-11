@@ -21,6 +21,7 @@ import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.utilities.uicomponent.TabFactory;
+import semsim.reading.ModelAccessor;
 
 import java.net.URI;
 import java.awt.Color;
@@ -82,9 +83,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 	}
 	
-	public void startNewAnnotatorTask(final File existingfile){
-		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate(), existingfile);
-		if (isOntologyOpenForEditing(existingfile.toURI())) return;
+	public void startNewAnnotatorTask(final ModelAccessor existingaccessor){
+		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate(), existingaccessor);
+		if (isOntologyOpenForEditing(existingaccessor.getFileThatContainsModel().toURI())) return;
 		
 		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, true);
@@ -97,8 +98,8 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		addTab(factory, tabfactory, true);
 	}
 	
-	public void startNewExtractorTask(final File existingfile){
-		ExtractorFactory factory = new ExtractorFactory(existingfile);
+	public void startNewExtractorTask(final ModelAccessor existingobj){
+		ExtractorFactory factory = new ExtractorFactory(existingobj);
 		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, true);
 	}
@@ -109,9 +110,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		addTab(factory, tabfactory, true);
 	}
 	
-	public void startNewMergerTask(Set<File> existingFiles){
+	public void startNewMergerTask(Set<ModelAccessor> existingobjs){
 		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
-		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions, existingFiles);
+		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions, existingobjs);
 		addTab(factory, tabfactory, true);
 	}
 	

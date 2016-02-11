@@ -93,13 +93,17 @@ public class SBMLreader extends ModelReader{
 	public SBMLreader(File file) {
 		super(file);
 	}
+	
+	public SBMLreader(ModelAccessor accessor){
+		super(accessor);
+	}
 
 	@Override
-	public SemSimModel readFromFile() throws IOException, InterruptedException,
+	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromFile(srcfile.getAbsolutePath());
+		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getModelTextAsString());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -116,7 +120,9 @@ public class SBMLreader extends ModelReader{
 		}
 		
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);
-		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
+		
+		// TODO: fix next line 
+		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
 		
 		// Collect function definitions. Not used in SBML level 1.
 		// collectFunctionDefinitions();

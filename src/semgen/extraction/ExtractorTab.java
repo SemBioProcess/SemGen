@@ -50,6 +50,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.reading.ModelAccessor;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -109,7 +110,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public JPanel physiomappanel = new JPanel();
 	public JTabbedPane graphtabpane = new JTabbedPane();
 	
-	public File sourcefile;
+	public ModelAccessor modelaccessor;
 	public File extractedfile;
 	public File autogendirectory;
 	public SemSimModel extractedmodel;
@@ -129,7 +130,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
 		settings = sets;
 		workbench = bench;
-		sourcefile = workbench.getSourceFile();
+		modelaccessor = workbench.getModelAccessor();
 		semsimmodel = workbench.getSourceModel();
 	}
 	
@@ -211,7 +212,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 				if (o == toolbar.extractoritemopenann) {
 						try {
-							globalactions.NewAnnotatorTab(sourcefile);
+							globalactions.NewAnnotatorTab(modelaccessor);
 						} catch (Exception e1) {e1.printStackTrace();} 
 					}	
 			}

@@ -28,7 +28,7 @@ public class JSimProjectFileReader extends ModelReader{
 		SAXBuilder builder = new SAXBuilder();
 		
 		try{ 
-			doc = builder.build(srcfile);
+			doc = builder.build(file);
 			root = doc.getRootElement();
 			projelement = root.getChild("project");
 		}
@@ -78,9 +78,8 @@ public class JSimProjectFileReader extends ModelReader{
 
 	
 	@Override
-	public SemSimModel readFromFile() throws IOException, InterruptedException,
+	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, CloneNotSupportedException, XMLStreamException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

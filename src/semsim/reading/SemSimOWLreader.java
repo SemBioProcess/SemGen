@@ -2,8 +2,12 @@ package semsim.reading;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,7 +85,7 @@ public class SemSimOWLreader extends ModelReader {
 		super(file);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		factory = manager.getOWLDataFactory();
-		semsimmodel.setName(srcfile.getName().substring(0, srcfile.getName().lastIndexOf(".")));
+		semsimmodel.setName(modelaccessor.getModelName());
 		
 		try {
 			ont = manager.loadOntologyFromOntologyDocument(file);
@@ -90,9 +94,28 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+//	public SemSimOWLreader(ModelAccessor modelaccessor){
+//		super(modelaccessor);
+//		
+//		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+//		factory = manager.getOWLDataFactory();
+//		semsimmodel.setName(modelaccessor.getModelName());
+//		
+//		try {
+//			String modelcode = modelaccessor.getModelTextAsString();
+//			InputStream stream = new ByteArrayInputStream(modelcode.getBytes(StandardCharsets.UTF_8));
+//			
+//			System.out.println(modelcode);
+//			
+//			ont = manager.loadOntologyFromOntologyDocument(stream);
+//		} catch (OWLOntologyCreationException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
 	//*****************************READ METHODS*************************//
 		
-	public SemSimModel readFromFile() throws OWLException{	
+	public SemSimModel read() throws OWLException{	
 		if (verifyModel()) return semsimmodel;
 		
 		setPhysicalDefinitionURI();
@@ -742,7 +765,9 @@ public class SemSimOWLreader extends ModelReader {
 				String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, sub, SemSimConstants.IMPORTED_FROM_URI,
 						importval, SemSimConstants.REFERENCE_NAME_OF_IMPORT_URI);
 				sssubmodel = 
-						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval, sslib);
+						SemSimComponentImporter.importFunctionalSubmodel(
+								modelaccessor.getFileThatContainsModel(),
+								semsimmodel, subname, referencename, importval, sslib);
 			}
 		}
 		

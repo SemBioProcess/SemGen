@@ -1,7 +1,9 @@
 package semsim.reading;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -75,28 +77,36 @@ public class CellMLreader extends ModelReader {
 		super(file);
 	}
 	
-	public SemSimModel readFromFile() {
-		String modelname = srcfile.getName().substring(0, srcfile.getName().indexOf("."));
-		semsimmodel.setName(modelname);
+	public CellMLreader(ModelAccessor modelaccessor){
+		super(modelaccessor);
+	}
+	
+	public SemSimModel read() {
+		
+		String srccode = modelaccessor.getModelTextAsString();
 		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
+		
 		try {
-			doc = builder.build(srcfile);
+			InputStream is = new ByteArrayInputStream(srccode.getBytes("UTF-8"));
+			doc = builder.build(is);
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 			semsimmodel.addError(e.getLocalizedMessage());
 			return semsimmodel;
 		}
+		
 		if(doc.getRootElement()==null){
 			semsimmodel.addError("Could not parse original model: Root element of XML document was null");
 			return semsimmodel;
 		}
 
 		// Add model-level metadata
-		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
+		// TODO: Fix next line so it works
+		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// Get the namespace that indicates if it is a CellML 1.0 or 1.1 model
@@ -110,6 +120,7 @@ public class CellMLreader extends ModelReader {
 		rdfblockelement = getRDFmarkupForElement(doc.getRootElement(), semsimmodel);
 		
 		String rdfstring = null;
+		
 		if(rdfblockelement!=null){
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
@@ -118,17 +129,20 @@ public class CellMLreader extends ModelReader {
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");
+		
 		if(modelnamespacefromrdfblock !=null ) semsimmodel.setNamespace(modelnamespacefromrdfblock);
 
 		
 		// Get imported components
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
+		
 		while(importsit.hasNext()){
 			Element importel = (Element) importsit.next();
 			String hrefValue = importel.getAttributeValue("href", CellMLconstants.xlinkNS);
 			
 			// Load in the referenced units
 			Iterator<?> importedunitsit = importel.getChildren("units", mainNS).iterator();
+			
 			while(importedunitsit.hasNext()){
 				Element importedunitel = (Element) importedunitsit.next();
 				String localunitname = importedunitel.getAttributeValue("name");
@@ -137,12 +151,17 @@ public class CellMLreader extends ModelReader {
 			}
 			
 			Iterator<?> importedcompsit = importel.getChildren("component", mainNS).iterator();
+			
 			while(importedcompsit.hasNext()){
 				Element importedcompel = (Element) importedcompsit.next();
 				String localcompname = importedcompel.getAttributeValue("name");
 				String origcompname = importedcompel.getAttributeValue("component_ref");
+				
 				FunctionalSubmodel instantiatedsubmodel = 
-						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, localcompname, origcompname, hrefValue, sslib);
+						SemSimComponentImporter.importFunctionalSubmodel(
+								modelaccessor.getFileThatContainsModel(), 
+								semsimmodel, localcompname, origcompname, hrefValue, sslib);
+				
 				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
 				instantiatedsubmodel.setMetadataID(metadataid);
 
@@ -503,7 +522,10 @@ public class CellMLreader extends ModelReader {
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", CellMLconstants.cmetaNS);
-			if(name!=null && !name.equals("")) semsimmodel.setModelAnnotation(Metadata.fullname, name);
+			if(name!=null && !name.equals("")){
+				semsimmodel.setModelAnnotation(Metadata.fullname, name);
+				semsimmodel.setName(name);
+			}
 			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
 			
 			// Try to get pubmed ID from RDF tags

@@ -39,7 +39,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
-		semsim.model.collection.SemSimModel model = reader.readFromFile();
+		semsim.model.collection.SemSimModel model = reader.read();
 		CellMLwriter writer = new CellMLwriter(model);
 		File newModelFile = createTempFile();
 		writer.writeToFile(newModelFile);

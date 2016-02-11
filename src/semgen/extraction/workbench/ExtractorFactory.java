@@ -6,29 +6,34 @@ import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 
 public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
+	
 	public ExtractorFactory() {
 		super("Loading File");
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"},true);
 		for (File file : sgc.getSelectedFiles()) {
-			sourcefile.add(file);
+			modelaccessors.add(file);
 		}
-		if (sourcefile.size()==0) 
+		if (modelaccessors.size()==0) 
 			abort();
 	}
 	
-	public ExtractorFactory(File file) {
-		super("Loading File");
-		sourcefile.add(file);
+//	public ExtractorFactory(File file) {
+//		super("Loading File");
+//	}
+	
+	public ExtractorFactory(ModelAccessor accessor) {
+		modelaccessors.add(accessor);
 	}
 	
-	protected void makeWorkbench(File file) {	
-		System.out.println("Loading " + file.getName());
+	protected void makeWorkbench(ModelAccessor modelaccessor) {	
+		System.out.println("Loading " + modelaccessor.getModelName());
 		
 		setStatus("Creating SemSimModel");
-		LoadSemSimModel	loader = new LoadSemSimModel(file, false, this);
+		LoadSemSimModel	loader = new LoadSemSimModel(modelaccessor, false, this);
 		loader.run();
 		SemSimModel semsimmodel = loader.getLoadedModel();
 		
@@ -36,6 +41,6 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 			return;
 		}
 
-		workbenches.add(new ExtractorWorkbench(file, semsimmodel));
+		workbenches.add(new ExtractorWorkbench(modelaccessor, semsimmodel));
 	}	
 }

@@ -30,13 +30,14 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.annotation.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelAccessor;
+import semsim.reading.ModelingFileClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
-	protected File sourcefile; //File originally loaded at start of Annotation session (could be 
+	protected ModelAccessor modelaccessor; //File originally loaded at start of Annotation session (could be 
 							//in SBML, MML, CellML or SemSim format)
 	private ModelAnnotationsBench modanns;
 	private SemSimTermLibrary termlib;
@@ -49,9 +50,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public static enum ModelEdit {PROPERTY_CHANGED, COMPOSITE_CHANGED, CODEWORD_CHANGED, SUBMODEL_CHANGED, MODEL_IMPORT, 
 		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED, CWLIST_CHANGED }
 	
-	public AnnotatorWorkbench(File file, SemSimModel model) {
+	public AnnotatorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		semsimmodel = model;
-		sourcefile = file;
+		this.modelaccessor = accessor;
 		lastsavedas = semsimmodel.getSourceModelType();	
 	}
 	
@@ -95,8 +96,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public boolean isSemSimorCellMLModel() {
-		return (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || 
-				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL);
+		return (semsimmodel.getSourceModelType()==ModelingFileClassifier.SEMSIM_MODEL || 
+				semsimmodel.getSourceModelType()==ModelingFileClassifier.CELLML_MODEL);
 	}
 	
 	@Override
@@ -131,39 +132,51 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public File saveModel() {
-		URI fileURI = sourcefile.toURI();
+		
+		File file = modelaccessor.getFileThatContainsModel();
+		URI fileURI = file.toURI();
+		
 		if(fileURI!=null){
 			validateModelComposites();
 			try {
-				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
+				if(lastsavedas==ModelingFileClassifier.SEMSIM_MODEL) {
 					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
 				}
-				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
+				else if(lastsavedas==ModelingFileClassifier.CELLML_MODEL){
 					File outputfile =  new File(fileURI);
 					String content = new CellMLwriter(semsimmodel).writeToString();
 					SemSimUtil.writeStringToFile(content, outputfile);
 				}
+//				else if(lastsavedas==ModelingFileClassifier.PROJ_FILE){
+					//TODO: new JSimProjectFileWriter();
+//				}
 			} catch (Exception e) {e.printStackTrace();}		
-			SemGen.logfilewriter.println(sourcefile.getName() + " was saved");
+			SemGen.logfilewriter.println(modelaccessor.toString() + " was saved");
 			setModelSaved(true);
 		}
 		else{
 			return saveModelAs();
 		}			
 
-		return sourcefile;
+		return file;
 	}
 
 	@Override
 	public File saveModelAs() {
+		
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl"});
+		
 		if (filec.SaveAsAction()!=null) {
-			sourcefile = filec.getSelectedFile();
+			
+			// TODO: How to handle proj files??
+			
+			modelaccessor.setFileThatContainsModel(filec.getSelectedFile());
+			
 			lastsavedas = filec.getFileType();
 			saveModel();
-			semsimmodel.setName(sourcefile.getName().substring(0, sourcefile.getName().lastIndexOf(".")));
-			return sourcefile;
+			semsimmodel.setName(modelaccessor.getModelName());
+			return modelaccessor.getFileThatContainsModel();
 		}
 		return null;
 	}
@@ -178,9 +191,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public boolean unsavedChanges() {
 		if (!getModelSaved()) {
 			String title = "[unsaved file]";
-			URI fileURI = sourcefile.toURI();
+			URI fileURI = modelaccessor.getFileThatContainsModel().toURI();
 			if(fileURI!=null){
-				title =  new File(fileURI).getName();
+				title = modelaccessor.toString();
 			}
 			int returnval= JOptionPane.showConfirmDialog(null,
 					"Save changes?", title + " has unsaved changes",
@@ -198,8 +211,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 		return true;
 	}
-	public File getFile() {
-		return sourcefile;
+	public ModelAccessor getModelAccessor() {
+		return modelaccessor;
 	}
 
 	public void changeModelSourceFile() {
@@ -276,7 +289,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public File getSourceSubmodelFile() {
-		return new File(getFile().getParent() + "/" + smdrawer.getHrefValue());
+		File returnfile = new File(getModelAccessor().getFileThatContainsModel().getParent() + "/" + smdrawer.getHrefValue());
+		return returnfile;
 	}
 	
 	public TermCollector collectAffiliatedTermsandCodewords(Integer index) {

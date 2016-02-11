@@ -11,6 +11,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
@@ -38,7 +39,7 @@ public class Encoder {
 	}
 	
 	public void startEncoding(File afile, String filenamesuggestion){
-		LoadSemSimModel loader = new LoadSemSimModel(afile, false);
+		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(afile), false);
 		loader.run();
 		SemSimModel model = loader.getLoadedModel();
 		if(SemGenError.showSemSimErrors()){

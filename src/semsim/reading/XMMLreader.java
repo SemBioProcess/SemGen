@@ -52,17 +52,18 @@ public class XMMLreader extends ModelReader {
 		this.doc = doc;
 	}
 	
-	public XMMLreader(File file, Document doc, String mmlcode) throws Xcept {
-		super(file);
+	public XMMLreader(ModelAccessor modelaccessor, Document doc, String mmlcode) throws Xcept {
+		super(modelaccessor);
 		this.doc = doc;
 		this.mmlcode = mmlcode;
 	}
 	
 	// This is for reading from an actual XMML file (.xml), not an MML (.mod) file
 	@Override
-	public SemSimModel readFromFile() throws IOException, InterruptedException,
+	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, CloneNotSupportedException, XMLStreamException {
 		
+		File srcfile = modelaccessor.getFileThatContainsModel();
 		if(srcfile != null){
 			doc = null;
 
@@ -399,12 +400,13 @@ public class XMMLreader extends ModelReader {
 		}
 				
 		// Add the model-level annotations
-		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
+		//TODO: change next line so it works
+		semsimmodel.setSourceFileLocation(modelaccessor.getFileThatContainsModel().getAbsolutePath());
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
 		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
-			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
+			semsimmodel.addError(modelaccessor.getModelName() + " model appears to be empty.");
 		}
 		return semsimmodel;
 	}
