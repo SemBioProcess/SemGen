@@ -39,14 +39,14 @@ public class ModelAccessor {
 	
 	// This constructor parses a string input and assigns values to the object's fields
 	public ModelAccessor(String location){
+		
 		if(location.toLowerCase().contains(".proj" + separator)){
 			String archiveloc = location.substring(0, location.indexOf(separator));
 		
 			this.archiveFile = new File(archiveloc);
 			this.modelNameInArchive = location.substring(location.indexOf(separator)+1, location.length());
-			
-			System.out.println(archiveloc + " : " + this.modelNameInArchive);
 		}
+		else this.standAloneFile = new File(location);
 	}
 
 	private File getArchiveFile(){
