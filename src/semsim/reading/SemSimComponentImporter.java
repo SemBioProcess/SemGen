@@ -35,15 +35,15 @@ public class SemSimComponentImporter {
 			return null;
 		}
 		SemSimModel importedmodel = null;
-		int modeltype = ModelingFileClassifier.classify(importedmodelfile);
-		if(modeltype == ModelingFileClassifier.SEMSIM_MODEL){
+		int modeltype = ModelClassifier.classify(importedmodelfile);
+		if(modeltype == ModelClassifier.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelfile).read();
 			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}
-		else if(modeltype == ModelingFileClassifier.CELLML_MODEL){
+		else if(modeltype == ModelClassifier.CELLML_MODEL){
 			try {
 				importedmodel = new CellMLreader(importedmodelfile).read();
 			} catch (Exception e) {

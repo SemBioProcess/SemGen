@@ -10,7 +10,7 @@ import org.jdom.input.SAXBuilder;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 
-public class ModelingFileClassifier {
+public class ModelClassifier {
 	
 	public static final int SEMSIM_MODEL = 0;
 	public static final int SBML_MODEL = 1;

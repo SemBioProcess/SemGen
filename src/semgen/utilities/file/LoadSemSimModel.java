@@ -14,7 +14,7 @@ import semsim.reading.CellMLreader;
 import semsim.reading.MMLParser;
 import semsim.reading.ModelAccessor;
 import semsim.reading.XMMLreader;
-import semsim.reading.ModelingFileClassifier;
+import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
@@ -52,18 +52,18 @@ public class LoadSemSimModel extends SemGenJob {
 		
     	setStatus("Reading " + modelaccessor.toString());
 
-		int modeltype = ModelingFileClassifier.classify(modelaccessor);
+		int modeltype = ModelClassifier.classify(modelaccessor);
 		try {
 			switch (modeltype){
 			
-			case ModelingFileClassifier.SEMSIM_MODEL:
+			case ModelClassifier.SEMSIM_MODEL:
 				if(modelaccessor.modelIsInStandAloneFile())
 					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
 				else
 					ErrorLog.addError("Cannot load a SemSim model from within an archive file.", true, false);
 				break;
 			
-			case ModelingFileClassifier.CELLML_MODEL:
+			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(modelaccessor).read();
 				nameOntologyTerms();
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate) {
@@ -72,12 +72,12 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				break;
 				
-			case ModelingFileClassifier.SBML_MODEL:
+			case ModelClassifier.SBML_MODEL:
 				semsimmodel = new SBMLreader(modelaccessor).read();			
 				nameOntologyTerms();
 				break;
 				
-			case ModelingFileClassifier.MML_MODEL:
+			case ModelClassifier.MML_MODEL:
 				semsimmodel = loadMML(modelaccessor.getModelTextAsString(), modelaccessor.getModelName());
 				
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){

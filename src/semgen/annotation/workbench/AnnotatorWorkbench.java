@@ -31,7 +31,7 @@ import semsim.annotation.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelingFileClassifier;
+import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 
@@ -96,8 +96,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public boolean isSemSimorCellMLModel() {
-		return (semsimmodel.getSourceModelType()==ModelingFileClassifier.SEMSIM_MODEL || 
-				semsimmodel.getSourceModelType()==ModelingFileClassifier.CELLML_MODEL);
+		return (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || 
+				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL);
 	}
 	
 	@Override
@@ -139,16 +139,16 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if(fileURI!=null){
 			validateModelComposites();
 			try {
-				if(lastsavedas==ModelingFileClassifier.SEMSIM_MODEL) {
+				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
 					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
 				}
-				else if(lastsavedas==ModelingFileClassifier.CELLML_MODEL){
+				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
 					File outputfile =  new File(fileURI);
 					String content = new CellMLwriter(semsimmodel).writeToString();
 					SemSimUtil.writeStringToFile(content, outputfile);
 				}
-//				else if(lastsavedas==ModelingFileClassifier.PROJ_FILE){
+//				else if(lastsavedas==ModelClassifier.PROJ_FILE){
 					//TODO: new JSimProjectFileWriter();
 //				}
 			} catch (Exception e) {e.printStackTrace();}		

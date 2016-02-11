@@ -853,8 +853,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 
 	/**
 	 * Specify which format was used for the model's simulation source code.
-	 * See {@link ModelingFileClassifier} constants. 
-	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link ModelingFileClassifier} ).
+	 * See {@link ModelClassifier} constants. 
+	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link ModelClassifier} ).
 	 */
 	public void setSourceModelType(int originalModelType) {
 		this.sourceModelType = originalModelType;
@@ -862,7 +862,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 
 	
 	/**
-	 * @return An integer representing the format of the original model code (see {@link ModelingFileClassifier} ) 
+	 * @return An integer representing the format of the original model code (see {@link ModelClassifier} ) 
 	 * and associated constants.
 	 */
 	public int getSourceModelType() {

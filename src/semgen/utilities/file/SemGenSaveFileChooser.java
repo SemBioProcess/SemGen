@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import semsim.reading.ModelingFileClassifier;
+import semsim.reading.ModelClassifier;
 
 public class SemGenSaveFileChooser extends SemGenFileChooser {
 	private static final long serialVersionUID = 1L;
@@ -26,15 +26,15 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 			File file =getSelectedFile();
 			if(getFileFilter()==owlfilter){
 				extension = "owl";
-				modeltype = ModelingFileClassifier.SEMSIM_MODEL;
+				modeltype = ModelClassifier.SEMSIM_MODEL;
 			}
 			else if(getFileFilter()==cellmlfilter){
 				extension = "cellml";
-				modeltype = ModelingFileClassifier.CELLML_MODEL;
+				modeltype = ModelClassifier.CELLML_MODEL;
 			}
 			else if(getFileFilter()==mmlfilter){
 				extension = "mod";
-				modeltype = ModelingFileClassifier.MML_MODEL;
+				modeltype = ModelClassifier.MML_MODEL;
 			}
 			else if(getFileFilter()==csvfilter){
 				extension = "csv";
