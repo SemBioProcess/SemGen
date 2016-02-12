@@ -125,7 +125,7 @@ public class CellMLreader extends ModelReader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
+		rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");

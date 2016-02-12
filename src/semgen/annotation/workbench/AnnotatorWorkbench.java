@@ -34,6 +34,7 @@ import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
+import semsim.writing.JSimProjectFileWriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
@@ -136,7 +137,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		File file = modelaccessor.getFileThatContainsModel();
 		URI fileURI = file.toURI();
 		
-		if(fileURI!=null){
+		if(fileURI != null){
 			validateModelComposites();
 			try {
 				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
@@ -148,9 +149,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 					String content = new CellMLwriter(semsimmodel).writeToString();
 					SemSimUtil.writeStringToFile(content, outputfile);
 				}
-//				else if(lastsavedas==ModelClassifier.PROJ_FILE){
-					//TODO: new JSimProjectFileWriter();
-//				}
+				else if(lastsavedas==ModelClassifier.MML_MODEL_IN_PROJ){
+					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(fileURI);
+				}
 			} catch (Exception e) {e.printStackTrace();}		
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
 			setModelSaved(true);
@@ -170,9 +171,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (filec.SaveAsAction()!=null) {
 			
 			// TODO: How to handle proj files??
-			
-			modelaccessor.setFileThatContainsModel(filec.getSelectedFile());
-			
+			modelaccessor = filec.convertFileToModelAccessor(filec.getSelectedFile());
 			lastsavedas = filec.getFileType();
 			saveModel();
 			semsimmodel.setName(modelaccessor.getModelName());

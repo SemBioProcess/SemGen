@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.jdom.Attribute;
+import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -21,6 +23,7 @@ public class JSimProjectFileReader extends ModelReader{
 	private Document doc;
 	private Element root;
 	private Element projelement;
+	public static final String semSimAnnotationControlValue = "SemSimAnnotation";
 	
 	public JSimProjectFileReader(File file) {
 		super(file);
@@ -37,6 +40,9 @@ public class JSimProjectFileReader extends ModelReader{
 		}
 	}
 	
+	public Document getDocument(){
+		return doc;
+	}
 	
 	public ArrayList<String> getNamesOfModelsInProject(){
 		
@@ -54,26 +60,54 @@ public class JSimProjectFileReader extends ModelReader{
 	
 	
 	public String getModelCode(String modelname){
+		
+		Element modelel = getModelElement(modelname);
+		Iterator<Element> controlit = modelel.getChildren("control").iterator();
+		
+		while(controlit.hasNext()){
+			Element controlel = controlit.next();
+			
+			if(controlel.getAttributeValue("name").equals("modelSource")){
+				return controlel.getText();
+			}
+		}
+		
+		return null;
+	}
+	
+
+	public Element getModelElement(String modelname){
 		Iterator<Element> modelit = projelement.getChildren("model").iterator();
 		
 		while(modelit.hasNext()){
 			Element modelel = modelit.next();
 			
 			if(modelel.getAttributeValue("name").equals(modelname)){
-				
-				Iterator<Element> controlit = modelel.getChildren("control").iterator();
-				
-				while(controlit.hasNext()){
-					Element controlel = controlit.next();
-					
-					if(controlel.getAttributeValue("name").equals("modelSource")){
-						return controlel.getText();
-					}
-				}
+				return modelel;
+			}
+		}
+		return null;
+	}
+	
+	
+	public Element getSemSimAnnotationsControlElementForModel(String modelname){
+		Element modelel = getModelElement(modelname);
+		Iterator<Element> controlit = modelel.getChildren("control").iterator();
+		
+		while(controlit.hasNext()){
+			Element controlel = controlit.next();
+			
+			if(controlel.getAttributeValue("name").equals(semSimAnnotationControlValue)){
+				return controlel;
 			}
 		}
 		
-		return null;
+		// If we're here we need to create a new control element and attach it to the model element
+		Element newel = new Element("control");
+		newel.setAttribute(new Attribute("name", semSimAnnotationControlValue));
+		modelel.addContent(newel);
+		
+		return newel;
 	}
 
 	

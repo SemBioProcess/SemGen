@@ -82,8 +82,6 @@ public class CellMLwriter extends ModelWriter {
 			
 			doc = new Document(root);
 			
-			
-			
 			declareImports();
 			
 			// Add the documentation element
@@ -121,7 +119,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
+		rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
 	}
 	
 	private void createRootElement() {		
@@ -365,7 +363,7 @@ public class CellMLwriter extends ModelWriter {
 	//*************END WRITE PROCEDURE********************************************//
 	
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
-		if(!((FunctionalSubmodel)submodel).isImported()){
+		if( ! ((FunctionalSubmodel)submodel).isImported()){
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any singular annotation on the submodel
@@ -373,7 +371,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
-			if(!submodel.getMetadataID().equalsIgnoreCase("")) 
+			if( ! submodel.getMetadataID().equalsIgnoreCase("")) 
 				comp.setAttribute("id", submodel.getMetadataID(), CellMLconstants.cmetaNS);  // Add ID, if present
 			
 			// Add the variables
@@ -439,10 +437,12 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	@Override
 	public void writeToFile(File destination){
 		SemSimUtil.writeStringToFile(writeToString(), destination);
 	}
 	
+	@Override
 	public void writeToFile(URI destination){
 		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
@@ -475,10 +475,12 @@ public class CellMLwriter extends ModelWriter {
 	
 	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
 	public void createRDFforAnnotatedThing(SemSimObject annotated, String idprefix, Element el, String freetext){
+		
 		if(annotated instanceof Annotatable){
 			Annotatable a = (Annotatable) annotated;
 			
 			Boolean hasphysprop = false;
+			
 			if(a instanceof DataStructure){
 				hasphysprop = ((DataStructure)a).hasPhysicalProperty();
 			}
@@ -507,26 +509,15 @@ public class CellMLwriter extends ModelWriter {
 				}
 				
 				// Add the local RDF within the annotated CellML element
-				if(!localrdf.isEmpty()){
+				if( ! localrdf.isEmpty()){
 					String rawrdf = CellMLbioRDFblock.getRDFAsString(localrdf);
 					Content newrdf = makeXMLContentFromString(rawrdf);
-					if(newrdf!=null) el.addContent(newrdf);
+					if(newrdf != null) el.addContent(newrdf);
 				}
 				
 				// If annotated thing is a variable, include any necessary composite annotation info
 				if(hasphysprop){
-					rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("ro", SemSimConstants.RO_NAMESPACE);
-					rdfblock.rdf.setNsPrefix("model", semsimmodel.getNamespace());
-						
-					Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
-					Resource propres = rdfblock.getResourceForDataStructurePropertyAndAnnotate(rdfblock.rdf, (DataStructure)a);
-					Statement st = rdfblock.rdf.createStatement(ares, iccfprop, propres);
-					
-					if(!rdfblock.rdf.contains(st)) rdfblock.rdf.add(st);
-					rdfblock.addCompositeAnnotationMetadataForVariable((DataStructure)a);
+					rdfblock.addPropertyAndPropertyOfAnnotationsToDataStructure((DataStructure)a, ares);
 				}
 			}
 		}
@@ -541,6 +532,7 @@ public class CellMLwriter extends ModelWriter {
 	
 	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
 		String metaid = annotated.getMetadataID();
+		
 		// Create metadata ID for the model element, cache locally
 		if(metaid.isEmpty()){
 			metaid = idprefix + 0;

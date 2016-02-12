@@ -16,6 +16,7 @@ public class ModelClassifier {
 	public static final int SBML_MODEL = 1;
 	public static final int CELLML_MODEL = 2;
 	public static final int MML_MODEL = 3;
+	public static final int MML_MODEL_IN_PROJ = 4;
 	
 	
 	public static int classify(File file){
@@ -29,7 +30,7 @@ public class ModelClassifier {
 			if(accessor.modelIsPartOfArchive()){
 				
 				if(accessor.modelIsPartOfJSimProjectFile()){
-					type = MML_MODEL;
+					type = MML_MODEL_IN_PROJ;
 				}
 			}
 			else if(accessor.modelIsInStandAloneFile()){

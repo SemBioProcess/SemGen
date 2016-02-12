@@ -75,8 +75,8 @@ public class SemGenFileChooser extends JFileChooser {
 		return modeltype;
 	}
 	
+	
 	public ModelAccessor convertFileToModelAccessor(File file){
-		
 		ModelAccessor modelaccessor = null;
 		
 		if(file.getName().toLowerCase().endsWith(".proj")){
@@ -96,17 +96,15 @@ public class SemGenFileChooser extends JFileChooser {
 			}
 		}
 		else modelaccessor = new ModelAccessor(file);
-		
 		return modelaccessor;
 	}
 	
+	
 	public ArrayList<ModelAccessor> convertFilesToModelAccessors(File[] files){
-		
 		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
 		
-		for (File file : files) {
+		for (File file : files)
 			modelaccessors.add(convertFileToModelAccessor(file));
-		}
 		
 		return modelaccessors;
 	}

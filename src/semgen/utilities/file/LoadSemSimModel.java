@@ -78,12 +78,11 @@ public class LoadSemSimModel extends SemGenJob {
 				break;
 				
 			case ModelClassifier.MML_MODEL:
-				semsimmodel = loadMML(modelaccessor.getModelTextAsString(), modelaccessor.getModelName());
+				loadMML(modelaccessor);
+				break;
 				
-				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
-					setStatus("Annotating Physical Properties");
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-				}
+			case ModelClassifier.MML_MODEL_IN_PROJ:
+				loadMML(modelaccessor);
 				break;
 				
 			default:
@@ -112,6 +111,17 @@ public class LoadSemSimModel extends SemGenJob {
 	}
 
 
+	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
+		semsimmodel = loadMML(modelaccessor.getModelTextAsString(), modelaccessor.getModelName());
+		
+		if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
+			setStatus("Annotating Physical Properties");
+			semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+		}
+		
+		return semsimmodel;
+	}
+	
 	// Convert MML model string to SemSim model
 	private SemSimModel loadMML(String srcText, String modelname) throws Xcept, IOException, InterruptedException, OWLException{
 		Document doc = new MMLParser().readFromMMLstring(srcText, modelname);

@@ -24,6 +24,7 @@ import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.StructuralRelation;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -59,10 +60,10 @@ public class CellMLbioRDFblock {
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	
-	public CellMLbioRDFblock(String namespace, String rdfasstring, String baseNamespace){	
-		this.modelns = namespace;
+	public CellMLbioRDFblock(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
+		this.modelns = semsimmodel.getNamespace();
 		
-		if(rdfasstring!=null){
+		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
@@ -71,11 +72,29 @@ public class CellMLbioRDFblock {
 				e.printStackTrace();
 			}
 		}
+		
+		rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
+		rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
+		rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
+		rdf.setNsPrefix("ro", SemSimConstants.RO_NAMESPACE);
+		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 	
-	protected void addCompositeAnnotationMetadataForVariable(DataStructure ds){		
+	protected void addPropertyAndPropertyOfAnnotationsToDataStructure(DataStructure a, Resource ares){
+		
+		Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
+		Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)a);
+		Statement st = rdf.createStatement(ares, iccfprop, propres);
+		
+		if( ! rdf.contains(st)) rdf.add(st);
+		
+		addPropertyOfAnnotationForDataStructure((DataStructure)a);
+	}
+	
+	
+	protected void addPropertyOfAnnotationForDataStructure(DataStructure ds){		
 		// Collect physical model components with properties
-		if(!ds.isImportedViaSubmodel()){
+		if( ! ds.isImportedViaSubmodel()){
 			
 			if(ds.hasPhysicalProperty()){
 				Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, ds);
@@ -107,7 +126,7 @@ public class CellMLbioRDFblock {
 
 						Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
 						Statement st = rdf.createStatement(propres, physicalpropertyof, processres);
-						if(!rdf.contains(st)) rdf.add(st);
+						if( ! rdf.contains(st)) rdf.add(st);
 						
 						// Set the sources
 						for(PhysicalEntity source : process.getSourcePhysicalEntities()){
