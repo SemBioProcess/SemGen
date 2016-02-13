@@ -1,7 +1,7 @@
 /**
  * Represents a node in the d3 graph
  */
-Node.prototype.color = "";
+
 
 function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	if(!graph)
@@ -13,13 +13,12 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	this.displayName = name;
 	this.r = r;
 	this.textSize = textSize;
-	this.nodeType = nodeType;
+	this.nodeType = NodeTypeMap[nodeType];
 	this.charge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;
 	this.inputs = inputs || [];
-	this.userCanHide = true;
 	this.hidden = false;
 	this.textlocx = 0;
 	this.defaultcharge = charge;
@@ -31,9 +30,8 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
 	}
+	validateNode(this);
 }
-
-
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
@@ -56,7 +54,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
-    	.style("fill", this.color)
+    	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
     	
 	this.rootElement.append("svg:circle")
@@ -115,7 +113,7 @@ Node.prototype.getLinks = function () {
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			var parent = this.graph.findNode(inputData.parentModelId);
+			var parent = this.graph.findVisibleNode(inputData.parentModelId);
 			if (!parent) {
 				console.log("External link without a parent!");
 				continue;
@@ -131,7 +129,7 @@ Node.prototype.getLinks = function () {
 			}
 		}
 
-		else if(this.nodeType == "Entity" || this.nodeType == "Process") {
+		else if(this.nodeType == NodeType.ENTITY || this.nodeType == NodeType.PROCESS) {
 			type = "physiomap";
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
@@ -148,10 +146,10 @@ Node.prototype.getLinks = function () {
 		}
 
 		// Get the input node
-		var inputNode = this.graph.findNode(inputNodeId);
+		var inputNode = this.graph.findVisibleNode(inputNodeId);
 		
 		// Get the sink node
-		var outputNode = outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
+		var outputNode = outputNodeId === undefined ? this : this.graph.findVisibleNode(outputNodeId);
 		
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
@@ -212,14 +210,6 @@ Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('postTick');
 }
 
-Node.prototype.getKeyInfo = function () {
-	return {
-		nodeType: this.nodeType,
-		color: this.color,
-		canShowHide: this.userCanHide,
-	};
-}
-
 Node.prototype.createTextElement = function (className) {
 	
 	this.rootElement.append("svg:text")
@@ -262,6 +252,32 @@ Node.prototype.onClick = function () {
 
 }
 
-
-
 Node.prototype.onDoubleClick = function () {}
+
+Node.prototype.globalApply = function (funct) {
+	funct(this);
+}
+
+function validateNode(nodeData) {
+	if(!nodeData)
+		throw "Invalid node data";
+	
+	if(typeof nodeData.id != "string")
+		throw "Node id must be a string";
+	
+	if(typeof nodeData.r != "number")
+		throw "Node radius must be a number";
+	
+	if(typeof nodeData.charge != "number")
+		throw "Charge must be a number";
+	
+	if(typeof nodeData.getLinks != "function")
+		throw "Node getLinks is not defined";
+	
+	if(typeof nodeData.createVisualElement != "function")
+		throw "Node createVisualElement is not defined";
+	
+	if(typeof nodeData.tickHandler != "function")
+		throw "Node tickHandler is not defined";
+	
+};

@@ -29,23 +29,21 @@ SubmodelNode.prototype.onDoubleClick = function () {
 		node = this;
 		
 		var visiblenodes = 0;
-		if (this.graph.activedeptypes[0]) {
+		if (this.graph.nodesVisible[NodeType.STATE.id]) {
 			visiblenodes = this.dependencytypecount[0];
 		}
-		if (this.graph.activedeptypes[1]) {
+		if (this.graph.nodesVisible[NodeType.RATE.id]) {
 			visiblenodes += this.dependencytypecount[1];
 		}
-		if (this.graph.activedeptypes[2]) {
+		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
 			visiblenodes += this.dependencytypecount[2];
 		}
 		//sender.consoleOut(visiblenodes + " of " + this.dependencies.length);
 		if (visiblenodes > 0) {
 			// Create dependency nodes from the submodel's dependency data
-			main.task.addChildNodes(node, node.dependencies, function (data) {
+			this.setChildren(node.dependencies, function (data) {
 				return new DependencyNode(node.graph, data, node);
 			});
 		}
 	
 }
-
-var submodelKey = {nodeType: "Submodel", color: SubmodelNode.prototype.color, canShowHide: false};

@@ -4,12 +4,7 @@
  * Adapted from: http://stackoverflow.com/questions/11400241/updating-links-on-a-force-directed-graph-from-dynamic-json-data
  */
 
-	var defaultcharge = -300;
 
-	var ShowSubmodels = 0;
-	var ShowDependencies = 1;
-	var ShowPhysioMap = 2;
-	
 function Graph() {
 	var graph = this;
 
@@ -30,55 +25,25 @@ function Graph() {
 	    .linkDistance(function (d) { return d.length; });
 	this.color = d3.scale.category10();
 
-	var nodes = this.force.nodes();
+	this.displaymode = DisplayModes.SHOWSUBMODELS;
+	this.fixedMode = false;
+		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator
+	this.nodesVisible = [true, true, true, true, false, true, true, true];
+	
+	var nodes;
+	var visibleNodes = this.force.nodes();
 	var links = this.force.links();
-	var hiddenNodes = {};
 	var orphanNodes = [];
 
 	var hiddenLinks = {};
-	var fixedMode = false;
 
-	//array for storing which dependency node types are currently shown
-	//State, rate, constituative
-	this.activedeptypes = [true, true, false];
-	this.activephysmaptypes = [true, true, true];
-	this.vismode = ShowSubmodels;
-	
-	// Add a node to the graph
-	this.addNode = function (nodeData) {
-		if(!nodeData)
-			throw "Invalid node data";
-		
-		if(typeof nodeData.id != "string")
-			throw "Node id must be a string";
-		
-		if(typeof nodeData.r != "number")
-			throw "Node radius must be a number";
-		
-		if(typeof nodeData.charge != "number")
-			throw "Charge must be a number";
-		
-		if(typeof nodeData.getLinks != "function")
-			throw "Node getLinks is not defined";
-		
-		if(typeof nodeData.createVisualElement != "function")
-			throw "Node createVisualElement is not defined";
-		
-		if(typeof nodeData.tickHandler != "function")
-			throw "Node tickHandler is not defined";
-		
-		// If the node already exists don't add it again
-		if(this.findNode(nodeData.id)) {
-			console.log("node already exists. Node id: " + nodeData.id);
-			return;
-		}
-		
-		nodes.push(nodeData);
-		$(this).triggerHandler("nodeAdded", [nodeData]);
+	this.setTaskNodes = function(tasknodes) {
+		nodes = tasknodes;
+		graph.update();
 	};
 	
-	this.getNodes = function() {
-		return nodes;
+	this.getVisibleNodes = function() {
+		return visibleNodes;
 	}
 	
 	// Add a link to the graph
@@ -93,30 +58,16 @@ function Graph() {
 	}
 	
 	// Remove a node from the graph
-	this.removeNode = function (id) {
+	this.removeNode = function (node) {
 		var i = 0;
-	    var node = this.findNode(id);
-	    
-	    // If we did not find the node it must be hidden
-	    if(!node) {
-	    	// Remove it from the hidden list
-	    	for(type in hiddenNodes)
-	    		for(var i = 0; i < hiddenNodes[type].length; i++)
-	    			if(hiddenNodes[type][i].id == id) {
-	    				hiddenNodes[type].splice(i, 1);
-	    				return;
-	    			}
-	    	
-	    	return;
-	    }
-	    
+	      
 	    while (i < links.length) {
 	    	if ((links[i].source == node)||(links[i].target == node))
 	            links.splice(i,1);
 	        else
 	        	i++;
 	    }
-	    nodes.splice(findNodeIndex(id),1);
+	    graph.update();
 	    $(this).triggerHandler("nodeRemoved", [node]);
 	};
 
@@ -138,11 +89,6 @@ function Graph() {
 		links.splice(findLinkIndex(id), 1);
 	};
 	
-	// Remove all nodes
-	this.removeAllNodes = function(){
-	    nodes.splice(0,nodes.length);
-	};
-	
 	// Remove all links
 	this.removeAllLinks = function(){
 	    links.splice(0,links.length);
@@ -150,56 +96,27 @@ function Graph() {
 	
 	// Check to see if there's at least 1 node of the given type
 	this.hasNodeOfType = function (type) {
-		for(var index = 0; index < nodes.length; index++) {
-			if(nodes[index].nodeType == type)
+		for(var index = 0; index < visibleNodes.length; index++) {
+			if(visibleNodes[index].nodeType == type)
 				return true;
 		}
 		
 		return false;
 	};
 	
-	// Hide all nodes of the given type
-	this.hideNodes = function (type) {
-		sender.consoleOut("fire");
-		this.activedeptypes[typeToGroup[type]] = false;
-		var nodesToHide = [];
-		nodes.forEach(function (node) {
-			if(node.nodeType == type) {
-				nodesToHide.push(node);
-				node.hidden = true;
-			}
-		});
-		
-		// Remove the hidden nodes from the graph
-		nodesToHide.forEach(function (node) {
-			this.removeNode(node.id);
-		}, this);
-		
-		if(!hiddenNodes[type])
-			hiddenNodes[type] = [];
-		
-		// Save the hidden nodes in case we want to add them back
-		hiddenNodes[type] = hiddenNodes[type].concat(nodesToHide);
+	// Hide all visibleNodes of the given type
+	this.showNodes = function (type) {
+		this.nodesVisible[type.id] = true;
 		this.update();
 	}
 	
-	// Show all nodes of the given type
-	this.showNodes = function (type) {
-		this.activedeptypes[typeToGroup[type]] = true;
-		if(!hiddenNodes[type])
-			return;
-		
-		// Add all nodes back to the graph
-		hiddenNodes[type].forEach(function (node) {
-			node.hidden = false;
-			this.addNode(node);
-		}, this);
-		
-		// These nodes are no longer hidden
-		delete hiddenNodes[type];
-		
+	// Hide all visibleNodes of the given type
+	this.hideNodes = function (type) {
+		this.nodesVisible[type.id] = false;
 		this.update();
 	}
+	
+	
 
 	// Hide all links of the give type
 	this.hideLinks = function (type) {
@@ -226,7 +143,7 @@ function Graph() {
 		this.update();
 	}
 
-	// Hide nodes without links
+	// Hide visibleNodes without links
 	this.hideOrphanNodes = function (linkToHide) {
 		var nodesWithLink = [];
 		var nodesFromLinkToHide = [];
@@ -235,7 +152,7 @@ function Graph() {
 		nodesFromLinkToHide.push(linkToHide.target);
 
 		nodesFromLinkToHide.forEach(function (node) {
-			// Model nodes and hiddenLabel nodes don't count as orphan nodes
+			// Model visibleNodes and hiddenLabel visibleNodes don't count as orphan visibleNodes
 			if(node.nodeType === undefined || node.nodeType == "Model") {
 				return;
 			}
@@ -256,7 +173,7 @@ function Graph() {
 		}, this);
 	}
 
-	// Add orphan nodes back
+	// Add orphan visibleNodes back
 	this.showOrphanNodes = function () {
 		orphanNodes.forEach(function (node) {
 			this.addNode(node);
@@ -277,13 +194,13 @@ function Graph() {
 		// These links are no longer hidden
 		delete hiddenLinks[type];
 
-		// Add orphan nodes back
+		// Add orphan visibleNodes back
 		this.showOrphanNodes();
 
 		this.update();
 	}
 	
-	// Get an array of the hidden nodes
+	// Get an array of the hidden visibleNodes
 	this.getHiddenNodes = function () {
 		var hiddenNodesArr = [];
 		for(type in hiddenNodes)
@@ -320,9 +237,9 @@ function Graph() {
 
 		path.exit().remove();
 		
-		// Build the nodes
+		// Build the visibleNodes
 	    node = vis.selectAll("g.node")
-	        .data(nodes, function(d) { return d.id; });
+	        .data(visibleNodes, function(d) { return d.id; });
 
 	    node.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
@@ -340,13 +257,66 @@ function Graph() {
 	    
 	    $(this).triggerHandler("postupdate");
 	    
-	    // This is for new nodes. We need to set them to fixed if we're in fixed mode
+	    // This is for new visibleNodes. We need to set them to fixed if we're in fixed mode
 	    // There's a delay so the forces can equalize
 	    setTimeout(function () {
-	    	if(fixedMode)
-	    		nodes.forEach(toggleFixedMode);
+	    	if(this.fixedMode)
+	    		visibleNodes.forEach(toggleFixedMode);
 	    }, 7000);
 	};
+	
+	// Brute force redraw
+	// Motivation:
+	//	The z-index in SVG relies on the order of elements in html.
+	//	The way things are added using D3, we don't have much control
+	//	over ordering when we're adding and removing element dynamically.
+	//	So to get control back we remove everything and redraw everything from scratch
+	var refreshing = false;
+	var bruteForceRefresh = function () {
+		if(refreshing)
+			return;
+		
+		refreshing = true;
+		vis.selectAll("*").remove();
+		// Remove all visibleNodes from the graph
+		visibleNodes.length = 0;
+		
+		// Remove all links from the graph
+		this.removeAllLinks();
+		
+		
+		var node;
+		// Add the visibleNodes back
+		for (var x in nodes) {
+			node = nodes[x];
+			node.globalApply(function(d) {
+				if (!d.hidden && graph.nodesVisible[d.nodeType.id]) {
+					visibleNodes.push(d);
+				}
+			});
+		}
+
+		// Process links for each node
+		visibleNodes.forEach(function (n) {
+			var nodeLinks = n.getLinks();
+
+			// If the node doesnt have any links move on
+			if(!nodeLinks)
+				return;
+
+			nodeLinks.forEach( function (link) {
+				if (!link.source.hidden && !hiddenLinks[link.linkType]) {
+					links = links.concat(link);
+				}
+			});
+
+		}, this);
+
+		this.force.links(links);
+		
+		refreshing = false;
+	}
+	
 	
 	this.tick = function () {
 		// Execute the tick handler for each link
@@ -361,10 +331,10 @@ function Graph() {
 	};
 	
 	// Find a node by its id
-	this.findNode = function(id) {
-	    for (var i in nodes) {
-	        if (nodes[i].id === id)
-	        	return nodes[i];
+	this.findVisibleNode = function(id) {
+	    for (var i in visibleNodes) {
+	        if (visibleNodes[i].id === id)
+	        	return visibleNodes[i];
 	    }
 	};
 
@@ -376,7 +346,7 @@ function Graph() {
 		}
 	}
 	
-	// Highlight a node, its links, link labels, and the nodes that its linked to
+	// Highlight a node, its links, link labels, and the visibleNodes that its linked to
 	this.highlightMode = function (highlightNode) {
 		// Remove any existing dim assignments
 		vis.selectAll(".node, .link").each(function (d) {
@@ -393,7 +363,7 @@ function Graph() {
 		if(!highlightNode)
 			return;
 		
-		// Get all the nodes that need to be highlighted
+		// Get all the visibleNodes that need to be highlighted
 		// and dim all the links and labels that need to be dimmed
 		var nodesToHighlight = {};
 		nodesToHighlight[highlightNode.index] = 1;
@@ -415,12 +385,12 @@ function Graph() {
 			d3.select(this).classed("dim", true);
 		});
 		
-		// Dim all the nodes that need to be dimmed
+		// Dim all the visibleNodes that need to be dimmed
 		vis.selectAll(".node").each(function (d) {
 			if(!nodesToHighlight[d.index])
 				d3.select(this).classed("dim", true);
 			else
-				// Display full name for highlighted nodes
+				// Display full name for highlighted visibleNodes
 				d3.select(this).selectAll("text")
 					.text(function(d) {
 						return d.name;
@@ -437,59 +407,10 @@ function Graph() {
 	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
 	}
 	
-	// Brute force redraw
-	// Motivation:
-	//	The z-index in SVG relies on the order of elements in html.
-	//	The way things are added using D3, we don't have much control
-	//	over ordering when we're adding and removing element dynamically.
-	//	So to get control back we remove everything and redraw everything from scratch
-	var refreshing = false;
-	var bruteForceRefresh = function () {
-		if(refreshing)
-			return;
-		
-		refreshing = true;
-		
-		// Remove all nodes from the graph
-		var allNodes = nodes.slice(0);
-		this.removeAllNodes();
-		
-		// Remove all links from the graph
-		this.removeAllLinks();
-		
-		// Redraw
-		this.update();
-		
-		// Add the nodes back
-		allNodes.forEach(function (node) {
-			this.addNode(node);
-		}, this);
-
-		// Process links for each node
-		nodes.forEach(function (node) {
-			var nodeLinks = node.getLinks();
-
-			// If the node doesnt have any links move on
-			if(!nodeLinks)
-				return;
-
-			nodeLinks.forEach( function (link) {
-				if (!link.source.hidden && !hiddenLinks[link.linkType]) {
-					links = links.concat(link);
-				}
-			});
-
-		}, this);
-
-		this.force.links(links);
-		
-		refreshing = false;
-	}
-	
 	// Find a node's index
 	var findNodeIndex = function(id) {
-		for (var i in nodes) {
-	        if (nodes[i].id == id)
+		for (var i in visibleNodes) {
+	        if (visibleNodes[i].id == id)
 	        	return i;
 		};
 	};
@@ -504,7 +425,7 @@ function Graph() {
 
 	this.setNodeCharge = function(charge) {
 		if (isNaN(charge)) return;
-		nodes.forEach(function(node) {
+		visibleNodes.forEach(function(node) {
 			if(node.nodeType != "Model") {
 				node.charge = charge;
 			}
@@ -516,7 +437,7 @@ function Graph() {
 	
 	this.toggleFixedMode = function(setfixed) {
 		fixedMode = setfixed;
-		nodes.forEach(setFixed);
+		visibleNodes.forEach(setFixed);
 	}
 
 	var setFixed = function (node) {

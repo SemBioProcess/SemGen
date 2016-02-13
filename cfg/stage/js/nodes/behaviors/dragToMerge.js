@@ -5,8 +5,7 @@
 
 var DropZoneSideLength = 50;
 function DragToMerge(_node) {
-	AllNodes.push(_node);
-	
+	var models = _node.graph.getVisibleNodes();
 	// When the node visualization is created add a dropzone element
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
@@ -37,7 +36,7 @@ function DragToMerge(_node) {
 				};
 				
 				// Show drop zones on all other model nodes
-				AllNodes.forEach(function (node) {
+				models.forEach(function (node) {
 					if(node != _node)
 						node.rootElement.classed("dropZone", true);
 				});
@@ -52,7 +51,7 @@ function DragToMerge(_node) {
 		        
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.
-		        AllNodes.forEach(function (node) {
+		        models.forEach(function (node) {
 					if(node == _node)
 						return;
 					
@@ -89,7 +88,7 @@ function DragToMerge(_node) {
 		        }
 		        
 		        // Remove any classes we may have set
-		        AllNodes.forEach(function (node) {
+		        models.forEach(function (node) {
 		        	node.rootElement.classed("dropZone", false);
 					node.rootElement.classed("canDrop", false);
 				});

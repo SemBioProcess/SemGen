@@ -21,6 +21,7 @@ function main() {
 	KeyElement.getInstance().initialize(this.graph);
 
 	this.task = new Stage(this.graph);
+	this.graph.setTaskNodes(this.task.nodes);
 }
 
 $(window).bind("cwb-initialized", function(e) {

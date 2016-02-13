@@ -4,7 +4,6 @@
 
 ModelNode.prototype = new ParentNode();
 ModelNode.prototype.constructor = ModelNode;
-ModelNode.prototype.color = "#000000";
 
 function ModelNode (graph, name) {
 	ParentNode.prototype.constructor.call(this, graph, name, null, null, 16, 20, "Model", 0);
@@ -30,6 +29,3 @@ ModelNode.prototype.onDoubleClick = function () {
 	}
 	sender.queryModel(node.name, "hassubmodels");	
 }
-
-var modelKey = {nodeType: "Model", color: ModelNode.prototype.color, canShowHide: false};
-

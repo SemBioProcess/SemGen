@@ -6,17 +6,14 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			visibleNodeKeys.empty();
 			hiddenNodeKeys.empty();
 			
-			addKeyToParent(graph, visibleNodeKeys, modelKey, null);
-			
-			if (graph.vismode==ShowSubmodels) {
-				showSubmodelKeys(graph,visibleNodeKeys, hiddenNodeKeys );
-			}
-			else if (graph.vismode==ShowDependencies) {
-				showDependencyKeys(graph,visibleNodeKeys, hiddenNodeKeys );
-			}
-			else {
-				showPhysioMapKeys(graph,visibleNodeKeys, hiddenNodeKeys );
-			}
+			graph.displaymode.forEach(function(type) {
+				if (graph.nodesVisible[type.id]) {
+					addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
+				}
+				else {
+					addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
+				}
+			});
 			
 			// Update keys for visible links
 			addLinkKeysToParent(graph, visibleLinkKeys, graph.force.links(), "hideLinks");
@@ -25,42 +22,6 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			addLinkKeysToParent(graph, hiddenLinkKeys, graph.getHiddenLinks(), "showLinks");
 		});
 	};
-	
-	
-	
-	var showSubmodelKeys = function(graph, visibleNodeKeys, hiddenNodeKeys) {
-		addKeyToParent(graph, visibleNodeKeys, submodelKey, null);
-		
-		showDependencyKeys(graph, visibleNodeKeys, hiddenNodeKeys);
-	}
-	
-	var showDependencyKeys = function(graph, visibleNodeKeys, hiddenNodeKeys) {
-		var i = 0;
-		var key;
-		graph.activedeptypes.forEach(function (shown) {
-			if (shown) {
-				addKeyToParent(graph, visibleNodeKeys, depenKey(i), "showNodes");
-			}
-			else {
-				addKeyToParent(graph, hiddenNodeKeys, depenKey(i), "hideNodes");
-			}
-			i++;
-		}) 		
-		
-	}
-	
-	var showPhysioMapKeys = function(graph, visibleNodeKeys, hiddenNodeKeys) {
-		var i = 0;
-		graph.activephysmaptypes.forEach(function (shown) {
-			if (shown) {
-				addKeyToParent(graph, visibleNodeKeys, physmapKey(i), "showNodes");
-			}
-			else {
-				addKeyToParent(graph, hiddenNodeKeys, physmapKey[i], "hideNodes");
-			}
-			i++;
-		}) 	
-	}
 	
 	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
 			var keyElement = document.createElement("li");

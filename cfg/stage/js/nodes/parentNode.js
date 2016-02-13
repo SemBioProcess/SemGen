@@ -3,11 +3,9 @@
  */
 ParentNode.prototype = new Node();
 ParentNode.prototype.constructor = ParentNode;
-ParentNode.prototype.color = "";
 
 function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, charge) {
 	Node.prototype.constructor.call(this, graph, name, parent, links, r, group, textSize, nodeType, charge);
-	this.userCanHide = false;
 	this.children = null;
 
 	this.xmin = null;
@@ -17,8 +15,8 @@ function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, ch
 }
 
 ParentNode.prototype.createVisualElement = function (element, graph) {
+
 	Node.prototype.createVisualElement.call(this, element, graph);
-	
 	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
 	this.addBehavior(parentDrag);
 	
@@ -30,53 +28,59 @@ ParentNode.prototype.spaceBetweenTextAndNode = function() {
 	if (this.children && this.ymin) {
 		dist += (this.y - this.ymin)+4; 
 	}
-	return dist
+	return dist;
 }
 
 ParentNode.prototype.canLink = function () {
 	return !this.children;
 }
 
-ParentNode.prototype.setChildren = function (children) {
-	// Remove existing child nodes from the graph
-	if(this.children) {
-		// Recursively remove all descendant nodes
-		var removeChildren = function (childrenArr) {
-			childrenArr.forEach(function (child) {
-				// If this child has children remove them from the graph as well
-				if(child.children)
-					removeChildren.call(this, child.children);
-				
-				this.graph.removeNode(child.id);
-			}, this);
-		};
-		removeChildren.call(this, this.children);
-	}
-	
-	this.children = children;
-	
-	// If we added new children...
-	if(this.children) {
-		this.children.forEach(function (child) {
-			// Place the children around the parent (plus jitter)
+ParentNode.prototype.setChildren = function (data, createNode) {
+	this.children = null;
+	 if (data) {
+		this.children = {};
+		data.forEach(function (d) {
+			var child = createNode(d);
 			child.x = this.x + Math.random();
 			child.y = this.y + Math.random();
-			
-			// Add the child to the graph
-			this.graph.addNode(child);
+			this.children[d.name] = child
 		}, this);
-		
-		// Hide constitutive nodes by default
-		this.graph.update();
-		
-		if(this.graph.hasNodeOfType("State") || this.graph.hasNodeOfType("Rate"))
-			this.graph.hideNodes("Constitutive");
+		$(this).triggerHandler('childrenSet', [this.children]);
 	}
-	
-
-	$(this).triggerHandler('childrenSet', [children]);
-	
 	this.graph.update();
+	
 }
 
+ParentNode.prototype.getChildNode = function(id) {
+	var node = this.children[id];
+	if (node) {
+		return node;
+	}
+	for (var key in this.children) {
+		if (this.children[key].children) {
+			node = children.getChildNode(id);
+			if (node) return node;
+		}
+	}
+	return null;
+}
 
+ParentNode.prototype.getAllChildNodes = function() {
+	if (!this.children) return null;
+	var immediate = getSymbolArray(this.children);
+	var childnodes = [];
+	immediate.forEach(function(child) {
+		child.globalApply(function(d){
+			immediate.push(d);
+		});
+	});
+	return childnodes;
+}
+
+ParentNode.prototype.globalApply = function(funct) {
+	funct(this);
+	for (var key in this.children) {
+		var child = this.children[key];
+		child.globalApply(funct);
+	}	
+}

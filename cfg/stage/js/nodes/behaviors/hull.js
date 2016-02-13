@@ -21,7 +21,12 @@ function Hull(node) {
 	});
 	
 	$(node).on('childrenSet', function (e, newChildren) {
-		children = newChildren;
+		if (newChildren) {
+			children = getSymbolArray(newChildren);
+		}
+		else {
+			children = null;
+		}
 		
 		// If there are children show the hull. Otherwise, show the node
 		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
@@ -50,7 +55,7 @@ function Hull(node) {
 
 					// If the child has children analyze them as well
 					if(child.children)
-						analyzeChildren(child.children);
+						analyzeChildren(getSymbolArray(child.children));
 					
 					vertexes.push([child.x, child.y]);
 					//Find the most extreme node positions for each axis
