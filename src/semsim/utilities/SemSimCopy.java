@@ -3,6 +3,7 @@ package semsim.utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,9 +36,9 @@ public class SemSimCopy {
 	HashMap<PhysicalEntity, PhysicalEntity> entities = new HashMap<PhysicalEntity, PhysicalEntity>();
 	HashMap<PhysicalProcess, PhysicalProcess> procs = new HashMap<PhysicalProcess, PhysicalProcess>();
 	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
-	HashMap<DataStructure, DataStructure> dsmap = new HashMap<DataStructure, DataStructure>();
+	LinkedHashMap<DataStructure, DataStructure> dsmap = new LinkedHashMap<DataStructure, DataStructure>();
 	HashMap<Computation, Computation> compmap = new HashMap<Computation, Computation>();
-	HashMap<Submodel, Submodel> smmap = new HashMap<Submodel, Submodel>();
+	LinkedHashMap<Submodel, Submodel> smmap = new LinkedHashMap<Submodel, Submodel>();
 	
 	SemSimModel modeltocopy;
 	SemSimModel destmodel;
@@ -64,10 +65,10 @@ public class SemSimCopy {
 		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitmap.values()));
 		
 		copyDataStructures(modeltocopy);
-		destmodel.setAssociatedDataStructures(new HashSet<DataStructure>(dsmap.values()));
+		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.values()));
 		
 		copySubModels();
-		destmodel.setSubmodels(new HashSet<Submodel>(smmap.values()));
+		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.values()));
 		remapSubmodels();
 		
 		copyComputations();
@@ -152,23 +153,26 @@ public class SemSimCopy {
 	}
 	
 	private void copyDataStructures(SemSimModel modeltocopy) {
-		for (DataStructure ds : modeltocopy.getIntegers()) {
-			dsmap.put(ds, new SemSimInteger((SemSimInteger)ds));
-		}
-		for (DataStructure ds : modeltocopy.getMMLchoiceVars()) {
-			dsmap.put(ds, new MMLchoice((MMLchoice)ds));
-		}
+		
 		HashMap<MappableVariable, MappableVariable> mvset = new HashMap<MappableVariable, MappableVariable>();
-		for (DataStructure ds : modeltocopy.getDecimals()) {
-			if (ds instanceof MappableVariable) {
-				MappableVariable newmv = new MappableVariable((MappableVariable)ds);
-				mvset.put((MappableVariable)ds, newmv);
-				dsmap.put(ds, newmv);
-			}
-			else {
-				dsmap.put(ds, new Decimal((Decimal)ds));
+
+		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
+			
+			if(ds instanceof SemSimInteger) dsmap.put(ds, new SemSimInteger((SemSimInteger)ds));
+			else if(ds instanceof MMLchoice) dsmap.put(ds, new MMLchoice((MMLchoice)ds));
+			else if(ds instanceof Decimal) {
+				
+				if (ds instanceof MappableVariable) {
+					MappableVariable newmv = new MappableVariable((MappableVariable)ds);
+					mvset.put((MappableVariable)ds, newmv);
+					dsmap.put(ds, newmv);
+				}
+				else {
+					dsmap.put(ds, new Decimal((Decimal)ds));
+				}
 			}
 		}
+		
 		for (MappableVariable old : mvset.keySet()) {
 			Set<MappableVariable> fromset = new HashSet<MappableVariable>();
 			for (MappableVariable mv : old.getMappedFrom()) {
@@ -262,13 +266,15 @@ public class SemSimCopy {
 		
 		// For each submodel copy, associate it with data structure copies
 		for (Submodel newsm : smmap.values()) {
-			HashSet<DataStructure> dsset = new HashSet<DataStructure>();
+			ArrayList<DataStructure> dsset = new ArrayList<DataStructure>();
+			
 			for (DataStructure ds : newsm.getAssociatedDataStructures()) {
 				dsset.add(dsmap.get(ds));
 			}
 			
 			// Associate it with the submodel copies
-			HashSet<Submodel> smset = new HashSet<Submodel>();
+			ArrayList<Submodel> smset = new ArrayList<Submodel>();
+			
 			for (Submodel assocsm : newsm.getSubmodels()) {
 				smset.add(smmap.get(assocsm));
 			}

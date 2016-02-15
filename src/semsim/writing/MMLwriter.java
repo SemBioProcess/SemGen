@@ -45,7 +45,7 @@ public class MMLwriter extends ModelWriter{
 		    // create server
 		    NamedVal.NList soptions = new NamedVal.NList();
 			try {
-				soptions.setVal("buildDir", "");
+				soptions.setVal("buildDir", "./.jsim_temp");
 				ASServer server = ASServer.create(soptions, null, null);
 				String options = "sbml";
 	

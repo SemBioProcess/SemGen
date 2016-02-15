@@ -237,7 +237,9 @@ public class CellMLwriter extends ModelWriter {
 
 		// If there are no functional submodels, then create a new one that houses all the data structures
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
-			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", semsimmodel.getAssociatedDataStructures());
+			Set<DataStructure> outputset = new HashSet<DataStructure>();
+			outputset.addAll(semsimmodel.getAssociatedDataStructures());
+			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", outputset);
 			maincomponent.setAssociatedDataStructures(semsimmodel.getAssociatedDataStructures());
 			String mathml = "";
 			
@@ -259,7 +261,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		if(!looseDataStructures.isEmpty()){
+		if( ! looseDataStructures.isEmpty()){
 			System.err.println("There were data structures left over");
 			for(DataStructure ds : looseDataStructures) System.err.println(ds.getName());
 		}

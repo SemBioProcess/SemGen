@@ -59,7 +59,8 @@ public class Computation extends ComputationalModelComponent{
 	 * @return The set of all inputs for the Computation
 	 */
 	public Set<DataStructure> addInput(DataStructure input){
-		if(!inputs.contains(input)){
+		
+		if(! inputs.contains(input)){
 			inputs.add(input);
 			input.addUsedToCompute(getOutputs());
 		}
@@ -75,7 +76,7 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	/**
-	 * @return The set of {@link DataStructure} inputs used in the Computation
+	 * @return The list of {@link DataStructure} inputs used in the Computation
 	 */
 	public Set<DataStructure> getInputs(){
 		return inputs;
