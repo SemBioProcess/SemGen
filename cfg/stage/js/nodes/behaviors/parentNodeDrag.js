@@ -33,7 +33,7 @@ function parentDrag (parent) {
 						else { 
 							d.x = d.x;
 							d.y = d.y;
-							triggerHandler("dragend");
+							$(parent).triggerHandler("dragend");
 						}
 					}
 					else {

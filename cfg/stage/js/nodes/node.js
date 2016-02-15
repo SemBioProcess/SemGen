@@ -252,6 +252,10 @@ Node.prototype.onClick = function () {
 
 }
 
+Node.prototype.isVisible = function () {
+	return (!this.hidden && this.graph.nodesVisible[this.nodeType.id]);
+}
+
 Node.prototype.onDoubleClick = function () {}
 
 Node.prototype.globalApply = function (funct) {

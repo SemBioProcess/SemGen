@@ -15,7 +15,7 @@ function Hull(node) {
 			.on("dblclick", function(d) {
 				console.log("hull click");
 				node.setChildren(null);
-
+				
 				node.rootElement.selectAll("text").attr("x", 0);
 			});
 	});
@@ -50,7 +50,7 @@ function Hull(node) {
 				childrenArr.forEach(function (child) {
 					// Hull position shouldn't be effected
 					// by hidden models
-					if(child.hidden)
+					if(!child.isVisible())
 						return;
 
 					// If the child has children analyze them as well
@@ -88,14 +88,14 @@ function Hull(node) {
 
 			}
 			
+			if(!vertexes.length)
+				return;
+			
 			node.xmin = minX;
 			node.xmax = maxX;
 			node.ymin = minY;
 			node.ymax = maxY;
 			
-			if(!vertexes.length)
-				return;
-
 			// Center the node at the top of the hull
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))

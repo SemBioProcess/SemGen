@@ -106,13 +106,14 @@ function Graph() {
 	
 	// Hide all visibleNodes of the given type
 	this.showNodes = function (type) {
-		this.nodesVisible[type.id] = true;
+		
+		this.nodesVisible[NodeTypeMap[type].id] = true;
 		this.update();
 	}
 	
 	// Hide all visibleNodes of the given type
 	this.hideNodes = function (type) {
-		this.nodesVisible[type.id] = false;
+		this.nodesVisible[NodeTypeMap[type].id] = false;
 		this.update();
 	}
 	
@@ -199,15 +200,6 @@ function Graph() {
 
 		this.update();
 	}
-	
-	// Get an array of the hidden visibleNodes
-	this.getHiddenNodes = function () {
-		var hiddenNodesArr = [];
-		for(type in hiddenNodes)
-			hiddenNodesArr = hiddenNodesArr.concat(hiddenNodes[type]);
-		
-		return hiddenNodesArr;
-	}
 
 	// Get an array of the hidden links
 	this.getHiddenLinks = function () {
@@ -290,7 +282,7 @@ function Graph() {
 		for (var x in nodes) {
 			node = nodes[x];
 			node.globalApply(function(d) {
-				if (!d.hidden && graph.nodesVisible[d.nodeType.id]) {
+				if (d.isVisible()) {
 					visibleNodes.push(d);
 				}
 			});

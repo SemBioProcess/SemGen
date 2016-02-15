@@ -7,7 +7,7 @@ ParentNode.prototype.constructor = ParentNode;
 function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, charge) {
 	Node.prototype.constructor.call(this, graph, name, parent, links, r, group, textSize, nodeType, charge);
 	this.children = null;
-
+	
 	this.xmin = null;
 	this.xmax = null;
 	this.ymin = null;
