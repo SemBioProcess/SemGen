@@ -60,4 +60,5 @@ public interface SemGenWebBrowserCommandSender {
 	 * @param Answer query
 	 */
 	void receiveReply(String reply);
+	
 }

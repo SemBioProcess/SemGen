@@ -105,7 +105,7 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 	
 	public CommunicatingWebBrowser(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		super();
-		createBrowserListeners(commandSenderInterface, commandReceiver);
+		setBrowserListeners(commandSenderInterface, commandReceiver);
 		
 		// Insert the adapter that facilitates communication
 		addLoadListener(new CommunicatingWebBrowserLoadAdapter());

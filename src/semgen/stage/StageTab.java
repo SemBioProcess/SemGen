@@ -28,6 +28,7 @@ public class StageTab extends SemGenTab {
 		super("Stage", SemGenIcon.stageicon, "Stage for facilitating SemGen tasks", sets, globalacts);
 		
 		_workbench = bench;
+		bench.initialize();
 	}
 
 	@Override
