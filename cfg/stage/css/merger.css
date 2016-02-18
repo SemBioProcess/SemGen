@@ -1,0 +1,64 @@
+.modal-dialog {
+    width: 90vw;
+}
+
+.modal-body {
+    height: 75vh;
+    overflow: scroll;
+}
+
+.substage {
+    position: fixed;
+    top: 0;
+    bottom: 30px;
+    z-index: 10;
+    background: #FFFFFF;
+}
+
+#modelAStage {
+    width: 33vw;
+    left: 0;
+    border-right: 2px solid black;
+}
+
+#modelABStage {
+    width: 34vw;
+    left: 33vw;
+}
+
+#modelBStage {
+    width: 33vw;
+    right: 0;
+    border-left: 2px solid black;
+}
+
+.alignLeft {
+    float: left;
+    text-align:left;
+    width:33.33333%;
+}
+.alignCenter {
+    float: left;
+    text-align:center;
+    width:33.33333%;
+}
+.alignRight {
+    float: left;
+    text-align:right;
+    width:33.33333%;
+}
+
+.mergeResHeader {
+    padding-bottom: 30px;
+}
+
+.mergeResolution {
+    height: 250px;
+    border-width: 1px;
+    border-top-style: solid;
+}
+
+.mergeResolution:hover {
+    background-color: #dfe3ee;
+    cursor: pointer;
+}

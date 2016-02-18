@@ -34,6 +34,7 @@
 		<link type="text/css" rel="stylesheet" href="css/graph.css" />
 		<link type="text/css" rel="stylesheet" href="css/leftSidebar.css" />
 		<link type="text/css" rel="stylesheet" href="css/rightSidebar.css" />
+		<link type="text/css" rel="stylesheet" href="css/merger.css" />
 
 		<!--  Loads a mock sender and receiver if we're loading outside of SemGen -->
 		<script src="js/mock.js"></script>
@@ -65,8 +66,8 @@
 			</div>
 		</div>
 
-<!-- Sidebars -->
-	<!-- Left Sidebar -->
+		<!-- Sidebars -->
+		<!-- Left Sidebar -->
 		<div id="leftSidebar" class="panel panel-default sidebar">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#leftmenu"><span class="caret-left"></span></a>
@@ -92,8 +93,8 @@
 			</div>
 		</div>
 
-	<!-- Right Sidebar -->
-	<div id="rightSidebar" class="panel panel-default sidebar on">
+		<!-- Right Sidebar -->
+		<div id="rightSidebar" class="panel panel-default sidebar on">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#rightmenu"><span class="caret-left"></span></a>
 			</div>
@@ -156,10 +157,31 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title">Merger</h4>
+						<h3 class="modal-title">New and improved merger coming soon!</h3>
 					</div>
 					<div class="modal-body">
-						<p>New and improved merger coming soon!</p>
+						<div class="mergeResHeader">
+							<!--TODO: Replace "Model A" and "Model B" with actual model names-->
+							<h4 class="alignLeft">Model A</h4>
+							<h4 class="alignCenter">Merged Model</h4>
+							<h4 class="alignRight">Model B</h4>
+						</div>
+						<!--TODO: Create each of these with actual merge resolution-->
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button id="previewMergeBtn" type="button" class="btn btn-default" data-dismiss="modal">Preview merge</button>
