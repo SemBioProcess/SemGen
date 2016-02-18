@@ -18,17 +18,21 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
-public class StageTab extends SemGenTab {
+public class StageTab extends SemGenTab implements Observer {
 	private static final long serialVersionUID = 1L;
 	// Stage workbench
 	private StageWorkbench _workbench;
+	private SemGenCommunicatingWebBrowser browser;
 	
 	public StageTab(SemGenSettings sets, GlobalActions globalacts, StageWorkbench bench) {
 		super("Stage", SemGenIcon.stageicon, "Stage for facilitating SemGen tasks", sets, globalacts);
 		
 		_workbench = bench;
-		bench.initialize();
+		bench.addObserver(this);
+		
 	}
 
 	@Override
@@ -41,8 +45,9 @@ public class StageTab extends SemGenTab {
 			if (SemGen.debug) {
 				BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
 			}
-			SemGenCommunicatingWebBrowser browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
-			_workbench.setCommandSender(browser.getCommandSender());
+			_workbench.initialize();
+			browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
+			_workbench.setCommandSender(browser.getCommandSenderGenerator());
 			
 			if (SemGen.debug) {
 				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
@@ -82,5 +87,10 @@ public class StageTab extends SemGenTab {
 	@Override
 	public void requestSaveAs() {
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
 	}
 }

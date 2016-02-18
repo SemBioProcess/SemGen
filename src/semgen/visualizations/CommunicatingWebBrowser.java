@@ -2,6 +2,8 @@ package semgen.visualizations;
 
 import javax.naming.InvalidNameException;
 
+import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
+
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
@@ -49,7 +51,7 @@ import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
  *
  * @param <TSender> - Type of interface used as a contract for communication between java and javascript
  */
-public class CommunicatingWebBrowser<TSender> extends Browser {
+public class CommunicatingWebBrowser extends Browser {
 	
 	// Name of the variable in javascript that receives commands
 	private final String JavascriptCommandReceiverVariableName = "javaCommandReciever";
@@ -98,12 +100,12 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 			"}";
 	
 	// Generator for command sender values
-	private WebBrowserCommandSenderGenerator<TSender> _commandSenderGenerator;
+	private WebBrowserCommandSenderGenerator<?> _commandSenderGenerator;
 	
 	// Command receiver
 	private CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	
-	public CommunicatingWebBrowser(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+	public CommunicatingWebBrowser(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		super();
 		setBrowserListeners(commandSenderInterface, commandReceiver);
 		
@@ -111,7 +113,7 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
 	}
 	
-	public void setBrowserListeners(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+	public void setBrowserListeners(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		createBrowserListeners(commandSenderInterface, commandReceiver);
 		executeJavaScript(CommunicationHelpers.removeScriptbyID(javajsbridgeid));
 		
@@ -127,8 +129,9 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 		executeJavascriptAndHandleErrors(initializationScript);
 	}
 	
-	private void createBrowserListeners(Class<TSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
-		_commandSenderGenerator = new WebBrowserCommandSenderGenerator<TSender>(commandSenderInterface,
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void createBrowserListeners(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+		_commandSenderGenerator = new WebBrowserCommandSenderGenerator(commandSenderInterface,
 				this,
 				JavascriptCommandReceiverVariableName);
 
@@ -139,8 +142,8 @@ public class CommunicatingWebBrowser<TSender> extends Browser {
 		}
 	}
 	
-	public TSender getCommandSender() {
-		return _commandSenderGenerator.getSender();
+	public WebBrowserCommandSenderGenerator<?> getCommandSenderGenerator() {
+		return _commandSenderGenerator;
 	}
 
 	/**

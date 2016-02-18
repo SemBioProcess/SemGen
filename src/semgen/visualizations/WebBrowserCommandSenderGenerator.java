@@ -24,7 +24,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 	private T _sender;
 	
 	@SuppressWarnings("unchecked")
-	public WebBrowserCommandSenderGenerator(Class<T> senderInterface, CommunicatingWebBrowser<T> browser, String javascriptCommandReceiverVariableName) {
+	public WebBrowserCommandSenderGenerator(Class<T> senderInterface, CommunicatingWebBrowser browser, String javascriptCommandReceiverVariableName) {
 		if(senderInterface == null)
 			throw new NullPointerException("senderInterface");
 		
@@ -63,7 +63,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 	public String generateJavascriptReceiver() {
 		// Use reflection to create methods in javascript that listen for commands from java
 		String javascriptReceiverMethods = "";
-		Method[] javaCommandSenderMethods = _senderInterface.getDeclaredMethods();
+		Method[] javaCommandSenderMethods = _senderInterface.getMethods();
 		for(int i = 0; i < javaCommandSenderMethods.length; i++) {
 			Method method = javaCommandSenderMethods[i];
 			String senderMethodName = method.getName();
@@ -95,9 +95,9 @@ public class WebBrowserCommandSenderGenerator<T> {
 	 */
 	private class WebBrowserCommandSenderInvocationHandler implements InvocationHandler {
 		
-		private CommunicatingWebBrowser<T> _browser;
+		private CommunicatingWebBrowser _browser;
 		
-		public WebBrowserCommandSenderInvocationHandler(CommunicatingWebBrowser<T> browser) {
+		public WebBrowserCommandSenderInvocationHandler(CommunicatingWebBrowser browser) {
 			if(browser == null)
 				throw new NullPointerException("browser");
 			

@@ -1,7 +1,8 @@
-package semgen.stage.stagetask;
+package semgen.stage.stagetasks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
@@ -15,14 +16,12 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
-import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.collection.SemSimModel;
 
-public class ProjectTask extends StageTask {
-
-	public ProjectTask(SemGenWebBrowserCommandSender sender) {
-		super(sender);
-		_commandReceiver = new StageCommandReceiver();
+public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
+	
+	public ProjectTask() {
+		_commandReceiver = new ProjectCommandReceiver();
 	}
 	
 	/**
@@ -30,7 +29,7 @@ public class ProjectTask extends StageTask {
 	 * @author Ryan
 	 *
 	 */
-	public class StageCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
 		/**
 		 * Receives the add model command
@@ -162,6 +161,21 @@ public class ProjectTask extends StageTask {
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+	}
+
+	@Override
+	public Task getTaskType() {
+		return Task.PROJECT;
+	}
+
+	@Override
+	public Class<ProjectWebBrowserCommandSender> getSenderInterface() {
+		return ProjectWebBrowserCommandSender.class;
 	}
 	
 }

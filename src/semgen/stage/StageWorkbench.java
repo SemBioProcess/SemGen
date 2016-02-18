@@ -4,42 +4,61 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import semgen.stage.stagetask.ProjectTask;
-import semgen.stage.stagetask.StageTask;
+import semgen.stage.stagetasks.ProjectTask;
+import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
+import semgen.stage.stagetasks.StageTask;
+import semgen.stage.stagetasks.StageTask.StageTaskEvent;
+import semgen.stage.stagetasks.StageTaskConf;
 import semgen.utilities.Workbench;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
-import semgen.visualizations.SemGenWebBrowserCommandSender;
+import semgen.visualizations.WebBrowserCommandSenderGenerator;
 
 public class StageWorkbench extends Workbench {
-	private ProjectTask projtask;
-	private ArrayList<StageTask> tasks = new ArrayList<StageTask>();
+	public enum StageEvent {CHANGETASK}
 	
-	// Used to send commands to the view
-	private SemGenWebBrowserCommandSender _commandSender = null;
-	private CommunicatingWebBrowserCommandReceiver _commandReceiver;
+	private ArrayList<StageTask<? extends SemGenWebBrowserCommandSender>> tasks = new ArrayList<StageTask<? extends SemGenWebBrowserCommandSender>>();
+	private StageTask<? extends SemGenWebBrowserCommandSender> activetask;	
 	
 	public StageWorkbench() {}
+	
+	@Override
+	public void initialize() {
+		ProjectTask projtask = new ProjectTask();
+		projtask.addObserver(this);
+		tasks.add(projtask);
+		setActiveTask(0);
+	}
 	
 	/**
 	 * Get an object that listens for javascript commands
 	 * @return
 	 */
 	public CommunicatingWebBrowserCommandReceiver getCommandReceiver() {
-		return _commandReceiver;
+		return activetask.getCommandReceiver();
 	}
 	
 	/**
 	 * Sets the object used to send commands to the view
 	 * @param commandSender Object used to send commands to the view
 	 */
-	public void setCommandSender(SemGenWebBrowserCommandSender commandSender) {
-		_commandSender = commandSender;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setCommandSender(WebBrowserCommandSenderGenerator<?> commandSender) {
+		new CommandInterfaceSetter(commandSender, activetask);
+		
 	}
 	
-	@Override
-	public void initialize() {
-		projtask = new ProjectTask(_commandSender);
-		_commandReceiver = projtask.getCommandReceiver();
+	private void setActiveTask(int task) {
+		activetask = tasks.get(task);		
+	}
+	
+	private void createTask() {
+		StageTaskConf taskconf = activetask.getNewTaskConfiguration();
+		tasks.add(taskconf.createTask());
+		activetask.clearNewTaskConfiguration();	
+		
+		this.setActiveTask(tasks.size()-1);
+		this.setChanged();
+		this.notifyObservers(StageEvent.CHANGETASK);
 	}
 
 	@Override
@@ -70,6 +89,14 @@ public class StageWorkbench extends Workbench {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		
+		if (arg1 == StageTaskEvent.NEWTASK) {
+			createTask();
+		}
+	}
+	
+	private class CommandInterfaceSetter<T extends SemGenWebBrowserCommandSender> {
+		public CommandInterfaceSetter(WebBrowserCommandSenderGenerator<T> setter, StageTask<T> task) {
+			task.setCommandSender(setter.getSender());
+		}
 	}
 }

@@ -1,20 +1,11 @@
-package semgen.visualizations;
+package semgen.stage.stagetasks;
 
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SubModelNode;
 
-/**
- * Contract for sending commands between java and javascript
- * 
- * Note: This interface should not be implemented.
- * An instance of this interface will be dynamically implemented by CommunicatingWebBrowser.
- * 
- * @author Ryan
- *
- */
-public interface SemGenWebBrowserCommandSender {
+public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandSender{
 	
 	/**
 	 * Sends the add model command
@@ -55,10 +46,5 @@ public interface SemGenWebBrowserCommandSender {
 	 */
 	void showPhysioMapNetwork(String modelName, PhysioMapNode[] jsonPhysioMap);
 
-	/**
-	 * 
-	 * @param Answer query
-	 */
-	void receiveReply(String reply);
 	
 }

@@ -90,6 +90,32 @@ public class MergerWorkbench extends Workbench {
 		return true;
 	}
 	
+	public boolean addModels(ArrayList<File> files, ArrayList<SemSimModel> models, boolean autoannotate) {
+		if (loadedmodels.size() == 2) {
+			setChanged();
+			notifyObservers(MergeEvent.threemodelerror);
+			return false;
+		}
+		
+		SemSimModel model;
+		File file;
+		for (int i = 0; i < files.size(); i++) {
+			file = files.get(i);
+			model = models.get(i);
+			if (model == null) {
+				model = loadModel(file, autoannotate);
+				if (SemGenError.showSemSimErrors()) continue;
+			}
+			
+			loadedmodels.add(model);
+			filepathlist.add(file);
+			addDSNameList(model.getAssociatedDataStructures());
+		}
+		notifyModelListUpdated();
+		
+		return true;
+	}
+	
 	private void addDSNameList(Collection<DataStructure> dslist) {
 		alldslist.add(SemSimUtil.alphebetizeSemSimObjects(dslist));
 		ArrayList<DataStructure> tempdslist = new ArrayList<DataStructure>();

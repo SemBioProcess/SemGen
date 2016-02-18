@@ -3,18 +3,19 @@ package semgen.visualizations;
 import javax.naming.InvalidNameException;
 
 import semgen.SemGen;
+import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
-public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGenWebBrowserCommandSender> {
+public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	// Stage html in resource dir
 	private final static String StageHtml = SemGen.cfgreadpath + "stage/stage.html?testMode="+SemGen.debug;
 	
 	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException, IOException {
-		super(SemGenWebBrowserCommandSender.class, commandReceiver);
+		super(ProjectWebBrowserCommandSender.class, commandReceiver);
 
 		System.out.println("Loading SemGen web browser");
         
@@ -35,4 +36,5 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 	    
 	    System.out.println("SemGen web browser loaded");
 	}
+
 }
