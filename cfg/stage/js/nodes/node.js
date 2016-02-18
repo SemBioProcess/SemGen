@@ -2,9 +2,8 @@
  * Represents a node in the d3 graph
  */
 
-var defaultcharge = -300;
-    
-function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge) {
+
+function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	if(!graph)
 		return;
 
@@ -13,19 +12,17 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 	this.id = name;
 	this.displayName = name;
 	this.r = r;
-	this.color = color;
 	this.textSize = textSize;
-	this.nodeType = nodeType;
+	this.nodeType = NodeTypeMap[nodeType];
 	this.charge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;
 	this.inputs = inputs || [];
-	this.userCanHide = true;
 	this.hidden = false;
 	this.textlocx = 0;
 	this.defaultcharge = charge;
-	
+
 	this.timer = null;
 	this.clicks = 0;
 	if(this.parent) {
@@ -33,7 +30,7 @@ function Node(graph, name, parent, inputs, r, color, textSize, nodeType, charge)
 		// it with its parent node's id
 		this.id = this.parent.id + this.id;
 	}
-
+	validateNode(this);
 }
 
 
@@ -43,7 +40,7 @@ Node.prototype.addClassName = function (className) {
 }
 
 Node.prototype.spaceBetweenTextAndNode = function() {
-	return this.r * 0.2 + this.textSize; 
+	return this.r * 0.2 + this.textSize;
 }
 
 Node.prototype.addBehavior = function (behavior) {
@@ -57,15 +54,14 @@ Node.prototype.addBehavior = function (behavior) {
 
 Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
-
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
-    	.style("fill", this.color)
+    	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
-    	
+
 	this.rootElement.append("svg:circle")
 			.attr("r", this.r)
-			
+
 			.attr("class","nodeStrokeClass")
 			.on("mouseover", function (d) {
 				graph.highlightMode(d);
@@ -73,7 +69,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 			.on("mouseout", function () {
 				graph.highlightMode(null);
 			});
-		
+
 	this.rootElement.on("click", function (node) {
 		node.onClick();
 	});
@@ -84,11 +80,19 @@ Node.prototype.createVisualElement = function (element, graph) {
 		.attr("r", this.r + 4)
 		.attr("stroke", "yellow")
 		.attr("stroke-width", "4");
-	
+
+
+	//Append highlight circle
+	this.rootElement.append("svg:circle")
+		.attr("class", "highlight")
+		.attr("r", this.r + 4)
+		.attr("stroke", "yellow")
+		.attr("stroke-width", "4");
+
 	// Create the text elements
 	this.createTextElement("shadow");
 	this.createTextElement("real");
-	
+
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 
@@ -99,12 +103,12 @@ Node.prototype.canLink = function () {
 Node.prototype.getLinks = function () {
 	if(!this.inputs)
 		return null;
-	
+
 	// Don't show any inputs to this node can't link
 	if(!this.canLink())
 		return;
 
-	
+
 	// Build an array of links from our list of inputs
 	var links = [];
 
@@ -118,7 +122,7 @@ Node.prototype.getLinks = function () {
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			var parent = this.graph.findNode(inputData.parentModelId);
+			var parent = this.graph.findVisibleNode(inputData.parentModelId);
 			if (!parent) {
 				console.log("External link without a parent!");
 				continue;
@@ -134,7 +138,7 @@ Node.prototype.getLinks = function () {
 			}
 		}
 
-		else if(this.nodeType == "Entity" || this.nodeType == "Process") {
+		else if(this.nodeType == NodeType.ENTITY || this.nodeType == NodeType.PROCESS) {
 			type = "physiomap";
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;
@@ -151,21 +155,21 @@ Node.prototype.getLinks = function () {
 		}
 
 		// Get the input node
-		var inputNode = this.graph.findNode(inputNodeId);
-		
+		var inputNode = this.graph.findVisibleNode(inputNodeId);
+
 		// Get the sink node
-		var outputNode = outputNodeId === undefined ? this : this.graph.findNode(outputNodeId);
-		
+		var outputNode = outputNodeId === undefined ? this : this.graph.findVisibleNode(outputNodeId);
+
 		if(!inputNode) {
 			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
 			continue;
 		}
-		
+
 		if(!outputNode) {
 			console.log("sink node '" + outputNodeId + "' does not exist. Can't build link.");
 			continue;
 		}
-		
+
 		// If the parent has children it's circle is hidden
 		// so we don't want to show any inputs to it
 		if(!inputNode.canLink()) {
@@ -183,26 +187,26 @@ Node.prototype.getLinks = function () {
 		links.push(newLink);
 
 	}
-	
+
 	return links;
 }
 
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
-	
+
 	//Keep child nodes centered on parent
 	var forcey = 0;
 	var forcex = 0;
-	
+
 	if (this.parent) {
-		var k = .0005; 
+		var k = .0005;
 		forcey = (this.parent.y - this.y) * k;
 		forcex = (this.parent.x - this.x) * k;
 
 	}
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;
 	this.y = Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.y)) + forcey;
-	
+
 	var root = d3.select(element);
 	//Keep the text above hull when an parent node is opened.
 	if (this.children) {
@@ -210,20 +214,12 @@ Node.prototype.tickHandler = function (element, graph) {
 		this.rootElement.selectAll("text").attr("x", -(this.x - (this.xmax + this.xmin)/2.0));
 	}
 	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
-	
+
 	$(this).triggerHandler('postTick');
 }
 
-Node.prototype.getKeyInfo = function () {
-	return {
-		nodeType: this.nodeType,
-		color: this.color,
-		canShowHide: this.userCanHide,
-	};
-}
-
 Node.prototype.createTextElement = function (className) {
-	
+
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
@@ -244,7 +240,7 @@ Node.prototype.removeHighlight = function () {
 
 Node.prototype.onClick = function () {
 	this.clicks++;
-	
+
 	if(this.clicks == 1) {
 
 		node = this;
@@ -252,19 +248,48 @@ Node.prototype.onClick = function () {
 			node.clicks = 0;             //after action performed, reset counter
 	        main.task.selectNode(node);
 	    }, 500);
-		
+
 	}
     else {
         clearTimeout(this.timer);    //prevent single-click action
         this.clicks = 0;             //after action performed, reset counter
     	this.onDoubleClick();
-       
+
     }
-	sender.consoleOut(this.charge);
       d3.event.stopPropagation();
 
 }
 
-
+Node.prototype.isVisible = function () {
+	return (!this.hidden && this.graph.nodesVisible[this.nodeType.id]);
+}
 
 Node.prototype.onDoubleClick = function () {}
+
+Node.prototype.globalApply = function (funct) {
+	funct(this);
+}
+
+function validateNode(nodeData) {
+	if(!nodeData)
+		throw "Invalid node data";
+
+	if(typeof nodeData.id != "string")
+		throw "Node id must be a string";
+
+	if(typeof nodeData.r != "number")
+		throw "Node radius must be a number";
+
+	if(typeof nodeData.charge != "number")
+		throw "Charge must be a number";
+
+	if(typeof nodeData.getLinks != "function")
+		throw "Node getLinks is not defined";
+
+	if(typeof nodeData.createVisualElement != "function")
+		throw "Node createVisualElement is not defined";
+
+	if(typeof nodeData.tickHandler != "function")
+		throw "Node tickHandler is not defined";
+
+};

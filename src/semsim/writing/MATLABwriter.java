@@ -17,8 +17,8 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.sbml.libsbml.ASTNode;
-import org.sbml.libsbml.libsbml;
+import org.sbml.jsbml.ASTNode;
+import org.sbml.jsbml.JSBML;
 
 import semsim.SemSimLibrary;
 import semsim.definitions.RDFNamespace;
@@ -72,8 +72,8 @@ public class MATLABwriter extends ModelWriter{
 			
 			if(mathmlstring!=null) mathmlstring = SemSimUtil.getRHSofMathML(mathmlstring, dslocalname);
 			
-			ASTNode ast_result   = libsbml.readMathMLFromString(mathmlstring);
-			String ast_as_string = libsbml.formulaToString(ast_result);
+			ASTNode ast_result   = JSBML.readMathMLFromString(mathmlstring);
+			String ast_as_string = JSBML.formulaToString(ast_result);
 			
 			String formula = null;
 			
@@ -154,8 +154,8 @@ public class MATLABwriter extends ModelWriter{
 				
 				// If the start value uses a mathematical expression (is dependent on other vars, as can sometimes happen in JSim models)
 				if(startval.startsWith(mathMLhead)){
-					ASTNode ast_startexp   = libsbml.readMathMLFromString(startval);
-					startval = libsbml.formulaToString(ast_startexp);
+					ASTNode ast_startexp   = JSBML.readMathMLFromString(startval);
+					startval = JSBML.formulaToString(ast_startexp);
 				}
 					
 				dsnamesandstartvals.put(dsname, startval);
@@ -348,11 +348,11 @@ public class MATLABwriter extends ModelWriter{
 					Element value = (Element)piecechildrenit.next();
 					Element condition = (Element)piecechildrenit.next();
 										
-					ASTNode value_ast   = libsbml.readMathMLFromString(mathMLhead + outputter.outputString(value) + mathMLtail);
-					String value_ast_string = libsbml.formulaToString(value_ast);
+					ASTNode value_ast   = JSBML.readMathMLFromString(mathMLhead + outputter.outputString(value) + mathMLtail);
+					String value_ast_string = JSBML.formulaToString(value_ast);
 					
-					ASTNode condition_ast   = libsbml.readMathMLFromString(mathMLhead + outputter.outputString(condition) + mathMLtail);
-					String condition_ast_string = libsbml.formulaToString(condition_ast);
+					ASTNode condition_ast   = JSBML.readMathMLFromString(mathMLhead + outputter.outputString(condition) + mathMLtail);
+					String condition_ast_string = JSBML.formulaToString(condition_ast);
 										
 					formula = formula + condition_ast_string + "\n";
 					formula = formula + "\t\t" + solvedvarname + " = " + value_ast_string + ";\n";
@@ -365,8 +365,8 @@ public class MATLABwriter extends ModelWriter{
 				String otherwise_ast_string = "???";
 				if(doc.getRootElement().getChild("piecewise",mathns).getChild("otherwise", mathns)!=null){
 					Element otherwiseel = doc.getRootElement().getChild("piecewise",mathns).getChild("otherwise", mathns);
-					ASTNode otherwise_ast   = libsbml.readMathMLFromString(mathMLhead + outputter.outputString(otherwiseel.getChildren()) + mathMLtail);
-					otherwise_ast_string = libsbml.formulaToString(otherwise_ast);
+					ASTNode otherwise_ast   = JSBML.readMathMLFromString(mathMLhead + outputter.outputString(otherwiseel.getChildren()) + mathMLtail);
+					otherwise_ast_string = JSBML.formulaToString(otherwise_ast);
 				}
 				formula = formula + "\telse " + solvedvarname + " = " + otherwise_ast_string + ";\n\tend";
 			}

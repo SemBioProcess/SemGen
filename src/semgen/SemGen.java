@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +22,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -49,7 +47,7 @@ public class SemGen extends JFrame implements Observer{
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private static boolean openstage = false;
 	
 	//A class for application level events such as exiting and creating new tabs
@@ -141,12 +139,6 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
-		
-		// Add the cfg folder to java.library.path (for using libSBML)
-		System.setProperty( "java.library.path", cfgreadpath );
-		Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
-		fieldSysPath.setAccessible( true );
-		fieldSysPath.set( null, null );
 						
 		setTitle(":: S e m  G e n ::");
 		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
@@ -205,15 +197,12 @@ public class SemGen extends JFrame implements Observer{
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
 		
-		File libsbmlfile = null;
-		
 		switch (OS) { 
 		case WINDOWS :
 			if (!new File(cfgreadpath).canRead()) {
 				cfgreadpath = System.getProperty("user.home") + "/AppData/local/SemGen/cfg/";
 				cfgwritepath = cfgreadpath;
 			}
-			libsbmlfile = new File(cfgreadpath + "sbmlj.dll"); 
 			break;
 		
 		case MACOSX :
@@ -227,25 +216,10 @@ public class SemGen extends JFrame implements Observer{
 				cfgwritepath = new File(homeDir + "/Library/Preferences/SemGen/cfg/").getAbsolutePath() + "/";
 				examplespath = appbundlepath + "/Contents/Resources/examples/";
 			}
-			
-			libsbmlfile = new File(cfgreadpath + "libsbmlj.jnilib");
-
 			break;
 		
 		default : 
-			libsbmlfile = new File(cfgreadpath + "libsbmlj.so");
 		}
-		
-		if(libsbmlfile.exists()){
-			try {
-				System.load(libsbmlfile.getAbsolutePath());
-			}
-			catch (UnsatisfiedLinkError e){
-				JOptionPane.showMessageDialog(null, "Unable to load " + libsbmlfile.getAbsolutePath() + ". JSim may not work properly. Error: {0}" + e.getMessage());
-			}
-		}
-		else 
-			JOptionPane.showMessageDialog(null, "Couldn't open " + libsbmlfile.getAbsolutePath() + " for loading.");
 	}
 	
 	/**Define and Add Frame Listeners */

@@ -12,6 +12,7 @@ import semsim.model.computational.datastructures.DataStructure;
 public class DependencyNode extends Node {	
 	
 	public String nodeType;
+	public Number typeIndex;
 	
 	public DependencyNode(DataStructure dataStructure, String parentModelId)
 	{
@@ -28,7 +29,7 @@ public class DependencyNode extends Node {
 		super(name, parentModelId);
 		
 		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
-
+		this.typeIndex = deptypes.indexOf(nodeType);
 		// Are there intra-model inputs?
 		if(dataStructure.getComputation() != null) {
 			for(DataStructure input : dataStructure.getComputation().getInputs())

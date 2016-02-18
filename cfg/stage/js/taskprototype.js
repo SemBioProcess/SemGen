@@ -5,29 +5,27 @@
 function Task(graph) {
 
 	this.graph = graph;
-	this.AllNodes = [];
-	this.modelNodes = {};
+	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
 
+	this.addModelNode = function(modelName) {
+		if(this.nodes[modelName])
+			throw "Model already exists";
+		
+		var modelNode = new ModelNode(this.graph, modelName);
+		
+		this.nodes[modelName] = modelNode;
+		graph.update();
+	};
+	
 	//Get a model node
 	this.getModelNode = function(modelName) {
-		var modelNode = modelNodes[modelName];
+		var modelNode = this.nodes[modelName];
 		if(!modelNode)
 			throw "model doesn't exist";
 		
 		return modelNode;
-	};
-	
-	//Add child nodes to a model node
-	this.addChildNodes = function(parentNode, data, createNode) {
-		// Create nodes from the data
-		var nodes = [];
-		data.forEach(function (d) {
-			nodes.push(createNode(d));
-		});
-		
-		parentNode.setChildren(nodes);
 	};
 
 	this.taskClicked = function(element) {
@@ -43,7 +41,7 @@ function Task(graph) {
 	};
 	
 	this.selectNode = function(node) {
-		if (node.nodeType=="Model") {
+		if (node.nodeType==NodeType.MODEL) {
 			this.selectedModels.forEach(function(selnode) {
 				//if (selnode == node) { return; }
 				selnode.removeHighlight();

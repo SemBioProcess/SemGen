@@ -237,26 +237,26 @@ public class SemSimTermLibrary extends Observable {
 		
 		// For cases where we're looking up a physical model component and we're assuming that all processes are unique
 		// (i.e. not equivalent even if they have same participants)
-		if((pmc instanceof PhysicalProcess) && assumeuniqueprocesses){
-			
-			for (IndexCard<?> card : masterlist) {
-				if (card.component==pmc && ! card.removed) return masterlist.indexOf(card);
+		if((pmc.getSemSimType()==SemSimTypes.CUSTOM_PHYSICAL_PROCESS) && assumeuniqueprocesses){
+			for (Integer index : procindexer) {
+				IndexCard<?> card = masterlist.get(index);
+				if (card.component==pmc && !card.removed) return masterlist.indexOf(card);
 			}
-			return -1;
 		}
 		// Otherwise...
-		else
+		else {
 			for (IndexCard<?> card : masterlist) {
 				if (card.isTermEquivalent(pmc)) return masterlist.indexOf(card);
 			}
-			return -1;
+		}
+		return -1;
 	}
 	
 	// Retrieving physical properties
 		public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
 			return (PhysicalPropertyinComposite)masterlist.get(index).getObject();
 		}
-
+		
 		public Integer getPhysicalPropertyIndex(PhysicalPropertyinComposite pp) {
 			for (Integer i : ppccompindexer) {
 				if (masterlist.get(i).isTermEquivalent(pp)) return i; 
@@ -306,20 +306,6 @@ public class SemSimTermLibrary extends Observable {
 			return sortComponentIndiciesbyName(singppindexer);
 		}
 
-		
-		// Retrieving physical entities
-		
-		public Integer getIndexofPhysicalEntity(PhysicalEntity pe){
-			if(pe instanceof CompositePhysicalEntity) 
-				return getIndexofCompositePhysicalEntity((CompositePhysicalEntity) pe);
-			
-			else if(pe.hasPhysicalDefinitionAnnotation()) 
-				return getIndexofReferencePhysicalEntity((ReferencePhysicalEntity) pe);
-			
-			else
-				return getIndexofCustomPhysicalEntity((CustomPhysicalEntity) pe);
-		}
-		
 		public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
 			return (ReferencePhysicalEntity)masterlist.get(index).getObject();
 		}
@@ -328,7 +314,7 @@ public class SemSimTermLibrary extends Observable {
 			return sortComponentIndiciesbyName(rpeindexer);
 		}
 		
-		public Integer getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
+		public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
 			for (Integer i : rpeindexer) {
 				if (masterlist.get(i).isTermEquivalent(rpe)) return i; 
 			}
@@ -339,7 +325,7 @@ public class SemSimTermLibrary extends Observable {
 			return (CustomPhysicalEntity)masterlist.get(index).getObject();
 		}
 
-		public Integer getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
+		public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
 			for (Integer i : custpeindexer) {
 				if (masterlist.get(i).isTermEquivalent(cupe)) {
 					return i; 
@@ -352,7 +338,7 @@ public class SemSimTermLibrary extends Observable {
 			return (CompositePhysicalEntity)masterlist.get(index).getObject();
 		}
 
-		public Integer getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
+		public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
 			for (Integer i : cpeindexer) {
 				if (masterlist.get(i).isTermEquivalent(cpe)) return i; 
 			}
@@ -449,11 +435,11 @@ public class SemSimTermLibrary extends Observable {
 			return namelist;
 		}
 		
-		public String getComponentName(int index) {
+		public String getComponentName(Integer index) {
 			return masterlist.get(index).getName();
 		}
 		
-		public String getComponentDescription(int index) {
+		public String getComponentDescription(Integer index) {
 			String desc = masterlist.get(index).getDescription();
 			if (desc==null) desc="";
 			return desc;
@@ -471,7 +457,7 @@ public class SemSimTermLibrary extends Observable {
 			return -1;
 		}
 		
-		public void setName(int index, String name) {
+		public void setName(Integer index, String name) {
 			masterlist.get(index).getObject().setName(name);
 			notifyTermChanged();
 			
@@ -490,7 +476,7 @@ public class SemSimTermLibrary extends Observable {
 			notifyTermChanged();
 		}
 		
-		public SemSimTypes getSemSimType(int index) {
+		public SemSimTypes getSemSimType(Integer index) {
 			return masterlist.get(index).getType();
 		}
 		
@@ -553,7 +539,7 @@ public class SemSimTermLibrary extends Observable {
 		LinkedHashMap<Integer, Double>  ppmap = new LinkedHashMap<Integer, Double>();
 		
 		for (PhysicalEntity pe : pes.keySet()) {
-			Integer peindex = getIndexofPhysicalEntity(pe);
+			Integer peindex = getComponentIndex(pe, false);
 			ppmap.put(peindex, pes.get(pe));
 		}
 		
@@ -581,7 +567,7 @@ public class SemSimTermLibrary extends Observable {
 		PhysicalProcess process = getPhysicalProcess(index);
 		ArrayList<Integer> mediators = new ArrayList<Integer>();
 		for (PhysicalEntity entity : process.getMediators()) {
-			mediators.add(getIndexofPhysicalEntity(entity));
+			mediators.add(getComponentIndex(entity, false));
 		}
 		return sortComponentIndiciesbyName(mediators);
 	}
@@ -589,7 +575,7 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getAllProcessParticipantIndicies(Integer index) {
 		ArrayList<Integer> parts = new ArrayList<Integer>();
 		for (PhysicalEntity entity : getPhysicalProcess(index).getParticipants()) {
-			parts.add(getIndexofPhysicalEntity(entity));
+			parts.add(getComponentIndex(entity, false));
 		}
 		return parts;
 	}
@@ -609,10 +595,14 @@ public class SemSimTermLibrary extends Observable {
 		String pstring = "<html><body>";
 		
 		for(int source : getProcessSourcesIndexMultiplierMap(proc).keySet()){
-			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
+			Double mult = getProcessSourcesIndexMultiplierMap(proc).get(source);
+			String multstring = (mult==1.0) ? "" : " (X" + Double.toString(mult) + ")";
+			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + multstring + "<br>";
 		}
 		for(int sink : getProcessSinksIndexMultiplierMap(proc).keySet()) {
-			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
+			Double mult = getProcessSinksIndexMultiplierMap(proc).get(sink);
+			String multstring = (mult==1.0) ? "" : " (X" + Double.toString(mult) + ")";
+			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + multstring + "<br>";
 		}
 		for(int mediator : getProcessMediatorIndicies(proc)){
 			pstring = pstring + "<b>Mediator:</b> " + getComponentName(mediator) + "<br>";

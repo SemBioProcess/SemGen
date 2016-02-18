@@ -3,8 +3,9 @@ Stage.prototype = new Task();
 Stage.prototype.constructor = Stage;
 function Stage(graph) {
 	Task.prototype.constructor.call(this, graph);
-	AllNodes = this.AllNodes;
-	modelNodes = this.modelNodes;
+
+	var stage = this;
+	var nodes = this.nodes;
 
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
@@ -14,14 +15,11 @@ function Stage(graph) {
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
+		stage.addModelNode(modelName);
+	});
 
-		if(modelNodes[modelName])
-			throw "Model already exists";
-
-		var modelNode = new ModelNode(graph, modelName);
-		modelNodes[modelName] = modelNode;
-		graph.addNode(modelNode);
-		graph.update();
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
 	});
 
 	receiver.onReceiveReply(function (reply) {
@@ -31,9 +29,7 @@ function Stage(graph) {
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
 		sender.consoleOut("Removing model " + modelName);
-		removeFromDragList(graph.findNode(modelName));
-		graph.removeNode(modelName);
-		delete this.modelNodes[modelName];
+		delete nodes[modelName];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
 	});
@@ -41,30 +37,31 @@ function Stage(graph) {
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
 		console.log("Showing dependencies for model " + modelName);
-
-		var modelNode = main.task.getModelNode(modelName);
-		main.task.addChildNodes(modelNode, dependencyNodeData, function (data) {
-			return new DependencyNode(main.graph, data, modelNode);
+		graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
+		var modelNode = stage.getModelNode(modelName);
+		modelNode.setChildren(dependencyNodeData, function (data) {
+			return new DependencyNode(graph, data, modelNode);
 		});
 	});
 
 	// Adds a submodel network to the d3 graph
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
-
-		var modelNode = main.task.getModelNode(modelName);
-		main.task.addChildNodes(modelNode, submodelData, function (data) {
-			return new SubmodelNode(main.graph, data, modelNode);
+		graph.displaymode = DisplayModes.SHOWSUBMODELS;
+		var modelNode = stage.getModelNode(modelName);
+		modelNode.setChildren(submodelData, function (data) {
+			return new SubmodelNode(graph, data, modelNode);
 		});
 	});
 
 	// Adds a PhysioMap network to the d3 graph
 	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
 		console.log("Showing PhysioMap for model " + modelName);
+		graph.displaymode = DisplayModes.SHOWPHYSIOMAP;
 
-		var modelNode = main.task.getModelNode(modelName);
-		main.task.addChildNodes(modelNode, physiomapData, function (data) {
-			return new PhysioMapNode(main.graph, data, modelNode);
+		var modelNode = stage.getModelNode(modelName);
+		modelNode.setChildren(physiomapData, function (data) {
+			return new PhysioMapNode(graph, data, modelNode);
 		});
 	});
 
@@ -177,14 +174,4 @@ function makeResultSet(searchResultSet) {
 
     resultSet.append(list);
     return resultSet;
-}
-
-function removeFromDragList(_node) {
-
-	var NewNodes = [];
-	AllNodes.forEach(function (node) {
-		if(node != _node)
-			NewNodes.push(node);
-	});
-	AllNodes = NewNodes;
-}
+};

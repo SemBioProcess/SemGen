@@ -15,13 +15,18 @@ function Hull(node) {
 			.on("dblclick", function(d) {
 				console.log("hull click");
 				node.setChildren(null);
-
+				
 				node.rootElement.selectAll("text").attr("x", 0);
 			});
 	});
 	
 	$(node).on('childrenSet', function (e, newChildren) {
-		children = newChildren;
+		if (newChildren) {
+			children = getSymbolArray(newChildren);
+		}
+		else {
+			children = null;
+		}
 		
 		// If there are children show the hull. Otherwise, show the node
 		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
@@ -39,17 +44,18 @@ function Hull(node) {
 			var maxX = null;
 			var minY = null;
 			var maxY = null;
+
 			// Recursively analyze all descendants
 			var analyzeChildren = function (childrenArr) {
 				childrenArr.forEach(function (child) {
 					// Hull position shouldn't be effected
 					// by hidden models
-					if(child.hidden)
+					if(!child.isVisible())
 						return;
-					
+
 					// If the child has children analyze them as well
 					if(child.children)
-						analyzeChildren(child.children);
+						analyzeChildren(getSymbolArray(child.children));
 					
 					vertexes.push([child.x, child.y]);
 					//Find the most extreme node positions for each axis
@@ -67,14 +73,29 @@ function Hull(node) {
 				});
 			};
 			analyzeChildren(children);
+			
+						//If there is only one visible child, make the hull a circle with a radius of 6
+			if (minX == maxX) {
+				
+				minX = minX - 6;
+				maxX = maxX + 6;
+				minY = minY - 6;
+				maxY = maxY + 6;
+				vertexes.push([minX, minY]);
+				vertexes.push([maxX, minY]);
+				vertexes.push([minX, maxY]);
+				vertexes.push([maxX, maxY]);
+
+			}
+			
+			if(!vertexes.length)
+				return;
+			
 			node.xmin = minX;
 			node.xmax = maxX;
 			node.ymin = minY;
 			node.ymax = maxY;
 			
-			if(!vertexes.length)
-				return;
-
 			// Center the node at the top of the hull
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))

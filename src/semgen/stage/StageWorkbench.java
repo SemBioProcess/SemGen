@@ -26,14 +26,14 @@ public class StageWorkbench extends Workbench {
 
 	// Maps semsim model name to a semsim model
 	private Map<String, ModelInfo> _models;
-	
+
 	// Used to send commands to the view
 	private SemGenWebBrowserCommandSender _commandSender;
-	
+
 	public StageWorkbench() {
 		_models = new HashMap<String, ModelInfo>();
 	}
-	
+
 	/**
 	 * Get an object that listens for javascript commands
 	 * @return
@@ -41,7 +41,7 @@ public class StageWorkbench extends Workbench {
 	public CommunicatingWebBrowserCommandReceiver getCommandReceiver() {
 		return new StageCommandReceiver();
 	}
-	
+
 	/**
 	 * Sets the object used to send commands to the view
 	 * @param commandSender Object used to send commands to the view
@@ -49,7 +49,7 @@ public class StageWorkbench extends Workbench {
 	public void setCommandSender(SemGenWebBrowserCommandSender commandSender) {
 		_commandSender = commandSender;
 	}
-	
+
 	@Override
 	public void initialize() {
 
@@ -79,11 +79,11 @@ public class StageWorkbench extends Workbench {
 	public String getModelSourceFile() {
 		return null;
 	}
-	
+
 	private class ModelInfo {
 		public SemSimModel Model;
 		public File Path;
-		
+
 		public ModelInfo(SemSimModel model, File path) {
 			Model = model;
 			Path = path;
@@ -110,12 +110,12 @@ public class StageWorkbench extends Workbench {
 					continue;
 				}
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
-				
+
 				// Tell the view to add a model
 				_commandSender.addModel(semsimmodel.getName());
 			}
 		}
-		
+
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				File file = new File(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
@@ -130,16 +130,16 @@ public class StageWorkbench extends Workbench {
 				_commandSender.addModel(semsimmodel.getName());
 			}
 		}
-		
+
 		public void onTaskClicked(String modelName, String task) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
 				throw new IllegalArgumentException(modelName);
-			
+
 			// Get the model
 			ModelInfo modelInfo = _models.get(modelName);
 			SemSimModel model = modelInfo.Model;
-			
+
 			// Execute the proper task
 			switch(task) {
 				case "annotate":
@@ -179,7 +179,6 @@ public class StageWorkbench extends Workbench {
 			}
 		}
 
-
 		public void onSearch(String searchString) throws FileNotFoundException {
 			SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
@@ -188,21 +187,21 @@ public class StageWorkbench extends Workbench {
 
 			_commandSender.search(resultSets);
 		}
-		
+
 		public void onMerge(String modelName1, String modelName2) {
 			// If the models don't exist throw an exception
 			if(!_models.containsKey(modelName1))
 				throw new IllegalArgumentException(modelName1);
-			
+
 			if(!_models.containsKey(modelName2))
 				throw new IllegalArgumentException(modelName2);
-			
+
 			ModelInfo model1Info = _models.get(modelName1);
 			ModelInfo model2Info = _models.get(modelName2);
-			
+
 			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
 		}
-		
+
 		public void onQueryModel(String modelName, String query) {
 			ModelInfo modelInfo = _models.get(modelName);
 			switch (query) {
@@ -216,18 +215,22 @@ public class StageWorkbench extends Workbench {
 				break;
 			}
 		}
-		
+
 		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}
-		
+
 		public void onConsoleOut(Number msg) {
 			System.out.println(msg.toString());
+		}
+
+		public void onConsoleOut(boolean msg) {
+			System.out.println(msg);
 		}
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		
+
 	}
 }

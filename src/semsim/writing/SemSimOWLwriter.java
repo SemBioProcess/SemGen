@@ -654,7 +654,8 @@ public class SemSimOWLwriter extends ModelWriter {
 		String uritrunk = namespace;
 		URI uri = null;
 
-		if(!(pmc instanceof PhysicalProcess)){
+		if(! (pmc instanceof PhysicalProcess)){
+			
 			if(pmc.hasPhysicalDefinitionAnnotation()){
 				uritrunk = uritrunk +
 				SemSimOWLFactory.getIRIfragment(((ReferenceTerm) pmc).getPhysicalDefinitionURI().toString());
@@ -665,13 +666,16 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 		else uri = URI.create(uritrunk + SemSimOWLFactory.URIencoding(pmc.getName()));
 		
-		if(semsimmodel.getAssociatedDataStructure(pmc.getName())!=null){
-			try {
-				uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uri.toString() + "_",
-						SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString())));
-			} 
-			catch (OWLException e) {e.printStackTrace();}
-		}
+		// If there is already a data structure with the same URI as the physical model component,
+		// append with a numerical suffix until we have a unique ID
+		try {
+			Set<String> existingdsinds = SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString());
+			
+			if(existingdsinds.contains(uri.toString()) && semsimmodel.getAssociatedDataStructure(pmc.getName()) != null)
+					uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uri.toString() + "_", existingdsinds)); 
+			}
+		catch (OWLException e) {e.printStackTrace();}
+
 		return uri;
 	}
 	
