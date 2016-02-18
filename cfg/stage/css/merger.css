@@ -37,11 +37,7 @@
     text-align:left;
     width:33.33333%;
 }
-.alignCenter {
-    float: left;
-    text-align:center;
-    width:33.33333%;
-}
+
 .alignRight {
     float: left;
     text-align:right;
