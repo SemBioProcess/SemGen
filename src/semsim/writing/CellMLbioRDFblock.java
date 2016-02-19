@@ -50,7 +50,7 @@ public class CellMLbioRDFblock {
 	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getURIasString());
 	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimRelation.HAS_MULTIPLIER.getURIasString());
 	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimRelation.PHYSICAL_PROPERTY_OF.getURIasString());
-	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.toString());
+	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getURIasString());
 	public static Property is = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
 	public static Property isversionof = ResourceFactory.createProperty(SemSimRelation.BQB_IS_VERSION_OF.getURIasString());
 	public static Property partof = ResourceFactory.createProperty(StructuralRelation.PART_OF.getURIasString());
@@ -58,7 +58,7 @@ public class CellMLbioRDFblock {
 	public static Property containedin = ResourceFactory.createProperty(StructuralRelation.CONTAINED_IN.getURIasString());
 	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 	public static Property hasname = ResourceFactory.createProperty(SemSimRelation.HAS_NAME.getURIasString());
-	public static Property description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespace() + "description");
+	public static Property description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString() + "description");
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	

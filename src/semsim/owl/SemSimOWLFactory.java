@@ -91,7 +91,7 @@ public class SemSimOWLFactory {
 	// Add external class
 	public static void addExternalReferenceClass(OWLOntology destinationont,
 			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
-		String parentname = RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_" + physicaltype;
+		String parentname = RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_" + physicaltype;
 		OWLClass parent = factory.getOWLClass(IRI.create(parentname));
 		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsuri));
 		OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd, parent);

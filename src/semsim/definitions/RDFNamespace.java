@@ -7,7 +7,7 @@ public enum RDFNamespace  {
 	SEMSIM("http://www.bhi.washington.edu/SemSim#", "semsim"),
 	OPB("http://bhi.washington.edu/OPB#", "opb"),
 	RO("http://www.obofoundry.org/ro/ro.owl#", "ro"),
-	BQB("http://biomodels.net/biology-qualifiers/", "bqb"),
+	BQB("http://biomodels.net/biology-qualifiers/", "bqbiol"),
 	BQM("http://biomodels.net/model-qualifiers/", "bqm"),
 	RDF("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf"),
 	DCTERMS("http://purl.org/dc/terms/", "dcterms"),
@@ -18,7 +18,8 @@ public enum RDFNamespace  {
 	CELLML1_1("http://www.cellml.org/cellml/1.1#", "cellml"),
 	BQS("http://www.cellml.org/bqs/1.0#", "bqs"),
 	CMETA("http://www.cellml.org/metadata/1.0#", "cmeta"),
-	DOC("http://cellml.org/tmp-documentation", "doc");
+	DOC("http://cellml.org/tmp-documentation", "doc"),
+	VCARD("http://www.w3.org/2001/vcard-rdf/3.0#","vCard");
 	
 	private String namespace;
 	private String owlid;
@@ -28,7 +29,7 @@ public enum RDFNamespace  {
 		owlid = id;
 	}
 	
-	public String getNamespace() {
+	public String getNamespaceasString() {
 		return namespace;
 	}
 	
@@ -37,6 +38,6 @@ public enum RDFNamespace  {
 	}
 	
 	public Namespace createJdomNamespace() {
-		return Namespace.getNamespace(getOWLid(), getNamespace());
+		return Namespace.getNamespace(getOWLid(), getNamespaceasString());
 	}
 }

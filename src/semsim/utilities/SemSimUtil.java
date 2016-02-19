@@ -256,7 +256,7 @@ public class SemSimUtil {
 	 */
 	public static String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
 		SAXBuilder saxbuilder = new SAXBuilder();
-		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespace());
+		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
 		
 		try {
 			Document doc = saxbuilder.build(new StringReader(mathmlstring));

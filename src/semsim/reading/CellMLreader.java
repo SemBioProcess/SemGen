@@ -606,7 +606,7 @@ public class CellMLreader extends ModelReader {
 				}
 			Property pred = st.getPredicate();
 			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespace())){
+				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceasString())){
 					listofremovedstatements.add(st);
 				}
 			}
@@ -687,7 +687,7 @@ public class CellMLreader extends ModelReader {
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespace()))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -1027,7 +1027,7 @@ public class CellMLreader extends ModelReader {
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	private URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = RDFNamespace.OPB.getNamespace() + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
 		return URI.create(uristring);
 	}
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
