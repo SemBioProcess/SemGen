@@ -16,4 +16,10 @@ public interface SemGenWebBrowserCommandSender {
 	 */
 	void receiveReply(Object reply);
 	
+	/**
+	 * 
+	 * @param Change task
+	 */
+	void changeTask(String taskname);
+	
 }

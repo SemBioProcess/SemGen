@@ -22,6 +22,10 @@ function main() {
 
 	this.task = new Stage(this.graph);
 	this.graph.setTaskNodes(this.task.nodes);
+	
+	//receiver.onChangeTask(String taskname) {
+		
+	//}
 }
 
 $(window).bind("cwb-initialized", function(e) {

@@ -8,6 +8,7 @@ import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
+import semgen.stage.StageWorkbench.StageEvent;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -91,6 +92,12 @@ public class StageTab extends SemGenTab implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+		if (arg == StageEvent.CHANGETASK) {
+			try {
+				browser.setBrowserListeners(_workbench.getCommandSenderInterface(), _workbench.getCommandReceiver());
+			} catch (InvalidNameException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

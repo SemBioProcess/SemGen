@@ -47,6 +47,18 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		this.notifyObservers(StageTaskEvent.NEWTASK);
 	}
 
+	protected void createMerger(String[] modelnames) {
+		ArrayList<ModelInfo> mods = new ArrayList<ModelInfo>();
+		for (String name : modelnames) {
+		// If the models don't exist throw an exception
+			if(!_models.containsKey(name))
+				throw new IllegalArgumentException(name);
+			
+			mods.add(_models.get(name));
+		}
+		configureTask(Task.MERGER, mods);
+	}
+	
 	protected void switchTask() {
 		this.setChanged();
 		this.notifyObservers(StageTaskEvent.SWITCHTASK);

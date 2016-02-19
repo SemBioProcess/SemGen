@@ -122,18 +122,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String modelName1, String modelName2) {
-			// If the models don't exist throw an exception
-			if(!_models.containsKey(modelName1))
-				throw new IllegalArgumentException(modelName1);
-			
-			if(!_models.containsKey(modelName2))
-				throw new IllegalArgumentException(modelName2);
-			
-			ModelInfo model1Info = _models.get(modelName1);
-			ModelInfo model2Info = _models.get(modelName2);
-			
-			SemGen.gacts.NewMergerTab(model1Info.Path, model2Info.Path);
+		public void onMerge(String[] modelNames) {
+			createMerger(modelNames);			
 		}
 		
 		public void onQueryModel(String modelName, String query) {
@@ -148,6 +138,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				_commandSender.receiveReply(hasdependencies.toString());
 				break;
 			}
+		}
+		
+		public void onChangeTask(Number index) {
+			
 		}
 		
 		public void onConsoleOut(String msg) {

@@ -38,6 +38,15 @@ public class StageWorkbench extends Workbench {
 	}
 	
 	/**
+	 * Get an object that listens for javascript commands
+	 * @return
+	 */
+	public Class<? extends SemGenWebBrowserCommandSender> getCommandSenderInterface() {
+		return activetask.getSenderInterface();
+	}
+	
+	
+	/**
 	 * Sets the object used to send commands to the view
 	 * @param commandSender Object used to send commands to the view
 	 */
