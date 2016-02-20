@@ -1,5 +1,6 @@
 package semsim.model.collection;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +14,9 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 
 public abstract class SemSimCollection extends SemSimObject{
-	protected Set<Submodel> submodels = new HashSet<Submodel>();
-	protected Set<DataStructure> dataStructures = new HashSet<DataStructure>();
+	
+	protected ArrayList<Submodel> submodels = new ArrayList<Submodel>();
+	protected ArrayList<DataStructure> dataStructures = new ArrayList<DataStructure>();
 
 	public SemSimCollection(SemSimTypes type) {
 		super(type);
@@ -68,7 +70,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return submodel;
 	}
 	
-	public void setSubmodels(Set<Submodel> submodels) {
+	public void setSubmodels(ArrayList<Submodel> submodels) {
 		this.submodels.clear();
 		this.submodels.addAll(submodels);
 	}
@@ -80,7 +82,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return All {@link Submodel}s in the model.
 	 */
-	public Set<Submodel> getSubmodels() {
+	public ArrayList<Submodel> getSubmodels() {
 		return submodels;
 	}
 	
@@ -111,7 +113,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return null;
 	}
 	
-	public void setAssociatedDataStructures(Set<DataStructure> dsset) {
+	public void setAssociatedDataStructures(ArrayList<DataStructure> dsset) {
 		dataStructures.clear();
 		dataStructures.addAll(dsset);
 	}
@@ -119,7 +121,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return The set of all {@link DataStructure}s in the model.
 	 */
-	public Set<DataStructure> getAssociatedDataStructures(){
+	public ArrayList<DataStructure> getAssociatedDataStructures(){
 		return dataStructures;
 	}
 	

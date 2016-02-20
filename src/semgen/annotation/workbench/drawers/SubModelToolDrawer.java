@@ -2,7 +2,6 @@ package semgen.annotation.workbench.drawers;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import semgen.annotation.workbench.SemSimTermLibrary;
@@ -16,7 +15,7 @@ import semsim.utilities.SemSimComponentComparator;
 import semsim.writing.CaseInsensitiveComparator;
 
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
-	public SubModelToolDrawer(SemSimTermLibrary lib, Set<Submodel> modlist) {
+	public SubModelToolDrawer(SemSimTermLibrary lib, ArrayList<Submodel> modlist) {
 		super(lib);
 		componentlist.addAll(modlist);
 		refreshSubModels();
@@ -63,7 +62,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	public void addSubmodelstoSubmodel(ArrayList<Integer> sms) {
-		Set<Submodel> smset = new HashSet<Submodel>();
+		ArrayList<Submodel> smset = new ArrayList<Submodel>();
 		for (Integer i : sms) {
 			smset.add(componentlist.get(i));
 		}
@@ -91,8 +90,8 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return smdslist;
 	}
 	
-	public void setDataStructures(Set<DataStructure> dsset) {
-		componentlist.get(currentfocus).setAssociatedDataStructures(dsset);
+	public void setDataStructures(ArrayList<DataStructure> dslist) {
+		componentlist.get(currentfocus).setAssociatedDataStructures(dslist);
 	}
 	
 	public ArrayList<String> getAssociatedSubModelDataStructureNames() {

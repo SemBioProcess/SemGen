@@ -88,8 +88,8 @@ public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable
 		return cset;
 	}
 	
-	public HashSet<T> getComponentsfromIndicies(ArrayList<Integer> sms) {
-		HashSet<T> components = new HashSet<T>();
+	public ArrayList<T> getComponentsfromIndicies(ArrayList<Integer> sms) {
+		ArrayList<T> components = new ArrayList<T>();
 		
 		for (Integer i : sms) {
 			components.add(componentlist.get(i));

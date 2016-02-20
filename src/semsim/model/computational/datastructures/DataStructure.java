@@ -69,7 +69,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	 * @param ds A DataStructure that is computed from this DataStructure
 	 */
 	public void addUsedToCompute(DataStructure ds){
-		if(!getUsedToCompute().contains(ds) && ds.isDeclared){
+		
+		if( ! getUsedToCompute().contains(ds) && ds.isDeclared){
 			usedToCompute.add(ds);
 		}
 	}
@@ -77,11 +78,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	/**
 	 * Append the list of DataStructures that this DataStructure
 	 * is used to compute
-	 * @param ds A set of DataStructures that are computed from this DataStructure
+	 * @param ds A list of DataStructures that are computed from this DataStructure
 	 */
 	public void addUsedToCompute(Set<DataStructure> dss){
+		
 		for(DataStructure ds : dss){
-			if(!getUsedToCompute().contains(ds)){ // && ds.isDeclared){
+			
+			if( ! getUsedToCompute().contains(ds)){ // && ds.isDeclared){
 				usedToCompute.add(ds);
 			}
 		}

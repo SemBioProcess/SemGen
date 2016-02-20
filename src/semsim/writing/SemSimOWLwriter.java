@@ -367,8 +367,10 @@ public class SemSimOWLwriter extends ModelWriter {
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			Boolean toplevelimport = false;
 			Boolean sublevelimport = false;
+			
 			if(sub.isFunctional()){
 				FunctionalSubmodel fsub = (FunctionalSubmodel)sub;
+				
 				if(fsub.isImported() && fsub.getParentImport()==null){
 					toplevelimport = true;
 				}
@@ -377,7 +379,8 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 			}
 			
-			if(!sublevelimport){
+			if(! sublevelimport){
+				
 				// Create the individual
 				String indstr = namespace + SemSimOWLFactory.URIencoding(sub.getName());
 				SemSimOWLFactory.createSemSimIndividual(ont, indstr, factory.getOWLClass(SemSimTypes.SUBMODEL.getIRI()), "", manager);
@@ -393,6 +396,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 				
 				if(!toplevelimport){
+					
 					// If a functional sub-model, store computation.
 					if(sub instanceof FunctionalSubmodel){
 						SemSimOWLFactory.createSemSimIndividual(ont, indstr + "_computation", factory.getOWLClass(SemSimTypes.COMPUTATION.getIRI()), "", manager);

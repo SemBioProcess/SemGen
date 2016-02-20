@@ -265,10 +265,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	// Generate the mappings between submodels and the data structures they are associated with
 	private Map<Submodel,Set<DataStructure>> createSubmodelDataStructureMap(){
 			
-		Map<Submodel,Set<DataStructure>> submodeldatastructuremap = new HashMap<Submodel,Set<DataStructure>>();
+		Map<Submodel, Set<DataStructure>> submodeldatastructuremap = new HashMap<Submodel,Set<DataStructure>>();
 		
 		for(Submodel submodel : semsimmodel.getSubmodels()){
-			submodeldatastructuremap.put(submodel, submodel.getAssociatedDataStructures());
+			Set<DataStructure> dsset = new HashSet<DataStructure>();
+			dsset.addAll(submodel.getAssociatedDataStructures());
+			submodeldatastructuremap.put(submodel, dsset);
 		}
 		
 		return submodeldatastructuremap;

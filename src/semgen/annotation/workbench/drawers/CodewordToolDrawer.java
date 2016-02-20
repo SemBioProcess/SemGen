@@ -41,7 +41,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		}
 	}
 	
-	public CodewordToolDrawer(SemSimTermLibrary lib, Set<DataStructure> dslist) {
+	public CodewordToolDrawer(SemSimTermLibrary lib, ArrayList<DataStructure> dslist) {
 		super(lib);
 		componentlist.addAll(dslist);
 		

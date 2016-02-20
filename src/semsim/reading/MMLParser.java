@@ -21,12 +21,8 @@ public class MMLParser {
 	public int srcType = -1;
 
 	protected Document doc;
-	public String jsimBuildDir;
 
-	public MMLParser(String jsimBuildDir){
-		this.jsimBuildDir = jsimBuildDir;
-		System.setProperty("jsim.home", jsimBuildDir);
-	}
+	public MMLParser(){}
 	
 	public Document readFromFile(File file) throws JDOMException, IOException, Xcept, InterruptedException, OWLException {
 		String fname = file.getName();
@@ -44,7 +40,6 @@ public class MMLParser {
 	    
 	    // create server
 	    NamedVal.NList soptions = new NamedVal.NList();
-	    if (jsimBuildDir != null) soptions.setVal("buildDir", jsimBuildDir);
 	    ASServer server = ASServer.create(soptions, null, null);	
 	    String options = "sbml";
 	

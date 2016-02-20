@@ -217,6 +217,7 @@ public class CellMLreader extends ModelReader {
 			}
 
 			// Iterate through variables to find the outputs
+			ArrayList<DataStructure> allvars = new ArrayList<DataStructure>();
 			Set<DataStructure> outputs = new HashSet<DataStructure>();
 			Set<DataStructure> inputs = new HashSet<DataStructure>();
 			Set<DataStructure> unknowns = new HashSet<DataStructure>();
@@ -235,6 +236,7 @@ public class CellMLreader extends ModelReader {
 				
 				
 				MappableVariable cvar = new MappableVariable(uniquevarname);
+				allvars.add(cvar);
 				
 				if(publicinterface!=null){
 					if(publicinterface.equals("out")){
@@ -345,9 +347,7 @@ public class CellMLreader extends ModelReader {
 			FunctionalSubmodel submodel = new FunctionalSubmodel(submodelname, outputs);
 			
 			// Set inputs, outputs, etc. and the computational elements of the submodel component
-			for(DataStructure output : outputs) submodel.addDataStructure(output);
-			for(DataStructure input : inputs) submodel.addDataStructure(input);
-			for(DataStructure unknown : unknowns) submodel.addDataStructure(unknown);
+			submodel.setAssociatedDataStructures(allvars);;
 			
 			submodel.getComputation().setOutputs(outputs);
 			submodel.getComputation().setInputs(inputs);
@@ -606,7 +606,7 @@ public class CellMLreader extends ModelReader {
 				}
 			Property pred = st.getPredicate();
 			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespace())){
+				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceasString())){
 					listofremovedstatements.add(st);
 				}
 			}
@@ -687,7 +687,7 @@ public class CellMLreader extends ModelReader {
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespace()))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -1027,7 +1027,7 @@ public class CellMLreader extends ModelReader {
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	private URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = RDFNamespace.OPB.getNamespace() + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
 		return URI.create(uristring);
 	}
 	public static String getRHSofDataStructureEquation(String varmathml, String varname){
