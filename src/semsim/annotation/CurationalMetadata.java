@@ -12,7 +12,7 @@ import org.semanticweb.owlapi.model.OWLLiteral;
 import semsim.definitions.RDFNamespace;
 
 public class CurationalMetadata {
-	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespace();
+	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceasString();
 	
 	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
 	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
@@ -90,7 +91,7 @@ public class SemSimOWLFactory {
 	// Add external class
 	public static void addExternalReferenceClass(OWLOntology destinationont,
 			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
-		String parentname = RDFNamespace.SEMSIM.getNamespace() + "Reference_physical_" + physicaltype;
+		String parentname = RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_" + physicaltype;
 		OWLClass parent = factory.getOWLClass(IRI.create(parentname));
 		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsuri));
 		OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd, parent);
@@ -541,7 +542,7 @@ public class SemSimOWLFactory {
 	public static Set<Submodel> traverseNestedComponentTreeForDataStructures(Submodel sub) {
 	    // traverse all nodes that belong to the parent
 		Set<Submodel> nodes  = new HashSet<Submodel>();
-		Set<Submodel> set = sub.getSubmodels();
+		ArrayList<Submodel> set = sub.getSubmodels();
 	    for(Submodel node : set){
 		    // store node information
 		    nodes.add(node);
