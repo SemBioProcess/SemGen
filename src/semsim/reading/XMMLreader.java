@@ -47,10 +47,6 @@ public class XMMLreader extends ModelReader {
 	protected Document doc;
 	private String mmlcode;
 	
-	public XMMLreader(File file, Document doc) throws Xcept {
-		super(file);
-		this.doc = doc;
-	}
 	
 	public XMMLreader(ModelAccessor modelaccessor, Document doc, String mmlcode) throws Xcept {
 		super(modelaccessor);
@@ -400,7 +396,6 @@ public class XMMLreader extends ModelReader {
 		}
 				
 		// Add the model-level annotations
-		//TODO: change next line so it works
 		semsimmodel.setSourceFileLocation(modelaccessor);
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		

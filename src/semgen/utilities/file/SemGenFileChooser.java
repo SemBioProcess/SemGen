@@ -81,8 +81,7 @@ public class SemGenFileChooser extends JFileChooser {
 		
 		if(file.getName().toLowerCase().endsWith(".proj")){
 			
-			JSimProjectFileReader projreader = new JSimProjectFileReader(file);
-			ArrayList<String> modelnames = projreader.getNamesOfModelsInProject();
+			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(file);
 			
 			if(modelnames.size()==1) 
 				modelaccessor = new ModelAccessor(file, modelnames.get(0));

@@ -19,21 +19,21 @@ import semsim.utilities.SemSimUtil;
 
 public class JSimProjectFileWriter extends ModelWriter{
 
-	JSimProjectFileReader projreader;
+	File projectFile;
 	String modelName;
 	XMLOutputter outputter;
-	CellMLbioRDFblock rdfblock;
+	BiologicalRDFblock rdfblock;
 	Element modelElement;
 	Element semsimControlElement;
 
 
 	public JSimProjectFileWriter(ModelAccessor modelaccessor, SemSimModel semsimmodel) {
 		super(semsimmodel);
-		projreader = new JSimProjectFileReader(modelaccessor.getFileThatContainsModel());
 		outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
 		modelName = modelaccessor.getModelName();
-		modelElement = projreader.getModelElement(modelName);
+		projectFile = modelaccessor.getFileThatContainsModel();
+		modelElement = JSimProjectFileReader.getModelElement(projectFile, modelName);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
 			
-			rdfblock = new CellMLbioRDFblock(semsimmodel, null, null);
+			rdfblock = new BiologicalRDFblock(semsimmodel, null, null);
 			
 			for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 				
@@ -62,15 +62,15 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		// Add the RDF metadata to the appropriate element in the JSim project file
 		if( ! rdfblock.rdf.isEmpty()){
-			String rawrdf = CellMLbioRDFblock.getRDFAsString(rdfblock.rdf);
+			String rawrdf = BiologicalRDFblock.getRDFAsString(rdfblock.rdf);
 			Content newrdf = CellMLwriter.makeXMLContentFromString(rawrdf);
 			
-			semsimControlElement = projreader.getSemSimAnnotationsControlElementForModel(modelName);
+			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projectFile, modelName);
 			
 			if(newrdf!=null) semsimControlElement.addContent(newrdf);
 		}
 		
-		String outputstring =  outputter.outputString(projreader.getDocument());
+		String outputstring =  outputter.outputString(JSimProjectFileReader.getDocument(projectFile));
 		SemSimUtil.writeStringToFile(outputstring, destination);
 		
 	}

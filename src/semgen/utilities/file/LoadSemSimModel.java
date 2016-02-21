@@ -3,6 +3,8 @@ package semgen.utilities.file;
 import java.io.IOException;
 
 import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
@@ -11,7 +13,8 @@ import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
-import semsim.reading.MMLParser;
+import semsim.reading.JSimProjectFileReader;
+import semsim.reading.MMLtoXMMLconverter;
 import semsim.reading.ModelAccessor;
 import semsim.reading.XMMLreader;
 import semsim.reading.ModelClassifier;
@@ -21,6 +24,7 @@ import semsim.reading.SemSimOWLreader;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.WebserviceTester;
+import semsim.writing.BiologicalRDFblock;
 
 public class LoadSemSimModel extends SemGenJob {
 	private ModelAccessor modelaccessor;
@@ -112,25 +116,47 @@ public class LoadSemSimModel extends SemGenJob {
 
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
-		semsimmodel = loadMML(modelaccessor.getModelTextAsString(), modelaccessor.getModelName());
 		
-		if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate){
-			setStatus("Annotating Physical Properties");
-			semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+		String srcText = ma.getModelTextAsString();
+		Document xmmldoc = MMLtoXMMLconverter.convert(ma.getModelTextAsString(), ma.getModelName());
+		
+		if (ErrorLog.hasErrors()) return null;
+		
+		XMMLreader xmmlreader = new XMMLreader(modelaccessor, xmmldoc, srcText);		
+		semsimmodel = xmmlreader.readFromDocument();
+		
+		if((semsimmodel == null) || semsimmodel.getErrors().isEmpty()){
+			return semsimmodel;
+		}
+		else{
+			
+			Element ssael = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(
+					ma.getFileThatContainsModel(), ma.getModelName());
+			
+			
+			// If there are no semsim annotations associated with the model...
+			if(ssael.getChildren().isEmpty()){
+				if(autoannotate){
+					setStatus("Annotating physical properties");
+					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				}
+			}
+			// Otherwise collect the semsim annotations
+			else{
+				setStatus("Collecting annotations");
+				XMLOutputter xmloutputter = new XMLOutputter();
+				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
+				BiologicalRDFblock biordf = new BiologicalRDFblock(semsimmodel, xmloutputter.outputString(rdfel), null);
+				
+				//semsimmodel = 
+			}
+			
+			
 		}
 		
 		return semsimmodel;
 	}
 	
-	// Convert MML model string to SemSim model
-	private SemSimModel loadMML(String srcText, String modelname) throws Xcept, IOException, InterruptedException, OWLException{
-		Document doc = new MMLParser().readFromMMLstring(srcText, modelname);
-		
-		if (ErrorLog.hasErrors()) return null;
-		
-		XMMLreader xmmlreader = new XMMLreader(modelaccessor, doc, srcText);		
-		return xmmlreader.readFromDocument();
-	}
 	
 	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel).size()>0){

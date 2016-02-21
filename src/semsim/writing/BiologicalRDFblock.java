@@ -34,7 +34,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.utilities.SemSimUtil;
 
-public class CellMLbioRDFblock {
+public class BiologicalRDFblock {
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
 	private Map<PhysicalModelComponent, URI> pmcsandresourceURIs = new HashMap<PhysicalModelComponent,URI>(); 
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
@@ -60,7 +60,7 @@ public class CellMLbioRDFblock {
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	
-	public CellMLbioRDFblock(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
+	public BiologicalRDFblock(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
 		this.modelns = semsimmodel.getNamespace();
 		
 		if(rdfasstring != null){

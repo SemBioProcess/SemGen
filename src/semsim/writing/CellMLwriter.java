@@ -51,7 +51,7 @@ import semsim.utilities.SemSimUtil;
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
 	private Set<String> metadataids = new HashSet<String>();
-	private CellMLbioRDFblock rdfblock;
+	private BiologicalRDFblock rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
@@ -98,7 +98,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Declare the RDF metadata
 			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = CellMLbioRDFblock.getRDFAsString(rdfblock.rdf);
+				String rawrdf = BiologicalRDFblock.getRDFAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -119,7 +119,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new CellMLbioRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new BiologicalRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
 	}
 	
 	private void createRootElement() {		
@@ -510,7 +510,7 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add the local RDF within the annotated CellML element
 				if( ! localrdf.isEmpty()){
-					String rawrdf = CellMLbioRDFblock.getRDFAsString(localrdf);
+					String rawrdf = BiologicalRDFblock.getRDFAsString(localrdf);
 					Content newrdf = makeXMLContentFromString(rawrdf);
 					if(newrdf != null) el.addContent(newrdf);
 				}

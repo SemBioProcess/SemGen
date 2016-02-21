@@ -6,47 +6,46 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.jdom.Attribute;
-import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.semanticweb.owlapi.model.OWLException;
 
-import semsim.model.collection.SemSimModel;
+public class JSimProjectFileReader {
 
-public class JSimProjectFileReader extends ModelReader{
-
-	private Document doc;
-	private Element root;
-	private Element projelement;
 	public static final String semSimAnnotationControlValue = "SemSimAnnotation";
 	
-	public JSimProjectFileReader(File file) {
-		super(file);
+	public static Document getDocument(File file){
+		Document doc = null;
 		
 		SAXBuilder builder = new SAXBuilder();
 		
 		try{ 
 			doc = builder.build(file);
-			root = doc.getRootElement();
-			projelement = root.getChild("project");
 		}
 		catch(JDOMException | IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public Document getDocument(){
 		return doc;
 	}
 	
-	public ArrayList<String> getNamesOfModelsInProject(){
+	private static Element getRootElement(File projfile){
+		Document doc = getDocument(projfile);
+		return doc.getRootElement();
+	}
+	
+	private static Element getProjectElement(File projfile){
+		Element root = getRootElement(projfile);
+		return root.getChild("project");
+	}
+	
+	
+	public static ArrayList<String> getNamesOfModelsInProject(File projfile){
 		
 		ArrayList<String> returnlist = new ArrayList<String>();
+		
+		Element projelement = getProjectElement(projfile);
 								
 		if(projelement != null){
 			List<Element> modellist = projelement.getChildren("model");
@@ -59,9 +58,9 @@ public class JSimProjectFileReader extends ModelReader{
 	}
 	
 	
-	public String getModelCode(String modelname){
+	protected static String getModelCode(File projfile, String modelname){
 		
-		Element modelel = getModelElement(modelname);
+		Element modelel = getModelElement(projfile, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){
@@ -76,7 +75,8 @@ public class JSimProjectFileReader extends ModelReader{
 	}
 	
 
-	public Element getModelElement(String modelname){
+	public static Element getModelElement(File projfile, String modelname){
+		Element projelement = getProjectElement(projfile);
 		Iterator<Element> modelit = projelement.getChildren("model").iterator();
 		
 		while(modelit.hasNext()){
@@ -90,8 +90,8 @@ public class JSimProjectFileReader extends ModelReader{
 	}
 	
 	
-	public Element getSemSimAnnotationsControlElementForModel(String modelname){
-		Element modelel = getModelElement(modelname);
+	public static Element getSemSimAnnotationControlElementForModel(File projfile, String modelname){
+		Element modelel = getModelElement(projfile, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){
@@ -109,12 +109,5 @@ public class JSimProjectFileReader extends ModelReader{
 		
 		return newel;
 	}
-
 	
-	@Override
-	public SemSimModel read() throws IOException, InterruptedException,
-			OWLException, CloneNotSupportedException, XMLStreamException {
-		return null;
-	}
-
 }

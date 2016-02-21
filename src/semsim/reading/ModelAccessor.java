@@ -106,9 +106,7 @@ public class ModelAccessor {
 		else if(modelIsPartOfArchive()){
 			
 			if(modelIsPartOfJSimProjectFile()){
-				
-				JSimProjectFileReader projreader = new JSimProjectFileReader(getArchiveFile());
-				returnstring = projreader.getModelCode(getModelNameInArchive());
+				returnstring = JSimProjectFileReader.getModelCode(getArchiveFile(), getModelNameInArchive());
 			}
 		}
 			

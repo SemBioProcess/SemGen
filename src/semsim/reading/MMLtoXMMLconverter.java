@@ -12,14 +12,11 @@ import JSim.data.NamedVal;
 import JSim.util.Xcept;
 import semsim.utilities.ErrorLog;
 
-public class MMLParser {
-	public int srcType = -1;
+public class MMLtoXMMLconverter {
 
-	protected Document doc;
+	protected static Document doc;
 
-	public MMLParser(){}
-	
-	public Document readFromMMLstring(String srcText, String modelname) {
+	public static Document convert(String mmlcode, String modelname) {
 
 		try{
 		    // create server
@@ -29,7 +26,7 @@ public class MMLParser {
 		
 		    // translate
 		    String xmlstring = null;
-		    try {xmlstring = server.translateModelText(ASModel.TEXT_MML, ASModel.TEXT_XMML, srcText, options);} 
+		    try {xmlstring = server.translateModelText(ASModel.TEXT_MML, ASModel.TEXT_XMML, mmlcode, options);} 
 		    catch (Exception e) {
 		    	ErrorLog.addError("XMML parsing error - could not compile " + modelname, true, true);
 		    	e.printStackTrace();
