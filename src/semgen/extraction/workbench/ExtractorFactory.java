@@ -1,7 +1,5 @@
 package semgen.extraction.workbench;
 
-import java.io.File;
-
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -14,9 +12,8 @@ public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 		super("Loading File");
 		final SemGenOpenFileChooser sgc =  new SemGenOpenFileChooser("Extractor - Select source SemSim model",
 				new String[]{"owl"},true);
-		File[] files = sgc.getSelectedFiles();
 		
-		modelaccessors.addAll(sgc.convertFilesToModelAccessors(files));
+		modelaccessors.addAll(sgc.getSelectedFilesAsModelAccessors());
 
 		if (modelaccessors.size()==0) 
 			abort();

@@ -139,7 +139,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		
 		if(fileURI != null){
 			validateModelComposites();
+			
 			try {
+
 				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
 					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
@@ -152,6 +154,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				else if(lastsavedas==ModelClassifier.MML_MODEL_IN_PROJ){
 					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(fileURI);
 				}
+				
 			} catch (Exception e) {e.printStackTrace();}		
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
 			setModelSaved(true);

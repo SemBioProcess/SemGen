@@ -18,7 +18,6 @@ public class JSimProjectFileReader {
 	
 	public static Document getDocument(File file){
 		Document doc = null;
-		
 		SAXBuilder builder = new SAXBuilder();
 		
 		try{ 
@@ -30,22 +29,17 @@ public class JSimProjectFileReader {
 		return doc;
 	}
 	
-	private static Element getRootElement(File projfile){
-		Document doc = getDocument(projfile);
-		return doc.getRootElement();
-	}
 	
-	private static Element getProjectElement(File projfile){
-		Element root = getRootElement(projfile);
+	private static Element getProjectElement(Document projdoc){
+		Element root = projdoc.getRootElement();
 		return root.getChild("project");
 	}
 	
 	
-	public static ArrayList<String> getNamesOfModelsInProject(File projfile){
+	public static ArrayList<String> getNamesOfModelsInProject(Document projdoc){
 		
 		ArrayList<String> returnlist = new ArrayList<String>();
-		
-		Element projelement = getProjectElement(projfile);
+		Element projelement = getProjectElement(projdoc);
 								
 		if(projelement != null){
 			List<Element> modellist = projelement.getChildren("model");
@@ -58,9 +52,9 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	protected static String getModelCode(File projfile, String modelname){
+	protected static String getModelCode(Document projdoc, String modelname){
 		
-		Element modelel = getModelElement(projfile, modelname);
+		Element modelel = getModelElement(projdoc, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){
@@ -75,8 +69,8 @@ public class JSimProjectFileReader {
 	}
 	
 
-	public static Element getModelElement(File projfile, String modelname){
-		Element projelement = getProjectElement(projfile);
+	public static Element getModelElement(Document projdoc, String modelname){
+		Element projelement = getProjectElement(projdoc);
 		Iterator<Element> modelit = projelement.getChildren("model").iterator();
 		
 		while(modelit.hasNext()){
@@ -90,8 +84,8 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	public static Element getSemSimAnnotationControlElementForModel(File projfile, String modelname){
-		Element modelel = getModelElement(projfile, modelname);
+	public static Element getSemSimAnnotationControlElementForModel(Document projdoc, String modelname){
+		Element modelel = getModelElement(projdoc, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){

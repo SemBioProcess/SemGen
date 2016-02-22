@@ -1,8 +1,15 @@
 package semsim.writing;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
+import org.jdom.Content;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
@@ -24,4 +31,15 @@ public abstract class ModelWriter {
 	public abstract void writeToFile(File destination) throws OWLException;
 	
 	public abstract void writeToFile(URI uri) throws OWLException;
+	
+	public static Content makeXMLContentFromString(String xml){
+		try {
+			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+			Document aDoc = new SAXBuilder().build(stream);
+			return aDoc.getRootElement().detach();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+			return null;
+		} 
+	}
 }

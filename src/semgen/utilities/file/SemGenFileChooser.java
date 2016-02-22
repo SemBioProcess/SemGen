@@ -8,6 +8,8 @@ import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jdom.Document;
+
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 
@@ -81,13 +83,13 @@ public class SemGenFileChooser extends JFileChooser {
 		
 		if(file.getName().toLowerCase().endsWith(".proj")){
 			
-			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(file);
+			Document projdoc = JSimProjectFileReader.getDocument(file);
+			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
-			if(modelnames.size()==1) 
-				modelaccessor = new ModelAccessor(file, modelnames.get(0));
+			if(modelnames.size()==1)  modelaccessor = new ModelAccessor(file, modelnames.get(0));
 			else{
 				ProjectFileModelSelectorDialog pfmsd = 
-						new ProjectFileModelSelectorDialog("Select model(s) in archive", modelnames);
+						new ProjectFileModelSelectorDialog("Select model(s) in " + file.getName(), modelnames);
 	
 				for(String modelname : pfmsd.getSelectedModelNames()){
 					modelaccessor = new ModelAccessor(file, modelname);
@@ -99,10 +101,10 @@ public class SemGenFileChooser extends JFileChooser {
 	}
 	
 	
-	public ArrayList<ModelAccessor> convertFilesToModelAccessors(File[] files){
+	public ArrayList<ModelAccessor> getSelectedFilesAsModelAccessors(){
 		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
 		
-		for (File file : files)
+		for (File file : getSelectedFiles())
 			modelaccessors.add(convertFileToModelAccessor(file));
 		
 		return modelaccessors;

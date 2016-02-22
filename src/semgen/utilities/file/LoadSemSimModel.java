@@ -7,11 +7,14 @@ import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
+import com.hp.hpl.jena.rdf.model.ResIterator;
+
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
@@ -70,6 +73,10 @@ public class LoadSemSimModel extends SemGenJob {
 			case ModelClassifier.CELLML_MODEL:
 				semsimmodel = new CellMLreader(modelaccessor).read();
 				nameOntologyTerms();
+				
+				// TODO: Should check whether the CellML code already contains
+				// semsim-style annotations. If so, don't autoAnnotateWithOPB
+				
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate) {
 					setStatus("Annotating Physical Properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
@@ -90,7 +97,7 @@ public class LoadSemSimModel extends SemGenJob {
 				break;
 				
 			default:
-				ErrorLog.addError("SemGen did not recognize the model type for " + modelaccessor.toString(), true, false);
+				ErrorLog.addError("SemGen did not recognize the model type for " + modelaccessor.getShortLocation(), true, false);
 				return;
 			}
 		}
@@ -98,8 +105,8 @@ public class LoadSemSimModel extends SemGenJob {
 			e.printStackTrace();
 		}
 		
-		if(semsimmodel!=null){
-			if(!semsimmodel.getErrors().isEmpty()){
+		if(semsimmodel != null){
+			if( ! semsimmodel.getErrors().isEmpty()){
 				for (String e : semsimmodel.getErrors()) {
 					ErrorLog.addError(e,true, true);
 				}
@@ -125,17 +132,17 @@ public class LoadSemSimModel extends SemGenJob {
 		XMMLreader xmmlreader = new XMMLreader(modelaccessor, xmmldoc, srcText);		
 		semsimmodel = xmmlreader.readFromDocument();
 		
-		if((semsimmodel == null) || semsimmodel.getErrors().isEmpty()){
+		if((semsimmodel == null) || (! semsimmodel.getErrors().isEmpty())){
 			return semsimmodel;
 		}
 		else{
 			
-			Element ssael = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(
-					ma.getFileThatContainsModel(), ma.getModelName());
-			
+			Document projdoc = JSimProjectFileReader.getDocument(ma.getFileThatContainsModel());
+			Element ssael = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
 			
 			// If there are no semsim annotations associated with the model...
 			if(ssael.getChildren().isEmpty()){
+				
 				if(autoannotate){
 					setStatus("Annotating physical properties");
 					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
@@ -145,13 +152,18 @@ public class LoadSemSimModel extends SemGenJob {
 			else{
 				setStatus("Collecting annotations");
 				XMLOutputter xmloutputter = new XMLOutputter();
+				
+				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				BiologicalRDFblock biordf = new BiologicalRDFblock(semsimmodel, xmloutputter.outputString(rdfel), null);
 				
-				//semsimmodel = 
+				ResIterator x = biordf.rdf.listSubjects();
+				while(x.hasNext()) System.out.println(x.next().getURI());
+				
+				for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+					biordf.collectCompositeAnnotation(ds, null);
+				}
 			}
-			
-			
 		}
 		
 		return semsimmodel;
@@ -164,7 +176,7 @@ public class LoadSemSimModel extends SemGenJob {
 			setStatus("Annotating with web services...");
 			boolean online = WebserviceTester.testBioPortalWebservice();
 			
-			if(!online){
+			if( ! online){
 				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
 			}
 				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), online);

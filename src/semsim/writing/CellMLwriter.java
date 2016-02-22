@@ -1,9 +1,6 @@
 package semsim.writing;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +13,7 @@ import java.util.Set;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
@@ -45,7 +40,6 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
@@ -98,7 +92,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Declare the RDF metadata
 			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = BiologicalRDFblock.getRDFAsString(rdfblock.rdf);
+				String rawrdf = BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -446,17 +440,7 @@ public class CellMLwriter extends ModelWriter {
 	public void writeToFile(URI destination){
 		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
-	
-	public static Content makeXMLContentFromString(String xml){
-		try {
-			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-			Document aDoc = new SAXBuilder().build(stream);
-			return aDoc.getRootElement().detach();
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-			return null;
-		} 
-	}
+
 	
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		
@@ -502,7 +486,7 @@ public class CellMLwriter extends ModelWriter {
 				if(a.hasPhysicalDefinitionAnnotation()){
 					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
 					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
-					URI furi = formatAsIdentifiersDotOrgURI(uri);
+					URI furi = rdfblock.convertURItoIdentifiersDotOrgFormat(uri);
 					Resource refres = localrdf.createResource(furi.toString());
 					Statement st = localrdf.createStatement(ares, isprop, refres);
 					collectRDFStatement(st, "bqbiol", SemSimConstants.BQB_NAMESPACE, localrdf);
@@ -510,14 +494,14 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add the local RDF within the annotated CellML element
 				if( ! localrdf.isEmpty()){
-					String rawrdf = BiologicalRDFblock.getRDFAsString(localrdf);
+					String rawrdf = BiologicalRDFblock.getRDFmodelAsString(localrdf);
 					Content newrdf = makeXMLContentFromString(rawrdf);
 					if(newrdf != null) el.addContent(newrdf);
 				}
 				
 				// If annotated thing is a variable, include any necessary composite annotation info
 				if(hasphysprop){
-					rdfblock.addPropertyAndPropertyOfAnnotationsToDataStructure((DataStructure)a, ares);
+					rdfblock.setDataStructurePropertyAndPropertyOfAnnotations((DataStructure)a, ares);
 				}
 			}
 		}
@@ -549,56 +533,6 @@ public class CellMLwriter extends ModelWriter {
 		rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
 		rdfblock.rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
 		return metaid;
-	}
-	
-	protected static URI formatAsIdentifiersDotOrgURI(URI uri){
-		URI newuri = uri;
-		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
-
-		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if(!uri.toString().startsWith("http://identifiers.org") 
-				&& SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
-			
-			String kbname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
-			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
-			String newnamespace = null;
-			
-			// Look up new namespace
-			for(String nskey : SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.keySet()){
-				if(nskey.startsWith("http://identifiers.org") && 
-						SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(nskey)==kbname){
-					newnamespace = nskey;
-				}
-			}
-
-			// Replacement rules for specific knowledge bases
-			if(kbname==SemSimConstants.UNIPROT_FULLNAME){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(kbname==SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(kbname==SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(kbname==SemSimConstants.GENE_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(kbname==SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(kbname==SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME){
-				// Need to figure out how to get FMAIDs!!!!
-			}
-			if(kbname==SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-		}
-		return newuri;
 	}
 	
 	

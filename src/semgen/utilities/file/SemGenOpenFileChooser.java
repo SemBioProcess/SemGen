@@ -46,8 +46,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	private void openFile(Set<ModelAccessor> modelaccessors) {
 		if (showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
-			File[] files = getSelectedFiles();
-			modelaccessors.addAll(convertFilesToModelAccessors(files));
+			modelaccessors.addAll(getSelectedFilesAsModelAccessors());
 		}
 		else {
 			setSelectedFiles(null);
