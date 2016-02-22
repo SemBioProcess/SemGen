@@ -450,7 +450,7 @@ public class SemSimOWLreader extends ModelReader {
 				// If the assertion uses the "hasUnitFactor" property, collect the required info
 				if(readprop.equals(hasunitfactorprop)){
 					OWLIndividual baseunitOWLind = oopaa.getObject();
-					String baseunitind = baseunitOWLind.asOWLNamedIndividual().toString();
+					String baseunitind = baseunitOWLind.asOWLNamedIndividual().getIRI().toString();
 					String factorunitcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, baseunitind, SemSimRelation.HAS_COMPUTATIONAL_CODE.getURIasString());
 					
 					if(!factorunitcode.equals("") && factorunitcode!=null){
