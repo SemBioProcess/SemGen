@@ -9,3 +9,12 @@ getSymbolArray = function (obj) {
 	}
 	return syms;
 }
+
+convertArraytoString = function (array) {
+	var string = "";
+	array.foreach(function(d) {
+		string += d + ",";
+	});
+	//return string with last comma removed
+	return string.slice(0, -1);
+}

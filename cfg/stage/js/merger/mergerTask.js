@@ -12,4 +12,7 @@ function MergerTask(graph, models) {
 	var merger = this;
 	var nodes = this.nodes;
 	
+	receiver.onTest(msg) {
+		sender.consoleOut("It works!");
+	}
 }

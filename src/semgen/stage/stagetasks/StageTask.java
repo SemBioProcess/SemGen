@@ -15,7 +15,15 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	protected Map<String, ModelInfo> _models  = new HashMap<String, ModelInfo>();
 	protected StageTaskConf newtaskconf = null;
 
-	public enum Task {PROJECT, MERGER, EXTRACTOR, EDITOR};
+	public enum Task {
+		PROJECT("proj"), 
+		MERGER("merge"), 
+		EXTRACTOR("extr"), 
+		EDITOR("edit");
+		
+		public String jsid;
+		Task(String id) {}
+	};
 	
 	public enum StageTaskEvent {SWITCHTASK, NEWTASK};
 	
@@ -47,9 +55,10 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		this.notifyObservers(StageTaskEvent.NEWTASK);
 	}
 
-	protected void createMerger(String[] modelnames) {
+	protected void createMerger(String modelnames) {
 		ArrayList<ModelInfo> mods = new ArrayList<ModelInfo>();
-		for (String name : modelnames) {
+		
+		for (String name : modelnames.split(",")) {
 		// If the models don't exist throw an exception
 			if(!_models.containsKey(name))
 				throw new IllegalArgumentException(name);

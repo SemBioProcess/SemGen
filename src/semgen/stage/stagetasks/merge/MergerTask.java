@@ -33,22 +33,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		workbench.addModels(files, models, true);
 	}
-	
-	public MergerTask(ModelInfo model1, ModelInfo model2) {
-		_commandReceiver = new MergerCommandReceiver();
-		
-		_models.put(model1.getModelName(), model1);
-		_models.put(model2.getModelName(), model2);
-		ArrayList<File> files = new ArrayList<File>();
-		files.add(model1.Path);
-		files.add(model2.Path);
-		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
-		models.add(model1.Model);
-		models.add(model2.Model);
-		
-		workbench.addModels(files, models, true);
-	}
-	
+
 	public void primeForMerging() {
 		if (workbench.getNumberofStagedModels() == 0) return;
 		if(workbench.hasMultipleModels()) {

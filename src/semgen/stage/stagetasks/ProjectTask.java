@@ -122,7 +122,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String[] modelNames) {
+		public void onMerge(String modelNames) {
 			createMerger(modelNames);			
 		}
 		

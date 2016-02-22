@@ -12,7 +12,7 @@ var CallWaiting;
 
 function main() {
 	this.graph = new Graph();
-	
+	var graph = this.graph;
 	if(!this.graph) {
 		alert("Graph initialization failed.");
 		return;
@@ -23,9 +23,12 @@ function main() {
 	this.task = new Stage(this.graph);
 	this.graph.setTaskNodes(this.task.nodes);
 	
-	//receiver.onChangeTask(String taskname) {
-		
-	//}
+	receiver.onChangeTask(function(taskname) {
+		if (taskname=="merger") {
+			main.task = new mergerTask(graph, null);
+		}
+	});
+
 }
 
 $(window).bind("cwb-initialized", function(e) {
@@ -34,6 +37,8 @@ $(window).bind("cwb-initialized", function(e) {
 	receiver = e.originalEvent.commandReceiver;
 	
 	main = new main();	
+	
+
 	
 	window.onresize = function () {
 		main.graph.updateHeightAndWidth();

@@ -171,8 +171,6 @@ public class CommunicatingWebBrowser extends Browser {
 				javascriptCommandSender + CommunicationHelpers.NLJS;
 	}
 	
-
-	
 	/**
 	 * Inserts an initialization script into the page header while the page is loading.
 	 * This allows java and javascript to communicate using an agreed upon contract.
