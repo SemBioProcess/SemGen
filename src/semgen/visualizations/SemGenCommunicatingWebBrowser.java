@@ -4,6 +4,9 @@ import javax.naming.InvalidNameException;
 
 import semgen.SemGen;
 import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
+import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
+import semgen.stage.stagetasks.StageTask.Task;
+
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
@@ -37,4 +40,13 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	    System.out.println("SemGen web browser loaded");
 	}
 
+	public void changeTask(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, 
+			CommunicatingWebBrowserCommandReceiver commandReceiver, Task task) throws InvalidNameException {
+		
+		String javascript = this.setBrowserListeners(commandSenderInterface, commandReceiver);
+			javascript += "main.changeTask(\"" + task.jsid + "\");";
+		
+		executeJavascriptAndHandleErrors(javascript);
+	}
+	
 }

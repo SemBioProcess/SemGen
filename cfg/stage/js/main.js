@@ -23,12 +23,14 @@ function main() {
 	this.task = new Stage(this.graph);
 	this.graph.setTaskNodes(this.task.nodes);
 	
-	receiver.onChangeTask(function(taskname) {
-		if (taskname=="merger") {
-			main.task = new mergerTask(graph, null);
+	this.changeTask = function changeTask(taskname) {
+		if (taskname=="merge") {
+			this.task = new MergerTask(graph);
+			
 		}
-	});
-
+		this.graph.setTaskNodes(this.task.nodes);
+		this.graph.update();
+	}
 }
 
 $(window).bind("cwb-initialized", function(e) {
@@ -39,13 +41,9 @@ $(window).bind("cwb-initialized", function(e) {
 	main = new main();	
 	
 
-	
 	window.onresize = function () {
 		main.graph.updateHeightAndWidth();
 		main.graph.update();
 	};
-	
-
 });
-
 

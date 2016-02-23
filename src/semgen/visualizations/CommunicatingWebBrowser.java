@@ -89,6 +89,12 @@ public class CommunicatingWebBrowser extends Browser {
 				"}" + CommunicationHelpers.NLJS +
 			"}";
 	
+	private final String SetCommunicatorsScript = 
+			"function setCommunicators(receivr, sendr) {" + CommunicationHelpers.NLJS +
+			"	sender = sendr;" + CommunicationHelpers.NLJS +
+			"	receiver = receivr;" + CommunicationHelpers.NLJS +
+			"}";
+	
 	// Executes javascript and handles errors
 	private final String ExecuteJavascriptAndHandleErrorsScript = 
 			"function executeAndHandleErrors(func) {" + CommunicationHelpers.NLJS +
@@ -107,26 +113,25 @@ public class CommunicatingWebBrowser extends Browser {
 	
 	public CommunicatingWebBrowser(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		super();
-		setBrowserListeners(commandSenderInterface, commandReceiver);
-		
+		createBrowserListeners(commandSenderInterface, commandReceiver);
+
 		// Insert the adapter that facilitates communication
 		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
 	}
-	
-	public void setBrowserListeners(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+
+	protected String setBrowserListeners(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
 		createBrowserListeners(commandSenderInterface, commandReceiver);
-		executeJavaScript(CommunicationHelpers.removeScriptbyID(javajsbridgeid));
-		
-		String scriptInnerHtml = generateReceiverandSenderHtml() +
-				TriggerInitializationEventScript + CommunicationHelpers.NLJS +
+	
+		String scriptInnerHtml = generateReceiverandSenderHtml() + 
+				SetCommunicatorsScript + CommunicationHelpers.NLJS +
 				ExecuteJavascriptAndHandleErrorsScript;
 		
 		// Insert a script element into the page header that defines an object that receives commands.
 		// the page is responsible for registering handlers for those commands
-		String initializationScript = CommunicationHelpers.appendScript(scriptInnerHtml, javajsbridgeid) +
-				"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
-		
-		executeJavascriptAndHandleErrors(initializationScript);
+		String changescript = CommunicationHelpers.removeScriptbyID(javajsbridgeid) +
+				CommunicationHelpers.appendScript(scriptInnerHtml, javajsbridgeid) +
+				"setCommunicators(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
+		return changescript;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

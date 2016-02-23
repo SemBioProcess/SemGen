@@ -78,7 +78,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onConsoleOut(String msg) {
+			
 			System.out.println(msg);
+			receivertest();
 		}
 		
 		public void onConsoleOut(Number msg) {
@@ -97,5 +99,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	public Class<MergerWebBrowserCommandSender> getSenderInterface() {
 		return MergerWebBrowserCommandSender.class;
+	}
+	
+	public void receivertest() {
+		_commandSender.test("");
 	}
 }

@@ -94,7 +94,8 @@ public class StageTab extends SemGenTab implements Observer {
 	public void update(Observable o, Object arg) {
 		if (arg == StageEvent.CHANGETASK) {
 			try {
-				browser.setBrowserListeners(_workbench.getCommandSenderInterface(), _workbench.getCommandReceiver());
+				browser.changeTask(_workbench.getCommandSenderInterface(), _workbench.getCommandReceiver(), _workbench.getTaskType());
+				_workbench.setCommandSender(browser.getCommandSenderGenerator());
 			} catch (InvalidNameException e) {
 				e.printStackTrace();
 			}

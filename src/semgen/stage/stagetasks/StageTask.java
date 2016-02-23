@@ -22,7 +22,9 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		EDITOR("edit");
 		
 		public String jsid;
-		Task(String id) {}
+		Task(String id) {
+			jsid = id;
+		}
 	};
 	
 	public enum StageTaskEvent {SWITCHTASK, NEWTASK};
@@ -75,4 +77,5 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	public abstract Task getTaskType();
 	public abstract Class<TSender> getSenderInterface();
+	public abstract void receivertest();
 }

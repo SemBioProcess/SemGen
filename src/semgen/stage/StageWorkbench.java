@@ -8,6 +8,7 @@ import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 import semgen.stage.stagetasks.StageTask;
 import semgen.stage.stagetasks.StageTask.StageTaskEvent;
+import semgen.stage.stagetasks.StageTask.Task;
 import semgen.stage.stagetasks.StageTaskConf;
 import semgen.utilities.Workbench;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
@@ -107,5 +108,12 @@ public class StageWorkbench extends Workbench {
 		public CommandInterfaceSetter(WebBrowserCommandSenderGenerator<T> setter, StageTask<T> task) {
 			task.setCommandSender(setter.getSender());
 		}
+	}
+	
+	public Task getTaskType() {
+		return activetask.getTaskType();
+	}
+	public void triggertest() {
+		activetask.receivertest();
 	}
 }
