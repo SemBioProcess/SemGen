@@ -125,7 +125,12 @@ function Stage(graph) {
 		$('#mergerModal').modal('toggle');
 
 		// Create three different graphs on stage to preview Merge Resolutions
-		$("#stage").append('<div class="substage" id="modelAStage"></div> <div class="substage" id="modelABStage">Merge preview coming soon!</div> <div class="substage" id="modelBStage"></div>');
+		$("#stage").append(
+			'<div class="substage" id="modelAStage"></div>' +
+			'<div class="substage" id="modelABStage">Merge preview coming soon!</div>' +
+			'<div class="substage" id="modelBStage"></div>' +
+			'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
+		);
 
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
 		$("#activeTaskText").addClass('blink');

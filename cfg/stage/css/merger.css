@@ -34,27 +34,32 @@
 
 .alignLeft {
     float: left;
-    text-align:left;
-    width:33.33333%;
 }
 
 .alignRight {
-    float: left;
-    text-align:right;
-    width:33.33333%;
+    float: right;
 }
 
 .mergeResHeader {
     padding-bottom: 30px;
+    clear: both;
 }
 
 .mergeResolution {
     height: 250px;
     border-width: 1px;
     border-top-style: solid;
+    text-align: center;
 }
 
 .mergeResolution:hover {
     background-color: #dfe3ee;
     cursor: pointer;
+}
+
+#backToMergeRes {
+    z-index: 11;
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }

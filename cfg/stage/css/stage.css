@@ -16,19 +16,13 @@ body {
 	margin: 5px;
 	width:25px;
 	height:25px;
+	top: 15px;
+	left: 10px;
 	line-height:25px;
 	font-size: 25px;
 	border: hidden;
-}
-
-
-#addModelButton {
-	top: 15px;
-	left: 57px;
-	width:25px;
-	height:25px;
 	border-radius:250px;
-	color:#fff;
+	color:#ffffff;
 	text-align:center;
 	background:#3b5998;
 	opacity: .8;
@@ -52,7 +46,7 @@ body {
 	position: absolute;
 	margin: 1px;
 	top: 6px;
-	left: 100px;
+	left: 50px;
 	padding: 10px;
 	opacity: 1;
 }
