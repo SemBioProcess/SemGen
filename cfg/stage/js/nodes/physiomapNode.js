@@ -14,7 +14,7 @@ function PhysioMapNode (graph, data, parentNode) {
 	if(data.name.includes("Portion of ")) {
 		this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
 	}
-	
+
 	this.displayName = limitWords(this.displayName, 3);
 	this.addClassName("physiomapNode");
 	this.addBehavior(HiddenLabelNodeGenerator);

@@ -11,23 +11,23 @@ function SubmodelNode (graph, data, parent) {
 	data.dependencies.forEach(function (dependency) {
 		if(!dependency.inputs)
 			return;
-		
+
 		inputs = inputs.concat(dependency.inputs);
 	});
-	
+
 	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, 16, "Submodel", defaultcharge);
 	this.dependencies = data.dependencies;
 	this.dependencytypecount = data.deptypecounts;
 
 	this.addClassName("submodelNode");
-	
+
 	this.addBehavior(Hull);
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
 
 SubmodelNode.prototype.onDoubleClick = function () {
 		node = this;
-		
+
 		var visiblenodes = 0;
 		if (this.graph.nodesVisible[NodeType.STATE.id]) {
 			visiblenodes = this.dependencytypecount[0];
@@ -45,5 +45,5 @@ SubmodelNode.prototype.onDoubleClick = function () {
 				return new DependencyNode(node.graph, data, node);
 			});
 		}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 function parentDrag (parent) {
 	$(parent).on('createVisualization', function (e, root) {
@@ -10,7 +10,7 @@ function parentDrag (parent) {
 						d.globalApply(function (node) {
 							node.fixed = true;
 						});
-						
+
 					}
 				})
 				.on("drag", function (d, i) {
@@ -22,15 +22,15 @@ function parentDrag (parent) {
 							&& (d3.event.dy + d.ymin) > 10
 							&& (d3.event.dy + d.ymax) < d.graph.h-10
 						){
-							d.globalApply(function(d) {	
+							d.globalApply(function(d) {
 							d.x += d3.event.dx;
-								d.y += d3.event.dy; 
+								d.y += d3.event.dy;
 								d.px += d3.event.dx;
 								d.py += d3.event.dy;
 							});
 						    d.graph.tick();
 						}
-						else { 
+						else {
 							d.x = d.x;
 							d.y = d.y;
 							$(parent).triggerHandler("dragend");
@@ -40,11 +40,11 @@ function parentDrag (parent) {
 				        d.px += d3.event.dx;
 				        d.py += d3.event.dy;
 				        d.x += d3.event.dx;
-				        d.y += d3.event.dy; 
+				        d.y += d3.event.dy;
 				        d.graph.tick();
 					}
 				})
-				
+
 				.on("dragend", function (d, i) {
 					// Children no longer fixed
 					if(!d.graph.fixedMode) {
@@ -55,6 +55,6 @@ function parentDrag (parent) {
 					d.graph.tick();
 				});
 			  // Add the dragging functionality to the node
-			parent.rootElement.call(parentDrag);	
-	});	    
+			parent.rootElement.call(parentDrag);
+	});
 }
