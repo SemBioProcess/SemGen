@@ -31,7 +31,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
-import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
@@ -144,7 +143,7 @@ public class CellMLreader extends ModelReader {
 				String metadataid = importedcompel.getAttributeValue("id", CellMLconstants.cmetaNS);
 				instantiatedsubmodel.setMetadataID(metadataid);
 
-				collectSingularBiologicalAnnotationForSubmodel(doc, instantiatedsubmodel, importedcompel);
+				collectSingularBiologicalAnnotationForSubmodel(instantiatedsubmodel);
 			}
 		}
 		
@@ -282,19 +281,23 @@ public class CellMLreader extends ModelReader {
 				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
 
 				// Collect the singular biological annotation, if present
-				if(cvar.getMetadataID()!=null){
-					URI termURI = collectSingularBiologicalAnnotation(doc, cvar, var);
+				if(cvar.getMetadataID() != null){
 					
-					if(termURI!=null){
-						
-						if(termURI.toString().startsWith("http:identifiers.org/opb"))
-							termURI = rdfblock.swapInOPBnamespace(termURI);
-						
-						PhysicalProperty prop = rdfblock.getSingularPhysicalProperty(termURI);
-						cvar.setSingularAnnotation(prop);
-					}
+					rdfblock.getRDFforAnnotatedSemSimObject(cvar);
+					// TODO: Might need to redo this section once BiologicalRDFblock is done.
 					
-					rdfblock.collectCompositeAnnotation(cvar, mainNS);
+//					URI termURI = rdfblock.collectSingularBiologicalAnnotation(cvar);
+//					
+//					if(termURI!=null){
+//						
+//						if(termURI.toString().startsWith("http:identifiers.org/opb"))
+//							termURI = rdfblock.swapInOPBnamespace(termURI);
+//						
+//						PhysicalProperty prop = rdfblock.getSingularPhysicalProperty(termURI);
+//						cvar.setSingularAnnotation(prop);
+//					}
+//					
+//					rdfblock.collectCompositeAnnotation(cvar);
 					
 				}
 				semsimmodel.addDataStructure(cvar);
@@ -357,7 +360,7 @@ public class CellMLreader extends ModelReader {
 			if(metadataid!=null) submodel.setMetadataID(metadataid);
 			
 			// Collect the biological annotation, if present
-			collectSingularBiologicalAnnotationForSubmodel(doc, submodel, comp);
+			collectSingularBiologicalAnnotationForSubmodel(submodel);
 			
 			semsimmodel.addSubmodel(submodel);
 		}
@@ -461,9 +464,9 @@ public class CellMLreader extends ModelReader {
 	
 	
 	// Collect singular annotation for model components
-	private void collectSingularBiologicalAnnotationForSubmodel(Document doc, FunctionalSubmodel submodel, Element comp){
+	private void collectSingularBiologicalAnnotationForSubmodel(FunctionalSubmodel submodel){
 		if(submodel.getMetadataID()!=null){
-			URI termURI = collectSingularBiologicalAnnotation(doc, submodel, comp);
+			URI termURI = rdfblock.collectSingularBiologicalAnnotation(submodel);
 			if(termURI!=null){
 				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
 				semsimmodel.addReferencePhysicalEntity(rpe);
@@ -613,58 +616,6 @@ public class CellMLreader extends ModelReader {
 			}
 		}
 		rdf.remove(listofremovedstatements);
-	}
-	
-	
-	// Collect the reference ontology term used to describe the model component
-	private URI collectSingularBiologicalAnnotation(Document doc, SemSimObject toann, Element el){
-		// Look for rdf markup as child of element
-		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
-		// If not present, look for it in main RDF block
-		if(mainrdfel==null)
-			mainrdfel = rdfblockelement;
-		
-		URI singularannURI = null;
-		if(mainrdfel!=null){
-			Iterator<?> descit = mainrdfel.getChildren("Description", CellMLconstants.rdfNS).iterator();
-			
-			while(descit.hasNext()){
-				Element rdfdesc = (Element) descit.next();
-				String about = rdfdesc.getAttributeValue("about", CellMLconstants.rdfNS);
-				String ID = rdfdesc.getAttributeValue("ID", CellMLconstants.rdfNS);
-				String ref = null;
-				
-				if(about!=null) ref = about.replace("#", "");
-				else if(ID!=null) ref = ID;
-				
-				if(ref!=null){				
-					if(ref.equals(toann.getMetadataID())){
-						Element relel = rdfdesc.getChild("is", CellMLconstants.bqbNS);
-						Element freeel = rdfdesc.getChild("description", CellMLconstants.dctermsNS);
-						
-						// If there is a singular annotation
-						if(relel!=null){
-							String term = relel.getAttributeValue("resource", CellMLconstants.rdfNS);
-							if(term==null){
-								Element objectdescel = relel.getChild("Description", CellMLconstants.rdfNS);
-								if(objectdescel!=null){
-									term = objectdescel.getAttributeValue("about", CellMLconstants.rdfNS);
-									singularannURI = URI.create(term);
-								}
-							}
-							else singularannURI = URI.create(term);
-						}
-						
-						// If there is a free-text description
-						if(freeel!=null){
-							String freetext = freeel.getText();
-							if(freetext!=null) toann.setDescription(freetext);
-						}
-					}
-				}
-			}
-		}
-		return singularannURI;
 	}
 		
 	

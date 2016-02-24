@@ -10,8 +10,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-
+import semsim.CellMLconstants;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
@@ -25,6 +24,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 	XMLOutputter outputter;
 	BiologicalRDFblock rdfblock;
 	Element semsimControlElement;
+	String modelNamespace;
 
 
 	public JSimProjectFileWriter(ModelAccessor modelaccessor, SemSimModel semsimmodel) {
@@ -33,6 +33,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		outputter.setFormat(Format.getPrettyFormat());
 		modelName = modelaccessor.getModelName();
 		projectFile = modelaccessor.getFileThatContainsModel();
+		modelNamespace = semsimmodel.getNamespace();
 	}
 
 	@Override
@@ -47,10 +48,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 				
 				if(ds.hasPhysicalProperty()){
-					Resource dsres = rdfblock.rdf.createResource("#" + ds.getName());
-					rdfblock.setDataStructurePropertyAndPropertyOfAnnotations(ds, dsres);
-					
-					//TODO:singular annotations and free-text anns
+					rdfblock.setRDFforAnnotatedSemSimObject(ds);
 				}
 			}
 		}
@@ -62,14 +60,14 @@ public class JSimProjectFileWriter extends ModelWriter{
 		if( ! rdfblock.rdf.isEmpty()){
 			
 			projdoc = JSimProjectFileReader.getDocument(projectFile);
-			
-			String rawrdf = BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf);
-			System.out.println(rawrdf);
-			
+			String rawrdf = BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
-			
 			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
 			
+			// Clear out the old RDF
+			semsimControlElement.removeChild("RDF", CellMLconstants.rdfNS);
+			
+			// Add the new RDF
 			if(newrdf != null) semsimControlElement.addContent(newrdf);
 		}
 		

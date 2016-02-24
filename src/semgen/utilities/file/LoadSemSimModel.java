@@ -7,8 +7,6 @@ import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import com.hp.hpl.jena.rdf.model.ResIterator;
-
 import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
@@ -157,11 +155,8 @@ public class LoadSemSimModel extends SemGenJob {
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				BiologicalRDFblock biordf = new BiologicalRDFblock(semsimmodel, xmloutputter.outputString(rdfel), null);
 				
-				ResIterator x = biordf.rdf.listSubjects();
-				while(x.hasNext()) System.out.println(x.next().getURI());
-				
 				for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-					biordf.collectCompositeAnnotation(ds, null);
+					biordf.getRDFforAnnotatedSemSimObject(ds);
 				}
 			}
 		}

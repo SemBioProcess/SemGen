@@ -17,19 +17,10 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-
 import semsim.CellMLconstants;
 import semsim.SemSimConstants;
 import semsim.SemSimObject;
-import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
@@ -44,7 +35,6 @@ import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
-	private Set<String> metadataids = new HashSet<String>();
 	private BiologicalRDFblock rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
@@ -62,7 +52,6 @@ public class CellMLwriter extends ModelWriter {
 		
 		try{	
 			mainNS = CellMLconstants.cellml1_1NS;
-			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
 			// Check for events, if present write out error msg
 			if(semsimmodel.getEvents().size()>0){
@@ -158,26 +147,23 @@ public class CellMLwriter extends ModelWriter {
 				importel.setAttribute("href", hrefVal, CellMLconstants.xlinkNS);
 				importelements.add(importel); // make a set of elements
 				
-				String metaidprefix = null;
 				String importedpiecetagname = null;
 				String importedpiecerefattr = null;
 				
 				if(ssc instanceof FunctionalSubmodel){
 					importedpiecetagname = "component";
 					importedpiecerefattr = "component_ref";
-					metaidprefix = "c";
 				}
 				else if(ssc instanceof UnitOfMeasurement){
 					importedpiecetagname = "units";
 					importedpiecerefattr = "units_ref";
-					metaidprefix = "u";
 				}
 				importedpiece = new Element(importedpiecetagname, mainNS);
 				importedpiece.setAttribute("name", ssc.getLocalName());
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				createRDFforAnnotatedThing((SemSimObject)ssc, metaidprefix, importedpiece, ((SemSimObject)ssc).getDescription());
+				rdfblock.setRDFforAnnotatedSemSimObject((SemSimObject)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -361,7 +347,7 @@ public class CellMLwriter extends ModelWriter {
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any singular annotation on the submodel
-			createRDFforAnnotatedThing(submodel, "c", comp, submodel.getDescription());
+			rdfblock.setRDFforAnnotatedSemSimObject(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
@@ -393,7 +379,7 @@ public class CellMLwriter extends ModelWriter {
 					initialval = ds.getStartValue();
 				
 				// Add the RDF block for any singular annotation
-				createRDFforAnnotatedThing(ds, "v", variable, ds.getDescription());
+				rdfblock.setRDFforAnnotatedSemSimObject(ds);
 				
 				String metadataid = ds.getMetadataID();
 				// Add other attributes
@@ -455,84 +441,6 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
-	}
-	
-	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
-	public void createRDFforAnnotatedThing(SemSimObject annotated, String idprefix, Element el, String freetext){
-		
-		if(annotated instanceof Annotatable){
-			Annotatable a = (Annotatable) annotated;
-			
-			Boolean hasphysprop = false;
-			
-			if(a instanceof DataStructure){
-				hasphysprop = ((DataStructure)a).hasPhysicalProperty();
-			}
-			
-			if(a.hasPhysicalDefinitionAnnotation() || !freetext.equals("") || hasphysprop){
-				String metaid = createMetadataIDandSetNSPrefixes(annotated, idprefix, el);
-						
-				Resource ares = rdfblock.rdf.createResource("#" + metaid);
-				Model localrdf = ModelFactory.createDefaultModel();
-				
-				// Add free-text description, if present
-				if(!freetext.equals("")){
-					Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
-					Statement st = localrdf.createStatement(ares, ftprop, freetext);
-					collectRDFStatement(st, "dcterms", CurationalMetadata.DCTERMS_NAMESPACE, localrdf);
-				}
-								
-				// Add singular annotation
-				if(a.hasPhysicalDefinitionAnnotation()){
-					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
-					Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
-					URI furi = rdfblock.convertURItoIdentifiersDotOrgFormat(uri);
-					Resource refres = localrdf.createResource(furi.toString());
-					Statement st = localrdf.createStatement(ares, isprop, refres);
-					collectRDFStatement(st, "bqbiol", SemSimConstants.BQB_NAMESPACE, localrdf);
-				}
-				
-				// Add the local RDF within the annotated CellML element
-				if( ! localrdf.isEmpty()){
-					String rawrdf = BiologicalRDFblock.getRDFmodelAsString(localrdf);
-					Content newrdf = makeXMLContentFromString(rawrdf);
-					if(newrdf != null) el.addContent(newrdf);
-				}
-				
-				// If annotated thing is a variable, include any necessary composite annotation info
-				if(hasphysprop){
-					rdfblock.setDataStructurePropertyAndPropertyOfAnnotations((DataStructure)a, ares);
-				}
-			}
-		}
-	}
-	
-	private void collectRDFStatement(Statement st, String abrev, String namespace, Model localrdf) {
-		if(!localrdf.contains(st)){
-			localrdf.add(st);
-			localrdf.setNsPrefix(abrev, namespace);
-		}
-	}
-	
-	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
-		String metaid = annotated.getMetadataID();
-		
-		// Create metadata ID for the model element, cache locally
-		if(metaid.isEmpty()){
-			metaid = idprefix + 0;
-			int n = 0;
-			while(metadataids.contains(metaid)){
-				n++;
-				metaid = idprefix + n;
-			}
-			metadataids.add(metaid);
-			el.setAttribute("id", metaid, CellMLconstants.cmetaNS);
-		}
-		
-		rdfblock.rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-		rdfblock.rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-		rdfblock.rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
-		return metaid;
 	}
 	
 	

@@ -11,8 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jdom.Namespace;
-
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -24,6 +22,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimConstants;
+import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -53,7 +52,6 @@ public class BiologicalRDFblock {
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	public String modelns;
 	public SemSimModel semsimmodel;
 	private String unnamedstring = "[unnamed!]";
 	
@@ -78,18 +76,20 @@ public class BiologicalRDFblock {
 	// Constructor
 	public BiologicalRDFblock(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
 		this.semsimmodel = semsimmodel;
-		this.modelns = semsimmodel.getNamespace();
 		
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
+					semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		}
 		
+		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
+
 		rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
 		rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
 		rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
@@ -101,37 +101,39 @@ public class BiologicalRDFblock {
 	// Methods for collecting RDF-formatted annotation data and reading it into a SemSim model
 	//--------------------------------------------------------------------------------------------
 	
-	public SemSimModel collectCompositeAnnotation(DataStructure ds, Namespace mainNS){	
+	public void getRDFforAnnotatedSemSimObject(SemSimObject sso){
 		
-		String uristart = "#";
-		String dsidentifier = ds.getName();
-		
-		if(mainNS != null){ 
-			uristart = mainNS.getURI();
-			dsidentifier = ds.getMetadataID();
+		if(sso instanceof DataStructure){
+			
+			String uristart = semsimmodel.getNamespace();
+			String dsidentifier = sso.getName();
+			
+			Resource resource = rdf.getResource(uristart + dsidentifier);
+			
+			collectFreeTextAnnotation(sso, resource);
+//			collectSingularBiologicalAnnotation(sso);
+			collectCompositeAnnotation((DataStructure)sso, resource);
 		}
-		
-				
-		Resource cvarResource = rdf.getResource(uristart + dsidentifier);
-		System.out.println("Model contains " + uristart + dsidentifier + "? " + rdf.containsResource(rdf.asRDFNode(cvarResource.asNode())));
+	}
+	
+	
+	private SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource){	
 		
 		Resource physpropres = null;
 		
-		if(cvarResource != null)
-			physpropres = cvarResource.getPropertyResourceValue(compcomponentfor);
+		if(resource != null)
+			physpropres = resource.getPropertyResourceValue(compcomponentfor);
 		
-		// If a physical property is specified for the variable
+		// If a physical property is specified for the data structure
 		if(physpropres != null){
-			
-			System.out.println("Prop specified for " + ds.getName());
-			
+						
 			Resource isannres = physpropres.getPropertyResourceValue(is);
 			
-			if(isannres==null)
+			if(isannres == null)
 				isannres = physpropres.getPropertyResourceValue(hasphysicaldefinition);
 			
 			// If the property is annotated against a reference ontology term
-			if(isannres!=null){
+			if(isannres != null){
 				
 				URI uri = URI.create(isannres.getURI());
 
@@ -317,6 +319,7 @@ public class BiologicalRDFblock {
 	
 	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(BiologicalRDFblock.is);
+		
 		if(isannres==null) isannres = res.getPropertyResourceValue(BiologicalRDFblock.hasphysicaldefinition);
 		
 		// If a reference entity
@@ -332,6 +335,72 @@ public class BiologicalRDFblock {
 	}
 	
 	
+	// Collect the reference ontology term used to describe the model component
+	public URI collectSingularBiologicalAnnotation(SemSimObject toann){
+		
+		URI singularannURI = null;
+
+		
+		/*
+		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
+		// If not present, look for it in main RDF block
+		if(mainrdfel==null)
+			mainrdfel = rdfblockelement;
+		
+		URI singularannURI = null;
+		if(mainrdfel!=null){
+			Iterator<?> descit = mainrdfel.getChildren("Description", CellMLconstants.rdfNS).iterator();
+			
+			while(descit.hasNext()){
+				Element rdfdesc = (Element) descit.next();
+				String about = rdfdesc.getAttributeValue("about", CellMLconstants.rdfNS);
+				String ID = rdfdesc.getAttributeValue("ID", CellMLconstants.rdfNS);
+				String ref = null;
+				
+				if(about!=null) ref = about.replace("#", "");
+				else if(ID!=null) ref = ID;
+				
+				if(ref!=null){				
+					if(ref.equals(toann.getMetadataID())){
+						Element relel = rdfdesc.getChild("is", CellMLconstants.bqbNS);
+						Element freeel = rdfdesc.getChild("description", CellMLconstants.dctermsNS);
+						
+						// If there is a singular annotation
+						if(relel!=null){
+							String term = relel.getAttributeValue("resource", CellMLconstants.rdfNS);
+							if(term==null){
+								Element objectdescel = relel.getChild("Description", CellMLconstants.rdfNS);
+								if(objectdescel!=null){
+									term = objectdescel.getAttributeValue("about", CellMLconstants.rdfNS);
+									singularannURI = URI.create(term);
+								}
+							}
+							else singularannURI = URI.create(term);
+						}
+						
+						// If there is a free-text description
+						if(freeel!=null){
+							String freetext = freeel.getText();
+							
+							if(freetext!=null) toann.setDescription(freetext);
+						}
+					}
+				}
+			}
+		}
+		*/
+		return singularannURI;
+	}
+	
+	
+	private void collectFreeTextAnnotation(SemSimObject sso, Resource resource){
+		Statement st = resource.getProperty(description);
+		
+		if(st != null) sso.setDescription(st.getObject().toString());
+
+	}
+		
+		
 	private CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
 		
 		StmtIterator isversionofann = res.listProperties(BiologicalRDFblock.isversionof);
@@ -394,6 +463,53 @@ public class BiologicalRDFblock {
 	//--------------------------------------------------------------------------------------------
 	// Methods for translating SemSim model data into RDF-formatted annotations 
 	//--------------------------------------------------------------------------------------------
+	
+	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
+	public void setRDFforAnnotatedSemSimObject(SemSimObject sso){
+		
+		Boolean hasphysprop = false;
+		
+		if(sso instanceof DataStructure){
+			hasphysprop = ((DataStructure)sso).hasPhysicalProperty();
+		}
+		
+		// If we actually need to write out annotations
+		if(sso.hasPhysicalDefinitionAnnotation() || ! sso.getDescription().equals("") || hasphysprop){
+			
+			String resuri = semsimmodel.getNamespace() + sso.getName();
+			Resource ares = rdf.createResource(resuri);
+			
+			if(sso instanceof PhysicalModelComponent){
+				String type = ((PhysicalModelComponent)sso).getComponentTypeasString();
+				ares = createResourceForPhysicalModelComponent(type);
+			}
+			
+			// Set the free-text annotation
+			if( ! sso.getDescription().equals("")){
+				Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+				Statement st = rdf.createStatement(ares, ftprop, sso.getDescription());
+				addRDFstatement(st, "dcterms", CurationalMetadata.DCTERMS_NAMESPACE, rdf);
+			}
+							
+			// Add singular annotation
+			if(sso.hasPhysicalDefinitionAnnotation()){
+				URI uri = ((DataStructure)sso).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
+				Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
+				URI furi = convertURItoIdentifiersDotOrgFormat(uri);
+				Resource refres = rdf.createResource(furi.toString());
+				Statement st = rdf.createStatement(ares, isprop, refres);
+				addRDFstatement(st, "bqbiol", SemSimConstants.BQB_NAMESPACE, rdf);
+			}
+			
+			// If annotated thing is a variable, include the necessary composite annotation info
+			if(hasphysprop){
+				setDataStructurePropertyAndPropertyOfAnnotations((DataStructure)sso, ares);
+			}
+		}
+		
+	}
+		
+	
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure a, Resource ares){
 		
 		Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
@@ -562,6 +678,37 @@ public class BiologicalRDFblock {
 		return indexuri;
 	}
 	
+	
+//	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
+//		String metaid = annotated.getMetadataID();
+//		
+//		// Create metadata ID for the model element, cache locally
+//		if(metaid.isEmpty()){
+//			metaid = idprefix + 0;
+//			int n = 0;
+//			while(metadataids.contains(metaid)){
+//				n++;
+//				metaid = idprefix + n;
+//			}
+//			metadataids.add(metaid);
+//			el.setAttribute("id", metaid, CellMLconstants.cmetaNS);
+//		}
+//		
+//		rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
+//		rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
+//		rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
+//		return metaid;
+//	}
+	
+	
+	private void addRDFstatement(Statement st, String abrev, String namespace, Model therdf) {
+		if( ! therdf.contains(st)){
+			therdf.add(st);
+			therdf.setNsPrefix(abrev, namespace);
+		}
+	}
+	
+	
 	public static String getRDFmodelAsString(Model rdf){
 		String syntax = "RDF/XML-ABBREV"; 
 		StringWriter out = new StringWriter();
@@ -606,7 +753,7 @@ public class BiologicalRDFblock {
 	
 	// Generate an RDF resource for a physical component
 	private Resource createResourceForPhysicalModelComponent(String typeprefix){
-		String resname = modelns;	
+		String resname = semsimmodel.getNamespace();	
 		int idnum = 0;
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
 			idnum++;
