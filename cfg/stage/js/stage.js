@@ -144,6 +144,7 @@ function Stage(graph) {
 		$(".substage").remove();
 		$("#activeTaskText").removeClass('blink');
 		$("#mergerIcon").remove();
+		$("#backToMergeRes").remove();
 	})
 
 }
