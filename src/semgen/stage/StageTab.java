@@ -27,10 +27,10 @@ public class StageTab extends SemGenTab implements Observer {
 	// Stage workbench
 	private StageWorkbench _workbench;
 	private SemGenCommunicatingWebBrowser browser;
-	
+
 	public StageTab(SemGenSettings sets, GlobalActions globalacts, StageWorkbench bench) {
 		super("Stage", SemGenIcon.stageicon, "Stage for facilitating SemGen tasks", sets, globalacts);
-		
+
 		_workbench = bench;
 		bench.addObserver(this);
 		
@@ -41,7 +41,7 @@ public class StageTab extends SemGenTab implements Observer {
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		// Create the browser
-		
+
 		try {
 			if (SemGen.debug) {
 				BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
@@ -56,9 +56,9 @@ public class StageTab extends SemGenTab implements Observer {
 				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
-			
+
 			final BrowserView browserView = new BrowserView(browser);
-			
+
 			// Show JS alerts in java dialogs
 			browser.setDialogHandler(new DefaultDialogHandler(browserView) {
 			    @Override

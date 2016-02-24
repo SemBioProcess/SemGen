@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 //Global objects
@@ -13,11 +13,12 @@ var CallWaiting;
 function main() {
 	this.graph = new Graph();
 	var graph = this.graph;
+
 	if(!this.graph) {
 		alert("Graph initialization failed.");
 		return;
 	}
-	
+
 	KeyElement.getInstance().initialize(this.graph);
 
 	this.task = new Stage(this.graph);
@@ -35,15 +36,13 @@ function main() {
 
 $(window).bind("cwb-initialized", function(e) {
 	sender = e.originalEvent.commandSender;
-	
+
 	receiver = e.originalEvent.commandReceiver;
-	
 	main = new main();	
-	
 
 	window.onresize = function () {
 		main.graph.updateHeightAndWidth();
 		main.graph.update();
 	};
-});
 
+});

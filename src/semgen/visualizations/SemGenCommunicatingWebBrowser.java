@@ -31,8 +31,9 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 			stageHtmlPath = "file://" + stageHtmlPath;
 		
 		System.out.println("Loading the stage @: " + stageHtmlPath);
+
 		this.loadURL(stageHtmlPath);
-	    
+
 	    LoggerProvider.getBrowserLogger().setLevel(Level.SEVERE);			// The BrowserLogger is used to log browser messages.
 	    LoggerProvider.getIPCLogger().setLevel(Level.SEVERE);				// The IPCLogger is used to log IPC (Inter-Process Communication) messages.
 	    LoggerProvider.getChromiumProcessLogger().setLevel(Level.SEVERE);	// The ChromiumProcessLogger is used to log messages that are come from Chromium process.

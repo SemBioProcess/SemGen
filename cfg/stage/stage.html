@@ -7,7 +7,7 @@
 		<script src="js/lib/bootstrap.min.js"></script>
 		<script src="js/definitions.js"></script>
 		<script src="js/classExtensions.js"></script>
-		<script src="js/graph.js"></script>
+
 		<script src="js/keyElement.js"></script>
 		<script src="js/nodes/hiddenLabelNode.js"></script>
 		<script src="js/nodes/node.js"></script>
@@ -39,12 +39,12 @@
 		<link type="text/css" rel="stylesheet" href="css/graph.css" />
 		<link type="text/css" rel="stylesheet" href="css/leftSidebar.css" />
 		<link type="text/css" rel="stylesheet" href="css/rightSidebar.css" />
+		<link type="text/css" rel="stylesheet" href="css/merger.css" />
 
 		<!--  Loads a mock sender and receiver if we're loading outside of SemGen -->
 		<script src="js/mock.js"></script>
 	</head>
 	<body>
-
 		<div id="addModelButton" class="btn-default">+</div>
 
 		<div class="stageSearch">
@@ -71,8 +71,8 @@
 			</div>
 		</div>
 
-<!-- Sidebars -->
-	<!-- Left Sidebar -->
+		<!-- Sidebars -->
+		<!-- Left Sidebar -->
 		<div id="leftSidebar" class="panel panel-default sidebar">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#leftmenu"><span class="caret-left"></span></a>
@@ -97,9 +97,9 @@
 				</div>
 			</div>
 		</div>
-		
-	<!-- Right Sidebar -->
-	<div id="rightSidebar" class="panel panel-default sidebar on">
+
+		<!-- Right Sidebar -->
+		<div id="rightSidebar" class="panel panel-default sidebar on">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#rightmenu"><span class="caret-left"></span></a>
 			</div>
@@ -150,6 +150,51 @@
 					</div>
 			</div>
 		</div>
+
+		<!-- Active Task Tray -->
+		<div id="activeTaskTray"><span id="activeTaskText">Active Tasks</span></div>
+		<div id="activeTaskPanel"></div>
+
+		<!-- Merger mode modal -->
+		<div id="mergerModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title">New and improved merger coming soon!</h3>
+					</div>
+					<div class="modal-body">
+						<div class="mergeResHeader">
+							<!--TODO: Replace "Model A" and "Model B" with actual model names-->
+							<h4 class="alignLeft">Model A</h4>
+							<h4 class="alignRight">Model B</h4>
+						</div>
+						<!--TODO: Create each of these with actual merge resolution-->
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
+							Merge resolution goes here
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
 		<div id="stage"></div>
 	</body>
 </html>

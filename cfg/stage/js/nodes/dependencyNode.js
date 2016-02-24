@@ -10,12 +10,9 @@ function DependencyNode (graph, data, parentNode) {
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 
 	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, defaultcharge);
-	
+
 	this.addClassName("dependencyNode");
 	//this.addBehavior(Columns);
 	this.addBehavior(HiddenLabelNodeGenerator);
 
 }
-
-
-

@@ -3,25 +3,29 @@ Stage.prototype = new Task();
 Stage.prototype.constructor = Stage;
 function Stage(graph) {
 	Task.prototype.constructor.call(this, graph);
-	
+
 	var stage = this;
 	var nodes = this.nodes;
 
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
-	
+
 	var leftsidebar = this.leftsidebar;
-	
+
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
 		stage.addModelNode(modelName);
 	});
-	
+
 	receiver.onReceiveReply(function (reply) {
 		CallWaiting(reply);
 	});
-	
+
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
+	});
+
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelName) {
 		sender.consoleOut("Removing model " + modelName);
@@ -39,7 +43,7 @@ function Stage(graph) {
 			return new DependencyNode(graph, data, modelNode);
 		});
 	});
-	
+
 	// Adds a submodel network to the d3 graph
 	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
 		console.log("Showing submodels for model " + modelName);
@@ -49,18 +53,18 @@ function Stage(graph) {
 			return new SubmodelNode(graph, data, modelNode);
 		});
 	});
-	
+
 	// Adds a PhysioMap network to the d3 graph
 	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
 		console.log("Showing PhysioMap for model " + modelName);
 		graph.displaymode = DisplayModes.SHOWPHYSIOMAP;
-		
+
 		var modelNode = stage.getModelNode(modelName);
 		modelNode.setChildren(physiomapData, function (data) {
 			return new PhysioMapNode(graph, data, modelNode);
 		});
 	});
-	
+
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");
@@ -91,12 +95,12 @@ function Stage(graph) {
 	$(".stageSearch").mouseover(function (){
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
 	});
-	
+
 	// When you mouseout of the search element hide the search box and results
 	$(".stageSearch").mouseout(function (){
 		$(".stageSearch .searchValueContainer").hide();
 	});
-	
+
 	$(".searchString").keyup(function() {
 		if( $(this).val() ) {
 			$(".stageSearch .searchValueContainer .searchResults").show()
@@ -106,6 +110,43 @@ function Stage(graph) {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
+
+	// Slide up panel for Active Task Tray
+	$("#activeTaskTray").click(function() {
+		$("#activeTaskPanel").slideToggle();
+	});
+
+	$('[data-toggle="tooltip"]').tooltip();
+
+	// Preview merge resolutions
+	$(".mergeResolution").click(function() {
+		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
+
+		$('#mergerModal').modal('toggle');
+
+		// Create three different graphs on stage to preview Merge Resolutions
+		$("#stage").append(
+			'<div class="substage" id="modelAStage"></div>' +
+			'<div class="substage" id="modelABStage">Merge preview coming soon!</div>' +
+			'<div class="substage" id="modelBStage"></div>' +
+			'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
+		);
+
+		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
+		$("#activeTaskText").addClass('blink');
+		if($("#mergerIcon").length == 0	)
+			$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
+	});
+
+	// Quit merger
+	$("#quitMergerBtn").click(function() {
+		// TODO: Warning dialog before quitting
+		$(".substage").remove();
+		$("#activeTaskText").removeClass('blink');
+		$("#mergerIcon").remove();
+		$("#backToMergeRes").remove();
+	})
+
 }
 
 Stage.prototype.onModelSelection = function(node) {

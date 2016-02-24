@@ -8,27 +8,21 @@ html, body, iframe {
 }
 
 body {
-	font-family: 12px sans-serif;
+	font-family: sans-serif;
 }
 
-.btn-default {
+#addModelButton {
 	position: absolute;
 	margin: 5px;
 	width:25px;
 	height:25px;
+	top: 15px;
+	left: 10px;
 	line-height:25px;
 	font-size: 25px;
 	border: hidden;
-}
-
-
-#addModelButton {
-	top: 15px;
-	left: 57px;
-	width:25px;
-	height:25px;
 	border-radius:250px;
-	color:#fff;
+	color:#ffffff;
 	text-align:center;
 	background:#3b5998;
 	opacity: .8;
@@ -37,24 +31,6 @@ body {
 #addModelButton:hover {
 	opacity: 1;
 	cursor: pointer;
-}
-
-.btn-default {
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin: 5px;
-	width: 50px;
-	height: 50px;
-	font-size: 25px;
-	border: hidden;
-
-}
-
-.dropdown-menu {
-	position: absolute;
-	top: 60px;
-	left: 5px;
 }
 
 .popover-title {
@@ -70,7 +46,7 @@ body {
 	position: absolute;
 	margin: 1px;
 	top: 6px;
-	left: 100px;
+	left: 50px;
 	padding: 10px;
 	opacity: 1;
 }
@@ -98,10 +74,14 @@ body {
 }
 
 ul.searchResults {
+	position: absolute;
+	width: 500px;
 	border: 1px solid black;
     border-top: none;
 	max-height: 30vh;
+	background-color: white;
 	overflow: scroll;
+	z-index: 2;
 }
 
 ul.searchResults li {
@@ -139,20 +119,42 @@ li.searchResultSet li:hover {
 	list-style-type:none;
 }
 
-.key ul.hiddenLinkKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
 .panel .subpanel {
 	background-color: white;
 }
 
+#activeTaskPanel, #activeTaskTray {
+	position: fixed;
+	width: 100%;
+	padding: 5px;
+	text-align: center;
+	z-index: 100;
+}
 
-.nodeInfoPanel {
-	position: absolute;
-	top: 450px;
-	right: 5px;
-	max-width: 250px;
+#activeTaskTray {
+	bottom: 0;
+	height: 30px;
+	background-color: #627AAC;
+	opacity: 0.8;
+}
+
+#activeTaskTray:hover {
 	opacity: 1;
+	cursor: pointer;
+}
+
+#activeTaskPanel {
+	bottom: 30px;
+	height: 30px;
+	display: none;
+	background-color: #D3D3D3;
+}
+
+.blink {
+	color: white;
+	animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+	50% { opacity: 0.0; }
 }

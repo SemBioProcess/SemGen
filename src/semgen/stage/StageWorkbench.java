@@ -28,8 +28,9 @@ public class StageWorkbench extends Workbench {
 		projtask.addObserver(this);
 		tasks.add(projtask);
 		setActiveTask(0);
+
 	}
-	
+
 	/**
 	 * Get an object that listens for javascript commands
 	 * @return
@@ -37,7 +38,7 @@ public class StageWorkbench extends Workbench {
 	public CommunicatingWebBrowserCommandReceiver getCommandReceiver() {
 		return activetask.getCommandReceiver();
 	}
-	
+
 	/**
 	 * Get an object that listens for javascript commands
 	 * @return
@@ -45,8 +46,7 @@ public class StageWorkbench extends Workbench {
 	public Class<? extends SemGenWebBrowserCommandSender> getCommandSenderInterface() {
 		return activetask.getSenderInterface();
 	}
-	
-	
+
 	/**
 	 * Sets the object used to send commands to the view
 	 * @param commandSender Object used to send commands to the view
