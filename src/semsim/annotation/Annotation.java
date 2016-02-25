@@ -2,6 +2,7 @@ package semsim.annotation;
 
 import org.apache.commons.lang3.builder.*;
 
+
 /**
  * A SemSim annotation provides additional information about
  * a SemSim model or one of its components. Annotations can be used
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.builder.*;
 public class Annotation {
 	
 	protected String valueDescription;
-	protected SemSimRelation relation;
+	protected Relation relation;
 	protected Object value;
 	
 	
@@ -21,7 +22,7 @@ public class Annotation {
 	 * and the annotation value
 	 * @param value The annotation value
 	 */
-	public Annotation(SemSimRelation relation, Object value){
+	public Annotation(Relation relation, Object value){
 		this.relation = relation;
 		this.setValue(value);
 	}
@@ -33,7 +34,7 @@ public class Annotation {
 	 * @param value The annotation value
 	 * @param valueDescription A free-text description of the annotation value
 	 */
-	public Annotation(SemSimRelation relation, Object value, String valueDescription){
+	public Annotation(Relation relation, Object value, String valueDescription){
 		this.relation = relation;
 		setValue(value);
 		setValueDescription(valueDescription);
@@ -68,14 +69,14 @@ public class Annotation {
 	 * Set the relationship between the object being annotated and the annotation value
 	 * @param relation
 	 */
-	public void setRelation(SemSimRelation relation) {
+	public void setRelation(Relation relation) {
 		this.relation = relation;
 	}
 
 	/**
 	 * @return The relationship between the object being annotated and the annotation value
 	 */
-	public SemSimRelation getRelation() {
+	public Relation getRelation() {
 		return relation;
 	}
 	

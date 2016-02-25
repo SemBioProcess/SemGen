@@ -2,15 +2,20 @@ package semsim;
 
 import java.net.URI;
 
+import semsim.definitions.SemSimTypes;
+
 public abstract class SemSimObject {
 	private String name = new String("");
 	private String description = new String("");
 	private String metadataID = new String("");
-	protected URI referenceuri = URI.create(new String(""));
+	private SemSimTypes semsimtype;
 	
-	public SemSimObject() {}
+	public SemSimObject(SemSimTypes type) {
+		semsimtype = type;
+	}
 	
 	public SemSimObject(SemSimObject objtocopy) {
+		semsimtype = objtocopy.semsimtype;
 		name = new String(objtocopy.name);
 		
 		if (objtocopy.description != null)
@@ -19,7 +24,7 @@ public abstract class SemSimObject {
 		if(objtocopy.metadataID != null)
 			metadataID = new String(objtocopy.metadataID);
 		
-		referenceuri = objtocopy.referenceuri;
+
 	}
 	
 	/**
@@ -83,11 +88,18 @@ public abstract class SemSimObject {
 		return metadataID;
 	}
 	
-	public Boolean hasPhysicalDefinitionAnnotation() {
-		return !referenceuri.toString().isEmpty();
+
+	public SemSimTypes getSemSimType() {
+		return semsimtype;
 	}
 	
-	public abstract URI getSemSimClassURI();
+	public URI getSemSimClassURI() {
+		return semsimtype.getURI();
+	}
+	
+	public boolean isType(SemSimTypes type) {
+		return type == semsimtype;
+	}
 	
 }
 

@@ -25,8 +25,8 @@ import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
-import semsim.annotation.ReferenceOntologies.OntologyDomain;
-import semsim.model.SemSimTypes;
+import semsim.definitions.ReferenceOntologies.OntologyDomain;
+import semsim.definitions.SemSimTypes;
 
 public class AddCreateTermPanel extends JPanel implements ListSelectionListener, ActionListener {
 	private static final long serialVersionUID = 1L;

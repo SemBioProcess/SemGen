@@ -4,6 +4,9 @@ package semsim.annotation;
 import java.net.URI;
 import java.util.Set;
 
+import semsim.SemSimLibrary;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+
 /**
  * Interface providing methods for annotating
  * SemSim model elements.
@@ -39,7 +42,7 @@ public interface Annotatable {
 	 * @param description A free-text description of the reference
 	 * ontology term (obtained from the ontology itself whenever possible). 
 	 */
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description);
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib);
 
 	
 	/**
@@ -49,7 +52,7 @@ public interface Annotatable {
 	 * @param relation The {@link SemSimRelation} that filters the annotations 
 	 * to return  
 	 */
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation);
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation);
 	
 	
 	/**

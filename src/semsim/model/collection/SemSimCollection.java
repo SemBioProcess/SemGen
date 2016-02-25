@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.SemSimObject;
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
@@ -17,7 +18,9 @@ public abstract class SemSimCollection extends SemSimObject{
 	protected ArrayList<Submodel> submodels = new ArrayList<Submodel>();
 	protected ArrayList<DataStructure> dataStructures = new ArrayList<DataStructure>();
 
-	public SemSimCollection() {}
+	public SemSimCollection(SemSimTypes type) {
+		super(type);
+	}
 	
 	public SemSimCollection(SemSimCollection coltocopy) {
 		super(coltocopy);

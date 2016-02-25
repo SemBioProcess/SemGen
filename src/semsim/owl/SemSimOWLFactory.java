@@ -1,22 +1,13 @@
 package semsim.owl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
-import java.io.IOException;
-
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddOntologyAnnotation;
@@ -53,15 +44,15 @@ import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
-import semsim.SemSimConstants;
+import semsim.annotation.Relation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 public class SemSimOWLFactory {
 
@@ -100,14 +91,14 @@ public class SemSimOWLFactory {
 	// Add external class
 	public static void addExternalReferenceClass(OWLOntology destinationont,
 			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
-		String parentname = SemSimConstants.SEMSIM_NAMESPACE + "Reference_physical_" + physicaltype;
+		String parentname = RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_" + physicaltype;
 		OWLClass parent = factory.getOWLClass(IRI.create(parentname));
 		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsuri));
 		OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd, parent);
 		AddAxiom addAxiom = new AddAxiom(destinationont, axiom);
 		manager.applyChange(addAxiom);
 
-		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(IRI.create(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI));
+		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI());
 		OWLLiteral con2 = factory.getOWLLiteral(clsuri);
 		OWLClassExpression physdef = factory.getOWLDataHasValue(hasphysdefprop,con2);
 		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd, physdef);
@@ -200,28 +191,28 @@ public class SemSimOWLFactory {
 
         OWLClassAssertionAxiom ax = factory.getOWLClassAssertionAxiom(owlexp, owlind);
         AddAxiom addAx = new AddAxiom(ont, ax);
-        manager.applyChange(addAx);				
+        manager.applyChange(addAx);	
 	}
 
 	// Set an object property for one individual
-	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, String rel, String invrel, OWLOntologyManager manager)
+	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, Relation rel, Relation invrel, OWLOntologyManager manager)
 			throws OWLException {
 
 		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, null, manager));
 		manager.applyChange(addAxiom);
-		OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
-		if(!invrel.equals("") && invrel!=null){
+		if(invrel!=null){
+			OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
 			AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
 			manager.applyChange(addinvAxiom);
 		}
 	}
 	
 	public static OWLAxiom createIndObjectPropertyAxiom(OWLOntology ont, String subject,
-			String object, String rel, Set<OWLAnnotation> anns, OWLOntologyManager manager)
+			String object, Relation rel, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLIndividual value = factory.getOWLNamedIndividual(IRI.create(object));
-		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(rel));
+		OWLObjectProperty prop = factory.getOWLObjectProperty(rel.getIRI());
 		OWLAxiom axiom = factory.getOWLObjectPropertyAssertionAxiom(prop, ind,value);
 		if(anns!=null)
 			axiom = axiom.getAnnotatedAxiom(anns);
@@ -229,23 +220,23 @@ public class SemSimOWLFactory {
 	}
 	
 	public static void setIndObjectPropertyWithAnnotations(OWLOntology ont, String subject,
-		String object, String rel, String invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
+		String object, Relation rel, Relation invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
 		throws OWLException{
 		AddAxiom addAxiom = new AddAxiom(ont, createIndObjectPropertyAxiom(ont, subject, object, rel, annsforrel, manager));
 		manager.applyChange(addAxiom);
-		OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
-		
-		if(!invrel.equals("") && invrel!=null){
+		if(invrel!=null){
+			OWLAxiom invaxiom = createIndObjectPropertyAxiom(ont, object, subject, invrel, null, manager);
+
 			AddAxiom addinvAxiom = new AddAxiom(ont, invaxiom);
 			manager.applyChange(addinvAxiom);
 		}
 	}
 
-	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, String rel,
+	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, Relation rel,
 			Object val, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
-		OWLDataProperty prop = factory.getOWLDataProperty(IRI.create(rel));
+		OWLDataProperty prop = factory.getOWLDataProperty(rel.getIRI());
 		OWLLiteral valueconstant;
 
 		Set<String> rangeset = new HashSet<String>();
@@ -263,7 +254,7 @@ public class SemSimOWLFactory {
 		return axiom;
 	}
 
-	public static void setIndDatatypeProperty(OWLOntology ont, String induri, String rel, Object val, OWLOntologyManager manager) throws OWLException {
+	public static void setIndDatatypeProperty(OWLOntology ont, String induri, Relation rel, Object val, OWLOntologyManager manager) throws OWLException {
 		if(val!=null && !val.equals("")){
 			OWLAxiom axiom = createIndDatatypePropertyAxiom(ont, induri, rel, val, null, manager);
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
@@ -271,7 +262,7 @@ public class SemSimOWLFactory {
 		}
 	}
 	
-	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String induri, String rel, Object val,
+	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String induri, Relation rel, Object val,
 			Set<OWLAnnotation> anns, OWLOntologyManager manager) throws OWLException{
 		AddAxiom addAxiom = new AddAxiom(ont, createIndDatatypePropertyAxiom(ont, induri, rel, val, anns, manager));
 		manager.applyChange(addAxiom);
@@ -299,7 +290,7 @@ public class SemSimOWLFactory {
 	// // Retrieve a functional datatype property value for one individuals (returns a single string)
 	public static String getFunctionalIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
 		// The hashtable keys are individual IRIs, values are relations (as IRIs)
-		Set<String> values = SemSimOWLFactory.getIndDatatypeProperty(ont, indname, propname);
+		Set<String> values = getIndDatatypeProperty(ont, indname, propname);
 		String[] valuearray = values.toArray(new String[] {});
 		
 		return (valuearray.length == 1)  ? valuearray[0] : "";
@@ -653,36 +644,7 @@ public class SemSimOWLFactory {
 		}
 		return commentstring;
 	}
-	
-	/**
-	 * @deprecated
-	 */
-	public static String getLatestVersionIDForBioPortalOntology(String bioportalID){
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = new Document();
-		String versionid = null;
-		try {
-			URL url = new URL(
-					"http://rest.bioontology.org/bioportal/virtual/ontology/" + bioportalID + "?apikey=" + SemSimConstants.BIOPORTAL_API_KEY);
-			URLConnection yc = url.openConnection();
-			yc.setReadTimeout(60000); // Tiemout after a minute
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					yc.getInputStream()));
-			doc = builder.build(in);
-			in.close();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Returned error: " + e.getLocalizedMessage()+ "\n\nPlease make sure you are online,\notherwise BioPortal may be experiencing problems",
-					"Problem searching BioPortal",JOptionPane.ERROR_MESSAGE);
-			return null;
-		} catch (JDOMException e) {e.printStackTrace();}
-
-		if (doc.hasRootElement()) {
-			versionid = doc.getRootElement().getChild("data").getChild("ontologyBean").getChildText("id");
-		}
-		return versionid;
-	}
-	
+		
 	public static String generateUniqueIRIwithNumber(String iritoappend, Set<String> existingmembers) {
 		int x = 0;
 		iritoappend = iritoappend + x;

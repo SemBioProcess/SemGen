@@ -10,11 +10,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import semgen.SemGen;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
-import semsim.SemSimConstants;
+import semsim.annotation.Ontology;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.owl.SemSimOWLFactory;
-import semsim.utilities.webservices.BioPortalConstants;
 
 public class ExternalURLButton extends JLabel implements MouseListener{
 
@@ -32,24 +33,25 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 	public void openTerminBrowser(URI termuri) {
 		if(termuri!=null){
 			System.out.println(termuri);
-			String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri.toString());
-			String fullontname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
-			String abbrev = SemSimConstants.ONTOLOGY_FULL_NAMES_AND_NICKNAMES_MAP.get(fullontname);
-			
+			Ontology ont = SemGen.semsimlib.getOntologyfromTermURI(termuri.toString());
+			if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
+				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
+				return;
+			}
 			// If an identifiers.org URI is used, just treat the identifier as the URL
 			if(termuri.toString().startsWith("http://identifiers.org")) BrowserLauncher.openURL(termuri.toString());
 
 			// ...else, if it's a UNIPROT term...
-			else if(SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(
-					SemSimOWLFactory.getNamespaceFromIRI(termuri.toString()))==SemSimConstants.UNIPROT_FULLNAME){
+			else if(ont == ReferenceOntology.UNIPROT.getAsOntology()){
 				String id = SemSimOWLFactory.getIRIfragment(termuri.toString());
 				String urlstring = "http://www.uniprot.org/uniprot/" + id;
 				BrowserLauncher.openURL(urlstring);				
 			}
 			
 			// ...else if we have identified the ontology and it is available through BioPortal, open the BioPortal URL
-			else if(abbrev!=null && BioPortalConstants.ONTOLOGY_FULL_NAMES_AND_BIOPORTAL_IDS.containsKey(fullontname)){
+			else if(!ont.getBioPortalID().isEmpty()){
 				// Special case for BRENDA
+				String abbrev = ont.getNickName();
 				if(abbrev.equals("BRENDA")) abbrev = "BTO";
 				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
 				BrowserLauncher.openURL(urlstring);
@@ -57,6 +59,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			// ...otherwise the knowledge resource is not known or not available online
 			else{
 				JOptionPane.showMessageDialog(getParent(), "Sorry, could not determine where to find more information about that resource.");
+				return;
 			}
 		}
 	}

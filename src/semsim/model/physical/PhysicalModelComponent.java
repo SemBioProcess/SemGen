@@ -4,18 +4,21 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.SemSimLibrary;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.SemSimRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.SemSimTypes;
 import semsim.model.SemSimComponent;
-import semsim.model.SemSimTypes;
 import semsim.utilities.SemSimCopy;
 
 public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable {
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	
-	public PhysicalModelComponent() {}
+	public PhysicalModelComponent(SemSimTypes type) {
+		super(type);
+	}
 	
 	public PhysicalModelComponent(PhysicalModelComponent pmctocopy) {
 		super(pmctocopy);
@@ -36,11 +39,11 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.add(ann);
 	}
 	
-	public void addReferenceOntologyAnnotation(SemSimRelation relation, URI uri, String description){
-		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description));
+	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
+		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(SemSimRelation relation) {
+	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation){
@@ -65,7 +68,7 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 		annotations.addAll(newset);
 	}
 	
-	public void removeReferenceAnnotationsofType(SemSimRelation relation) {
+	public void removeReferenceAnnotationsofType(Relation relation) {
 		Set<ReferenceOntologyAnnotation> refs = getReferenceOntologyAnnotations(relation);
 		for (ReferenceOntologyAnnotation ref : refs) {
 			annotations.remove(ref);
@@ -87,5 +90,4 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	protected abstract boolean isEquivalent(Object obj);
-	public abstract SemSimTypes getSemSimType();
 }

@@ -1,8 +1,12 @@
 package semsim.model.physical;
 
+import semsim.definitions.SemSimTypes;
+
 public abstract class PhysicalEntity extends PhysicalModelComponent{
 
-public PhysicalEntity() {}
+public PhysicalEntity(SemSimTypes type) {
+	super(type);
+}
 
 	public PhysicalEntity(PhysicalEntity petocopy) {
 		super(petocopy);

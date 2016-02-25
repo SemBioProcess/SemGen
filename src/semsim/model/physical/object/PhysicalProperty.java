@@ -2,23 +2,24 @@ package semsim.model.physical.object;
 
 import java.net.URI;
 
-import semsim.SemSimConstants;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.model.SemSimTypes;
+import semsim.definitions.SemSimTypes;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.physical.PhysicalModelComponent;
 
 public class PhysicalProperty extends PhysicalModelComponent implements ReferenceTerm{
 		
 	public PhysicalProperty(String label, URI uri) {
+		super(SemSimTypes.PHYSICAL_PROPERTY);
 		referenceuri = uri;
 		setName(label);
 	}
 
-	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(){
+	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
-			return new ReferenceOntologyAnnotation(SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION, referenceuri, getDescription());
+			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
 		}
 		return null;
 	}
@@ -38,11 +39,6 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	public String getComponentTypeasString() {
 		return "property";
 	}
-	
-	@Override
-	public URI getSemSimClassURI() {
-		return SemSimConstants.PHYSICAL_PROPERTY_CLASS_URI;
-	}
 
 
 	@Override
@@ -50,11 +46,6 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		return ((PhysicalProperty)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
 	}
 	
-	@Override
-	public SemSimTypes getSemSimType() {
-		return SemSimTypes.PHYSICAL_PROPERTY;
-	}
-
 	@Override
 	public String getOntologyName(SemSimLibrary semsimlib) {
 		return semsimlib.getReferenceOntologyName(referenceuri);

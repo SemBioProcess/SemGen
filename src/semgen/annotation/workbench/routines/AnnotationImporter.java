@@ -2,6 +2,7 @@ package semgen.annotation.workbench.routines;
 
 import java.io.File;
 
+import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenJob;
 import semgen.utilities.file.LoadSemSimModel;
@@ -83,7 +84,7 @@ public class AnnotationImporter extends SemGenJob {
 				DataStructure srcds = importedmodel.getAssociatedDataStructure(ds.getName());
 				
 				ds.copyDescription(srcds);
-				ds.copySingularAnnotations(srcds);
+				ds.copySingularAnnotations(srcds, SemGen.semsimlib);
 				AnnotationCopier.copyCompositeAnnotation(library, ds, srcds);
 				
 			} // otherwise no matching data structure found in source model

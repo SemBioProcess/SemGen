@@ -4,12 +4,16 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import semsim.definitions.SemSimTypes;
+
 public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();
 	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
 	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
 	
-	protected PhysicalProcess() {}
+	protected PhysicalProcess(SemSimTypes type) {
+		super(type);
+	}
 	
 	public PhysicalProcess(PhysicalProcess processtocopy) {
 		super(processtocopy);

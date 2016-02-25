@@ -10,7 +10,7 @@ import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
-import semsim.annotation.SemSimRelation;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
 

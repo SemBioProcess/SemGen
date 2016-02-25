@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 import semgen.annotation.workbench.drawers.CodewordToolDrawer.CodewordCompletion;
 import semgen.utilities.SemGenFont;
-import semsim.PropertyType;
+import semsim.definitions.PropertyType;
 
 public abstract class CodewordButton extends AnnotationObjectButton {
 	private static final long serialVersionUID = -7555259367118052593L;
