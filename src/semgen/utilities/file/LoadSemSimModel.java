@@ -17,6 +17,7 @@ import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
 import semsim.reading.ModelAccessor;
+import semsim.reading.SemSimRDFreader;
 import semsim.reading.XMMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
@@ -25,7 +26,6 @@ import semsim.reading.SemSimOWLreader;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.BioPortalSearcher;
-import semsim.writing.BiologicalRDFblock;
 
 public class LoadSemSimModel extends SemGenJob {
 	private ModelAccessor modelaccessor;
@@ -153,10 +153,10 @@ public class LoadSemSimModel extends SemGenJob {
 				
 				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
-				BiologicalRDFblock biordf = new BiologicalRDFblock(semsimmodel, xmloutputter.outputString(rdfel), null);
+				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
 				
 				for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-					biordf.getRDFforAnnotatedSemSimObject(ds);
+					rdfreader.getRDFforAnnotatedSemSimObject(ds);
 				}
 			}
 		}

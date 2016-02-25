@@ -15,6 +15,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
+import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
 public class JSimProjectFileWriter extends ModelWriter{
@@ -22,7 +23,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 	File projectFile;
 	String modelName;
 	XMLOutputter outputter;
-	BiologicalRDFblock rdfblock;
+	SemSimRDFwriter rdfblock;
 	Element semsimControlElement;
 	String modelNamespace;
 
@@ -43,7 +44,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
 			
-			rdfblock = new BiologicalRDFblock(semsimmodel, null, null);
+			rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
 			
 			for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 				
@@ -60,7 +61,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		if( ! rdfblock.rdf.isEmpty()){
 			
 			projdoc = JSimProjectFileReader.getDocument(projectFile);
-			String rawrdf = BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf);			
+			String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
 			

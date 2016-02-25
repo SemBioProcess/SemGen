@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,13 +41,11 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.utilities.SemSimUtil;
-import semsim.writing.BiologicalRDFblock;
 
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
-	private BiologicalRDFblock rdfblock;
+	private SemSimRDFreader rdfblock;
 	private Element rdfblockelement;
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	
@@ -103,7 +100,7 @@ public class CellMLreader extends ModelReader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
 		
-		rdfblock = new BiologicalRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");
@@ -143,7 +140,7 @@ public class CellMLreader extends ModelReader {
 				String metadataid = importedcompel.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 				instantiatedsubmodel.setMetadataID(metadataid);
 
-				collectSingularBiologicalAnnotationForSubmodel(instantiatedsubmodel);
+				//collectSingularBiologicalAnnotationForSubmodel(instantiatedsubmodel);
 			}
 		}
 		
@@ -360,7 +357,7 @@ public class CellMLreader extends ModelReader {
 			if(metadataid!=null) submodel.setMetadataID(metadataid);
 			
 			// Collect the biological annotation, if present
-			collectSingularBiologicalAnnotationForSubmodel(submodel);
+			//collectSingularBiologicalAnnotationForSubmodel(submodel);
 			
 			semsimmodel.addSubmodel(submodel);
 		}
@@ -457,23 +454,23 @@ public class CellMLreader extends ModelReader {
 		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
-		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf)));
+		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf)));
 		
 		return semsimmodel;
 	}
 	
 	
 	// Collect singular annotation for model components
-	private void collectSingularBiologicalAnnotationForSubmodel(FunctionalSubmodel submodel){
-		if(submodel.getMetadataID()!=null){
-			URI termURI = rdfblock.collectSingularBiologicalAnnotation(submodel);
-			if(termURI!=null){
-				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
-				semsimmodel.addReferencePhysicalEntity(rpe);
-				submodel.setSingularAnnotation(rpe);
-			}
-		}
-	}
+//	private void collectSingularBiologicalAnnotationForSubmodel(FunctionalSubmodel submodel){
+//		if(submodel.getMetadataID()!=null){
+//			URI termURI = rdfblock.collectSingularBiologicalAnnotation(submodel);
+//			if(termURI!=null){
+//				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
+//				semsimmodel.addReferencePhysicalEntity(rpe);
+//				submodel.setSingularAnnotation(rpe);
+//			}
+//		}
+//	}
 	
 	private void processComponentRelationships(String rel, Element comp){
 		Submodel parentsubmodel = semsimmodel.getSubmodel(comp.getAttributeValue("component"));

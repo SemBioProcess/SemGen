@@ -31,11 +31,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
-	private BiologicalRDFblock rdfblock;
+	private SemSimRDFwriter rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
@@ -81,7 +82,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Declare the RDF metadata
 			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = BiologicalRDFblock.getRDFmodelAsString(rdfblock.rdf);
+				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -102,7 +103,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new BiologicalRDFblock(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, mainNS.getURI().toString());
 	}
 	
 	private void createRootElement() {		

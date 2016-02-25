@@ -970,7 +970,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		metadata.setAnnotationValue(Metadata.description, value);
 	}
 	
-	public double getSemsimversion() {
+	public double getSemSimVersion() {
 		return semsimversion;
 	}
 
