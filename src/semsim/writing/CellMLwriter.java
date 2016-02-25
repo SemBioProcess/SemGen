@@ -17,16 +17,12 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import semsim.SemSimLibrary;
-import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
-import semsim.annotation.Ontology;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
+import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -168,7 +164,7 @@ public class CellMLwriter extends ModelWriter {
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				rdfblock.setRDFforAnnotatedSemSimObject((SemSimObject)ssc);
+				rdfblock.setRDFforAnnotatedSemSimObject((SemSimComponent)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);

@@ -1,6 +1,7 @@
 package semsim.writing;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -21,14 +22,18 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import semsim.SemSimConstants;
+import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
-import semsim.annotation.SemSimRelation;
-import semsim.annotation.StructuralRelation;
+import semsim.annotation.Relation;
+import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
@@ -44,7 +49,7 @@ import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 
-public class BiologicalRDFblock {
+public class BiologicalRDFblock extends ModelWriter{
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
 	private Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>(); 
 	private Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
@@ -55,26 +60,30 @@ public class BiologicalRDFblock {
 	public SemSimModel semsimmodel;
 	private String unnamedstring = "[unnamed!]";
 	
-	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SOURCE_PARTICIPANT_URI.toString());
-	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_SINK_PARTICIPANT_URI.toString());
-	public static Property hasmediatorparticipant = ResourceFactory.createProperty(SemSimConstants.HAS_MEDIATOR_PARTICIPANT_URI.toString());
-	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_ENTITY_REFERENCE_URI.toString());
-	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimConstants.HAS_MULTIPLIER_URI.toString());
-	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimConstants.PHYSICAL_PROPERTY_OF_URI.toString());
-	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimConstants.HAS_PHYSICAL_DEFINITION_URI.toString());
-	public static Property is = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
-	public static Property isversionof = ResourceFactory.createProperty(SemSimConstants.BQB_IS_VERSION_OF_URI.toString());
-	public static Property partof = ResourceFactory.createProperty(SemSimConstants.PART_OF_URI.toString());
-	public static Property haspart = ResourceFactory.createProperty(SemSimConstants.HAS_PART_URI.toString());
-	public static Property containedin = ResourceFactory.createProperty(SemSimConstants.CONTAINED_IN_URI.toString());
-	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
-	public static Property hasname = ResourceFactory.createProperty(SemSimConstants.HAS_NAME_URI.toString());
-	public static Property description = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+	protected static SemSimLibrary sslib;
+	
+	public static Property hassourceparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_SOURCE_PARTICIPANT.getURIasString());
+	public static Property hassinkparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_SINK_PARTICIPANT.getURIasString());
+	public static Property hasmediatorparticipant = ResourceFactory.createProperty(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getURIasString());
+	public static Property hasphysicalentityreference = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getURIasString());
+	public static Property hasmultiplier = ResourceFactory.createProperty(SemSimRelation.HAS_MULTIPLIER.getURIasString());
+	public static Property physicalpropertyof = ResourceFactory.createProperty(SemSimRelation.PHYSICAL_PROPERTY_OF.getURIasString());
+	public static Property hasphysicaldefinition = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getURIasString());
+	public static Property is = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
+	public static Property isversionof = ResourceFactory.createProperty(SemSimRelation.BQB_IS_VERSION_OF.getURIasString());
+	public static Property partof = ResourceFactory.createProperty(StructuralRelation.PART_OF.getURIasString());
+	public static Property haspart = ResourceFactory.createProperty(StructuralRelation.HAS_PART.getURIasString());
+	public static Property containedin = ResourceFactory.createProperty(StructuralRelation.CONTAINED_IN.getURIasString());
+	public static Property compcomponentfor = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
+	public static Property hasname = ResourceFactory.createProperty(SemSimRelation.HAS_NAME.getURIasString());
+	public static Property description = ResourceFactory.createProperty(RDFNamespace.DCTERMS + "description");
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	
 	// Constructor
 	public BiologicalRDFblock(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
+		super(null);
+		
 		this.semsimmodel = semsimmodel;
 		
 		if(rdfasstring != null){
@@ -90,16 +99,26 @@ public class BiologicalRDFblock {
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
-		rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-		rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-		rdf.setNsPrefix("opb", SemSimConstants.OPB_NAMESPACE);
-		rdf.setNsPrefix("ro", SemSimConstants.RO_NAMESPACE);
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
 		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 	
 	//--------------------------------------------------------------------------------------------
 	// Methods for collecting RDF-formatted annotation data and reading it into a SemSim model
 	//--------------------------------------------------------------------------------------------
+	
+	// Temp functions so that we can pass in sslib
+	@Override
+	public void writeToFile(File file){}
+	
+	@Override 
+	public void writeToFile(URI uri){}
+	
+	
+	
 	
 	public void getRDFforAnnotatedSemSimObject(SemSimObject sso){
 		
@@ -138,7 +157,7 @@ public class BiologicalRDFblock {
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(SemSimConstants.OPB_NAMESPACE))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -266,8 +285,8 @@ public class BiologicalRDFblock {
 			Resource isversionofann = res.getPropertyResourceValue(BiologicalRDFblock.isversionof);
 			if(isversionofann!=null){
 				URI isversionofannURI = URI.create(isversionofann.getURI());
-				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimConstants.BQB_IS_VERSION_OF_RELATION, 
-						isversionofannURI, isversionofannURI.toString()));
+				pmc.addAnnotation(new ReferenceOntologyAnnotation(SemSimRelation.BQB_IS_VERSION_OF, 
+						isversionofannURI, isversionofannURI.toString(), sslib));
 				if(isentity)
 					semsimmodel.addReferencePhysicalEntity(
 							new ReferencePhysicalEntity(isversionofannURI, isversionofannURI.toString()));
@@ -303,8 +322,8 @@ public class BiologicalRDFblock {
 			if(entityres!=null){
 				PhysicalEntity nextent = getCompositeEntityComponentFromResourceAndAnnotate(entityres);
 				entlist.add(nextent);
-				if(containedinlink) rellist.add(SemSimConstants.CONTAINED_IN_RELATION);
-				else rellist.add(SemSimConstants.PART_OF_RELATION);
+				if(containedinlink) rellist.add(StructuralRelation.CONTAINED_IN);
+				else rellist.add(StructuralRelation.PART_OF);
 				
 				curres = entityres;
 			}
@@ -338,57 +357,9 @@ public class BiologicalRDFblock {
 	// Collect the reference ontology term used to describe the model component
 	public URI collectSingularBiologicalAnnotation(SemSimObject toann){
 		
+		//TODO: finish this
 		URI singularannURI = null;
 
-		
-		/*
-		Element mainrdfel = el.getChild("RDF", CellMLconstants.rdfNS);
-		// If not present, look for it in main RDF block
-		if(mainrdfel==null)
-			mainrdfel = rdfblockelement;
-		
-		URI singularannURI = null;
-		if(mainrdfel!=null){
-			Iterator<?> descit = mainrdfel.getChildren("Description", CellMLconstants.rdfNS).iterator();
-			
-			while(descit.hasNext()){
-				Element rdfdesc = (Element) descit.next();
-				String about = rdfdesc.getAttributeValue("about", CellMLconstants.rdfNS);
-				String ID = rdfdesc.getAttributeValue("ID", CellMLconstants.rdfNS);
-				String ref = null;
-				
-				if(about!=null) ref = about.replace("#", "");
-				else if(ID!=null) ref = ID;
-				
-				if(ref!=null){				
-					if(ref.equals(toann.getMetadataID())){
-						Element relel = rdfdesc.getChild("is", CellMLconstants.bqbNS);
-						Element freeel = rdfdesc.getChild("description", CellMLconstants.dctermsNS);
-						
-						// If there is a singular annotation
-						if(relel!=null){
-							String term = relel.getAttributeValue("resource", CellMLconstants.rdfNS);
-							if(term==null){
-								Element objectdescel = relel.getChild("Description", CellMLconstants.rdfNS);
-								if(objectdescel!=null){
-									term = objectdescel.getAttributeValue("about", CellMLconstants.rdfNS);
-									singularannURI = URI.create(term);
-								}
-							}
-							else singularannURI = URI.create(term);
-						}
-						
-						// If there is a free-text description
-						if(freeel!=null){
-							String freetext = freeel.getText();
-							
-							if(freetext!=null) toann.setDescription(freetext);
-						}
-					}
-				}
-			}
-		}
-		*/
 		return singularannURI;
 	}
 	
@@ -429,11 +400,11 @@ public class BiologicalRDFblock {
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
 			URI propuri = URI.create(st.getPredicate().getURI());
-			SemSimRelation relation = SemSimConstants.URIS_AND_SEMSIM_RELATIONS.get(propuri);
+			Relation relation = SemSimRelations.getRelationFromURI(propuri);
 			String objectURI = st.getObject().asResource().getURI();
 		
 			semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(objectURI), objectURI));
-			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI));	
+			returnent.addAnnotation(new ReferenceOntologyAnnotation(relation, URI.create(objectURI), objectURI, sslib));	
 		}
 		
 		return returnent;
@@ -454,7 +425,7 @@ public class BiologicalRDFblock {
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = SemSimConstants.OPB_NAMESPACE + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
 		return URI.create(uristring);
 	}
 	
@@ -468,13 +439,15 @@ public class BiologicalRDFblock {
 	public void setRDFforAnnotatedSemSimObject(SemSimObject sso){
 		
 		Boolean hasphysprop = false;
+		Boolean physdefpresent = false;
 		
 		if(sso instanceof DataStructure){
 			hasphysprop = ((DataStructure)sso).hasPhysicalProperty();
+			physdefpresent = ((DataStructure)sso).hasPhysicalDefinitionAnnotation();
 		}
 		
 		// If we actually need to write out annotations
-		if(sso.hasPhysicalDefinitionAnnotation() || ! sso.getDescription().equals("") || hasphysprop){
+		if(physdefpresent || ! sso.getDescription().equals("") || hasphysprop){
 			
 			String resuri = semsimmodel.getNamespace() + sso.getName();
 			Resource ares = rdf.createResource(resuri);
@@ -486,19 +459,19 @@ public class BiologicalRDFblock {
 			
 			// Set the free-text annotation
 			if( ! sso.getDescription().equals("")){
-				Property ftprop = ResourceFactory.createProperty(CurationalMetadata.DCTERMS_NAMESPACE + "description");
+				Property ftprop = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString() + "description");
 				Statement st = rdf.createStatement(ares, ftprop, sso.getDescription());
-				addRDFstatement(st, "dcterms", CurationalMetadata.DCTERMS_NAMESPACE, rdf);
+				addRDFstatement(st, "dcterms", RDFNamespace.DCTERMS.getNamespaceasString(), rdf);
 			}
 							
 			// Add singular annotation
-			if(sso.hasPhysicalDefinitionAnnotation()){
-				URI uri = ((DataStructure)sso).getPhysicalDefinitionReferenceOntologyAnnotation().getReferenceURI();
-				Property isprop = ResourceFactory.createProperty(SemSimConstants.BQB_IS_URI.toString());
+			if(physdefpresent){
+				URI uri = ((DataStructure)sso).getPhysicalDefinitionURI();
+				Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
 				URI furi = convertURItoIdentifiersDotOrgFormat(uri);
 				Resource refres = rdf.createResource(furi.toString());
 				Statement st = rdf.createStatement(ares, isprop, refres);
-				addRDFstatement(st, "bqbiol", SemSimConstants.BQB_NAMESPACE, rdf);
+				addRDFstatement(st, "bqbiol", RDFNamespace.BQB.getNamespaceasString(), rdf);
 			}
 			
 			// If annotated thing is a variable, include the necessary composite annotation info
@@ -512,7 +485,7 @@ public class BiologicalRDFblock {
 	
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure a, Resource ares){
 		
-		Property iccfprop = ResourceFactory.createProperty(SemSimConstants.IS_COMPUTATIONAL_COMPONENT_FOR_URI.toString());
+		Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 		Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)a);
 		Statement st = rdf.createStatement(ares, iccfprop, propres);
 		
@@ -669,7 +642,7 @@ public class BiologicalRDFblock {
 		Property structprop = partof;
 		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
 		
-		if(rel==SemSimConstants.CONTAINED_IN_RELATION) structprop = containedin;
+		if(rel==StructuralRelation.CONTAINED_IN) structprop = containedin;
 		
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 		
@@ -853,44 +826,41 @@ public class BiologicalRDFblock {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 
 		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if(!uri.toString().startsWith("http://identifiers.org") 
-				&& SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.containsKey(namespace)){
+		if( ! uri.toString().startsWith("http://identifiers.org") 
+				&& ReferenceOntologies.getReferenceOntologybyNamespace(namespace) != ReferenceOntology.UNKNOWN){
 			
-			String kbname = SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(namespace);
+			ReferenceOntology refont = ReferenceOntologies.getReferenceOntologybyNamespace(namespace);
 			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
 			String newnamespace = null;
 			
-			// Look up new namespace
-			for(String nskey : SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.keySet()){
-				if(nskey.startsWith("http://identifiers.org") && 
-						SemSimConstants.ONTOLOGY_NAMESPACES_AND_FULL_NAMES_MAP.get(nskey)==kbname){
-					newnamespace = nskey;
-				}
+			// Look up identifiers.org namespace
+			for(String ns : refont.getNamespaces()){
+				if(ns.startsWith("http://identifiers.org")) newnamespace = ns;
 			}
 
 			// Replacement rules for specific knowledge bases
-			if(kbname==SemSimConstants.UNIPROT_FULLNAME){
+			if(refont==ReferenceOntology.UNIPROT){
 				newuri = URI.create(newnamespace + fragment);
 			}
-			if(kbname==SemSimConstants.ONTOLOGY_OF_PHYSICS_FOR_BIOLOGY_FULLNAME){
+			if(refont==ReferenceOntology.OPB){
 				newuri = URI.create(newnamespace + fragment);
 			}
-			if(kbname==SemSimConstants.CHEMICAL_ENTITIES_OF_BIOLOGICAL_INTEREST_FULLNAME){
+			if(refont==ReferenceOntology.CHEBI){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(kbname==SemSimConstants.GENE_ONTOLOGY_FULLNAME){
+			if(refont==ReferenceOntology.GO){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(kbname==SemSimConstants.CELL_TYPE_ONTOLOGY_FULLNAME){
+			if(refont==ReferenceOntology.CL){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(kbname==SemSimConstants.FOUNDATIONAL_MODEL_OF_ANATOMY_FULLNAME){
+			if(refont==ReferenceOntology.FMA){
 				// Need to figure out how to get FMAIDs!!!!
 			}
-			if(kbname==SemSimConstants.MOUSE_ADULT_GROSS_ANATOMY_ONTOLOGY_FULLNAME){
+			if(refont==ReferenceOntology.MA){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}

@@ -10,7 +10,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
-import semsim.CellMLconstants;
+import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
@@ -65,7 +65,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
 			
 			// Clear out the old RDF
-			semsimControlElement.removeChild("RDF", CellMLconstants.rdfNS);
+			semsimControlElement.removeChild("RDF", RDFNamespace.RDF.createJdomNamespace());
 			
 			// Add the new RDF
 			if(newrdf != null) semsimControlElement.addContent(newrdf);
