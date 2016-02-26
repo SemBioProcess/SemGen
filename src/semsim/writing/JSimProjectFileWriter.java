@@ -12,6 +12,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
@@ -46,12 +47,17 @@ public class JSimProjectFileWriter extends ModelWriter{
 			
 			rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
 			
-			for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-				
-				if(ds.hasPhysicalProperty()){
-					rdfblock.setRDFforAnnotatedSemSimObject(ds);
-				}
-			}
+			// Write out model-level annotations
+			rdfblock.setRDFforModelLevelAnnotations();
+			
+			// Write out annotations for data structures
+			for(DataStructure ds : semsimmodel.getAssociatedDataStructures())
+				rdfblock.setRDFforDataStructureAnnotations(ds);
+			
+			// Write out annotations for submodels
+			for(Submodel sub : semsimmodel.getSubmodels()) 
+				rdfblock.setRDFforSubmodelAnnotations(sub);
+			
 		}
 		
 		// Otherwise there are CellML-style functional submodels present
@@ -65,7 +71,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
 			
-			// Clear out the old RDF
+			// Remove old RDF
 			semsimControlElement.removeChild("RDF", RDFNamespace.RDF.createJdomNamespace());
 			
 			// Add the new RDF
@@ -76,7 +82,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			String outputstring =  outputter.outputString(projdoc);
 			SemSimUtil.writeStringToFile(outputstring, destination);
 		}
-		else{} // Otherwise we didn't need to write anything out because there were no annotations
+		else{} // Otherwise there were no annotations to write
 		
 	}
 

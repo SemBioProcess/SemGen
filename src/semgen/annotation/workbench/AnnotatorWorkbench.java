@@ -169,9 +169,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public File saveModelAs() {
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl", "proj"});
 		
-		if (filec.SaveAsAction()!=null) {
+		if (filec.SaveAsAction() != null) {
 			
 			// TODO: How to handle proj files??
 			modelaccessor = filec.convertFileToModelAccessor(filec.getSelectedFile());

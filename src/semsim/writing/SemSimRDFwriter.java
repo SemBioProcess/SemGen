@@ -28,6 +28,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -47,7 +48,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Set<String> localids = new HashSet<String>();
 	public SemSimModel semsimmodel;
 	
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS + "description");
+	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	
 	// Constructor
@@ -69,10 +70,11 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 
@@ -83,63 +85,89 @@ public class SemSimRDFwriter extends ModelWriter{
 	@Override 
 	public void writeToFile(URI uri){}
 	
-	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
-	public void setRDFforAnnotatedSemSimObject(SemSimObject sso){
+	
+	// Add model-level annotations 
+	protected void setRDFforModelLevelAnnotations(){
 		
-		Boolean hasphysprop = false;
-		Boolean physdefpresent = false;
+		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
 		
-		if(sso instanceof DataStructure){
-			hasphysprop = ((DataStructure)sso).hasPhysicalProperty();
-			physdefpresent = ((DataStructure)sso).hasPhysicalDefinitionAnnotation();
+		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
+			
+			System.out.println(ann.getRelation().getURIasString());
+			
+			Property prop = ann.getRelation().getRDFproperty();
+			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
+			
+			if( ! rdf.contains(st)) rdf.add(st);
 		}
 		
-		// If we actually need to write out annotations
-		if(physdefpresent || ! sso.getDescription().equals("") || hasphysprop){
+	}
+	
+	// Add annotations for data structure
+	protected void setRDFforDataStructureAnnotations(DataStructure ds){
+				
+		String resuri = semsimmodel.getNamespace() + ds.getName();
+		Resource ares = rdf.createResource(resuri);
+		
+		// Set free-text annotation
+		setFreeTextAnnotationForObject(ds, ares);
+		
+		// If a singular reference annotation is present, write it out
+		setSingularAnnotationForDataStructure(ds, ares);
+		
+		// Include the necessary composite annotation info
+		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+		
+	}
+	
+	// Add annotation for submodel
+	protected void setRDFforSubmodelAnnotations(Submodel sub){
+		
+		Resource ares = createNewResourceForSemSimObject("submodel");
+		setFreeTextAnnotationForObject(sub, ares);
+		
+		//TODO: add statements about data structures in submodels
+	}
+	
+	
+	// Set free text annotation
+	public void setFreeTextAnnotationForObject(SemSimObject sso, Resource ares){
+
+		// Set the free-text annotation
+		if( ! sso.getDescription().equals("")){
+			Statement st = rdf.createStatement(ares, dcterms_description, sso.getDescription());
 			
-			String resuri = semsimmodel.getNamespace() + sso.getName();
-			Resource ares = rdf.createResource(resuri);
+			if( ! rdf.contains(st)) rdf.add(st);
+		}
+	}
+	
+	// Add singular annotation
+	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
+		
+		if(ds.hasPhysicalDefinitionAnnotation()){
+			URI uri = ds.getPhysicalDefinitionURI();
+			Property isprop = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getURIasString());
+			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
+			Resource refres = rdf.createResource(furi.toString());
+			Statement st = rdf.createStatement(ares, isprop, refres);
 			
-			if(sso instanceof PhysicalModelComponent){
-				String type = ((PhysicalModelComponent)sso).getComponentTypeasString();
-				ares = createResourceForPhysicalModelComponent(type);
-			}
-			
-			// Set the free-text annotation
-			if( ! sso.getDescription().equals("")){
-				Property ftprop = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString() + "description");
-				Statement st = rdf.createStatement(ares, ftprop, sso.getDescription());
-				addRDFstatement(st, "dcterms", RDFNamespace.DCTERMS.getNamespaceasString(), rdf);
-			}
-							
-			// Add singular annotation
-			if(physdefpresent){
-				URI uri = ((DataStructure)sso).getPhysicalDefinitionURI();
-				Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
-				URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-				Resource refres = rdf.createResource(furi.toString());
-				Statement st = rdf.createStatement(ares, isprop, refres);
-				addRDFstatement(st, "bqbiol", RDFNamespace.BQB.getNamespaceasString(), rdf);
-			}
-			
-			// If annotated thing is a variable, include the necessary composite annotation info
-			if(hasphysprop){
-				setDataStructurePropertyAndPropertyOfAnnotations((DataStructure)sso, ares);
-			}
+			if( ! rdf.contains(st)) rdf.add(st);
 		}
 		
 	}
 		
 	
-	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure a, Resource ares){
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares){
 		
-		Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
-		Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)a);
-		Statement st = rdf.createStatement(ares, iccfprop, propres);
-		
-		if( ! rdf.contains(st)) rdf.add(st);
-		
-		setDataStructurePropertyOfAnnotation((DataStructure)a);
+		if(ds.hasPhysicalProperty()){
+			Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
+			Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)ds);
+			Statement st = rdf.createStatement(ares, iccfprop, propres);
+			
+			if( ! rdf.contains(st)) rdf.add(st);
+			
+			setDataStructurePropertyOfAnnotation((DataStructure)ds);
+		}
 	}
 	
 	
@@ -166,7 +194,7 @@ public class SemSimRDFwriter extends ModelWriter{
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
 									indexresource);
 							
-							if(!rdf.contains(propofst)) rdf.add(propofst);
+							if( ! rdf.contains(propofst)) rdf.add(propofst);
 						}
 						// else it's a singular physical entity
 						else{
@@ -176,7 +204,7 @@ public class SemSimRDFwriter extends ModelWriter{
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
 									entity);
 							
-							if(!rdf.contains(st)) rdf.add(st);
+							if( ! rdf.contains(st)) rdf.add(st);
 						}
 					}
 					// Otherwise it's a property of a process
@@ -214,7 +242,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		Resource participantres = getResourceForPMCandAnnotate(rdf, participant);
 		Statement partst = rdf.createStatement(processres, relationship, participantres);
 		
-		if(!rdf.contains(partst)) rdf.add(partst);
+		if( ! rdf.contains(partst)) rdf.add(partst);
 		
 		Resource physentrefres = null;
 		
@@ -229,10 +257,11 @@ public class SemSimRDFwriter extends ModelWriter{
 			Statement st = rdf.createStatement(participantres, 
 					SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty(), 
 					physentrefres);
-			if(!rdf.contains(st)) rdf.add(st);
+			if( ! rdf.contains(st)) rdf.add(st);
 		}
 		else System.err.println("Error in setting participants for process: null value for Resource corresponding to " + participant.getName());
 
+		//TODO: store multiplier info
 	}
 	
 	// Add statements that describe a composite physical entity in the model
@@ -308,7 +337,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 		
-		if(!rdf.contains(structst)) rdf.add(structst);
+		if( ! rdf.contains(structst)) rdf.add(structst);
 		
 		return indexuri;
 	}
@@ -336,14 +365,6 @@ public class SemSimRDFwriter extends ModelWriter{
 //	}
 	
 	
-	private void addRDFstatement(Statement st, String abrev, String namespace, Model therdf) {
-		if( ! therdf.contains(st)){
-			therdf.add(st);
-			therdf.setNsPrefix(abrev, namespace);
-		}
-	}
-	
-	
 	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
 		
@@ -357,7 +378,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
 			typeprefix = "unknown";
 		
-		Resource res = createResourceForPhysicalModelComponent(typeprefix);
+		Resource res = createNewResourceForSemSimObject(typeprefix);
 		
 		if(! isphysproperty) PMCandResourceURImap.put(pmc, URI.create(res.getURI()));
 		
@@ -373,14 +394,14 @@ public class SemSimRDFwriter extends ModelWriter{
 			return rdf.getResource(variablesAndPropertyResourceURIs.get(ds).toString());
 		}
 		
-		Resource res = createResourceForPhysicalModelComponent("property");
+		Resource res = createNewResourceForSemSimObject("property");
 		variablesAndPropertyResourceURIs.put(ds, URI.create(res.getURI()));
 		setReferenceOrCustomResourceAnnotations(ds.getPhysicalProperty(), res);
 		return res;
 	}
 	
 	// Generate an RDF resource for a physical component
-	private Resource createResourceForPhysicalModelComponent(String typeprefix){
+	private Resource createNewResourceForSemSimObject(String typeprefix){
 		String resname = semsimmodel.getNamespace();	
 		int idnum = 0;
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
@@ -464,7 +485,7 @@ public class SemSimRDFwriter extends ModelWriter{
 							dcterms_description, 
 							pmc.getDescription());
 					
-					if(!rdf.contains(descst)) rdf.add(descst);
+					if( ! rdf.contains(descst)) rdf.add(descst);
 				}
 			}
 		}

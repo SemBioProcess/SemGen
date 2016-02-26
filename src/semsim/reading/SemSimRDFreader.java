@@ -26,7 +26,9 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
+import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
@@ -34,6 +36,7 @@ import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -52,8 +55,7 @@ public class SemSimRDFreader extends ModelReader{
 	private Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	public Model rdf = ModelFactory.createDefaultModel();
 	private String unnamedstring = "[unnamed!]";
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS + "description");
-
+	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 
 
 	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, String baseNamespace) {
@@ -80,25 +82,50 @@ public class SemSimRDFreader extends ModelReader{
 		return null;
 	}
 	
+	// Get model-level annotations
+	public void getModelLevelAnnotations(){
+		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
+		StmtIterator stit = modelres.listProperties();
+				
+		while(stit.hasNext()){
+			
+			Statement st = stit.next();
+			URI predicateURI = URI.create(st.getPredicate().getURI());
+			
+			if (predicateURI.equals(SemSimLibrary.SEMSIM_VERSION_IRI.toURI())) {
+				semsimmodel.setSemSimVersion(st.getObject().asLiteral().toString());
+			}
+			
+			else if (predicateURI.equals(SemSimModel.LEGACY_CODE_LOCATION_IRI.toURI())) {
+				ModelAccessor ma = new ModelAccessor(st.getObject().asLiteral().toString());
+				semsimmodel.setSourceFileLocation(ma);
+			}
+			
+			else{
+				Metadata m = getMetadataByURI(predicateURI);
+				String value = st.getObject().toString();
+				semsimmodel.getCurationalMetadata().setAnnotationValue(m, value);
+			}
+		}
 
+	}
 	
-	
-	public void getRDFforAnnotatedSemSimObject(SemSimObject sso){
+	// Get the annotations on a data structure
+	public void getDataStructureAnnotations(DataStructure ds){
 		
 		String uristart = semsimmodel.getNamespace();
-		String dsidentifier = sso.getName();
+		String dsidentifier = ds.getName();
 		Resource resource = rdf.getResource(uristart + dsidentifier);
 
+		collectFreeTextAnnotation(ds, resource);
+		collectSingularBiologicalAnnotation((DataStructure)ds, resource);
+		collectCompositeAnnotation((DataStructure)ds, resource);
+	}
+	
+	// Get the annotations on a submodel
+	protected void getSubmodelAnnotations(Submodel sub){
 		
-		if(sso instanceof DataStructure){
-			
-			collectFreeTextAnnotation(sso, resource);
-			collectSingularBiologicalAnnotation((DataStructure)sso, resource);
-			collectCompositeAnnotation((DataStructure)sso, resource);
-		}
-//		else if(sso instanceof Submodel){
-////			dsidentifier = 
-//			semsimmodel
+		// TODO: How to retrieve submodel data? 
 //			Resource resource = rdf.getResource(uristart + dsidentifier);
 //			collectFreeTextAnnotation(sso, resource);
 //		}
@@ -126,7 +153,7 @@ public class SemSimRDFreader extends ModelReader{
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceAsString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -169,9 +196,9 @@ public class SemSimRDFreader extends ModelReader{
 						
 						if(sinkres.getProperty(SemSimRelation.HAS_MULTIPLIER.getRDFproperty())!=null){
 							Literal multiplier = sinkres.getProperty(SemSimRelation.HAS_MULTIPLIER.getRDFproperty()).getObject().asLiteral();
-							process.addSource((PhysicalEntity) sinkpmc, multiplier.getDouble());
+							process.addSink((PhysicalEntity) sinkpmc, multiplier.getDouble());
 						}
-						else process.addSource((PhysicalEntity) sinkpmc, 1.0);
+						else process.addSink((PhysicalEntity) sinkpmc, 1.0);
 					}
 					// Read in the mediator participants
 					NodeIterator mediatorit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty());
@@ -327,11 +354,12 @@ public class SemSimRDFreader extends ModelReader{
 	// Collect the reference ontology term used to describe the model component
 	public void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource){
 		
-		Statement singannst = resource.getProperty(SemSimRelation.BQB_IS.getRDFproperty());
+		Statement singannst = resource.getProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
 
 		if(singannst != null){
 			URI singularannURI = URI.create(singannst.getObject().asResource().getURI());
-			ds.addReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, singularannURI, null, sslib);singannst.getObject().asResource();
+			PhysicalProperty prop = getSingularPhysicalProperty(singularannURI);
+			ds.setSingularAnnotation(prop);
 		}
 	}
 	
@@ -339,7 +367,12 @@ public class SemSimRDFreader extends ModelReader{
 	private void collectFreeTextAnnotation(SemSimObject sso, Resource resource){
 		Statement st = resource.getProperty(dcterms_description);
 		
-		if(st != null) sso.setDescription(st.getObject().toString());
+		
+		
+		if(st != null){
+			System.out.println(st);
+			sso.setDescription(st.getObject().toString());
+		}
 
 	}
 		
@@ -385,6 +418,7 @@ public class SemSimRDFreader extends ModelReader{
 	
 	public PhysicalProperty getSingularPhysicalProperty(URI uri){
 		PhysicalModelComponent term = ResourceURIandPMCmap.get(uri.toString());
+		
 		if (term==null) {
 			term = new PhysicalProperty("", uri);
 			ResourceURIandPMCmap.put(uri.toString(), term);
@@ -393,11 +427,24 @@ public class SemSimRDFreader extends ModelReader{
 		return (PhysicalProperty)term;
 	}
 	
+	// For looking up Metadata items in CurationalMetadata by URI
+	private Metadata getMetadataByURI(URI uri){
+		
+		for(Metadata m : Metadata.values()){
+			if(m.getURI().equals(uri)){
+				return m;
+			}
+		}
+		
+		return null;
+	}
+	
 	
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceAsString() + frag;
+		
 		return URI.create(uristring);
 	}
 	

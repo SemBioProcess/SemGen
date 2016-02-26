@@ -256,7 +256,7 @@ public class SemSimUtil {
 	 */
 	public static String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
 		SAXBuilder saxbuilder = new SAXBuilder();
-		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
+		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString());
 		
 		try {
 			Document doc = saxbuilder.build(new StringReader(mathmlstring));
@@ -366,29 +366,35 @@ public class SemSimUtil {
 	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel, String cfgpath) {
 		Set<UnitOfMeasurement> units = semsimmodel.getUnits();
 		HashMap<String, Set<UnitFactor>> fundamentalBaseUnits = new HashMap<String, Set<UnitFactor>>();
+		SemSimLibrary sslib = new SemSimLibrary(cfgpath);
 		
 		for(UnitOfMeasurement uom : units) {
-			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0, cfgpath);
+			Set<UnitFactor> newUnitFactor = recurseBaseUnits(uom, 1.0, sslib);
 			
 			fundamentalBaseUnits.put(uom.getName(), newUnitFactor);
 		}
 		return fundamentalBaseUnits;
 	}
+	
 	// Used in tandem with getFundamentalBaseUnits
-	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, String cfgpath) {
-		SemSimLibrary semsimlib = new SemSimLibrary(cfgpath);
+	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, SemSimLibrary sslib) {
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
+		
 		for(UnitFactor factor : unitFactors) {
 			UnitOfMeasurement baseuom = factor.getBaseUnit();
+			
 			double newExp = factor.getExponent()*oldExp;
+			
 			String prefix = factor.getPrefix();
-			if(semsimlib.isCellMLBaseUnit(baseuom.getName())) {
+			
+			if(sslib.isCellMLBaseUnit(baseuom.getName())) {
 				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix);
 				newUnitFactors.add(baseUnitFactor);
 			}
+			
 			else {
-				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp, cfgpath));
+				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp, sslib));
 			}
 		}
 		return newUnitFactors;

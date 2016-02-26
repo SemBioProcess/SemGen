@@ -81,7 +81,7 @@ import semsim.writing.SemSimOWLwriter;
  */
 
 public class SemSimModel extends SemSimCollection implements Annotatable  {
-	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "legacyCodeURI");
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "legacyCodeURI");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
@@ -698,7 +698,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return A new SemSim model namespace from the current date and time
 	 */
 	public String generateNamespaceFromDateAndTime(){
-		namespace = RDFNamespace.SEMSIM.getNamespaceasString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
+		namespace = RDFNamespace.SEMSIM.getNamespaceAsString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
 		return namespace;
 	}
 
@@ -978,7 +978,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.semsimversion = semsimversion;
 	}
 	
-	public void setSemsimversion(String semsimversion) {
+	public void setSemSimVersion(String semsimversion) {
 		this.semsimversion = Double.valueOf(semsimversion);
 	}
 		

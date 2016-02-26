@@ -280,7 +280,7 @@ public class CellMLreader extends ModelReader {
 				// Collect the singular biological annotation, if present
 				if(cvar.getMetadataID() != null){
 					
-					rdfblock.getRDFforAnnotatedSemSimObject(cvar);
+					rdfblock.getDataStructureAnnotations(cvar);
 					// TODO: Might need to redo this section once BiologicalRDFblock is done.
 					
 //					URI termURI = rdfblock.collectSingularBiologicalAnnotation(cvar);
@@ -607,7 +607,7 @@ public class CellMLreader extends ModelReader {
 				}
 			Property pred = st.getPredicate();
 			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceasString())){
+				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceAsString())){
 					listofremovedstatements.add(st);
 				}
 			}

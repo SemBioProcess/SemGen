@@ -22,7 +22,6 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
-import semsim.model.SemSimComponent;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -52,7 +51,7 @@ public class CellMLwriter extends ModelWriter {
 		outputter.setFormat(Format.getPrettyFormat());
 		
 		try{	
-			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
+			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
 			
 			// Check for events, if present write out error msg
 			if(semsimmodel.getEvents().size()>0){
@@ -165,7 +164,8 @@ public class CellMLwriter extends ModelWriter {
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				rdfblock.setRDFforAnnotatedSemSimObject((SemSimComponent)ssc);
+				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
+				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -349,7 +349,7 @@ public class CellMLwriter extends ModelWriter {
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any singular annotation on the submodel
-			rdfblock.setRDFforAnnotatedSemSimObject(submodel);
+			rdfblock.setRDFforSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
@@ -381,7 +381,7 @@ public class CellMLwriter extends ModelWriter {
 					initialval = ds.getStartValue();
 				
 				// Add the RDF block for any singular annotation
-				rdfblock.setRDFforAnnotatedSemSimObject(ds);
+				rdfblock.setRDFforDataStructureAnnotations(ds);
 				
 				String metadataid = ds.getMetadataID();
 				// Add other attributes

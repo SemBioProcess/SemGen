@@ -304,7 +304,7 @@ public class SBMLreader extends ModelReader{
 				
 		timeds.setUnit(timeunits);
 
-		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01023"));
+		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01023"));
 		semsimmodel.addPhysicalProperty(timeprop);
 		timeds.setSingularAnnotation(timeprop);
 		
@@ -339,17 +339,17 @@ public class SBMLreader extends ModelReader{
 			
 			// Add physical property here
 			if(sbmlc.getSpatialDimensions()==3.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00154"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154"));
 				defaultunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==2.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00295"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295"));
 				defaultunits = "area";
 				modelobjectspecifieddefaultunits = sbmlmodel.getAreaUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==1.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01064"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064"));
 
 				defaultunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();
@@ -510,23 +510,23 @@ public class SBMLreader extends ModelReader{
 				if(hasonlysub){
 					// look up factor for unit substance in semsimmodel and determine OPB property from that.
 					// but if substance not in model...(level 3) ...
-					prop = new PhysicalPropertyinComposite("Chemical molar amount", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00425"));
+					prop = new PhysicalPropertyinComposite("Chemical molar amount", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00425"));
 				}
-				else prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00340"));
+				else prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00340"));
 			}
 			// Deal with particle units
 			else if(baseunitname.equals("item")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Particle count", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01001"));
+					prop = new PhysicalPropertyinComposite("Particle count", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01001"));
 				
-				else prop = new PhysicalPropertyinComposite("Particle concentration", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01000"));
+				else prop = new PhysicalPropertyinComposite("Particle concentration", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01000"));
 			}
 			// Deal with mass/density units
 			else if(baseunitname.equals("kilogram") || baseunitname.equals("gram")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Mass of solid entity", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01226"));
+					prop = new PhysicalPropertyinComposite("Mass of solid entity", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01226"));
 				
 				else {
 					double compartmentdims = sbmlmodel.getCompartment(compartmentname).getSpatialDimensions();
@@ -537,13 +537,13 @@ public class SBMLreader extends ModelReader{
 					}
 					
 					else if(compartmentdims==1.0)
-						prop = new PhysicalPropertyinComposite("Mass lineal density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00190"));
+						prop = new PhysicalPropertyinComposite("Mass lineal density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00190"));
 					
 					else if(compartmentdims==2.0)
-						prop = new PhysicalPropertyinComposite("Mass areal density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00258"));
+						prop = new PhysicalPropertyinComposite("Mass areal density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00258"));
 					
 					else if(compartmentdims==3.0)
-						prop = new PhysicalPropertyinComposite("Mass volumetric density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00101"));
+						prop = new PhysicalPropertyinComposite("Mass volumetric density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00101"));
 					
 				}
 			}
@@ -767,13 +767,13 @@ public class SBMLreader extends ModelReader{
 			prop = new PhysicalPropertyinComposite(null,null);
 		
 		else if(basesubstanceunitsname.equals("mole"))
-			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00592"));
+			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00592"));
 		
 		else if(basesubstanceunitsname.equals("item"))
-			prop = new PhysicalPropertyinComposite("Particle flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00544"));
+			prop = new PhysicalPropertyinComposite("Particle flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00544"));
 		
 		else if(basesubstanceunitsname.equals("kilogram") || basesubstanceunitsname.equals("gram"))
-			prop = new PhysicalPropertyinComposite("Material flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01220"));
+			prop = new PhysicalPropertyinComposite("Material flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01220"));
 		
 		else prop = new PhysicalPropertyinComposite(null,null);
 		

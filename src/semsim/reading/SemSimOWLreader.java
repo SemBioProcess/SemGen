@@ -138,7 +138,7 @@ public class SemSimOWLreader extends ModelReader {
 	 * Verify the model is a valid SemSimModel
 	 */
 	private boolean verifyModel() throws OWLException {
-		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
+		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_component"));
 		if(!ont.getClassesInSignature().contains(topclass)){
 			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
 		}
@@ -153,8 +153,8 @@ public class SemSimOWLreader extends ModelReader {
 	
 	private void setPhysicalDefinitionURI(){
 		
-		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo"))){
-			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo");
+		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo"))){
+			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo");
 		}
 		else if(ont.containsDataPropertyInSignature(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI())){
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
@@ -167,7 +167,7 @@ public class SemSimOWLreader extends ModelReader {
 		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();
 		for (OWLAnnotation named : anns) {
 			if (named.getProperty().getIRI().equals(SemSimLibrary.SEMSIM_VERSION_IRI)) {
-				semsimmodel.setSemsimversion(((OWLLiteral)named.getValue()).getLiteral());
+				semsimmodel.setSemSimVersion(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			};
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {

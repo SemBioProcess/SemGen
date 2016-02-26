@@ -65,10 +65,10 @@ public class FlowMergerDialog extends SemGenDialog implements
 				flowbutton.addActionListener(this);
 				JPanel choicepanel = new JPanel();
 				String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(
-						discardedont, flowdep, RDFNamespace.SEMSIM.getNamespaceasString()
+						discardedont, flowdep, RDFNamespace.SEMSIM.getNamespaceAsString()
 								+ "hasComputationalComponent");
 				String eq = SemSimOWLFactory.getFunctionalIndDatatypeProperty(
-						discardedont, comp, RDFNamespace.SEMSIM.getNamespaceasString()
+						discardedont, comp, RDFNamespace.SEMSIM.getNamespaceAsString()
 								+ "hasComputationalCode");
 
 				JRadioButton addButton = new JRadioButton("+");
@@ -155,7 +155,7 @@ public class FlowMergerDialog extends SemGenDialog implements
 										+ "Use this dialog to add or subtract the term(s) in blue from the\n"
 										+ "original conservation equation for "
 										+ SemSimOWLFactory.getIRIfragment(disp) + ":\n"
-										+ SemSimOWLFactory.getFunctionalIndDatatypeProperty(keptont,disp + "_computation",RDFNamespace.SEMSIM.getNamespaceasString() + "hasComputationalCode")
+										+ SemSimOWLFactory.getFunctionalIndDatatypeProperty(keptont,disp + "_computation",RDFNamespace.SEMSIM.getNamespaceAsString() + "hasComputationalCode")
 										+ "\n\n"
 										+ "If you do not want to alter the conservation equation, select \"Ignore\" for all terms.\n\n"
 										+ "Semantic information for "

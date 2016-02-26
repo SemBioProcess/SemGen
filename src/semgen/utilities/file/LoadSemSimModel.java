@@ -155,9 +155,12 @@ public class LoadSemSimModel extends SemGenJob {
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
 				
+				rdfreader.getModelLevelAnnotations();
+				
 				for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-					rdfreader.getRDFforAnnotatedSemSimObject(ds);
+					rdfreader.getDataStructureAnnotations(ds);
 				}
+				nameOntologyTerms();
 			}
 		}
 		
@@ -168,7 +171,7 @@ public class LoadSemSimModel extends SemGenJob {
 	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel, SemGen.semsimlib).size()>0){
 
-			setStatus("Annotating with web services...");
+			setStatus("Annotating with web services");
 			boolean online = BioPortalSearcher.testBioPortalWebservice();
 			
 			if( ! online){

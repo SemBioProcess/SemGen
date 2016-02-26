@@ -19,7 +19,7 @@ public class SemGenFileChooser extends JFileChooser {
 	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, .xml)", "cellml", "xml");
 	public static final FileNameExtensionFilter sbmlfilter = new FileNameExtensionFilter("SBML (*.sbml, .xml)", "sbml", "xml");
 	public static final FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
-	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("PROJ (*.proj)", "proj");
+	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("Model in JSim Project file (*.proj)", "proj");
 	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
 	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj"});
 	
@@ -40,6 +40,7 @@ public class SemGenFileChooser extends JFileChooser {
 		setDialogTitle(title);
 		addFilters(filters);
 		createMap();
+		//setFileFilter(filter);
 	}
 	
 	private void createMap() {
