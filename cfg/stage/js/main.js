@@ -27,11 +27,21 @@ function main() {
 	this.changeTask = function changeTask(taskname) {
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph);
-			
+			if($("#mergerIcon").length == 0	) {
+				$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
+			}
 		}
 		this.graph.setTaskNodes(this.task.nodes);
 		this.graph.update();
+		$('#taskModal').modal('toggle');
+		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
+		$("#activeTaskText").addClass('blink');
 	}
+	
+	// Slide up panel for Active Task Tray
+	$("#activeTaskTray").click(function() {
+		$("#activeTaskPanel").slideToggle();
+	});
 }
 
 $(window).bind("cwb-initialized", function(e) {

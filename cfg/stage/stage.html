@@ -155,46 +155,14 @@
 		<div id="activeTaskTray"><span id="activeTaskText">Active Tasks</span></div>
 		<div id="activeTaskPanel"></div>
 
-		<!-- Merger mode modal -->
-		<div id="mergerModal" class="modal fade" data-keyboard="false" data-backdrop="static">
-			<div class="modal-dialog modal-lg">
-
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 class="modal-title">New and improved merger coming soon!</h3>
-					</div>
-					<div class="modal-body">
-						<div class="mergeResHeader">
-							<!--TODO: Replace "Model A" and "Model B" with actual model names-->
-							<h4 class="alignLeft">Model A</h4>
-							<h4 class="alignRight">Model B</h4>
-						</div>
-						<!--TODO: Create each of these with actual merge resolution-->
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
-					</div>
-				</div>
-
-			</div>
-		</div>
 
 		<div id="stage"></div>
+		<div id="taskModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div id="modalContent"></div> 
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

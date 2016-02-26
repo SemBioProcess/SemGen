@@ -41,11 +41,14 @@ public class StageTab extends SemGenTab implements Observer {
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		// Create the browser
-
+		
 		try {
+			//Allows local files to be accessed - security vulnerability if not running locally
+			String browserprefs = "";
 			if (SemGen.debug) {
-				BrowserPreferences.setChromiumSwitches("--remote-debugging-port=9222"); // Uncomment to debug JS
+				browserprefs += "--remote-debugging-port=9222"; // Uncomment to debug JS
 			}
+			BrowserPreferences.setChromiumSwitches(browserprefs);
 			_workbench.initialize();
 			browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSenderGenerator());

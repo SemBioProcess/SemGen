@@ -111,41 +111,9 @@ function Stage(graph) {
 		}
 	});
 
-	// Slide up panel for Active Task Tray
-	$("#activeTaskTray").click(function() {
-		$("#activeTaskPanel").slideToggle();
-	});
+
 
 	$('[data-toggle="tooltip"]').tooltip();
-
-	// Preview merge resolutions
-	$(".mergeResolution").click(function() {
-		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
-
-		$('#mergerModal').modal('toggle');
-
-		// Create three different graphs on stage to preview Merge Resolutions
-		$("#stage").append(
-			'<div class="substage" id="modelAStage"></div>' +
-			'<div class="substage" id="modelABStage">Merge preview coming soon!</div>' +
-			'<div class="substage" id="modelBStage"></div>' +
-			'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
-		);
-
-		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
-		$("#activeTaskText").addClass('blink');
-		if($("#mergerIcon").length == 0	)
-			$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
-	});
-
-	// Quit merger
-	$("#quitMergerBtn").click(function() {
-		// TODO: Warning dialog before quitting
-		$(".substage").remove();
-		$("#activeTaskText").removeClass('blink');
-		$("#mergerIcon").remove();
-		$("#backToMergeRes").remove();
-	})
 
 }
 

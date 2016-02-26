@@ -1,9 +1,11 @@
 .modal-dialog {
     width: 90vw;
+    height: 90vh;
 }
 
 .modal-body {
-    height: 75vh;
+	width: 90vw;
+    height: 90vh;
     overflow: scroll;
 }
 

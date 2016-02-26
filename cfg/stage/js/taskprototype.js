@@ -69,4 +69,5 @@ function Task(graph) {
 }
 
 Task.prototype.onModelSelection = function(node) {}
-
+Task.prototype.onMinimize = function() {}
+Task.prototype.onClose = function() {}
