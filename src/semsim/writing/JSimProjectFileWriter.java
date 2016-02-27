@@ -21,7 +21,8 @@ import semsim.utilities.SemSimUtil;
 
 public class JSimProjectFileWriter extends ModelWriter{
 
-	File projectFile;
+	File outputProjectFile;
+	ModelAccessor outputModelAccessor;
 	String modelName;
 	XMLOutputter outputter;
 	SemSimRDFwriter rdfblock;
@@ -34,14 +35,15 @@ public class JSimProjectFileWriter extends ModelWriter{
 		outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
 		modelName = modelaccessor.getModelName();
-		projectFile = modelaccessor.getFileThatContainsModel();
+		outputProjectFile = modelaccessor.getFileThatContainsModel();
+		outputModelAccessor = modelaccessor;
 		modelNamespace = semsimmodel.getNamespace();
 	}
 
 	@Override
 	public void writeToFile(File destination) throws OWLException {
 		
-		Document projdoc = null;
+		Document projdoc = null; 
 		
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
 			
@@ -51,22 +53,43 @@ public class JSimProjectFileWriter extends ModelWriter{
 			rdfblock.setRDFforModelLevelAnnotations();
 			
 			// Write out annotations for data structures
-			for(DataStructure ds : semsimmodel.getAssociatedDataStructures())
-				rdfblock.setRDFforDataStructureAnnotations(ds);
+			rdfblock.setRDFforDataStructureAnnotations();
 			
 			// Write out annotations for submodels
-			for(Submodel sub : semsimmodel.getSubmodels()) 
-				rdfblock.setRDFforSubmodelAnnotations(sub);
+			rdfblock.setRDFforSubmodelAnnotations();
 			
 		}
 		
 		// Otherwise there are CellML-style functional submodels present
 		else{}
 		
-		// Add the RDF metadata to the appropriate element in the JSim project file
-		if( ! rdfblock.rdf.isEmpty()){
+		// Create the project document.
+		// If the file already exists...
+		if(destination.exists()){
 			
-			projdoc = JSimProjectFileReader.getDocument(projectFile);
+			// If the file that we're writing to exists, and is different than the source location,
+			// then we need to read in the target file as a document
+			if(semsimmodel.getLegacyCodeLocation().equals(outputModelAccessor))
+				projdoc = JSimProjectFileReader.getDocument(outputProjectFile);
+			
+			else
+				projdoc = JSimProjectFileReader.getDocument(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
+		}
+		
+		//...otherwise create a new empty project file, add model element and annotations.
+		else {
+			projdoc = createEmptyProject();
+			
+			// TODO: what if trying to save a CellML model to project file?
+			Document origindoc = JSimProjectFileReader.getDocument(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
+			Element modelel = JSimProjectFileReader.getModelElement(origindoc, semsimmodel.getName());
+			projdoc.getRootElement().getChild("project").addContent(modelel.detach());
+		}
+		
+		// Add the RDF metadata to the appropriate element in the JSim project file
+		// TODO: check this if block
+		if(rdfblock.rdf.listStatements().hasNext()){
+			
 			String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
@@ -91,4 +114,19 @@ public class JSimProjectFileWriter extends ModelWriter{
 		writeToFile(new File(uri));
 	}
 
+	
+	private Document createEmptyProject(){
+		Element jsimel = new Element("JSim");
+		Document doc = new Document(jsimel);
+		doc.setRootElement(jsimel);
+		
+		jsimel.setAttribute("version", "2.09"); // Might need to change version #
+		
+		Element projel = new Element("project");
+		projel.setAttribute("name", "proj1");
+		
+		jsimel.addContent(projel);
+		
+		return doc;
+	}
 }

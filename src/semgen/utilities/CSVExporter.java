@@ -51,7 +51,7 @@ public class CSVExporter {;
 	}
 	
 	public void saveCSV() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}); 
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}, "csv"); 
 		if (filec.SaveAsAction()!=null) {
 			Scanner scanner = new Scanner(datatosave);
 			try {

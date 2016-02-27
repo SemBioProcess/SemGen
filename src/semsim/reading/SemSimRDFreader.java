@@ -21,6 +21,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -56,7 +57,7 @@ public class SemSimRDFreader extends ModelReader{
 	public Model rdf = ModelFactory.createDefaultModel();
 	private String unnamedstring = "[unnamed!]";
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
-
+	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
 
 	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, String baseNamespace) {
 		super(accessor);
@@ -68,6 +69,7 @@ public class SemSimRDFreader extends ModelReader{
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
 					semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
+					createSubmodelURIandObjectMap();
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -75,6 +77,23 @@ public class SemSimRDFreader extends ModelReader{
 		}	
 	}
 
+	private void createSubmodelURIandObjectMap(){
+		
+		ResIterator subit = rdf.listSubjectsWithProperty(SemSimRelation.HAS_NAME.getRDFproperty());
+		
+		while(subit.hasNext()){
+			Resource submodelres = subit.next();
+			if(submodelres.getURI().contains("#submodel_")){
+				Statement subnamest = submodelres.getProperty(SemSimRelation.HAS_NAME.getRDFproperty());
+				String name = subnamest.getLiteral().toString();
+				
+				Submodel newsub = new Submodel(name);
+				submodelURIandObjectMap.put(submodelres.getURI(), newsub);
+				semsimmodel.addSubmodel(newsub);
+			}
+		}
+	}
+	
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, CloneNotSupportedException, XMLStreamException {
@@ -110,25 +129,48 @@ public class SemSimRDFreader extends ModelReader{
 
 	}
 	
-	// Get the annotations on a data structure
-	public void getDataStructureAnnotations(DataStructure ds){
+	// Get all the data structure annotations
+	public void getAllDataStructureAnnotations(){
 		
-		String uristart = semsimmodel.getNamespace();
-		String dsidentifier = ds.getName();
-		Resource resource = rdf.getResource(uristart + dsidentifier);
-
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+			getDataStructureAnnotations(ds);
+		}
+	}
+	
+	public void getDataStructureAnnotations(DataStructure ds){
+		Resource resource = rdf.getResource(semsimmodel.getNamespace() + ds.getName());
+		
 		collectFreeTextAnnotation(ds, resource);
-		collectSingularBiologicalAnnotation((DataStructure)ds, resource);
-		collectCompositeAnnotation((DataStructure)ds, resource);
+		collectSingularBiologicalAnnotation(ds, resource);
+		collectCompositeAnnotation(ds, resource);
 	}
 	
 	// Get the annotations on a submodel
-	protected void getSubmodelAnnotations(Submodel sub){
+	protected void getAllSubmodelAnnotations(){
 		
-		// TODO: How to retrieve submodel data? 
-//			Resource resource = rdf.getResource(uristart + dsidentifier);
-//			collectFreeTextAnnotation(sso, resource);
-//		}
+		for(String suburi : submodelURIandObjectMap.keySet()){
+			
+			Resource subres = rdf.getResource(suburi); // collect name
+			
+			Submodel sub = submodelURIandObjectMap.get(suburi);
+			collectFreeTextAnnotation(sub, subres); // collect description
+			
+			// Collect associated data structures
+			StmtIterator dsstit = subres.listProperties(SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty());
+			while(dsstit.hasNext()){
+				Statement dsst = dsstit.next();
+				Resource dsresinsub = dsst.getResource();
+				sub.addDataStructure(semsimmodel.getAssociatedDataStructure(dsresinsub.getLocalName()));
+			}
+			
+			// Collect submodels of submodels
+			StmtIterator substit = subres.listProperties(SemSimRelation.INCLUDES_SUBMODEL.getRDFproperty());
+			while(substit.hasNext()){
+				Statement subst = substit.next();
+				Resource subsubres = subst.getResource();
+				sub.addSubmodel(submodelURIandObjectMap.get(subsubres.getURI()));
+			}			
+		}		
 	}
 	
 	
@@ -365,15 +407,10 @@ public class SemSimRDFreader extends ModelReader{
 	
 	
 	private void collectFreeTextAnnotation(SemSimObject sso, Resource resource){
-		Statement st = resource.getProperty(dcterms_description);
+		Statement st = resource.getProperty(dcterms_description);		
 		
-		
-		
-		if(st != null){
-			System.out.println(st);
+		if(st != null)
 			sso.setDescription(st.getObject().toString());
-		}
-
 	}
 		
 		

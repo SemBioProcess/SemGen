@@ -3,8 +3,6 @@ package semgen.utilities.file;
 import java.io.IOException;
 
 import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
@@ -12,12 +10,10 @@ import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
-import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
 import semsim.reading.ModelAccessor;
-import semsim.reading.SemSimRDFreader;
 import semsim.reading.XMMLreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
@@ -135,32 +131,17 @@ public class LoadSemSimModel extends SemGenJob {
 		}
 		else{
 			
-			Document projdoc = JSimProjectFileReader.getDocument(ma.getFileThatContainsModel());
-			Element ssael = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
+			boolean alreadyannotated = JSimProjectFileReader.getAllAnnotationsForModel(semsimmodel, ma);
 			
-			// If there are no semsim annotations associated with the model...
-			if(ssael.getChildren().isEmpty()){
-				
-				if(autoannotate){
-					setStatus("Annotating physical properties");
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
-				}
-			}
-			// Otherwise collect the semsim annotations
-			else{
+			if(alreadyannotated){
+				//If annotations present, collect names of reference terms
 				setStatus("Collecting annotations");
-				XMLOutputter xmloutputter = new XMLOutputter();
-				
-				// TODO: Move getRDFmarkup fxn somewhere else?
-				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
-				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
-				
-				rdfreader.getModelLevelAnnotations();
-				
-				for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-					rdfreader.getDataStructureAnnotations(ds);
-				}
 				nameOntologyTerms();
+			}
+			else if(autoannotate){
+				// Otherwise auto-annotate, if turned on, 
+				setStatus("Annotating physical properties");
+				semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 			}
 		}
 		

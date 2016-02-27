@@ -11,10 +11,44 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+
+import semgen.annotation.workbench.routines.AutoAnnotate;
+import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class JSimProjectFileReader {
 
 	public static final String semSimAnnotationControlValue = "SemSimAnnotation";
+	
+	// This method collects all annotations for an MML model using the RDF block
+	// associated with it in its parent project file. The method returns whether 
+	// the model has already been annotated to some degree.
+	public static boolean getAllAnnotationsForModel(SemSimModel semsimmodel, ModelAccessor ma){
+		
+		
+		Document projdoc = getDocument(ma.getFileThatContainsModel());
+		Element ssael = getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
+		
+		// If there are semsim annotations associated with the model...
+		if(ssael.getChildren().isEmpty()){
+			return false;
+		}
+		else{	
+			XMLOutputter xmloutputter = new XMLOutputter();
+			
+			// TODO: Move getRDFmarkup fxn somewhere else?
+			Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
+			SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
+			
+			rdfreader.getModelLevelAnnotations();
+			rdfreader.getAllDataStructureAnnotations();
+			rdfreader.getAllSubmodelAnnotations();
+			
+			return true;
+		}
+	}
 	
 	public static Document getDocument(File file){
 		Document doc = null;

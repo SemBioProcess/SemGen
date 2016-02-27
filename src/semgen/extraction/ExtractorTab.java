@@ -51,6 +51,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -955,7 +956,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public void requestSaveAs() {}
 	
 	public File chooseLocationForExtraction() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"});
+		String selectedext = (semsimmodel.getSourceModelType() == ModelClassifier.CELLML_MODEL) ? "cellml" : "owl";
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"}, selectedext);
 		if (filec.SaveAsAction()!=null) {
 			extractedfile = filec.getSelectedFile();
 			return extractedfile;

@@ -47,6 +47,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
 	public SemSimModel semsimmodel;
+	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>();
+
 	
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
@@ -62,6 +64,7 @@ public class SemSimRDFwriter extends ModelWriter{
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
 					semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
+					createSubmodelURIandNameMap();
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -86,6 +89,13 @@ public class SemSimRDFwriter extends ModelWriter{
 	public void writeToFile(URI uri){}
 	
 	
+	private void createSubmodelURIandNameMap(){
+		for(Submodel sub : semsimmodel.getSubmodels()){
+			Resource subres = createNewResourceForSemSimObject("submodel");
+			submodelNameAndURImap.put(sub.getName(), subres.getURI());
+		}
+	}
+	
 	// Add model-level annotations 
 	protected void setRDFforModelLevelAnnotations(){
 		
@@ -104,8 +114,15 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	// Add annotations for data structure
+	protected void setRDFforDataStructureAnnotations(){
+		
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+			setRDFforDataStructureAnnotations(ds);
+		}
+	}
+	
+	
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
-				
 		String resuri = semsimmodel.getNamespace() + ds.getName();
 		Resource ares = rdf.createResource(resuri);
 		
@@ -117,16 +134,53 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		// Include the necessary composite annotation info
 		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
-		
 	}
 	
+	
 	// Add annotation for submodel
+	protected void setRDFforSubmodelAnnotations(){
+		
+		for(Submodel sub : semsimmodel.getSubmodels()){
+			setRDFforSubmodelAnnotations(sub);
+		}		
+	}
+	
 	protected void setRDFforSubmodelAnnotations(Submodel sub){
+
+		String subname = sub.getName();
+		Resource subres = rdf.getResource(submodelNameAndURImap.get(subname));
 		
-		Resource ares = createNewResourceForSemSimObject("submodel");
-		setFreeTextAnnotationForObject(sub, ares);
+		setFreeTextAnnotationForObject(sub, subres);
+
+		if(sub.isFunctional()) return; // Only collect free-text annotation if functional submodel
 		
-		//TODO: add statements about data structures in submodels
+		// Write out name
+		Statement st = rdf.createStatement(subres, SemSimRelation.HAS_NAME.getRDFproperty(), subname);
+		if( ! rdf.contains(st)) rdf.add(st);
+		
+		// Write out which data structures are associated with the submodel 
+		for(DataStructure dsinsub : sub.getAssociatedDataStructures()){
+			Resource dsres = rdf.getResource(semsimmodel.getNamespace() + dsinsub.getName());
+			Statement stds = rdf.createStatement(
+					subres, 
+					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
+					dsres);
+			
+			if( ! rdf.contains(stds)) rdf.add(stds);
+
+		}
+		
+		// Write out which submodels are associated with the model
+		for(Submodel subsub : sub.getSubmodels()){
+			String subsubname = subsub.getName();
+			Resource subsubres = rdf.getResource(submodelNameAndURImap.get(subsubname));
+			Statement stsub = rdf.createStatement(
+					subres, 
+					SemSimRelation.INCLUDES_SUBMODEL.getRDFproperty(), 
+					subsubres);
+			
+			if( ! rdf.contains(stsub)) rdf.add(stsub);
+		}
 	}
 	
 	

@@ -163,5 +163,18 @@ public class ModelAccessor {
 		
 		return null;
 	}
+	
+	
+	public boolean equals(ModelAccessor ma){
+		
+		if(ma.modelIsInStandAloneFile() && this.modelIsInStandAloneFile())
+			return ma.getStandAloneFile().getAbsolutePath().equals(this.getStandAloneFile().getAbsolutePath());
+		
+		else if(ma.modelIsPartOfArchive() && this.modelIsPartOfArchive())
+			return (ma.getArchiveFile().getAbsolutePath().equals(this.getArchiveFile().getAbsolutePath())
+					&& ma.getModelNameInArchive().equals(this.getModelNameInArchive()));
+		
+		return false;
+	}
 
 }

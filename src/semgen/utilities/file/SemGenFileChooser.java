@@ -16,10 +16,10 @@ import semsim.reading.ModelAccessor;
 public class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
 	public static final FileNameExtensionFilter owlfilter = new FileNameExtensionFilter("SemSim (*.owl)", "owl");
-	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, .xml)", "cellml", "xml");
-	public static final FileNameExtensionFilter sbmlfilter = new FileNameExtensionFilter("SBML (*.sbml, .xml)", "sbml", "xml");
+	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml");
+	public static final FileNameExtensionFilter sbmlfilter = new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml");
 	public static final FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
-	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("Model in JSim Project file (*.proj)", "proj");
+	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("JSim project file model (*.proj)", "proj");
 	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
 	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj"});
 	
@@ -40,7 +40,6 @@ public class SemGenFileChooser extends JFileChooser {
 		setDialogTitle(title);
 		addFilters(filters);
 		createMap();
-		//setFileFilter(filter);
 	}
 	
 	private void createMap() {
@@ -82,12 +81,14 @@ public class SemGenFileChooser extends JFileChooser {
 	public ModelAccessor convertFileToModelAccessor(File file){
 		ModelAccessor modelaccessor = null;
 		
-		if(file.getName().toLowerCase().endsWith(".proj")){
+		if(file.exists() && file.getName().toLowerCase().endsWith(".proj")){
 			
 			Document projdoc = JSimProjectFileReader.getDocument(file);
 			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
+			
 			if(modelnames.size()==1)  modelaccessor = new ModelAccessor(file, modelnames.get(0));
+			
 			else{
 				ProjectFileModelSelectorDialog pfmsd = 
 						new ProjectFileModelSelectorDialog("Select model(s) in " + file.getName(), modelnames);

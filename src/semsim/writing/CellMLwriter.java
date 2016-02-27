@@ -165,6 +165,8 @@ public class CellMLwriter extends ModelWriter {
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
 				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
+				
+				//TODO: might need to rethink the data that gets written out for submodels
 				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){

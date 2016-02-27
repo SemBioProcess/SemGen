@@ -26,6 +26,7 @@ import semgen.annotation.workbench.routines.TermCollector;
 import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
+import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
@@ -169,15 +170,42 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public File saveModelAs() {
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl", "proj"});
+		String selectedext = null;
+		int modtype = semsimmodel.getSourceModelType();
+		
+		if(modtype==ModelClassifier.SEMSIM_MODEL) selectedext = "owl";
+		else if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
+		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
+		else{}
+		
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(
+				"Choose location to save file", new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
 		
 		if (filec.SaveAsAction() != null) {
 			
-			// TODO: How to handle proj files??
-			modelaccessor = filec.convertFileToModelAccessor(filec.getSelectedFile());
-			lastsavedas = filec.getFileType();
+			File filetosave = filec.getSelectedFile();
+			
+			if(filec.getFileFilter() == SemGenFileChooser.owlfilter){
+				lastsavedas = ModelClassifier.SEMSIM_MODEL;
+			}
+			else if(filec.getFileFilter() == SemGenFileChooser.projfilter){
+				lastsavedas = ModelClassifier.MML_MODEL_IN_PROJ;
+				modelaccessor = filec.convertFileToModelAccessor(filec.getSelectedFile());
+			}
+			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter){
+				lastsavedas = ModelClassifier.CELLML_MODEL;
+			}
+			
+			// If we're writing out a new project file...
+			if( ! filetosave.exists())
+				modelaccessor = new ModelAccessor(filetosave, semsimmodel.getName());
+			
+			else modelaccessor = filec.convertFileToModelAccessor(filetosave);
+			
 			saveModel();
+			
 			semsimmodel.setName(modelaccessor.getModelName());
+			
 			return modelaccessor.getFileThatContainsModel();
 		}
 		return null;
@@ -191,22 +219,32 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public boolean unsavedChanges() {
-		if (!getModelSaved()) {
-			String title = "[unsaved file]";
+		if ( ! getModelSaved()) {
+			String title = "Unsaved changes in model";
+			String msg = "Save changes to ";
+			
 			URI fileURI = modelaccessor.getFileThatContainsModel().toURI();
-			if(fileURI!=null){
-				title = modelaccessor.getShortLocation();
-			}
+			
+			if(fileURI == null)
+				msg = msg + "[unsaved file]?";
+			
+			else if(modelaccessor.modelIsInStandAloneFile())
+				msg = msg + modelaccessor.getFileThatContainsModel().getName() + "?";
+			else msg = msg + modelaccessor.getModelName() + " in " + modelaccessor.getFileThatContainsModel().getName() + "?";
+			
 			int returnval= JOptionPane.showConfirmDialog(null,
-					"Save changes?", title + " has unsaved changes",
+					msg, title,
 					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
+			
 			if (returnval == JOptionPane.CANCEL_OPTION)
 				return false;
+			
 			if (returnval == JOptionPane.YES_OPTION) {
-				if(saveModel()==null) {
+				
+				if(saveModel()==null)
 					return false;
-				}
+				
 			}
 			if (returnval == JOptionPane.CLOSED_OPTION)
 				return false;

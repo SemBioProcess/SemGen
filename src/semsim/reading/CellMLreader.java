@@ -61,6 +61,8 @@ public class CellMLreader extends ModelReader {
 		
 		String srccode = modelaccessor.getModelTextAsString();
 		
+		System.out.println(srccode);
+		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
 		SAXBuilder builder = new SAXBuilder();

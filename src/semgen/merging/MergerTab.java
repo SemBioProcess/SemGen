@@ -365,8 +365,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	public File saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", 
-				new String[]{"owl"});
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl"}, "owl");
 		
 		if (filec.SaveAsAction()!=null) {
 			return filec.getSelectedFile();
