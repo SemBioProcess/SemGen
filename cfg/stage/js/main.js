@@ -24,13 +24,15 @@ function main() {
 	this.task = new Stage(this.graph);
 	this.graph.setTaskNodes(this.task.nodes);
 	
+	//If a change task request is received from Java
 	this.changeTask = function changeTask(taskname) {
+		var content = document.querySelector('#mergerContent');
+		content.removeChild(content.firstChild());
+		
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph);
-			if($("#mergerIcon").length == 0	) {
-				$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
-			}
 		}
+		
 		this.graph.setTaskNodes(this.task.nodes);
 		this.graph.update();
 		$('#taskModal').modal('toggle');

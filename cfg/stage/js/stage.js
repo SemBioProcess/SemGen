@@ -111,10 +111,6 @@ function Stage(graph) {
 		}
 	});
 
-
-
-	$('[data-toggle="tooltip"]').tooltip();
-
 }
 
 Stage.prototype.onModelSelection = function(node) {

@@ -12,11 +12,13 @@ function MergerTask(graph) {
 	var merger = this;
 	var nodes = this.nodes;
 	
-	document.getElementById("modalContent").innerHTML='<object type="text/html" data="merger.html" ></object>';
 	// Preview merge resolutions
 	//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
+	var t = document.querySelector('#mergerContent');
 
+	var clone = document.importNode(t.content, true);
+	document.querySelector('#modalContent').appendChild(clone);
 
 	// Create three different graphs on stage to preview Merge Resolutions
 //	$("#stage").append(
@@ -34,5 +36,15 @@ function MergerTask(graph) {
 		$("#mergerIcon").remove();
 		$("#backToMergeRes").remove();
 	})	
-
+	
+	$('[data-toggle="tooltip"]').tooltip();
+	
+	if($("#mergerIcon").length == 0	) {
+		$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
+	}
 }
+
+MergerTask.prototype.onModelSelection = function(node) {}
+
+MergerTask.prototype.onClose = function() {}
+
