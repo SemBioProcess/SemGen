@@ -109,6 +109,10 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 						type = Number.class;
 						param = jsValue.getNumber();
 					}
+					else if (jsValue.isObject()) {
+						type = Object.class;
+						param = jsValue.getClass();
+					}
 					else {
 						type = String.class;
 						param = jsValue.getString();

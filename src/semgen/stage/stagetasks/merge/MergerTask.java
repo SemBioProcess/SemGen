@@ -74,13 +74,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 		public void onMinimizeTask() {
-			
+			switchTask(0);
 		}
 		
-		public void onConsoleOut(String msg) {
-			
+		public void onConsoleOut(String msg) {			
 			System.out.println(msg);
-			receivertest();
 		}
 		
 		public void onConsoleOut(Number msg) {
@@ -99,9 +97,5 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	public Class<MergerWebBrowserCommandSender> getSenderInterface() {
 		return MergerWebBrowserCommandSender.class;
-	}
-	
-	public void receivertest() {
-		_commandSender.test("");
 	}
 }

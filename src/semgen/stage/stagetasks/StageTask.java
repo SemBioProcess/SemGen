@@ -14,6 +14,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	protected CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	protected Map<String, ModelInfo> _models  = new HashMap<String, ModelInfo>();
 	protected StageTaskConf newtaskconf = null;
+	private int existingtaskindex = 0;
 
 	public enum Task {
 		PROJECT("proj"), 
@@ -49,7 +50,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	public void clearNewTaskConfiguration() {
 		newtaskconf = null;
-	}
+	} 
 	
 	protected void configureTask(Task task, ArrayList<ModelInfo> info) {
 		newtaskconf = new StageTaskConf(task, info);
@@ -70,12 +71,16 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		configureTask(Task.MERGER, mods);
 	}
 	
-	protected void switchTask() {
+	protected void switchTask(int task) {
+		existingtaskindex = task;
 		this.setChanged();
 		this.notifyObservers(StageTaskEvent.SWITCHTASK);
 	}
 	
 	public abstract Task getTaskType();
 	public abstract Class<TSender> getSenderInterface();
-	public abstract void receivertest();
+	
+	public int getIndexofTasktoLoad() {
+		return existingtaskindex;
+	}
 }

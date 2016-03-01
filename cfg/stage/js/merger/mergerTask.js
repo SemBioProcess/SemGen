@@ -31,13 +31,11 @@ function MergerTask(graph) {
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 		// TODO: Warning dialog before quitting
-		$(".substage").remove();
 		$("#activeTaskText").removeClass('blink');
-		$("#mergerIcon").remove();
-		$("#backToMergeRes").remove();
+		sender.minimizeTask();
 	})	
 	
-	$('[data-toggle="tooltip"]').tooltip();
+	//$('[data-toggle="tooltip"]').tooltip();
 	
 	if($("#mergerIcon").length == 0	) {
 		$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");

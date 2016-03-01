@@ -54,16 +54,22 @@ public class StageWorkbench extends Workbench {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setCommandSender(WebBrowserCommandSenderGenerator<?> commandSender) {
 		new CommandInterfaceSetter(commandSender, activetask);
-		
 	}
 	
 	private void setActiveTask(int task) {
-		activetask = tasks.get(task);		
+		activetask = tasks.get(task);
+	}
+	
+	private void switchTask() {
+		setActiveTask(activetask.getIndexofTasktoLoad());
+		this.setChanged();
+		this.notifyObservers(StageEvent.CHANGETASK);
 	}
 	
 	private void createTask() {
-		StageTaskConf taskconf = activetask.getNewTaskConfiguration();
-		tasks.add(taskconf.createTask());
+		StageTask<?> newtask = activetask.getNewTaskConfiguration().createTask();
+		newtask.addObserver(this);
+		tasks.add(newtask);
 		activetask.clearNewTaskConfiguration();	
 		
 		this.setActiveTask(tasks.size()-1);
@@ -102,6 +108,9 @@ public class StageWorkbench extends Workbench {
 		if (arg1 == StageTaskEvent.NEWTASK) {
 			createTask();
 		}
+		if (arg1 == StageTaskEvent.SWITCHTASK) {
+			switchTask();
+		}
 	}
 	
 	private class CommandInterfaceSetter<T extends SemGenWebBrowserCommandSender> {
@@ -113,7 +122,5 @@ public class StageWorkbench extends Workbench {
 	public Task getTaskType() {
 		return activetask.getTaskType();
 	}
-	public void triggertest() {
-		activetask.receivertest();
-	}
+	
 }

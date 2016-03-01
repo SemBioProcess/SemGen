@@ -87,7 +87,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewExtractorTab(modelInfo.Path);
 					break;
 				case "merge":
-					SemGen.gacts.NewMergerTab(modelInfo.Path, null);
+					onMerge(modelName);
 					break;
 				case "close":
 					_models.remove(modelName);
@@ -170,12 +170,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	@Override
 	public Class<ProjectWebBrowserCommandSender> getSenderInterface() {
 		return ProjectWebBrowserCommandSender.class;
-	}
-
-	@Override
-	public void receivertest() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

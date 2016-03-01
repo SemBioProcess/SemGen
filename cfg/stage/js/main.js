@@ -22,13 +22,18 @@ function main() {
 	KeyElement.getInstance().initialize(this.graph);
 
 	this.task = new Stage(this.graph);
-	this.graph.setTaskNodes(this.task.nodes);
+	graph.setTaskNodes(this.task.nodes);
 	
 	//If a change task request is received from Java
 	this.changeTask = function changeTask(taskname) {
-		var content = document.querySelector('#mergerContent');
-		content.removeChild(content.firstChild());
+		var content = document.querySelector('#modalContent');
+		if (content.firstChild!=null) {
+			content.removeChild(content.firstChild);
+		}
 		
+		if (taskname=="proj") {
+			this.task = new Stage(this.graph);
+		}
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph);
 		}
