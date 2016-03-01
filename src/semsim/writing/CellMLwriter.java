@@ -382,7 +382,7 @@ public class CellMLwriter extends ModelWriter {
 				else if(ds.hasStartValue())
 					initialval = ds.getStartValue();
 				
-				// Add the RDF block for any singular annotation
+				// Add the RDF block for any annotations
 				rdfblock.setRDFforDataStructureAnnotations(ds);
 				
 				String metadataid = ds.getMetadataID();
@@ -407,8 +407,10 @@ public class CellMLwriter extends ModelWriter {
 		
 			// Add the mathml
 			Computation cmptn = ((FunctionalSubmodel)submodel).getComputation();
-			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty())
+			
+			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty()){
 				comp.addContent(makeXMLContentFromStringForMathML(cmptn.getMathML()));
+			}
 			else{
 				String allmathml = "";
 				for(DataStructure ds : submodel.getAssociatedDataStructures()){

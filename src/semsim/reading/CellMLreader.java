@@ -61,8 +61,6 @@ public class CellMLreader extends ModelReader {
 		
 		String srccode = modelaccessor.getModelTextAsString();
 		
-		System.out.println(srccode);
-		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
 		SAXBuilder builder = new SAXBuilder();
@@ -105,10 +103,8 @@ public class CellMLreader extends ModelReader {
 		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
-		String modelnamespacefromrdfblock = rdfblock.rdf.getNsPrefixURI("model");
-		
-		if(modelnamespacefromrdfblock !=null ) semsimmodel.setNamespace(modelnamespacefromrdfblock);
-
+		if(rdfblock.rdf.getNsPrefixURI("model") !=null ) semsimmodel.setNamespace(rdfblock.rdf.getNsPrefixURI("model"));
+		else semsimmodel.setNamespace(semsimmodel.generateNamespaceFromDateAndTime());
 		
 		// Get imported components
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();

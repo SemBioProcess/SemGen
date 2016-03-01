@@ -52,6 +52,9 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
+import semsim.writing.CellMLwriter;
+import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.SemSimOWLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -111,8 +114,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public JPanel physiomappanel = new JPanel();
 	public JTabbedPane graphtabpane = new JTabbedPane();
 	
-	public ModelAccessor modelaccessor;
-	public File extractedfile;
+	public ModelAccessor extractedaccessor;
 	public File autogendirectory;
 	public SemSimModel extractedmodel;
 	
@@ -131,7 +133,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
 		settings = sets;
 		workbench = bench;
-		modelaccessor = workbench.getModelAccessor();
 		semsimmodel = workbench.getSourceModel();
 	}
 	
@@ -213,7 +214,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 				if (o == toolbar.extractoritemopenann) {
 						try {
-							globalactions.NewAnnotatorTab(modelaccessor);
+							globalactions.NewAnnotatorTab(workbench.getModelAccessor());
 						} catch (Exception e1) {e1.printStackTrace();} 
 					}	
 			}
@@ -550,7 +551,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	// in a simulation language
 	public void optionToEncode(String filenamesuggestion) {
 		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
-				+ extractedfile.getName()
+				+ extractedaccessor.getModelName()
 				+ "\nGenerate simulation code from extracted model?", "",
 				JOptionPane.YES_NO_OPTION);
 		
@@ -783,24 +784,56 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public void actionPerformed(ActionEvent e){
 		Object o = e.getSource();
 		if (o == extractbutton) {
+			
 			primeextraction();
 			
 			if ( ! workbench.getExtraction().isEmpty()) {
-				extractedfile = chooseLocationForExtraction();
 				
-				if (extractedfile != null) {
-					try {
-						extractedmodel = workbench.getExtraction().extractToNewModel();
-						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
-						optionToEncode(extractedfile.getName());
-					} 
-					catch (CloneNotSupportedException | OWLException e1) {
+				// Choose file location for extraction
+				String selectedext = null;
+				int modtype = semsimmodel.getSourceModelType();
+				
+				if(modtype==ModelClassifier.SEMSIM_MODEL) selectedext = "owl";
+				else if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
+				else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
+				else{}
+				
+				// Create the extracted semsim model
+				try {
+					extractedmodel = workbench.getExtraction().extractToNewModel();
+				} catch (CloneNotSupportedException e2) {
+					e2.printStackTrace();
+				}
+				
+				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext);
+				
+				ModelAccessor ma = filec.SaveAsAction(extractedmodel);
+				
+				if (ma != null) {
+					
+					try{
+						File outputfile = ma.getFileThatContainsModel();
+						
+						// Save it out
+						if(filec.getFileFilter()==SemGenFileChooser.projfilter)
+							new JSimProjectFileWriter(ma, extractedmodel).writeToFile(outputfile);
+						
+						else if(filec.getFileFilter()==SemGenFileChooser.owlfilter)
+								new SemSimOWLwriter(extractedmodel).writeToFile(outputfile);
+								
+								//optionToEncode(ma.getModelName());
+							
+						else if(filec.getFileFilter()==SemGenFileChooser.cellmlfilter)
+							new CellMLwriter(extractedmodel).writeToFile(outputfile);
+						
+					}
+					catch (OWLException e1) {
 						e1.printStackTrace();
 					}
 				}
-			} else {
+			} 
+			else
 				SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");
-			}
 		}
 
 		if (o == vizsourcebutton) visualizeAllDataStructures(false);
@@ -954,14 +987,4 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	@Override
 	public void requestSaveAs() {}
-	
-	public File chooseLocationForExtraction() {
-		String selectedext = (semsimmodel.getSourceModelType() == ModelClassifier.CELLML_MODEL) ? "cellml" : "owl";
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"}, selectedext);
-		if (filec.SaveAsAction()!=null) {
-			extractedfile = filec.getSelectedFile();
-			return extractedfile;
-		}
-		return null;
-	}
 }

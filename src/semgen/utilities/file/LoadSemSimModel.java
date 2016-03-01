@@ -131,7 +131,7 @@ public class LoadSemSimModel extends SemGenJob {
 		}
 		else{
 			
-			boolean alreadyannotated = JSimProjectFileReader.getAllAnnotationsForModel(semsimmodel, ma);
+			boolean alreadyannotated = JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma);
 			
 			if(alreadyannotated){
 				//If annotations present, collect names of reference terms

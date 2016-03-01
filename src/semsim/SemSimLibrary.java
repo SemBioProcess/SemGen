@@ -39,6 +39,8 @@ import semsim.utilities.ResourcesManager;
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSimVersion");
+	public static final String SemSimInJSimControlValue = "SemSimAnnotation";
+
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;

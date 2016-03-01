@@ -58,13 +58,16 @@ public class SemSimRDFwriter extends ModelWriter{
 		super(null);
 		
 		this.semsimmodel = semsimmodel;
-		
+		createSubmodelURIandNameMap();
+
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 					rdf.read(stream, baseNamespace, null);
-					semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
-					createSubmodelURIandNameMap();
+					
+					if(rdf.getNsPrefixURI("model") != null)
+						semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
+					
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -102,9 +105,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
 		
 		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
-			
-			System.out.println(ann.getRelation().getURIasString());
-			
+						
 			Property prop = ann.getRelation().getRDFproperty();
 			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
 			
@@ -157,7 +158,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		// Write out name
 		Statement st = rdf.createStatement(subres, SemSimRelation.HAS_NAME.getRDFproperty(), subname);
 		if( ! rdf.contains(st)) rdf.add(st);
-		
+				
 		// Write out which data structures are associated with the submodel 
 		for(DataStructure dsinsub : sub.getAssociatedDataStructures()){
 			Resource dsres = rdf.getResource(semsimmodel.getNamespace() + dsinsub.getName());

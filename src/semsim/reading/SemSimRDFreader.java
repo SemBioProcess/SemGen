@@ -83,13 +83,17 @@ public class SemSimRDFreader extends ModelReader{
 		
 		while(subit.hasNext()){
 			Resource submodelres = subit.next();
-			if(submodelres.getURI().contains("#submodel_")){
-				Statement subnamest = submodelres.getProperty(SemSimRelation.HAS_NAME.getRDFproperty());
-				String name = subnamest.getLiteral().toString();
+						
+			if(submodelres.getURI() != null){
 				
-				Submodel newsub = new Submodel(name);
-				submodelURIandObjectMap.put(submodelres.getURI(), newsub);
-				semsimmodel.addSubmodel(newsub);
+				if(submodelres.getURI().contains("#submodel_")){
+					Statement subnamest = submodelres.getProperty(SemSimRelation.HAS_NAME.getRDFproperty());
+					String name = subnamest.getLiteral().toString();
+					
+					Submodel newsub = new Submodel(name);
+					submodelURIandObjectMap.put(submodelres.getURI(), newsub);
+					semsimmodel.addSubmodel(newsub);
+				}
 			}
 		}
 	}

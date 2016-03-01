@@ -57,7 +57,7 @@ public class Encoder {
 		if (selection == null) return;
 		
 		ModelWriter outwriter = null;
-		SemGenSaveFileChooser fc = new SemGenSaveFileChooser("Choose Destination");
+		SemGenSaveFileChooser fc = new SemGenSaveFileChooser();
 		if(selection == optionsarray[0]){
 			fc.addFilters(new String[]{"cellml"});
 			outwriter = new CellMLwriter(model);
@@ -67,10 +67,10 @@ public class Encoder {
 			fc.addFilters(new String[]{"mml"});
 			outwriter = new MMLwriter(model);
 		}
-		File outputfile = fc.SaveAsAction();
+		ModelAccessor ma = fc.SaveAsAction(model);
 		
-		if (outputfile != null) {
-			CoderTask task = new CoderTask(outwriter, outputfile);
+		if (ma != null) {
+			CoderTask task = new CoderTask(outwriter, ma.getFileThatContainsModel());
 		
 			task.execute();
 			SemGenError.showSemSimErrors();

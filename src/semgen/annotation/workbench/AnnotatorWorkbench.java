@@ -8,11 +8,6 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
@@ -33,9 +28,9 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
-import semsim.utilities.SemSimUtil;
 import semsim.writing.CellMLwriter;
 import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.SemSimOWLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
@@ -136,24 +131,20 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public File saveModel() {
 		
 		File file = modelaccessor.getFileThatContainsModel();
-		URI fileURI = file.toURI();
 		
-		if(fileURI != null){
+		if(file != null){
 			validateModelComposites();
 			
 			try {
 
 				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
-					OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-					manager.saveOntology(semsimmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(fileURI));
+					new SemSimOWLwriter(semsimmodel).writeToFile(file);
 				}
 				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
-					File outputfile =  new File(fileURI);
-					String content = new CellMLwriter(semsimmodel).writeToString();
-					SemSimUtil.writeStringToFile(content, outputfile);
+					new CellMLwriter(semsimmodel).writeToFile(file);
 				}
 				else if(lastsavedas==ModelClassifier.MML_MODEL_IN_PROJ){
-					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(fileURI);
+					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(file);
 				}
 				
 			} catch (Exception e) {e.printStackTrace();}		
@@ -178,36 +169,30 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
 		else{}
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(
-				"Choose location to save file", new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
 		
-		if (filec.SaveAsAction() != null) {
+		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
+
+		if (newaccessor != null) {
 			
-			File filetosave = filec.getSelectedFile();
+			modelaccessor = newaccessor;
 			
-			if(filec.getFileFilter() == SemGenFileChooser.owlfilter){
+			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
 				lastsavedas = ModelClassifier.SEMSIM_MODEL;
-			}
+			
 			else if(filec.getFileFilter() == SemGenFileChooser.projfilter){
 				lastsavedas = ModelClassifier.MML_MODEL_IN_PROJ;
-				modelaccessor = filec.convertFileToModelAccessor(filec.getSelectedFile());
 			}
-			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter){
+			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)
 				lastsavedas = ModelClassifier.CELLML_MODEL;
-			}
-			
-			// If we're writing out a new project file...
-			if( ! filetosave.exists())
-				modelaccessor = new ModelAccessor(filetosave, semsimmodel.getName());
-			
-			else modelaccessor = filec.convertFileToModelAccessor(filetosave);
-			
+				
 			saveModel();
-			
+
 			semsimmodel.setName(modelaccessor.getModelName());
 			
 			return modelaccessor.getFileThatContainsModel();
 		}
+		
 		return null;
 	}
 

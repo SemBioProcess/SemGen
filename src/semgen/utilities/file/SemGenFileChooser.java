@@ -2,18 +2,13 @@ package semgen.utilities.file;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.jdom.Document;
 
-import semsim.reading.JSimProjectFileReader;
-import semsim.reading.ModelAccessor;
-
-public class SemGenFileChooser extends JFileChooser {
+public abstract class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
 	public static final FileNameExtensionFilter owlfilter = new FileNameExtensionFilter("SemSim (*.owl)", "owl");
 	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml");
@@ -77,38 +72,4 @@ public class SemGenFileChooser extends JFileChooser {
 		return modeltype;
 	}
 	
-	
-	public ModelAccessor convertFileToModelAccessor(File file){
-		ModelAccessor modelaccessor = null;
-		
-		if(file.exists() && file.getName().toLowerCase().endsWith(".proj")){
-			
-			Document projdoc = JSimProjectFileReader.getDocument(file);
-			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
-			
-			
-			if(modelnames.size()==1)  modelaccessor = new ModelAccessor(file, modelnames.get(0));
-			
-			else{
-				ProjectFileModelSelectorDialog pfmsd = 
-						new ProjectFileModelSelectorDialog("Select model(s) in " + file.getName(), modelnames);
-	
-				for(String modelname : pfmsd.getSelectedModelNames()){
-					modelaccessor = new ModelAccessor(file, modelname);
-				}
-			}
-		}
-		else modelaccessor = new ModelAccessor(file);
-		return modelaccessor;
-	}
-	
-	
-	public ArrayList<ModelAccessor> getSelectedFilesAsModelAccessors(){
-		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
-		
-		for (File file : getSelectedFiles())
-			modelaccessors.add(convertFileToModelAccessor(file));
-		
-		return modelaccessors;
-	}
 }

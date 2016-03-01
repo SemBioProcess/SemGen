@@ -31,7 +31,7 @@ public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
 	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
-	private SemSimModel mergedmodel;
+	public SemSimModel mergedmodel;
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();

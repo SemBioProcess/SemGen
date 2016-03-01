@@ -51,8 +51,8 @@ public class CSVExporter {;
 	}
 	
 	public void saveCSV() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("", new String[]{"csv"}, "csv"); 
-		if (filec.SaveAsAction()!=null) {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"csv"}, "csv"); 
+		if (filec.SaveAsAction(semsimmodel)!=null) {
 			Scanner scanner = new Scanner(datatosave);
 			try {
 				PrintWriter outfile = new PrintWriter(new FileWriter(filec.getSelectedFile()));

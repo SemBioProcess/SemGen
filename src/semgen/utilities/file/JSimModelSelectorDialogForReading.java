@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 
 import semgen.utilities.uicomponent.SemGenDialog;
 
-public class ProjectFileModelSelectorDialog extends SemGenDialog implements PropertyChangeListener{
+public class JSimModelSelectorDialogForReading extends SemGenDialog implements PropertyChangeListener{
 
 	private static final long serialVersionUID = -6899404099942989139L;
 	private ArrayList<String> selectedModelNames = new ArrayList<String>();
@@ -23,7 +23,7 @@ public class ProjectFileModelSelectorDialog extends SemGenDialog implements Prop
 	private JPanel panel;
 	
 
-	public ProjectFileModelSelectorDialog(String title, ArrayList<String> modelnames) {
+	public JSimModelSelectorDialogForReading(String title, ArrayList<String> modelnames) {
 		super(title);
 		
 		setPreferredSize(new Dimension(430, 250));

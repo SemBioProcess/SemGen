@@ -14,40 +14,42 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import semgen.annotation.workbench.routines.AutoAnnotate;
+import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class JSimProjectFileReader {
-
-	public static final String semSimAnnotationControlValue = "SemSimAnnotation";
 	
 	// This method collects all annotations for an MML model using the RDF block
 	// associated with it in its parent project file. The method returns whether 
 	// the model has already been annotated to some degree.
-	public static boolean getAllAnnotationsForModel(SemSimModel semsimmodel, ModelAccessor ma){
+	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, ModelAccessor ma){
 		
-		
-		Document projdoc = getDocument(ma.getFileThatContainsModel());
-		Element ssael = getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
-		
-		// If there are semsim annotations associated with the model...
-		if(ssael.getChildren().isEmpty()){
-			return false;
+		if(ma.modelIsPartOfJSimProjectFile()){
+			
+			Document projdoc = getDocument(ma.getFileThatContainsModel());
+			Element ssael = getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
+			
+			// If there are semsim annotations associated with the model...
+			if(ssael.getChildren().isEmpty()){
+				return false;
+			}
+			else{
+				XMLOutputter xmloutputter = new XMLOutputter();
+				
+				// TODO: Move getRDFmarkup fxn somewhere else?
+				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
+				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
+				
+				rdfreader.getModelLevelAnnotations();
+				rdfreader.getAllDataStructureAnnotations();
+				rdfreader.getAllSubmodelAnnotations();
+				
+				return true;
+			}
 		}
-		else{	
-			XMLOutputter xmloutputter = new XMLOutputter();
-			
-			// TODO: Move getRDFmarkup fxn somewhere else?
-			Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
-			SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
-			
-			rdfreader.getModelLevelAnnotations();
-			rdfreader.getAllDataStructureAnnotations();
-			rdfreader.getAllSubmodelAnnotations();
-			
-			return true;
-		}
+		else return false;
 	}
 	
 	public static Document getDocument(File file){
@@ -86,8 +88,14 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	protected static String getModelCode(Document projdoc, String modelname){
+	protected static String getModelSourceCode(Document projdoc, String modelname){
 		
+		if(getModelSourceCodeElement(projdoc, modelname) != null)
+			return getModelSourceCodeElement(projdoc, modelname).getText();
+		else return null;
+	}
+	
+	public static Element getModelSourceCodeElement(Document projdoc, String modelname){
 		Element modelel = getModelElement(projdoc, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
@@ -95,7 +103,7 @@ public class JSimProjectFileReader {
 			Element controlel = controlit.next();
 			
 			if(controlel.getAttributeValue("name").equals("modelSource")){
-				return controlel.getText();
+				return controlel;
 			}
 		}
 		
@@ -125,14 +133,14 @@ public class JSimProjectFileReader {
 		while(controlit.hasNext()){
 			Element controlel = controlit.next();
 			
-			if(controlel.getAttributeValue("name").equals(semSimAnnotationControlValue)){
+			if(controlel.getAttributeValue("name").equals(SemSimLibrary.SemSimInJSimControlValue)){
 				return controlel;
 			}
 		}
 		
 		// If we're here we need to create a new control element and attach it to the model element
 		Element newel = new Element("control");
-		newel.setAttribute(new Attribute("name", semSimAnnotationControlValue));
+		newel.setAttribute(new Attribute("name", SemSimLibrary.SemSimInJSimControlValue));
 		modelel.addContent(newel);
 		
 		return newel;
