@@ -119,7 +119,7 @@ function Stage(graph) {
 	$('[data-toggle="tooltip"]').tooltip();
 
 	// Preview merge resolutions
-	$(".mergeResolution").click(function() {
+	$(".mergePreviewBtn").click(function() {
 		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
 		$('#mergerModal').modal('toggle');
@@ -144,6 +144,7 @@ function Stage(graph) {
 		$(".substage").remove();
 		$("#activeTaskText").removeClass('blink');
 		$("#mergerIcon").remove();
+		$("#backToMergeRes").remove();
 	})
 
 }
