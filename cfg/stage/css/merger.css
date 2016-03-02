@@ -81,8 +81,8 @@
     margin: 30px auto;
 }
 
-.fullMergePreviewBtn {
-    margin: 0 auto;
+#quitMergerBtn {
+    float: left;
 }
 
 #backToMergeRes {
