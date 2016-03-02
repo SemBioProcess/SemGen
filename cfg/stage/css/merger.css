@@ -46,15 +46,43 @@
 }
 
 .mergeResolution {
-    height: 250px;
+    height: 100px;
     border-width: 1px;
     border-top-style: solid;
     text-align: center;
 }
 
-.mergeResolution:hover {
+.leftResolution {
+    float: left;
+    margin: 30px;
+}
+
+.rightResolution {
+    float: right;
+    margin: 30px;
+}
+
+.leftResolution:hover, .rightResolution:hover {
     background-color: #dfe3ee;
     cursor: pointer;
+}
+
+.leftNode {
+    position: absolute;
+    left: 300px;
+}
+
+.rightNode {
+    position: absolute;
+    right: 300px;
+}
+
+.mergePreviewBtn {
+    margin: 30px auto;
+}
+
+.fullMergePreviewBtn {
+    margin: 0 auto;
 }
 
 #backToMergeRes {
@@ -62,4 +90,10 @@
     position: absolute;
     top: 5px;
     left: 5px;
+}
+
+#mergerDemoBtn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
