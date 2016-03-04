@@ -9,6 +9,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.BrowserFunction;
+import com.teamdev.jxbrowser.chromium.JSObject;
 import com.teamdev.jxbrowser.chromium.JSValue;
 
 /**
@@ -110,8 +111,8 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 						param = jsValue.getNumber();
 					}
 					else if (jsValue.isObject()) {
-						type = Object.class;
-						param = jsValue.getClass();
+						type = JSObject.class;
+						param = jsValue;
 					}
 					else {
 						type = String.class;

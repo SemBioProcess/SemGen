@@ -3,12 +3,25 @@
  */
 
 function Task(graph) {
-
+	
 	this.graph = graph;
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
+	var task = this;
+	
+	this.loadStageState = function (state) {
+		if (state.nodetree.length != 0) {
+			state.nodetree.forEach(function(branch) {
+				var modelName = branch.branchroot.name;
+				var modelNode = new ModelNode(graph, modelName);
+				
+				task.nodes[modelName] = modelNode;
+			});
+		};
+	}
 
+	
 	this.addModelNode = function(modelName) {
 		if(this.nodes[modelName])
 			throw "Model already exists";
@@ -16,7 +29,7 @@ function Task(graph) {
 		var modelNode = new ModelNode(this.graph, modelName);
 		
 		this.nodes[modelName] = modelNode;
-		graph.update();
+		task.graph.update();
 	};
 	
 	//Get a model node
@@ -29,8 +42,8 @@ function Task(graph) {
 	};
 
 	this.taskClicked = function(element) {
-		var task = element.innerHTML.toLowerCase();
-		sender.taskClicked(this.getFirstSelectedModel().id, task);
+		var taskid = element.innerHTML.toLowerCase();
+		sender.taskClicked(this.getFirstSelectedModel().id, taskid, this);
 	};
 	
 	this.getFirstSelectedModel = function () {
@@ -67,6 +80,7 @@ function Task(graph) {
 	
 
 }
+Task.prototype.onInitialize = function() {}
 
 Task.prototype.onModelSelection = function(node) {}
 Task.prototype.onClose = function() {}

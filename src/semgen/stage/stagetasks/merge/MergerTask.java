@@ -7,8 +7,11 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.JSObject;
+
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
@@ -20,7 +23,7 @@ import semsim.model.collection.SemSimModel;
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
 
-	public MergerTask(ArrayList<ModelInfo> modelinfo) {
+	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<File> files = new ArrayList<File>();
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
@@ -30,7 +33,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			files.add(model.Path);
 			models.add(model.Model);
 		}
-
+		this.state = state;
 		workbench.addModels(files, models, true);
 	}
 
@@ -73,7 +76,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-		public void onMinimizeTask() {
+		public void onMinimizeTask(JSObject snapshot) {
+			createStageState(snapshot);
 			switchTask(0);
 		}
 		

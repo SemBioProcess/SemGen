@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 import semgen.stage.stagetasks.StageTask;
 import semgen.stage.stagetasks.StageTask.StageTaskEvent;
 import semgen.stage.stagetasks.StageTask.Task;
-import semgen.stage.stagetasks.StageTaskConf;
 import semgen.utilities.Workbench;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.WebBrowserCommandSenderGenerator;
@@ -122,5 +122,7 @@ public class StageWorkbench extends Workbench {
 	public Task getTaskType() {
 		return activetask.getTaskType();
 	}
-	
+	public StageState getActiveStageState() {
+		return activetask.getStageState();
+	}
 }

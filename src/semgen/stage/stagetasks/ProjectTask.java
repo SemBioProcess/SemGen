@@ -6,11 +6,14 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.JSObject;
+
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SemSimModelSerializer;
+import semgen.stage.serialization.StageState;
 import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
@@ -21,6 +24,7 @@ import semsim.model.collection.SemSimModel;
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
+		state = new StageState(Task.PROJECT);
 		_commandReceiver = new ProjectCommandReceiver();
 	}
 	
@@ -65,7 +69,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onTaskClicked(String modelName, String task) {
+		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
 				throw new IllegalArgumentException(modelName);
@@ -87,7 +91,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewExtractorTab(modelInfo.Path);
 					break;
 				case "merge":
-					onMerge(modelName);
+					onMerge(modelName, snapshot);
 					break;
 				case "close":
 					_models.remove(modelName);
@@ -122,7 +126,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String modelNames) {
+		public void onMerge(String modelNames, JSObject snapshot) {
+			createStageState(snapshot);
 			createMerger(modelNames);			
 		}
 		

@@ -25,18 +25,20 @@ function main() {
 	graph.setTaskNodes(this.task.nodes);
 	
 	//If a change task request is received from Java
-	this.changeTask = function changeTask(taskname) {
+	this.changeTask = function changeTask(stagestate) {
 		var content = document.querySelector('#modalContent');
 		if (content.firstChild!=null) {
 			content.removeChild(content.firstChild);
 		}
-		
+		var taskname = stagestate.tasktype;
 		if (taskname=="proj") {
-			this.task = new Stage(this.graph);
+			this.task = new Stage(graph);
 		}
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph);
 		}
+		this.task.loadStageState(stagestate);
+		this.task.onInitialize();
 		
 		this.graph.setTaskNodes(this.task.nodes);
 		this.graph.update();
