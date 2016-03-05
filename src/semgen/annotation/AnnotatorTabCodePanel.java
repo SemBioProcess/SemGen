@@ -121,7 +121,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 			else {
 				modelfile = new File(modelloc);
 				if (!modelfile.exists()) {
-					modelfile = new File (workbench.getFile().getParentFile().toString() + "\\"+ modelfile.getName());
+					modelfile = new File (workbench.getFile().getParentFile().toString() + "/" + modelfile.getName());
 				}
 				if (modelfile.exists()) {
 					// Read in the model code and append it to the codearea
