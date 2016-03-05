@@ -29,10 +29,10 @@ public class JSimProjectFileReader {
 		if(ma.modelIsPartOfJSimProjectFile()){
 			
 			Document projdoc = getDocument(ma.getFileThatContainsModel());
-			Element ssael = getSemSimAnnotationControlElementForModel(projdoc, ma.getModelName());
+			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
 			
 			// If there are semsim annotations associated with the model...
-			if(ssael.getChildren().isEmpty()){
+			if(ssael == null){
 				return false;
 			}
 			else{
@@ -126,7 +126,7 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	public static Element getSemSimAnnotationControlElementForModel(Document projdoc, String modelname){
+	public static Element getSemSimControlElementForModel(Document projdoc, String modelname){
 		Element modelel = getModelElement(projdoc, modelname);
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
@@ -138,12 +138,7 @@ public class JSimProjectFileReader {
 			}
 		}
 		
-		// If we're here we need to create a new control element and attach it to the model element
-		Element newel = new Element("control");
-		newel.setAttribute(new Attribute("name", SemSimLibrary.SemSimInJSimControlValue));
-		modelel.addContent(newel);
-		
-		return newel;
+		return null;
 	}
 	
 }

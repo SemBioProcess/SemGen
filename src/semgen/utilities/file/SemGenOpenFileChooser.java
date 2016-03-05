@@ -78,27 +78,31 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	}
 	
 	
-	public ModelAccessor convertFileToModelAccessor(File file){
-		ModelAccessor modelaccessor = null;
+	// This returns a list of accessors because if a user selects a JSim
+	// project file there may be multiple models within the file they 
+	// want to open
+	public ArrayList<ModelAccessor> convertFileToModelAccessorList(File file){
+		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
 		
 		if(file.exists() && file.getName().toLowerCase().endsWith(".proj")){
 			
 			Document projdoc = JSimProjectFileReader.getDocument(file);
 			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
-			if(modelnames.size()==1)  modelaccessor = new ModelAccessor(file, modelnames.get(0));
+			if(modelnames.size()==1)  modelaccessors.add(new ModelAccessor(file, modelnames.get(0)));
 			
 			else{
 				JSimModelSelectorDialogForReading pfmsd = 
 						new JSimModelSelectorDialogForReading("Select model(s) in " + file.getName(), modelnames);
 	
 				for(String modelname : pfmsd.getSelectedModelNames()){
-					modelaccessor = new ModelAccessor(file, modelname);
+					modelaccessors.add(new ModelAccessor(file, modelname));
 				}
 			}
 		}
-		else modelaccessor = new ModelAccessor(file);
-		return modelaccessor;
+		else modelaccessors.add(new ModelAccessor(file));
+		
+		return modelaccessors;
 	}
 	
 	
@@ -106,7 +110,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
 		
 		for (File file : getSelectedFiles())
-			modelaccessors.add(convertFileToModelAccessor(file));
+			modelaccessors.addAll(convertFileToModelAccessorList(file));
 		
 		return modelaccessors;
 	}

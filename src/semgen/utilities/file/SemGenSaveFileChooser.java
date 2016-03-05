@@ -97,52 +97,24 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 				// If we're saving to a JSim project file
 				if(getFileFilter()==SemGenFileChooser.projfilter){
 					
-					// If we don't have a name for the model we're writing out yet
-					// like during extraction and merging...
-					if(modelInArchiveName == null){
-						
-						String modelname = null;
-						
-						// If the output file already exists
-						if(filetosave.exists()){
-							Document projdoc = JSimProjectFileReader.getDocument(filetosave);
-							ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
-							
-							JSimModelSelectorDialogForWriting jms = 
-									new JSimModelSelectorDialogForWriting(modelnames);
-							
-							modelname = jms.getSelectedModelName();
-
-							if(modelname == null) return null;
-
-							overwriting = modelnames.contains(modelname);
-						}
-						
-						// Otherwise we're creating a new project with one as-yet-unnamed model
-						else{
-							JSimModelSelectorDialogForWriting jms = 
-									new JSimModelSelectorDialogForWriting(new ArrayList<String>());
-							
-							modelname = jms.getSelectedModelName();
-							
-							if(modelname == null) return null;
-						}
-						ma = new ModelAccessor(filetosave, modelname);
+					String modelname = null;
+					ArrayList<String> existingmodelnames = new ArrayList<String>();
+					
+					// If the output file already exists
+					if(filetosave.exists()){
+						Document projdoc = JSimProjectFileReader.getDocument(filetosave);
+						existingmodelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);	
 					}
 					
-					// Otherwise we already have a name, like when we're saving from
-					// the Annotator
-					else{
-						ma = new ModelAccessor(getSelectedFile(), modelInArchiveName);
+					JSimModelSelectorDialogForWriting jms = 
+							new JSimModelSelectorDialogForWriting(existingmodelnames, modelInArchiveName);
+					
+					modelname = jms.getSelectedModelName();
 
-						if(getSelectedFile().exists()){
-							
-							// If we're saving the model to a JSim project file, check if we'll be overwriting
-							// a model with the same name
-							Document projdoc = JSimProjectFileReader.getDocument(ma.getFileThatContainsModel());
-							overwriting = (JSimProjectFileReader.getModelElement(projdoc, ma.getModelName()) != null);
-						}
-					}		
+					if(modelname == null) return null;
+
+					overwriting = existingmodelnames.contains(modelname);
+					ma = new ModelAccessor(filetosave, modelname);
 				}
 				
 				// Otherwise we're saving to a standalone file
@@ -162,10 +134,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 							overwritemsg, "Confirm overwrite",
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
+					
 					if (overwriteval == JOptionPane.OK_OPTION) break;
-					else {
-						return null;
-					}
+					else return null;
 				}
 				break;
 			}
@@ -173,6 +144,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 				return null;
 			}
 		}
+
+		currentdirectory = getCurrentDirectory();
+
 		return ma;
 	}
 	

@@ -31,23 +31,25 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return All Decimals contained in the model.
 	 */
-	public Set<DataStructure> getDecimals(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
+	public ArrayList<DataStructure> getDecimals(){
+		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof Decimal) set.add(ds);
+			if(ds instanceof Decimal) list.add(ds);
 		}
-		return set;
+		return list;
 	}
 	
 	/**
 	 * @return The MMLchoiceVariables in the model. 
 	 */
-	public Set<DataStructure> getMMLchoiceVars(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
+	public ArrayList<DataStructure> getMMLchoiceVars(){
+		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof MMLchoice) set.add(ds);
+			if(ds instanceof MMLchoice) list.add(ds);
 		}
-		return set;
+		return list;
 	}
 
 	/**
@@ -58,10 +60,12 @@ public abstract class SemSimCollection extends SemSimObject{
 	 * @return The DataStructure to add
 	 */
 	public DataStructure addDataStructure(DataStructure ds){
+		
 		if(!containsDataStructure(ds.getName())){
 			dataStructures.add(ds);
 		}
 		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
+		
 		return ds;
 	}
 	
@@ -92,7 +96,9 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public Submodel getSubmodel(String name){
 		Submodel sub = null;
+		
 		for(Submodel sub1 : getSubmodels()){
+			
 			if(sub1.getName().equals(name)){
 				sub = sub1;
 				break;
@@ -107,7 +113,9 @@ public abstract class SemSimCollection extends SemSimObject{
 	 * @return The DataStructure with the specified name or null if not found.
 	 */
 	public DataStructure getAssociatedDataStructure(String name){
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
+			
 			if(ds.getName().equals(name)) return ds;
 		}
 		return null;
@@ -130,9 +138,11 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public Set<String> getDataStructureNames(){
 		Set<String> set = new HashSet<String>();
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
 			set.add(ds.getName());
 		}
+		
 		return set;
 	}
 
@@ -144,9 +154,11 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public Set<DataStructure> getDeclaredDataStructures(){
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
 			if(ds.isDeclared()) dsset.add(ds);
 		}
+		
 		return dsset;
 	}
 		
@@ -162,9 +174,11 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public Set<DataStructure> getDataStructuresFromFunctionalSubmodels(){
 		Set<DataStructure> dss = new HashSet<DataStructure>();
+		
 		for(FunctionalSubmodel submodel : getFunctionalSubmodels()){
 			dss.addAll(submodel.getAssociatedDataStructures());
 		}
+		
 		return dss;
 	}
 	
@@ -173,21 +187,25 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public Set<FunctionalSubmodel> getFunctionalSubmodels(){
 		Set<FunctionalSubmodel> fxnalsubs = new HashSet<FunctionalSubmodel>();
+		
 		for(Submodel sub : getSubmodels()){
 			if(sub.isFunctional()) fxnalsubs.add((FunctionalSubmodel) sub);
 		}
+		
 		return fxnalsubs;
 	}
 	
 	/**
 	 * @return All {@link SemSimInteger}s in the model.
 	 */
-	public Set<DataStructure> getIntegers(){
-		Set<DataStructure> set = new HashSet<DataStructure>();
+	public ArrayList<DataStructure> getIntegers(){
+		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
+		
 		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof SemSimInteger) set.add(ds);
+			
+			if(ds instanceof SemSimInteger) list.add(ds);
 		}
-		return set;
+		return list;
 	}
 	
 	/**

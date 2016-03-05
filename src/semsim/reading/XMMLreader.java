@@ -137,6 +137,9 @@ public class XMMLreader extends ModelReader {
 				else if(vardatatype.equals("choice")) ds = new MMLchoice(codeword);
 				
 				semsimmodel.addDataStructure(ds);
+				
+				System.out.println(ds.getName());
+				
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				

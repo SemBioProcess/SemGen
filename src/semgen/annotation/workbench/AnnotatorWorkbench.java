@@ -64,7 +64,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		smdrawer = new SubModelToolDrawer(termlib, semsimmodel.getSubmodels());
 		smdrawer.addObserver(this);
 
-		setModelSaved(isSemSimorCellMLModel());
+		setModelSaved(sourceModelTypeCanStoreSemSimAnnotations());
 	}
 	
 	public CodewordToolDrawer openCodewordDrawer() {
@@ -92,9 +92,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return semsimmodel;
 	}
 	
-	public boolean isSemSimorCellMLModel() {
+	public boolean sourceModelTypeCanStoreSemSimAnnotations() {
 		return (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || 
-				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL);
+				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL ||
+				semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL_IN_PROJ);
 	}
 	
 	@Override

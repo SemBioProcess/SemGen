@@ -66,7 +66,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 			File file = sgc.getSelectedFile();
 			if (file!=null){
 				
-				ModelAccessor ma = sgc.convertFileToModelAccessor(file);
+				ModelAccessor ma = sgc.convertFileToModelAccessorList(file).get(0);
 				txtfld.setText(ma.getFullLocation());
 			}
 		}

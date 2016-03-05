@@ -35,7 +35,7 @@ public class JSimModelSelectorDialogForWriting extends SemGenDialog implements A
 	private Dimension dims = new Dimension(430, 250);
 	
 
-	public JSimModelSelectorDialogForWriting(ArrayList<String> modelnames) {
+	public JSimModelSelectorDialogForWriting(ArrayList<String> modelnames, String suggestednewname) {
 		super("Choose how to save model in project");
 		
 		setPreferredSize(dims);
@@ -53,6 +53,8 @@ public class JSimModelSelectorDialogForWriting extends SemGenDialog implements A
 		inputbox.setMinimumSize(inputboxdims);
 		inputbox.setForeground(Color.blue);
 		
+		if(suggestednewname != null) inputbox.setText(suggestednewname);
+		
 		inputbutton = new JRadioButton("Save as new model");
 		inputbutton.setAlignmentX(JRadioButton.LEFT_ALIGNMENT);
 		inputbutton.addActionListener(this);
@@ -61,7 +63,7 @@ public class JSimModelSelectorDialogForWriting extends SemGenDialog implements A
 		buttongroup.add(inputbutton);
 				
 		inputpanel = new JPanel();
-		inputpanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
+		inputpanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 5, 0));
 		inputpanel.setLayout(new BoxLayout(inputpanel, BoxLayout.X_AXIS));
 		inputpanel.setVisible(modelnames.isEmpty());
 		inputpanel.add(new JLabel("Enter name: "));

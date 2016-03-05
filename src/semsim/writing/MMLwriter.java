@@ -3,7 +3,7 @@ package semsim.writing;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
+//import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -134,8 +134,8 @@ public class MMLwriter extends ModelWriter{
 		ArrayList<String> decnames = new ArrayList<String>();
 		for(DataStructure dec : semsimmodel.getDecimals()) decnames.add(dec.getName());
 		
-		CaseInsensitiveComparator byVarName = new CaseInsensitiveComparator();
-		Collections.sort(decnames, byVarName);
+//		CaseInsensitiveComparator byVarName = new CaseInsensitiveComparator();
+//		Collections.sort(decnames, byVarName);
 		
 		for (String onedecimalstr : decnames) {
 			Decimal onedecimal = (Decimal) semsimmodel.getAssociatedDataStructure(onedecimalstr);
@@ -180,7 +180,7 @@ public class MMLwriter extends ModelWriter{
 		ArrayList<String> intnames = new ArrayList<String>();
 		for(DataStructure integer : semsimmodel.getIntegers()) intnames.add(integer.getName());
 		
-		Collections.sort(intnames, byVarName);
+//		Collections.sort(intnames, byVarName);
 		
 		for (String oneintstr : intnames) {
 			SemSimInteger oneint = (SemSimInteger) semsimmodel.getAssociatedDataStructure(oneintstr);
@@ -226,7 +226,9 @@ public class MMLwriter extends ModelWriter{
 		output = output.concat("\n\n\t// Boundary conditions\n\n");
 		
 		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
-		Collections.sort(alldsarray, byVarName);
+		
+//		Collections.sort(alldsarray, byVarName);
+		
 		for (String onedsstr : alldsarray) {
 			DataStructure onedatastr = semsimmodel.getAssociatedDataStructure(onedsstr);
 			if (onedatastr.hasStartValue() && onedatastr.hasSolutionDomain()) {

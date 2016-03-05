@@ -63,7 +63,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			if(JSimProjectFileReader.getModelElement(projdoc, modelName) != null) {
 				Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
 				srccodeel.setText(new MMLwriter(modeltowrite).writeToString());
-				semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
+				semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
 			}
 			
 			// ...otherwise create a new model element.
@@ -97,8 +97,16 @@ public class JSimProjectFileWriter extends ModelWriter{
 			else 
 				modelel = createNewModelElement(modelName);
 			
+			// Add the model element
 			projdoc.getRootElement().getChild("project").addContent(modelel.detach());
-			semsimControlElement = JSimProjectFileReader.getSemSimAnnotationControlElementForModel(projdoc, modelName);
+			semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
+			
+			// Create a new SemSim control element if needed
+			if(semsimControlElement == null){
+				semsimControlElement = new Element("control");
+				semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
+				modelel.addContent(semsimControlElement);
+			}
 		}
 		
 		
