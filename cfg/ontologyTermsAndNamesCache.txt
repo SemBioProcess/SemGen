@@ -208,6 +208,7 @@ http://identifiers.org/go/GO:0045860; positive regulation of protein kinase acti
 http://identifiers.org/obo.chebi/CHEBI:17234; glucose
 http://identifiers.org/go/GO:0006817; phosphate ion transport
 http://identifiers.org/obo.go/GO:0030332; cyclin binding
+http://identifiers.org/obo.chebi/CHEBI:90993; MgADP(1-)
 http://identifiers.org/go/GO:0004872; receptor activity
 urn:miriam:obo.chebi:CHEBI%3A16077; D-glucopyranose 1-phosphate
 http://identifiers.org/go/GO:0004634; phosphopyruvate hydratase activity
@@ -246,7 +247,9 @@ http://identifiers.org/go/GO:0004643; phosphoribosylaminoimidazolecarboxamide fo
 http://identifiers.org/chebi/CHEBI:72738; phosphatidylserine O-18:0/0:0
 http://identifiers.org/obo.go/GO:0043407; negative regulation of MAP kinase activity
 http://identifiers.org/obo.go/GO:0002090; regulation of receptor internalization
+http://purl.org/sig/ont/fma/fma72566; Intermembranous matrix of mitochondrion
 http://identifiers.org/obo.go/GO:0016049; cell growth
+http://identifiers.org/obo.chebi/CHEBI:16389; ubiquinones
 http://identifiers.org/chebi/CHEBI:15954; aldehydo-D-glucose 6-phosphate
 http://identifiers.org/kegg.compound/C00022; Pyruvate
 http://identifiers.org/kegg.compound/C00020; AMP
@@ -435,6 +438,7 @@ http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
 urn:miriam:obo.chebi:CHEBI%3A15361; pyruvate
 http://purl.obolibrary.org/obo/PR_000016502; troponin C, slow skeletal and cardiac muscles
 http://identifiers.org/kegg.compound/C00327; L-Citrulline
+http://purl.org/sig/ont/fma/fma66864; Mitochondrial matrix
 http://identifiers.org/chebi/CHEBI:57737; D-xylulose 5-phosphate(2-)
 http://identifiers.org/obo.chebi/CHEBI:15551; prostaglandin E2
 http://identifiers.org/kegg.reaction/R00299; ATP:D-glucose 6-phosphotransferase
@@ -467,6 +471,7 @@ http://identifiers.org/go/GO:0048406; nerve growth factor binding
 http://identifiers.org/obo.go/GO:0009780; photosynthetic NADP+ reduction
 http://identifiers.org/go/GO:0035861; site of double-strand break
 http://identifiers.org/obo.chebi/CHEBI:15558; 15(S)-HETE
+http://identifiers.org/obo.chebi/CHEBI:39745; dihydrogenphosphate
 http://identifiers.org/ec-code/1.1.1.71; alcohol dehydrogenase [NAD(P)+]
 http://identifiers.org/go/GO:0031264; death-inducing signaling complex
 http://identifiers.org/obo.chebi/CHEBI:15554; prostaglandin H2
@@ -477,6 +482,7 @@ http://identifiers.org/cl/CL:0000129; microglial cell
 http://identifiers.org/obo.chebi/CHEBI:16643; L-methionine
 http://identifiers.org/obo.go/GO:0005186; pheromone activity
 http://identifiers.org/go/GO:0030177; positive regulation of Wnt signaling pathway
+http://identifiers.org/obo.chebi/CHEBI:17976; ubiquinol
 http://identifiers.org/kegg.compound/C00562; Phosphoprotein
 http://identifiers.org/obo.chebi/CHEBI:28209; 5(S)-HETE
 http://identifiers.org/chebi/CHEBI:15919; N(6)-(1,2-dicarboxyethyl)-AMP
@@ -563,6 +569,7 @@ http://identifiers.org/go/GO:0070389; chaperone cofactor-dependent protein refol
 http://identifiers.org/obo.go/GO:0003872; 6-phosphofructokinase activity
 http://identifiers.org/go/GO:0016063; rhodopsin biosynthetic process
 http://identifiers.org/go/GO:0010519; negative regulation of phospholipase activity
+http://purl.obolibrary.org/obo/PR_000025635; cytochrome c
 http://identifiers.org/go/GO:0007588; excretion
 http://identifiers.org/obo.go/GO:0004725; protein tyrosine phosphatase activity
 http://identifiers.org/fma/FMA:66835; Cytoplasm
@@ -594,6 +601,7 @@ http://identifiers.org/obo.go/GO:0043086; negative regulation of catalytic activ
 http://identifiers.org/obo.chebi/CHEBI:15978; sn-glycerol 3-phosphate
 http://identifiers.org/go/GO:0071498; cellular response to fluid shear stress
 http://identifiers.org/chebi/CHEBI:29223; bromate
+http://bhi.washington.edu/OPB#OPB_01030; Chemical potential energy amount
 http://identifiers.org/chebi/CHEBI:30212; photon
 http://identifiers.org/obo.go/GO:0004709; MAP kinase kinase kinase activity
 http://identifiers.org/go/GO:0005388; calcium-transporting ATPase activity
@@ -707,6 +715,7 @@ http://identifiers.org/chebi/CHEBI:27082; trehalose
 http://identifiers.org/go/GO:0051209; release of sequestered calcium ion into cytosol
 http://identifiers.org/go/GO:0032961; negative regulation of inositol trisphosphate biosynthetic process
 http://identifiers.org/go/GO:0016236; macroautophagy
+http://purl.org/sig/ont/fma/fma67353; Wall of mitochondrion
 http://identifiers.org/obo.go/GO:0003887; DNA-directed DNA polymerase activity
 http://identifiers.org/obo.go/GO:0006913; nucleocytoplasmic transport
 http://bhi.washington.edu/OPB#OPB_01220; Material flow rate
@@ -939,6 +948,7 @@ http://identifiers.org/chebi/CHEBI:35681; secondary alcohol
 http://identifiers.org/obo.go/GO:0019427; acetyl-CoA biosynthetic process from acetate
 http://identifiers.org/chebi/CHEBI:15843; arachidonic acid
 http://purl.obolibrary.org/obo/CHEBI_17306; maltose
+http://identifiers.org/obo.chebi/CHEBI:29103; potassium(1+)
 http://identifiers.org/go/GO:0015881; creatine transport
 http://identifiers.org/chebi/CHEBI:15846; NAD(+)
 http://identifiers.org/obo.chebi/CHEBI:28013; beta-D-fructofuranose 1,6-bisphosphate
@@ -971,6 +981,7 @@ http://identifiers.org/obo.chebi/CHEBI:16480; nitric oxide
 http://identifiers.org/go/GO:0004737; pyruvate decarboxylase activity
 http://identifiers.org/go/GO:0006914; autophagy
 http://identifiers.org/go/GO:0000139; Golgi membrane
+http://identifiers.org/obo.chebi/CHEBI:18420; magnesium(2+)
 http://identifiers.org/go/GO:0006919; activation of cysteine-type endopeptidase activity involved in apoptotic process
 http://identifiers.org/go/GO:0005829; cytosol
 urn:miriam:kegg.compound:C00022; Pyruvate
@@ -1235,6 +1246,7 @@ http://identifiers.org/go/GO:0005070; SH3/SH2 adaptor activity
 http://identifiers.org/go/GO:0031594; neuromuscular junction
 http://identifiers.org/obo.go/GO:0032469; endoplasmic reticulum calcium ion homeostasis
 urn:miriam:obo.go:GO%3A0046395; carboxylic acid catabolic process
+http://identifiers.org/obo.chebi/CHEBI:30617; MgATP(2-)
 urn:miriam:kegg.compound:C00236; 3-Phospho-D-glyceroyl phosphate
 urn:miriam:kegg.compound:C00231; D-Xylulose 5-phosphate
 http://identifiers.org/obo.chebi/CHEBI:16332; D-xylulose 5-phosphate
