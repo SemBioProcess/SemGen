@@ -153,7 +153,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		
 		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
-		includepartipantscheckbox.setSelected(true);
+		includepartipantscheckbox.setSelected(false);
 		includepartipantscheckbox.addItemListener(this);
 
 		extractionlevelchooser2.setFont(SemGenFont.defaultPlain(-2));
@@ -548,18 +548,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		workbench.getExtraction().getDataStructuresToExtract().putAll(tempmap);
 	}
 	
-	// After an extraction is performed, provide user the option to encode the extracted model
-	// in a simulation language
-	public void optionToEncode(String filenamesuggestion) {
-		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
-				+ extractedaccessor.getModelName()
-				+ "\nGenerate simulation code from extracted model?", "",
-				JOptionPane.YES_NO_OPTION);
-		
-		if (x == JOptionPane.YES_OPTION) {
-			new Encoder(extractedmodel, filenamesuggestion);
-		}
-	}
 	
 	// Visualize a graph of the SemSim model
 	public void visualize(Extraction extraction, Boolean clusteringonly) {
@@ -824,9 +812,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 							
 						else if(filec.getFileFilter()==SemGenFileChooser.cellmlfilter)
 							new CellMLwriter(extractedmodel).writeToFile(outputfile);
-						
-						else if(filec.getFileFilter()==SemGenFileChooser.mmlfilter)
-							new MMLwriter(extractedmodel).writeToFile(outputfile);
 						
 					}
 					catch (OWLException e1) {
