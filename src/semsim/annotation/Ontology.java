@@ -7,18 +7,18 @@ import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 public class Ontology {
 	private String fullname;
 	private String nickname;
-	private String bioportalid = null;
+	private String bioportalnamespace;
 	private ArrayList<String> namespaces = new ArrayList<String>();
 	private String description;
 	
-	public Ontology(String name, String abrev, String[] ns, String desc, String bpid) {
+	public Ontology(String name, String abrev, String[] ns, String desc, String bpns) {
 		fullname = name;
 		nickname = abrev;
 		description = desc;
 		for (String s : ns) {
 			namespaces.add(s.trim());
 		}
-		bioportalid = bpid;
+		bioportalnamespace = bpns;
 	}
 	
 	public Ontology(String name, String abrev, String[] ns, String desc) {
@@ -33,7 +33,7 @@ public class Ontology {
 	public Ontology(ReferenceOntology ro) {
 		fullname = ro.getFullName();
 		nickname = ro.getNickName();
-		bioportalid = ro.getBioPortalID();
+		bioportalnamespace = ro.getBioPortalNamespace();
 		namespaces = ro.getNamespaces();
 		description = ro.getDescription();
 	}
@@ -53,8 +53,8 @@ public class Ontology {
 		return new String(nickname);
 	}
 	
-	public String getBioPortalID() {
-		return bioportalid;
+	public String getBioPortalNamespace() {
+		return bioportalnamespace;
 	}
 	
 	public ArrayList<String> getNameSpaces() {

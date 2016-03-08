@@ -8,12 +8,10 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.commons.lang3.tuple.Pair;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
@@ -21,11 +19,15 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 import semsim.utilities.SemSimUtil;
+import semsim.writing.CellMLwriter;
+import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.SemSimOWLwriter;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
@@ -256,13 +258,23 @@ public class MergerWorkbench extends Workbench {
 		return null;
 	}
 	
-	public void saveMergedModel(File file) {
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		try {
-			manager.saveOntology(mergedmodel.toOWLOntology(), new RDFXMLOntologyFormat(), IRI.create(file.toURI()));
-		} catch (OWLException e) {
-			e.printStackTrace();
+	public void saveMergedModel(ModelAccessor ma, FileFilter filter) {
+		
+		File outputfile = ma.getFileThatContainsModel();
+		
+		// Save it out
+		if(filter==SemGenFileChooser.projfilter)
+			new JSimProjectFileWriter(ma, mergedmodel).writeToFile(outputfile);
+		
+		else if(filter==SemGenFileChooser.owlfilter){
+			try{
+				new SemSimOWLwriter(mergedmodel).writeToFile(outputfile);
+			}
+			catch(OWLException e){e.printStackTrace();}
 		}
+			
+		else if(filter==SemGenFileChooser.cellmlfilter)
+			new CellMLwriter(mergedmodel).writeToFile(outputfile);
 	}
 	
 	@Override

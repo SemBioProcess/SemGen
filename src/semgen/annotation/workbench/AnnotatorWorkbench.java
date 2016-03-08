@@ -30,6 +30,7 @@ import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.MMLwriter;
 import semsim.writing.SemSimOWLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
@@ -147,8 +148,13 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				else if(lastsavedas==ModelClassifier.MML_MODEL_IN_PROJ){
 					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(file);
 				}
-				
-			} catch (Exception e) {e.printStackTrace();}		
+				else if(lastsavedas==ModelClassifier.MML_MODEL){
+					new MMLwriter(semsimmodel).writeToFile(file);
+				}
+			} 
+			catch (Exception e) {e.printStackTrace();
+			}
+			
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
 			setModelSaved(true);
 		}
@@ -170,7 +176,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
 		else{}
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "mod"}, selectedext, semsimmodel.getName());
 		
 		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
 
@@ -180,12 +186,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			
 			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
 				lastsavedas = ModelClassifier.SEMSIM_MODEL;
-			
-			else if(filec.getFileFilter() == SemGenFileChooser.projfilter){
+			else if(filec.getFileFilter() == SemGenFileChooser.projfilter)
 				lastsavedas = ModelClassifier.MML_MODEL_IN_PROJ;
-			}
 			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)
 				lastsavedas = ModelClassifier.CELLML_MODEL;
+			else if(filec.getFileFilter() == SemGenFileChooser.mmlfilter)
+				lastsavedas = ModelClassifier.MML_MODEL;
 				
 			saveModel();
 

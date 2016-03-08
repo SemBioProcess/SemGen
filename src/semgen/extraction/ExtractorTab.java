@@ -54,6 +54,7 @@ import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
 import semsim.writing.CellMLwriter;
 import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.MMLwriter;
 import semsim.writing.SemSimOWLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -820,11 +821,12 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						
 						else if(filec.getFileFilter()==SemGenFileChooser.owlfilter)
 								new SemSimOWLwriter(extractedmodel).writeToFile(outputfile);
-								
-								//optionToEncode(ma.getModelName());
 							
 						else if(filec.getFileFilter()==SemGenFileChooser.cellmlfilter)
 							new CellMLwriter(extractedmodel).writeToFile(outputfile);
+						
+						else if(filec.getFileFilter()==SemGenFileChooser.mmlfilter)
+							new MMLwriter(extractedmodel).writeToFile(outputfile);
 						
 					}
 					catch (OWLException e1) {

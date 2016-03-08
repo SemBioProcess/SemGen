@@ -215,14 +215,9 @@ public class ReferenceClassFinderPanel extends JPanel implements
 			if (domain==OntologyDomain.AssociatePhysicalProperty || domain==OntologyDomain.PhysicalProperty) {
 				x = 234;
 			}
-			else if (domain==OntologyDomain.PhysicalEntity) {
-				x = 208;
-			}
-			else {
-				x = 234;
-			}
+			else if (domain==OntologyDomain.PhysicalEntity) x = 208;
+			else x = 234;
 		}
-
 			ontdescription.setBorder(BorderFactory.createEmptyBorder(0, x, 10, 0));
 	}
 	
@@ -240,13 +235,13 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		resultslistright.setEnabled(true);
 		resultslistright.removeAll();
 		
-		String bioportalID = selected.getNickName();
+		String bioportalNickName = selected.getNickName();
 		
 		// If the user is searching BioPortal
-		if (bioportalID!=selected.getBioPortalID()) {
+		if (selected != ReferenceOntology.UNIPROT) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
-				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalID, findchooser.getSelectedIndex());
+				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalNickName, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
 				SemGenError.showWebConnectionError("BioPortal web service");
@@ -261,7 +256,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				//rdflabelsanduris = SemGen.semsimlib.removeOPBAttributeProperties(rdflabelsanduris);
 			}
 		}
-		else if(selected.getFullName().startsWith(ReferenceOntology.UNIPROT.getFullName())){
+		else{
 			UniProtSearcher ups = new UniProtSearcher();
 			try {
 				rdflabelsanduris = ups.search(text);

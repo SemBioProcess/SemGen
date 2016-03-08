@@ -41,7 +41,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		filtermap.put("owl", owlfilter);
 		filtermap.put("cellml", cellmlfilter);
 		filtermap.put("sbml", sbmlfilter);
-		filtermap.put("mml", mmlfilter);
+		filtermap.put("mod", mmlfilter);
 		filtermap.put("proj", projfilter);
 		filtermap.put("csv", csvfilter);
 	}

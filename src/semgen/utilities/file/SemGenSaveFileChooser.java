@@ -1,10 +1,19 @@
 package semgen.utilities.file;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.jdom.Document;
 
@@ -13,14 +22,17 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
 
-public class SemGenSaveFileChooser extends SemGenFileChooser {
+public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 	private String modelInArchiveName;
+	private static final JLabel warningMsg = new JLabel("Warning! Annotations are not preserved in the standalone MML format.");
+	private JPanel warningMsgPanel;
 	
 	public SemGenSaveFileChooser() {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
 		setPreferredSize(filechooserdims);
+		initializeWarningMsg();
 	}
 	
 	public SemGenSaveFileChooser(String[] exts, String selectedext) {
@@ -29,6 +41,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 		addFilters(getFilter(exts));
 		setFileFilter(getFilter(selectedext));
 		setPreferredSize(filechooserdims);
+		initializeWarningMsg();
 	}
 	
 	public SemGenSaveFileChooser(String[] exts, String selectedext, String modelinarchivename) {
@@ -37,6 +50,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 		addFilters(getFilter(exts));
 		setFileFilter(getFilter(selectedext));
 		setPreferredSize(filechooserdims);
+		initializeWarningMsg();
 		modelInArchiveName = modelinarchivename;
 	}
 	
@@ -71,6 +85,36 @@ public class SemGenSaveFileChooser extends SemGenFileChooser {
 			} 
 		}
 	}
+	
+	
+	private void initializeWarningMsg(){
+		addPropertyChangeListener(this);
+		
+		warningMsg.setForeground(Color.RED);
+		warningMsg.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+		warningMsg.setBorder(BorderFactory.createEmptyBorder(4,0,0,0));
+		warningMsg.setVisible(getFileFilter()==mmlfilter);
+		
+		warningMsgPanel = new JPanel();
+		warningMsgPanel.add(warningMsg);
+		warningMsgPanel.add(Box.createVerticalStrut(18));
+		
+		Component c = getComponent(getComponentCount()-1); // This is the bottom-most component
+		
+		if(c instanceof JPanel)	((JPanel)c).add(warningMsgPanel);
+	}
+	
+	
+	
+	public void propertyChange(PropertyChangeEvent e) {
+		String propertyfired = e.getPropertyName();
+		
+		if (propertyfired.equals(JFileChooser.FILE_FILTER_CHANGED_PROPERTY)){
+			warningMsg.setVisible(getFileFilter()==mmlfilter);
+			validate();
+		}
+	}
+	
 	
 	public ModelAccessor SaveAsAction(SemSimModel semsimmodel){
 		

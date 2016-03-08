@@ -3,7 +3,6 @@ package semgen.merging;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -364,13 +363,14 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				
 	}
 	
-	public File saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl"}, "owl");
+	public void saveMerge() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
+		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
 		
-		if (filec.SaveAsAction(workbench.mergedmodel) != null) {
-			return filec.getSelectedFile();
+		if (ma != null) {
+			workbench.saveMergedModel(ma, filec.getFileFilter());
+			addmanualmappingbutton.setEnabled(true);
 		}
-		return null;
 	}
 
 	@Override
@@ -387,17 +387,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			primeForMerging();
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			File file = saveMerge();
-			
-			if (file==null) return;
-			
-			workbench.saveMergedModel(file);
-			addmanualmappingbutton.setEnabled(true);
-			try {
-				optionToEncode(file.getAbsolutePath());
-			} catch (IOException | OWLException e) {
-				e.printStackTrace();
-			}
+			saveMerge();
 		}
 	}
 }

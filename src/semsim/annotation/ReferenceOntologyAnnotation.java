@@ -27,10 +27,10 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	}
 
 	/**
-	 * @return The BioPortal Ontology ID of the knowledge base that contains the URI annotation value
+	 * @return The BioPortal Ontology namespace of the knowledge base that contains the URI annotation value
 	 */
-	public String getBioPortalOntologyID() {
-		return refontology.getBioPortalID();
+	public String getBioPortalOntologyNamespace() {
+		return refontology.getBioPortalNamespace();
 	}
 	
 	/**

@@ -28,7 +28,7 @@ public class BioPortalSearcher {
 	private static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	private static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 	
-	public HashMap<String,String> search(SemSimLibrary lib, String text, String bioportalID, int exactmatch) throws IOException, JDOMException{
+	public HashMap<String,String> search(SemSimLibrary lib, String text, String bioportalNickName, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
 		boolean exactmatchbool = exactmatch==1; 
@@ -36,9 +36,9 @@ public class BioPortalSearcher {
 		URL url;
 		if (exactmatch==2) {
 			url = new URL(
-					"http://data.bioontology.org/search?q=" + bioportalID + ":"
+					"http://data.bioontology.org/search?q=" + bioportalNickName + ":"
 							+ text + "&ontologies="
-							+ bioportalID + "&format=xml" + "&include=prefLabel,synonym,definition,notation,cui,semanticType,properties"
+							+ bioportalNickName + "&format=xml" + "&include=prefLabel,synonym,definition,notation,cui,semanticType,properties"
 							+ "&apikey=" + BIOPORTAL_API_KEY + "&also_search_properties=true");
 
 		}
@@ -46,7 +46,7 @@ public class BioPortalSearcher {
 					url = new URL(
 				"http://data.bioontology.org/search?q="
 						+ text + "&ontologies="
-						+ bioportalID + "&format=xml" + "&exact_match=" + exactmatchbool
+						+ bioportalNickName + "&format=xml" + "&exact_match=" + exactmatchbool
 						+ "&apikey=" + BIOPORTAL_API_KEY);
 
 		}
@@ -76,7 +76,7 @@ public class BioPortalSearcher {
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
 					Ontology ont = lib.getOntologyfromTermURI(uri);
 					
-					if(ont.getNickName().equals(bioportalID)){
+					if(ont.getNickName().equals(bioportalNickName)){
 						rdflabelsanduris.put(preferredLabel, uri);
 					}
 
@@ -109,16 +109,17 @@ public class BioPortalSearcher {
 	            result += line;
 	        }
 	        rd.close();
-	        	        
+	        
 	        // process resulting input stream
             JsonNode root = JSON_OBJECT_MAPPER.readTree(result);
             JsonNode labelnode = root.get("prefLabel");
-            if(labelnode!=null)
-            	label = labelnode.textValue();
+            
+            if(labelnode != null) label = labelnode.asText();
 		}
-        catch (Exception e) {
+        catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		return label;
 	}
 	
