@@ -46,8 +46,6 @@
 	<body>
 		<div id="addModelButton" class="btn-default">+</div>
 
-		<div id="mergerDemoBtn" class="btn-primary" data-toggle='modal' href='#mergerModal'>Merger demo</div>
-
 		<div class="stageSearch">
 			<div class="searchIcon">
 				<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300">
@@ -163,7 +161,7 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 class="modal-title">New and improved merger coming soon!</h3>
+						<h3 class="modal-title">Merge models</h3>
 					</div>
 					<div class="modal-body">
 						<div class="mergeResHeader">
@@ -172,6 +170,9 @@
 							<h4 class="alignRight">Model B</h4>
 						</div>
 						<!--TODO: Create each of these with actual merge resolution-->
+						<!--Each mergeResolution class is a resolution step.-->
+						<!--Give different name for mergeResRadio in each mergeResolution class-->
+
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
@@ -196,6 +197,7 @@
 								</label>
 							</div>
 						</div>
+
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
@@ -220,6 +222,7 @@
 								</label>
 							</div>
 						</div>
+
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
@@ -244,6 +247,7 @@
 								</label>
 							</div>
 						</div>
+
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
@@ -268,6 +272,7 @@
 								</label>
 							</div>
 						</div>
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary fullMergePreviewBtn">Preview merge</button>

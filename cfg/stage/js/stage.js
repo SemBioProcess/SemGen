@@ -125,12 +125,16 @@ function Stage(graph) {
 		$('#mergerModal').modal('toggle');
 
 		// Create three different graphs on stage to preview Merge Resolutions
-		$("#stage").append(
-			'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
-			'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
-			'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
-			'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
-		);
+		if(!$("#stage").hasClass("mergePreview")) {
+			$("#stage").append(
+				'<div class="mergePreview">' +
+				'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
+				'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
+				'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
+				'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
+				'</div>'
+			);
+		}
 
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
 		$("#activeTaskText").addClass('blink');
@@ -141,10 +145,9 @@ function Stage(graph) {
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 		// TODO: Warning dialog before quitting
-		$(".substage").remove();
+		$(".mergePreview").remove();
 		$("#activeTaskText").removeClass('blink');
 		$("#mergerIcon").remove();
-		$("#backToMergeRes").remove();
 	})
 
 }
