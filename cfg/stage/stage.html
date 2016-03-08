@@ -46,6 +46,8 @@
 	<body>
 		<div id="addModelButton" class="btn-default">+</div>
 
+		<div id="mergerDemoBtn" class="btn-primary" data-toggle='modal' href='#mergerModal'>Merger demo</div>
+
 		<div class="stageSearch">
 			<div class="searchIcon">
 				<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300">
@@ -170,23 +172,106 @@
 							<h4 class="alignRight">Model B</h4>
 						</div>
 						<!--TODO: Create each of these with actual merge resolution-->
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
+						<div class="mergeResolution">
+							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelAVarName">Concentration of sodium in bulk cytosol (Na_i)</div>
+									<div class="modelAVarEquation">Na_i=some_equation</div>
+									<svg class="leftNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
+									</svg>
+									<input type="radio" name="mergeResRadio">
+								</label>
+							</div>
+							<button type="button" class="btn btn-primary mergePreviewBtn"
+									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
+							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelBVarName">Intracellular sodium (1+) concentration (Na_i)</div>
+									<div class="modelBVarEquation">Na_i=some_other_equation</div>
+									<svg class="rightNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
+									</svg>
+									<input type="radio" name="mergeResRadio">
+								</label>
+							</div>
 						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
+						<div class="mergeResolution">
+							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelAVarName">Concentration of calcium in bulk cytosol (Ca_i)</div>
+									<div class="modelAVarEquation">Ca_i=some_equation</div>
+									<svg class="leftNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
+									</svg>
+									<input type="radio" name="mergeResRadio0">
+								</label>
+							</div>
+							<button type="button" class="btn btn-primary mergePreviewBtn"
+									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
+							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelBVarName">Intracellular calcium (2+) concentration (Ca_i)</div>
+									<div class="modelBVarEquation">Ca_i=some_other_equation</div>
+									<svg class="rightNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
+									</svg>
+									<input type="radio" name="mergeResRadio0">
+								</label>
+							</div>
 						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
+						<div class="mergeResolution">
+							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelAVarName">Current through calcium channel (i_B_Ca)</div>
+									<div class="modelAVarEquation">i_B_Ca=some_equation</div>
+									<svg class="leftNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#2CA02C />
+									</svg>
+									<input type="radio" name="mergeResRadio1">
+								</label>
+							</div>
+							<button type="button" class="btn btn-primary mergePreviewBtn"
+									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
+							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelBVarName">Sarcolemmal calcium leak current (I_CaB)</div>
+									<div class="modelBVarEquation">I_CaB=some_other_equation</div>
+									<svg class="rightNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#2CA02C />
+									</svg>
+									<input type="radio" name="mergeResRadio1">
+								</label>
+							</div>
 						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
-						</div>
-						<div class="mergeResolution" data-toggle="tooltip" data-placement="bottom" title="Preview merge">
-							Merge resolution goes here
+						<div class="mergeResolution">
+							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelAVarName">Faraday constant (F)</div>
+									<div class="modelAVarEquation">F=some_equation</div>
+									<svg class="leftNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#FF7F0E />
+									</svg>
+									<input type="radio" name="mergeResRadio2">
+								</label>
+							</div>
+							<button type="button" class="btn btn-primary mergePreviewBtn"
+									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
+							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+								<label>
+									<div class="modelBVarName">Faraday constant (F)</div>
+									<div class="modelBVarEquation">F=some_other_equation</div>
+									<svg class="rightNode" height="10" width="10">
+										<circle cx="5" cy="5" r="5" fill=#FF7F0E />
+									</svg>
+									<input type="radio" name="mergeResRadio2">
+								</label>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
+						<button type="button" class="btn btn-primary fullMergePreviewBtn">Preview merge</button>
+						<button type="button" class="btn btn-success merge">Merge!</button>
 						<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
 					</div>
 				</div>

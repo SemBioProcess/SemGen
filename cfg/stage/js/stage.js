@@ -119,16 +119,16 @@ function Stage(graph) {
 	$('[data-toggle="tooltip"]').tooltip();
 
 	// Preview merge resolutions
-	$(".mergeResolution").click(function() {
+	$(".mergePreviewBtn").click(function() {
 		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
 		$('#mergerModal').modal('toggle');
 
 		// Create three different graphs on stage to preview Merge Resolutions
 		$("#stage").append(
-			'<div class="substage" id="modelAStage"></div>' +
-			'<div class="substage" id="modelABStage">Merge preview coming soon!</div>' +
-			'<div class="substage" id="modelBStage"></div>' +
+			'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
+			'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
+			'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
 			'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
 		);
 
