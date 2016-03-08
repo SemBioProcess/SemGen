@@ -46,6 +46,7 @@
 }
 
 .mergeResolution {
+    position: static;
     height: 100px;
     border-width: 1px;
     border-top-style: solid;
@@ -53,13 +54,19 @@
 }
 
 .leftResolution {
-    float: left;
-    margin: 30px;
+    position: absolute;
+    left: 0px;
+    width: 300px;
+    padding: 10px;
+    display: inline-block
 }
 
 .rightResolution {
-    float: right;
-    margin: 30px;
+    position: absolute;
+    right: 0px;
+    width: 300px;
+    padding: 10px;
+    display: inline-block
 }
 
 .leftResolution:hover, .rightResolution:hover {
