@@ -110,7 +110,6 @@ function Stage(graph) {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
-
 }
 
 Stage.prototype.onModelSelection = function(node) {

@@ -19,14 +19,6 @@ function MergerTask(graph, state) {
 
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
-	
-	// Create three different graphs on stage to preview Merge Resolutions
-//	$("#stage").append(
-//		'<div class="substage" id="modelAStage"></div>' +
-//		'<div class="substage" id="modelABStage">Merge preview coming soon!</div>' +
-//		'<div class="substage" id="modelBStage"></div>' +
-//		'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>'
-//	);
 
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
@@ -36,6 +28,30 @@ function MergerTask(graph, state) {
 	})	
 	
 	//$('[data-toggle="tooltip"]').tooltip();
+	
+		// Slide up panel for Active Task Tray
+	$("#activeTaskTray").click(function() {
+		$("#activeTaskPanel").slideToggle();
+	});
+
+	// Preview merge resolutions
+	$(".mergePreviewBtn").click(function() {
+		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
+
+		$('#mergerModal').modal('toggle');
+
+		// Create three different graphs on stage to preview Merge Resolutions
+		if(!$("#stage").hasClass("mergePreview")) {
+			$("#stage").append(
+				'<div class="mergePreview">' +
+				'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
+				'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
+				'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
+				'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
+				'</div>'
+			);
+		}
+	}
 	
 
 }
