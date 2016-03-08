@@ -129,6 +129,7 @@ public class MergerWorkbench extends Workbench {
 		exposeddslist.add(tempdslist);
 	}
 	
+	//Get the objects describing a pair of semantically matched data strutures
 	public Pair<DataStructureDescriptor,DataStructureDescriptor> getDSDescriptors(int index) {
 		return overlapmap.getDSPairDescriptors(index);
 	}
@@ -151,6 +152,7 @@ public class MergerWorkbench extends Workbench {
 		return (loadedmodels.size() > 1);
 	}
 	
+	//Compare two models and find all semantically identical codewords and datastructures using the same name
 	public void mapModels() {
 		SemanticComparator comparator = new SemanticComparator(loadedmodels.get(0), loadedmodels.get(1));
 		overlapmap = new ModelOverlapMap(0, 1, comparator);
@@ -158,6 +160,8 @@ public class MergerWorkbench extends Workbench {
 		notifyObservers(MergeEvent.mapfocuschanged);
 	}
 	
+	//Create a map of identical submodel names with an empty string for the value. The empty string will
+	//be replaced by the users replacement name
 	public HashMap<String, String> createIdenticalSubmodelNameMap() {
 		HashMap<String, String> namemap = new HashMap<String, String>();
 		for (String name : overlapmap.getIdenticalSubmodelNames()) {
@@ -189,6 +193,7 @@ public class MergerWorkbench extends Workbench {
 		return identicalmap;
 	}
 	
+	//Get the names of the two data structures at the given index
 	public Pair<String, String> getMapPairNames(int index) {
 		return overlapmap.getDataStructurePairNames(index);
 	}
@@ -197,6 +202,7 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getMappingType(index);
 	}
 	
+	//Get the names of the two models being merged
 	public Pair<String, String> getOverlapMapModelNames() {
 		Pair<Integer, Integer> indicies = overlapmap.getModelIndicies();
 		return Pair.of(loadedmodels.get(indicies.getLeft()).getName(), 
@@ -211,6 +217,7 @@ public class MergerWorkbench extends Workbench {
 		return names;
 	}
 
+	//Add manual codeword mapping to the list of equivalent terms
 	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
 		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
 		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
@@ -252,6 +259,7 @@ public class MergerWorkbench extends Workbench {
 		modelselection = index;
 	}
 	
+	//Get the models a modeloverlapmap describes
 	private Pair<SemSimModel, SemSimModel> getModelOverlapMapModels(ModelOverlapMap map) {
 		Pair<Integer, Integer> indexpair = map.getModelIndicies();
 		return Pair.of(loadedmodels.get(indexpair.getLeft()),loadedmodels.get(indexpair.getRight()));

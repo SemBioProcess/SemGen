@@ -6,9 +6,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
 
+import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.StageState;
@@ -22,7 +24,8 @@ import semsim.model.collection.SemSimModel;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
-
+	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
+	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<File> files = new ArrayList<File>();
@@ -45,6 +48,18 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			workbench.mapModels();
 			progframe.dispose();
 		}
+		//Check if two models have semantic overlap
+		if (!workbench.hasSemanticOverlap()) {
+			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
+			return;
+		}
+		int n = workbench.getSolutionDomainCount();
+		ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> descriptors = new ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>>();
+		
+		for (int i = n; i < (workbench.getMappingCount()); i++) {
+			descriptors.add(workbench.getDSDescriptors(i));
+		}
+		dsdescriptors = descriptors;
 	}
 	
 	public File saveMerge() {
