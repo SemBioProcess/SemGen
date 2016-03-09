@@ -567,15 +567,16 @@ public class SemSimRDFwriter extends ModelWriter{
 
 		// If we are looking at a URI that is NOT formatted according to identifiers.org
 		if( ! uri.toString().startsWith("http://identifiers.org") 
-				&& ReferenceOntologies.getReferenceOntologybyNamespace(namespace) != ReferenceOntology.UNKNOWN){
+				&& ReferenceOntologies.getReferenceOntologyByNamespace(namespace) != ReferenceOntology.UNKNOWN){
 			
-			ReferenceOntology refont = ReferenceOntologies.getReferenceOntologybyNamespace(namespace);
+			ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
 			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
 			String newnamespace = null;
 			
 			// Look up identifiers.org namespace
 			for(String ns : refont.getNamespaces()){
-				if(ns.startsWith("http://identifiers.org")) newnamespace = ns;
+				if(ns.startsWith("http://identifiers.org")
+						&& ! ns.startsWith("http://identifiers.org/obo.")) newnamespace = ns;
 			}
 
 			// Replacement rules for specific knowledge bases

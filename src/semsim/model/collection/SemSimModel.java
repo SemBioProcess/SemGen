@@ -124,7 +124,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private SemSimModel(SemSimModel ssmtocopy) {
 		super(ssmtocopy);
 		namespace = new String(ssmtocopy.namespace);
-		sourcefilelocation = new ModelAccessor(ssmtocopy.sourcefilelocation);
+		
+		if(ssmtocopy.sourcefilelocation != null)
+			sourcefilelocation = new ModelAccessor(ssmtocopy.sourcefilelocation);
+		
 		sourceModelType = ssmtocopy.sourceModelType;
 		semsimversion = ssmtocopy.semsimversion;
 		importCurationalMetadatafromModel(ssmtocopy, true);
@@ -791,6 +794,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			DataStructure ds = getAssociatedDataStructure(name);
 			
 			for(DataStructure otherds : ds.getUsedToCompute()){
+				if(otherds==null) System.out.println("HERE: " + ds.getName());
 				otherds.getComputation().getInputs().remove(ds);
 			}
 			

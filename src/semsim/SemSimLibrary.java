@@ -328,17 +328,17 @@ public class SemSimLibrary {
 	
 	public String getReferenceOntologyName(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
-		return getOntologybyNamespace(namespace).getFullName();
+		return getOntologyByNamespace(namespace).getFullName();
 	}
 	
 	public String getReferenceOntologyAbbreviation(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 		
-		return getOntologybyNamespace(namespace).getNickName();
+		return getOntologyByNamespace(namespace).getNickName();
 	}
 	
-	private Ontology getOntologybyNamespace(String namespace) {
-		Ontology ont = ReferenceOntologies.getOntologybyNamespace(namespace);
+	private Ontology getOntologyByNamespace(String namespace) {
+		Ontology ont = ReferenceOntologies.getOntologyByNamespace(namespace);
 		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
 			for (Ontology o : ontologies) {
 				if (o.hasNamespace(namespace)) {
@@ -352,7 +352,7 @@ public class SemSimLibrary {
 	
 	public Ontology getOntologyfromTermURI(String termuri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri);
-		return getOntologybyNamespace(namespace);
+		return getOntologyByNamespace(namespace);
 	}
 	
 	

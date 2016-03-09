@@ -210,7 +210,6 @@ public class Merger {
 		if(prune) pruneSubmodels(mergedmodel);
 		
 		// Remove legacy code info
-		//TODO: Check next line
 		mergedmodel.setSourceFileLocation(null);
 		
 		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
@@ -237,7 +236,7 @@ public class Merger {
 		receiverds.getMappedTo().clear();
 		
 		//Also remove any initial_value that the receiver DS has.
-		receiverds.setCellMLinitialValue(null);
+		receiverds.setCellMLinitialValue("");
 		receiverds.setStartValue(null);
 		
 		// Find mathML block for the receiver codeword and remove it from the FunctionalSubmodel's computational code

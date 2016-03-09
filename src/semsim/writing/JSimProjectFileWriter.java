@@ -2,6 +2,7 @@ package semsim.writing;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,8 +47,6 @@ public class JSimProjectFileWriter extends ModelWriter{
 	public void writeToFile(File destination) {
 		
 		Document projdoc = null; 
-		SemSimModel modeltowrite = semsimmodel;
-
 		boolean fromannotator = (semsimmodel.getLegacyCodeLocation() != null);
 		
 		// Create the project document.
@@ -62,7 +61,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			// model in the project file.
 			if(JSimProjectFileReader.getModelElement(projdoc, modelName) != null) {
 				Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
-				srccodeel.setText(new MMLwriter(modeltowrite).writeToString());
+				srccodeel.setText(new MMLwriter(semsimmodel).writeToString());
 				semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
 			}
 			
@@ -84,18 +83,17 @@ public class JSimProjectFileWriter extends ModelWriter{
 			
 			// If the model is to be copied from an existing file like using SaveAs in the Annotator, collect <model> element
 			// from legacy code location
-			if(fromannotator && modeltowrite.getLegacyCodeLocation().modelIsPartOfJSimProjectFile()){
+			if(fromannotator && semsimmodel.getLegacyCodeLocation().modelIsPartOfJSimProjectFile()){
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
-				Document origindoc = JSimProjectFileReader.getDocument(modeltowrite.getLegacyCodeLocation().getFileThatContainsModel());
+				Document origindoc = JSimProjectFileReader.getDocument(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			
 			// Otherwise we're using SaveAs in the Annotator for a CellML, SBML or MML file, or the model was created
 			// via an extraction or merging process. Create a new model element for the project file.
-			else 
-				modelel = createNewModelElement(modelName);
+			else  modelel = createNewModelElement(modelName);
 			
 			// Add the model element
 			projdoc.getRootElement().getChild("project").addContent(modelel.detach());
@@ -112,14 +110,12 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		// If the model contains functional submodels then we need to "flatten"
 		// the data structure names in the model
-		
-		if(modeltowrite.getFunctionalSubmodels().size() > 0){
-			modeltowrite = semsimmodel.clone();
+		if(semsimmodel.getFunctionalSubmodels().size() > 0){
 			Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
-			modeltowrite = flattenModelForMML(srccodeel.getText());
+			flattenModelForMML(srccodeel.getText());
 		}
 		
-		rdfblock = new SemSimRDFwriter(modeltowrite, null, null);
+		rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
 		
 		// Write out model-level annotations
 		rdfblock.setRDFforModelLevelAnnotations();
@@ -180,14 +176,16 @@ public class JSimProjectFileWriter extends ModelWriter{
 		return modelel;
 	}
 	
-	private SemSimModel flattenModelForMML(String MMLcode){
-		SemSimModel flattenedmodel = semsimmodel.clone();
+	private void flattenModelForMML(String MMLcode){
+		
+		ArrayList<DataStructure> allds = new ArrayList<DataStructure>();
+		allds.addAll(semsimmodel.getAssociatedDataStructures());
 		
 		// For each data structure in model, see if its name is declared in the MML text
 		// If not, see if its local name is declared.
 		// If not, remove the data structure from the model
 		// If so, change the data structure's name to the flattened name
-		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+		for(DataStructure ds : allds){
 			String name = ds.getName();
 			
 			Pattern p1 = Pattern.compile("\\n\\s*real " + name + "\\W"); // line start, some white space, real X
@@ -201,13 +199,9 @@ public class JSimProjectFileWriter extends ModelWriter{
 				Matcher m2 = p2.matcher(MMLcode);
 				
 				// If flattened name not found
-				if( ! m2.find())
-					flattenedmodel.removeDataStructure(name);
-				else
-					flattenedmodel.getAssociatedDataStructure(name).setName(flattenedname);
+				if( ! m2.find()) semsimmodel.removeDataStructure(name);
+				else semsimmodel.getAssociatedDataStructure(name).setName(flattenedname);
 			}
-		}
-		
-		return flattenedmodel;
+		}		
 	}
 }

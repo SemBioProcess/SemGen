@@ -1,8 +1,10 @@
 package semsim.definitions;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import semsim.annotation.Ontology;
+import semsim.owl.SemSimOWLFactory;
 
 public class ReferenceOntologies {
 	public static ArrayList<ReferenceOntology> getAllOntologies() {
@@ -20,18 +22,30 @@ public class ReferenceOntologies {
 		return ReferenceOntology.UNKNOWN;
 	}
 	
-	public static ReferenceOntology getReferenceOntologybyNamespace(String namespace) {
+	public static ReferenceOntology getReferenceOntologyByNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro;
 		}
 		return ReferenceOntology.UNKNOWN;
 	}
 	
-	public static Ontology getOntologybyNamespace(String namespace) {
+	public static Ontology getOntologyByNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro.getAsOntology();
 		}
 		return ReferenceOntology.UNKNOWN.getAsOntology();
+	}
+	
+	public static ReferenceOntology getReferenceOntologyByURI(URI uri){
+		String ns = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
+		return getReferenceOntologyByNamespace(ns);
+	}
+	
+	public static boolean URIsAreFromSameReferenceOntology(URI uri1, URI uri2){
+		ReferenceOntology ont1 = ReferenceOntologies.getReferenceOntologyByURI(uri1);
+		ReferenceOntology ont2 = ReferenceOntologies.getReferenceOntologyByURI(uri2);
+		
+		return ((ont1==ont2) && (ont1 != ReferenceOntology.UNKNOWN));
 	}
 	
 	public enum OntologyDomain {
