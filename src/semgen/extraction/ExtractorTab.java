@@ -37,6 +37,7 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.FileFilter;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -798,26 +799,8 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				
 				ModelAccessor ma = filec.SaveAsAction(extractedmodel);
 				
-				if (ma != null) {
-					
-					try{
-						File outputfile = ma.getFileThatContainsModel();
-						
-						// Save it out
-						if(filec.getFileFilter()==SemGenFileChooser.projfilter)
-							new JSimProjectFileWriter(ma, extractedmodel).writeToFile(outputfile);
-						
-						else if(filec.getFileFilter()==SemGenFileChooser.owlfilter)
-								new SemSimOWLwriter(extractedmodel).writeToFile(outputfile);
-							
-						else if(filec.getFileFilter()==SemGenFileChooser.cellmlfilter)
-							new CellMLwriter(extractedmodel).writeToFile(outputfile);
-						
-					}
-					catch (OWLException e1) {
-						e1.printStackTrace();
-					}
-				}
+				if (ma != null)
+					SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 			} 
 			else
 				SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");

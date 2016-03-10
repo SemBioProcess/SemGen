@@ -392,8 +392,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		
 	/**@return The parent FunctionalSubmodel for a MappableVariable.*/
 	public FunctionalSubmodel getParentFunctionalSubmodelForMappableVariable(MappableVariable var){
-		String compname = var.getName().substring(0, var.getName().lastIndexOf("."));
-		return (FunctionalSubmodel) getSubmodel(compname);
+		
+		if(var.getName().contains(".")){
+			String compname = var.getName().substring(0, var.getName().lastIndexOf("."));
+			
+			return (FunctionalSubmodel) getSubmodel(compname);
+		}
+		else return null;
 	}
 	
 	/**
@@ -794,7 +799,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			DataStructure ds = getAssociatedDataStructure(name);
 			
 			for(DataStructure otherds : ds.getUsedToCompute()){
-				if(otherds==null) System.out.println("HERE: " + ds.getName());
 				otherds.getComputation().getInputs().remove(ds);
 			}
 			
@@ -814,7 +818,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 				}
 				
 				FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);
-				fs.removeVariableEquationFromMathML(mapv);
+				if(fs != null) fs.removeVariableEquationFromMathML(mapv);
 			}
 			
 			for(Submodel sub : getSubmodels()){

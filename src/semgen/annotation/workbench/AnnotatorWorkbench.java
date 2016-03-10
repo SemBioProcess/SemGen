@@ -9,7 +9,6 @@ import java.util.Observer;
 import javax.swing.JOptionPane;
 
 import semgen.GlobalActions;
-import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
@@ -21,6 +20,7 @@ import semgen.annotation.workbench.routines.TermCollector;
 import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -28,10 +28,6 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
-import semsim.writing.CellMLwriter;
-import semsim.writing.JSimProjectFileWriter;
-import semsim.writing.MMLwriter;
-import semsim.writing.SemSimOWLwriter;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
@@ -136,26 +132,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		
 		if(file != null){
 			validateModelComposites();
-			
-			try {
-
-				if(lastsavedas==ModelClassifier.SEMSIM_MODEL) {
-					new SemSimOWLwriter(semsimmodel).writeToFile(file);
-				}
-				else if(lastsavedas==ModelClassifier.CELLML_MODEL){
-					new CellMLwriter(semsimmodel).writeToFile(file);
-				}
-				else if(lastsavedas==ModelClassifier.MML_MODEL_IN_PROJ){
-					new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(file);
-				}
-				else if(lastsavedas==ModelClassifier.MML_MODEL){
-					new MMLwriter(semsimmodel).writeToFile(file);
-				}
-			} 
-			catch (Exception e) {e.printStackTrace();
-			}
-			
-			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
+			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor, file, lastsavedas);			
 			setModelSaved(true);
 		}
 		else{
@@ -176,7 +153,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
 		else{}
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "mod"}, selectedext, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
 		
 		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
 

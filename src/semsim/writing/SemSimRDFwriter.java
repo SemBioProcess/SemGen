@@ -109,7 +109,7 @@ public class SemSimRDFwriter extends ModelWriter{
 			Property prop = ann.getRelation().getRDFproperty();
 			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
 			
-			if( ! rdf.contains(st)) rdf.add(st);
+			addStatement(st);
 		}
 		
 	}
@@ -124,6 +124,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
+
 		String resuri = semsimmodel.getNamespace() + ds.getName();
 		Resource ares = rdf.createResource(resuri);
 		
@@ -157,7 +158,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		// Write out name
 		Statement st = rdf.createStatement(subres, SemSimRelation.HAS_NAME.getRDFproperty(), subname);
-		if( ! rdf.contains(st)) rdf.add(st);
+		addStatement(st);
 				
 		// Write out which data structures are associated with the submodel 
 		for(DataStructure dsinsub : sub.getAssociatedDataStructures()){
@@ -167,7 +168,7 @@ public class SemSimRDFwriter extends ModelWriter{
 					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
 					dsres);
 			
-			if( ! rdf.contains(stds)) rdf.add(stds);
+			addStatement(stds);
 
 		}
 		
@@ -180,7 +181,7 @@ public class SemSimRDFwriter extends ModelWriter{
 					SemSimRelation.INCLUDES_SUBMODEL.getRDFproperty(), 
 					subsubres);
 			
-			if( ! rdf.contains(stsub)) rdf.add(stsub);
+			addStatement(stsub);
 		}
 	}
 	
@@ -192,7 +193,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		if( ! sso.getDescription().equals("")){
 			Statement st = rdf.createStatement(ares, dcterms_description, sso.getDescription());
 			
-			if( ! rdf.contains(st)) rdf.add(st);
+			addStatement(st);
 		}
 	}
 	
@@ -206,7 +207,7 @@ public class SemSimRDFwriter extends ModelWriter{
 			Resource refres = rdf.createResource(furi.toString());
 			Statement st = rdf.createStatement(ares, isprop, refres);
 			
-			if( ! rdf.contains(st)) rdf.add(st);
+			addStatement(st);
 		}
 		
 	}
@@ -219,7 +220,7 @@ public class SemSimRDFwriter extends ModelWriter{
 			Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)ds);
 			Statement st = rdf.createStatement(ares, iccfprop, propres);
 			
-			if( ! rdf.contains(st)) rdf.add(st);
+			addStatement(st);
 			
 			setDataStructurePropertyOfAnnotation((DataStructure)ds);
 		}
@@ -249,7 +250,7 @@ public class SemSimRDFwriter extends ModelWriter{
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
 									indexresource);
 							
-							if( ! rdf.contains(propofst)) rdf.add(propofst);
+							addStatement(propofst);
 						}
 						// else it's a singular physical entity
 						else{
@@ -259,7 +260,7 @@ public class SemSimRDFwriter extends ModelWriter{
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
 									entity);
 							
-							if( ! rdf.contains(st)) rdf.add(st);
+							addStatement(st);
 						}
 					}
 					// Otherwise it's a property of a process
@@ -272,19 +273,22 @@ public class SemSimRDFwriter extends ModelWriter{
 								SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
 								processres);
 						
-						if( ! rdf.contains(st)) rdf.add(st);
+						addStatement(st);
 						
 						// Set the sources
 						for(PhysicalEntity source : process.getSourcePhysicalEntities()){
-							setProcessParticipationRDFstatements(processres, source, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty());
+							setProcessParticipationRDFstatements(process, source, 
+									SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), process.getSourceStoichiometry(source));
 						}
 						// Set the sinks
 						for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
-							setProcessParticipationRDFstatements(processres, sink, SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty());
+							setProcessParticipationRDFstatements(process, sink,
+									SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), process.getSinkStoichiometry(sink));
 						}
 						// Set the mediators
 						for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
-							setProcessParticipationRDFstatements(processres, mediator, SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty());
+							setProcessParticipationRDFstatements(process, mediator,
+									SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
 						}
 					}
 				}
@@ -293,30 +297,48 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 
 	// For creating the statements that specify which physical entities participate in which processes
-	private void setProcessParticipationRDFstatements(Resource processres, PhysicalEntity participant, Property relationship){
-		Resource participantres = getResourceForPMCandAnnotate(rdf, participant);
-		Statement partst = rdf.createStatement(processres, relationship, participantres);
+	private void setProcessParticipationRDFstatements(
+			PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
+				
+		Resource processres = getResourceForPMCandAnnotate(rdf, process);
 		
-		if( ! rdf.contains(partst)) rdf.add(partst);
+		// Create a new participant resource
+		String type = null;
+		
+		if(relationship.getLocalName().equals(SemSimRelation.HAS_SOURCE_PARTICIPANT.getName())) type = "source";
+		else if(relationship.getLocalName().equals(SemSimRelation.HAS_SINK_PARTICIPANT.getName())) type = "sink";
+		else if(relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())) type = "mediator";
+		else return;
+		
+		Resource participantres = createNewResourceForSemSimObject(type);
+		Statement partst = rdf.createStatement(processres, relationship, participantres);
+		addStatement(partst);
 		
 		Resource physentrefres = null;
 		
 		// Create link between process participant and the physical entity it references
-		if(participant instanceof CompositePhysicalEntity){
-			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)participant);
+		if(physent instanceof CompositePhysicalEntity){
+			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
-		else physentrefres = getResourceForPMCandAnnotate(rdf, participant);
+		else physentrefres = getResourceForPMCandAnnotate(rdf, physent);
 		
 		if(physentrefres!=null){
 			Statement st = rdf.createStatement(participantres, 
 					SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty(), 
 					physentrefres);
-			if( ! rdf.contains(st)) rdf.add(st);
+			addStatement(st);
 		}
-		else System.err.println("Error in setting participants for process: null value for Resource corresponding to " + participant.getName());
+		else System.err.println("Error in setting participants for process: null value for Resource corresponding to " + physent.getName());
 
-		//TODO: store multiplier info
+		// Add multiplier info
+		if( multiplier != null && ! relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())){
+			Statement st = rdf.createStatement(participantres, 
+					SemSimRelation.HAS_MULTIPLIER.getRDFproperty(), 
+					multiplier.toString());
+			
+			addStatement(st);
+		}
 	}
 	
 	// Add statements that describe a composite physical entity in the model
@@ -392,7 +414,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 		
-		if( ! rdf.contains(structst)) rdf.add(structst);
+		addStatement(structst);
 		
 		return indexuri;
 	}
@@ -540,7 +562,7 @@ public class SemSimRDFwriter extends ModelWriter{
 							dcterms_description, 
 							pmc.getDescription());
 					
-					if( ! rdf.contains(descst)) rdf.add(descst);
+					addStatement(descst);
 				}
 			}
 		}
@@ -607,5 +629,9 @@ public class SemSimRDFwriter extends ModelWriter{
 			}
 		}
 		return newuri;
+	}
+	
+	private void addStatement(Statement st){
+		if( ! rdf.contains(st)) rdf.add(st);
 	}
 }

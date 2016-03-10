@@ -88,7 +88,7 @@ public class ModelAccessor {
 	public String getModelTextAsString(){
 		String returnstring = "";
 		
-		if(modelIsInStandAloneFile()){
+		if(modelIsInStandAloneFile() && getStandAloneFile().exists()){
 			Scanner scanner = null;
 
 			try {

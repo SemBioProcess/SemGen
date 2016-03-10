@@ -3,6 +3,8 @@ package semsim.writing;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,8 +93,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			
-			// Otherwise we're using SaveAs in the Annotator for a CellML, SBML or MML file, or the model was created
-			// via an extraction or merging process. Create a new model element for the project file.
+			// Otherwise create a new model element for the project file.
 			else  modelel = createNewModelElement(modelName);
 			
 			// Add the model element
@@ -178,6 +179,8 @@ public class JSimProjectFileWriter extends ModelWriter{
 	
 	private void flattenModelForMML(String MMLcode){
 		
+		Set<String> foundnamesinMML = new HashSet<String>();
+		
 		ArrayList<DataStructure> allds = new ArrayList<DataStructure>();
 		allds.addAll(semsimmodel.getAssociatedDataStructures());
 		
@@ -188,20 +191,26 @@ public class JSimProjectFileWriter extends ModelWriter{
 		for(DataStructure ds : allds){
 			String name = ds.getName();
 			
-			Pattern p1 = Pattern.compile("\\n\\s*real " + name + "\\W"); // line start, some white space, real X
+			Pattern p1 = Pattern.compile("\\n\\s*(real |realDomain )" + name + "\\W"); // line start, some white space, real X
 			Matcher m1 = p1.matcher(MMLcode);
 	
 			// If full name not found
 			if( ! m1.find() && name.contains(".")){
 				String flattenedname = name.substring(name.lastIndexOf(".") +1 );
 
-				Pattern p2 = Pattern.compile("\\n\\s*real " + flattenedname + "\\W"); // line start, some white space, real X
+				Pattern p2 = Pattern.compile("\\n\\s*(real |realDomain )" + flattenedname + "\\W"); // line start, some white space, real X
 				Matcher m2 = p2.matcher(MMLcode);
 				
-				// If flattened name not found
-				if( ! m2.find()) semsimmodel.removeDataStructure(name);
-				else semsimmodel.getAssociatedDataStructure(name).setName(flattenedname);
+				// If flattened name not found or if we've already found a
+				// codeword with the flattened name, remove from semsim model
+				if( ! m2.find() || foundnamesinMML.contains(flattenedname))
+					semsimmodel.removeDataStructure(name);
+				else{
+					semsimmodel.getAssociatedDataStructure(name).setName(flattenedname);
+					foundnamesinMML.add(flattenedname);
+				}
 			}
+			else foundnamesinMML.add(name);
 		}		
 	}
 }
