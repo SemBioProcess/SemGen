@@ -71,6 +71,21 @@
     cursor: pointer;
 }
 
+.freeText {
+    font-style: italic;
+}
+
+.codeName {
+    font-weight: bold;
+}
+
+.equation {
+    font-family: Courier, monospace;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+}
+
 .leftNode {
     position: absolute;
     left: 350px;
