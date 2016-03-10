@@ -168,103 +168,85 @@
 					<div class="modal-body">
 						<div class="mergeResHeader">
 							<!--TODO: Replace "Model A" and "Model B" with actual model names-->
-							<h4 class="alignLeft">Model A</h4>
-							<h4 class="alignRight">Model B</h4>
+							<h4 class="leftModelName">Pandit+Hinch</h4>
+							<h4 class="rightModelName">Niederer</h4>
 						</div>
 						<!--TODO: Create each of these with actual merge resolution-->
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelAVarName">Concentration of sodium in bulk cytosol (Na_i)</div>
-									<div class="modelAVarEquation">Na_i=some_equation</div>
+									<div class="modelVarName">Simulation time doamin</div>
+									<div class="modelCodeName">(environment.time)</div>
+									<div class="modelVarEquation">user-defined input</div>
 									<svg class="leftNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
 									</svg>
-									<input type="radio" name="mergeResRadio">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio">
 								</label>
 							</div>
 							<button type="button" class="btn btn-primary mergePreviewBtn"
 									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
 							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelBVarName">Intracellular sodium (1+) concentration (Na_i)</div>
-									<div class="modelBVarEquation">Na_i=some_other_equation</div>
+									<div class="modelVarName">Temporal solution domain</div>
+									<div class="modelCodeName">(environment.time)</div>
+									<div class="modelVarEquation">user-defined input</div>
 									<svg class="rightNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
 									</svg>
-									<input type="radio" name="mergeResRadio">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio">
 								</label>
 							</div>
 						</div>
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelAVarName">Concentration of calcium in bulk cytosol (Ca_i)</div>
-									<div class="modelAVarEquation">Ca_i=some_equation</div>
+									<div class="modelVarName">Concentration of troponin in cytosol</div>
+									<div class="modelCodeName">(intracellular_ion_concentrations.TRPN)</div>
+									<div class="modelVarEquation">d(TRPN)/dt = I_TRPN</div>
 									<svg class="leftNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
 									</svg>
-									<input type="radio" name="mergeResRadio0">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio0">
 								</label>
 							</div>
 							<button type="button" class="btn btn-primary mergePreviewBtn"
 									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
 							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelBVarName">Intracellular calcium (2+) concentration (Ca_i)</div>
-									<div class="modelBVarEquation">Ca_i=some_other_equation</div>
+									<div class="modelVarName">Intracellular troponin concentration</div>
+									<div class="modelCodeName">(intracellular_ion_concentrations.TRPN)</div>
+									<div class="modelVarEquation">d(TRPN)/dt = J_TRPN</div>
 									<svg class="rightNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#1F77B4 />
 									</svg>
-									<input type="radio" name="mergeResRadio0">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio0">
 								</label>
 							</div>
 						</div>
 						<div class="mergeResolution">
 							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelAVarName">Current through calcium channel (i_B_Ca)</div>
-									<div class="modelAVarEquation">i_B_Ca=some_equation</div>
+									<div class="modelVarName">Intracellular calcium (2+) concentration</div>
+									<div class="modelCodeName">(intracellular_ion_concentrations.Ca_i)</div>
+									<div class="modelVarEquation">d(Ca_i)/dt = beta_CMDN*(I_LCC+I_RyR-I_SERCA+I_SR+I_NaCa-I_pCa+I_CaB+I_TRPN)</div>
 									<svg class="leftNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#2CA02C />
 									</svg>
-									<input type="radio" name="mergeResRadio1">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio1">
 								</label>
 							</div>
 							<button type="button" class="btn btn-primary mergePreviewBtn"
 									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
 							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 								<label>
-									<div class="modelBVarName">Sarcolemmal calcium leak current (I_CaB)</div>
-									<div class="modelBVarEquation">I_CaB=some_other_equation</div>
+									<div class="modelVarName">Intracellular calcium (2+) concentration</div>
+									<div class="modelCodeName">(intracellular_ion_concentrations.Ca_i)</div>
+									<div class="modelVarEquation">piecewise(1000*1.8433E-7, time < 1, 1000*(1.055*(time/1000)^3-0.03507*(time/1000)^2+0.0003992*time/1000-1.356E-6), (time >= 10) && (time < 15), 1000*(0.014*(time/1000)^3-0.002555*(time/1000)^2+0.0001494*time/1000-1.428E-6), (time >= 15) && (time < 55), 1000*(1.739E-5*(time/1000)^3-3.209E-6*(time/1000)^2-5.689E-6*time/1000+1.719E-6), (time >= 55) && (time < 250), 1000*(0.0001321*(time/1000)^4-0.0002197*(time/1000)^3+0.0001374*(time/1000)^2-3.895E-5*time/1000+4.441E-6), (time >= 250) && (time < 490), 1000*1.2148E-7)</div>
 									<svg class="rightNode" height="10" width="10">
 										<circle cx="5" cy="5" r="5" fill=#2CA02C />
 									</svg>
-									<input type="radio" name="mergeResRadio1">
-								</label>
-							</div>
-						</div>
-						<div class="mergeResolution">
-							<div class="radio leftResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-								<label>
-									<div class="modelAVarName">Faraday constant (F)</div>
-									<div class="modelAVarEquation">F=some_equation</div>
-									<svg class="leftNode" height="10" width="10">
-										<circle cx="5" cy="5" r="5" fill=#FF7F0E />
-									</svg>
-									<input type="radio" name="mergeResRadio2">
-								</label>
-							</div>
-							<button type="button" class="btn btn-primary mergePreviewBtn"
-									data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
-							<div class="radio rightResolution" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-								<label>
-									<div class="modelBVarName">Faraday constant (F)</div>
-									<div class="modelBVarEquation">F=some_other_equation</div>
-									<svg class="rightNode" height="10" width="10">
-										<circle cx="5" cy="5" r="5" fill=#FF7F0E />
-									</svg>
-									<input type="radio" name="mergeResRadio2">
+									<input class="mergeResRadio" type="radio" name="mergeResRadio1">
 								</label>
 							</div>
 						</div>
