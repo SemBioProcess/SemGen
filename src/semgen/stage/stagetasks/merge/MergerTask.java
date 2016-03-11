@@ -6,11 +6,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JOptionPane;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.merging.workbench.DataStructureDescriptor;
+import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.StageState;
@@ -38,6 +40,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		this.state = state;
 		workbench.addModels(files, models, true);
+		primeForMerging();
 	}
 
 	public void primeForMerging() {
@@ -91,6 +94,13 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+		public void onRequestOverlaps() {
+			ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
+			for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
+				overlaps.add(new Overlap(dsd));
+			}
+			_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
+		}
 		public void onMinimizeTask(JSObject snapshot) {
 			createStageState(snapshot);
 			switchTask(0);
@@ -116,5 +126,30 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	public Class<MergerWebBrowserCommandSender> getSenderInterface() {
 		return MergerWebBrowserCommandSender.class;
+	}
+	
+	//Classes for passing information to the stage
+	public class Overlap {
+		public StageDSDescriptor dsleft;
+		public StageDSDescriptor dsright; 
+		
+		protected Overlap(Pair<DataStructureDescriptor, DataStructureDescriptor> dsdesc) {
+			dsleft = new StageDSDescriptor(dsdesc.getLeft());
+			dsright = new StageDSDescriptor(dsdesc.getRight());
+		}
+	}
+	
+	public class StageDSDescriptor {
+		public String name;
+		public String type;
+		public String description;
+		public String equation;
+		
+		protected StageDSDescriptor(DataStructureDescriptor dsdesc) {
+			name = dsdesc.getDescriptorValue(Descriptor.name);
+			type = dsdesc.getDescriptorValue(Descriptor.type);
+			description = dsdesc.getDescriptorValue(Descriptor.description);
+			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
+		}
 	}
 }

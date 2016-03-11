@@ -12,6 +12,7 @@ function MergerTask(graph, state) {
 	var nodes = this.nodes;
 	var task = this;
 	
+	var resolutions = [];
 	// Preview merge resolutions
 	//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
@@ -33,12 +34,45 @@ function MergerTask(graph, state) {
 	$("#activeTaskTray").click(function() {
 		$("#activeTaskPanel").slideToggle();
 	});
+	
+	//Create the resolution panel
+	this.addResolutionPanel = function(overlap) {
+		
+		var dsradiobutton = function (nodeside, desc) {
+			var nodetype = NodeTypeMap[desc.type];
+			return '<label>' + 
+				'<div class="modelVarName">' + desc.name + '</div>' +
+				//'<div class="modelVarEquation">' + desc.equation + '</div>' +
+				'<svg class="'+ nodeside + '" height="10" width="10">' +
+					'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
+				'</svg>' + 
+				'<input type="radio" name="mergeResRadio">' +
+			'</label>';
 
+		}
+
+		var t = document.querySelector('#overlapPanel');
+		var clone = document.importNode(t.content, true);
+		
+		clone.id = "res" + resolutions.length;
+		
+		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft);
+		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright);
+		
+		resolutions.push(clone);
+		
+		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
+	}
+	
+	receiver.onShowOverlaps(function(data) {
+		data.forEach(function(d) {
+			task.addResolutionPanel(d);	
+		});
+	});
+	
 	// Preview merge resolutions
 	$(".mergePreviewBtn").click(function() {
 		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
-
-		$('#mergerModal').modal('toggle');
 
 		// Create three different graphs on stage to preview Merge Resolutions
 		if(!$("#stage").hasClass("mergePreview")) {
@@ -50,8 +84,9 @@ function MergerTask(graph, state) {
 				'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
 				'</div>'
 			);
+			$('#taskModal').hide();
 		}
-	}
+	});
 	
 
 }
@@ -64,6 +99,8 @@ MergerTask.prototype.onInitialize = function() {
 	if($("#mergerIcon").length == 0	) {
 		$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	}
+	
+	sender.requestOverlaps();
 }
 
 MergerTask.prototype.onModelSelection = function(node) {}
