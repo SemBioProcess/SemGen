@@ -1,7 +1,7 @@
-startDirectory; /Users/max_neal
+startDirectory; /Users/max_neal/_UW/SemGenGrant/PapersBySGgroup/PHN_paper/archived_results/checkForFinalSubmissionWithSG3_0/sourceModels
 maximize; false
-screensize; 900x700
-screenpos; 0x0
+screensize; 1274x801
+screenpos; 0x23
 autoAnnotate; true
 showImports; true
 displayMarkers; true

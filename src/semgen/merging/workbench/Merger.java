@@ -118,6 +118,8 @@ public class Merger {
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
 				
+				System.out.println("Resolving " + keptds.getName() + " and " + discardedds.getName());
+				
 				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
@@ -140,7 +142,15 @@ public class Merger {
 			
 			for(DataStructure dstoprune : runningsettoprune){
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
-				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning								
+				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
+				
+				// If we are removing a state variable, remove its derivative, if present
+				if(dstoprune.hasSolutionDomain()){
+					
+					if(parentmodel.containsDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName())){
+						parentmodel.removeDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName());
+					}
+				}
 			}
 		}
 			
@@ -326,14 +336,6 @@ public class Merger {
 			for(DataStructure nsdds : ssm2clone.getAssociatedDataStructures()){
 				if(nsdds.hasSolutionDomain())
 					nsdds.setSolutionDomain(soldom1);
-			}
-		}
-		
-		// If we are removing a state variable, remove its derivative, if present
-		if(discardedds.hasSolutionDomain()){
-			
-			if(modelfordiscardedds.containsDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName())){
-				modelfordiscardedds.removeDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName());
 			}
 		}
 		

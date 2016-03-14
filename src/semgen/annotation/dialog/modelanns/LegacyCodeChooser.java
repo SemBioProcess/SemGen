@@ -24,9 +24,11 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	public JTextField txtfld = new JTextField();
 	public JButton locbutton = new JButton("or choose local file");
 	private String locationtoadd = "";
+	private ModelAccessor currentma;
 	
 	public LegacyCodeChooser(ModelAccessor current) {
 		super("Enter URL of legacy code or choose a local file");
+		currentma = current;
 		JPanel srcmodpanel = new JPanel();
 		txtfld.setPreferredSize(new Dimension(250, 25));
 		locbutton.addActionListener(this);
@@ -39,18 +41,23 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
-		if (current != null) txtfld.setText(current.getFullLocation());
+		if (currentma != null) txtfld.setText(currentma.getFullLocation());
 		
 		setContentPane(optionPane);
 		showDialog();
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
+		
 		if (e.getPropertyName().equals("value")) {
 			String value = optionPane.getValue().toString();
-			if (value == "OK") {
+			
+			if (value == "OK")
 				locationtoadd = txtfld.getText();
-			} 
+			
+			else if(value == "Cancel")
+				locationtoadd = currentma.getFullLocation();
+			
 			dispose();
 		}
 	}

@@ -35,6 +35,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -368,7 +369,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
 		
 		if (ma != null) {
-			workbench.saveMergedModel(ma, filec.getFileFilter());
+			SaveSemSimModel.writeToFile(workbench.mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 			addmanualmappingbutton.setEnabled(true);
 		}
 	}

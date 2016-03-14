@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -63,20 +64,20 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		}
 	}
 	
-	public void setCodeView(ModelAccessor modelaccessor) throws IOException {
+	public void setCodeView(ModelAccessor srccodema) throws IOException {
 		Boolean cont = true;
 		setText("");
 		String modelloc = "";
 		
-		if(modelaccessor != null){
+		if(srccodema != null){
 			
-			modelloc = modelaccessor.getFullLocation();
+			modelloc = srccodema.getFullLocation();
 			
 			// If the legacy model code is on the web
-			if (modelaccessor.getFullLocation().startsWith("http://")) {
+			if (srccodema.getFullLocation().startsWith("http://")) {
 				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving code...", false);
 
-				URL url = new URL(modelaccessor.getFullLocation());
+				URL url = new URL(srccodema.getFullLocation());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -122,7 +123,20 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 			
 			// Otherwise it's a local file or within a local file
 			else {
-				String modelcode = modelaccessor.getModelTextAsString();
+				
+				// If the local file doesn't exist, check the directory that the
+				// SemSim model is in
+				if( ! srccodema.getFileThatContainsModel().exists()){
+					String srcfilename = srccodema.getFileThatContainsModel().getName();
+					File samedirfile = new File (
+							workbench.getModelAccessor().getFileThatContainsModel().getParentFile().toString() + 
+							"/" + srcfilename);
+					
+					if(samedirfile.exists())
+						srccodema.setFileThatContainsModel(samedirfile);
+				}
+				
+				String modelcode = srccodema.getModelTextAsString();
 				
 				if (modelcode != null && ! modelcode.equals("")){
 					append(modelcode);

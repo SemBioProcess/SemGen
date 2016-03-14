@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
-import javax.swing.filechooser.FileFilter;
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import semgen.encoding.Encoder;
@@ -18,7 +16,6 @@ import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -252,10 +249,6 @@ public class MergerWorkbench extends Workbench {
 		task.execute();
 		
 		return null;
-	}
-	
-	public void saveMergedModel(ModelAccessor ma, FileFilter filter) {		
-		SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filter);
 	}
 	
 	@Override

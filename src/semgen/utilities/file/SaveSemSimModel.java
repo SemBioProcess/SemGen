@@ -15,17 +15,17 @@ import semsim.writing.SemSimOWLwriter;
 public class SaveSemSimModel {
 
 	public static void writeToFile(SemSimModel semsimmodel,
-			ModelAccessor modelaccessor, File file, int modelformat) {
+			ModelAccessor modelaccessor, File outputfile, int modelformat) {
 		
 		try {
 			if(modelformat==ModelClassifier.SEMSIM_MODEL) {
-				new SemSimOWLwriter(semsimmodel).writeToFile(file);
+				new SemSimOWLwriter(semsimmodel).writeToFile(outputfile);
 			}
 			else if(modelformat==ModelClassifier.CELLML_MODEL){
-				new CellMLwriter(semsimmodel).writeToFile(file);
+				new CellMLwriter(semsimmodel).writeToFile(outputfile);
 			}
 			else if(modelformat==ModelClassifier.MML_MODEL_IN_PROJ){
-				new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(file);
+				new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(outputfile);
 			}
 			
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
@@ -37,7 +37,7 @@ public class SaveSemSimModel {
 	}
 	
 	public static void writeToFile(SemSimModel semsimmodel,
-			ModelAccessor modelaccessor, File file, FileFilter filter){
+			ModelAccessor modelaccessor, File outputfile, FileFilter filter){
 		
 		int format = -1;
 		if(filter == SemGenFileChooser.projfilter){
@@ -50,7 +50,7 @@ public class SaveSemSimModel {
 			format = ModelClassifier.CELLML_MODEL;
 		}
 		
-		writeToFile(semsimmodel, modelaccessor, file, format);
+		writeToFile(semsimmodel, modelaccessor, outputfile, format);
 		
 	}
 
