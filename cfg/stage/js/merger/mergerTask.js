@@ -62,6 +62,24 @@ function MergerTask(graph, state) {
 		resolutions.push(clone);
 		
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
+		
+		// Preview merge resolutions
+		$(".mergePreviewBtn").click(function() {
+			//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
+
+			// Create three different graphs on stage to preview Merge Resolutions
+			if(!$("#stage").hasClass("mergePreview")) {
+				$("#stage").append(
+					'<div class="mergePreview">' +
+					'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
+					'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
+					'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
+					'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
+					'</div>'
+				);
+				$('#taskModal').hide();
+			}
+		});
 	}
 	
 	receiver.onShowOverlaps(function(data) {
@@ -70,23 +88,7 @@ function MergerTask(graph, state) {
 		});
 	});
 	
-	// Preview merge resolutions
-	$(".mergePreviewBtn").click(function() {
-		//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
-		// Create three different graphs on stage to preview Merge Resolutions
-		if(!$("#stage").hasClass("mergePreview")) {
-			$("#stage").append(
-				'<div class="mergePreview">' +
-				'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
-				'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
-				'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
-				'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
-				'</div>'
-			);
-			$('#taskModal').hide();
-		}
-	});
 	
 
 }
