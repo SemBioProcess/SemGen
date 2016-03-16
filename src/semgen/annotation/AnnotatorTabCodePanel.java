@@ -71,13 +71,13 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		
 		if(srccodema != null){
 			
-			modelloc = srccodema.getFullLocation();
+			modelloc = srccodema.getModelURI().toString();
 			
 			// If the legacy model code is on the web
-			if (srccodema.getFullLocation().startsWith("http://")) {
+			if (srccodema.modelIsOnline()) {
 				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving code...", false);
 
-				URL url = new URL(srccodema.getFullLocation());
+				URL url = new URL(srccodema.getModelURI().toString());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -99,7 +99,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					urlcon.setUseCaches(false);
 					urlcon.setReadTimeout(60000);
 					
-					// If there's no file at the URL
+					// If there's a file at the URL
 					if(urlcon.getContentLength()>0){
 						BufferedReader d = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
 						String s;
@@ -133,10 +133,10 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 							"/" + srcfilename);
 					
 					if(samedirfile.exists())
-						srccodema.setFileThatContainsModel(samedirfile);
+						srccodema.setModelURI(samedirfile.toURI());
 				}
 				
-				String modelcode = srccodema.getModelTextAsString();
+				String modelcode = srccodema.getLocalModelTextAsString();
 				
 				if (modelcode != null && ! modelcode.equals("")){
 					append(modelcode);

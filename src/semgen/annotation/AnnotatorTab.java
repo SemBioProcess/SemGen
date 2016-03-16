@@ -199,7 +199,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	}
 	
 	public boolean fileURIMatches(URI uri) {
-		return (uri.toString().equals(modelaccessor.getFileThatContainsModel().toURI().toString()));
+		return (uri.toString().equals(modelaccessor.getFileThatContainsModelAsURI().toString()));
 	}
 
 	public boolean closeTab() {

@@ -59,7 +59,7 @@ public class CellMLreader extends ModelReader {
 	
 	public SemSimModel read() {
 		
-		String srccode = modelaccessor.getModelTextAsString();
+		String srccode = modelaccessor.getLocalModelTextAsString();
 		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		

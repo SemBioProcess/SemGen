@@ -192,7 +192,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 				
 				if( workbench.getModelSourceLocation() != null) {
 					
-					if(workbench.getModelAccessor().modelIsInStandAloneFile()){
+					if( ! workbench.getModelAccessor().modelIsPartOfArchive()){
 						String filename = workbench.getModelAccessor().getFileThatContainsModel().getName();
 						filenamesuggestion = filename.substring(0, filename.lastIndexOf("."));
 					}

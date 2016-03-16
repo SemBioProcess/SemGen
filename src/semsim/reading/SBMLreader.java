@@ -103,7 +103,7 @@ public class SBMLreader extends ModelReader{
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getModelTextAsString());
+		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getLocalModelTextAsString());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");

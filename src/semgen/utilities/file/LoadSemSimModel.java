@@ -58,10 +58,10 @@ public class LoadSemSimModel extends SemGenJob {
 			switch (modeltype){
 			
 			case ModelClassifier.SEMSIM_MODEL:
-				if(modelaccessor.modelIsInStandAloneFile())
-					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
-				else
+				if(modelaccessor.modelIsPartOfArchive())
 					ErrorLog.addError("Cannot load a SemSim model from within an archive file.", true, false);
+				else
+					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
 				break;
 			
 			case ModelClassifier.CELLML_MODEL:
@@ -118,8 +118,8 @@ public class LoadSemSimModel extends SemGenJob {
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
 		
-		String srcText = ma.getModelTextAsString();
-		Document xmmldoc = MMLtoXMMLconverter.convert(ma.getModelTextAsString(), ma.getModelName());
+		String srcText = ma.getLocalModelTextAsString();
+		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getModelName());
 		
 		if (ErrorLog.hasErrors()) return null;
 		

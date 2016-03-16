@@ -3,6 +3,7 @@ package semsim.reading;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Scanner;
 
 import org.jdom.Document;
@@ -11,88 +12,83 @@ import org.jdom.input.SAXBuilder;
 
 public class ModelAccessor {
 
-	private File archiveFile;
-	private String modelNameInArchive; 
-	private File standAloneFile;
-	private static final String separator = "#";
+	private URI modelURI;
+	public static final String separator = "#";
 
 	// Copy constructor
 	public ModelAccessor(ModelAccessor matocopy) {
-		
-		if(matocopy.modelIsInStandAloneFile()) this.standAloneFile = matocopy.getStandAloneFile();
-		else if(matocopy.modelIsPartOfArchive()){
-			this.archiveFile = matocopy.archiveFile;
-			this.modelNameInArchive = matocopy.modelNameInArchive;
-		}
+		modelURI = matocopy.modelURI;
 	}
 		
 	// Use this constructor for models that are stored as standalone files
 	public ModelAccessor(File standAloneFile){
-		this.standAloneFile = standAloneFile;
+		modelURI = standAloneFile.toURI();
 	}
 	
 	// Use this constructor for models that are stored within archive files
 	public ModelAccessor(File archiveFile, String modelNameInArchive){
-		this.archiveFile = archiveFile;
-		this.modelNameInArchive = modelNameInArchive;
+		modelURI = URI.create(archiveFile.toURI().toString() + separator + modelNameInArchive);
 	}
 	
 	// This constructor parses a string input and assigns values to the object's fields
 	public ModelAccessor(String location){
 		
-		if(location.toLowerCase().contains(".proj" + separator)){
-			String archiveloc = location.substring(0, location.indexOf(separator));
-		
-			this.archiveFile = new File(archiveloc);
-			this.modelNameInArchive = location.substring(location.indexOf(separator)+1, location.length());
+		if(location.startsWith("http://") || location.startsWith("file:")) modelURI = URI.create(location);
+				
+		else if(location.contains(separator)){
+			String path = location.substring(0, location.indexOf(separator));
+			String frag = location.substring(location.indexOf(separator) + 1, location.length());
+			modelURI = URI.create("file:" + path + separator + frag);
 		}
-		else this.standAloneFile = new File(location);
+		
+		else modelURI = URI.create("file:" + location);
 	}
 
-	private File getArchiveFile(){
-		return archiveFile;
+	public URI getModelURI(){
+		return modelURI;
 	}
 	
-	private String getModelNameInArchive(){
-		return modelNameInArchive;
+	public void setModelURI(URI uri){
+		modelURI = uri;
 	}
 	
-	private File getStandAloneFile(){
-		return standAloneFile;
-	}
 
-	// This returns the archive file if the model is part of an archive, 
-	// or returns the standalone file if the model is in a standalone file.
+	// This returns the archive uri if the model is part of an archive, 
+	// or returns the standalone uri if the model is in a standalone file.
+	public URI getFileThatContainsModelAsURI(){
+		
+		if( ! modelIsPartOfArchive()) return modelURI;
+		else{
+			String uri = modelURI.toString();
+			return URI.create(uri.substring(0, uri.indexOf(separator)));
+		}
+	}
+	
 	public File getFileThatContainsModel(){
-		
-		if(modelIsInStandAloneFile()) return getStandAloneFile();
-		else if(modelIsPartOfArchive()) return getArchiveFile();
-		
-		return null;
-	}
-	
-	public void setFileThatContainsModel(File file){
-		if(modelIsInStandAloneFile()) standAloneFile = file;
-		else if(modelIsPartOfArchive()) archiveFile = file;
-	}
-	
-	public boolean modelIsInStandAloneFile(){
-		return (standAloneFile!=null && archiveFile==null && modelNameInArchive==null);
+		if(modelIsOnline()) return null;
+		else return new File(getFileThatContainsModelAsURI());
 	}
 	
 	public boolean modelIsPartOfArchive(){
-		return (archiveFile!=null && modelNameInArchive!=null && standAloneFile==null);
+		return getModelURI().getFragment() != null;
 	}
 	
-	// Retrieve model text as a string
-	public String getModelTextAsString(){
+	public boolean modelIsOnline(){
+		return getFileThatContainsModelAsURI().toString().startsWith("http://");
+	}
+	
+	// Retrieve model text as a string (only for locally-stored models)
+	public String getLocalModelTextAsString(){
 		String returnstring = "";
 		
-		if(modelIsInStandAloneFile() && getStandAloneFile().exists()){
+		if(modelIsOnline()) return null;
+		
+		else if( ! modelIsPartOfArchive() && getFileThatContainsModel().exists()){
 			Scanner scanner = null;
 
 			try {
-				scanner = new Scanner(getStandAloneFile());
+				scanner = new Scanner(getFileThatContainsModel());
+				
 				while(scanner.hasNextLine()){
 					String nextline = scanner.nextLine();
 					returnstring = returnstring + nextline + "\n";
@@ -101,13 +97,15 @@ public class ModelAccessor {
 			catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-			finally{scanner.close();}
+			finally{
+				scanner.close();
+			}
 		}
 		else if(modelIsPartOfArchive()){
 			
 			if(modelIsPartOfJSimProjectFile()){
-				Document projdoc = JSimProjectFileReader.getDocument(getArchiveFile());
-				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelNameInArchive());
+				Document projdoc = JSimProjectFileReader.getDocument(getFileThatContainsModel());
+				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
 			}
 		}
 			
@@ -119,12 +117,12 @@ public class ModelAccessor {
 		
 		if(modelIsPartOfArchive()){
 			SAXBuilder builder = new SAXBuilder();
+			
 			try{
-				Document doc = builder.build(archiveFile);
+				Document doc = builder.build(getFileThatContainsModel());
 				String rootname = doc.getRootElement().getName();
-				if(rootname.equals("JSim")){
-					return true;
-				}
+				
+				if(rootname.equals("JSim")) return true;
 			}
 			catch(JDOMException | IOException e){
 				e.printStackTrace();
@@ -136,11 +134,12 @@ public class ModelAccessor {
 	
 	public String getModelName(){
 		
-		if(modelIsInStandAloneFile()){
-			String filename = getStandAloneFile().getName();
+		if(modelIsPartOfArchive())
+			return getModelURI().getFragment();
+		else{
+			String filename = getFileThatContainsModel().getName();
 			return filename.substring(0, filename.lastIndexOf("."));
 		}
-		else return getModelNameInArchive();
 	}
 	
 	
@@ -148,33 +147,16 @@ public class ModelAccessor {
 	// otherwise a string with format [name of archive] > [name of model] is returned
 	public String getShortLocation(){
 		
-		if(modelIsInStandAloneFile()) return getStandAloneFile().getName();
-		else if(modelIsPartOfArchive()) return getArchiveFile().getName() + separator + getModelNameInArchive();
-		
-		return null;
+		if( ! modelIsPartOfArchive()) return getFileThatContainsModel().getName();
+		else{
+			String archiveloc = modelURI.toString();
+			return archiveloc.substring(archiveloc.lastIndexOf(File.separator)+1, archiveloc.length());
+		}
 	}
-	
-	// If the model is in a standalone file, the full path to the file is returned
-    // otherwise a string with format [path to archive] > [name of model] is returned
-	public String getFullLocation(){
 		
-		if(modelIsInStandAloneFile()) return getStandAloneFile().getAbsolutePath();
-		else if(modelIsPartOfArchive()) return getArchiveFile().getAbsolutePath() + separator + getModelNameInArchive();
-		
-		return null;
-	}
-	
 	
 	public boolean equals(ModelAccessor ma){
-		
-		if(ma.modelIsInStandAloneFile() && this.modelIsInStandAloneFile())
-			return ma.getStandAloneFile().getAbsolutePath().equals(this.getStandAloneFile().getAbsolutePath());
-		
-		else if(ma.modelIsPartOfArchive() && this.modelIsPartOfArchive())
-			return (ma.getArchiveFile().getAbsolutePath().equals(this.getArchiveFile().getAbsolutePath())
-					&& ma.getModelNameInArchive().equals(this.getModelNameInArchive()));
-		
-		return false;
+		return modelURI.toString().equals(ma.getModelURI().toString());
 	}
 
 }

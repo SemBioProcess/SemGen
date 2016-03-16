@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.net.URI;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -30,7 +31,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		super("Enter URL of legacy code or choose a local file");
 		currentma = current;
 		JPanel srcmodpanel = new JPanel();
-		txtfld.setPreferredSize(new Dimension(250, 25));
+		txtfld.setPreferredSize(new Dimension(350, 25));
 		locbutton.addActionListener(this);
 		srcmodpanel.add(txtfld);
 		srcmodpanel.add(locbutton);
@@ -41,10 +42,22 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		optionPane.addPropertyChangeListener(this);
 		optionPane.setOptions(options);
 		optionPane.setInitialValue(options[0]);
-		if (currentma != null) txtfld.setText(currentma.getFullLocation());
+		
+		if (currentma != null) setLocationInTextField(currentma);
 		
 		setContentPane(optionPane);
 		showDialog();
+	}
+	
+	private void setLocationInTextField(ModelAccessor ma){
+		
+		String text = "";
+		URI uri = ma.getModelURI();
+		
+		if(ma.modelIsOnline()) text = uri.toString();
+		else if(ma.modelIsPartOfArchive()) text = uri.getPath() + ModelAccessor.separator + uri.getFragment();
+		else text = uri.getPath();
+		txtfld.setText(text);
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
@@ -56,7 +69,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 				locationtoadd = txtfld.getText();
 			
 			else if(value == "Cancel")
-				locationtoadd = currentma.getFullLocation();
+				locationtoadd = currentma.getModelURI().toString();
 			
 			dispose();
 		}
@@ -74,7 +87,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 			if (file!=null){
 				
 				ModelAccessor ma = sgc.convertFileToModelAccessorList(file).get(0);
-				txtfld.setText(ma.getFullLocation());
+				setLocationInTextField(ma);
 			}
 		}
 	}

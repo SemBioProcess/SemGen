@@ -45,7 +45,7 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	public ArrayList<URI> getFileURIs() {
 		ArrayList<URI> uris = new ArrayList<URI>();
 		for (ModelAccessor modelaccessor : modelaccessors) {
-			uris.add(modelaccessor.getFileThatContainsModel().toURI());
+			uris.add(modelaccessor.getFileThatContainsModelAsURI());
 		}
 		return uris;
 	}

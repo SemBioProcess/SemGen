@@ -33,8 +33,7 @@ public class ModelClassifier {
 					type = MML_MODEL_IN_PROJ;
 				}
 			}
-			else if(accessor.modelIsInStandAloneFile()){
-				
+			else{
 				File file = accessor.getFileThatContainsModel();
 				if (file.toString().toLowerCase().endsWith(".mod")){
 					type = MML_MODEL;

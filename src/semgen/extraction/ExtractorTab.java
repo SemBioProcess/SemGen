@@ -800,7 +800,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				ModelAccessor ma = filec.SaveAsAction(extractedmodel);
 				
 				if (ma != null)
-					SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+					SaveSemSimModel.writeToFile(extractedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 			} 
 			else
 				SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");

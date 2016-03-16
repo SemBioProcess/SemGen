@@ -128,18 +128,18 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public File saveModel() {
 		
-		File file = modelaccessor.getFileThatContainsModel();
+		URI fileuri = modelaccessor.getFileThatContainsModelAsURI();
 		
-		if(file != null){
+		if(fileuri != null){
+			File file = new File(fileuri);
 			validateModelComposites();
 			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor, file, lastsavedas);			
 			setModelSaved(true);
+			return file;
 		}
 		else{
 			return saveModelAs();
 		}			
-
-		return file;
 	}
 
 	@Override
@@ -192,12 +192,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			String title = "Unsaved changes in model";
 			String msg = "Save changes to ";
 			
-			URI fileURI = modelaccessor.getFileThatContainsModel().toURI();
+			URI fileURI = modelaccessor.getFileThatContainsModelAsURI();
 			
 			if(fileURI == null)
 				msg = msg + "[unsaved file]?";
 			
-			else if(modelaccessor.modelIsInStandAloneFile())
+			else if( ! modelaccessor.modelIsPartOfArchive())
 				msg = msg + modelaccessor.getFileThatContainsModel().getName() + "?";
 			else msg = msg + modelaccessor.getModelName() + " in " + modelaccessor.getFileThatContainsModel().getName() + "?";
 			
