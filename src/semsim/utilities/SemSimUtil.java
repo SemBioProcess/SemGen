@@ -180,9 +180,7 @@ public class SemSimUtil {
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
 					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());
-					
-					System.out.println("Setting comp for " + dscheck.getName() + ": " + neweq);
-					
+										
 					ds.getComputation().setComputationalCode(neweq);
 				}
 	
