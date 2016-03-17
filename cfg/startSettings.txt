@@ -1,7 +1,7 @@
-startDirectory; C:\Users\max_neal\_UW\SemGenGrant\PapersBySGgroup\PHN_paper\archived_results\checkForFinalSubmissionWithSG3_0\sourceModels
-maximize; false
-screensize; 1274x801
-screenpos; 0x23
+startDirectory; C:\Users\Christopher\Documents\SemGen Test Files
+maximize; true
+screensize; 1938x1048
+screenpos; -9x-9
 autoAnnotate; true
 showImports; true
 displayMarkers; true

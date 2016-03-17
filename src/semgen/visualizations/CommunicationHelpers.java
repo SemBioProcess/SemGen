@@ -54,6 +54,6 @@ public class CommunicationHelpers {
 	
 	
 	public static String removeScriptbyID(String id) {
-		return "(elem=document.getElementById(\"" + id +"\")).parentNode.removeChild(elem);";
+		return "(elem=document.getElementById(\"" + id +"\")).parentNode.removeChild(elem);"+ NL;
 	}
 }

@@ -3,11 +3,12 @@ package semgen.merging.workbench;
 import java.util.HashMap;
 import java.util.Set;
 
+import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class DataStructureDescriptor {
 	public enum Descriptor {
-		name, description, units, computationalcode, inputs, inputfor;
+		name, description, units, computationalcode, inputs, inputfor, type;
 	}
 	
 	private HashMap<Descriptor, String> descriptormap = new HashMap<Descriptor, String>();
@@ -15,7 +16,7 @@ public class DataStructureDescriptor {
 	public DataStructureDescriptor(DataStructure ds) {
 		descriptormap.put(Descriptor.name, ds.getName());
 		descriptormap.put(Descriptor.description, ds.getDescription());
-		
+		descriptormap.put(Descriptor.type, ds.getPropertyType(SemGen.semsimlib).toString());
 		if(ds.hasUnits())
 			descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
 		else descriptormap.put(Descriptor.units, "");

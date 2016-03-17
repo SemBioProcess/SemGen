@@ -3,18 +3,23 @@ package semgen.visualizations;
 import javax.naming.InvalidNameException;
 
 import semgen.SemGen;
+import semgen.stage.serialization.StageState;
+import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
+import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
+
+import com.google.gson.Gson;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
-public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGenWebBrowserCommandSender> {
+public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	// Stage html in resource dir
 	private final static String StageHtml = SemGen.cfgreadpath + "stage/stage.html?testMode="+SemGen.debug;
 	
 	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException, IOException {
-		super(SemGenWebBrowserCommandSender.class, commandReceiver);
+		super(ProjectWebBrowserCommandSender.class, commandReceiver);
 
 		System.out.println("Loading SemGen web browser");
         
@@ -36,4 +41,14 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser<SemGe
 	    
 	    System.out.println("SemGen web browser loaded");
 	}
+
+	public void changeTask(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, 
+			CommunicatingWebBrowserCommandReceiver commandReceiver, StageState state) throws InvalidNameException {
+		
+		String javascript = this.setBrowserListeners(commandSenderInterface, commandReceiver);
+			javascript += "main.changeTask(" + (new Gson()).toJson(state) + ");";
+		
+		executeJavascriptAndHandleErrors(javascript);
+	}
+	
 }

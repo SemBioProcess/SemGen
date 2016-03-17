@@ -1,9 +1,11 @@
 .modal-dialog {
     width: 90vw;
+    height: 90vh;
 }
 
 .modal-body {
-    height: 75vh;
+	width: 90vw;
+    height: 90vh;
     overflow: scroll;
 }
 
@@ -53,6 +55,10 @@
     text-align: center;
 }
 
+.overlapPane {
+	height: 15vh;
+}
+
 .leftResolution {
     position: absolute;
     left: 0px;
@@ -85,6 +91,9 @@
 }
 
 .mergePreviewBtn {
+	position: relative;
+	left: 45vw;
+	display: inline-block;
     margin: 30px auto;
 }
 

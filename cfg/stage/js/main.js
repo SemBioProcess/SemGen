@@ -12,6 +12,7 @@ var CallWaiting;
 
 function main() {
 	this.graph = new Graph();
+	var graph = this.graph;
 
 	if(!this.graph) {
 		alert("Graph initialization failed.");
@@ -21,20 +22,46 @@ function main() {
 	KeyElement.getInstance().initialize(this.graph);
 
 	this.task = new Stage(this.graph);
-	this.graph.setTaskNodes(this.task.nodes);
+	graph.setTaskNodes(this.task.nodes);
+	
+	//If a change task request is received from Java
+	this.changeTask = function changeTask(stagestate) {
+		var content = document.querySelector('#modalContent');
+		if (content.firstChild!=null) {
+			content.removeChild(content.firstChild);
+		}
+		var taskname = stagestate.tasktype;
+		if (taskname=="proj") {
+			this.task = new Stage(graph);
+		}
+		if (taskname=="merge") {
+			this.task = new MergerTask(graph);
+		}
+		this.task.loadStageState(stagestate);
+		this.task.onInitialize();
+		
+		this.graph.setTaskNodes(this.task.nodes);
+		this.graph.update();
+		$('#taskModal').modal('toggle');
+		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
+		$("#activeTaskText").addClass('blink');
+	}
+	
+	// Slide up panel for Active Task Tray
+	$("#activeTaskTray").click(function() {
+		$("#activeTaskPanel").slideToggle();
+	});
 }
 
 $(window).bind("cwb-initialized", function(e) {
 	sender = e.originalEvent.commandSender;
 
 	receiver = e.originalEvent.commandReceiver;
-
-	main = new main();
+	main = new main();	
 
 	window.onresize = function () {
 		main.graph.updateHeightAndWidth();
 		main.graph.update();
 	};
-
 
 });

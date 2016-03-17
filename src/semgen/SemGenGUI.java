@@ -123,6 +123,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 
 	// Initialize a new addTabTask with the provided factories and execute
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void addTab(WorkbenchFactory<? extends Workbench> workbenchmaker, TabFactory<? extends Workbench> tabmaker, boolean showbar) {
 		if (!workbenchmaker.isValid()) return;
 		AddTabTask<? extends Workbench> task = new AddTabTask(workbenchmaker, tabmaker, showbar);

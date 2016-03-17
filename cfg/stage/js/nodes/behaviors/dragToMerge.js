@@ -77,7 +77,8 @@ function DragToMerge(_node) {
 		    .on("dragend", function (d, i) {
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
-		        	sender.merge(_node.name, mergeNode.name);
+		        	var modelstomerge = _node.name + "," + mergeNode.name;
+		        	sender.merge(modelstomerge, main.task);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location

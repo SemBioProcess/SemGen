@@ -12,17 +12,18 @@ public abstract class Node {
 	public String id;
 	public String name;
 	public String parentModelId;
+	public int xpos = -1;
+	public int ypos = -1;
+	public Boolean hidden = false;
 	public ArrayList<Link> inputs;
 	
-	public Node(String name)
-	{
+	public Node(String name) {
 		inputs = new ArrayList<Link>();
 		this.name = name;
 		this.id = buildId(this.name);
 	}
 
-	public Node(String name, String parentModelId)
-	{
+	public Node(String name, String parentModelId) {
 		inputs = new ArrayList<Link>();
 		this.name = name;
 		this.parentModelId = parentModelId;

@@ -271,9 +271,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {
-		public Set<ModelAccessor> modelaccessors;
+		public ArrayList<ModelAccessor> modelaccessors;
         public AddModelsToMergeTask(Set<ModelAccessor> modelstoload){
-        	modelaccessors = modelstoload;
+        	modelaccessors.addAll(modelstoload);
         	progframe = new SemGenProgressBar("Loading models...", true);
         }
         @Override
@@ -377,7 +377,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == MergeEvent.threemodelerror) {
-			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
+			SemGenError.showError("SemGen can only merge two models at a time.", "Too many models");
 		}	
 		if (arg == MergeEvent.modelerrors) {
 			JOptionPane.showMessageDialog(this, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
