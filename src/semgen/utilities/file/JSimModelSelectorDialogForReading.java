@@ -1,6 +1,5 @@
 package semgen.utilities.file;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,8 +19,8 @@ public class JSimModelSelectorDialogForReading extends SemGenDialog implements P
 	private static final long serialVersionUID = -6899404099942989139L;
 	private ArrayList<String> selectedModelNames = new ArrayList<String>();
 	private JOptionPane optionPane;
-	private JPanel panel;
-	
+	private JPanel panel = new JPanel();
+	private ArrayList<JCheckBox> modelstoread = new ArrayList<JCheckBox>();
 
 	public JSimModelSelectorDialogForReading(String title, ArrayList<String> modelnames) {
 		super(title);
@@ -29,11 +28,14 @@ public class JSimModelSelectorDialogForReading extends SemGenDialog implements P
 		setPreferredSize(new Dimension(430, 250));
 		setResizable(false);
 		
-		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		for(String modname : modelnames) panel.add(new JCheckBox(modname));
+		for(String modname : modelnames) {
+			JCheckBox cb = new JCheckBox(modname);
+			modelstoread.add(cb);
+			panel.add(cb);
+		}
 		
 		JScrollPane scroller = new JScrollPane(panel);
 
@@ -60,16 +62,10 @@ public class JSimModelSelectorDialogForReading extends SemGenDialog implements P
 		if (evt.getPropertyName().equals("value")) {
 			String value = optionPane.getValue().toString();
 			
-			if (value.equals("OK")) {
-				
-				for(Component comp : panel.getComponents()){
-					
-					if(comp instanceof JCheckBox){
-						JCheckBox checkbox = (JCheckBox)comp;
-						
-						if(checkbox.isSelected()){
-							selectedModelNames.add(checkbox.getText());
-						}
+			if (value.equals("OK")) {				
+				for(JCheckBox checkbox : modelstoread){
+					if(checkbox.isSelected()){
+						selectedModelNames.add(checkbox.getText());
 					}
 				}
 			}

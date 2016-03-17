@@ -17,7 +17,7 @@ public class ModelAccessor {
 
 	// Copy constructor
 	public ModelAccessor(ModelAccessor matocopy) {
-		modelURI = matocopy.modelURI;
+		modelURI = URI.create(matocopy.modelURI.toString());
 	}
 		
 	// Use this constructor for models that are stored as standalone files
@@ -66,7 +66,7 @@ public class ModelAccessor {
 	
 	public File getFileThatContainsModel(){
 		if(modelIsOnline()) return null;
-		else return new File(getFileThatContainsModelAsURI());
+		return new File(getFileThatContainsModelAsURI());
 	}
 	
 	public boolean modelIsPartOfArchive(){
@@ -82,8 +82,14 @@ public class ModelAccessor {
 		String returnstring = "";
 		
 		if(modelIsOnline()) return null;
-		
-		else if( ! modelIsPartOfArchive() && getFileThatContainsModel().exists()){
+		else if(modelIsPartOfArchive()){
+			
+			if(modelIsPartOfJSimProjectFile()){
+				Document projdoc = JSimProjectFileReader.getDocument(getFileThatContainsModel());
+				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
+			}
+		}
+		else if(getFileThatContainsModel().exists()){
 			Scanner scanner = null;
 
 			try {
@@ -101,14 +107,7 @@ public class ModelAccessor {
 				scanner.close();
 			}
 		}
-		else if(modelIsPartOfArchive()){
-			
-			if(modelIsPartOfJSimProjectFile()){
-				Document projdoc = JSimProjectFileReader.getDocument(getFileThatContainsModel());
-				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
-			}
-		}
-			
+
 		return returnstring;
 	}
 	

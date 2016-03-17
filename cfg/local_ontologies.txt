@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-#This file is used for providing information about ontologies which are not used for annotating SemSim models, but
-#may have provided terms for imported models.
-#Use this format:
-#Name, Abreviation, {namespace namespace ...}, description, Bioportal ID (optional).
-#
-Braunschweig Enzyme Database, BRENDA, {http://identifiers.org/ec-code/}, Enzyme sources.
-Brenda Tissue Ontology, BTO, {http://purl.org/obo/owl/BTO# http://purl.obolibrary.org/obo/bto.owl# http://purl.obolibrary.org/obo/BTO}, Enzyme sources, 1005.
-Electrocardiography Ontology, ECG, {http://www.cvrgrid.org/ECGOntology1229347266968.owl# http://www.cvrgrid.org/files/ECGOntologyv0.1.7.owl http://www.cvrgrid.org/files/ECGOntologyv1.owl#}, Electrocardiograms, 1146.
-Human Disease Ontology, DOID, {http://purl.org/obo/owl/DOID#}, Human disease, 1009.
-Kyoto Encyclopedia of Genes and Genomes - Compound, KEGG-compound, {http://identifiers.org/kegg.compound/ urn:miriam:kegg.compound:}, Small molecules.
-Kyoto Encyclopedia of Genes and Genomes - Drug, KEGG-drug, {http://identifiers.org/kegg.drug/ urn:miriam:kegg.drug:}, Drugs.
-Kyoto Encyclopedia of Genes and Genomes - Genes, KEGG-genes, {http://identifiers.org/kegg.genes/ urn:miriam:kegg.genes:}, Genes and proteins.
-Kyoto Encyclopedia of Genes and Genomes - Orthology, KEGG-orthology, {http://identifiers.org/kegg.orthology/ urn:miriam:kegg.orthology:}, Ortholog groups.
-Kyoto Encyclopedia of Genes and Genomes - Pathway, KEGG-pathway, {http://identifiers.org/kegg.pathway/ urn:miriam:kegg.pathway:}, Pathway maps.
-Kyoto Encyclopedia of Genes and Genomes - Reaction, KEGG-reaction, {http://identifiers.org/kegg.reaction/ urn:miriam:kegg.reaction:}, Biochemical reactions.
-Relations Ontology, RO, {http://www.obofoundry.org/ro/ro.owl#}, Relations between ontologies.
-Uberon, UBERON, {http://purl.org/obo/owl/UBERON# http://purl.obolibrary.org/obo/UBERON}, Cross-species anatomy, 1404.
-=======
 #This file is used for providing information about ontologies which are not used for annotating SemSim models, but
 #may have provided terms for imported models.
 #Use this format:
@@ -34,4 +15,3 @@ Kyoto Encyclopedia of Genes and Genomes - Pathway, KEGG-pathway, {http://identif
 Kyoto Encyclopedia of Genes and Genomes - Reaction, KEGG-reaction, {http://identifiers.org/kegg.reaction/ urn:miriam:kegg.reaction:}, Biochemical reactions.
 Relations Ontology, RO, {http://www.obofoundry.org/ro/ro.owl#}, Relations between ontologies.
 Uberon, UBERON, {http://purl.org/obo/owl/UBERON#}, Cross-species anatomy, http://purl.obolibrary.org/obo/UBERON.
->>>>>>> refs/heads/master

@@ -6,18 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
-import semgen.annotation.workbench.routines.AutoAnnotate;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
-import semsim.model.collection.Submodel;
-import semsim.model.computational.datastructures.DataStructure;
 
 public class JSimProjectFileReader {
 	
@@ -49,7 +45,7 @@ public class JSimProjectFileReader {
 				return true;
 			}
 		}
-		else return false;
+		return false;
 	}
 	
 	public static Document getDocument(File file){
@@ -92,7 +88,7 @@ public class JSimProjectFileReader {
 		
 		if(getModelSourceCodeElement(projdoc, modelname) != null)
 			return getModelSourceCodeElement(projdoc, modelname).getText();
-		else return null;
+		return null;
 	}
 	
 	public static Element getModelSourceCodeElement(Document projdoc, String modelname){
