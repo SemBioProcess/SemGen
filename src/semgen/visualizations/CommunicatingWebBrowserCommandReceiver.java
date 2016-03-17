@@ -2,13 +2,14 @@ package semgen.visualizations;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import javax.naming.InvalidNameException;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.BrowserFunction;
+import com.teamdev.jxbrowser.chromium.JSFunctionCallback;
 import com.teamdev.jxbrowser.chromium.JSValue;
 
 /**
@@ -89,33 +90,17 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 	 * and adds it to the browser
 	 */
 	public void listenForBrowserCommands(Browser browser) {
-		browser.registerFunction("sendJavaCommand", new BrowserFunction() {
-		    public JSValue invoke(JSValue... args) {
-		        String methodName = args[0].getString();
-				Object[] parameters = new Object[args.length - 1];
+		JSValue window = browser.executeJavaScriptAndReturnValue("window");
+		window.asObject().setProperty("sendJavaCommand", new JSFunctionCallback() {
+		    public Object invoke(Object... args) {
+		        String methodName = args[0].toString();
+				ArrayList<Object> parameters = new ArrayList<Object>();
 				
 				// Create and array of parameters and parameter types
-				Class<?>[] parameterTypes = new Class<?>[parameters.length];
-				for(int paramIndex = 0, argIndex = 1; argIndex < args.length; paramIndex++, argIndex++) {
-					JSValue jsValue = args[argIndex];
-					
-					Class<?> type;
-					Object param;
-					if(jsValue.isBoolean()) {
-						type = boolean.class;
-						param = jsValue.getBoolean();
-					}
-					else if(jsValue.isNumber()) {
-						type = Number.class;
-						param = jsValue.getNumber();
-					}
-					else {
-						type = String.class;
-						param = jsValue.getString();
-					}
-					
-					parameterTypes[paramIndex] = type;
-					parameters[paramIndex] = param;
+				Class<?>[] parameterTypes = new Class<?>[args.length-1];
+				for(int argIndex = 1; argIndex < args.length; argIndex++) {
+					parameterTypes[argIndex-1] = args[argIndex].getClass();
+					parameters.add(args[argIndex]);
 				}
 				
 				// Get the java method to call
@@ -129,7 +114,7 @@ public abstract class CommunicatingWebBrowserCommandReceiver {
 				
 				// Invoke the java method with parameters from javascript
 				try {
-					receivingMethod.invoke(CommunicatingWebBrowserCommandReceiver.this, parameters);
+					receivingMethod.invoke(CommunicatingWebBrowserCommandReceiver.this, parameters.toArray());
 				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException invokeMethodException) {
 					invokeMethodException.printStackTrace();
 					return null;
