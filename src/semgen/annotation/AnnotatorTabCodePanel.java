@@ -20,7 +20,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +37,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTextArea;
+import semsim.reading.ModelAccessor;
 
 public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -58,24 +58,26 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		addMouseListener(new PopupListener());
 		
 		try {
-			setCodeView(workbench.getModelSourceFile());
+			setCodeView(workbench.getModelSourceLocation());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 	
-	public void setCodeView(String modelloc) throws IOException {
+	public void setCodeView(ModelAccessor srccodema) throws IOException {
 		Boolean cont = true;
 		setText("");
-		if(modelloc!=null && !modelloc.equals("")){
-			File modelfile = null;
+		String modelloc = "";
+		
+		if(srccodema != null){
+			
+			modelloc = srccodema.getModelURI().toString();
+			
 			// If the legacy model code is on the web
-			if (modelloc.startsWith("http://")) {
-				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving legacy code...", false);
+			if (srccodema.modelIsOnline()) {
+				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving code...", false);
 
-				modelfile = new File(modelloc);
-	
-				URL url = new URL(modelloc);
+				URL url = new URL(srccodema.getModelURI().toString());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -96,7 +98,8 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					urlcon.setDoInput(true);
 					urlcon.setUseCaches(false);
 					urlcon.setReadTimeout(60000);
-					// If there's no file at the URL
+					
+					// If there's a file at the URL
 					if(urlcon.getContentLength()>0){
 						BufferedReader d = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
 						String s;
@@ -117,27 +120,34 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				else cont = false;
 				progframe.dispose();
 			}
-			// Otherwise it's a local file
+			
+			// Otherwise it's a local file or within a local file
 			else {
-				modelfile = new File(modelloc);
-				if (modelfile.exists()) {
-					// Read in the model code and append it to the codearea
-					// JTextArea in the top pane
-					String filename = modelfile.getAbsolutePath();
-					Scanner importfilescanner = new Scanner(new File(filename));
+				
+				// If the local file doesn't exist, check the directory that the
+				// SemSim model is in
+				if( ! srccodema.getFileThatContainsModel().exists()){
+					String srcfilename = srccodema.getFileThatContainsModel().getName();
+					File samedirfile = new File (
+							workbench.getModelAccessor().getFileThatContainsModel().getParentFile().toString() + 
+							"/" + srcfilename);
 					
-					String nextline;
-					while (importfilescanner.hasNextLine()) {
-						nextline = importfilescanner.nextLine();
-						append(nextline);
-						append("\n");
-						setCaretPosition(0);
-					}
-					importfilescanner.close();
-				} else cont = false;
+					if(samedirfile.exists())
+						srccodema.setModelURI(samedirfile.toURI());
+				}
+				
+				String modelcode = srccodema.getLocalModelTextAsString();
+				
+				if (modelcode != null && ! modelcode.equals("")){
+					append(modelcode);
+					append("\n");
+					setCaretPosition(0);
+				} 
+				else cont = false;
 			}
-		} else { 
-			modelloc = "<file location not specified>";
+		} 
+		else { 
+			modelloc = "<model location not specified>";
 			cont = false; 
 		}
 
@@ -283,7 +293,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == ModelAnnotationsBench.ModelChangeEnum.SOURCECHANGED) {
 			try {
-				setCodeView(workbench.getModelSourceFile());
+				setCodeView(workbench.getModelSourceLocation());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

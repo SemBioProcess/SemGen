@@ -12,6 +12,7 @@ import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 
 public class ModelAnnotationsBench extends Observable {
 	SemSimModel model;
@@ -39,18 +40,20 @@ public class ModelAnnotationsBench extends Observable {
 		annotations.add(new Annotation(rel, ann));
 	}
 	
-	public void setModelSourceFile(String loc) {
-		model.setSourceFileLocation(loc);
+	public void setModelSourceLocation(ModelAccessor ma) {
+		model.setSourceFileLocation(ma);
 		setChanged();
 		notifyObservers(ModelChangeEnum.SOURCECHANGED);
 	}
 	
-	public void changeModelSourceFile() {
-		LegacyCodeChooser lc = new LegacyCodeChooser(model.getLegacyCodeLocation());
-		String loc = lc.getCodeLocation();
-		if (loc != null && !loc.equals("")) {
-			setModelSourceFile(loc);
-		}
+	public void changeModelSourceLocation() {
+		ModelAccessor currentloc = model.getLegacyCodeLocation();
+		LegacyCodeChooser lc = new LegacyCodeChooser(currentloc);
+		ModelAccessor newloc = lc.getCodeLocation();
+		
+		if (newloc != null && ! (currentloc.equals(newloc)))
+			setModelSourceLocation(newloc);
+		
 	}
 	
 	public ArrayList<String[]> getAllMetadataInformation() {

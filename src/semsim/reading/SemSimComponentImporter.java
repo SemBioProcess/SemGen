@@ -38,14 +38,14 @@ public class SemSimComponentImporter {
 		int modeltype = ModelClassifier.classify(importedmodelfile);
 		if(modeltype == ModelClassifier.SEMSIM_MODEL){
 			try {
-				importedmodel = new SemSimOWLreader(importedmodelfile).readFromFile();
+				importedmodel = new SemSimOWLreader(importedmodelfile).read();
 			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}
 		else if(modeltype == ModelClassifier.CELLML_MODEL){
 			try {
-				importedmodel = new CellMLreader(importedmodelfile).readFromFile();
+				importedmodel = new CellMLreader(importedmodelfile).read();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

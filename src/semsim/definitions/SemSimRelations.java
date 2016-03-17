@@ -5,6 +5,9 @@ import java.net.URI;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.semanticweb.owlapi.model.IRI;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+
 import semsim.annotation.Relation;
 
 public class SemSimRelations {
@@ -149,7 +152,7 @@ public class SemSimRelations {
 		HAS_UNIT("hasUnit", RDFNamespace.SEMSIM.getNamespaceasString(), "physical property has physical units", RDFNamespace.SEMSIM.getOWLid()),
 		UNIT_FOR("unitFor", RDFNamespace.SEMSIM.getNamespaceasString(), "physical units for a property", RDFNamespace.SEMSIM.getOWLid()),
 		
-		//Qualifiers
+		//BioModels qualifiers
 		BQB_HAS_PART("hasPart", RDFNamespace.BQB.getNamespaceasString(), 
 				"The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", RDFNamespace.BQM.getOWLid()),
 		BQB_IS_PART_OF("isPartOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a physical or logical part of the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
@@ -203,6 +206,11 @@ public class SemSimRelations {
 		public IRI getIRI() {
 			return IRI.create(uri);
 		}
+		
+		public Property getRDFproperty(){
+			return ResourceFactory.createProperty(getURIasString());
+		}
+	
 	}
 	
 	/** A type of SemSimRelation for establishing structural relationships between
@@ -262,6 +270,11 @@ public class SemSimRelations {
 		@Override
 		public IRI getIRI() {
 			return IRI.create(uri);
+		}
+		
+		@Override
+		public Property getRDFproperty(){
+			return ResourceFactory.createProperty(getURIasString());
 		}
 	}
 	

@@ -31,11 +31,8 @@ import semsim.utilities.webservices.KEGGsearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
 public class ReferenceTermNamer {
-	
+		
 	public static final String BioPortalOBOlibraryPrefix = "http://purl.obolibrary.org/obo/";
-	public static final String BioPortalFMAnamespace = "http://purl.org/sig/ont/fma/";
-	public static final String BioPortalSNOMEDCTnamespace = "http://purl.bioontology.org/ontology/SNOMEDCT/";
-	public static final String BioPortalECGontNamespace = "http://www.cvrgrid.org/files/ECGOntologyv1.owl#";
 	
 	/**
 	 * @param model The SemSim model containing the SemSimObjects that will be processed
@@ -108,7 +105,7 @@ public class ReferenceTermNamer {
 						name = getNameFromURI(uri, lib);
 						
 						// If we retrieved the name
-						if(name!=null){
+						if(name != null){
 							System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
 							URInameMap.put(uri.toString(), new String[]{name});
 						}
@@ -139,6 +136,8 @@ public class ReferenceTermNamer {
 	}
 	
 	private static String getNameFromURI(URI uri, SemSimLibrary lib) {
+		String name = null;
+
 		String uristring= uri.toString();
 		
 		Ontology ont = lib.getOntologyfromTermURI(uristring);
@@ -148,107 +147,99 @@ public class ReferenceTermNamer {
 		if(uristring.startsWith("urn:miriam:")) id = uristring.substring(uristring.lastIndexOf(":")+1);
 		else id = SemSimOWLFactory.getIRIfragment(uristring);
 		
-		String name = null;
+		
 		String KBname = ont.getFullName();
 		System.out.println("Accessing " + KBname);
 		
-		while (name==null) {
-			if (!ont.getBioPortalID().isEmpty()) {
-				String edittedid = id;
-				
-				if (ont==ReferenceOntology.FMA.getAsOntology()) {
-					edittedid = edittedid.replace("FMA%3A", "");
-					edittedid = BioPortalFMAnamespace + edittedid.replace("FMA:", "fma");
-				}
-				else if (ont==ReferenceOntology.OPB.getAsOntology()) {
-					edittedid = edittedid.replace("OPB%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("OPB:", "OPB_");
-				}
-				else if (ont==ReferenceOntology.CHEBI.getAsOntology()) {
-					edittedid = edittedid.replace("CHEBI%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CHEBI:", "CHEBI_");
-				}
-				else if (ont==ReferenceOntology.GO.getAsOntology()) {
-					edittedid = edittedid.replace("GO%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("GO:", "GO_");
-				}
-				else if (ont==ReferenceOntology.CL.getAsOntology()) {
-					edittedid = edittedid.replace("CL%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("CL:", "CL_");
-				}
-				else if (ont==ReferenceOntology.MA.getAsOntology()) {
-					edittedid = edittedid.replace("MA%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("MA:", "MA_");
-				}
-				else if (ont==ReferenceOntology.PR.getAsOntology()) {
-					edittedid = edittedid.replace("PR%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PR:", "PR_");
-				}
-				else if (ont.getNickName().equals("BTO")) {
-					edittedid = edittedid.replace("BTO%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("BTO:", "BTO_");
-				}
-				else if (ont==ReferenceOntology.SBO.getAsOntology()) {
-					edittedid = edittedid.replace("SBO%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("SBO:", "SBO_");
-				}
-				
-				else if (ont==ReferenceOntology.PATO.getAsOntology()) {
-					edittedid = edittedid.replace("PATO%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("PATO:", "PATO_");
-				}
-				else if (ont.getNickName().equals("UBERON")) {
-					edittedid = edittedid.replace("UBERON%3A", "");
-					edittedid = BioPortalOBOlibraryPrefix + edittedid.replace("UBERON:", "UBERON_");
-				}
-				
-				else if (ont.getNickName().equals("ECG")) {
-					edittedid = BioPortalECGontNamespace + edittedid;
-				}
-				else if (ont==ReferenceOntology.SNOMED.getAsOntology()) {
-					edittedid = BioPortalSNOMEDCTnamespace + edittedid;
-				}
-				edittedid = SemSimOWLFactory.URIencoding(edittedid);
-				name = getRDFLabelUsingBioPortal(edittedid, ont.getNickName());
+		if ( ! ont.getBioPortalNamespace().isEmpty()) {
+			String edittedid = id;
+			
+			String ns = ont.getBioPortalNamespace();
+			if(ns.startsWith(BioPortalOBOlibraryPrefix)) ns = BioPortalOBOlibraryPrefix;
+					
+			
+			if (ont==ReferenceOntology.FMA.getAsOntology()) {
+				edittedid = edittedid.replace("FMA%3A", "");
+				edittedid = ns + edittedid.replace("FMA:", "fma");
 			}
+			else if (ont==ReferenceOntology.OPB.getAsOntology()) {
+				edittedid = edittedid.replace("OPB%3A", "");
+				edittedid = ns + edittedid.replace("OPB:", "OPB_");
+			}
+			else if (ont==ReferenceOntology.CHEBI.getAsOntology()) {
+				edittedid = edittedid.replace("CHEBI%3A", "");
+				edittedid = ns + edittedid.replace("CHEBI:", "CHEBI_");
+			}
+			else if (ont==ReferenceOntology.GO.getAsOntology()) {
+				edittedid = edittedid.replace("GO%3A", "");
+				edittedid = ns + edittedid.replace("GO:", "GO_");
+			}
+			else if (ont==ReferenceOntology.CL.getAsOntology()) {
+				edittedid = edittedid.replace("CL%3A", "");
+				edittedid = ns + edittedid.replace("CL:", "CL_");
+			}
+			else if (ont==ReferenceOntology.MA.getAsOntology()) {
+				edittedid = edittedid.replace("MA%3A", "");
+				edittedid = ns + edittedid.replace("MA:", "MA_");
+			}
+			else if (ont==ReferenceOntology.PR.getAsOntology()) {
+				edittedid = edittedid.replace("PR%3A", "");
+				edittedid = ns + edittedid.replace("PR:", "PR_");
+			}
+			else if (ont.getNickName().equals("BTO")) {
+				edittedid = edittedid.replace("BTO%3A", "");
+				edittedid = ns + edittedid.replace("BTO:", "BTO_");
+			}
+			else if (ont==ReferenceOntology.SBO.getAsOntology()) {
+				edittedid = edittedid.replace("SBO%3A", "");
+				edittedid = ns + edittedid.replace("SBO:", "SBO_");
+			}
+			
+			else if (ont==ReferenceOntology.PATO.getAsOntology()) {
+				edittedid = edittedid.replace("PATO%3A", "");
+				edittedid = ns + edittedid.replace("PATO:", "PATO_");
+			}
+			else if (ont.getNickName().equals("UBERON")) {
+				edittedid = edittedid.replace("UBERON%3A", "");
+				edittedid = ns + edittedid.replace("UBERON:", "UBERON_");
+			}
+			
+			else if (ont==ReferenceOntology.SNOMED.getAsOntology()) {
+				edittedid = ns + edittedid;
+			}
+			edittedid = SemSimOWLFactory.URIencoding(edittedid);
+			name = 	BioPortalSearcher.getRDFLabelUsingBioPortal(edittedid, ont.getNickName());
 
-			else if(KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME)
-					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME)
-					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME)
-					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME)
-					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME)
-					|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME)){
-				try {
-					name = KEGGsearcher.getNameForID(id);
-				} catch (IOException e) {e.printStackTrace();}
-			}
-			else if(KBname.equals(SemSimConstants.BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME)){
-				// Use KEGG for EC codes
-				try {
-					name = KEGGsearcher.getNameForID("ec:" + id);
-				} catch (IOException e) {e.printStackTrace();}
-	
-			}
-
-			else if(KBname.equals(SemSimConstants.UNIPROT_FULLNAME)){
-				try {
-					name = getRDFLabelUsingUniProt(id);
-				} 
-				catch (IOException | JDOMException e) {
-					e.printStackTrace();
-					} 
-			}
-			return null;
 		}
+
+		else if(KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME)
+				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME)
+				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME)
+				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME)
+				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME)
+				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME)){
+			try {
+				name = KEGGsearcher.getNameForID(id);
+			} catch (IOException e) {e.printStackTrace();}
+		}
+		else if(KBname.equals(SemSimConstants.BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME)){
+			// Use KEGG for EC codes
+			try {
+				name = KEGGsearcher.getNameForID("ec:" + id);
+			} catch (IOException e) {e.printStackTrace();}
+
+		}
+
+		else if(KBname.equals(SemSimConstants.UNIPROT_FULLNAME)){
+			try {
+				name = UniProtSearcher.getPreferredNameForID(id);
+			} 
+			catch (IOException | JDOMException e) {
+				e.printStackTrace();
+			} 
+		}
+		
 		return name; 
 	}
 	
-	
-	private static String getRDFLabelUsingBioPortal(String id, String bioportalontID){
-		return BioPortalSearcher.getRDFLabelUsingBioPortal(id, bioportalontID);
-	}
-	
-	private static String getRDFLabelUsingUniProt(String ID) throws IOException, JDOMException{
-		return UniProtSearcher.getPreferredNameForID(ID);
-	}
 }

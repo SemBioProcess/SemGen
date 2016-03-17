@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
+import semsim.reading.ModelAccessor;
+
 public abstract class Workbench extends Observable implements Observer, PropertyChangeListener{
 	public abstract void initialize();
 	
@@ -27,7 +29,7 @@ public abstract class Workbench extends Observable implements Observer, Property
 	
 	public abstract String getCurrentModelName();
 	
-	public abstract String getModelSourceFile();
+	public abstract ModelAccessor getModelSourceLocation();
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {

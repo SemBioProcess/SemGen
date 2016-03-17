@@ -60,6 +60,21 @@ public class Merger {
 		Set<DataStructure> dsdonotprune = new HashSet<DataStructure>();
 		boolean prune = true;
 		
+		// If one of the models contains functional submodels and the other doesn't,
+		 // flatten the one 
+		 boolean fxnalsubsinmodel1 = ssm1clone.getFunctionalSubmodels().size() > 0;
+		 boolean fxnalsubsinmodel2 = ssm2clone.getFunctionalSubmodels().size() > 0;
+		 Map<String,String> mod1renamemap = new HashMap<String,String>();
+		 Map<String,String> mod2renamemap = new HashMap<String,String>();
+		 
+		 if(fxnalsubsinmodel1 && ! fxnalsubsinmodel2){ 
+			 mod1renamemap = SemSimUtil.flattenModel(ssm1clone);
+		 }
+		 		
+		 else if(fxnalsubsinmodel2 && ! fxnalsubsinmodel1){
+			 mod2renamemap = SemSimUtil.flattenModel(ssm2clone);
+		 }
+		 
 		int i = 0;
 		
 		// Step through resolution points and replace/rewire codewords as needed
@@ -68,17 +83,31 @@ public class Merger {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				if (newname==null) newname=dsp.getLeft().getName();
+				
+				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
+
 				keptds = ssm1clone.getAssociatedDataStructure(newname);
 				modelfordiscardedds = ssm2clone;
+				String discardedname = dsp.getRight().getName();
 				
-				discardedds = modelfordiscardedds.getAssociatedDataStructure(dsp.getRight().getName());
+				if(mod2renamemap.containsKey(discardedname)) discardedname = mod2renamemap.get(discardedname);
+				
+				discardedds = modelfordiscardedds.getAssociatedDataStructure(discardedname);
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
-				keptds = ssm2clone.getAssociatedDataStructure(dsp.getRight().getName());
+				String keptname = dsp.getRight().getName();
+				
+				if(mod2renamemap.containsKey(keptname)) keptname = mod2renamemap.get(keptname);
+				
+				keptds = ssm2clone.getAssociatedDataStructure(keptname);
+				
 				modelfordiscardedds = ssm1clone;
 				
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				if (newname==null) newname=dsp.getLeft().getName();
+				
+				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
+				
 				discardedds = modelfordiscardedds.getAssociatedDataStructure(newname);
 			}
 			
@@ -88,13 +117,15 @@ public class Merger {
 				discardeddsset.add(discardedds);
 				keptdsset.add(keptds);
 				dsdonotprune.add(keptds);
-				
+								
 				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
 					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
 				}
-				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)) 
-					return null;
+				// else we assume that we're dealing with two flattened models
+				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)){ 
+				  	return null;
+				}
 			}
 			i++;
 		}
@@ -110,11 +141,13 @@ public class Merger {
 			for(DataStructure dstoprune : runningsettoprune){
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
 				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
-								
-				// Remove equation in MathML block, if inputds is a MappableVariable
-				if(dstoprune instanceof MappableVariable){
-					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)dstoprune);
-					fs.removeVariableEquationFromMathML((MappableVariable)dstoprune);
+				
+				// If we are removing a state variable, remove its derivative, if present
+				if(dstoprune.hasSolutionDomain()){
+					
+					if(parentmodel.containsDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName())){
+						parentmodel.removeDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName());
+					}
 				}
 			}
 		}
@@ -210,10 +243,11 @@ public class Merger {
 		if(prune) pruneSubmodels(mergedmodel);
 		
 		// Remove legacy code info
-		mergedmodel.setSourceFileLocation("");
+		mergedmodel.setSourceFileLocation(null);
 		
-		// WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
+		//TODO: WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
+		mergedmodel.setName("model_0");
 		
 		return mergedmodel;
 	}
@@ -236,7 +270,7 @@ public class Merger {
 		receiverds.getMappedTo().clear();
 		
 		//Also remove any initial_value that the receiver DS has.
-		receiverds.setCellMLinitialValue(null);
+		receiverds.setCellMLinitialValue("");
 		receiverds.setStartValue(null);
 		
 		// Find mathML block for the receiver codeword and remove it from the FunctionalSubmodel's computational code
@@ -284,8 +318,12 @@ public class Merger {
 		
 		// if the two terms have different names, or a conversion factor is required
 		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
-			String replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
-			SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
+			String replacementtext = keptds.getName();
+			if(conversionfactor.getLeft()!=1.0) 
+				replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
+			
+			 
+			 SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor);
 		}
 		// What to do about sol doms that have different units?
@@ -296,14 +334,6 @@ public class Merger {
 			for(DataStructure nsdds : ssm2clone.getAssociatedDataStructures()){
 				if(nsdds.hasSolutionDomain())
 					nsdds.setSolutionDomain(soldom1);
-			}
-		}
-		
-		// If we are removing a state variable, remove its derivative, if present
-		if(discardedds.hasSolutionDomain()){
-			
-			if(modelfordiscardedds.containsDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName())){
-				modelfordiscardedds.removeDataStructure(discardedds.getName() + ":" + discardedds.getSolutionDomain().getName());
 			}
 		}
 		

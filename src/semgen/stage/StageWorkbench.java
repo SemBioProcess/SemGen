@@ -21,6 +21,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.SemGenWebBrowserCommandSender;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 
 public class StageWorkbench extends Workbench {
 
@@ -76,15 +77,15 @@ public class StageWorkbench extends Workbench {
 	}
 
 	@Override
-	public String getModelSourceFile() {
+	public ModelAccessor getModelSourceLocation() {
 		return null;
 	}
 
 	private class ModelInfo {
 		public SemSimModel Model;
-		public File Path;
-
-		public ModelInfo(SemSimModel model, File path) {
+		public ModelAccessor Path;
+		
+		public ModelInfo(SemSimModel model, ModelAccessor path) {
 			Model = model;
 			Path = path;
 		}
@@ -102,30 +103,34 @@ public class StageWorkbench extends Workbench {
 		 */
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
-			for (File file : sgc.getSelectedFiles()) {
-				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+			
+			for (ModelAccessor ma : sgc.getSelectedFilesAsModelAccessors()) {
+				LoadSemSimModel loader = new LoadSemSimModel(ma, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
-
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, ma));
+				
 				// Tell the view to add a model
 				_commandSender.addModel(semsimmodel.getName());
 			}
 		}
 
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
+			
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
+				
 				File file = new File(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
-				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				ModelAccessor ma = new ModelAccessor(file);
+				LoadSemSimModel loader = new LoadSemSimModel(ma, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					return;
-				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+				
+				if (SemGenError.showSemSimErrors()) return;
+				
+				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, ma));
 
 				_commandSender.addModel(semsimmodel.getName());
 			}

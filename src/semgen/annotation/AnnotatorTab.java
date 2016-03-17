@@ -22,13 +22,14 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.SemSimObject;
+import semsim.reading.ModelAccessor;
 
 import java.net.URI;
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 import java.awt.BorderLayout;
@@ -36,7 +37,7 @@ import java.awt.BorderLayout;
 public class AnnotatorTab extends SemGenTab implements Observer {
 
 	private static final long serialVersionUID = -5360722647774877228L;
-	public File sourcefile; //File originally loaded at start of Annotation session (could be in SBML, MML, CellML or SemSim format)
+	public ModelAccessor modelaccessor; //Model location originally loaded at start of Annotation session (could be in SBML, MML, CellML, PROJ or SemSim format)
 	private AnnotatorWorkbench workbench;
 	
 	public static int initwidth;
@@ -65,7 +66,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	public AnnotatorTab(SemGenSettings sets, GlobalActions gacts, AnnotatorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.annotatoricon, "Annotating " + bench.getCurrentModelName(), sets, gacts);
 		workbench = bench;
-		sourcefile = workbench.getFile();
+		modelaccessor = workbench.getModelAccessor();
 		workbench.addObserver(this);
 		settings.addObserver(this);
 		workbench.addObservertoModelAnnotator(this);
@@ -198,7 +199,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	}
 	
 	public boolean fileURIMatches(URI uri) {
-		return (uri.toString().equals(sourcefile.toURI().toString()));
+		return (uri.toString().equals(modelaccessor.getFileThatContainsModelAsURI().toString()));
 	}
 
 	public boolean closeTab() {

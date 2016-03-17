@@ -5,9 +5,11 @@ import java.net.URI;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.physical.PhysicalEntity;
+import semsim.owl.SemSimOWLFactory;
 
 public class ReferencePhysicalEntity extends PhysicalEntity implements ReferenceTerm{
 	
@@ -37,8 +39,14 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalEntity)obj).getPhysicalDefinitionURI().toString().equals(referenceuri.toString());
-	}
+		URI physdefuri = ((ReferencePhysicalEntity)obj).getPhysicalDefinitionURI();
+		
+		String physdefID = getTermID().replace(":", "_");
+		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
+		
+		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
+				&& physdefID.equals(thisID));
+		}
 	
 	@Override
 	public String getOntologyName(SemSimLibrary semsimlib) {
@@ -47,6 +55,6 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 
 	@Override
 	public String getTermID() {
-		return referenceuri.getFragment();
+		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 }

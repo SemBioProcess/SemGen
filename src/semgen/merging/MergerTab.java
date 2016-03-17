@@ -3,7 +3,6 @@ package semgen.merging;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,11 +35,14 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.reading.ModelAccessor;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -63,9 +65,9 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	private JButton loadingbutton = new JButton(SemGenIcon.blankloadingiconsmall);
 	private MappingPanel mappingpanelleft, mappingpanelright; 
 	private MergerWorkbench workbench;
-	private Set<File> existingModels;
+	private Set<ModelAccessor> existingModels;
 	
-	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench, Set<File> existing) {
+	public MergerTab(SemGenSettings sets, GlobalActions globalacts, MergerWorkbench bench, Set<ModelAccessor> existing) {
 		super("Merger", SemGenIcon.mergeicon, "Tab for Merging SemSim Models", sets, globalacts);
 		
 		workbench = bench;
@@ -228,16 +230,16 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	private void plusButtonAction(){
-		Set<File> files = new HashSet<File>();
-		new SemGenOpenFileChooser(files, "Select SemSim models to merge",
+		Set<ModelAccessor> modelaccessors = new HashSet<ModelAccessor>();
+		new SemGenOpenFileChooser(modelaccessors, "Select SemSim models to merge",
         			new String[]{"owl", "xml", "sbml", "mod"});
 		
-		if (files.size() == 0) return;
-		if (files.size()+workbench.getNumberofStagedModels() > 2) {
+		if (modelaccessors.size() == 0) return;
+		if (modelaccessors.size() + workbench.getNumberofStagedModels() > 2) {
 			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
 			return;
 		}
-		AddModelsToMergeTask task = new AddModelsToMergeTask(files);
+		AddModelsToMergeTask task = new AddModelsToMergeTask(modelaccessors);
 		task.execute(); 
 	}
 
@@ -269,15 +271,15 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {
-		public Set<File> files;
-        public AddModelsToMergeTask(Set<File> filestoload){
-        	files = filestoload;
+		public Set<ModelAccessor> modelaccessors;
+        public AddModelsToMergeTask(Set<ModelAccessor> modelstoload){
+        	modelaccessors = modelstoload;
         	progframe = new SemGenProgressBar("Loading models...", true);
         }
         @Override
         public Void doInBackground() {
         	try {
-				cancel(!workbench.addModels(files, settings.doAutoAnnotate()));
+				cancel( ! workbench.addModels(modelaccessors, settings.doAutoAnnotate()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -362,14 +364,14 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				
 	}
 	
-	public File saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", 
-				new String[]{"owl"});
+	public void saveMerge() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
+		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
 		
-		if (filec.SaveAsAction()!=null) {
-			return filec.getSelectedFile();
+		if (ma != null) {
+			SaveSemSimModel.writeToFile(workbench.mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+			addmanualmappingbutton.setEnabled(true);
 		}
-		return null;
 	}
 
 	@Override
@@ -386,17 +388,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			primeForMerging();
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			File file = saveMerge();
-			
-			if (file==null) return;
-			
-			workbench.saveMergedModel(file);
-			addmanualmappingbutton.setEnabled(true);
-			try {
-				optionToEncode(file.getAbsolutePath());
-			} catch (IOException | OWLException e) {
-				e.printStackTrace();
-			}
+			saveMerge();
 		}
 	}
 }

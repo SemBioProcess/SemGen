@@ -1,9 +1,6 @@
 package semsim.writing;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,28 +13,13 @@ import java.util.Set;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-
-import semsim.SemSimLibrary;
-import semsim.SemSimObject;
-import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
-import semsim.annotation.Ontology;
 import semsim.definitions.RDFNamespace;
-import semsim.definitions.SemSimConstants;
-import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
@@ -48,13 +30,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.owl.SemSimOWLFactory;
+import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
-	private Set<String> metadataids = new HashSet<String>();
-	private CellMLbioRDFblock rdfblock;
+	private SemSimRDFwriter rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
@@ -71,7 +52,6 @@ public class CellMLwriter extends ModelWriter {
 		
 		try{	
 			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
-			metadataids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 			
 			// Check for events, if present write out error msg
 			if(semsimmodel.getEvents().size()>0){
@@ -84,8 +64,6 @@ public class CellMLwriter extends ModelWriter {
 			createRootElement();
 			
 			doc = new Document(root);
-			
-			
 			
 			declareImports();
 			
@@ -103,7 +81,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Declare the RDF metadata
 			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = CellMLbioRDFblock.getRDFAsString(rdfblock.rdf);
+				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -124,7 +102,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new CellMLbioRDFblock(sslib, semsimmodel.getNamespace(), rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, mainNS.getURI().toString());
 	}
 	
 	private void createRootElement() {		
@@ -170,26 +148,26 @@ public class CellMLwriter extends ModelWriter {
 				importel.setAttribute("href", hrefVal, RDFNamespace.XLINK.createJdomNamespace());
 				importelements.add(importel); // make a set of elements
 				
-				String metaidprefix = null;
 				String importedpiecetagname = null;
 				String importedpiecerefattr = null;
 				
 				if(ssc instanceof FunctionalSubmodel){
 					importedpiecetagname = "component";
 					importedpiecerefattr = "component_ref";
-					metaidprefix = "c";
 				}
 				else if(ssc instanceof UnitOfMeasurement){
 					importedpiecetagname = "units";
 					importedpiecerefattr = "units_ref";
-					metaidprefix = "u";
 				}
 				importedpiece = new Element(importedpiecetagname, mainNS);
 				importedpiece.setAttribute("name", ssc.getLocalName());
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				createRDFforAnnotatedThing((SemSimObject)ssc, metaidprefix, importedpiece, ((SemSimObject)ssc).getDescription());
+				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
+				
+				//TODO: might need to rethink the data that gets written out for submodels
+				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -369,15 +347,15 @@ public class CellMLwriter extends ModelWriter {
 	//*************END WRITE PROCEDURE********************************************//
 	
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
-		if(!((FunctionalSubmodel)submodel).isImported()){
+		if( ! ((FunctionalSubmodel)submodel).isImported()){
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any singular annotation on the submodel
-			createRDFforAnnotatedThing(submodel, "c", comp, submodel.getDescription());
+			rdfblock.setRDFforSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
-			if(!submodel.getMetadataID().equalsIgnoreCase("")) 
+			if( ! submodel.getMetadataID().equalsIgnoreCase("")) 
 				comp.setAttribute("id", submodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());  // Add ID, if present
 			
 			// Add the variables
@@ -404,8 +382,8 @@ public class CellMLwriter extends ModelWriter {
 				else if(ds.hasStartValue())
 					initialval = ds.getStartValue();
 				
-				// Add the RDF block for any singular annotation
-				createRDFforAnnotatedThing(ds, "v", variable, ds.getDescription());
+				// Add the RDF block for any annotations
+				rdfblock.setRDFforDataStructureAnnotations(ds);
 				
 				String metadataid = ds.getMetadataID();
 				// Add other attributes
@@ -429,8 +407,10 @@ public class CellMLwriter extends ModelWriter {
 		
 			// Add the mathml
 			Computation cmptn = ((FunctionalSubmodel)submodel).getComputation();
-			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty())
+			
+			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty()){
 				comp.addContent(makeXMLContentFromStringForMathML(cmptn.getMathML()));
+			}
 			else{
 				String allmathml = "";
 				for(DataStructure ds : submodel.getAssociatedDataStructures()){
@@ -443,24 +423,16 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	@Override
 	public void writeToFile(File destination){
 		SemSimUtil.writeStringToFile(writeToString(), destination);
 	}
 	
+	@Override
 	public void writeToFile(URI destination){
 		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
 	}
-	
-	public static Content makeXMLContentFromString(String xml){
-		try {
-			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-			Document aDoc = new SAXBuilder().build(stream);
-			return aDoc.getRootElement().detach();
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-			return null;
-		} 
-	}
+
 	
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		
@@ -475,129 +447,6 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
-	}
-	
-	// Add RDF-formatted semantic metadata for an annotated data structure or submodel 
-	public void createRDFforAnnotatedThing(SemSimObject annotated, String idprefix, Element el, String freetext){
-		if(annotated instanceof Annotatable){
-			Annotatable a = (Annotatable) annotated;
-			
-			Boolean hasphysprop = false;
-			if(a instanceof DataStructure){
-				hasphysprop = ((DataStructure)a).hasPhysicalProperty();
-			}
-			
-			if(a.hasPhysicalDefinitionAnnotation() || !freetext.equals("") || hasphysprop){
-				String metaid = createMetadataIDandSetNSPrefixes(annotated, idprefix, el);
-						
-				Resource ares = rdfblock.rdf.createResource("#" + metaid);
-				Model localrdf = ModelFactory.createDefaultModel();
-				
-				// Add free-text description, if present
-				if(!freetext.equals("")){
-					Property ftprop = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString() + "description");
-					Statement st = localrdf.createStatement(ares, ftprop, freetext);
-					collectRDFStatement(st, "dcterms", RDFNamespace.DCTERMS.getNamespaceasString(), localrdf);
-				}
-								
-				// Add singular annotation
-				if(a.hasPhysicalDefinitionAnnotation()){
-					URI uri = ((DataStructure)a).getPhysicalDefinitionReferenceOntologyAnnotation(sslib).getReferenceURI();
-					Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
-					URI furi = formatAsIdentifiersDotOrgURI(uri, sslib);
-					Resource refres = localrdf.createResource(furi.toString());
-					Statement st = localrdf.createStatement(ares, isprop, refres);
-					collectRDFStatement(st, "bqbiol", RDFNamespace.BQB.getNamespaceasString(), localrdf);
-				}
-				
-				// Add the local RDF within the annotated CellML element
-				if(!localrdf.isEmpty()){
-					String rawrdf = CellMLbioRDFblock.getRDFAsString(localrdf);
-					Content newrdf = makeXMLContentFromString(rawrdf);
-					if(newrdf!=null) el.addContent(newrdf);
-				}
-				
-				// If annotated thing is a variable, include any necessary composite annotation info
-				if(hasphysprop){
-					rdfblock.rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-					rdfblock.rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-					rdfblock.rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
-					rdfblock.rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
-					rdfblock.rdf.setNsPrefix("model", semsimmodel.getNamespace());
-						
-					Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
-					Resource propres = rdfblock.getResourceForDataStructurePropertyAndAnnotate(rdfblock.rdf, (DataStructure)a);
-					Statement st = rdfblock.rdf.createStatement(ares, iccfprop, propres);
-					
-					if(!rdfblock.rdf.contains(st)) rdfblock.rdf.add(st);
-					rdfblock.addCompositeAnnotationMetadataForVariable((DataStructure)a);
-				}
-			}
-		}
-	}
-	
-	private void collectRDFStatement(Statement st, String abrev, String namespace, Model localrdf) {
-		if(!localrdf.contains(st)){
-			localrdf.add(st);
-			localrdf.setNsPrefix(abrev, namespace);
-		}
-	}
-	
-	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
-		String metaid = annotated.getMetadataID();
-		// Create metadata ID for the model element, cache locally
-		if(metaid.isEmpty()){
-			metaid = idprefix + 0;
-			int n = 0;
-			while(metadataids.contains(metaid)){
-				n++;
-				metaid = idprefix + n;
-			}
-			metadataids.add(metaid);
-			el.setAttribute("id", metaid, RDFNamespace.CMETA.createJdomNamespace());
-		}
-		
-		rdfblock.rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-		rdfblock.rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdfblock.rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		return metaid;
-	}
-	
-	protected static URI formatAsIdentifiersDotOrgURI(URI uri, SemSimLibrary lib){
-		URI newuri = uri;
-		Ontology ont = lib.getOntologyfromTermURI(uri.toString());
-
-		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if(!uri.toString().startsWith("http://identifiers.org") && ont!=ReferenceOntology.UNKNOWN.getAsOntology()){
-			
-			String kbname = ont.getFullName();
-			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
-			String newnamespace = null;
-			
-			// Look up new namespace
-			for(String nskey : ont.getNameSpaces()){
-				if(nskey.startsWith("http://identifiers.org")){
-					newnamespace = nskey;
-				}
-			}
-
-			// Replacement rules for specific knowledge bases
-			if(kbname==SemSimConstants.UNIPROT_FULLNAME || ont==ReferenceOntology.OPB.getAsOntology()){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(ont==ReferenceOntology.CHEBI.getAsOntology()
-				|| ont==ReferenceOntology.GO.getAsOntology()
-				|| ont==ReferenceOntology.CL.getAsOntology()
-				|| ont==ReferenceOntology.MA.getAsOntology()
-			){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			//if(ont==ReferenceOntology.fma.getAsOntology()){
-				// Need to figure out how to get FMAIDs!!!!
-			//}
-		}
-		return newuri;
 	}
 	
 	

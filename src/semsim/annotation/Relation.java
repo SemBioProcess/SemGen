@@ -4,6 +4,8 @@ import java.net.URI;
 
 import org.semanticweb.owlapi.model.IRI;
 
+import com.hp.hpl.jena.rdf.model.Property;
+
 public interface Relation {
 	public String getName();
 	
@@ -17,4 +19,6 @@ public interface Relation {
 	public String getSPARQLCode();
 	
 	public IRI getIRI();
+	
+	public Property getRDFproperty();
 }

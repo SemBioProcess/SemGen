@@ -1,11 +1,11 @@
 package semgen;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
 import semgen.utilities.uicomponent.SemGenTab;
+import semsim.reading.ModelAccessor;
 /**
  * Class for notifying application level classes of requests and events 
  * from elsewhere in SemGen. Contains methods for passing a file
@@ -29,8 +29,8 @@ public class GlobalActions extends Observable {
 	};
 	private Integer tabsopen = 0;
 	private SemGenTab currentTab;
-	private File seed;
-	private Set<File> seeds;
+	private ModelAccessor seed;
+	private Set<ModelAccessor> seeds;
 	
 	GlobalActions() {}
 	
@@ -53,7 +53,7 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.ANNOTATE);
 	}
 	
-	public void NewAnnotatorTab(File obj) {
+	public void NewAnnotatorTab(ModelAccessor obj) {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.ANNOTATEEXISTING);
@@ -64,7 +64,7 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.EXTRACT);
 	}
 	
-	public void NewExtractorTab(File obj) {
+	public void NewExtractorTab(ModelAccessor obj) {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.EXTRACTEXISTING);
@@ -75,12 +75,12 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.MERGE);
 	}
 	
-	public void NewMergerTab(File model1, File model2) {
-		seeds = new HashSet<File>();
-		seeds.add(model1);
+	public void NewMergerTab(ModelAccessor accessor1, ModelAccessor accessor2) {
+		seeds = new HashSet<ModelAccessor>();
+		seeds.add(accessor1);
 		
-		if(model2 != null)
-			seeds.add(model2);
+		if(accessor2 != null)
+			seeds.add(accessor2);
 		
 		setChanged();
 		notifyObservers(appactions.MERGEEXISTING);
@@ -94,16 +94,16 @@ public class GlobalActions extends Observable {
 	/** 
 	 * Retrieve the stored file and reset the pointer.
 	 */
-	public File getSeed() {
-		File file = seed;
+	public ModelAccessor getSeed() {
+		ModelAccessor accessor = seed;
 		seed = null;
-		return file;
+		return accessor;
 	}
 	
-	public Set<File> getSeeds() {
-		Set<File> files = seeds;
+	public Set<ModelAccessor> getSeeds() {
+		Set<ModelAccessor> accessors = seeds;
 		seeds = null;
-		return files;
+		return accessors;
 	}
 	
 	public void requestSave() {

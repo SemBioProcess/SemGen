@@ -13,9 +13,13 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.Namespace;
+import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
@@ -32,7 +36,7 @@ import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
-public class MMLreader extends ModelReader {
+public class XMMLreader extends ModelReader {
 	private Hashtable<String,String> discretevarsandconstraints = new Hashtable<String,String>();
 	private Hashtable<String,Event> discretevarsandevents = new Hashtable<String,Event>();
 	private Hashtable<String,String[]> discretevarsandeventtriggerinputs = new Hashtable<String,String[]>();
@@ -41,14 +45,37 @@ public class MMLreader extends ModelReader {
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	private Set<Element> toolset = new HashSet<Element>(); 
 	protected Document doc;
+	private String mmlcode;
 	
-	public MMLreader(File file, Document doc) throws Xcept {
-		super(file);
+	
+	public XMMLreader(ModelAccessor modelaccessor, Document doc, String mmlcode) throws Xcept {
+		super(modelaccessor);
 		this.doc = doc;
+		this.mmlcode = mmlcode;
 	}
 	
+	// This is for reading from an actual XMML file (.xml), not an MML (.mod) file
+	@Override
+	public SemSimModel read() throws IOException, InterruptedException,
+			OWLException, CloneNotSupportedException, XMLStreamException {
+		
+		File srcfile = modelaccessor.getFileThatContainsModel();
+		if(srcfile != null){
+			doc = null;
+
+			try {
+				doc = new SAXBuilder().build(srcfile);
+			} catch (JDOMException e) {
+				e.printStackTrace();
+			}
+			return readFromDocument();
+		}
+		else return null;
+	}
+	
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public SemSimModel readFromFile() throws IOException, InterruptedException, OWLException {
+	public SemSimModel readFromDocument() throws IOException, InterruptedException, OWLException {
 		int numdomains = 0;
 		// Collect all tools into a set
 		Iterator toolit = doc.getRootElement().getChild("toolList").getChildren().iterator();
@@ -110,6 +137,7 @@ public class MMLreader extends ModelReader {
 				else if(vardatatype.equals("choice")) ds = new MMLchoice(codeword);
 				
 				semsimmodel.addDataStructure(ds);
+								
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);
 				
@@ -182,10 +210,10 @@ public class MMLreader extends ModelReader {
 						Element solvedvar = (Element) solvedvarsit.next();
 						if(solvedvar.getAttributeValue("id").equals(codeword)){ //&& ds.isDeclared()){
 							
-							String mmlcode = expr.getChild("expression").getChildText("debug");
+							String mmlcodeex = expr.getChild("expression").getChildText("debug");
 							String mathmlassignment = xmloutputter.outputString(expr.getChild("expression").getChild("math",mathmlns));
 							
-							computation.setComputationalCode(codeword + " = " + mmlcode);
+							computation.setComputationalCode(codeword + " = " + mmlcodeex);
 							computation.setMathML(mathmlassignment);
 							stop = true;
 						}
@@ -311,8 +339,7 @@ public class MMLreader extends ModelReader {
 		}
 
 		
-		// Set the custom units
-		setCustomUnits(srcfile);
+		setCustomUnits();
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures())
 			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, null);
@@ -370,19 +397,19 @@ public class MMLreader extends ModelReader {
 		}
 				
 		// Add the model-level annotations
-		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
+		semsimmodel.setSourceFileLocation(modelaccessor);
 		semsimmodel.setSemSimVersion(sslib.getSemSimVersion());
 		
 		// If jsbatch couldn't parse the model code into an xmml file, log the error
 		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
-			semsimmodel.addError(srcfile.getName() + " model appears to be empty.");
+			semsimmodel.addError(modelaccessor.getModelName() + " model appears to be empty.");
 		}
 		return semsimmodel;
 	}
 	
-	private void setCustomUnits(File file) throws FileNotFoundException, OWLException {
+	private void setCustomUnits() throws FileNotFoundException, OWLException {
 		Map<String,String> unitnamesandcustomdeclarations = new HashMap<String,String>();
-		Scanner scnr = new Scanner(file);
+		Scanner scnr = new Scanner(mmlcode);
 
 		// This next part that attempts to account for custom unit declarations
 		// is a bit of a hack
@@ -474,4 +501,5 @@ public class MMLreader extends ModelReader {
 		}
 		return null;
 	}
+
 }

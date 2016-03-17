@@ -16,30 +16,45 @@ public class ModelClassifier {
 	public static final int SBML_MODEL = 1;
 	public static final int CELLML_MODEL = 2;
 	public static final int MML_MODEL = 3;
+	public static final int MML_MODEL_IN_PROJ = 4;
+	
 	
 	public static int classify(File file){
+		return classify(new ModelAccessor(file));
+	}
+	
+	public static int classify(ModelAccessor accessor){
 		int type = -1;
 		try{
-			// get the model's language (SBML, CellML, MML, etc.)
-			if (file.toString().toLowerCase().endsWith(".mod")){
-				type = MML_MODEL;
+			
+			if(accessor.modelIsPartOfArchive()){
+				
+				if(accessor.modelIsPartOfJSimProjectFile()){
+					type = MML_MODEL_IN_PROJ;
+				}
 			}
-			else if (file.toString().endsWith(".owl")) {
-				type =  SEMSIM_MODEL;
-			}
-			else if(isCellMLmodel(file)){
-				type =  CELLML_MODEL;
-			}
-			else if(isValidSBML(file)){
-				type =  SBML_MODEL;
-			}
-			else if(file.toString().toLowerCase().endsWith(".xml")){
-				if(isValidSBML(file)) type =  SBML_MODEL;
-				else
-					if(isCellMLmodel(file)) type =  CELLML_MODEL;
+			else{
+				File file = accessor.getFileThatContainsModel();
+				if (file.toString().toLowerCase().endsWith(".mod")){
+					type = MML_MODEL;
+				}
+				else if (file.toString().endsWith(".owl")) {
+					type =  SEMSIM_MODEL;
+				}
+				else if(isCellMLmodel(file)){
+					type =  CELLML_MODEL;
+				}
+				else if(isValidSBML(file)){
+					type =  SBML_MODEL;
+				}
+				else if(file.toString().toLowerCase().endsWith(".xml")){
+					if(isValidSBML(file)) type =  SBML_MODEL;
+					else
+						if(isCellMLmodel(file)) type =  CELLML_MODEL;
+				}
 			}
 		}
-		catch(Exception e) {
+		catch(JDOMException | IOException e) {
 			e.printStackTrace();
 		} 
 		return type;

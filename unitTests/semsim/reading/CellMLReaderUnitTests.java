@@ -20,7 +20,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
-		SemSimModel model = reader.readFromFile();
+		SemSimModel model = reader.read();
 		
 		// Assert
 		assertNotNull("Verify the model is not null", model);
@@ -33,7 +33,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
-		SemSimModel model = reader.readFromFile();
+		SemSimModel model = reader.read();
 		
 		// Assert
 		

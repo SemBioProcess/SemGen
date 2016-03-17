@@ -84,7 +84,7 @@ public class SemSimOWLreader extends ModelReader {
 		super(file);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		factory = manager.getOWLDataFactory();
-		semsimmodel.setName(srcfile.getName().substring(0, srcfile.getName().lastIndexOf(".")));
+		semsimmodel.setName(modelaccessor.getModelName());
 		
 		try {
 			ont = manager.loadOntologyFromOntologyDocument(file);
@@ -93,9 +93,28 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+//	public SemSimOWLreader(ModelAccessor modelaccessor){
+//		super(modelaccessor);
+//		
+//		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+//		factory = manager.getOWLDataFactory();
+//		semsimmodel.setName(modelaccessor.getModelName());
+//		
+//		try {
+//			String modelcode = modelaccessor.getModelTextAsString();
+//			InputStream stream = new ByteArrayInputStream(modelcode.getBytes(StandardCharsets.UTF_8));
+//			
+//			System.out.println(modelcode);
+//			
+//			ont = manager.loadOntologyFromOntologyDocument(stream);
+//		} catch (OWLOntologyCreationException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
 	//*****************************READ METHODS*************************//
 		
-	public SemSimModel readFromFile() throws OWLException{	
+	public SemSimModel read() throws OWLException{	
 		if (verifyModel()) return semsimmodel;
 		
 		setPhysicalDefinitionURI();
@@ -148,11 +167,12 @@ public class SemSimOWLreader extends ModelReader {
 		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();
 		for (OWLAnnotation named : anns) {
 			if (named.getProperty().getIRI().equals(SemSimLibrary.SEMSIM_VERSION_IRI)) {
-				semsimmodel.setSemsimversion(((OWLLiteral)named.getValue()).getLiteral());
+				semsimmodel.setSemSimVersion(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			};
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
-				semsimmodel.setSourceFileLocation(((OWLLiteral)named.getValue()).getLiteral());
+				ModelAccessor ma = new ModelAccessor(((OWLLiteral)named.getValue()).getLiteral());
+				semsimmodel.setSourceFileLocation(ma);
 				annstoremove.add(named);
 			};
 		}
@@ -739,7 +759,9 @@ public class SemSimOWLreader extends ModelReader {
 				String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, sub, SemSimRelation.IMPORTED_FROM.getURI(),
 						importval, SemSimRelation.REFERENCE_NAME_OF_IMPORT.getURI());
 				sssubmodel = 
-						SemSimComponentImporter.importFunctionalSubmodel(srcfile, semsimmodel, subname, referencename, importval, sslib);
+						SemSimComponentImporter.importFunctionalSubmodel(
+								modelaccessor.getFileThatContainsModel(),
+								semsimmodel, subname, referencename, importval, sslib);
 			}
 		}
 		

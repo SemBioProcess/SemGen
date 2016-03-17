@@ -6,8 +6,10 @@ import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.model.physical.PhysicalProcess;
+import semsim.owl.SemSimOWLFactory;
 
 public class ReferencePhysicalProcess extends PhysicalProcess implements ReferenceTerm{
 	
@@ -42,12 +44,18 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 
 	@Override
-	public String getTermID() {
-		return referenceuri.getFragment();
-	}
-
-	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((ReferencePhysicalProcess)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
+		URI physdefuri = ((ReferencePhysicalProcess)obj).getPhysicalDefinitionURI();
+		
+		String physdefID = getTermID().replace(":", "_");
+		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
+		
+		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
+				&& physdefID.equals(thisID));
+	}
+	
+	@Override
+	public String getTermID() {
+		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 }

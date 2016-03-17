@@ -37,6 +37,7 @@ import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.file.FileFilter;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -50,6 +51,12 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier;
+import semsim.writing.CellMLwriter;
+import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.MMLwriter;
+import semsim.writing.SemSimOWLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -109,8 +116,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public JPanel physiomappanel = new JPanel();
 	public JTabbedPane graphtabpane = new JTabbedPane();
 	
-	public File sourcefile;
-	public File extractedfile;
+	public ModelAccessor extractedaccessor;
 	public File autogendirectory;
 	public SemSimModel extractedmodel;
 	
@@ -129,7 +135,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
 		settings = sets;
 		workbench = bench;
-		sourcefile = workbench.getSourceFile();
 		semsimmodel = workbench.getSourceModel();
 	}
 	
@@ -149,7 +154,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		
 		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
-		includepartipantscheckbox.setSelected(true);
+		includepartipantscheckbox.setSelected(false);
 		includepartipantscheckbox.addItemListener(this);
 
 		extractionlevelchooser2.setFont(SemGenFont.defaultPlain(-2));
@@ -211,7 +216,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 				if (o == toolbar.extractoritemopenann) {
 						try {
-							globalactions.NewAnnotatorTab(sourcefile);
+							globalactions.NewAnnotatorTab(workbench.getModelAccessor());
 						} catch (Exception e1) {e1.printStackTrace();} 
 					}	
 			}
@@ -544,18 +549,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		workbench.getExtraction().getDataStructuresToExtract().putAll(tempmap);
 	}
 	
-	// After an extraction is performed, provide user the option to encode the extracted model
-	// in a simulation language
-	public void optionToEncode(String filenamesuggestion) {
-		int x = JOptionPane.showConfirmDialog(this, "Finished extracting "
-				+ extractedfile.getName()
-				+ "\nGenerate simulation code from extracted model?", "",
-				JOptionPane.YES_NO_OPTION);
-		
-		if (x == JOptionPane.YES_OPTION) {
-			new Encoder(extractedmodel, filenamesuggestion);
-		}
-	}
 	
 	// Visualize a graph of the SemSim model
 	public void visualize(Extraction extraction, Boolean clusteringonly) {
@@ -781,24 +774,36 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public void actionPerformed(ActionEvent e){
 		Object o = e.getSource();
 		if (o == extractbutton) {
+			
 			primeextraction();
 			
 			if ( ! workbench.getExtraction().isEmpty()) {
-				extractedfile = chooseLocationForExtraction();
 				
-				if (extractedfile != null) {
-					try {
-						extractedmodel = workbench.getExtraction().extractToNewModel();
-						manager.saveOntology(extractedmodel.toOWLOntology(), new RDFXMLOntologyFormat(),IRI.create(extractedfile));
-						optionToEncode(extractedfile.getName());
-					} 
-					catch (CloneNotSupportedException | OWLException e1) {
-						e1.printStackTrace();
-					}
+				// Choose file location for extraction
+				String selectedext = null;
+				int modtype = semsimmodel.getSourceModelType();
+				
+				if(modtype==ModelClassifier.SEMSIM_MODEL) selectedext = "owl";
+				else if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
+				else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
+				else{}
+				
+				// Create the extracted semsim model
+				try {
+					extractedmodel = workbench.getExtraction().extractToNewModel();
+				} catch (CloneNotSupportedException e2) {
+					e2.printStackTrace();
 				}
-			} else {
+				
+				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext);
+				
+				ModelAccessor ma = filec.SaveAsAction(extractedmodel);
+				
+				if (ma != null)
+					SaveSemSimModel.writeToFile(extractedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+			} 
+			else
 				SemGenError.showError("Nothing to extract because no check boxes selected in extraction panels", "Extraction Error");
-			}
 		}
 
 		if (o == vizsourcebutton) visualizeAllDataStructures(false);
@@ -952,13 +957,4 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	@Override
 	public void requestSaveAs() {}
-	
-	public File chooseLocationForExtraction() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("Choose location to save file", new String[]{"owl","cellml"});
-		if (filec.SaveAsAction()!=null) {
-			extractedfile = filec.getSelectedFile();
-			return extractedfile;
-		}
-		return null;
-	}
 }

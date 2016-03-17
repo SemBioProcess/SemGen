@@ -49,9 +49,10 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 			}
 			
 			// ...else if we have identified the ontology and it is available through BioPortal, open the BioPortal URL
-			else if(!ont.getBioPortalID().isEmpty()){
+			else if( ! ont.getBioPortalNamespace().isEmpty()){
 				// Special case for BRENDA
 				String abbrev = ont.getNickName();
+				
 				if(abbrev.equals("BRENDA")) abbrev = "BTO";
 				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
 				BrowserLauncher.openURL(urlstring);

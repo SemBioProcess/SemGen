@@ -11,15 +11,16 @@ import semgen.utilities.Workbench;
 import semsim.extraction.Extraction;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.reading.ModelAccessor;
 
 
 public class ExtractorWorkbench extends Workbench {
-	File sourcefile;
+	ModelAccessor modelaccessor;
 	SemSimModel semsimmodel;
 	Extraction extraction;
 
-	public ExtractorWorkbench(File file, SemSimModel model) {
-		sourcefile = file;
+	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
+		modelaccessor = accessor;
 		semsimmodel = model;
 		extraction = new Extraction(semsimmodel);
 	}
@@ -36,7 +37,7 @@ public class ExtractorWorkbench extends Workbench {
 	}
 
 	@Override
-	public String getModelSourceFile() {
+	public ModelAccessor getModelSourceLocation() {
 		return semsimmodel.getLegacyCodeLocation();
 	}
 	
@@ -54,8 +55,8 @@ public class ExtractorWorkbench extends Workbench {
 		return null;
 	}
 
-	public File getSourceFile() {
-		return sourcefile;
+	public ModelAccessor getModelAccessor() {
+		return modelaccessor;
 	}
 	
 	public SemSimModel getSourceModel() {

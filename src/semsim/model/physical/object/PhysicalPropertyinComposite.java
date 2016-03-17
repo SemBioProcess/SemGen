@@ -5,9 +5,11 @@ import java.net.URI;
 import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.owl.SemSimOWLFactory;
 
 public class PhysicalPropertyinComposite extends PhysicalModelComponent implements ReferenceTerm{
 		
@@ -43,7 +45,13 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		return ((PhysicalPropertyinComposite)obj).getPhysicalDefinitionURI().compareTo(referenceuri)==0;
+		URI physdefuri = ((PhysicalPropertyinComposite)obj).getPhysicalDefinitionURI();
+		
+		String physdefID = getTermID().replace(":", "_");
+		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
+		
+		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
+				&& physdefID.equals(thisID));
 	}
 	
 	@Override
@@ -53,6 +61,6 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 	@Override
 	public String getTermID() {
-		return referenceuri.getFragment();
+		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 }

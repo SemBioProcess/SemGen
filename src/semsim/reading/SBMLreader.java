@@ -93,13 +93,17 @@ public class SBMLreader extends ModelReader{
 	public SBMLreader(File file) {
 		super(file);
 	}
+	
+	public SBMLreader(ModelAccessor accessor){
+		super(accessor);
+	}
 
 	@Override
-	public SemSimModel readFromFile() throws IOException, InterruptedException,
+	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromFile(srcfile.getAbsolutePath());
+		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getLocalModelTextAsString());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -116,7 +120,9 @@ public class SBMLreader extends ModelReader{
 		}
 		
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);
-		semsimmodel.setSourceFileLocation(srcfile.getAbsolutePath());
+		
+		// TODO: fix next line 
+		semsimmodel.setSourceFileLocation(modelaccessor);
 		
 		// Collect function definitions. Not used in SBML level 1.
 		// collectFunctionDefinitions();
@@ -1056,8 +1062,8 @@ public class SBMLreader extends ModelReader{
 						String namespace = SemSimOWLFactory.getNamespaceFromIRI(uristring);
 						
 						// If we can look up the knowledge resource given the namespace of the CV term
-						if(ReferenceOntologies.getReferenceOntologybyNamespace(namespace)!=null){
-							ReferenceOntology refont = ReferenceOntologies.getReferenceOntologybyNamespace(namespace);
+						if(ReferenceOntologies.getReferenceOntologyByNamespace(namespace)!=null){
+							ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
 							
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainhasReferenceOntology(refont)){

@@ -11,6 +11,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 import semsim.writing.ModelWriter;
 import semsim.writing.CellMLwriter;
 import semsim.writing.MMLwriter;
@@ -38,7 +39,7 @@ public class Encoder {
 	}
 	
 	public void startEncoding(File afile, String filenamesuggestion){
-		LoadSemSimModel loader = new LoadSemSimModel(afile, false);
+		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(afile), false);
 		loader.run();
 		SemSimModel model = loader.getLoadedModel();
 		if(SemGenError.showSemSimErrors()){
@@ -56,7 +57,7 @@ public class Encoder {
 		if (selection == null) return;
 		
 		ModelWriter outwriter = null;
-		SemGenSaveFileChooser fc = new SemGenSaveFileChooser("Choose Destination");
+		SemGenSaveFileChooser fc = new SemGenSaveFileChooser();
 		if(selection == optionsarray[0]){
 			fc.addFilters(new String[]{"cellml"});
 			outwriter = new CellMLwriter(model);
@@ -66,10 +67,10 @@ public class Encoder {
 			fc.addFilters(new String[]{"mml"});
 			outwriter = new MMLwriter(model);
 		}
-		File outputfile = fc.SaveAsAction();
+		ModelAccessor ma = fc.SaveAsAction(model);
 		
-		if (outputfile != null) {
-			CoderTask task = new CoderTask(outwriter, outputfile);
+		if (ma != null) {
+			CoderTask task = new CoderTask(outwriter, ma.getFileThatContainsModel());
 		
 			task.execute();
 			SemGenError.showSemSimErrors();

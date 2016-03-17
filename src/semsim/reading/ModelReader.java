@@ -13,15 +13,19 @@ import semsim.model.collection.SemSimModel;
 public abstract class ModelReader {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel = new SemSimModel();
-	protected File srcfile;
+	protected ModelAccessor modelaccessor;
 	
 	ModelReader(File file) {
-		srcfile = file;
+		modelaccessor = new ModelAccessor(file);
+	}
+	
+	ModelReader(ModelAccessor accessor){
+		this.modelaccessor = accessor;
 	}
 	
 	public static void pointtoSemSimLibrary(SemSimLibrary lib) {
 		sslib = lib;
 	}
 	
-	public abstract SemSimModel readFromFile() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException;
+	public abstract SemSimModel read() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException;
 }

@@ -1,22 +1,22 @@
 package semgen.merging;
 
-import java.io.File;
 import java.util.Set;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.utilities.uicomponent.TabFactory;
+import semsim.reading.ModelAccessor;
 
 public class MergerTabFactory extends TabFactory<MergerWorkbench> {
 
-	private Set<File> _existingModels;
+	private Set<ModelAccessor> _existingModels;
 	
 	public MergerTabFactory(SemGenSettings sets, GlobalActions actions) {
 		super(sets, actions);
 	}
 	
-	public MergerTabFactory(SemGenSettings sets, GlobalActions actions, Set<File> existingModels) {
+	public MergerTabFactory(SemGenSettings sets, GlobalActions actions, Set<ModelAccessor> existingModels) {
 		super(sets, actions);
 		_existingModels = existingModels;
 	}

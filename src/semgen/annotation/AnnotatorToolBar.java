@@ -154,7 +154,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == extractorbutton) {
 			try {
 				if(workbench.unsavedChanges()){
-					globalactions.NewExtractorTab(workbench.getFile());
+					globalactions.NewExtractorTab(workbench.getModelAccessor());
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();}
@@ -166,7 +166,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		
 		if (o == annotateitemchangesourcemodelcode) {
-				workbench.changeModelSourceFile();
+				workbench.changeModelSourceLocation();
 		}
 
 		if(o == annotateitemexportcsv){
@@ -188,10 +188,14 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == coderbutton) {
 			String filenamesuggestion = null;
 			
-			if(workbench.getModelSourceFile() != null){
+			if(workbench.getModelSourceLocation() != null){
 				
-				if(! workbench.getModelSourceFile().isEmpty()) {
-					filenamesuggestion = workbench.getModelSourceFile().substring(0, workbench.getModelSourceFile().lastIndexOf("."));
+				if( workbench.getModelSourceLocation() != null) {
+					
+					if( ! workbench.getModelAccessor().modelIsPartOfArchive()){
+						String filename = workbench.getModelAccessor().getFileThatContainsModel().getName();
+						filenamesuggestion = filename.substring(0, filename.lastIndexOf("."));
+					}
 				}
 			}
 			

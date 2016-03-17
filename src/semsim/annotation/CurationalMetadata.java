@@ -9,6 +9,9 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLLiteral;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+
 import semsim.definitions.RDFNamespace;
 
 public class CurationalMetadata {
@@ -111,6 +114,11 @@ public class CurationalMetadata {
 		@Override
 		public IRI getIRI() {
 			return IRI.create(uri);
+		}
+		
+		@Override
+		public Property getRDFproperty(){
+			return ResourceFactory.createProperty(getURIasString());
 		}
 	}
 	

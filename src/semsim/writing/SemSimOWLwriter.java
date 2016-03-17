@@ -510,7 +510,8 @@ public class SemSimOWLwriter extends ModelWriter {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
 		
 		if(semsimmodel.getLegacyCodeLocation()!=null)
-			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, semsimmodel.getLegacyCodeLocation(), manager);
+			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
+					semsimmodel.getLegacyCodeLocation().getModelURI().toString(), manager);
 		
 		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
 		anns.addAll(semsimmodel.getAnnotations());

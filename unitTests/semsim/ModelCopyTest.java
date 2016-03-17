@@ -21,7 +21,7 @@ public class ModelCopyTest extends UnitTestBase {
 			SemSimOWLreader reader = new SemSimOWLreader(validCellMLFile);
 			
 			// Act
-			semsim.model.collection.SemSimModel model = reader.readFromFile();
+			semsim.model.collection.SemSimModel model = reader.read();
 			SemSimModel copy = model.clone();
 			SemSimOWLwriter writer = new SemSimOWLwriter(copy);
 			File newModelFile = new File(System.getProperty("user.home"),"CVCopy.owl");
