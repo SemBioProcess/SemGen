@@ -143,8 +143,12 @@ public class CommunicatingWebBrowser extends Browser {
 		if(commandReceiver != null){
 			_commandReceiver = commandReceiver;
 			_commandReceiver.validate();
-			_commandReceiver.listenForBrowserCommands(this);
+			listenForCommands();
 		}
+	}
+	
+	private void listenForCommands() {
+		_commandReceiver.listenForBrowserCommands(this);
 	}
 	
 	public WebBrowserCommandSenderGenerator<?> getCommandSenderGenerator() {
@@ -198,6 +202,7 @@ public class CommunicatingWebBrowser extends Browser {
 
 			// We don't need to listen for anymore events
 			e.getBrowser().removeLoadListener(this);
+			listenForCommands();
 			
 			// Stitch together the script html
 			String scriptInnerHtml = generateReceiverandSenderHtml() +

@@ -2,11 +2,8 @@ package semgen.stage.stagetasks.merge;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.tuple.Pair;

@@ -32,8 +32,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 			throw new NullPointerException("browser");
 		
 		if(javascriptCommandReceiverVariableName == null ||
-				javascriptCommandReceiverVariableName.isEmpty())
-		{
+				javascriptCommandReceiverVariableName.isEmpty()) {
 			throw new NullPointerException("javascriptCommandReceiverVariableName");
 		}
 		
