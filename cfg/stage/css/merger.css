@@ -56,13 +56,13 @@
 
 .leftResolution {
     float: left;
-    width: 300px;
+    width: 250px;
     text-align: left;
 }
 
 .rightResolution {
     float: right;
-    width: 300px;
+    width: 250px;
     text-align: right;
 }
 
@@ -81,9 +81,9 @@
 
 .equation {
     font-family: Courier, monospace;
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
-    /*white-space: nowrap;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .leftNode {
