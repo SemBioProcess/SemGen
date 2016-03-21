@@ -1083,7 +1083,7 @@ public class SBMLreader extends ModelReader{
 												getIDforSBaseObject(sbmlobject) + ". Ignoring annotation against " + uristring);
 								}
 								// Otherwise add the non-identity annotation
-								else anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring, sslib));
+								else if(relation != null) anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring, sslib));
 							}
 						}
 					}
