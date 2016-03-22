@@ -27,8 +27,8 @@ function Graph() {
 
 	this.displaymode = DisplayModes.SHOWSUBMODELS;
 	this.fixedMode = false;
-		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator
-	this.nodesVisible = [true, true, true, true, false, true, true, true];
+		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
+	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
 
 	var nodes;
 	var visibleNodes = this.force.nodes();
