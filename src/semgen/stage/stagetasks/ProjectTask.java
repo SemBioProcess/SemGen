@@ -71,6 +71,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
+		public void onTaskClicked(String modelName, String task) {
+			onTaskClicked(modelName, task, null);
+		}
+		
 		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
