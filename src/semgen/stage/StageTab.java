@@ -19,6 +19,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -44,18 +45,17 @@ public class StageTab extends SemGenTab implements Observer {
 		
 		try {
 			//Allows local files to be accessed - security vulnerability if not running locally
-			String browserprefs = "";
+			ArrayList<String> browserprefs = new ArrayList<String>();
 			if (SemGen.debug) {
-				browserprefs += "--remote-debugging-port=9222"; // Uncomment to debug JS
+				browserprefs.add("--remote-debugging-port=9222"); // Uncomment to debug JS
 			}
-			BrowserPreferences.setChromiumSwitches(browserprefs);
+			BrowserPreferences.setChromiumSwitches(browserprefs.toArray(new String[]{}));
 			_workbench.initialize();
 			browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
 			_workbench.setCommandSender(browser.getCommandSenderGenerator());
 			
 			if (SemGen.debug) {
 				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
-				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
