@@ -430,12 +430,12 @@ function Graph() {
 	this.toggleFixedMode = function(setfixed) {
 		fixedMode = setfixed;
 		visibleNodes.forEach(setFixed);
+		this.update();
 	}
 
 	var setFixed = function (node) {
 		node.oldFixed = node.fixed;
 		node.fixed = fixedMode;
-		this.update();
 	};
 
 	var resetFixed = function () {
