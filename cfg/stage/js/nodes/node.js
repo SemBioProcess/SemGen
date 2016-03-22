@@ -73,6 +73,13 @@ Node.prototype.createVisualElement = function (element, graph) {
 	if(this.nodeType.nodeType == "Null") {
 		circleSelection.attr("stroke", "black")
 			.attr("stroke-width", 0.5);
+		this.rootElement.append("svg:line")
+			.attr("x1", this.r)
+			.attr("x2", -this.r)
+			.attr("y1", -this.r)
+			.attr("y2", this.r)
+			.attr("stroke", "black")
+			.attr("stroke-width", 1);
 	};
 
 	this.rootElement.on("click", function (node) {
