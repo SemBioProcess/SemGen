@@ -32,16 +32,18 @@ public class ModelAccessor {
 	
 	// This constructor parses a string input and assigns values to the object's fields
 	public ModelAccessor(String location){
-		
+				
 		if(location.startsWith("http://") || location.startsWith("file:")) modelURI = URI.create(location);
 				
 		else if(location.contains(separator)){
 			String path = location.substring(0, location.indexOf(separator));
 			String frag = location.substring(location.indexOf(separator) + 1, location.length());
-			modelURI = URI.create("file:" + path + separator + frag);
+
+			URI pathuri = new File(path).toURI();
+			modelURI = URI.create(pathuri.toString() + separator + frag);
 		}
 		
-		else modelURI = URI.create("file:" + location);
+		else modelURI = new File(location).toURI();
 	}
 
 	public URI getModelURI(){

@@ -128,25 +128,14 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 		@Override
 		public void addParticipant() {
 			ArrayList<Integer> cpes = library.getSortedCompositePhysicalEntityIndicies();
-			ArrayList<ParticipantEditor> notthis = new ArrayList<ParticipantEditor>(editors);
-			notthis.remove(this);
-			
-			ArrayList<Integer> templist = new ArrayList<Integer>();
-			for (ParticipantEditor editor : notthis) {
-				templist.addAll(editor.getParticipants());
-			}
-			
-			ArrayList<Integer> todisable = new ArrayList<Integer>();
-			for (Integer i : templist) {
-				todisable.add(cpes.indexOf(i));
-			}
 			ArrayList<Integer> preselect = new ArrayList<Integer>();
+			
 			for (Integer i : getParticipants()) {
 				preselect.add(cpes.indexOf(i));
 			}
 			
 			String dialogname = "Add participants to " + mantextfield.getText();
-			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(cpes), preselect, todisable);
+			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(cpes), preselect);
 			if (seldialog.isConfirmed()) {
 				preselect = seldialog.getSelections();
 				ArrayList<Integer> newsels = new ArrayList<Integer>();
