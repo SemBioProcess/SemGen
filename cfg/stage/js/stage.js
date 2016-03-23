@@ -128,12 +128,59 @@ function Stage(graph) {
 		if(!$("#stage").hasClass("mergePreview")) {
 			$("#stage").append(
 				'<div class="mergePreview">' +
-				'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
-				'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
-				'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
+				'<div class="substage" id="modelAStage"></div>' +
+				'<div class="substage" id="modelABStage"></div>' +
+				'<div class="substage" id="modelBStage"></div>' +
 				'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
 				'</div>'
 			);
+
+			var dataA = {
+				"nodes":[
+					{"name":"A", "group":1},
+					{"name":"B", "group":2},
+					{"name":"C", "group":3},
+				],
+				"links":[
+					{"source":1,"target":0},
+					{"source":2,"target":0},
+					{"source":2,"target":1},
+				]
+			};
+
+			var dataB = {
+				"nodes":[
+					{"name":"D", "group":1},
+					{"name":"E", "group":2},
+					{"name":"F", "group":3},
+				],
+				"links":[
+					{"source":1,"target":0},
+					{"source":2,"target":0},
+					{"source":2,"target":1},
+				]
+			};
+
+			var dataAB = {
+				"nodes":[
+					{"name":"G", "group":1},
+					{"name":"H", "group":2},
+					{"name":"I", "group":3},
+					{"name":"J", "group":1},
+					{"name":"K", "group":2},
+				],
+				"links":[
+					{"source":1,"target":0},
+					{"source":2,"target":0},
+					{"source":2,"target":1},
+					{"source":3,"target":1},
+					{"source":0,"target":3},
+				]
+			};
+
+			createGraph("#modelAStage", dataA);
+			createGraph("#modelABStage", dataAB);
+			createGraph("#modelBStage", dataB);
 		}
 
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
