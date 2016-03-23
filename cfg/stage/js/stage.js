@@ -175,6 +175,7 @@ function Stage(graph) {
 					{"source":2,"target":1},
 					{"source":3,"target":1},
 					{"source":0,"target":3},
+					{"source":4,"target":3},
 				]
 			};
 
