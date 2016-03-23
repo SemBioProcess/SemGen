@@ -1,10 +1,9 @@
 package semsim.annotation;
 
-import java.net.URI;
-
+import com.hp.hpl.jena.rdf.model.Property;
 import org.semanticweb.owlapi.model.IRI;
 
-import com.hp.hpl.jena.rdf.model.Property;
+import java.net.URI;
 
 public interface Relation {
 	public String getName();

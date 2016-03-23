@@ -1,8 +1,8 @@
 package semsim.definitions;
 
-import java.net.URI;
-
 import org.semanticweb.owlapi.model.IRI;
+
+import java.net.URI;
 
 public enum SemSimTypes {
 	MODEL("SemSim Model", RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_Model", "", "SemSim:SemSim_Model"),
