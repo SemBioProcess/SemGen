@@ -97,47 +97,26 @@ public class SemSimModelSerializer {
 	}
 	
 	private static void updateNodeMapForProcess(String parentModelId, String processName, Set<PhysicalEntity> sources, Set<PhysicalEntity> sinks, Set<PhysicalEntity> mediators, HashMap<String, PhysioMapNode> nodeMap) {
+		if(sources.isEmpty() && !sinks.isEmpty()) {
+			addNodesAndLinks("", parentModelId, processName, nodeMap, "Source");
+		}
 		for(PhysicalEntity source : sources) {
-			for(PhysicalEntity sink : sinks) {
-
-				// If the source or sink is not specified, set it to "Null node"
-				String sinkName = sink.getName();
-				if(sinkName == "") sinkName = "Null node";
-				String sourceName = source.getName();
-				if(sourceName == "") sourceName = "Null node";
-
-				getOrCreatePhysioMapNode(sourceName, parentModelId, nodeMap, "Entity");
-				getOrCreatePhysioMapNode(sinkName, parentModelId, nodeMap, "Entity");
-				PhysioMapNode procNode = getOrCreatePhysioMapNode(processName, parentModelId, nodeMap, "Process");
-
-				String processId = Node.buildId(processName, parentModelId);
-
-				procNode.inputs.add(new Link(
-						processId,
-						Node.buildId(sinkName, parentModelId),
-						parentModelId,
-						null
-				));
-
-				procNode.inputs.add(new Link(
-						Node.buildId(sourceName, parentModelId),
-						processId,
-						parentModelId,
-						null
-				));
-
-				for(PhysicalEntity mediator : mediators) {
-					getOrCreatePhysioMapNode(mediator.getName(), parentModelId, nodeMap, "Mediator");
-					procNode.inputs.add(new Link(
-							Node.buildId(mediator.getName(), parentModelId),
-							processId,
-							parentModelId,
-							"Mediator"
-					));
-				}
-			}
+			String nodeName = source.getName();
+			addNodesAndLinks(nodeName, parentModelId, processName, nodeMap, "Source");
 		}
 
+		if(sinks.isEmpty() && !sources.isEmpty()) {
+			addNodesAndLinks("", parentModelId, processName, nodeMap, "Sink");
+		}
+		for(PhysicalEntity sink : sinks) {
+			String nodeName = sink.getName();
+			addNodesAndLinks(nodeName, parentModelId, processName, nodeMap, "Sink");
+		}
+
+		for(PhysicalEntity mediator : mediators) {
+			String nodeName = mediator.getName();
+			addNodesAndLinks(nodeName, parentModelId, processName, nodeMap, "Mediator");
+		}
 	}
 
 	private static PhysioMapNode getOrCreatePhysioMapNode(String name, String parentModelId, HashMap<String, PhysioMapNode> nodeMap, String nodeType){
@@ -155,6 +134,44 @@ public class SemSimModelSerializer {
 		}
 
 		return node;
+	}
+
+	private static void addNodesAndLinks(String nodeName, String parentModelId, String processName, HashMap<String, PhysioMapNode> nodeMap, String nodeType) {
+		if(nodeName == "") nodeName = "Null "+nodeType+processName;
+
+		PhysioMapNode procNode = getOrCreatePhysioMapNode(processName, parentModelId, nodeMap, "Process");
+
+		String processId = Node.buildId(processName, parentModelId);
+
+		if(nodeType == "Source") {
+			getOrCreatePhysioMapNode(nodeName, parentModelId, nodeMap, "Entity");
+			procNode.inputs.add(new Link(
+					Node.buildId(nodeName, parentModelId),
+					processId,
+					parentModelId,
+					null
+			));
+		}
+
+		else if (nodeType == "Sink") {
+			getOrCreatePhysioMapNode(nodeName, parentModelId, nodeMap, "Entity");
+			procNode.inputs.add(new Link(
+					processId,
+					Node.buildId(nodeName, parentModelId),
+					parentModelId,
+					null
+			));
+		}
+
+		else if (nodeType == "Mediator") {
+			getOrCreatePhysioMapNode(nodeName, parentModelId, nodeMap, "Mediator");
+			procNode.inputs.add(new Link(
+					Node.buildId(nodeName, parentModelId),
+					processId,
+					parentModelId,
+					"Mediator"
+			));
+		}
 	}
 
 }

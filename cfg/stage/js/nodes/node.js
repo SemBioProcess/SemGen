@@ -59,28 +59,32 @@ Node.prototype.createVisualElement = function (element, graph) {
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
 
-	this.rootElement.append("svg:circle")
-			.attr("r", this.r)
+	var circleSelection = this.rootElement.append("svg:circle")
+										.attr("r", this.r)
 
-			.attr("class","nodeStrokeClass")
-			.on("mouseover", function (d) {
-				graph.highlightMode(d);
-			})
-			.on("mouseout", function () {
-				graph.highlightMode(null);
-			});
+										.attr("class","nodeStrokeClass")
+										.on("mouseover", function (d) {
+											graph.highlightMode(d);
+										})
+										.on("mouseout", function () {
+											graph.highlightMode(null);
+										});
+
+	if(this.nodeType.nodeType == "Null") {
+		circleSelection.attr("stroke", "black")
+			.attr("stroke-width", 0.5);
+		this.rootElement.append("svg:line")
+			.attr("x1", this.r)
+			.attr("x2", -this.r)
+			.attr("y1", -this.r)
+			.attr("y2", this.r)
+			.attr("stroke", "black")
+			.attr("stroke-width", 1);
+	};
 
 	this.rootElement.on("click", function (node) {
 		node.onClick();
 	});
-
-	//Append highlight circle
-	this.rootElement.append("svg:circle")
-		.attr("class", "highlight")
-		.attr("r", this.r + 4)
-		.attr("stroke", "yellow")
-		.attr("stroke-width", "4");
-
 
 	//Append highlight circle
 	this.rootElement.append("svg:circle")
@@ -138,7 +142,7 @@ Node.prototype.getLinks = function () {
 			}
 		}
 
-		else if(this.nodeType == NodeType.ENTITY || this.nodeType == NodeType.PROCESS) {
+		else if(this.nodeType == NodeType.ENTITY || this.nodeType == NodeType.PROCESS || this.nodeType == NodeType.NULLNODE) {
 			type = "physiomap";
 			inputNodeId = inputData.sourceId;
 			outputNodeId = inputData.sinkId;

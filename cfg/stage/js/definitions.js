@@ -11,6 +11,7 @@ var NodeType = {
 		ENTITY: {id: 5, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
 		PROCESS: {id: 6, nodeType: "Process", color: "#2CA02C", canShowHide: true},
 		MEDIATOR: {id: 7, nodeType: "Mediator", color: "#1F77B4", canShowHide: true},
+		NULLNODE: {id: 8, nodeType: "Null", color: "#FFFFFF", canShowHide: true}
 };
 
 var NodeTypeMap = {
@@ -21,7 +22,8 @@ var NodeTypeMap = {
 		"Constitutive": NodeType.CONSTITUTIVE,
 		"Entity": NodeType.ENTITY,
 		"Process": NodeType.PROCESS,
-		"Mediator": NodeType.MEDIATOR
+		"Mediator": NodeType.MEDIATOR,
+		"Null": NodeType.NULLNODE
 		};
 
 var defaultcharge = -300;
