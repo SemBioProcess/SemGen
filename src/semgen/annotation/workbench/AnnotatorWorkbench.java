@@ -145,13 +145,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public File saveModelAs() {
 		
-		String selectedext = null;
+		String selectedext = "owl";  // Default extension type
 		int modtype = semsimmodel.getSourceModelType();
 		
-		if(modtype==ModelClassifier.SEMSIM_MODEL) selectedext = "owl";
-		else if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
+		if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
 		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
-		else{}
 		
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
 		
