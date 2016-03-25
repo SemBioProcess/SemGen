@@ -15,7 +15,7 @@ function PhysioMapNode (graph, data, parentNode) {
 		this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
 	}
 	if(data.name.includes("Null ")) {
-		this.name = "Null";
+		this.name = "";
 		this.displayName = "";
 		this.nodeType = NodeTypeMap["Null"];
 	}
