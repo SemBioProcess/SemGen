@@ -251,10 +251,10 @@ function Graph() {
 
 	    // This is for new visibleNodes. We need to set them to fixed if we're in fixed mode
 	    // There's a delay so the forces can equalize
-	    setTimeout(function () {
-	    	if(this.fixedMode)
-	    		visibleNodes.forEach(toggleFixedMode);
-	    }, 7000);
+//	    setTimeout(function () {
+//	    	if(this.fixedMode)
+//	    		visibleNodes.forEach(toggleFixedMode);
+//	    }, 7000);
 	};
 
 	// Brute force redraw

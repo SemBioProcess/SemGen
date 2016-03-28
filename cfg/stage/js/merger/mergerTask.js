@@ -87,10 +87,6 @@ function MergerTask(graph, state) {
 			task.addResolutionPanel(d);	
 		});
 	});
-	
-
-	
-
 }
 
 MergerTask.prototype.onInitialize = function() {

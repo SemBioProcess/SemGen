@@ -59,7 +59,7 @@ public class StageTab extends SemGenTab implements Observer {
 				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
-
+			
 			final BrowserView browserView = new BrowserView(browser);
 
 			// Show JS alerts in java dialogs
@@ -72,6 +72,7 @@ public class StageTab extends SemGenTab implements Observer {
 			                JOptionPane.PLAIN_MESSAGE);
 			    }
 			});
+			
 			this.add(browserView, BorderLayout.CENTER);
 		} catch (InvalidNameException | IOException e) {
 			e.printStackTrace();
@@ -93,6 +94,11 @@ public class StageTab extends SemGenTab implements Observer {
 
 	}
 
+	public boolean closeTab() {
+		browser.dispose();
+		return true;
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == StageEvent.CHANGETASK) {
