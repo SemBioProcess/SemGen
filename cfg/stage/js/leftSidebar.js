@@ -19,7 +19,6 @@ function LeftSidebar(graph) {
 			"<ul>" +
 				"<li><a href='#' onclick='main.task.taskClicked(this);'>Annotate</a></li>" +
 				"<li><a href='#' onclick='main.task.taskClicked(this);'>Extract</a></li>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Merge</a></li>" +
 				"<li><a href='#' onclick='main.task.taskClicked(this);'>Close</a></li>" +
 			"</ul>" +
 			"Visualize" +

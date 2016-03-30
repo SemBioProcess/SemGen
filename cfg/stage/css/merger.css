@@ -34,12 +34,14 @@
     border-left: 2px solid black;
 }
 
-.alignLeft {
-    float: left;
+.leftModelName {
+    position: absolute;
+    left: 20px;
 }
 
-.alignRight {
-    float: right;
+.rightModelName {
+    position: absolute;
+    right: 20px;
 }
 
 .mergeResHeader {
@@ -48,7 +50,6 @@
 }
 
 .mergeResolution {
-    position: static;
     height: 100px;
     border-width: 1px;
     border-top-style: solid;
@@ -60,19 +61,15 @@
 }
 
 .leftResolution {
-    position: absolute;
-    left: 0px;
-    width: 300px;
-    padding: 10px;
-    display: inline-block
+    float: left;
+    width: 250px;
+    text-align: left;
 }
 
 .rightResolution {
-    position: absolute;
-    right: 0px;
-    width: 300px;
-    padding: 10px;
-    display: inline-block
+    float: right;
+    width: 250px;
+    text-align: right;
 }
 
 .leftResolution:hover, .rightResolution:hover {
@@ -80,14 +77,31 @@
     cursor: pointer;
 }
 
+.freeText {
+    font-style: italic;
+}
+
+.codeName {
+    font-weight: bold;
+}
+
+.equation {
+    font-family: Courier, monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .leftNode {
     position: absolute;
-    left: 300px;
+    left: 350px;
+    top: 35px;
 }
 
 .rightNode {
     position: absolute;
-    right: 300px;
+    right: 350px;
+    top: 35px;
 }
 
 .mergePreviewBtn {
@@ -95,6 +109,22 @@
 	left: 45vw;
 	display: inline-block;
     margin: 30px auto;
+}
+
+.radio label {
+    padding-left: 0px;
+}
+
+.leftResolution .mergeResRadio {
+    position: absolute;
+    left: 320px;
+    top: 30px;
+}
+
+.rightResolution .mergeResRadio {
+    position: absolute;
+    right: 300px;
+    top: 30px;
 }
 
 #quitMergerBtn {

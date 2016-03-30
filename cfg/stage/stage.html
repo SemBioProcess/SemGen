@@ -24,7 +24,7 @@
 		<script src="js/links/mediatorLink.js"></script>
 		<script src="js/links/link.js"></script>
 		<script src="js/links/mediatorLink.js"></script>
-		
+
 		<script src="js/leftSidebar.js"></script>
 		<script src="js/rightSidebar.js"></script>
 		<script src="js/graph.js"></script>
@@ -33,6 +33,7 @@
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/stage.js"></script>
 		<script src="js/main.js"></script>
+		<script src="js/mergePreviewMock.js"></script>
 
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 		<link type="text/css" rel="stylesheet" href="css/stage.css" />
@@ -159,11 +160,11 @@
 		<div id="taskModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
-					<div id="modalContent"></div> 
+					<div id="modalContent"></div>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Templates -->
 		<template id="mergerContent">
 			<div class="modal-header">
@@ -185,18 +186,18 @@
 				<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
 			</div>
 		</template>
-		
-		
+
+
 		<template id="overlapPanel">
 			<div class="overlapPane">
 				<div class="radio leftResolution" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-	
+
 				</div>
 				<button type="button" class="btn btn-primary mergePreviewBtn"
 					data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
-						
+
 				<div class="radio rightResolution" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-	
+
 				</div>
 			</div>
 		</template>
