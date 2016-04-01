@@ -59,7 +59,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			projdoc = JSimProjectFileReader.getDocument(outputProjectFile);
 		
 			// If the model already exists in the project file, overwrite the model code
-			// and the SemSimAnnotation control element. This will preserve parsets, etc. for the 
+			// and the SemSim annotation control element. This will preserve parsets, etc. for the 
 			// model in the project file.
 			if(JSimProjectFileReader.getModelElement(projdoc, modelName) != null) {
 				Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
