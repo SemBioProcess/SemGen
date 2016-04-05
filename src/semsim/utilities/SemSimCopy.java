@@ -13,10 +13,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.Decimal;
-import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
@@ -158,18 +155,10 @@ public class SemSimCopy {
 
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
 			
-			if(ds instanceof SemSimInteger) dsmap.put(ds, new SemSimInteger((SemSimInteger)ds));
-			else if(ds instanceof MMLchoice) dsmap.put(ds, new MMLchoice((MMLchoice)ds));
-			else if(ds instanceof Decimal) {
-				
-				if (ds instanceof MappableVariable) {
-					MappableVariable newmv = new MappableVariable((MappableVariable)ds);
-					mvset.put((MappableVariable)ds, newmv);
-					dsmap.put(ds, newmv);
-				}
-				else {
-					dsmap.put(ds, new Decimal((Decimal)ds));
-				}
+			DataStructure copy = ds.copy();
+			dsmap.put(ds, copy);
+			if (ds instanceof MappableVariable) {
+				mvset.put((MappableVariable)ds, (MappableVariable) copy);				
 			}
 		}
 		

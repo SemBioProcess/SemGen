@@ -31,4 +31,9 @@ public class Decimal extends DataStructure{
 	public boolean isReal() {
 		return true;
 	}
+
+	@Override
+	public DataStructure copy() {
+		return new Decimal(this);
+	}
 }

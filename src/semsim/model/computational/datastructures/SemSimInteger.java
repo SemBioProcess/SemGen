@@ -29,4 +29,9 @@ public class SemSimInteger extends DataStructure{
 	public boolean isReal() {
 		return true;
 	}
+
+	@Override
+	public DataStructure copy() {
+		return new SemSimInteger(this);
+	}
 }

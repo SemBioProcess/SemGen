@@ -1,6 +1,5 @@
 package semgen.stage;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -79,12 +78,12 @@ public class StageWorkbench extends Workbench {
 	}
 
 	@Override
-	public File saveModel() {
+	public ModelAccessor saveModel() {
 		return null;
 	}
 
 	@Override
-	public File saveModelAs() {
+	public ModelAccessor saveModelAs() {
 		return null;
 	}
 

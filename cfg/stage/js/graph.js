@@ -117,8 +117,6 @@ function Graph() {
 		this.update();
 	}
 
-
-
 	// Hide all links of the give type
 	this.hideLinks = function (type) {
 		var linksToHide = [];
@@ -237,7 +235,7 @@ function Graph() {
 	        .each(function (d) { d.createVisualElement(this, graph); });
 
 	    node.exit().remove();
-
+	    
 	    // Define the tick function
 	    this.force.on("tick", this.tick);
 

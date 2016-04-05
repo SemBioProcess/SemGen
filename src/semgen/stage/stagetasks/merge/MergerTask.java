@@ -1,6 +1,5 @@
 package semgen.stage.stagetasks.merge;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -18,7 +17,6 @@ import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
-import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
@@ -26,6 +24,7 @@ import semsim.reading.ModelAccessor;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
+	private MergePreview preview;
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
@@ -63,15 +62,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			descriptors.add(workbench.getDSDescriptors(i));
 		}
 		dsdescriptors = descriptors;
+		preview = workbench.generateMergePreview();
 	}
 	
-	public File saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl"}, "owl");
-		
-		if (filec.SaveAsAction(workbench.mergedmodel)!=null) {
-			return filec.getSelectedFile();
-		}
-		return null;
+	public ModelAccessor saveMerge() {
+		return workbench.saveModelAs();
 	}
 	
 	@Override
@@ -86,9 +81,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			JOptionPane.showMessageDialog(null, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
-		if (arg == MergeEvent.mergecompleted) {
-			File file = saveMerge();	
-			if (file==null) return;
+		if (arg == MergeEvent.mergecompleted) {	
+			if (saveMerge()==null) return;
 		}
 	}
 	

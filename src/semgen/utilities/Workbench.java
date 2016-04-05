@@ -8,7 +8,6 @@ package semgen.utilities;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,9 +20,9 @@ public abstract class Workbench extends Observable implements Observer, Property
 		return false;
 	}
 	
-	public abstract File saveModel();
+	public abstract ModelAccessor saveModel();
 	
-	public abstract File saveModelAs();
+	public abstract ModelAccessor saveModelAs();
 	
 	public abstract void setModelSaved(boolean val);	
 	

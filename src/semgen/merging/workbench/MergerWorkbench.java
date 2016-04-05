@@ -1,6 +1,5 @@
 package semgen.merging.workbench;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,9 +12,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
+import semgen.stage.stagetasks.merge.MergePreview;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.SaveSemSimModel;
+import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -26,7 +28,7 @@ public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
 	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
-	public SemSimModel mergedmodel;
+	private SemSimModel mergedmodel;
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
@@ -307,13 +309,20 @@ public class MergerWorkbench extends Workbench {
 	}
 
 	@Override
-	public File saveModel() {
+	public ModelAccessor saveModel() {
 		return null;
 
 	}
 
 	@Override
-	public File saveModelAs() {
+	public ModelAccessor saveModelAs() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
+		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
+		
+		if (ma != null) {
+			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+			return ma;
+		}
 		return null;
 	}
 	
@@ -347,6 +356,10 @@ public class MergerWorkbench extends Workbench {
 		return namelist;
 	}
 
+	public MergePreview generateMergePreview() {
+		return new MergePreview(overlapmap);
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 	}

@@ -5,7 +5,7 @@
 
 var DropZoneSideLength = 50;
 function DragToMerge(_node) {
-	var models = _node.graph.getVisibleNodes();
+	var models;
 	// When the node visualization is created add a dropzone element
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
@@ -26,6 +26,7 @@ function DragToMerge(_node) {
 			y: null,
 		};
 		var mergeNode = null;
+		models = _node.graph.getVisibleNodes();
 		
 		var nodeDrag = d3.behavior.drag()
 			.on("dragstart", function (d, i) {
@@ -34,6 +35,7 @@ function DragToMerge(_node) {
 					x: _node.x,
 					y: _node.y,
 				};
+				
 				
 				// Show drop zones on all other model nodes
 				models.forEach(function (node) {

@@ -415,4 +415,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public boolean isMapped() {
 		return false;
 	}
+	
+	public abstract DataStructure copy();
 }

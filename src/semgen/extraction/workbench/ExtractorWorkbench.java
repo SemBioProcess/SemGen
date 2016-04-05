@@ -1,6 +1,5 @@
 package semgen.extraction.workbench;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,12 +45,12 @@ public class ExtractorWorkbench extends Workbench {
 	}
 
 	@Override
-	public File saveModel() {
+	public ModelAccessor saveModel() {
 		return null;
 	}
 
 	@Override
-	public File saveModelAs() {
+	public ModelAccessor saveModelAs() {
 		return null;
 	}
 

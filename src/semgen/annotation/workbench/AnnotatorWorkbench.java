@@ -126,7 +126,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 
 	@Override
-	public File saveModel() {
+	public ModelAccessor saveModel() {
 		
 		URI fileuri = modelaccessor.getFileThatContainsModelAsURI();
 		
@@ -135,7 +135,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			validateModelComposites();
 			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor, file, lastsavedas);			
 			setModelSaved(true);
-			return file;
+			return modelaccessor;
 		}
 		else{
 			return saveModelAs();
@@ -143,7 +143,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 
 	@Override
-	public File saveModelAs() {
+	public ModelAccessor saveModelAs() {
 		
 		String selectedext = null;
 		int modtype = semsimmodel.getSourceModelType();
@@ -174,7 +174,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 			semsimmodel.setName(modelaccessor.getModelName());
 			
-			return modelaccessor.getFileThatContainsModel();
+			return modelaccessor;
 		}
 		
 		return null;

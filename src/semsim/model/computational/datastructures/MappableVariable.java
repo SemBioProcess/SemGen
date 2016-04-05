@@ -119,4 +119,9 @@ public class MappableVariable extends Decimal {
 		// If the mapped variable has an "in" interface value, return true
 		return getPublicInterfaceValue().equals("in") || getPrivateInterfaceValue().equals("in"); 
 	}
+	
+	@Override
+	public DataStructure copy() {
+		return new MappableVariable(this);
+	}
 }

@@ -35,9 +35,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
-import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -365,11 +363,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	public void saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
-		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
-		
-		if (ma != null) {
-			SaveSemSimModel.writeToFile(workbench.mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+		if (workbench.saveModelAs() != null) {
 			addmanualmappingbutton.setEnabled(true);
 		}
 	}
