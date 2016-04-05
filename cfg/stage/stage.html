@@ -62,7 +62,7 @@
 					<metadata id="metadata12220">image/svg+xmlSergio Luiz Araujo Silvasearchiconsinformaticcomputer</metadata>
 					<g>
 						<title>Layer 1</title>
-						<path fill="#454040" stroke-width="9.756173" id="path12423" d="m35.938999,35.085999c-43.272999,43.272003 -43.379,114.158997 -0.105988,157.432007c36.662991,36.663025 93.201992,42.25 135.920986,16.765991l76.343994,74.234985c10.506989,10.197998 27.084991,9.821045 37.116974,-0.843994c10.03302,-10.664978 9.77002,-27.445984 -0.737976,-37.643982l-75.182983,-72.864014c26.360992,-42.846985 21.007996,-100.044983 -16.028015,-137.080994c-43.27298,-43.273008 -114.054993,-43.273008 -157.327,0l0,0l0.000008,0zm31.738979,31.739014c26.10202,-26.102024 67.746033,-26.102024 93.848022,0c26.10199,26.10199 26.10199,67.745972 0,93.847961c-26.10199,26.102051 -67.746002,26.102051 -93.848022,0c-26.10199,-26.10199 -26.10199,-67.745972 0,-93.847961z"></>
+						<path fill="#454040" stroke-width="9.756173" id="path12423" d="m35.938999,35.085999c-43.272999,43.272003 -43.379,114.158997 -0.105988,157.432007c36.662991,36.663025 93.201992,42.25 135.920986,16.765991l76.343994,74.234985c10.506989,10.197998 27.084991,9.821045 37.116974,-0.843994c10.03302,-10.664978 9.77002,-27.445984 -0.737976,-37.643982l-75.182983,-72.864014c26.360992,-42.846985 21.007996,-100.044983 -16.028015,-137.080994c-43.27298,-43.273008 -114.054993,-43.273008 -157.327,0l0,0l0.000008,0zm31.738979,31.739014c26.10202,-26.102024 67.746033,-26.102024 93.848022,0c26.10199,26.10199 26.10199,67.745972 0,93.847961c-26.10199,26.102051 -67.746002,26.102051 -93.848022,0c-26.10199,-26.10199 -26.10199,-67.745972 0,-93.847961z"></path>
 					</g>
 				</svg>
 			</div>
@@ -157,6 +157,8 @@
 		<div id="activeTaskPanel"></div>
 
 		<div id="stage"></div>
+
+		<!--Merger modal-->
 		<div id="taskModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -168,16 +170,18 @@
 		<!-- Templates -->
 		<template id="mergerContent">
 			<div class="modal-header">
-				<h3 class="modal-title">New and improved merger coming soon!</h3>
+				<h3 class="modal-title">Merge models</h3>
+				<div class="mergeResHeader">
+					<h4 class="leftModelName"></h4>
+					<h4 class="rightModelName"></h4>
+				</div>
+			</div>
+			<div class="mergePreview">
+				<div class="substage" id="modelAStage"></div>
+				<div class="substage" id="modelABStage"></div>
+				<div class="substage" id="modelBStage"></div>
 			</div>
 			<div class="modal-body">
-				<div class="mergeResHeader">
-						<!--TODO: Create each of these with actual merge resolution-->
-						<!--Each mergeResolution class is a resolution step.-->
-						<!--Give different name for mergeResRadio in each mergeResolution class-->
-					<h4 id="ModelA" class="alignLeft"></h4>
-					<h4 id="ModelB" class="alignRight"></h4>
-				</div>
 				<div id="overlapPanels"></div>
 			</div>
 			<div class="modal-footer">
@@ -190,14 +194,11 @@
 
 		<template id="overlapPanel">
 			<div class="overlapPane">
-				<div class="radio leftResolution" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-
+				<div class="radio leftRes" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 				</div>
 				<button type="button" class="btn btn-primary mergePreviewBtn"
-					data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
-
-				<div class="radio rightResolution" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-
+						data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
+				<div class="radio rightRes" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
 				</div>
 			</div>
 		</template>

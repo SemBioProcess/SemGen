@@ -25,39 +25,35 @@ function MergerTask(graph, state) {
 	$("#quitMergerBtn").click(function() {
 		// TODO: Warning dialog before quitting
 		$("#activeTaskText").removeClass('blink');
+		$("#mergerIcon").remove();
 		sender.minimizeTask(task);
 	})	
 	
 	//$('[data-toggle="tooltip"]').tooltip();
 	
-		// Slide up panel for Active Task Tray
-	$("#activeTaskTray").click(function() {
-		$("#activeTaskPanel").slideToggle();
-	});
-	
 	//Create the resolution panel
 	this.addResolutionPanel = function(overlap) {
 		
-		var dsradiobutton = function (nodeside, desc) {
+		var dsradiobutton = function (nodeside, desc, id) {
 			var nodetype = NodeTypeMap[desc.type];
-			return '<label>' + 
+			return '<label>' +
 				'<div class="modelVarName">' + desc.name + '</div>' +
 				//'<div class="modelVarEquation">' + desc.equation + '</div>' +
 				'<svg class="'+ nodeside + '" height="10" width="10">' +
-					'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
-				'</svg>' + 
-				'<input type="radio" name="mergeResRadio">' +
-			'</label>';
+				'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
+				'</svg>' +
+				'<input class="mergeResRadio" type="radio" name="mergeResRadio' + id + '">' +
+				'</label>';
 
-		}
+		};
 
 		var t = document.querySelector('#overlapPanel');
 		var clone = document.importNode(t.content, true);
 		
 		clone.id = "res" + resolutions.length;
 		
-		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft);
-		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright);
+		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
+		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
 		
 		resolutions.push(clone);
 		
@@ -66,19 +62,54 @@ function MergerTask(graph, state) {
 		// Preview merge resolutions
 		$(".mergePreviewBtn").click(function() {
 			//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
+				var dataA = {
+					"nodes":[
+						{"name":"A", "group":1},
+						{"name":"B", "group":2},
+						{"name":"C", "group":3},
+					],
+					"links":[
+						{"source":1,"target":0},
+						{"source":2,"target":0},
+						{"source":2,"target":1},
+					]
+				};
 
-			// Create three different graphs on stage to preview Merge Resolutions
-			if(!$("#stage").hasClass("mergePreview")) {
-				$("#stage").append(
-					'<div class="mergePreview">' +
-					'<div class="substage" id="modelAStage"><img src="modelA.png" style="width:200px;height:200px;"></div>' +
-					'<div class="substage" id="modelABStage"><img src="modelAB.png" style="width:400px;height:400px;"></div>' +
-					'<div class="substage" id="modelBStage"><img src="modelB.png" style="width:200px;height:200px;"></div>' +
-					'<button id="backToMergeRes" type="button" class="btn btn-default" data-toggle="modal" data-target="#mergerModal">Back</button>' +
-					'</div>'
-				);
-				$('#taskModal').hide();
-			}
+				var dataB = {
+					"nodes":[
+						{"name":"D", "group":1},
+						{"name":"E", "group":2},
+						{"name":"F", "group":3},
+					],
+					"links":[
+						{"source":1,"target":0},
+						{"source":2,"target":0},
+						{"source":2,"target":1},
+					]
+				};
+
+				var dataAB = {
+					"nodes":[
+						{"name":"G", "group":1},
+						{"name":"H", "group":2},
+						{"name":"I", "group":3},
+						{"name":"J", "group":1},
+						{"name":"K", "group":2},
+					],
+					"links":[
+						{"source":1,"target":0},
+						{"source":2,"target":0},
+						{"source":2,"target":1},
+						{"source":3,"target":1},
+						{"source":0,"target":3},
+						{"source":4,"target":3},
+					]
+				};
+
+				createGraph("#modelAStage", dataA);
+				createGraph("#modelABStage", dataAB);
+				createGraph("#modelBStage", dataB);
+
 		});
 	}
 	
@@ -91,11 +122,11 @@ function MergerTask(graph, state) {
 
 MergerTask.prototype.onInitialize = function() {
 	var nodearr = getSymbolArray(this.nodes);
-	$("#ModelA").append(nodearr[0].id);
-	$("#ModelB").append(nodearr[1].id);
+	$(".leftModelName").append(nodearr[0].id);
+	$(".rightModelName").append(nodearr[1].id);
 	
 	if($("#mergerIcon").length == 0	) {
-		$("#activeTaskPanel").append("<a data-toggle='modal' href='#mergerModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
+		$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	}
 	
 	sender.requestOverlaps();
