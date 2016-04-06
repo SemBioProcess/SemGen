@@ -19,7 +19,7 @@ function Graph() {
 
 	this.force = d3.layout.force()
 		.gravity(0)
-		.chargeDistance(250)
+		.chargeDistance(defaultchargedistance)
 		.friction(0.7)
 		.charge(function (d) { return d.charge; })
 	    .linkDistance(function (d) { return d.length; });
@@ -247,9 +247,7 @@ function Graph() {
 	    // Restart the force layout.
 	    this.force
 			    .size([this.w, this.h])
-			    .start();  
-		
-
+			    .start(); 
 	    
 	    $(this).triggerHandler("postupdate");
 	    
@@ -410,6 +408,25 @@ function Graph() {
 				d.charge = charge;
 			});
 		};
+		
+		this.update();
+
+	}
+	
+	this.setLinkLength = function(length) {
+		if (isNaN(length)) return;
+		graph.linklength = length;
+		for (l in links) {
+			links[l].length = length;
+		};
+		
+		this.update();
+
+	}
+	
+	this.setChargeDistance = function(dist) {
+		if (isNaN(dist)) return;
+		this.force.chargeDistance(dist);
 		
 		this.update();
 

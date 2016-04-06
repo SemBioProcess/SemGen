@@ -28,6 +28,7 @@ var NodeTypeMap = {
 
 var defaultcharge = -300;
 var defaultlinklength = 300;
+var defaultchargedistance = 400;
 
 var DisplayModes = {
 	SHOWSUBMODELS: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
