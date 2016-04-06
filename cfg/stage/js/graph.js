@@ -7,7 +7,7 @@
 
 function Graph() {
 	var graph = this;
-
+	
 	// Get the stage and style it
 	var svg = d3.select("#stage")
 	    .append("svg:svg")
@@ -19,10 +19,13 @@ function Graph() {
 
 	this.force = d3.layout.force()
 		.gravity(0)
-		.chargeDistance(250)
+		.chargeDistance(defaultchargedistance)
 		.friction(0.7)
 		.charge(function (d) { return d.charge; })
 	    .linkDistance(function (d) { return d.length; });
+	
+	this.nodecharge = defaultcharge;
+	this.linklength = defaultlinklength;
 	this.color = d3.scale.category10();
 
 	this.displaymode = DisplayModes.SHOWSUBMODELS;
@@ -32,9 +35,9 @@ function Graph() {
 
 	var nodes;
 	var visibleNodes = this.force.nodes();
-	var links = this.force.links();
 	var orphanNodes = [];
-
+	
+	var links = this.force.links();
 	var hiddenLinks = {};
 
 	this.setTaskNodes = function(tasknodes) {
@@ -241,18 +244,16 @@ function Graph() {
 
 	    // Restart the force layout.
 	    this.force
-		    .size([this.w, this.h])
-		    .start();
-
-
+			    .size([this.w, this.h])
+			    .start(); 
+	    
 	    $(this).triggerHandler("postupdate");
-
-	    // This is for new visibleNodes. We need to set them to fixed if we're in fixed mode
-	    // There's a delay so the forces can equalize
-//	    setTimeout(function () {
-//	    	if(this.fixedMode)
-//	    		visibleNodes.forEach(toggleFixedMode);
-//	    }, 7000);
+	    
+	    if (this.fixedMode) {
+	    	setTimeout(function() {
+	    		graph.toggleFixedMode(true);
+	    	}, 7000);
+	    }
 	};
 
 	// Brute force redraw
@@ -397,50 +398,49 @@ function Graph() {
 	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
 	}
 
-	// Find a node's index
-	var findNodeIndex = function(id) {
-		for (var i in visibleNodes) {
-	        if (visibleNodes[i].id == id)
-	        	return i;
-		};
-	};
-
-	// Find a link's index
-	var findLinkIndex = function(id) {
-		for (var i in links) {
-			if (links[i].id == id)
-				return i;
-		}
-	}
-
 	this.setNodeCharge = function(charge) {
 		if (isNaN(charge)) return;
-		visibleNodes.forEach(function(node) {
-			if(node.nodeType != "Model") {
-				node.charge = charge;
-			}
-		});
-		defaultcharge = charge;
+		this.nodecharge = charge;
+		for (n in nodes) {
+			nodes[n].applytoChildren(function(d) {
+				d.charge = charge;
+			});
+		};
+		
+		this.update();
+
+	}
+	
+	this.setLinkLength = function(length) {
+		if (isNaN(length)) return;
+		graph.linklength = length;
+		for (l in links) {
+			links[l].length = length;
+		};
+		
+		this.update();
+
+	}
+	
+	this.setChargeDistance = function(dist) {
+		if (isNaN(dist)) return;
+		this.force.chargeDistance(dist);
+		
 		this.update();
 
 	}
 
 	this.toggleFixedMode = function(setfixed) {
-		fixedMode = setfixed;
-		visibleNodes.forEach(setFixed);
-		this.update();
+		this.fixedMode = setfixed;
+		for (n in nodes) {
+			nodes[n].applytoChildren(function(d) {
+				if (setfixed) {
+					d.wasfixed = d.fixed;
+				}
+				d.fixed = setfixed || d.wasfixed;
+			});
+		}
 	}
-
-	var setFixed = function (node) {
-		node.oldFixed = node.fixed;
-		node.fixed = fixedMode;
-	};
-
-	var resetFixed = function () {
-		node.fixed = node.oldFixed || false;
-		node.oldFixed = undefined;
-		this.update();
-	};
 
 	this.toggleGravity = function(enabled) {
 		if (enabled) {

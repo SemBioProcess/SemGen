@@ -9,7 +9,7 @@ function DependencyNode (graph, data, parentNode) {
 	// Ensure the node type is formatted properly
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 
-	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, defaultcharge);
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, graph.nodecharge);
 
 	this.addClassName("dependencyNode");
 	//this.addBehavior(Columns);
