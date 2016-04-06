@@ -8,6 +8,7 @@ function parentDrag (parent) {
 					// Set children to fixed if not already
 					if(!d.graph.fixedMode) {
 						d.globalApply(function (node) {
+							node.oldfixed = node.fixed;
 							node.fixed = true;
 						});
 
@@ -47,12 +48,12 @@ function parentDrag (parent) {
 
 				.on("dragend", function (d, i) {
 					// Children no longer fixed
-					if(!d.graph.fixedMode) {
-						d.globalApply(function (node) {
-							node.fixed = false;
-						});
-					}
+				if(!d.graph.fixedMode) {
+					d.globalApply(function (node) {
+						node.fixed = node.oldfixed;
+					});
 					d.graph.tick();
+				}
 				});
 			  // Add the dragging functionality to the node
 			parent.rootElement.call(parentDrag);

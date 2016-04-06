@@ -21,8 +21,8 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	this.inputs = inputs || [];
 	this.hidden = false;
 	this.textlocx = 0;
-	this.defaultcharge = charge;
-
+	this.wasfixed = false;
+	
 	this.timer = null;
 	this.clicks = 0;
 	if(this.parent) {
@@ -181,9 +181,9 @@ Node.prototype.getLinks = function () {
 			continue;
 		}
 
-		if(type == "external") length = 300;
-		else if(type == "physiomap") length = 100;
-		else length = 60;
+		if(type == "external") length = this.graph.linklength;
+		else if(type == "physiomap") length = Math.round(this.graph.linklength/3);
+		else length = Math.round(this.graph.linklength/5);
 
 		if(type == "Mediator")
 			var newLink = new MediatorLink(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
@@ -273,6 +273,8 @@ Node.prototype.onDoubleClick = function () {}
 Node.prototype.globalApply = function (funct) {
 	funct(this);
 }
+
+Node.prototype.applytoChildren = function(funct) {}
 
 function validateNode(nodeData) {
 	if(!nodeData)

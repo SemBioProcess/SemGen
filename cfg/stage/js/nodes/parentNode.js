@@ -77,6 +77,13 @@ ParentNode.prototype.getAllChildNodes = function() {
 	return childnodes;
 }
 
+ParentNode.prototype.applytoChildren = function(funct) {
+	for (var key in this.children) {
+		var child = this.children[key];
+		child.globalApply(funct);
+	}	
+}
+
 ParentNode.prototype.globalApply = function(funct) {
 	funct(this);
 	for (var key in this.children) {
