@@ -21,6 +21,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
@@ -172,7 +173,19 @@ public class JSimProjectFileWriter extends ModelWriter{
 		modelel.setAttribute("name", modelname);
 		Element controlelsrc = new Element("control"); 
 		controlelsrc.setAttribute("name", "modelSource");
-		controlelsrc.setText(new MMLwriter(semsimmodel).writeToString());
+		
+		// Write out MML code for model. If already in MML format, don't use
+		// SemSim as intermediate step
+		String modelText = null;
+		ModelAccessor sourceCodeLocation = semsimmodel.getLegacyCodeLocation();
+		
+		if(semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
+			modelText = sourceCodeLocation.getLocalModelTextAsString();
+		// TODO: if MML source code is online, retrieve it
+
+		else modelText = new MMLwriter(semsimmodel).writeToString();
+		
+		controlelsrc.setText(modelText);
 		modelel.addContent(controlelsrc);
 		return modelel;
 	}
