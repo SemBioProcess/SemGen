@@ -13,8 +13,7 @@ function Hull(node) {
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
-				console.log("hull click");
-				node.setChildren(null);
+				node.setChildren(null, null);
 				
 				node.rootElement.selectAll("text").attr("x", 0);
 			});
@@ -33,6 +32,7 @@ function Hull(node) {
 	});
 	
 	$(node).on('preTick', function () {
+		if (node.id==null) return; 
 		// Draw the hull around child nodes
 		if(children) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull

@@ -269,7 +269,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	private class AddModelsToMergeTask extends SemGenTask {
-		public ArrayList<ModelAccessor> modelaccessors;
+		public ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
         public AddModelsToMergeTask(Set<ModelAccessor> modelstoload){
         	modelaccessors.addAll(modelstoload);
         	progframe = new SemGenProgressBar("Loading models...", true);

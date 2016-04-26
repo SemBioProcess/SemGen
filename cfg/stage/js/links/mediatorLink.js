@@ -1,7 +1,7 @@
 /**
  * Represents a link in the d3 graph
  */
-function MediatorLink(graph, name, parent, input, output, length, linkType) {
+function MediatorLink(graph, name, input, output, length, linkType) {
 	if(!graph)
 		return;
 

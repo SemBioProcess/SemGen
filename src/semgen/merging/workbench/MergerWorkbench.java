@@ -357,7 +357,7 @@ public class MergerWorkbench extends Workbench {
 	}
 
 	public MergePreview generateMergePreview() {
-		return new MergePreview(overlapmap);
+		return new MergePreview(overlapmap, Pair.of(this.getModelName(0), this.getModelName(1)));
 	}
 	
 	@Override

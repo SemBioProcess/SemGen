@@ -94,7 +94,7 @@ function Graph() {
 
 	// Remove all links
 	this.removeAllLinks = function(){
-	    links.splice(0,links.length);
+	    links.length = 0;
 	};
 
 	// Check to see if there's at least 1 node of the given type

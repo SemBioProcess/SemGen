@@ -3,6 +3,7 @@ package semgen.stage.stagetasks.merge;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -13,6 +14,7 @@ import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.stage.serialization.MergePreviewSubmodels;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
@@ -99,6 +101,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			switchTask(0);
 		}
 		
+		public void onRequestPreview(Double index) {
+			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
+			_commandSender.showPreview(psms);			
+		}
+		
 		public void onConsoleOut(String msg) {			
 			System.out.println(msg);
 		}
@@ -110,6 +117,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
 		}
+		
 	}
 	
 	@Override

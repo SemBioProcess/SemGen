@@ -7,6 +7,7 @@ public class SubModelDependencyNode extends DependencyNode {
 
 	// When we split the submodel name and the variable name string into an array
 	// we'll need to index into the array to get the correct parts
+
 	public final static int SubmodelNamePart = 0;
 	public final static int VariableNamePart = 1;
 
@@ -31,6 +32,16 @@ public class SubModelDependencyNode extends DependencyNode {
 		}
 	}
 
+	public SubModelDependencyNode(DataStructure dataStructure) {
+		super(dataStructure, "");
+		String[] parts = getNodeNameParts(dataStructure);
+		
+		parentModelId = parts[0];
+		this.name = parts[2];
+		this.id = parts[0] + "." + parts[1] + "." + parts[2];
+		
+	}
+	
 	/**
 	 * Get the data structure's name (without the submodel prefix).
 	 * If the data structure is a child of a submodel the submodel name will need to be removed.
@@ -51,8 +62,8 @@ public class SubModelDependencyNode extends DependencyNode {
 	 * @param dataStrcuture - datastructure to extract parts from
 	 * @return Each name part.
 	 */
-	private static String[] getNodeNameParts(DataStructure dataStrcuture) {
-		return dataStrcuture.getName().split("\\.");
+	private static String[] getNodeNameParts(DataStructure dataStructure) {
+		return dataStructure.getName().split("\\.");
 	}
 	
 	/**

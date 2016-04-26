@@ -1,7 +1,7 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, name, parent, input, output, length, linkType) {
+function Link(graph, name, input, output, length, linkType) {
 	if(!graph)
 		return;
 
@@ -106,5 +106,5 @@ var limitWords = function (text, wordLimit) {
 
 		return finalText+"...";
 	}
-	else return text;
+	return text;
 }

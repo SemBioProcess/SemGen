@@ -28,7 +28,9 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	if(this.parent) {
 		// We need to keep the ids of each node unique by prefixing
 		// it with its parent node's id
-		this.id = this.parent.id + this.id;
+		if (this.parent.id != "null") {
+			this.id = this.parent.id + this.id;
+		}
 	}
 	validateNode(this);
 }
@@ -126,19 +128,25 @@ Node.prototype.getLinks = function () {
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			var parent = this.graph.findVisibleNode(inputData.parentModelId);
-			if (!parent) {
-				console.log("External link without a parent!");
-				continue;
+			if (this.parent.id != "null") { 
+				
+				var parent = this.graph.findVisibleNode(inputData.parentModelId);
+				if (!parent) {
+					console.log("External link without a parent!");
+					continue;
+				}
+	
+				// If the parent can link add a link to it
+				if (parent.canLink())
+					inputNodeId = parent.id;
+				// Otherwise, add a link to its child
+				else {
+					type = "internal";
+					inputNodeId = this.parent.id + inputData.name;
+				}
 			}
-
-			// If the parent can link add a link to it
-			if (parent.canLink())
-				inputNodeId = parent.id;
-			// Otherwise, add a link to its child
 			else {
-				type = "internal";
-				inputNodeId = this.parent.id + inputData.name;
+				inputNodeId = inputData.name;
 			}
 		}
 
@@ -186,8 +194,8 @@ Node.prototype.getLinks = function () {
 		else length = Math.round(this.graph.linklength/5);
 
 		if(type == "Mediator")
-			var newLink = new MediatorLink(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
-		else var newLink = new Link(this.graph, linkLabel, this.parent, inputNode, outputNode, length, type);
+			var newLink = new MediatorLink(this.graph, linkLabel, inputNode, outputNode, length, type);
+		else var newLink = new Link(this.graph, linkLabel, inputNode, outputNode, length, type);
 		links.push(newLink);
 
 	}
@@ -203,9 +211,11 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent) {
-		var k = .0005;
-		forcey = (this.parent.y - this.y) * k;
-		forcex = (this.parent.x - this.x) * k;
+		if (this.parent.id != "null") {
+			var k = .0005;
+			forcey = (this.parent.y - this.y) * k;
+			forcex = (this.parent.x - this.x) * k;
+		}
 
 	}
 	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;

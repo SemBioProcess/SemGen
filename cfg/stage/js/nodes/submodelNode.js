@@ -26,7 +26,7 @@ function SubmodelNode (graph, data, parent) {
 }
 
 SubmodelNode.prototype.onDoubleClick = function () {
-		node = this;
+		var node = this;
 
 		var visiblenodes = 0;
 		if (this.graph.nodesVisible[NodeType.STATE.id]) {
@@ -38,7 +38,6 @@ SubmodelNode.prototype.onDoubleClick = function () {
 		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
 			visiblenodes += this.dependencytypecount[2];
 		}
-		//sender.consoleOut(visiblenodes + " of " + this.dependencies.length);
 		if (visiblenodes > 0) {
 			// Create dependency nodes from the submodel's dependency data
 			this.setChildren(node.dependencies, function (data) {

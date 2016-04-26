@@ -25,7 +25,21 @@ public class SubModelNode extends Node {
 		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
 			SubModelDependencyNode sdn = new SubModelDependencyNode(dependency, this);
 			dependencies.add(sdn);
-			incrementType(sdn.typeIndex);		}
+			incrementType(sdn.typeIndex);		
+		}
+	}
+	
+	public SubModelNode(Submodel subModel) {
+		super(subModel.getName());
+
+		dependencies = new ArrayList<DependencyNode>();
+		
+		// SemSimModelSerializer.getDependencyNetwork(subModel);
+		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
+			SubModelDependencyNode sdn = new SubModelDependencyNode(dependency);
+			dependencies.add(sdn);
+			incrementType(sdn.typeIndex);		
+		}
 	}
 	
 	private void incrementType(Number type) {

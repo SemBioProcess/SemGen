@@ -11,7 +11,7 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
 
 public class ModelOverlapMap {
-	Pair<Integer, Integer> modelindicies;
+	private Pair<Integer, Integer> modelindicies;
 	private Set<String> identicalsubmodelnames;
 	private Set<String> identicaldsnames;
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();

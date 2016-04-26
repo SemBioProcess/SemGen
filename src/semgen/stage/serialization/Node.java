@@ -15,16 +15,14 @@ public abstract class Node {
 	public int xpos = -1;
 	public int ypos = -1;
 	public Boolean hidden = false;
-	public ArrayList<Link> inputs;
+	public ArrayList<Link> inputs = new ArrayList<Link>();
 	
 	public Node(String name) {
-		inputs = new ArrayList<Link>();
 		this.name = name;
 		this.id = buildId(this.name);
 	}
 
 	public Node(String name, String parentModelId) {
-		inputs = new ArrayList<Link>();
 		this.name = name;
 		this.parentModelId = parentModelId;
 		this.id = buildId(this.name, this.parentModelId);

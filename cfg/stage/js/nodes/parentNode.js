@@ -45,8 +45,9 @@ ParentNode.prototype.setChildren = function (data, createNode) {
 			child.y = this.y + Math.random();
 			this.children[d.name] = child
 		}, this);
-		$(this).triggerHandler('childrenSet', [this.children]);
+		
 	}
+	 $(this).triggerHandler('childrenSet', [this.children]);
 	this.graph.update();
 	
 }
