@@ -176,10 +176,10 @@
 		<!-- Templates -->
 		<template id="mergerContent">
 			<div class="modal-header">
-				<h3 class="modal-title">Merge models</h3>
+				<h5 class="modal-title">Merge models</h5>
 				<div class="mergeResHeader">
-					<h4 class="leftModelName"></h4>
-					<h4 class="rightModelName"></h4>
+					<h6 class="leftModelName"></h6>
+					<h6 class="rightModelName"></h6>
 				</div>
 			</div>
 			<div class="mergePreview">
@@ -187,8 +187,11 @@
 				<div class="substage" id="modelABStage"></div>
 				<div class="substage" id="modelBStage"></div>
 			</div>
+			<div id="resizeHandle"></div>
 			<div class="modal-body">
-				<div id="overlapPanels"></div>
+				<div class="panel-group" id="accordion">
+					<div id="overlapPanels"></div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary fullMergePreviewBtn">Preview merge</button>
@@ -199,14 +202,24 @@
 
 
 		<template id="overlapPanel">
-			<div class="overlapPane">
-				<div class="radio leftRes" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a class="collapsePane" data-toggle="collapse" data-parent="#accordion">
+								<div class="overlapPane">
+									<div class="radio leftRes" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
+									<div class="radio ignoreRes" id="ignoreRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
+									<div class="radio rightRes" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
+								</div>
+							</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse">
+						<div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+							sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+					</div>
 				</div>
-				<button type="button" class="btn btn-primary mergePreviewBtn"
-						data-toggle="tooltip" data-placement="bottom" title="Preview merge for this resolution point">Preview</button>
-				<div class="radio rightRes" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this">
-				</div>
-			</div>
 		</template>
 
 	</body>

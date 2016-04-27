@@ -3,7 +3,7 @@
 }
 
 .modal-body {
-    height: 30vh;
+    height: 50vh;
     bottom: 0;
     overflow: scroll;
 }
@@ -11,7 +11,7 @@
 .mergePreview {
     position: relative;
     top: 0;
-    height: 70vh;
+    height: 25vh;
     border-bottom: 2px solid black;
     border-top: 2px solid black;
 }
@@ -51,21 +51,34 @@
 }
 
 .mergeResHeader {
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     clear: both;
 }
 
+#resizeHandle {
+    height: 8px;
+    cursor: ns-resize;
+    background-color: darkgrey;
+}
+
 .overlapPane {
-    height: 100px;
-    border-width: 1px;
-    border-top-style: solid;
+    height: 15px;
     text-align: center;
+}
+
+.panel-title {
+    font-size: 12px;
+}
+
+.expandBtn {
+
 }
 
 .leftRes {
     float: left;
     width: 250px;
     text-align: left;
+    margin-top: 0px;
 }
 
 .rightRes {
@@ -74,13 +87,14 @@
     text-align: right;
 }
 
-.leftRes:hover, .rightRes:hover {
-    background-color: #dfe3ee;
-    cursor: pointer;
+.ignoreRes {
+    width: 250px;
+    display: inline-block;
 }
 
-.modelVarName {
-    font-style: italic;
+.ignoreLabel {
+    padding-right: 90px;
+    padding-top: 3px;
 }
 
 .modelVarEquation {
@@ -93,19 +107,17 @@
 .leftNode {
     position: absolute;
     left: 350px;
-    top: 35px;
+    top: 6px;
 }
 
 .rightNode {
     position: absolute;
     right: 350px;
-    top: 35px;
+    top: 6px;
 }
 
-.mergePreviewBtn {
-	position: relative;
-	display: inline-block;
-    margin: 30px auto;
+.radio+.radio {
+    margin-top: 0px;
 }
 
 .radio label {
@@ -115,13 +127,18 @@
 .leftRes .mergeResRadio {
     position: absolute;
     left: 320px;
-    top: 30px;
+    top: 0px;
 }
 
 .rightRes .mergeResRadio {
     position: absolute;
     right: 300px;
-    top: 30px;
+    top: 0px;
+}
+
+.ignoreRes .mergeResRadio {
+    top: 0px;
+    margin-left: 0px;
 }
 
 #quitMergerBtn {

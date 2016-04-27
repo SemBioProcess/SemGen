@@ -27,8 +27,8 @@ function MergerTask(graph, state) {
 		$("#activeTaskText").removeClass('blink');
 		$("#mergerIcon").remove();
 		sender.minimizeTask(task);
-	})	
-	
+	});
+
 	//$('[data-toggle="tooltip"]').tooltip();
 	
 	//Create the resolution panel
@@ -38,7 +38,6 @@ function MergerTask(graph, state) {
 			var nodetype = NodeTypeMap[desc.type];
 			return '<label>' +
 				'<div class="modelVarName">' + desc.name + '</div>' +
-				//'<div class="modelVarEquation">' + desc.equation + '</div>' +
 				'<svg class="'+ nodeside + '" height="10" width="10">' +
 				'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
 				'</svg>' +
@@ -54,64 +53,99 @@ function MergerTask(graph, state) {
 		
 		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
 		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
-		
+		clone.querySelector('#ignoreRes').innerHTML = '<label><div class="ignoreLabel">Ignore</div><input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
+
+		clone.querySelector('.collapsePane').setAttribute("href", "#collapsePane" + clone.id);
+		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
+
 		resolutions.push(clone);
 		
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
-		
-		// Preview merge resolutions
-		$(".mergePreviewBtn").click(function() {
-			//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
-				var dataA = {
-					"nodes":[
-						{"name":"A", "group":1},
-						{"name":"B", "group":2},
-						{"name":"C", "group":3},
-					],
-					"links":[
-						{"source":1,"target":0},
-						{"source":2,"target":0},
-						{"source":2,"target":1},
-					]
-				};
 
-				var dataB = {
-					"nodes":[
-						{"name":"D", "group":1},
-						{"name":"E", "group":2},
-						{"name":"F", "group":3},
-					],
-					"links":[
-						{"source":1,"target":0},
-						{"source":2,"target":0},
-						{"source":2,"target":1},
-					]
-				};
+	};
 
-				var dataAB = {
-					"nodes":[
-						{"name":"G", "group":1},
-						{"name":"H", "group":2},
-						{"name":"I", "group":3},
-						{"name":"J", "group":1},
-						{"name":"K", "group":2},
-					],
-					"links":[
-						{"source":1,"target":0},
-						{"source":2,"target":0},
-						{"source":2,"target":1},
-						{"source":3,"target":1},
-						{"source":0,"target":3},
-						{"source":4,"target":3},
-					]
-				};
+	// Preview merge resolutions
+	// $(".overlapPane").click(function() {
+    //
+	// 	window.alert("overlapPane Clicked");
+	//
+	// 	//TODO: Load relevant nodes of merge resolution.
+	// 	var dataA = {
+	// 		"nodes":[
+	// 			{"name":"A", "group":1},
+	// 			{"name":"B", "group":2},
+	// 			{"name":"C", "group":3},
+	// 		],
+	// 		"links":[
+	// 			{"source":1,"target":0},
+	// 			{"source":2,"target":0},
+	// 			{"source":2,"target":1},
+	// 		]
+	// 	};
+	// 	var dataB = {
+	// 		"nodes":[
+	// 			{"name":"D", "group":1},
+	// 			{"name":"E", "group":2},
+	// 			{"name":"F", "group":3},
+	// 		],
+	// 		"links":[
+	// 			{"source":1,"target":0},
+	// 			{"source":2,"target":0},
+	// 			{"source":2,"target":1},
+	// 		]
+	// 	};
+	// 	var dataAB = {
+	// 		"nodes":[
+	// 			{"name":"G", "group":1},
+	// 			{"name":"H", "group":2},
+	// 			{"name":"I", "group":3},
+	// 			{"name":"J", "group":1},
+	// 			{"name":"K", "group":2},
+	// 		],
+	// 		"links":[
+	// 			{"source":1,"target":0},
+	// 			{"source":2,"target":0},
+	// 			{"source":2,"target":1},
+	// 			{"source":3,"target":1},
+	// 			{"source":0,"target":3},
+	// 			{"source":4,"target":3},
+	// 		]
+	// 	};
+    //
+	// 	createGraph("#modelAStage", dataA);
+	// 	createGraph("#modelABStage", dataAB);
+	// 	createGraph("#modelBStage", dataB);
+	// });
 
-				createGraph("#modelAStage", dataA);
-				createGraph("#modelABStage", dataAB);
-				createGraph("#modelBStage", dataB);
+	var isResizing = false,
+		lastDownY = 0;
 
+	$(function () {
+		var container = $('.modal-content'),
+			top = $('.mergePreview'),
+			bottom = $('.modal-body'),
+			handle = $('#resizeHandle');
+
+		handle.on('mousedown', function (e) {
+			isResizing = true;
+			lastDownY = e.clientY;
 		});
-	}
+
+		$(document).on('mousemove', function (e) {
+			// we don't want to do anything if we aren't resizing.
+			if (!isResizing)
+				return;
+
+			var percentage = (e.pageY / container.innerWidth) * 100;
+			var mainPercentage = 100-percentage;
+
+			top.css('height', percentage);
+			bottom.css('height', mainPercentage);
+		}).on('mouseup', function (e) {
+			// stop resizing
+			isResizing = false;
+		});
+	});
 	
 	receiver.onShowOverlaps(function(data) {
 		data.forEach(function(d) {
