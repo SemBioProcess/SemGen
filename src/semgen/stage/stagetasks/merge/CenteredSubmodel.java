@@ -50,17 +50,11 @@ public class CenteredSubmodel extends Submodel {
 		}
 		return dscopy;
 	}
-	
-	private DataStructure copyDataStructure(DataStructure dstocopy) {
-		DataStructure copy = dstocopy.copy();
-		copy.setComputation(new Computation(copy));
-		
-		return copy;
-	}
-	
+
 	private DataStructure copyDataStructure(DataStructure dstocopy, String name) {
 		DataStructure copy = dstocopy.copy();
 		copy.setName(name + "." + copy.getName());
+		copy.getUsedToCompute().clear();
 		copy.setComputation(new Computation(copy));
 		
 		return copy;
@@ -92,23 +86,12 @@ public class CenteredSubmodel extends Submodel {
 	}
 
 	public void addUsedtoComputetoFocus(DataStructure dstoadd) {
-		HashMap<DataStructure, DataStructure> dsmap = new HashMap<DataStructure, DataStructure>();
-		
-		dsmap.put(dstoadd, focusds);
+
 		for (DataStructure ds : dstoadd.getUsedToCompute()) {
+			focusds.addUsedToCompute(ds);
+			ds.replaceDataStructureReference(focusds, dstoadd);
+			addDataStructure(ds);
 			
-			if (ds != dstoadd) {
-				dsmap.put(ds, copyDataStructure(ds));
-			}
-		}
-		
-		for (DataStructure sourceds : dsmap.keySet()) {
-			DataStructure replacer = dsmap.get(sourceds);
-			
-			if (!dataStructures.contains(replacer)) {
-				addDataStructure(replacer);
-				replaceDataStructures(dsmap, sourceds);
-			}
 		}
 	}
 	

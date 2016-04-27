@@ -399,6 +399,21 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return null;
 	}
 	
+	public void replaceDataStructureReference(DataStructure replacer, DataStructure replacee) {
+		if (computation.getOutputs().contains(replacee)) {
+			computation.getOutputs().remove(replacee);
+			computation.addOutput(replacer);
+		}
+		if (computation.getInputs().contains(replacee)) {
+			computation.getInputs().remove(replacee);
+			computation.addInput(replacer);
+		}
+		if (this.usedToCompute.contains(replacee)) {
+			usedToCompute.remove(replacee);
+			usedToCompute.add(replacer);
+		}
+	}
+	
 	@Override
 	public Boolean hasPhysicalDefinitionAnnotation() {
 		return singularterm!=null;

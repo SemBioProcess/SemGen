@@ -49,7 +49,7 @@ ParentNode.prototype.setChildren = function (data, createNode) {
 	}
 	 $(this).triggerHandler('childrenSet', [this.children]);
 	this.graph.update();
-	
+	f
 }
 
 ParentNode.prototype.getChildNode = function(id) {
