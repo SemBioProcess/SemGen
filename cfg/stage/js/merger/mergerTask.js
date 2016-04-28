@@ -56,24 +56,57 @@ function MergerTask(graph, state) {
 		
 		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
 		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
+		clone.querySelector('#ignoreRes').innerHTML = '<label><div class="ignoreLabel">Ignore</div><input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
+
+		clone.querySelector('.collapsePane').setAttribute("href", "#collapsePane" + clone.id);
+		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
 		
-		var btn = clone.querySelector('.mergePreviewBtn');
-		btn.id = 'prebtn' + clone.index;
+		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
 		// Preview merge resolutions
-		$('#' + btn.id).click(function() {
-			sender.requestPreview(clone.index);
-		});
+		//$('#' + clone.id).on('click', function() {
+			
+		//});
 		
 	}
-	
+
 	//Preview graphs
 	this.leftgraph = new PreviewGraph("modelAStage");
 	this.midgraph = new PreviewGraph("modelABStage");
 	this.rightgraph = new PreviewGraph("modelBStage");
+	
+	var isResizing = false,
+	lastDownY = 0;
+
+	$(function () {
+		var container = $('.modal-content'),
+			top = $('.mergePreview'),
+			bottom = $('.modal-body'),
+			handle = $('#resizeHandle');
+	
+		handle.on('mousedown', function (e) {
+			isResizing = true;
+			lastDownY = e.clientY;
+		});
+	
+		$(document).on('mousemove', function (e) {
+			// we don't want to do anything if we aren't resizing.
+			if (!isResizing)
+				return;
+	
+			var percentage = (e.pageY / container.innerWidth) * 100;
+			var mainPercentage = 100-percentage;
+	
+			top.css('height', percentage);
+			bottom.css('height', mainPercentage);
+		}).on('mouseup', function (e) {
+			// stop resizing
+			isResizing = false;
+		});
+	});
 	
 	receiver.onShowOverlaps(function(data) {
 		data.forEach(function(d) {
@@ -107,4 +140,3 @@ MergerTask.prototype.onInitialize = function() {
 MergerTask.prototype.onModelSelection = function(node) {}
 
 MergerTask.prototype.onClose = function() {}
-

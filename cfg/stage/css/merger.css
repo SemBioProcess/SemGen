@@ -11,14 +11,14 @@
 .mergePreview {
     position: relative;
     top: 0;
-    height: 70vh;
+    height: 33vh;
     border-bottom: 2px solid black;
     border-top: 2px solid black;
 }
 
 .substage {
     position: absolute;
-    height: 70vh;
+    height: 33vh;
     background: #FFFFFF;
     z-index: 1;
 }
@@ -126,4 +126,32 @@
 
 #quitMergerBtn {
     float: left;
+}
+
+#resizeHandle {
+    height: 8px;
+    cursor: ns-resize;
+    background-color: darkgrey;
+}
+
+.panel-title {
+    font-size: 12px;
+}
+
+.expandBtn {
+
+}
+
+.ignoreRes {
+    width: 250px;
+    display: inline-block;
+}
+
+.ignoreLabel {
+    padding-right: 90px;
+    padding-top: 3px;
+}
+
+.radio+.radio {
+    margin-top: 0px;
 }
