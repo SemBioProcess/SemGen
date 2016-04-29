@@ -118,7 +118,7 @@ public class SemSimLibrary {
 	
 	//Map ontology namespaces to ontologies
 	private void loadOntologyDescriptions() throws FileNotFoundException {
-		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions();
+		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions(cfgpath);
 		for (Ontology ont : onts) {
 			ontologies.add(ont);
 		}
