@@ -42,21 +42,33 @@ function PreviewGraph(id) {
     	svg.selectAll("*").remove();
     	nodes.length = 0;
     	links.length = 0;
-	    data.dependencies.forEach(function (d) {
-			var dnode = new DependencyNode(graph, d, nullmodel);
-			dnode.x = Math.random() * graph.w;
-			dnode.y = Math.random() * graph.h;
-			dnode.id = d.id;
-			nodes.push(dnode);
-		}, this);
-	
-		nodes.forEach(function (n) {
-			
-			var nodelinks = n.getLinks();
-			nodelinks.forEach(function(l){
-				//l.id = l.id + graph.id;
-				links.push(l);
+    	
+    	var smnodes = [];
+    	data.childsubmodels.forEach(function(sm) {
+    		var smnode = new SubmodelNode(graph, sm, nullmodel);
+    		
+    		smnode.x = Math.random() * graph.w;
+			smnode.y = Math.random() * graph.h;
+			smnodes.push(smnode);
+			nodes.push(smnode);
+			smnode.createChildren(sm.dependencies, function (data) {
+    			var dnode = new DependencyNode(smnode.graph, data, smnode);
+    			dnode.id = data.id;
+    			nodes.push(dnode);
+				return dnode;
 			});
+			
+    	}); 
+	
+		nodes.forEach(function (n) {		
+			n.isVisible = function() {return true;};
+			var nodelinks = n.getLinks();
+			if (nodelinks) {
+				nodelinks.forEach(function(l){
+					//l.id = l.id + graph.id;
+					links.push(l);
+				});
+			}
 		});
 		
 		// Add the links
@@ -76,7 +88,12 @@ function PreviewGraph(id) {
 	        .each(function (d) { d.createVisualElement(this, graph); });
 	
 	    node.exit().remove();
-	 
+	    
+	    smnodes.forEach(function(sn) {
+	    	$(sn).triggerHandler('childrenSet', [sn.children]);
+	    	sn.lockhull = true;
+	    });
+	    
 	    this.force.on("tick", this.tick);
 	    
 	    graph.force.size([graph.w, graph.h])

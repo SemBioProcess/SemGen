@@ -13,9 +13,10 @@ function Hull(node) {
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
-				node.setChildren(null, null);
-				
-				node.rootElement.selectAll("text").attr("x", 0);
+				if (!node.lockhull) {
+					node.setChildren(null, null);
+					node.rootElement.selectAll("text").attr("x", 0);
+				}
 			});
 	});
 	

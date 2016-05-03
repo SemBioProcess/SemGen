@@ -19,6 +19,7 @@ ParentNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this, element, graph);
 	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
 	this.addBehavior(parentDrag);
+	this.lockhull = false; //Set to true to lock the node in the expanded or closed position
 	
 }
 
@@ -35,7 +36,7 @@ ParentNode.prototype.canLink = function () {
 	return !this.children;
 }
 
-ParentNode.prototype.setChildren = function (data, createNode) {
+ParentNode.prototype.createChildren = function(data, createNode) {
 	this.children = null;
 	 if (data) {
 		this.children = {};
@@ -45,11 +46,14 @@ ParentNode.prototype.setChildren = function (data, createNode) {
 			child.y = this.y + Math.random();
 			this.children[d.name] = child
 		}, this);
-		
 	}
+}
+
+ParentNode.prototype.setChildren = function (data, createNode) {
+	this.createChildren(data, createNode);
 	 $(this).triggerHandler('childrenSet', [this.children]);
 	this.graph.update();
-	f
+
 }
 
 ParentNode.prototype.getChildNode = function(id) {

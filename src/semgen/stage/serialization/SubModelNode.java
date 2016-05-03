@@ -12,6 +12,7 @@ import semsim.model.computational.datastructures.DataStructure;
  *
  */
 public class SubModelNode extends Node {
+	public ArrayList<SubModelNode> childsubmodels = new ArrayList<SubModelNode>();
 	public ArrayList<DependencyNode> dependencies;
 	//Count of how many dependencies of each type are childrent of this submodel.
 	public int[] deptypecounts = {0, 0 ,0};
@@ -33,8 +34,19 @@ public class SubModelNode extends Node {
 		super(subModel.getName());
 
 		dependencies = new ArrayList<DependencyNode>();
-		
-		// SemSimModelSerializer.getDependencyNetwork(subModel);
+		if (!subModel.getSubmodels().isEmpty()) {
+			for (Submodel sm : subModel.getSubmodels()) {
+				childsubmodels.add(new SubModelNode(sm));
+			}
+		}
+		else {
+			loadDataStructuresfromCenteredSubmodel(subModel);
+		}
+
+	}
+
+	
+	private void loadDataStructuresfromCenteredSubmodel(Submodel subModel) {
 		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
 			SubModelDependencyNode sdn = new SubModelDependencyNode(dependency);
 			dependencies.add(sdn);

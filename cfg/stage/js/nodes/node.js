@@ -128,7 +128,7 @@ Node.prototype.getLinks = function () {
 		// If the linked node is in a different parent, mark it as external
 		if(inputData.parentModelId != this.parent.id) {
 			type = "external";
-			if (this.parent.id != "null") { 
+			if (this.parent.id != "null" && inputData.parentModelId != "null") { 
 				
 				var parent = this.graph.findVisibleNode(inputData.parentModelId);
 				if (!parent) {

@@ -66,11 +66,6 @@ function MergerTask(graph, state) {
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
-		// Preview merge resolutions
-		//$('#' + clone.id).on('click', function() {
-			
-		//});
-		
 	}
 
 	//Preview graphs

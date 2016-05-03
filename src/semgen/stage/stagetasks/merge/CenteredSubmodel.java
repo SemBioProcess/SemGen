@@ -21,6 +21,13 @@ public class CenteredSubmodel extends Submodel {
 		this.focusds = submodel.focusds;
 	}
 	
+	public CenteredSubmodel(CenteredSubmodel submodel, String name) {
+		super(name);
+		focusds = submodel.getFocusDataStructure();
+		this.addSubmodel(submodel);
+	}
+	
+	
 	private DataStructure getConnections(DataStructure ds) {
 		HashMap<DataStructure, DataStructure> dsmap = new HashMap<DataStructure, DataStructure>();
 		DataStructure dscopy = copyDataStructure(ds, getName());
@@ -85,17 +92,20 @@ public class CenteredSubmodel extends Submodel {
 		}
 	}
 
-	public void addUsedtoComputetoFocus(DataStructure dstoadd) {
-
+	public void addUsedtoComputetoFocus(DataStructure dstoadd, String parentname) {
+		Submodel computesubmodel = new Submodel(parentname);
 		for (DataStructure ds : dstoadd.getUsedToCompute()) {
 			focusds.addUsedToCompute(ds);
 			ds.replaceDataStructureReference(focusds, dstoadd);
-			addDataStructure(ds);
+			computesubmodel.addDataStructure(ds);
 			
 		}
+		
+		this.addSubmodel(computesubmodel);
 	}
 	
 	public DataStructure getFocusDataStructure() {
 		return focusds;
 	}
+	
 }
