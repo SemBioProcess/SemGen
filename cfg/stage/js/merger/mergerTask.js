@@ -45,7 +45,7 @@ function MergerTask(graph, state) {
 				'</label>';
 
 		};
-
+		
 		var t = document.querySelector('#overlapPanel');
 		var clone = document.importNode(t.content, true);
 		
@@ -58,64 +58,20 @@ function MergerTask(graph, state) {
 		clone.querySelector('.collapsePane').setAttribute("href", "#collapsePane" + clone.id);
 		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
 
+		clone.querySelector('.leftCollapsePanel > .equation').innerHTML = overlap.dsleft.equation;
+		clone.querySelector('.rightCollapsePanel > .equation').innerHTML = overlap.dsright.equation;
+		clone.querySelector('.leftCollapsePanel > .freetext').innerHTML = overlap.dsleft.description;
+		clone.querySelector('.rightCollapsePanel > .freetext').innerHTML = overlap.dsright.description;
+		clone.querySelector('.leftCollapsePanel > .compAnnotation').innerHTML = overlap.dsleft.compAnnotation;
+		clone.querySelector('.rightCollapsePanel > .compAnnotation').innerHTML = overlap.dsright.compAnnotation;
+		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
+		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
+
 		resolutions.push(clone);
 		
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 
 	};
-
-	// Preview merge resolutions
-	// $(".overlapPane").click(function() {
-    //
-	// 	window.alert("overlapPane Clicked");
-	//
-	// 	//TODO: Load relevant nodes of merge resolution.
-	// 	var dataA = {
-	// 		"nodes":[
-	// 			{"name":"A", "group":1},
-	// 			{"name":"B", "group":2},
-	// 			{"name":"C", "group":3},
-	// 		],
-	// 		"links":[
-	// 			{"source":1,"target":0},
-	// 			{"source":2,"target":0},
-	// 			{"source":2,"target":1},
-	// 		]
-	// 	};
-	// 	var dataB = {
-	// 		"nodes":[
-	// 			{"name":"D", "group":1},
-	// 			{"name":"E", "group":2},
-	// 			{"name":"F", "group":3},
-	// 		],
-	// 		"links":[
-	// 			{"source":1,"target":0},
-	// 			{"source":2,"target":0},
-	// 			{"source":2,"target":1},
-	// 		]
-	// 	};
-	// 	var dataAB = {
-	// 		"nodes":[
-	// 			{"name":"G", "group":1},
-	// 			{"name":"H", "group":2},
-	// 			{"name":"I", "group":3},
-	// 			{"name":"J", "group":1},
-	// 			{"name":"K", "group":2},
-	// 		],
-	// 		"links":[
-	// 			{"source":1,"target":0},
-	// 			{"source":2,"target":0},
-	// 			{"source":2,"target":1},
-	// 			{"source":3,"target":1},
-	// 			{"source":0,"target":3},
-	// 			{"source":4,"target":3},
-	// 		]
-	// 	};
-    //
-	// 	createGraph("#modelAStage", dataA);
-	// 	createGraph("#modelABStage", dataAB);
-	// 	createGraph("#modelBStage", dataB);
-	// });
 
 	var isResizing = false,
 		lastDownY = 0;

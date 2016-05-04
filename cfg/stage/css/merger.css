@@ -90,18 +90,12 @@
 .ignoreRes {
     width: 250px;
     display: inline-block;
+    margin-left: 40px;
 }
 
 .ignoreLabel {
     padding-right: 90px;
     padding-top: 3px;
-}
-
-.modelVarEquation {
-    font-family: Courier, monospace;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .leftNode {
@@ -139,6 +133,24 @@
 .ignoreRes .mergeResRadio {
     top: 0px;
     margin-left: 0px;
+}
+
+.leftCollapsePanel {
+    float: left;
+    text-align: left;
+    display: inline-block;
+    font-size: 11px;
+}
+
+.rightCollapsePanel {
+    float: right;
+    text-align: right;
+    display: inline-block;
+    font-size: 11px;
+}
+
+.collapsePanelLabel {
+    font-weight: bold;
 }
 
 #quitMergerBtn {

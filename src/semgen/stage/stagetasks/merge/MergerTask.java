@@ -1,15 +1,7 @@
 package semgen.stage.stagetasks.merge;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.teamdev.jxbrowser.chromium.JSObject;
-
+import org.apache.commons.lang3.tuple.Pair;
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.MergerWorkbench;
@@ -23,6 +15,12 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
+
+import javax.swing.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
@@ -142,13 +140,17 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public String name;
 		public String type;
 		public String description;
+		public String compAnnotation;
 		public String equation;
+		public String unit;
 		
 		protected StageDSDescriptor(DataStructureDescriptor dsdesc) {
 			name = dsdesc.getDescriptorValue(Descriptor.name);
 			type = dsdesc.getDescriptorValue(Descriptor.type);
 			description = dsdesc.getDescriptorValue(Descriptor.description);
+			compAnnotation = dsdesc.getDescriptorValue(Descriptor.compAnnotation);
 			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
+			unit = dsdesc.getDescriptorValue(Descriptor.units);
 		}
 	}
 }
