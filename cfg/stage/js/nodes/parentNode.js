@@ -12,13 +12,15 @@ function ParentNode(graph, name, parent, links, r, group, textSize, nodeType, ch
 	this.xmax = null;
 	this.ymin = null;
 	this.ymax = null;
+	
+	
 }
 
 ParentNode.prototype.createVisualElement = function (element, graph) {
 
 	Node.prototype.createVisualElement.call(this, element, graph);
 	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
-	this.addBehavior(parentDrag);
+	
 	this.lockhull = false; //Set to true to lock the node in the expanded or closed position
 	
 }

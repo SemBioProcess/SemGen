@@ -33,6 +33,10 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 		}
 	}
 	validateNode(this);
+	this.dragstart = [];
+	this.drag = [];
+	this.dragend = [];
+	this.addBehavior(NodeDrag);
 }
 
 
@@ -98,8 +102,9 @@ Node.prototype.createVisualElement = function (element, graph) {
 	// Create the text elements
 	this.createTextElement("shadow");
 	this.createTextElement("real");
-
+	
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
+	
 }
 
 Node.prototype.canLink = function () {

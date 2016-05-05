@@ -5,7 +5,7 @@
 
 var DropZoneSideLength = 50;
 function DragToMerge(_node) {
-	var models;
+	
 	// When the node visualization is created add a dropzone element
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
@@ -18,18 +18,20 @@ function DragToMerge(_node) {
 		    .attr("width", DropZoneSideLength)
 		    .attr("height", DropZoneSideLength)
 		    .attr("class","dropZoneRect");
-		
+	});
 		// Save the original location so we can move the node back
 		// if a merge is successful (we don't want two models occupying the same location)
 		var originalLocation = {
 			x: null,
 			y: null,
 		};
+		var models;
 		var mergeNode = null;
-		models = _node.graph.getVisibleNodes();
 		
-		var nodeDrag = d3.behavior.drag()
-			.on("dragstart", function (d, i) {
+		_node.dragstart.push(function (d) {
+				if (_node.children) return;
+				//Refresh node references
+				models = _node.graph.getVisibleNodes();
 				// Save the original location
 				originalLocation = {
 					x: _node.x,
@@ -42,8 +44,9 @@ function DragToMerge(_node) {
 					if(node != _node)
 						node.rootElement.classed("dropZone", true);
 				});
-			})
-		    .on("drag", function (d, i) {
+			});
+		    _node.drag.push(function (d) {
+		    	if (_node.children) return;
 		    	// Drag functionality
 		        _node.px += d3.event.dx;
 		        _node.py += d3.event.dy;
@@ -75,8 +78,11 @@ function DragToMerge(_node) {
 							mergeNode = null;
 					}
 				});
-		    })
-		    .on("dragend", function (d, i) {
+		    });
+		    _node.dragend.push(function (d) {
+		    	if (_node.children) {
+		    		return;
+		    	}
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
 		        	var modelstomerge = _node.name + "," + mergeNode.name;
@@ -96,12 +102,6 @@ function DragToMerge(_node) {
 					node.rootElement.classed("canDrop", false);
 				});
 		        
-		        _node.graph.tick();
-		    });
-		
-		// Add the dragging functionality to the node
-		_node.rootElement.call(nodeDrag);
-	});
-
+		    });	
 };
 

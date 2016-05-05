@@ -12,7 +12,17 @@ function ModelNode (graph, name) {
 	this.addClassName("modelNode");
 	this.x = (Math.random() * (graph.w-graph.w/3))+graph.w/6;
 	this.y = (Math.random() * (graph.h-graph.h/2))+graph.h/6;
-	this.addBehavior(Hull);	this.addBehavior(DragToMerge);
+	this.addBehavior(Hull);	
+	
+	this.addBehavior(DragToMerge);
+	this.addBehavior(parentDrag);
+	
+}
+
+ModelNode.prototype.createVisualElement = function (element, graph) {
+	
+	ParentNode.prototype.createVisualElement.call(this, element, graph);
+	
 }
 
 ModelNode.prototype.onDoubleClick = function () {
