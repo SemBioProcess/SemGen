@@ -82,5 +82,6 @@ function Task(graph) {
 }
 Task.prototype.onInitialize = function() {}
 
+Task.prototype.onMinimize = function() {}
 Task.prototype.onModelSelection = function(node) {}
 Task.prototype.onClose = function() {}
