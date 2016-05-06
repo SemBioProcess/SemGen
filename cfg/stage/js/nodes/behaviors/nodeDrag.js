@@ -20,6 +20,12 @@ function NodeDrag(_node) {
 				_node.graph.tick();
 			})
 		    .on("drag", function (d, i) {
+		    	if (!_node.children) {
+			        _node.px += d3.event.dx;
+			        _node.py += d3.event.dy;
+			        _node.x += d3.event.dx;
+			        _node.y += d3.event.dy; 
+		    	}
 		    	_node.drag.forEach(function(behavior) {
 		    		behavior(_node);
 				});

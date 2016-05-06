@@ -46,13 +46,7 @@ function DragToMerge(_node) {
 				});
 			});
 		    _node.drag.push(function (d) {
-		    	if (_node.children) return;
-		    	// Drag functionality
-		        _node.px += d3.event.dx;
-		        _node.py += d3.event.dy;
-		        _node.x += d3.event.dx;
-		        _node.y += d3.event.dy; 
-		        _node.graph.tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+		    	if (_node.children) return;on d !
 		        
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.

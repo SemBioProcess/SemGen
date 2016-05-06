@@ -36,8 +36,7 @@ MergerTask.prototype.onMinimize = function() {
 }
 
 MergerTask.prototype.onModelSelection = function(node) {
-	
-	
+
 }
 
 MergerTask.prototype.onClose = function() {
