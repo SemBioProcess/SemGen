@@ -40,7 +40,6 @@ public class LoadSemSimModel extends SemGenJob {
 	public LoadSemSimModel(ModelAccessor modelaccessor, SemGenJob sga) {
 		super(sga);
 		this.modelaccessor = modelaccessor;
-		
 	}
 	
 	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
@@ -65,16 +64,25 @@ public class LoadSemSimModel extends SemGenJob {
 				break;
 			
 			case ModelClassifier.CELLML_MODEL:
-				semsimmodel = new CellMLreader(modelaccessor).read();
-				nameOntologyTerms();
+				CellMLreader reader = new CellMLreader(modelaccessor);
+				semsimmodel = reader.read();
 				
-				// TODO: Should check whether the CellML code already contains
-				// semsim-style annotations. If so, don't autoAnnotateWithOPB
+				boolean previouslyannotated = false;
+				String namespace = reader.rdfblock.rdf.getNsPrefixURI("model");
+				if(namespace != null) previouslyannotated = namespace.startsWith("http://www.bhi.washington.edu/SemSim/");
 				
-				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate) {
+				// If the model wasn't previously annotated in SemGen and autoannotate is turned on,
+				// perform auto-annotation
+				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate && ! previouslyannotated) {
 					setStatus("Annotating Physical Properties");
-					semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 				}
+				// Otherwise collect any needed reference term names from BioPortal
+				else{
+					setStatus("Collecting annotations");
+					nameOntologyTerms();
+				}
+
 				break;
 				
 			case ModelClassifier.SBML_MODEL:
@@ -100,6 +108,7 @@ public class LoadSemSimModel extends SemGenJob {
 		}
 		
 		if(semsimmodel != null){
+			
 			if( ! semsimmodel.getErrors().isEmpty()){
 				for (String e : semsimmodel.getErrors()) {
 					ErrorLog.addError(e,true, true);
@@ -110,9 +119,9 @@ public class LoadSemSimModel extends SemGenJob {
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
-		else {
+		else
 			ErrorLog.addError(modelaccessor.getModelName() + " was an invalid model.", true, false);
-		}
+		
 	}
 
 
@@ -126,14 +135,12 @@ public class LoadSemSimModel extends SemGenJob {
 		XMMLreader xmmlreader = new XMMLreader(modelaccessor, xmmldoc, srcText);		
 		semsimmodel = xmmlreader.readFromDocument();
 		
-		if((semsimmodel == null) || (! semsimmodel.getErrors().isEmpty())){
+		if((semsimmodel == null) || (! semsimmodel.getErrors().isEmpty()))
 			return semsimmodel;
-		}
+		
 		else{
 			
-			boolean alreadyannotated = JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma);
-			
-			if(alreadyannotated){
+			if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma)){
 				//If annotations present, collect names of reference terms
 				setStatus("Collecting annotations");
 				nameOntologyTerms();
@@ -141,7 +148,7 @@ public class LoadSemSimModel extends SemGenJob {
 			else if(autoannotate){
 				// Otherwise auto-annotate, if turned on, 
 				setStatus("Annotating physical properties");
-				semsimmodel = AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
 			}
 		}
 		
@@ -170,7 +177,6 @@ public class LoadSemSimModel extends SemGenJob {
 			abort();
 			return;
 		}
-		
 	}
 	
 	public SemSimModel getLoadedModel() {

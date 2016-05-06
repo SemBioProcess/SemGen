@@ -45,7 +45,7 @@ import semsim.utilities.SemSimUtil;
 
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
-	private SemSimRDFreader rdfblock;
+	public SemSimRDFreader rdfblock;
 	private Element rdfblockelement;
 	private XMLOutputter xmloutputter = new XMLOutputter();
 	
