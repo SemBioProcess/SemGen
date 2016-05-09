@@ -772,13 +772,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			if ( ! workbench.getExtraction().isEmpty()) {
 				
 				// Choose file location for extraction
-				String selectedext = null;
+				String selectedext = "owl";  // Default extension type
 				int modtype = semsimmodel.getSourceModelType();
 				
-				if(modtype==ModelClassifier.SEMSIM_MODEL) selectedext = "owl";
-				else if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
+				if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
 				else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
-				else{}
 				
 				// Create the extracted semsim model
 				try {

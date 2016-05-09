@@ -139,12 +139,12 @@ public class ResourcesManager {
 			return null;
 		}
 		
-		public static HashSet<Ontology> loadOntologyDescriptions() throws FileNotFoundException {
+		public static HashSet<Ontology> loadOntologyDescriptions(String cfgpath) throws FileNotFoundException {
 			HashSet<Ontology> ontologies = new HashSet<Ontology>();
 			for (ReferenceOntology ro : ReferenceOntology.values()) {
 				ontologies.add(new Ontology(ro));
 			}
-			Set<String> buffer = createSetFromFile("cfg/local_ontologies.txt");
+			Set<String> buffer = createSetFromFile(cfgpath + "local_ontologies.txt");
 			
 			for (String rawont : buffer) {
 				rawont.trim();
