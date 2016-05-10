@@ -29,6 +29,18 @@ function MergerTask(graph, state) {
 		sender.minimizeTask(task);
 	});
 
+	// Adjust preview window size
+	$('#resizeHandle').mousedown(function(e) {
+		e.preventDefault();
+		$(document).mousemove(function(e) {
+			$('.mergePreview').css("height",e.pageY-95);
+			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+		});
+	});
+	$(document).mouseup(function(e) {
+		$(document).unbind('mousemove');
+	});
+
 	//$('[data-toggle="tooltip"]').tooltip();
 	
 	//Create the resolution panel
@@ -72,36 +84,6 @@ function MergerTask(graph, state) {
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 
 	};
-
-	var isResizing = false,
-		lastDownY = 0;
-
-	$(function () {
-		var container = $('.modal-content'),
-			top = $('.mergePreview'),
-			bottom = $('.modal-body'),
-			handle = $('#resizeHandle');
-
-		handle.on('mousedown', function (e) {
-			isResizing = true;
-			lastDownY = e.clientY;
-		});
-
-		$(document).on('mousemove', function (e) {
-			// we don't want to do anything if we aren't resizing.
-			if (!isResizing)
-				return;
-
-			var percentage = (e.pageY / container.innerWidth) * 100;
-			var mainPercentage = 100-percentage;
-
-			top.css('height', percentage);
-			bottom.css('height', mainPercentage);
-		}).on('mouseup', function (e) {
-			// stop resizing
-			isResizing = false;
-		});
-	});
 	
 	receiver.onShowOverlaps(function(data) {
 		data.forEach(function(d) {

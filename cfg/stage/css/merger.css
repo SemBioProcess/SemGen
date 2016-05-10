@@ -1,17 +1,16 @@
 .modal-dialog {
     width: 95vw;
+    overflow-y: initial;
 }
 
-.modal-body {
-    height: 50vh;
-    bottom: 0;
-    overflow: scroll;
+.modal-content {
+    height: 90%;
 }
 
 .mergePreview {
     position: relative;
     top: 0;
-    height: 25vh;
+    height: 300px;
     border-bottom: 2px solid black;
     border-top: 2px solid black;
 }
@@ -40,6 +39,11 @@
     border-left: 2px solid black;
 }
 
+.modal-body {
+    height: 50vh;
+    overflow: scroll;
+}
+
 .leftModelName {
     position: absolute;
     left: 20px;
@@ -56,9 +60,9 @@
 }
 
 #resizeHandle {
-    height: 8px;
+    height: 3px;
     cursor: ns-resize;
-    background-color: darkgrey;
+    background-color: black;
 }
 
 .overlapPane {
@@ -68,10 +72,6 @@
 
 .panel-title {
     font-size: 12px;
-}
-
-.expandBtn {
-
 }
 
 .leftRes {
