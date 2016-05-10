@@ -1,15 +1,7 @@
 package semgen.stage.stagetasks.merge;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.teamdev.jxbrowser.chromium.JSObject;
-
+import org.apache.commons.lang3.tuple.Pair;
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.MergerWorkbench;
@@ -23,6 +15,11 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
@@ -83,7 +80,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			JOptionPane.showMessageDialog(null, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
-		if (arg == MergeEvent.mergecompleted) {	
+		if (arg == MergeEvent.mergecompleted) {
 			if (saveMerge()==null) return;
 		}
 	}
@@ -103,10 +100,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		
 		public void onRequestPreview(Double index) {
 			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
-			_commandSender.showPreview(psms);			
+			_commandSender.showPreview(psms);
 		}
-		
-		public void onConsoleOut(String msg) {			
+
+		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}
 		
@@ -117,7 +114,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
 		}
-		
 	}
 	
 	@Override
@@ -144,13 +140,17 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public String name;
 		public String type;
 		public String description;
+		public String compAnnotation;
 		public String equation;
-		
+		public String unit;
+
 		protected StageDSDescriptor(DataStructureDescriptor dsdesc) {
 			name = dsdesc.getDescriptorValue(Descriptor.name);
 			type = dsdesc.getDescriptorValue(Descriptor.type);
 			description = dsdesc.getDescriptorValue(Descriptor.description);
+			compAnnotation = dsdesc.getDescriptorValue(Descriptor.compAnnotation);
 			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
+			unit = dsdesc.getDescriptorValue(Descriptor.units);
 		}
 	}
 }

@@ -19,14 +19,12 @@ function SemanticResolutionPane() {
 		var dsradiobutton = function (nodeside, desc, id) {
 			var nodetype = NodeTypeMap[desc.type];
 			return '<label>' +
-				'<div class="modelVarName">' + desc.name + '</div>' +
-				//'<div class="modelVarEquation">' + desc.equation + '</div>' +
+				'<div class="freetextDef">' + desc.description + '</div>' +
 				//'<svg class="'+ nodeside + '" height="10" width="10">' +
 				//'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
 				//'</svg>' +
 				'<input class="mergeResRadio" type="radio" name="mergeResRadio' + id + '">' +
 				'</label>';
-
 		};
 
 		var t = document.querySelector('#overlapPanel');
@@ -41,49 +39,28 @@ function SemanticResolutionPane() {
 
 		clone.querySelector('.collapsePane').setAttribute("href", "#collapsePane" + clone.id);
 		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
+
+		clone.querySelector('.leftCollapsePanel > .equation').innerHTML = overlap.dsleft.equation;
+		clone.querySelector('.rightCollapsePanel > .equation').innerHTML = overlap.dsright.equation;
+		clone.querySelector('.leftCollapsePanel > .varName').innerHTML = overlap.dsleft.name;
+		clone.querySelector('.rightCollapsePanel > .varName').innerHTML = overlap.dsright.name;
+		clone.querySelector('.leftCollapsePanel > .compAnnotation').innerHTML = overlap.dsleft.compAnnotation;
+		clone.querySelector('.rightCollapsePanel > .compAnnotation').innerHTML = overlap.dsright.compAnnotation;
+		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
+		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
 		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
-	}
+	};
 
 	//Preview graphs
 	this.leftgraph = new PreviewGraph("modelAStage");
 	this.midgraph = new PreviewGraph("modelABStage");
 	this.rightgraph = new PreviewGraph("modelBStage");
-	
-	var isResizing = false,
-	lastDownY = 0;
 
-	$(function () {
-		var container = $('.modal-content'),
-			top = $('.mergePreview'),
-			bottom = $('.modal-body'),
-			handle = $('#resizeHandle');
-	
-		handle.on('mousedown', function (e) {
-			isResizing = true;
-			lastDownY = e.clientY;
-		});
-	
-		$(document).on('mousemove', function (e) {
-			// we don't want to do anything if we aren't resizing.
-			if (!isResizing)
-				return;
-	
-			var percentage = (e.pageY / container.innerWidth) * 100;
-			var mainPercentage = 100-percentage;
-	
-			top.css('height', percentage);
-			bottom.css('height', mainPercentage);
-		}).on('mouseup', function (e) {
-			// stop resizing
-			isResizing = false;
-		});
-	});
-	
 	this.initialize = function(nodes) {
 		var nodearr = getSymbolArray(nodes);
 		$(".leftModelName").append(nodearr[0].id);
@@ -106,6 +83,18 @@ function SemanticResolutionPane() {
 		pane.leftgraph.update(data.left);
 		pane.midgraph.update(data.middle);
 		pane.rightgraph.update(data.right);
+	});
+
+	// Adjust preview window size
+	$('#resizeHandle').mousedown(function(e) {
+		e.preventDefault();
+		$(document).mousemove(function(e) {
+			$('.mergePreview').css("height",e.pageY-95);
+			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+		});
+	});
+	$(document).mouseup(function(e) {
+		$(document).unbind('mousemove');
 	});
 }
 

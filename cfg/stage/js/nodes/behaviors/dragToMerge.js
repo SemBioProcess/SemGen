@@ -46,7 +46,7 @@ function DragToMerge(_node) {
 				});
 			});
 		    _node.drag.push(function (d) {
-		    	if (_node.children) return;on d !
+		    	if (_node.children) return;
 		        
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.

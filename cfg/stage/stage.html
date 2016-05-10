@@ -16,13 +16,13 @@
 		<script src="js/nodes/modelNode.js"></script>
 		<script src="js/nodes/submodelNode.js"></script>
 		<script src="js/nodes/physiomapNode.js"></script>
-		
+
 		<script src="js/nodes/behaviors/nodeDrag.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
 		<script src="js/nodes/behaviors/dragToMerge.js"></script>
 		<script src="js/nodes/behaviors/hull.js"></script>
 		<script src="js/nodes/behaviors/hiddenLabelNodeGenerator.js"></script>
-		
+
 		<script src="js/links/link.js"></script>
 		<script src="js/links/mediatorLink.js"></script>
 		<script src="js/links/link.js"></script>
@@ -33,8 +33,8 @@
 		<script src="js/graph.js"></script>
 		<script src="js/taskprototype.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
-		<script src="js/merger/mergePreviewMock.js"></script>		
-		<script src="js/merger/semanticResolPane.js"></script>		
+		<script src="js/merger/mergePreviewMock.js"></script>
+		<script src="js/merger/semanticResolPane.js"></script>
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/stage.js"></script>
 		<script src="js/main.js"></script>
@@ -180,10 +180,10 @@
 		<!-- Templates -->
 		<template id="mergerContent">
 			<div class="modal-header">
-				<h3 class="modal-title">Merge models</h3>
+				<h5 class="modal-title">Merge models</h5>
 				<div class="mergeResHeader">
-					<h4 class="leftModelName"></h4>
-					<h4 class="rightModelName"></h4>
+					<h6 class="leftModelName"></h6>
+					<h6 class="rightModelName"></h6>
 				</div>
 			</div>
 			<div class="mergePreview">
@@ -191,23 +191,26 @@
 				<div class="substage" id="modelABStage"></div>
 				<div class="substage" id="modelBStage"></div>
 			</div>
+			<div id="resizeHandle"></div>
 			<div class="modal-body">
-				<div id="overlapPanels"></div>
+				<div class="panel-group" id="accordion">
+					<div id="overlapPanels"></div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary fullMergePreviewBtn">Preview merge</button>
-				<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-success merge">Merge!</button>
+				<button id="quitMergerBtn" type="button" class="btn btn-default" data-dismiss="modal">Quit merge</button>
 			</div>
 		</template>
 
 
 		<template id="overlapPanel">
-			<div class="overlapPane">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a class="collapsePane" data-toggle="collapse" data-parent="#accordion">
-								<div class="radiobtns">
+								<div class="overlapPane">
 									<div class="radio leftRes" id="leftRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
 									<div class="radio ignoreRes" id="ignoreRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
 									<div class="radio rightRes" id="rightRes" data-toggle="tooltip" data-placement="bottom" title="Resolve using this"></div>
@@ -216,12 +219,30 @@
 						</h4>
 					</div>
 					<div class="panel-collapse collapse">
-						<div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-							sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+						<div class="panel-body">
+							<div class="leftCollapsePanel">
+								<div class="collapsePanelLabel">Name</div>
+								<div class="varName"></div>
+								<div class="collapsePanelLabel">Composite annotation</div>
+								<div class="compAnnotation"></div>
+								<div class="collapsePanelLabel">Equation</div>
+								<div class="equation"></div>
+								<div class="collapsePanelLabel">Unit</div>
+								<div class="unit"></div>
+							</div>
+							<div class="rightCollapsePanel">
+								<div class="collapsePanelLabel">Name</div>
+								<div class="varName"></div>
+								<div class="collapsePanelLabel">Composite annotation</div>
+								<div class="compAnnotation"></div>
+								<div class="collapsePanelLabel">Equation</div>
+								<div class="equation"></div>
+								<div class="collapsePanelLabel">Unit</div>
+								<div class="unit"></div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
 		</template>
 
 	</body>

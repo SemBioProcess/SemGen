@@ -1,7 +1,6 @@
 /**
  * 
  */
-//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
 MergerTask.prototype = new Task();
 MergerTask.prototype.constructor = MergerTask;
@@ -13,13 +12,16 @@ function MergerTask(graph, state) {
 	
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
-
-	})	
+		// TODO: Warning dialog before quitting
+		$("#activeTaskText").removeClass('blink');
+		$("#mergerIcon").remove();
+		sender.minimizeTask(task);
+	});
 
 	this.showResolutionPane = function() {
 		var semrespane = new SemanticResolutionPane();
 		semrespane.initialize(this.nodes);
-	}
+	};
 	
 }
 
