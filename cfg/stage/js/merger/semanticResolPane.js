@@ -47,6 +47,9 @@ function SemanticResolutionPane() {
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
+		$("#hideResolutionsBtn").click(function() {
+			$('#taskModal').modal("hide");
+		})
 	}
 
 	//Preview graphs

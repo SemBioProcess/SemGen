@@ -10,12 +10,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
 
+import semgen.SemGen;
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.MergePreviewSubmodels;
+import semgen.stage.serialization.PhysioMapNode;
+import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.StageState;
+import semgen.stage.serialization.SubModelNode;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
@@ -104,6 +108,51 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onRequestPreview(Double index) {
 			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
 			_commandSender.showPreview(psms);			
+		}
+		
+		public void onQueryModel(String modelName, String query) {
+			ModelInfo modelInfo = _models.get(modelName);
+			switch (query) {
+			case "hassubmodels":
+				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
+				_commandSender.receiveReply(hassubmodels.toString());
+				break;
+			case "hasdependencies":
+				Boolean hasdependencies = !modelInfo.Model.getAssociatedDataStructures().isEmpty();
+				_commandSender.receiveReply(hasdependencies.toString());
+				break;
+			}
+		}
+		public void onTaskClicked(String modelName, String task) {
+			onTaskClicked(modelName, task, null);
+		}
+		
+		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
+			// If the model doesn't exist throw an exception
+			if(!_models.containsKey(modelName))
+				throw new IllegalArgumentException(modelName);
+			
+			// Get the model
+			ModelInfo modelInfo = _models.get(modelName);
+			SemSimModel model = modelInfo.Model;
+			
+			// Execute the proper task
+			switch(task) {
+				case "dependencies":
+					_commandSender.showDependencyNetwork(model.getName(),
+							SemSimModelSerializer.getDependencyNetwork(model));
+					break;
+				case "submodels":
+					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+					if(submodelNetwork.length <= 0)
+						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
+					else
+						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
+					break;
+				default:
+					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+					break;
+			}
 		}
 		
 		public void onConsoleOut(String msg) {			

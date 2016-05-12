@@ -14,7 +14,6 @@ function ModelNode (graph, name) {
 	this.y = (Math.random() * (graph.h-graph.h/2))+graph.h/6;
 	this.addBehavior(Hull);	
 	
-	this.addBehavior(DragToMerge);
 	this.addBehavior(parentDrag);
 	
 }

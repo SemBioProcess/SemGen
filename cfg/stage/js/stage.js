@@ -15,15 +15,7 @@ function Stage(graph) {
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
-		stage.addModelNode(modelName);
-	});
-
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
-	});
-
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
+		stage.addModelNode(modelName, [DragToMerge]);
 	});
 
 	//Remove the named model node
@@ -81,6 +73,14 @@ function Stage(graph) {
 
 			searchResultsList.append(makeResultSet(searchResultSet));
 		});
+	});
+	
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
+	});
+
+	receiver.onReceiveReply(function (reply) {
+		CallWaiting(reply);
 	});
 
 	$("#addModelButton").click(function() {

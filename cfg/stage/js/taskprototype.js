@@ -9,6 +9,7 @@ function Task(graph) {
 	this.selectedModels = [];
 	this.selectedNodes = [];
 	var task = this;
+	$("#leftSidebar").empty();
 	
 	this.loadStageState = function (state) {
 		if (state.nodetree.length != 0) {
@@ -22,14 +23,18 @@ function Task(graph) {
 	}
 
 	
-	this.addModelNode = function(modelName) {
+	this.addModelNode = function(modelName, optbehaviors) {
 		if(this.nodes[modelName])
 			throw "Model already exists";
 		
 		var modelNode = new ModelNode(this.graph, modelName);
+		optbehaviors.forEach(function(b){
+			modelNode.addBehavior(b);
+		});
 		
 		this.nodes[modelName] = modelNode;
 		task.graph.update();
+
 	};
 	
 	//Get a model node

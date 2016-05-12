@@ -3,7 +3,12 @@
  */
 function LeftSidebar(graph) {
 	this.graph = graph;
-
+	
+	var t = document.querySelector('#leftProjectMenus');
+	var clone = document.importNode(t.content, true);
+	
+	document.querySelector('#leftSidebar').appendChild(clone);
+	
 	this.updateModelPanel = function(model) {
 		var pane = $("#modelinfo");
 
