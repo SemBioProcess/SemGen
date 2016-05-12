@@ -76,7 +76,7 @@ public class BioPortalSearcher {
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
 					Ontology ont = lib.getOntologyfromTermURI(uri);
 					
-					if(ont.getNickName().equals(bioportalNickName)){
+					if(ont.getNickName().equals(bioportalNickName) && preferredLabel != null){
 						rdflabelsanduris.put(preferredLabel, uri);
 					}
 

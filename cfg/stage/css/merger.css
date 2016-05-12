@@ -2,10 +2,8 @@
     width: 95vw;
 }
 
-.modal-body {
-    height: 30vh;
-    bottom: 0;
-    overflow: scroll;
+.modal-content {
+    height: 90%;
 }
 
 .mergePreview {
@@ -40,6 +38,12 @@
     border-left: 2px solid black;
 }
 
+.modal-body {
+    height: 30vh;
+     bottom: 0;
+    overflow: scroll;
+}
+
 .leftModelName {
     position: absolute;
     left: 20px;
@@ -51,21 +55,30 @@
 }
 
 .mergeResHeader {
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     clear: both;
 }
 
+#resizeHandle {
+    height: 3px;
+    cursor: ns-resize;
+    background-color: black;
+}
+
 .overlapPane {
-    height: 100px;
-    border-width: 1px;
-    border-top-style: solid;
+    height: 15px;
     text-align: center;
+}
+
+.panel-title {
+    font-size: 12px;
 }
 
 .leftRes {
     float: left;
     width: 250px;
     text-align: left;
+    margin-top: 0px;
 }
 
 .rightRes {
@@ -74,38 +87,31 @@
     text-align: right;
 }
 
-.leftRes:hover, .rightRes:hover {
-    background-color: #dfe3ee;
-    cursor: pointer;
+.ignoreRes {
+    width: 250px;
+    display: inline-block;
+    margin-left: 40px;
 }
 
-.modelVarName {
-    font-style: italic;
-}
-
-.modelVarEquation {
-    font-family: Courier, monospace;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.ignoreLabel {
+    padding-right: 90px;
+    padding-top: 3px;
 }
 
 .leftNode {
     position: absolute;
     left: 350px;
-    top: 35px;
+    top: 6px;
 }
 
 .rightNode {
     position: absolute;
     right: 350px;
-    top: 35px;
+    top: 6px;
 }
 
-.mergePreviewBtn {
-	position: relative;
-	display: inline-block;
-    margin: 30px auto;
+.radio+.radio {
+    margin-top: 0px;
 }
 
 .radio label {
@@ -115,43 +121,38 @@
 .leftRes .mergeResRadio {
     position: absolute;
     left: 320px;
-    top: 30px;
+    top: 0px;
 }
 
 .rightRes .mergeResRadio {
     position: absolute;
     right: 300px;
-    top: 30px;
+    top: 0px;
+}
+
+.ignoreRes .mergeResRadio {
+    top: 0px;
+    margin-left: 0px;
+}
+
+.leftCollapsePanel {
+    float: left;
+    text-align: left;
+    display: inline-block;
+    font-size: 11px;
+}
+
+.rightCollapsePanel {
+    float: right;
+    text-align: right;
+    display: inline-block;
+    font-size: 11px;
+}
+
+.collapsePanelLabel {
+    font-weight: bold;
 }
 
 #quitMergerBtn {
     float: left;
-}
-
-#resizeHandle {
-    height: 8px;
-    cursor: ns-resize;
-    background-color: darkgrey;
-}
-
-.panel-title {
-    font-size: 12px;
-}
-
-.expandBtn {
-
-}
-
-.ignoreRes {
-    width: 250px;
-    display: inline-block;
-}
-
-.ignoreLabel {
-    padding-right: 90px;
-    padding-top: 3px;
-}
-
-.radio+.radio {
-    margin-top: 0px;
 }

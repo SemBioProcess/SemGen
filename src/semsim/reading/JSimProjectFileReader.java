@@ -27,10 +27,11 @@ public class JSimProjectFileReader {
 			Document projdoc = getDocument(ma.getFileThatContainsModel());
 			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
 			
-			// If there are semsim annotations associated with the model...
+			// If there are no semsim annotations associated with the model, return false
 			if(ssael == null){
 				return false;
 			}
+			// Otherwise collect the annotations
 			else{
 				XMLOutputter xmloutputter = new XMLOutputter();
 				

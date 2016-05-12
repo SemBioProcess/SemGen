@@ -1,14 +1,14 @@
 package semgen.merging.workbench;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
 
+import java.util.HashMap;
+import java.util.Set;
+
 public class DataStructureDescriptor {
 	public enum Descriptor {
-		name, description, units, computationalcode, inputs, inputfor, type;
+		name, description, units, computationalcode, inputs, inputfor, type, compAnnotation;
 	}
 	
 	private HashMap<Descriptor, String> descriptormap = new HashMap<Descriptor, String>();
@@ -22,6 +22,7 @@ public class DataStructureDescriptor {
 		else descriptormap.put(Descriptor.units, "");
 		
 		descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
+		descriptormap.put(Descriptor.compAnnotation, ds.getCompositeAnnotationAsString(false));
 		
 		makeStringListFromSet(Descriptor.inputs, ds.getComputationInputs(), true);
 		makeStringListFromSet(Descriptor.inputfor, ds.getUsedToCompute(), false);
