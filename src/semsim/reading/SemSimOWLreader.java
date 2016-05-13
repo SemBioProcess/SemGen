@@ -584,14 +584,17 @@ public class SemSimOWLreader extends ModelReader {
 
 	
 	private void collectCustomAnnotations() {
+		
 		// Get additional annotations on custom terms
 		// Make sure to get reference classes that are there to define custom classes
 		SemSimTypes[] customclasses = new SemSimTypes[]{SemSimTypes.CUSTOM_PHYSICAL_ENTITY, SemSimTypes.CUSTOM_PHYSICAL_PROCESS};
 		
 		// For the two custom physical model classes...
-		for(SemSimTypes customclass : customclasses){			
+		for(SemSimTypes customclass : customclasses){	
+			
 			// For each custom term in them...
-			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclass.toString())){
+			for(String custstring : SemSimOWLFactory.getIndividualsAsStrings(ont, customclass.getURIasString())){
+				
 				OWLNamedIndividual custind = factory.getOWLNamedIndividual(IRI.create(custstring));
 				
 				// For each super class that is not the custom physical component class itself...
@@ -628,10 +631,11 @@ public class SemSimOWLreader extends ModelReader {
 									pmc = semsimmodel.getCustomPhysicalEntityByName(SemSimOWLFactory.getRDFLabels(ont, custind)[0]);
 								}
 								
-								String propstring = owlprop.getNamedProperty().toString();
-
+								String propstring = owlprop.getNamedProperty().getIRI().toString();
+								
 								// If we've got the physical model component object, add the annotations
 								if(pmc!=null){
+
 									Relation rel = SemSimRelations.getRelationFromURI(URI.create(propstring));
 									if (rel!=SemSimRelation.UNKNOWN) {
 										pmc.addReferenceOntologyAnnotation(rel, reftermURI, label, sslib);
