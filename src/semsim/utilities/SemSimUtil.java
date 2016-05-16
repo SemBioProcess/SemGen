@@ -68,26 +68,27 @@ public class SemSimUtil {
 		// Remove mapping info on MappableVariables, set eqs. for variables that are inputs
 		Set<DataStructure> dsset = new HashSet<DataStructure>();
 		dsset.addAll(model.getAssociatedDataStructures());
-		
+				
 		for(DataStructure ds : dsset){
 			
-			if(ds instanceof MappableVariable){
+			if(ds instanceof MappableVariable){	
 				
 				// Need to flatten names of variables. Can we get rid of the inputs?
 				// How to deal with solution domain resolution?
 				MappableVariable mv = (MappableVariable)ds;
 								
 				if(mv.isFunctionalSubmodelInput()){
-					
-					boolean sourcefound = false;
-					
+										
 					MappableVariable sourcemv = mv;
 					
+					boolean sourcefound = ! sourcemv.isMapped();
+					
 					// follow mappings until source variable is found
-					while(! sourcefound){						
+					while( ! sourcefound){		
+						
 						sourcemv = sourcemv.getMappedFrom().toArray(new MappableVariable[]{})[0];
 						
-						if(! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
+						if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
 					}
 					
 					String sourcevarglobalname = sourcemv.getName();
@@ -98,7 +99,7 @@ public class SemSimUtil {
 					
 					//Remove the computational dependency between source and input var
 					sourcemv.getUsedToCompute().remove(mv);
-					
+											
 					// Go through all the variables that are computed from the one we're going to remove
 					// and set them dependent on the source variable
 					for(DataStructure dependentmv : mv.getUsedToCompute()){
@@ -108,7 +109,7 @@ public class SemSimUtil {
 						
 						// If the local name of the input doesn't match that of its source,
 						// replace all occurrences of the input's name in the equations that use it
-						if(! sourcelocalname.equals(mvlocalname)){
+						if( ! sourcelocalname.equals(mvlocalname)){
 							
 							String newmathml = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getMathML(), sourcelocalname, mvlocalname);
 							dependentmv.getComputation().setMathML(newmathml);
@@ -123,15 +124,15 @@ public class SemSimUtil {
 					model.removeDataStructure(mv.getName());
 				}
 				
-				mv.setPublicInterfaceValue("");
-				mv.setPrivateInterfaceValue("");
+			mv.setPublicInterfaceValue("");
+			mv.setPrivateInterfaceValue("");
 				
 				// Clear mappings
-				mv.getMappedFrom().clear();
-				mv.getMappedTo().clear();
+			mv.getMappedFrom().clear();
+			mv.getMappedTo().clear();
 			}
 		}
-		
+			
 		// Second pass through new data structures to remove the prefixes on their names
 		for(DataStructure ds : model.getAssociatedDataStructures()){
 			String oldname = ds.getName();

@@ -31,18 +31,27 @@ public class AnnotationCopier {
 	 * Inter-model datastructure copy 
 	 * */
 	public static void copyCompositeAnnotation(SemSimTermLibrary lib, DataStructure targetds, DataStructure sourceds) {		
+		
+		// Copy over physical property, physical model component, and singular annotations.
+		// If no annotations present in source variable, remove annotations on target variable
+		
 		if (sourceds.hasPhysicalProperty()) {
 			int ppindex = lib.getPhysicalPropertyIndex(sourceds.getPhysicalProperty());
 			targetds.setAssociatedPhysicalProperty(lib.getAssociatePhysicalProperty(ppindex));
 		}
+		else targetds.setAssociatedPhysicalProperty(null);
+		
 		if (sourceds.hasAssociatedPhysicalComponent()) {
 			int pmcindex = lib.getComponentIndex(sourceds.getAssociatedPhysicalModelComponent(), true);
 			targetds.setAssociatedPhysicalModelComponent(lib.getComponent(pmcindex));
 		}
+		else targetds.setAssociatedPhysicalModelComponent(null);
+		
 		if (sourceds.hasPhysicalDefinitionAnnotation()) {
 			int pmcindex = lib.getPhysicalPropertyIndex(sourceds.getSingularTerm());
 			targetds.setSingularAnnotation((PhysicalProperty) lib.getComponent(pmcindex));
 		}
+		else targetds.setSingularAnnotation(null);
 	}
 	
 	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){

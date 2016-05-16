@@ -29,7 +29,7 @@ import semsim.utilities.SemSimCopy;
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
 	private Computation computation = null;
 	private PhysicalPropertyinComposite physicalProperty = null;
-	private PhysicalModelComponent physicalcomponent =null;
+	private PhysicalModelComponent physicalcomponent = null;
 	private PhysicalProperty singularterm = null;
 	private DataStructure solutionDomain;
 	private Set<DataStructure> usedToCompute = new HashSet<DataStructure>();

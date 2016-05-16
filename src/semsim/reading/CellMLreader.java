@@ -47,7 +47,7 @@ public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
 	public SemSimRDFreader rdfblock;
 	private Element rdfblockelement;
-	private XMLOutputter xmloutputter = new XMLOutputter();
+	private static XMLOutputter xmloutputter = new XMLOutputter();
 	
 	public CellMLreader(File file) {
 		super(file);
@@ -450,6 +450,21 @@ public class CellMLreader extends ModelReader {
 			}
 		}
 		
+		// If there's a variable called "time" in a component called "environment"
+		// set it as a solution domain for the other variables in the model
+		
+		String soldomname = "environment.time";
+		if(semsimmodel.containsDataStructure(soldomname)){
+			DataStructure soldomds = semsimmodel.getAssociatedDataStructure(soldomname);
+			soldomds.setIsSolutionDomain(true);
+			
+			for(DataStructure dstruct : semsimmodel.getAssociatedDataStructures()){
+				
+				if(dstruct != soldomds) dstruct.setSolutionDomain(soldomds);
+			}
+		}
+		
+		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
 		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf)));
@@ -616,11 +631,17 @@ public class CellMLreader extends ModelReader {
 	
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
-		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.createJdomNamespace());
+		
+		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceAsString());
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
 		Element childel = getElementForOutputVariableFromComponentMathML(cvarname, compmathmlit);
+				
 		if(childel!=null){
-			mathmlheadel.addContent((Element)childel.clone());
+			
+			Element childelclone = (Element)childel.clone();
+			childelclone.removeNamespaceDeclaration(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString()));
+			mathmlheadel.addContent(childelclone);
+			
 			return mathmlheadel;
 		}
 		return null;
