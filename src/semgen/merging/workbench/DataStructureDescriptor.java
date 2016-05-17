@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class DataStructureDescriptor {
 	public enum Descriptor {
-		name, description, units, computationalcode, inputs, inputfor, type, compAnnotation;
+		name, description, units, computationalcode, inputs, inputfor, type, annotation;
 	}
 	
 	private HashMap<Descriptor, String> descriptormap = new HashMap<Descriptor, String>();
@@ -21,9 +21,14 @@ public class DataStructureDescriptor {
 			descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
 		else descriptormap.put(Descriptor.units, "");
 		
-		descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
-		descriptormap.put(Descriptor.compAnnotation, ds.getCompositeAnnotationAsString(false));
-		
+		if(ds.hasComputation())
+			descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
+		else descriptormap.put(Descriptor.computationalcode, ds.getStartValue());
+
+		if(ds.getCompositeAnnotationAsString(false) != "[unspecified]")
+			descriptormap.put(Descriptor.annotation, ds.getCompositeAnnotationAsString(false));
+		else descriptormap.put(Descriptor.annotation, ds.getSingularTerm().getName());
+
 		makeStringListFromSet(Descriptor.inputs, ds.getComputationInputs(), true);
 		makeStringListFromSet(Descriptor.inputfor, ds.getUsedToCompute(), false);
 	}

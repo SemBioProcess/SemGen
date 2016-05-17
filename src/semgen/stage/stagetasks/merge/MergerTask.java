@@ -140,7 +140,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public String name;
 		public String type;
 		public String description;
-		public String compAnnotation;
+		public String annotation;
 		public String equation;
 		public String unit;
 
@@ -148,7 +148,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			name = dsdesc.getDescriptorValue(Descriptor.name);
 			type = dsdesc.getDescriptorValue(Descriptor.type);
 			description = dsdesc.getDescriptorValue(Descriptor.description);
-			compAnnotation = dsdesc.getDescriptorValue(Descriptor.compAnnotation);
+			annotation = dsdesc.getDescriptorValue(Descriptor.annotation);
 			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
 			unit = dsdesc.getDescriptorValue(Descriptor.units);
 		}

@@ -44,8 +44,8 @@ function SemanticResolutionPane() {
 		clone.querySelector('.rightCollapsePanel > .equation').innerHTML = overlap.dsright.equation;
 		clone.querySelector('.leftCollapsePanel > .varName').innerHTML = overlap.dsleft.name;
 		clone.querySelector('.rightCollapsePanel > .varName').innerHTML = overlap.dsright.name;
-		clone.querySelector('.leftCollapsePanel > .compAnnotation').innerHTML = overlap.dsleft.compAnnotation;
-		clone.querySelector('.rightCollapsePanel > .compAnnotation').innerHTML = overlap.dsright.compAnnotation;
+		clone.querySelector('.leftCollapsePanel > .annotation').innerHTML = overlap.dsleft.annotation;
+		clone.querySelector('.rightCollapsePanel > .annotation').innerHTML = overlap.dsright.annotation;
 		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
@@ -92,10 +92,9 @@ function SemanticResolutionPane() {
 			$('.mergePreview').css("height",e.pageY-95);
 			$('.modal-body').css("height", $(window).height()-e.pageY-95);
 		});
-	});
-	$(document).mouseup(function(e) {
-		$(document).unbind('mousemove');
-		// Initialize the graphs to resize the d3 graph
+		$(document).mouseup(function() {
+			$(document).unbind('mousemove');
+		});
 	});
 }
 

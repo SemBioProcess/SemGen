@@ -28,7 +28,7 @@ function PreviewGraph(id) {
     
     this.initialize = function () {
 	    graph.w = div.width();
-	    graph.h = div.height();
+	    graph.h = div.parent().height();
 	    nullmodel = new ModelNode(graph, "null");
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
