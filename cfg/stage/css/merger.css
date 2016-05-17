@@ -135,6 +135,7 @@
 }
 
 .leftCollapsePanel {
+    width: 350px;
     float: left;
     text-align: left;
     display: inline-block;
@@ -142,6 +143,7 @@
 }
 
 .rightCollapsePanel {
+    width: 350px;
     float: right;
     text-align: right;
     display: inline-block;
