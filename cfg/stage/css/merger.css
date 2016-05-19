@@ -60,7 +60,7 @@
 }
 
 #resizeHandle {
-    height: 3px;
+    height: 6px;
     cursor: ns-resize;
     background-color: black;
 }

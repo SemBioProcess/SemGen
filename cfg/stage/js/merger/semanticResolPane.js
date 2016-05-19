@@ -30,11 +30,11 @@ function SemanticResolutionPane() {
 		clone.id = 'res' + resolutions.length;
 		clone.index = resolutions.length;
 		
-		clone.querySelector('#leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
-		clone.querySelector('#rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
-		clone.querySelector('#ignoreRes').innerHTML = '<label><div class="ignoreLabel">Ignore</div><input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
+		clone.querySelector('.leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
+		clone.querySelector('.rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
+		clone.querySelector(".ignoreRes").innerHTML = '<label><div class="ignoreLabel">Ignore</div><input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
 
-		clone.querySelector('.collapsePane').setAttribute("href", "#collapsePane" + clone.id);
+		clone.querySelector('.collapsePane').setAttribute("data-target", "#collapsePane" + clone.id);
 		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
 
 		clone.querySelector('.leftCollapsePanel > .equation').innerHTML = overlap.dsleft.equation;
@@ -104,6 +104,7 @@ function SemanticResolutionPane() {
 	});
 	$(document).mouseup(function(e) {
 		$(document).unbind('mousemove');
+		// Initialize the graphs to resize the d3 graph
 	});
 	
 	this.pollOverlaps = function() {
