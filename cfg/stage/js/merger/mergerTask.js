@@ -8,7 +8,7 @@ MergerTask.prototype.constructor = MergerTask;
 
 function MergerTask(graph, state) {
 	Task.prototype.constructor.call(this, graph, state);
-	
+	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
 	var semrespane;
 	
@@ -21,14 +21,23 @@ function MergerTask(graph, state) {
 		semrespane = new SemanticResolutionPane();
 		semrespane.initialize(this.nodes);
 	}
+	
+	$("#addModelButton").hide();
+	$(".stageSearch").hide();
+	
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
-	})
+		sender.requestOverlaps();
+	});
+	
+	$("#mergeModels").click(function() {
+		sender.executeMerge(semrespane.pollOverlaps());
+	});
 	
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 
-	})	
+	});
 	
 	// Adds a dependency network to the d3 graph
 	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
@@ -72,7 +81,7 @@ MergerTask.prototype.onMinimize = function() {
 }
 
 MergerTask.prototype.onModelSelection = function(node) {
-
+	
 }
 
 MergerTask.prototype.onClose = function() {

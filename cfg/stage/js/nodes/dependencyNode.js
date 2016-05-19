@@ -10,9 +10,23 @@ function DependencyNode (graph, data, parentNode) {
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 
 	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, graph.nodecharge);
-
+	this.submodelinput = data.issubmodelinput;
+	
 	this.addClassName("dependencyNode");
 	//this.addBehavior(Columns);
+	var _node = this;
+	graph.depBehaviors.forEach(function(b) {
+		_node.addBehavior(b);
+	});
 	this.addBehavior(HiddenLabelNodeGenerator);
+	
 
+
+}
+
+DependencyNode.prototype.createVisualElement = function (element, graph) {
+	Node.prototype.createVisualElement.call(this,element, graph);
+	if (this.submodelinput) {
+		this.rootElement.selectAll("circle").attr("opacity", "0.6");
+	}	
 }

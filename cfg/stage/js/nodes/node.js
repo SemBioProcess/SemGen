@@ -39,10 +39,21 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	this.addBehavior(NodeDrag);
 }
 
-
+//Get this node's top level parent
+Node.prototype.getRootParent = function () {
+	var node = this;
+	while (node.parent!=null) {
+		node = node.parent;
+	}
+	return node;
+}
 
 Node.prototype.addClassName = function (className) {
 	this.className += " " + className;
+}
+
+Node.prototype.hasClassName = function (className) {
+	return this.className.indexOf(className) > -1;
 }
 
 Node.prototype.spaceBetweenTextAndNode = function() {

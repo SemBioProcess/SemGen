@@ -32,7 +32,8 @@ function Graph() {
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
 	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
-
+	this.depBehaviors = [];
+	
 	var nodes;
 	var visibleNodes = this.force.nodes();
 	var orphanNodes = [];
@@ -49,6 +50,10 @@ function Graph() {
 		return visibleNodes;
 	}
 
+	this.getModels = function() {
+		return getSymbolArray(nodes);
+	}
+	
 	// Add a link to the graph
 	this.addLink = function (link) {
 		// If the link already exists don't add it again

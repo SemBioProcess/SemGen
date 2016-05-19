@@ -26,6 +26,8 @@ function main() {
 	
 	//If a change task request is received from Java
 	this.changeTask = function changeTask(stagestate) {
+		graph.depBehaviors = [];
+		
 		var content = document.querySelector('#modalContent');
 		if (content.firstChild!=null) {
 			content.removeChild(content.firstChild);
@@ -41,6 +43,7 @@ function main() {
 		this.task.onInitialize();
 		
 		this.graph.setTaskNodes(this.task.nodes);
+		
 		this.graph.update();
 		$('#taskModal').modal('toggle');
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress

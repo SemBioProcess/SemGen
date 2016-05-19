@@ -5,9 +5,12 @@
 function Task(graph) {
 	
 	this.graph = graph;
+	
+	
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
+	var modelindex = 0;
 	var task = this;
 	$("#leftSidebar").empty();
 	
@@ -27,7 +30,8 @@ function Task(graph) {
 		if(this.nodes[modelName])
 			throw "Model already exists";
 		
-		var modelNode = new ModelNode(this.graph, modelName);
+		var modelNode = new ModelNode(this.graph, modelName, modelindex);
+		modelindex++;
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});

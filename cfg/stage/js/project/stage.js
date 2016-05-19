@@ -6,7 +6,10 @@ function Stage(graph) {
 
 	var stage = this;
 	var nodes = this.nodes;
-
+	
+	$("#addModelButton").show();
+	$(".stageSearch").show();
+	
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
 
@@ -16,6 +19,7 @@ function Stage(graph) {
 	receiver.onAddModel(function (modelName) {
 		console.log("Adding model " + modelName);
 		stage.addModelNode(modelName, [DragToMerge]);
+		
 	});
 
 	//Remove the named model node

@@ -213,7 +213,24 @@ public class MergerWorkbench extends Workbench {
 		}
 		return names;
 	}
+	
+	//Add manual codeword mapping to the list of equivalent terms
+	public Pair<String,String> addManualCodewordMapping(String cdwd1, String cdwd2) {
+		int index1 = getExposedCodewordIndexbyName(0, cdwd1);
+		int index2 =getExposedCodewordIndexbyName(1, cdwd2);
 
+		return addManualCodewordMapping(index1,index2);
+	}
+	
+	private int getExposedCodewordIndexbyName(int modind, String cdwd) {
+		for (DataStructure ds : exposeddslist.get(modind)) {
+			if (ds.getName().equals(cdwd)) {
+				return exposeddslist.get(modind).indexOf(ds);
+			}
+		}
+		return -1;
+	}
+	
 	//Add manual codeword mapping to the list of equivalent terms
 	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
 		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
@@ -221,8 +238,7 @@ public class MergerWorkbench extends Workbench {
 		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
 				
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
-		addCodewordMapping(ds1, ds2
-				, maptype.manualmapping);
+		addCodewordMapping(ds1, ds2, maptype.manualmapping);
 		setChanged();
 		notifyObservers(MergeEvent.mappingadded);
 		return null;

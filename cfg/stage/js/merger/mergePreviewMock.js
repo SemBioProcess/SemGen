@@ -13,7 +13,8 @@ function PreviewGraph(id) {
 	
     this.nodecharge = -120;
     this.linklength = 120;
-    
+	this.depBehaviors = [];
+	
     var color = d3.scale.category10();
     var svg = d3.select(selector)
     	.append("svg");
@@ -29,7 +30,7 @@ function PreviewGraph(id) {
     this.initialize = function () {
 	    graph.w = div.width();
 	    graph.h = div.height();
-	    nullmodel = new ModelNode(graph, "null");
+	    nullmodel = new ModelNode(graph, "null", 0);
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
     }

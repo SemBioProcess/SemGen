@@ -7,7 +7,7 @@ public class SubModelDependencyNode extends DependencyNode {
 
 	// When we split the submodel name and the variable name string into an array
 	// we'll need to index into the array to get the correct parts
-
+	
 	public final static int SubmodelNamePart = 0;
 	public final static int VariableNamePart = 1;
 
@@ -16,6 +16,7 @@ public class SubModelDependencyNode extends DependencyNode {
 
 		// Are there inputs from other models?
 		if(dataStructure instanceof MappableVariable) {
+			
 			for(MappableVariable input : ((MappableVariable)dataStructure).getMappedFrom())
 			{
 				String[] nameParts = getNodeNameParts(input);

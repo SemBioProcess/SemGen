@@ -4,25 +4,22 @@
 function SemanticResolutionPane() {
 	var pane = this;
 	var resolutions = [];
+	var radiolisteners = [];
 	// Preview merge resolutions
 
 	var t = document.querySelector('#mergerContent');
 
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
-
-	//$('[data-toggle="tooltip"]').tooltip();
 	
 	//Create the resolution panel
 	this.addResolutionPanel = function(overlap) {
-		
+		var choice = -1;	
 		var dsradiobutton = function (nodeside, desc, id) {
 			var nodetype = NodeTypeMap[desc.type];
 			return '<label>' +
 				'<div class="freetextDef">' + desc.description + '</div>' +
-				//'<svg class="'+ nodeside + '" height="10" width="10">' +
-				//'<circle cx="5" cy="5" r="5" fill="' + nodetype.color + '"/>' +
-				//'</svg>' +
+
 				'<input class="mergeResRadio" type="radio" name="mergeResRadio' + id + '">' +
 				'</label>';
 		};
@@ -50,7 +47,9 @@ function SemanticResolutionPane() {
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
 		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
-		
+		clone.poll = function() {
+			return choice;
+		}
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
@@ -78,6 +77,12 @@ function SemanticResolutionPane() {
 	}
 	
 	receiver.onShowOverlaps(function(data) {
+		pane.resolutions = [];
+		var olaps = document.querySelector('#modalContent #overlapPanels');
+		while (olaps.firstChild) {
+			olaps.removeChild(olaps.firstChild);
+		}
+		
 		data.forEach(function(d) {
 			pane.addResolutionPanel(d);	
 		});
@@ -100,5 +105,13 @@ function SemanticResolutionPane() {
 	$(document).mouseup(function(e) {
 		$(document).unbind('mousemove');
 	});
+	
+	this.pollOverlaps = function() {
+		var choices = [];
+		resolutions.forEach(function(panel) {
+			choices.push(panel.poll);
+		});
+		return choices;
+	}
 }
 

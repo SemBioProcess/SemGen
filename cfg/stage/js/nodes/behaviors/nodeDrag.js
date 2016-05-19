@@ -12,7 +12,8 @@ function NodeDrag(_node) {
 	$(_node).on('createVisualization', function (e, root) {
 		var nodeDrag = d3.behavior.drag()
 			.on("dragstart", function (d, i) {
-				
+				_node.graph.force.stop();
+				_node.rootElement.selectAll("circle").attr("r", _node.r*2);
 				_node.dragstart.forEach(function(behavior) {
 					behavior(_node);
 				});
@@ -26,16 +27,21 @@ function NodeDrag(_node) {
 			        _node.x += d3.event.dx;
 			        _node.y += d3.event.dy; 
 		    	}
+		    	
 		    	_node.drag.forEach(function(behavior) {
 		    		behavior(_node);
 				});
-		    	_node.graph.tick();
+				_node.graph.tick();
+		    	
 		    })
 		    .on("dragend", function (d, i) {
+		    	_node.rootElement.selectAll("circle").attr("r", _node.r);
 		    	_node.dragend.forEach(function(behavior) {
 		    		behavior(_node);
 				});
+		    	_node.graph.force.start();
 		        _node.graph.tick();
+		        
 		    });
 		
 		// Add the dragging functionality to the node

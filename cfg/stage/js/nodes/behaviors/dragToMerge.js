@@ -3,9 +3,9 @@
  * @param node
  */
 
-var DropZoneSideLength = 50;
+
 function DragToMerge(_node) {
-	
+	var DropZoneSideLength = 50;
 	// When the node visualization is created add a dropzone element
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model

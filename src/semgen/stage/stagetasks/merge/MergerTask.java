@@ -10,13 +10,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
 
-import semgen.SemGen;
 import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
+import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.MergePreviewSubmodels;
-import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.StageState;
 import semgen.stage.serialization.SubModelNode;
@@ -31,6 +30,7 @@ import semsim.reading.ModelAccessor;
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
 	private MergePreview preview;
+	private MergeConflictResolvers resolvers;
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
@@ -46,6 +46,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		this.state = state;
 		workbench.addModels(files, models, true);
 		primeForMerging();
+		
+		resolvers = new MergeConflictResolvers(workbench);
 	}
 
 	public void primeForMerging() {
@@ -93,6 +95,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+		
 		public void onRequestOverlaps() {
 			ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 			for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
@@ -108,6 +111,22 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onRequestPreview(Double index) {
 			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
 			_commandSender.showPreview(psms);			
+		}
+		
+		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
+			String[] nodestolink = nodes.split(",");
+			if (nodemodelindex.intValue()==0) {
+				workbench.addManualCodewordMapping(nodestolink[0], nodestolink[1]);
+			}
+			else {
+				workbench.addManualCodewordMapping(nodestolink[1], nodestolink[0]);
+			}
+			preview = workbench.generateMergePreview();
+		}
+		
+		public void onExecuteMerge() {
+			ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
+			resolvers.mergeButtonAction(choicelist);
 		}
 		
 		public void onQueryModel(String modelName, String query) {
