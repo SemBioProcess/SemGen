@@ -1,5 +1,5 @@
 SEMGEN
-Copyright (c) 2010-2014 Maxwell Neal, University of Washington.
+Copyright (c) 2010-2016 Maxwell Neal, University of Washington.
  
 All rights reserved.
  

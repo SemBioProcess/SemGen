@@ -22,7 +22,7 @@ public class AnnotatorTreeMap {
 	}
 	
 	private void makeTree(boolean showimports, SubModelToolDrawer smdrawer, CodewordToolDrawer cwdrawer) {
-		ArrayList<Integer> sm2disp = smdrawer.getSubmodelstoDisplay(showimports);
+		ArrayList<Integer> sm2disp = smdrawer.getSubmodelsToDisplay(showimports);
 		
 		for (Integer sm : sm2disp) {
 			TreeBranch branch = new TreeBranch();

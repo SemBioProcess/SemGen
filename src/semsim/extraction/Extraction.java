@@ -243,7 +243,12 @@ public class Extraction {
 				newds.setStartValue(null);
 				newds.getAnnotations().addAll(ds.getAnnotations());
 				
-				if(newds instanceof MappableVariable) ((MappableVariable)newds).getMappedFrom().clear();
+				if(newds instanceof MappableVariable){
+					MappableVariable mvnewds = ((MappableVariable)newds);
+					mvnewds.getMappedFrom().clear();
+					mvnewds.setPrivateInterfaceValue("");
+					mvnewds.setPublicInterfaceValue("");
+				}
 			}
 			
 			extractedmodel.addDataStructure(newds);

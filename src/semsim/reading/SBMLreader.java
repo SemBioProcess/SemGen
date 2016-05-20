@@ -420,6 +420,7 @@ public class SBMLreader extends ModelReader{
 
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(speciesid));
 			ds.setDeclared(true);
+			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
 			speciessubmodel.addDataStructure(ds);
 			
 			speciesAndConservation.put(speciesid, new SpeciesConservation());
@@ -501,9 +502,8 @@ public class SBMLreader extends ModelReader{
 			String baseunitname = getSubstanceBaseUnits(substanceunits);
 			
 			// Assign OPB properties
-			if(baseunitname.equals("dimensionless")){
+			if(baseunitname.equals("dimensionless"))
 				prop = new PhysicalPropertyinComposite(null,null);
-			}
 			
 			// Deal with amount/concentration units
 			else if(baseunitname.equals("mole")){

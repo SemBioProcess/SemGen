@@ -3,9 +3,11 @@ package semsim.writing;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-//import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
@@ -24,6 +26,9 @@ import JSim.util.UtilIO;
 import JSim.util.Xcept;
 
 public class MMLwriter extends ModelWriter{ 
+	
+	private Map<DataStructure,String> dataStructureAndEquationMap = new HashMap<DataStructure,String>();
+	private Map<String,String> renamedDataStructureMap = new HashMap<String,String>();
 
 	public MMLwriter(SemSimModel model) {
 		super(model);
@@ -111,9 +116,52 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("\nmath MODEL{\n");
 
+		// Deal with JSim-specific naming conventions:
+		// If a data structure starts with "JS" it needs to be renamed
+		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
+
+		for(String dsname : alldsarray){
+
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
+			String origcode = ds.getComputation().getComputationalCode();
+
+			// Rename codewords that start with "JS"
+			if(dsname.startsWith("JS")){
+				
+				String newname = dsname;
+				
+				while(semsimmodel.getAssociatedDataStructure(newname) != null){
+					newname = dsname.replaceFirst("JS", "xJS");
+				}
+				renamedDataStructureMap.put(dsname, newname);
+				String newcode = SemSimUtil.replaceCodewordsInString(origcode, newname, dsname);
+				dataStructureAndEquationMap.put(ds, newcode);
+
+				// Replace the old variable name with the new one in any equations that use it
+				for(DataStructure dependentds : ds.getUsedToCompute()){
+					String origdepcode = dependentds.getComputation().getComputationalCode();
+					String neweq = SemSimUtil.replaceCodewordsInString(origdepcode, dsname, newname);
+					dataStructureAndEquationMap.put(dependentds, neweq);
+				}
+			}
+			
+			// Replace occurrences of "pi", which is a SBML reserved codeword, with "PI"
+			// as long as there isn't a variable named pi in the model
+			if( ! alldsarray.contains("pi")){
+				Pattern p = Pattern.compile("\\W" + "pi" + "\\W");
+				String code = dataStructureAndEquationMap.containsKey(ds) ? dataStructureAndEquationMap.get(ds) : origcode;
+				
+				if(p.matcher(code).find()){
+					String repicode = SemSimUtil.replaceCodewordsInString(code, "PI", "pi");
+					dataStructureAndEquationMap.put(ds, repicode);
+				}
+			}
+		}
+		
 		// Print the Domain declarations
 		for (DataStructure domaindatastr : semsimmodel.getSolutionDomains()) {
-			String name = domaindatastr.getName();
+			
+			String name = getJSimFormattedName(domaindatastr);
 					
 			// Domains are without units. Unit conversion turned off in outputted MML.
 			UnitOfMeasurement soldomunit = domaindatastr.getUnit();
@@ -170,14 +218,15 @@ public class MMLwriter extends ModelWriter{
 				}
 				else if(onedecimal instanceof MappableVariable) declaration = "real";
 
+				String name = getJSimFormattedName(onedecimal);
+				
 				if (semsimmodel.getSolutionDomainNames().size() == 1) {
 					
 					for (String oned : semsimmodel.getSolutionDomainNames())
-						output = output.concat("\t" + declaration + " " + onedecimal.getName() + "(" + oned + ") " + unitcode + ";" + "\n");
+						output = output.concat("\t" + declaration + " " + name + "(" + oned + ") " + unitcode + ";" + "\n");
 					
 				} 
-				else
-					output = output.concat("\t" + declaration + " " + onedecimal.getName() + " " + unitcode + ";" + "\n");
+				else output = output.concat("\t" + declaration + " " + name + " " + unitcode + ";" + "\n");
 			}
 		}
 
@@ -212,18 +261,18 @@ public class MMLwriter extends ModelWriter{
 					
 				}
 
+				String name = getJSimFormattedName(oneint);
+				
 				if (domainnames.size() == 1) {
 					String base = semsimmodel.getNamespace();
 					
 					for (String onedom1 : domainnames) {
 						onedom1 = onedom1.replace(base, "");
-						output = output.concat("\t" + declaration + " " + oneint.getName()
-								+ "(" + onedom1.replace(base, "") + ") "
+						output = output.concat("\t" + declaration + " " + name + "(" + onedom1.replace(base, "") + ") "
 								+ unitcode + ";" + "\n");
 					}
 				} 
-				else output = output.concat("\t" + declaration + " " + oneint.getName() + " "
-							+ unitcode + ";" + "\n");
+				else output = output.concat("\t" + declaration + " " + name + " " + unitcode + ";" + "\n");
 			}
 		}
 		
@@ -231,16 +280,38 @@ public class MMLwriter extends ModelWriter{
 
 		// Print the Initial conditions for the state variables
 		output = output.concat("\n\n\t// Boundary conditions\n\n");
+				
+		for (String dsname : alldsarray) {
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
+						
+			if (ds.hasStartValue() && ds.hasSolutionDomain()) {
+				output = output.concat("\twhen (" + ds.getSolutionDomain().getName()
+						+ " = " + ds.getSolutionDomain().getName() + ".min){ " 
+						+ getJSimFormattedName(ds) + " = " + ds.getStartValue() + "; }\n");
+			}
+		}
 		
-		ArrayList<String> alldsarray = new ArrayList<String>(semsimmodel.getDataStructureNames());
-		
-		for (String onedsstr : alldsarray) {
-			DataStructure onedatastr = semsimmodel.getAssociatedDataStructure(onedsstr);
+		// Local parameters in SBML models are prefixed with the reaction 
+		// submodel name. When writing out equations that use the local parameters,
+		// they must be renamed to include the prefix.
+		for(String dsname : alldsarray){
 			
-			if (onedatastr.hasStartValue() && onedatastr.hasSolutionDomain()) {
-				output = output.concat("\twhen (" + onedatastr.getSolutionDomain().getName()
-						+ " = " + onedatastr.getSolutionDomain().getName() + ".min){ " 
-						+ onedatastr.getName() + " = " + onedatastr.getStartValue() + "; }\n");
+			if(dsname.contains(".")){
+
+				DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
+				String fullname = ds.getName();
+				String localname = fullname.substring(fullname.indexOf(".") + 1, fullname.length());
+				
+				for(DataStructure dependentds : ds.getUsedToCompute()){
+					String code = dependentds.getComputation().getComputationalCode();
+					
+					// If the equation for the dependent ds was already processed before, retrieve it
+					// so we can continue editting it
+					if(dataStructureAndEquationMap.containsKey(dependentds)) code = dataStructureAndEquationMap.get(dependentds);
+					
+					code = SemSimUtil.replaceCodewordsInString(code, fullname, localname);
+					dataStructureAndEquationMap.put(dependentds, code);
+				}
 			}
 		}
 
@@ -258,12 +329,16 @@ public class MMLwriter extends ModelWriter{
 				
 				String code = ds.getComputation().getComputationalCode();
 				
+				// If the equation was reformatted to account for variables with submodel prefixes,
+				// retrieve the new equation
+				if(dataStructureAndEquationMap.containsKey(ds)) code = dataStructureAndEquationMap.get(ds);
+				
 				// If the data structure is solved with an ODE but the computational code
 				// isn't formatted for MML, format the LHS of the equation				
 				if( ds.hasStartValue()){
 					
 					String soldomname = semsimmodel.getSolutionDomainNames().toArray(new String[]{})[0];
-					String LHS = ds.getName() + ":" + soldomname;
+					String LHS = getJSimFormattedName(ds) + ":" + soldomname;
 					
 					if( ! code.startsWith(LHS)){
 						String rightfrag = code.substring(code.indexOf("="));
@@ -306,6 +381,10 @@ public class MMLwriter extends ModelWriter{
 
 	}
 	
+	private String getJSimFormattedName(DataStructure ds) {
+		return renamedDataStructureMap.containsKey(ds.getName()) ? renamedDataStructureMap.get(ds.getName()) : ds.getName();
+	}
+
 	private String getLineEnd(String code){
 		
 		if (code.endsWith("}"))	return "";
