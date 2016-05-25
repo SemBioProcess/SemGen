@@ -2,8 +2,8 @@
     width: 95vw;
 }
 
-.modal-content {
-    height: 90%;
+.modal-open .modal {
+    overflow-y: hidden;
 }
 
 .mergePreview {
