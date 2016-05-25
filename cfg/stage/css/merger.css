@@ -88,6 +88,8 @@
 }
 
 .ignoreRes {
+	position: relative;
+	left: 30vw; 
     width: 250px;
     display: inline-block;
     margin-left: 40px;
@@ -131,7 +133,8 @@
 }
 
 .ignoreRes .mergeResRadio {
-    top: 0px;
+
+    top: 0vh;
     margin-left: 0px;
 }
 

@@ -12,6 +12,13 @@ public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSe
 	public void showPreview(MergePreviewSubmodels preview);
 	
 	/**
+	 * Sends the add model command
+	 * 
+	 * @param testString
+	 */
+	void addModel(String modelName);
+	
+	/**
 	 * Tell the browser to render the dependencies
 	 * 
 	 * @param modelName Name of model

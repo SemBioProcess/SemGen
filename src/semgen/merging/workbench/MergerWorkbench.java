@@ -360,6 +360,10 @@ public class MergerWorkbench extends Workbench {
 		return loadedmodels.get(index).getName();
 	}
 	
+	public SemSimModel getMergedModel() {
+		return mergedmodel;
+	}
+	
 
 	//For populating the manual mapping panel, get all Data Structure names and add descriptions if available.
 	public ArrayList<String> getExposedDSNamesandDescriptions(int index){

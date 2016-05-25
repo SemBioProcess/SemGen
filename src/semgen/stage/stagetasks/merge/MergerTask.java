@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.merging.workbench.DataStructureDescriptor;
@@ -34,6 +35,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
+		workbench.addObserver(this);
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<ModelAccessor> files = new ArrayList<ModelAccessor>();
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
@@ -63,6 +65,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
 			return;
 		}
+		generateOverlapDescriptors();
+		preview = workbench.generateMergePreview();
+	}
+	
+	private void generateOverlapDescriptors() {
 		int n = workbench.getSolutionDomainCount();
 		ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> descriptors = new ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>>();
 		
@@ -70,7 +77,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			descriptors.add(workbench.getDSDescriptors(i));
 		}
 		dsdescriptors = descriptors;
-		preview = workbench.generateMergePreview();
 	}
 	
 	public ModelAccessor saveMerge() {
@@ -90,7 +96,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
 		if (arg == MergeEvent.mergecompleted) {	
-			if (saveMerge()==null) return;
+			ModelAccessor modelfile = saveMerge();
+			String mergedname = workbench.getMergedModelName();
+			_models.put(mergedname, new ModelInfo(workbench.getMergedModel(), modelfile));
+			_commandSender.addModel(mergedname);
 		}
 	}
 	
@@ -124,9 +133,25 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			preview = workbench.generateMergePreview();
 		}
 		
-		public void onExecuteMerge() {
+		public void onExecuteMerge(JSArray choicesmade) {
 			ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
+
+			for (int i=0; i<choicesmade.length(); i++) {
+				int choice = choicesmade.get(i).asNumber().getInteger();
+				switch(choice) {
+				case 0:
+					choicelist.add(ResolutionChoice.first);
+					break;
+				case 1:
+					choicelist.add(ResolutionChoice.second);
+					break;
+				case 2:
+					choicelist.add(ResolutionChoice.ignore);
+					break;
+				}
+			}
 			resolvers.mergeButtonAction(choicelist);
+			
 		}
 		
 		public void onQueryModel(String modelName, String query) {

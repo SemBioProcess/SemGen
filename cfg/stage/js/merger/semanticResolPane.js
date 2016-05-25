@@ -4,7 +4,7 @@
 function SemanticResolutionPane() {
 	var pane = this;
 	var resolutions = [];
-	var radiolisteners = [];
+
 	// Preview merge resolutions
 
 	var t = document.querySelector('#mergerContent');
@@ -12,9 +12,18 @@ function SemanticResolutionPane() {
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
 	
+	//Checks to see if requirements are met for merging.
+	this.allchoicesmade = function () {
+		var disable = false;
+		var choices = pane.pollOverlaps();
+		choices.forEach(function(c) {
+			if (c==-1) disable = true; 
+		});
+		$('.merge').prop('disabled', disable);
+	}
+	
 	//Create the resolution panel
 	this.addResolutionPanel = function(overlap) {
-		var choice = -1;	
 		var dsradiobutton = function (nodeside, desc, id) {
 			var nodetype = NodeTypeMap[desc.type];
 			return '<label>' +
@@ -23,16 +32,29 @@ function SemanticResolutionPane() {
 				'<input class="mergeResRadio" type="radio" name="mergeResRadio' + id + '">' +
 				'</label>';
 		};
-
+		
 		var t = document.querySelector('#overlapPanel');
 		var clone = document.importNode(t.content, true);
 		
 		clone.id = 'res' + resolutions.length;
 		clone.index = resolutions.length;
+
+		clone.choice = -1;
+		
+		var radioClick = function(val) {
+			clone.choice = val;
+			pane.allchoicesmade();
+		}
 		
 		clone.querySelector('.leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
+		clone.querySelector('.leftRes').onclick = function() {radioClick(0);};
+		
 		clone.querySelector('.rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
-		clone.querySelector(".ignoreRes").innerHTML = '<label><div class="ignoreLabel">Ignore</div><input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
+		clone.querySelector('.rightRes').onclick = function() {radioClick(1);};
+		
+		clone.querySelector(".ignoreRes").innerHTML = '<label><div class="ignoreLabel">Ignore</div>' +
+			'<input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
+		clone.querySelector('.ignoreRes').onclick = function() {radioClick(2);};
 
 		clone.querySelector('.collapsePane').setAttribute("data-target", "#collapsePane" + clone.id);
 		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
@@ -47,8 +69,9 @@ function SemanticResolutionPane() {
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
 		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
+		
 		clone.poll = function() {
-			return choice;
+			return clone.choice;
 		}
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
@@ -77,7 +100,7 @@ function SemanticResolutionPane() {
 	}
 	
 	receiver.onShowOverlaps(function(data) {
-		pane.resolutions = [];
+		resolutions = [];
 		var olaps = document.querySelector('#modalContent #overlapPanels');
 		while (olaps.firstChild) {
 			olaps.removeChild(olaps.firstChild);
@@ -110,7 +133,7 @@ function SemanticResolutionPane() {
 	this.pollOverlaps = function() {
 		var choices = [];
 		resolutions.forEach(function(panel) {
-			choices.push(panel.poll);
+			choices.push(panel.poll());
 		});
 		return choices;
 	}

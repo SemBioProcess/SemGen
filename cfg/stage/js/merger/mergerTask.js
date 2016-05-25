@@ -10,7 +10,8 @@ function MergerTask(graph, state) {
 	Task.prototype.constructor.call(this, graph, state);
 	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
-	var semrespane;
+	
+	this.semrespane;
 	
 	var t = document.querySelector('#leftMergerMenus');
 	var clone = document.importNode(t.content, true);
@@ -18,8 +19,8 @@ function MergerTask(graph, state) {
 	document.querySelector('#leftSidebar').appendChild(clone);
 
 	this.showResolutionPane = function() {
-		semrespane = new SemanticResolutionPane();
-		semrespane.initialize(this.nodes);
+		merger.semrespane = new SemanticResolutionPane();
+		merger.semrespane.initialize(this.nodes);
 	}
 	
 	$("#addModelButton").hide();
@@ -30,13 +31,18 @@ function MergerTask(graph, state) {
 		sender.requestOverlaps();
 	});
 	
-	$("#mergeModels").click(function() {
-		sender.executeMerge(semrespane.pollOverlaps());
-	});
+
 	
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 
+	});
+	
+	// Adds a model node to the d3 graph
+	receiver.onAddModel(function (modelName) {
+		console.log("Adding model " + modelName);
+		merger.addModelNode(modelName, [DragToMerge]);
+		
 	});
 	
 	// Adds a dependency network to the d3 graph
@@ -69,10 +75,15 @@ function MergerTask(graph, state) {
 }
 
 MergerTask.prototype.onInitialize = function() {
+	var merger = this;
 	if($("#mergerIcon").length == 0	) {
 		$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	}
-	this.showResolutionPane();
+	merger.showResolutionPane();
+	$(".merge").prop('disabled', true)
+		.click(function() {
+			sender.executeMerge(merger.semrespane.pollOverlaps());
+		});
 }
 
 MergerTask.prototype.onMinimize = function() {
