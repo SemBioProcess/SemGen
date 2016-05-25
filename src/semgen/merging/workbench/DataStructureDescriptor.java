@@ -23,7 +23,9 @@ public class DataStructureDescriptor {
 		
 		if(ds.getComputation().getComputationalCode() != null)
 			descriptormap.put(Descriptor.computationalcode, ds.getComputation().getComputationalCode());
-		else descriptormap.put(Descriptor.computationalcode, ds.getName().substring(ds.getName().lastIndexOf(".") + 1)+"="+ds.getStartValue());
+		else if(ds.getStartValue() != null)
+			descriptormap.put(Descriptor.computationalcode, ds.getName().substring(ds.getName().lastIndexOf(".") + 1)+"="+ds.getStartValue());
+		else descriptormap.put(Descriptor.computationalcode, "");
 
 		if(ds.getCompositeAnnotationAsString(false) != "[unspecified]")
 			descriptormap.put(Descriptor.annotation, ds.getCompositeAnnotationAsString(false));
