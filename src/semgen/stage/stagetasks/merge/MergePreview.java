@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.merging.workbench.DataStructureDescriptor;
 import semgen.merging.workbench.ModelOverlapMap;
 import semgen.stage.serialization.MergePreviewSubmodels;
 import semsim.model.computational.datastructures.DataStructure;

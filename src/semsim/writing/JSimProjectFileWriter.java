@@ -54,6 +54,8 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		// Create the project document.
 			
+		Element modelel = null;
+
 		// If the file already exists...
 		if(destination.exists()){
 			
@@ -62,7 +64,9 @@ public class JSimProjectFileWriter extends ModelWriter{
 			// If the model already exists in the project file, overwrite the model code
 			// and the SemSim annotation control element. This will preserve parsets, etc. for the 
 			// model in the project file.
-			if(JSimProjectFileReader.getModelElement(projdoc, modelName) != null) {
+			modelel = JSimProjectFileReader.getModelElement(projdoc, modelName);
+			
+			if(modelel != null) {
 				Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
 				srccodeel.setText(new MMLwriter(semsimmodel).writeToString());
 				semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
@@ -70,10 +74,8 @@ public class JSimProjectFileWriter extends ModelWriter{
 			
 			// ...otherwise create a new model element.
 			else{
-				Element modelel = createNewModelElement(modelName);
-				semsimControlElement = new Element("control");
-				semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
-				modelel.addContent(semsimControlElement);
+				modelel = createNewModelElement(modelName);
+				addNewSemSimControlElementToModel(modelel);
 				projdoc.getRootElement().getChild("project").addContent(modelel.detach());
 			}
 		}
@@ -81,9 +83,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		//...otherwise create a new empty project file, add model element and annotations.
 		else {
 			projdoc = createEmptyProject();
-						
-			Element modelel = null;
-			
+									
 			// If the model is to be copied from an existing file like using SaveAs in the Annotator, collect <model> element
 			// from legacy code location
 			if(fromannotator && semsimmodel.getLegacyCodeLocation().modelIsPartOfJSimProjectFile()){
@@ -100,15 +100,11 @@ public class JSimProjectFileWriter extends ModelWriter{
 			// Add the model element
 			projdoc.getRootElement().getChild("project").addContent(modelel.detach());
 			semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
-			
-			// Create a new SemSim control element if needed
-			if(semsimControlElement == null){
-				semsimControlElement = new Element("control");
-				semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
-				modelel.addContent(semsimControlElement);
-			}
 		}
 		
+		// Create a new SemSim control element if needed
+		if(semsimControlElement == null)
+			addNewSemSimControlElementToModel(modelel);
 		
 		// If the model contains functional submodels then we need to "flatten"
 		// the data structure names in the model
@@ -147,6 +143,12 @@ public class JSimProjectFileWriter extends ModelWriter{
 		}
 	}
 
+	private void addNewSemSimControlElementToModel(Element modelel){
+		semsimControlElement = new Element("control");
+		semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
+		modelel.addContent(semsimControlElement);
+	}
+	
 	@Override
 	public void writeToFile(URI uri) throws OWLException {
 		writeToFile(new File(uri));

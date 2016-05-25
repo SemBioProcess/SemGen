@@ -267,6 +267,10 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		for(Submodel submodel : semsimmodel.getSubmodels()){
 			Set<DataStructure> dsset = new HashSet<DataStructure>();
 			dsset.addAll(submodel.getAssociatedDataStructures());
+			
+			// Add any data structures associated with submodels within the submodel
+			for(Submodel subsub : submodel.getSubmodels()) dsset.addAll(subsub.getAssociatedDataStructures());
+			
 			submodeldatastructuremap.put(submodel, dsset);
 		}
 		

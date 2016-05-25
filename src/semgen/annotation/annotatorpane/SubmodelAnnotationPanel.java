@@ -130,9 +130,16 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 	}
 	
 	protected void associateSubmodels() {
-		ArrayList<Integer> sms = drawer.getSubmodelsWithoutFocus();
+		ArrayList<Integer> sms = drawer.getSubmodelsToDisplay(true);
+		ArrayList<Integer> smtodisable = new ArrayList<Integer>();
+		smtodisable.add(drawer.getSelectedIndex());
+
 		SemSimComponentSelectionDialog dialog = new SemSimComponentSelectionDialog(
-				"Select Submodels", drawer.getComponentNamesfromIndicies(sms), drawer.getAssociatedSubmodelIndicies(sms));
+				"Select Submodels", 
+				drawer.getComponentNamesfromIndicies(sms), 
+				drawer.getAssociatedSubmodelIndicies(sms), 
+				smtodisable);
+		
 		if (dialog.isConfirmed()) {
 			drawer.addSubmodelstoSubmodel(dialog.getSelections());
 			refreshSubmodelData();

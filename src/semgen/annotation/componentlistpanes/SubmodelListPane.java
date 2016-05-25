@@ -36,7 +36,7 @@ public class SubmodelListPane extends AnnotatorListPane<SubmodelButton, SubModel
 	}
 
 	public void updateButtonTable(){
-		ArrayList<Integer> numlist = drawer.getSubmodelstoDisplay(settings.showImports());
+		ArrayList<Integer> numlist = drawer.getSubmodelsToDisplay(settings.showImports());
 		addPanelTitle("Sub-models ", numlist.size(), "No sub-models found");
 		
 		JPanel componentaddremovepanel = new JPanel();

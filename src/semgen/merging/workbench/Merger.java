@@ -82,6 +82,7 @@ public class Merger {
 			
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				
 				if (newname==null) newname=dsp.getLeft().getName();
 				
 				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
@@ -120,12 +121,14 @@ public class Merger {
 								
 				if(keptds instanceof MappableVariable && discardedds instanceof MappableVariable){
 					rewireMappedVariableDependencies((MappableVariable)keptds, (MappableVariable)discardedds, modelfordiscardedds, i);
-					dsdonotprune.add(discardedds); // MappableVariables that are turned into "receivers" should not be pruned
+					
+					 // MappableVariables that are turned into "receivers" should not be pruned, unless they are a solution domain
+					if( ! discardedds.isSolutionDomain())
+						dsdonotprune.add(discardedds);
 				}
 				// else we assume that we're dealing with two flattened models
-				else if (! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i)){ 
+				else if ( ! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i))
 				  	return null;
-				}
 			}
 			i++;
 		}
@@ -161,13 +164,11 @@ public class Merger {
 		SemSimModel mergedmodel = ssm1clone;
 		
 		//Add processes to the merged model
-		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses()) {
+		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses())
 			mergedmodel.addCustomPhysicalProcess(pp);
-		}
 		
-		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses()) {
+		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses())
 			mergedmodel.addReferencePhysicalProcess(pp);
-		}
 		
 		//Create map with units from the cloned model
 		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
@@ -178,16 +179,17 @@ public class Merger {
 		// Create mirror map where model 2's units are the key set and model 1's are the values
 		Map<UnitOfMeasurement,UnitOfMeasurement> mirrorunitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();
 
-		for(UnitOfMeasurement uom1 : equnitsmap.keySet()){
+		for(UnitOfMeasurement uom1 : equnitsmap.keySet())
 			mirrorunitsmap.put(equnitsmap.get(uom1), uom1);
-		}
 		
 		// Replace any in-line unit declarations for equivalent units
 		// First collect the submodels we need to check
 		Set<FunctionalSubmodel> submodelswithconstants = new HashSet<FunctionalSubmodel>();
 
 		for(FunctionalSubmodel fs : ssm2clone.getFunctionalSubmodels()){
+			
 			if(fs.getComputation().getMathML()!=null){
+				
 				if(fs.getComputation().getMathML().contains("<cn")) 
 					submodelswithconstants.add(fs);
 			}
@@ -196,9 +198,10 @@ public class Merger {
 		for(FunctionalSubmodel fswithcon : submodelswithconstants){
 			String oldmathml = fswithcon.getComputation().getMathML();
 			String newmathml = oldmathml;
-			for(UnitOfMeasurement uom : mirrorunitsmap.keySet()){
+			
+			for(UnitOfMeasurement uom : mirrorunitsmap.keySet())
 				newmathml = newmathml.replace("\"" + uom.getName() + "\"", "\"" + mirrorunitsmap.get(uom).getName() + "\"");
-			}
+			
 			fswithcon.getComputation().setMathML(newmathml);
 		}
 		
@@ -208,9 +211,9 @@ public class Merger {
 			
 			// Deal with unit equivalencies
 			UnitOfMeasurement dsfrom2unit = dsfrom2.getUnit();
-			if(mirrorunitsmap.containsKey(dsfrom2unit)){
+			if(mirrorunitsmap.containsKey(dsfrom2unit))
 				dsfrom2.setUnit(mirrorunitsmap.get(dsfrom2unit));
-			}
+			
 		}		
 		
 		// Copy in the units, deal with equivalencies along the way
