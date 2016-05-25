@@ -71,7 +71,7 @@ function SemanticResolutionPane() {
 		this.rightgraph.initialize();
 
 		sender.requestOverlaps();
-	}
+	};
 	
 	receiver.onShowOverlaps(function(data) {
 		data.forEach(function(d) {
@@ -89,8 +89,12 @@ function SemanticResolutionPane() {
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height",e.pageY-95);
+			$('.mergePreview').css("height", e.pageY-95);
 			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+			pane.leftgraph.initialize();
+			pane.midgraph.initialize();
+			pane.rightgraph.initialize();
+			
 		});
 		$(document).mouseup(function() {
 			$(document).unbind('mousemove');
