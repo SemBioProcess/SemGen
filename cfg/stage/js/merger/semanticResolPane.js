@@ -49,7 +49,7 @@ function SemanticResolutionPane() {
 		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
-		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
+		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);

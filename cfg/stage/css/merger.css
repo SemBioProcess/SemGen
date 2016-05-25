@@ -67,10 +67,15 @@
 .overlapPane {
     height: 15px;
     text-align: center;
+    cursor: context-menu;
 }
 
 .panel-title {
     font-size: 12px;
+}
+
+.panel-body {
+    text-align: center;
 }
 
 .leftRes {
@@ -89,7 +94,7 @@
 .ignoreRes {
     width: 250px;
     display: inline-block;
-    margin-left: 40px;
+    margin-left: 65px;
 }
 
 .ignoreLabel {
