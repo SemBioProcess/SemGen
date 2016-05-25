@@ -48,7 +48,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		this.state = state;
 		workbench.addModels(files, models, true);
 		primeForMerging();
-		
+
 		resolvers = new MergeConflictResolvers(workbench);
 	}
 
@@ -68,7 +68,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		generateOverlapDescriptors();
 		preview = workbench.generateMergePreview();
 	}
-	
+
 	private void generateOverlapDescriptors() {
 		int n = workbench.getSolutionDomainCount();
 		ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> descriptors = new ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>>();
@@ -95,7 +95,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			JOptionPane.showMessageDialog(null, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
-		if (arg == MergeEvent.mergecompleted) {	
+		if (arg == MergeEvent.mergecompleted) {
 			ModelAccessor modelfile = saveMerge();
 			String mergedname = workbench.getMergedModelName();
 			_models.put(mergedname, new ModelInfo(workbench.getMergedModel(), modelfile));
@@ -104,7 +104,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-		
+
 		public void onRequestOverlaps() {
 			ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 			for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
@@ -119,9 +119,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		
 		public void onRequestPreview(Double index) {
 			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
-			_commandSender.showPreview(psms);			
+			_commandSender.showPreview(psms);
 		}
-		
+
 		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
 			String[] nodestolink = nodes.split(",");
 			if (nodemodelindex.intValue()==0) {
@@ -132,7 +132,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 			preview = workbench.generateMergePreview();
 		}
-		
+
 		public void onExecuteMerge(JSArray choicesmade) {
 			ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
 
@@ -151,9 +151,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 				}
 			}
 			resolvers.mergeButtonAction(choicelist);
-			
+
 		}
-		
+
 		public void onQueryModel(String modelName, String query) {
 			ModelInfo modelInfo = _models.get(modelName);
 			switch (query) {
@@ -170,16 +170,16 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onTaskClicked(String modelName, String task) {
 			onTaskClicked(modelName, task, null);
 		}
-		
+
 		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
 				throw new IllegalArgumentException(modelName);
-			
+
 			// Get the model
 			ModelInfo modelInfo = _models.get(modelName);
 			SemSimModel model = modelInfo.Model;
-			
+
 			// Execute the proper task
 			switch(task) {
 				case "dependencies":
@@ -198,8 +198,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					break;
 			}
 		}
-		
-		public void onConsoleOut(String msg) {			
+
+		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}
 		
@@ -210,7 +210,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
 		}
-		
+
 	}
 	
 	@Override
@@ -237,13 +237,17 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public String name;
 		public String type;
 		public String description;
+		public String annotation;
 		public String equation;
-		
+		public String unit;
+
 		protected StageDSDescriptor(DataStructureDescriptor dsdesc) {
 			name = dsdesc.getDescriptorValue(Descriptor.name);
 			type = dsdesc.getDescriptorValue(Descriptor.type);
 			description = dsdesc.getDescriptorValue(Descriptor.description);
+			annotation = dsdesc.getDescriptorValue(Descriptor.annotation);
 			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
+			unit = dsdesc.getDescriptorValue(Descriptor.units);
 		}
 	}
 }
