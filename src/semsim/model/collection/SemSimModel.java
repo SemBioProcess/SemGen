@@ -26,6 +26,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
@@ -366,7 +367,19 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * This includes anything that is a {@link ComputationalModelComponent} or
 	 * a {@link PhysicalModelComponent}.
 	 */
-	public Set<SemSimObject> getAllModelComponents(){
+	public Set<SemSimComponent> getAllModelComponents(){
+		Set<SemSimComponent> set = new HashSet<SemSimComponent>();
+		set.addAll(getComputationalModelComponents());
+		set.addAll(getPhysicalModelComponents());
+		return set;
+	}
+	
+	/**
+	 * @return The set of all computational and physical elements in the model.
+	 * This includes anything that is a {@link ComputationalModelComponent} or
+	 * a {@link PhysicalModelComponent}.
+	 */
+	public Set<SemSimObject> getAllModelComponentsandCollections(){
 		Set<SemSimObject> set = new HashSet<SemSimObject>();
 		set.addAll(getComputationalModelComponents());
 		set.addAll(getPhysicalModelComponents());
@@ -398,7 +411,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			
 			return (FunctionalSubmodel) getSubmodel(compname);
 		}
-		else return null;
+		return null;
 	}
 	
 	/**
@@ -406,7 +419,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
 		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
-		for(SemSimObject ssc : getAllModelComponents()){
+		for(SemSimObject ssc : getAllModelComponentsandCollections()){
 			if(ssc.getMetadataID()!=null) map.put(ssc.getMetadataID(), ssc);
 		}
 		return map;
@@ -418,7 +431,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * model component
 	 */
 	public SemSimObject getModelComponentByMetadataID(String ID){
-		for(SemSimObject ssc : getAllModelComponents()){
+		for(SemSimObject ssc : getAllModelComponentsandCollections()){
 			if(ssc.getMetadataID().equals(ID))
 				return ssc;
 		}
@@ -471,7 +484,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		if(entityToExclude!=null){
 			for(PhysicalEntity pe : getPhysicalEntities()){
 				// If pe is a composite entity, check if it uses the entityToExclue, ignore if so
-				if(pe instanceof CompositePhysicalEntity){
+				if(pe.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 					if(!((CompositePhysicalEntity) pe).getArrayListOfEntities().contains(entityToExclude))
 						includedents.add(pe);
 				}
@@ -499,7 +512,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Set<CompositePhysicalEntity> getCompositePhysicalEntities(){
 		Set<CompositePhysicalEntity> set = new HashSet<CompositePhysicalEntity>();
 		for(PhysicalEntity ent : getPhysicalEntities()){
-			if(ent instanceof CompositePhysicalEntity){
+			if(ent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 				CompositePhysicalEntity cpe = (CompositePhysicalEntity)ent;
 				set.add(cpe);
 			}
@@ -514,7 +527,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Set<ReferencePhysicalEntity> getReferencePhysicalEntities(){
 		Set<ReferencePhysicalEntity> refents = new HashSet<ReferencePhysicalEntity>();
 		for(PhysicalEntity ent : getPhysicalEntities()){
-			if(ent instanceof ReferencePhysicalEntity) refents.add((ReferencePhysicalEntity) ent);
+			if(ent.isType(SemSimTypes.REFERENCE_PHYSICAL_ENTITY)) refents.add((ReferencePhysicalEntity) ent);
 		}
 		return refents;
 	}
@@ -586,7 +599,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Set<CustomPhysicalEntity> getCustomPhysicalEntities(){
 		Set<CustomPhysicalEntity> custs = new HashSet<CustomPhysicalEntity>();
 		for(PhysicalEntity ent : getPhysicalEntities()){
-			if(ent instanceof CustomPhysicalEntity) custs.add((CustomPhysicalEntity) ent);
+			if(ent.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY)) custs.add((CustomPhysicalEntity) ent);
 		}
 		return custs;
 	}

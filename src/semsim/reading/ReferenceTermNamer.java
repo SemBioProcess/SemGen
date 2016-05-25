@@ -10,7 +10,6 @@ import java.util.Set;
 import org.jdom.JDOMException;
 
 import semsim.SemSimLibrary;
-import semsim.SemSimObject;
 import semsim.annotation.Annotatable;
 import semsim.annotation.Annotation;
 import semsim.annotation.Ontology;
@@ -19,12 +18,9 @@ import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimConstants;
+import semsim.model.SemSimComponent;
 import semsim.model.collection.SemSimModel;
-import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.KEGGsearcher;
@@ -38,11 +34,11 @@ public class ReferenceTermNamer {
 	 * @param model The SemSim model containing the SemSimObjects that will be processed
 	 * @return The set of SemSimObjects annotated with reference terms that are missing names.
 	 */
-	public static Set<SemSimObject> getModelComponentsWithUnnamedAnnotations(SemSimModel model, SemSimLibrary lib){
+	public static Set<SemSimComponent> getModelComponentsWithUnnamedAnnotations(SemSimModel model, SemSimLibrary lib){
 		
-		Set<SemSimObject> unnamed = new HashSet<SemSimObject>();
+		Set<SemSimComponent> unnamed = new HashSet<SemSimComponent>();
 		
-		for(SemSimObject ssc : model.getAllModelComponents()){
+		for(SemSimComponent ssc : model.getAllModelComponents()){
 			if(ssc instanceof Annotatable){
 
 				Annotatable annthing = (Annotatable)ssc;
@@ -80,7 +76,7 @@ public class ReferenceTermNamer {
 		// If we are online, get all the components of the model that can be annotated
 		// then see if they are missing their Descriptions. Retrieve description from web services
 		// or the local cache
-		for(SemSimObject ssc : getModelComponentsWithUnnamedAnnotations(model, lib)){
+		for(SemSimComponent ssc : getModelComponentsWithUnnamedAnnotations(model, lib)){
 			
 			Annotatable annthing = (Annotatable)ssc;
 			Set<Annotation> anns = new HashSet<Annotation>();
@@ -120,8 +116,7 @@ public class ReferenceTermNamer {
 					// Set the name of the semsim component to the annotation description if it's
 					// a physical entity, physical process or physical property
 					if(ann.getRelation()==SemSimRelation.HAS_PHYSICAL_DEFINITION
-							&& ((ssc instanceof PhysicalEntity)  || (ssc instanceof PhysicalProcess) 
-									|| (ssc instanceof PhysicalProperty) || (ssc instanceof PhysicalPropertyinComposite)))
+							&& ssc.isPhysicalComponent())
 						ssc.setName(name);
 				}
 			}

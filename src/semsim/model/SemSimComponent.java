@@ -25,5 +25,8 @@ public abstract class SemSimComponent extends SemSimObject {
 		return !referenceuri.toString().isEmpty();
 	}
 	
+	public Boolean isPhysicalComponent() {
+		return false;
+	}
 	
 }

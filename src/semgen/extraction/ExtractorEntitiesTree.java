@@ -26,8 +26,8 @@ import semsim.owl.SemSimOWLFactory;
 public class ExtractorEntitiesTree extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	public JTree tree;
-	public File testfile;
+	private JTree tree;
+	private File testfile;
 
 	public ExtractorEntitiesTree(File file) {
 

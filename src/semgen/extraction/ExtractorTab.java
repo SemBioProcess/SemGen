@@ -95,33 +95,30 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	public static int leftpanewidth = 400;
 	
 	public JButton vizsourcebutton = new JButton("Show source model");
-	public JButton clusterbutton = new JButton("Cluster");
-	public JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
-	public JCheckBox includepartipantscheckbox = new JCheckBox("Include participants");
-	public JCheckBox extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
+	private JButton clusterbutton = new JButton("Cluster");
+	private JCheckBox extractionlevelchooserentities = new JCheckBox("More inclusive");
+	private JCheckBox includepartipantscheckbox = new JCheckBox("Include participants");
+	private JCheckBox extractionlevelchooser2 = new JCheckBox("Include full dependency chain");
 	public JButton extractbutton = new JButton("EXTRACT");
-	public ExtractorSelectionPanel processespanel;
-	public ExtractorSelectionPanel entitiespanel;
-	public ExtractorSelectionPanel submodelspanel;
+	private ExtractorSelectionPanel processespanel;
+	private ExtractorSelectionPanel entitiespanel;
+	private ExtractorSelectionPanel submodelspanel;
 	public ExtractorSelectionPanel codewordspanel;
 	public ExtractorSelectionPanel clusterpanel;
-	public JPanel physiomappanel = new JPanel();
-	public JTabbedPane graphtabpane = new JTabbedPane();
+	private JPanel physiomappanel = new JPanel();
+	private JTabbedPane graphtabpane = new JTabbedPane();
 	
-	public ModelAccessor extractedaccessor;
-	public File autogendirectory;
-	public SemSimModel extractedmodel;
+	private SemSimModel extractedmodel;
 	
-	public SemGenRadialGraphView view;
-	public Graph tempgraph;
-	public Graph physiomapgraph;
-	public SparseMultigraph<String, Number> junggraph;
+	private SemGenRadialGraphView view;
+	private Graph tempgraph;
+	private Graph physiomapgraph;
+	private SparseMultigraph<String, Number> junggraph;
 
-	public Clusterer cd;
+	private Clusterer cd;
 	public PrintWriter clusterwriter;
-	public ExtractorToolbar toolbar;
+	private ExtractorToolbar toolbar;
 	private ExtractorWorkbench workbench;
-//	public enum selectionTypes {processes, entities, datastructures, submodels, clusters};
 	
 	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, ExtractorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);

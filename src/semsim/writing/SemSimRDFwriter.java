@@ -22,6 +22,7 @@ import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.definitions.SemSimTypes;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -34,8 +35,6 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 
@@ -46,7 +45,6 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	public SemSimModel semsimmodel;
 	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>();
 
 	
@@ -317,7 +315,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		Resource physentrefres = null;
 		
 		// Create link between process participant and the physical entity it references
-		if(physent instanceof CompositePhysicalEntity){
+		if(physent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
@@ -545,7 +543,7 @@ public class SemSimRDFwriter extends ModelWriter{
 			}
 			
 			// If it is a custom entity or process, store the name and description
-			if((pmc instanceof CustomPhysicalProcess) || (pmc instanceof CustomPhysicalEntity)){
+			if((pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_PROCESS)) || (pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY))){
 				
 				if(pmc.getName()!=null){
 					Statement namest = rdf.createStatement(

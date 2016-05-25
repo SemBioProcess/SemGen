@@ -2,7 +2,6 @@ package semgen.stage.serialization;
 
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 
 /**
  * Represents a dependency node in the d3 graph

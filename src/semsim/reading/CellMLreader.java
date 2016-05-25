@@ -604,7 +604,7 @@ public class CellMLreader extends ModelReader {
 		while(stit.hasNext()){
 			Statement st = (Statement) stit.next();
 			RDFNode obnode = st.getObject();
-			if(obnode instanceof Resource){
+			if(obnode.isResource()){
 				Resource obres = (Resource)obnode;
 				if(obres.getNameSpace()!=null){
 					if(obres.getNameSpace().equals(modelns)){

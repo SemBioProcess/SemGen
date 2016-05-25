@@ -7,11 +7,7 @@ import java.util.Set;
 import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.Decimal;
-import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
-import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.object.CompositePhysicalEntity;
 
 public abstract class SemSimCollection extends SemSimObject{
 	
@@ -35,7 +31,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
 		
 		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof Decimal) list.add(ds);
+			if(ds.isType(SemSimTypes.DECIMAL)) list.add(ds);
 		}
 		return list;
 	}
@@ -47,7 +43,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
 		
 		for(DataStructure ds : getAssociatedDataStructures()){
-			if(ds instanceof MMLchoice) list.add(ds);
+			if(ds.isType(SemSimTypes.MMLCHOICE)) list.add(ds);
 		}
 		return list;
 	}
@@ -226,7 +222,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		Set<DataStructure> dswcpes = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
-				if (ds.getAssociatedPhysicalModelComponent() instanceof CompositePhysicalEntity) {
+				if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) {
 					dswcpes.add(ds);
 				}
 			}
@@ -241,7 +237,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
-				if (ds.getAssociatedPhysicalModelComponent() instanceof PhysicalProcess) {
+				if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.PHYSICAL_PROCESS)) {
 					dswprocs.add(ds);
 				}
 			}

@@ -101,6 +101,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			_models.put(mergedname, new ModelInfo(workbench.getMergedModel(), modelfile));
 			_commandSender.addModel(mergedname);
 		}
+		if (arg == MergeEvent.mappingadded) {	
+			generateOverlapDescriptors();
+			preview = workbench.generateMergePreview();
+		}
 	}
 	
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {

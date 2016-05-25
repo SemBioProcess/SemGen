@@ -98,18 +98,17 @@ public class Clusterer extends JFrame {
 	@SuppressWarnings("unchecked")
 	Map<Number, Paint> edgePaints = LazyMap.<Number, Paint> decorate(
 			new HashMap<Number, Paint>(), new ConstantTransformer(Color.blue));
-	public static JFrame jf;
-	public JSplitPane splitpane;
-	public JPanel clusterpanel;
-	public JPanel sempanel = new JPanel();
-	public SemGenScrollPane semscroller;
+	private JSplitPane splitpane;
+	private JPanel clusterpanel;
+	private JPanel sempanel = new JPanel();
+	private SemGenScrollPane semscroller;
 	public SparseMultigraph<String, Number> mygraph;
 	public ExtractorTab extractor;
-	public ExtractorJCheckBox selectioncheckbox;
+	private ExtractorJCheckBox selectioncheckbox;
 	public AggregateLayout<String, Number> layout;
 	public static JToggleButton groupVertices;
 	public int nummodules = 0;
-	public int initsempanelwidth = 250;
+	private int initsempanelwidth = 250;
 
 	public final Color[] similarColors = { new Color(216, 134, 134),
 			new Color(135, 137, 211), new Color(134, 206, 189),

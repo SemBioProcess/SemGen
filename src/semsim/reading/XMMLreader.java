@@ -70,7 +70,7 @@ public class XMMLreader extends ModelReader {
 			}
 			return readFromDocument();
 		}
-		else return null;
+		return null;
 	}
 	
 	

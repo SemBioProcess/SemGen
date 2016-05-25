@@ -137,9 +137,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setModelSaved(true);
 			return modelaccessor;
 		}
-		else{
-			return saveModelAs();
-		}			
+		return saveModelAs();			
 	}
 
 	@Override

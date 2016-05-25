@@ -258,7 +258,7 @@ public class SemSimUtil {
 			m.appendTail(sb);
 			return sb.toString().trim();
 		}
-		else return exp;
+		return exp;
 	}
 	
 	/**

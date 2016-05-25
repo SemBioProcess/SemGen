@@ -317,11 +317,8 @@ public class SemGenFRLayout<V, E> extends AbstractLayout<V, E> implements
 	 * <tt>MAX_ITERATIONS</tt>.
 	 */
 	public boolean done() {
-		if (currentIteration > mMaxIterations
-				|| temperature < 1.0 / max_dimension) {
-			return true;
-		}
-		return false;
+		return (currentIteration > mMaxIterations
+				|| temperature < 1.0 / max_dimension);
 	}
 
 	protected static class FRVertexData extends Point2D.Double {

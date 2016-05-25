@@ -299,7 +299,6 @@ public class SBMLreader extends ModelReader{
 		else if(semsimmodel.containsUnit("time")){
 			timeunits = semsimmodel.getUnit("time");
 		}
-		else{}
 				
 		timeds.setUnit(timeunits);
 
@@ -654,7 +653,7 @@ public class SBMLreader extends ModelReader{
 				
 				collectSBaseData(sbmlrule, ds.getComputation());
 			}
-			else{}  // don't do anything if the Rule is a non-Assignment rule
+			// don't do anything if the Rule is a non-Assignment rule
 		}
 	}
 	
@@ -1303,12 +1302,9 @@ public class SBMLreader extends ModelReader{
 	
 	
 	private class SpeciesConservation{
-		public ArrayList<String> consumedby;
-		public ArrayList<String> producedby;
+		public ArrayList<String> consumedby = new ArrayList<String>();
+		public ArrayList<String> producedby = new ArrayList<String>();
 		
-		public SpeciesConservation(){
-			consumedby = new ArrayList<String>();
-			producedby = new ArrayList<String>();
-		}
+		public SpeciesConservation(){}
 	}
 }
