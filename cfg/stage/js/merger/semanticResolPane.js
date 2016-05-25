@@ -85,6 +85,11 @@ function SemanticResolutionPane() {
 		pane.rightgraph.update(data.right);
 	});
 
+	// Prevent clicking on radio button from toggling collapse panel
+	$(document).on("click", ".radio", function(e) {
+		e.stopPropagation();
+	});
+
 	// Adjust preview window size
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
