@@ -119,9 +119,7 @@ public class SBMLreader extends ModelReader{
 			return semsimmodel;
 		}
 		
-		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);
-		
-		// TODO: fix next line 
+		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);		
 		semsimmodel.setSourceFileLocation(modelaccessor);
 		
 		// Collect function definitions. Not used in SBML level 1.
@@ -289,6 +287,7 @@ public class SBMLreader extends ModelReader{
 		
 		// Create a data structure that represents the temporal solution domain
 		DataStructure timeds = new Decimal(timedomainname);
+		timeds.setDeclared(true);
 		timeds.setDescription("Temporal solution domain");
 		timeds.setIsSolutionDomain(true);
 		
@@ -325,6 +324,7 @@ public class SBMLreader extends ModelReader{
 			// NOTE: we ignore the "outside" attribute for now
 			
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
+			ds.setDeclared(true);
 			compartmentsubmodel.addDataStructure(ds);
 			
 			String mathml = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
@@ -419,6 +419,8 @@ public class SBMLreader extends ModelReader{
 			String speciesid = species.getId();
 
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(speciesid));
+			ds.setDeclared(true);
+			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
 			speciessubmodel.addDataStructure(ds);
 			
 			speciesAndConservation.put(speciesid, new SpeciesConservation());
@@ -500,9 +502,8 @@ public class SBMLreader extends ModelReader{
 			String baseunitname = getSubstanceBaseUnits(substanceunits);
 			
 			// Assign OPB properties
-			if(baseunitname.equals("dimensionless")){
+			if(baseunitname.equals("dimensionless"))
 				prop = new PhysicalPropertyinComposite(null,null);
-			}
 			
 			// Deal with amount/concentration units
 			else if(baseunitname.equals("mole")){
@@ -622,6 +623,7 @@ public class SBMLreader extends ModelReader{
 					ds = semsimmodel.getAssociatedDataStructure(varname);
 				else {
 					ds = new Decimal(varname); 
+					ds.setDeclared(true);
 					semsimmodel.addDataStructure(ds);
 				}
 				
@@ -785,6 +787,7 @@ public class SBMLreader extends ModelReader{
 			String reactionID = reaction.getId();
 			
 			DataStructure rateds = semsimmodel.addDataStructure(new Decimal(reactionID));
+			rateds.setDeclared(true);
 			String thereactionprefix = reactionprefix + reactionID;
 			
 			Submodel rxnsubmodel = new Submodel(thereactionprefix);
@@ -1202,6 +1205,7 @@ public class SBMLreader extends ModelReader{
 		}
 		
 		DataStructure ds = semsimmodel.addDataStructure(new Decimal(ID));
+		ds.setDeclared(true);
 		
 		UnitOfMeasurement unitforpar = semsimmodel.getUnit(qwu.getUnits());
 		ds.setUnit(unitforpar);

@@ -136,16 +136,18 @@ public class ModelOverlapMap {
 	// for each. Return a list of comparisons
 	public ArrayList<Boolean> compareDataStructureUnits() {
 		ArrayList<Boolean> unitmatchlist = new ArrayList<Boolean>();
+		
 		for (Pair<DataStructure, DataStructure> dsp : dsmap) {
 			boolean unitsmatch = true;
+			
 			if(dsp.getLeft().hasUnits() && dsp.getRight().hasUnits()){
 				UnitOfMeasurement uomleft = dsp.getLeft().getUnit();
 				UnitOfMeasurement uomright = dsp.getRight().getUnit();
 				
 				unitsmatch = unitsmap.containsKey(uomleft);
-				if(unitsmatch){
-					unitsmatch = unitsmap.get(uomleft).equals(uomright);
-				}
+				
+				if(unitsmatch) unitsmatch = unitsmap.get(uomleft).equals(uomright);
+				
 			}
 			unitmatchlist.add(unitsmatch);
 		}

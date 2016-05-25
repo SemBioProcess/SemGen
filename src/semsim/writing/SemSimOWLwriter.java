@@ -233,6 +233,16 @@ public class SemSimOWLwriter extends ModelWriter {
 				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.HAS_PHYSICAL_DEFINITION, refterm.getPhysicalDefinitionURI(), manager);
 			}
 			
+			// Determine whether the variable is a MappableVariable and has it's parent
+			// functional submodel present
+			boolean writeoutcomp = ds.getComputation() != null;
+			boolean parentSubmodelPresent = false;
+						
+			if(ds instanceof MappableVariable){
+				writeoutcomp = semsimmodel.getParentFunctionalSubmodelForMappableVariable((MappableVariable)ds) == null;
+				parentSubmodelPresent = ! writeoutcomp;
+			}
+			
 			// Classify the physical property under its reference ontology class
 			// that it is annotated against
 			if(ds.hasPhysicalProperty() || ds.hasAssociatedPhysicalComponent()){
@@ -243,21 +253,26 @@ public class SemSimOWLwriter extends ModelWriter {
 				
 				URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
 				createPhysicalModelIndividual(dspp, propertyuri.toString());
+				
 				// Log the physical property and its URI
 				singularPMCsAndUrisForDataStructures.put(dspp, propertyuri);
+				
 				SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
 						dsuri, SemSimRelation.HAS_COMPUTATIONAL_COMPONENT,
 						SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR, manager);
-				if(ds.getComputation()!=null && !(ds instanceof MappableVariable))
+				
+				if(ds.getComputation()!=null && ! parentSubmodelPresent)
 					SemSimOWLFactory.setIndObjectProperty(ont, propertyuri.toString(),
 						dsuri + "_dependency", SemSimRelation.IS_DETERMINED_BY, SemSimRelation.DETERMINES, manager);
+				
 				// Create physical entity and physical process individuals, link to properties
 				processAssociatedCompositeofDataStructure(ds);
 				
 			}
 			
 			// If the data structure is solved with an explicit computation, store that info
-			if(!(ds instanceof MappableVariable) && ds.getComputation()!=null){
+			if(writeoutcomp){
+								
 				SemSimOWLFactory.createSemSimIndividual(ont, dsuri + "_computation",
 						factory.getOWLClass(SemSimTypes.COMPUTATION.getIRI()), "", manager);
 			
@@ -280,16 +295,16 @@ public class SemSimOWLwriter extends ModelWriter {
 				}				
 			}
 			
-			if(ds.hasSolutionDomain()){
+			if(ds.hasSolutionDomain())
 				SemSimOWLFactory.setIndObjectProperty(ont, dsuri, namespace + SemSimOWLFactory.URIencoding(ds.getSolutionDomain().getName()),
-						SemSimRelation.HAS_SOLUTION_DOMAIN, SemSimRelation.IS_SOLUTION_DOMAIN, manager);
-			}
+						SemSimRelation.HAS_SOLUTION_DOMAIN, null, manager);
+			
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_SOLUTION_DOMAIN, ds.isSolutionDomain(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_DECLARED, ds.isDeclared(), manager);
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.METADATA_ID, ds.getMetadataID(), manager);
 			
 			// Assert CellML-type mappings between data structures
-			if(ds instanceof MappableVariable){
+			if(parentSubmodelPresent){
 				for(MappableVariable var : ((MappableVariable)ds).getMappedTo()){
 					String varuri = namespace + SemSimOWLFactory.URIencoding(var.getName());
 					if(localdss.contains(var))
@@ -316,6 +331,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			
 			// Get the units info
 			if(ds.hasUnits()){
+				
 				if(ds.getUnit().getParentImport()==null){
 					UnitOfMeasurement uom = ds.getUnit();
 					String unituri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
@@ -395,7 +411,7 @@ public class SemSimOWLwriter extends ModelWriter {
 							SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE, null, manager);
 				}
 				
-				if(!toplevelimport){
+				if( ! toplevelimport){
 					
 					// If a functional sub-model, store computation.
 					if(sub instanceof FunctionalSubmodel){
@@ -408,9 +424,12 @@ public class SemSimOWLwriter extends ModelWriter {
 						
 						// assert all CellML-type containment and encapsulation relationships 
 						for(String rel : ((FunctionalSubmodel)sub).getRelationshipSubmodelMap().keySet()){
+							
 							for(FunctionalSubmodel subsub : ((FunctionalSubmodel)sub).getRelationshipSubmodelMap().get(rel)){
 								Subsumption subsumption = null;
+								
 								for(Subsumption g : cellmlsubsumptions){
+									
 									if(g.parent==sub && g.child==subsub){
 										subsumption = g;
 										subsumption.rels.add(rel);
@@ -489,6 +508,7 @@ public class SemSimOWLwriter extends ModelWriter {
 					indURIstring = singularPMCsAndUrisForDataStructures.get(pmc).toString();
 				
 				else{
+					
 					for(String custind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, pmc.getSemSimClassURI().toString())){
 						OWLNamedIndividual theind = factory.getOWLNamedIndividual(IRI.create(custind));
 						
@@ -515,6 +535,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		
 		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
 		anns.addAll(semsimmodel.getAnnotations());
+		
 		for(Annotation ann : anns){
 				String str = (String)ann.getValue();
 				SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);
@@ -528,8 +549,9 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(ds.hasAssociatedPhysicalComponent()){				
 			// Create the new physical model individual and get what it's a physical property of
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
+			
 			// If it's not a composite physical entity
-			if(!pmc.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
+			if( ! pmc.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 				String uristring = null;
 				// Need to make sure that each process gets its own physical property individual, even
 				// if some are annotated as being the exact same process
@@ -542,9 +564,9 @@ public class SemSimOWLwriter extends ModelWriter {
 
 				for(PhysicalEntity ent : ((PhysicalProcess)pmc).getParticipants()){
 					URI uri = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
-					if (!compositeEntitiesAndIndexes.containsKey(ent)) {
+					
+					if (!compositeEntitiesAndIndexes.containsKey(ent))
 						compositeEntitiesAndIndexes.put((CompositePhysicalEntity) ent, uri);
-					}
 				}
 						
 				// Add the individual to the ontology if not already there, create it
@@ -571,9 +593,9 @@ public class SemSimOWLwriter extends ModelWriter {
 		// check if an equivalent nextcpe already exists
 		cpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, compositeEntitiesAndIndexes);
 		
-		if(compositeEntitiesAndIndexes.containsKey(cpe)) {
+		if(compositeEntitiesAndIndexes.containsKey(cpe))
 			return compositeEntitiesAndIndexes.get(cpe);
-		}
+		
 		// If we haven't added this composite entity yet
 		URI compuri = cpe.makeURI(namespace);
 		SemSimOWLFactory.createSemSimIndividual(ont, compuri.toString(), 
@@ -640,9 +662,10 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 		else{
 			URI uri = null;
+			
 			if(pmc instanceof CompositePhysicalEntity){
 				CompositePhysicalEntity cpe = (CompositePhysicalEntity)pmc;
-				// This should really associate the URI of the index entity with the CPE. Or should it?
+				// Maybe this should really associate the URI of the index entity with the CPE.
 				uri = cpe.makeURI(namespace);
 				return uri.toString();
 			}
@@ -666,6 +689,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				SemSimOWLFactory.getIRIfragment(((ReferenceTerm) pmc).getPhysicalDefinitionURI().toString());
 			}
 			else uritrunk = uritrunk + SemSimOWLFactory.URIencoding(pmc.getName());
+			
 			uritrunk = uritrunk + "_";
 			uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uritrunk.toString(), existinguris));
 		}
@@ -687,15 +711,16 @@ public class SemSimOWLwriter extends ModelWriter {
 	private void createPhysicalModelIndividual(PhysicalModelComponent pmc, String uriforind) throws OWLException{
 		String physicaltype = pmc.getComponentTypeasString();
 		String parenturistring = null;
-		if(pmc.isType(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE)) {
+		
+		if(pmc.isType(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE))
 			parenturistring = SemSimTypes.PHYSICAL_PROPERTY.getURIasString();
-		}
-		else if(pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_ENTITY) || pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY)){
+		
+		else if(pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_ENTITY) || pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY))
 			parenturistring = SemSimTypes.PHYSICAL_ENTITY.getURIasString();
-		}
-		else if(pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_PROCESS) || pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_PROCESS)){
+		
+		else if(pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_PROCESS) || pmc.isType(SemSimTypes.REFERENCE_PHYSICAL_PROCESS))
 			parenturistring = SemSimTypes.PHYSICAL_PROCESS.getURIasString();
-		}
+		
 		
 		Set<String> allphysmodclasses = new HashSet<String>();
 		allphysmodclasses.addAll(SemSimOWLFactory.getAllSubclasses(ont, SemSimTypes.PHYSICAL_MODEL_COMPONENT.getURIasString(), false));
@@ -710,9 +735,8 @@ public class SemSimOWLwriter extends ModelWriter {
 			label = firstann.getName();
 			
 			// Add the reference class to the semsim model if needed
-			if(!allphysmodclasses.contains(parenturistring)){
+			if(!allphysmodclasses.contains(parenturistring))
 				SemSimOWLFactory.addExternalReferenceClass(ont, parenturistring, physicaltype, label, manager);
-			}
 			
 			// Put the individual physical component in the reference class
 			SemSimOWLFactory.createSemSimIndividual(ont, uriforind, factory.getOWLClass(IRI.create(parenturistring)), "", manager);
@@ -723,20 +747,24 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 		// Otherwise it's a custom entity, custom process or unspecified property
 		else if (!(pmc instanceof CompositePhysicalEntity)){
+			
 			if(pmc instanceof PhysicalPropertyinComposite) parenturistring = SemSimTypes.PHYSICAL_PROPERTY.getURIasString();
+			
 			else{
 				parenturistring = SemSimOWLFactory.getNamespaceFromIRI(uriforind) + SemSimOWLFactory.URIencoding(pmc.getName());
-				if(!allphysmodclasses.contains(parenturistring)){
-					parenturistring = pmc.getSemSimClassURI().toString();
-				}
+				
+				if(!allphysmodclasses.contains(parenturistring)) parenturistring = pmc.getSemSimClassURI().toString();
+				
 				label = pmc.getName();
 				description = pmc.getDescription();
 			}
 			SemSimOWLFactory.createSemSimIndividual(ont, uriforind, factory.getOWLClass(IRI.create(parenturistring)), "", manager);
 		}
+		
 		// Set the RDF label for the individual (RDF label for reference classes are set in addExternalReferenceClass method)
 		if(label!=null)
 			SemSimOWLFactory.setRDFLabel(ont, factory.getOWLNamedIndividual(IRI.create(uriforind)), label, manager);
+		
 		if(description!=null){
 			SemSimOWLFactory.setRDFComment(ont, factory.getOWLNamedIndividual(IRI.create(uriforind)), description, manager);
 		}

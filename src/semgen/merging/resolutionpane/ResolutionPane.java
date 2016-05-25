@@ -75,18 +75,23 @@ public class ResolutionPane extends JPanel implements Observer {
 			repaint();
 
 		}
-		if (arg1 == MergeEvent.mapfocuschanged) {
+		
+		if (arg1 == MergeEvent.mapfocuschanged)
 			loadCodewordMap();
-		}
 	}
 	
 	public ArrayList<ResolutionChoice>  pollResolutionList() {
 		ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
+		
 		for (int i = 0; i < workbench.getSolutionDomainCount(); i++) {
 			choicelist.add(ResolutionChoice.first);
 		}
+		
 		for (ResolutionPanel panel : resolvelist) {
-			if (panel.getSelection().equals(ResolutionChoice.noselection)) return null;
+			
+			if (panel.getSelection().equals(ResolutionChoice.noselection)) 
+				return null;
+			
 			choicelist.add(panel.getSelection());
 		}
 		return choicelist;

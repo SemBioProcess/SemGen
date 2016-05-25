@@ -25,7 +25,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		Collections.sort(componentlist, new SemSimComponentComparator());
 	}
 	
-	public ArrayList<Integer> getSubmodelstoDisplay(boolean showimports) {
+	public ArrayList<Integer> getSubmodelsToDisplay(boolean showimports) {
 		ArrayList<Integer> sms = new ArrayList<Integer>();
 		
 		int i = 0;

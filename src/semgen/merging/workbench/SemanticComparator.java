@@ -26,9 +26,8 @@ public class SemanticComparator {
 		model1 = m1; model2 = m2;
 		DuplicateChecker.removeDuplicatePhysicalEntities(model1, model2);
 		
-		if ((model1.getSolutionDomains().size() > 0) && (model2.getSolutionDomains().size() > 0)) {
+		if ((model1.getSolutionDomains().size() > 0) && (model2.getSolutionDomains().size() > 0))
 			slndomain = model1.getSolutionDomains().toArray(new DataStructure[]{})[0];
-		}
 	}
 		
 	// Collect the submodels that have the same name
@@ -83,9 +82,8 @@ public class SemanticComparator {
 					Boolean match = false;
 					
 					// Test singular annotations
-					if(ds1.hasPhysicalDefinitionAnnotation() && ds2.hasPhysicalDefinitionAnnotation()) {
+					if(ds1.hasPhysicalDefinitionAnnotation() && ds2.hasPhysicalDefinitionAnnotation())
 						match = ds1.getSingularTerm().equals(ds2.getSingularTerm());
-					}
 					
 					// If the physical properties are not null...
 					if(!match && ds1.hasPhysicalProperty() && ds2.hasPhysicalProperty()){
@@ -94,6 +92,7 @@ public class SemanticComparator {
 							
 						// Test equivalency of physical properties
 						if(prop1.equals(prop2)) {
+							
 							if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){
 								PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
 								PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
@@ -105,9 +104,9 @@ public class SemanticComparator {
 							}
 						}
 					}
-					if(match){
-						dsmatchlist.add(Pair.of(ds1, ds2));
-					}
+					
+					if(match) dsmatchlist.add(Pair.of(ds1, ds2));
+					
 				} // end of iteration through model2 data structures
 			}
 		} // end of iteration through model1 data structures

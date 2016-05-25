@@ -170,22 +170,25 @@ public class MergerWorkbench extends Workbench {
 	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, Set<String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();
+		
 		for (int i=getSolutionDomainCount(); i<choicelist.size(); i++) {	
-			if (!choicelist.get(i).equals(ResolutionChoice.ignore)) {
+			
+			if (!choicelist.get(i).equals(ResolutionChoice.ignore))
 				identolnames.add(overlapmap.getDataStructurePairNames(i).getLeft());
-			}
+			
 		}
 		for (String name : overlapmap.getIdenticalNames()) {
+			
 			if(name.contains(".")) {
+				
 				if (submodelnamemap.contains(name.substring(0, name.lastIndexOf("."))))
 					continue;
 			}
 				
 			// If an identical codeword mapping will be resolved by a semantic resolution step or a renaming of identically-named submodels, 
 		    // don't include in idneticalmap	
-			if (!identolnames.contains(name)) {
+			if (!identolnames.contains(name))
 				identicalmap.put(new String(name), "");
-			}
 		}
 		return identicalmap;
 	}
@@ -270,9 +273,8 @@ public class MergerWorkbench extends Workbench {
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
 
-		if(models.getLeft().getSolutionDomains().size()>1 || models.getRight().getSolutionDomains().size()>1){
+		if(models.getLeft().getSolutionDomains().size()>1 || models.getRight().getSolutionDomains().size()>1)
 			return "One of the models to be merged has multiple solution domains.";
-		}
 		
 		MergerTask task = new MergerTask(models, overlapmap, dsnamemap, smnamemap, choices, conversions, bar) {
 			public void endTask() {
@@ -350,7 +352,9 @@ public class MergerWorkbench extends Workbench {
 		ArrayList<String> namelist = new ArrayList<String>();
 		for (DataStructure ds : exposeddslist.get(index)) {
 			String desc = "(" + ds.getName() + ")";
+			
 			if(ds.getDescription()!=null) desc = ds.getDescription() + " " + desc;
+			
 			namelist.add(desc);
 		}
 		return namelist;
@@ -361,6 +365,5 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	@Override
-	public void update(Observable o, Object arg) {
-	}
+	public void update(Observable o, Object arg) {}
 }

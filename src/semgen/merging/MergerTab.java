@@ -177,29 +177,38 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				addmanualmappingbutton.setEnabled(false);
 				
 				HashMap<String, String> smnamemap = workbench.createIdenticalSubmodelNameMap();
+				
 				for(String oldsubmodelname : smnamemap.keySet()){
 					String newsubmodelname = changeSubmodelNameDialog(oldsubmodelname);
+					
 					if (newsubmodelname==null) return;
+					
 					smnamemap.put(oldsubmodelname, newsubmodelname);
 				}
 				
 				// Then refresh the identical codeword name mappings in ModelOverlapMap
 				
 				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap.keySet());
+				
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
+					
 					if (newname==null) return;
+					
 					cwnamemap.put(name, newname);
 				}
 				
 				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
 				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
+				
 				for (int i=0; i<unitoverlaps.size(); i++) {
-					if (!unitoverlaps.get(i)) {
+					
+					if ( ! unitoverlaps.get(i)) {
 						ResolutionChoice choice = choicelist.get(i);
-						if (!choice.equals(ResolutionChoice.ignore)) {
-							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
+						
+						if ( ! choice.equals(ResolutionChoice.ignore)) {
+							if ( ! getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
 							continue;
 						}
 					}
@@ -208,10 +217,8 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
-				if (error!=null){
-					SemGenError.showError(
-							"ERROR: " + error, "Merge Failed");
-				}
+				
+				if (error!=null) SemGenError.showError("ERROR: " + error, "Merge Failed");
 		}
 		else {
 			JOptionPane.showMessageDialog(this, "Some codeword overlaps are unresolved.");

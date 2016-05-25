@@ -23,8 +23,6 @@ public abstract class SemSimObject {
 		
 		if(objtocopy.metadataID != null)
 			metadataID = new String(objtocopy.metadataID);
-		
-
 	}
 	
 	/**
