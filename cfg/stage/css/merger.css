@@ -2,21 +2,21 @@
     width: 95vw;
 }
 
-.modal-content {
-    height: 90%;
+.modal-open .modal {
+    overflow-y: hidden;
 }
 
 .mergePreview {
     position: relative;
     top: 0;
-    height: 33vh;
+    height: 25vh;
     border-bottom: 2px solid black;
     border-top: 2px solid black;
 }
 
 .substage {
     position: absolute;
-    height: 33vh;
+    height: 100%;
     background: #FFFFFF;
     z-index: 1;
 }
@@ -39,8 +39,7 @@
 }
 
 .modal-body {
-    height: 30vh;
-     bottom: 0;
+    height: 50vh;
     overflow: scroll;
 }
 
@@ -65,13 +64,18 @@
     background-color: black;
 }
 
-.radiobtns {
+.overlapPane {
     height: 15px;
     text-align: center;
+    cursor: context-menu;
 }
 
 .panel-title {
     font-size: 12px;
+}
+
+.panel-body {
+    text-align: center;
 }
 
 .leftRes {
@@ -88,11 +92,9 @@
 }
 
 .ignoreRes {
-	position: relative;
-	left: 30vw; 
     width: 250px;
     display: inline-block;
-    margin-left: 40px;
+    margin-left: 65px;
 }
 
 .ignoreLabel {
@@ -133,12 +135,12 @@
 }
 
 .ignoreRes .mergeResRadio {
-
-    top: 0vh;
+    top: 0px;
     margin-left: 0px;
 }
 
 .leftCollapsePanel {
+    width: 350px;
     float: left;
     text-align: left;
     display: inline-block;
@@ -146,6 +148,7 @@
 }
 
 .rightCollapsePanel {
+    width: 350px;
     float: right;
     text-align: right;
     display: inline-block;

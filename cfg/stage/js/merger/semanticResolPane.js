@@ -63,12 +63,12 @@ function SemanticResolutionPane() {
 		clone.querySelector('.rightCollapsePanel > .equation').innerHTML = overlap.dsright.equation;
 		clone.querySelector('.leftCollapsePanel > .varName').innerHTML = overlap.dsleft.name;
 		clone.querySelector('.rightCollapsePanel > .varName').innerHTML = overlap.dsright.name;
-		clone.querySelector('.leftCollapsePanel > .compAnnotation').innerHTML = overlap.dsleft.compAnnotation;
-		clone.querySelector('.rightCollapsePanel > .compAnnotation').innerHTML = overlap.dsright.compAnnotation;
+		clone.querySelector('.leftCollapsePanel > .annotation').innerHTML = overlap.dsleft.annotation;
+		clone.querySelector('.rightCollapsePanel > .annotation').innerHTML = overlap.dsright.annotation;
 		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
-		clone.querySelector('.collapsePane').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
+		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
 		clone.poll = function() {
 			return clone.choice;
@@ -97,7 +97,7 @@ function SemanticResolutionPane() {
 		this.rightgraph.initialize();
 
 		sender.requestOverlaps();
-	}
+	};
 	
 	receiver.onShowOverlaps(function(data) {
 		resolutions = [];
@@ -117,17 +117,25 @@ function SemanticResolutionPane() {
 		pane.rightgraph.update(data.right);
 	});
 
+	// Prevent clicking on radio button from toggling collapse panel
+	$(document).on("click", ".radio", function(e) {
+		e.stopPropagation();
+	});
+
 	// Adjust preview window size
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height",e.pageY-95);
+			$('.mergePreview').css("height", e.pageY-95);
 			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+			pane.leftgraph.initialize();
+			pane.midgraph.initialize();
+			pane.rightgraph.initialize();
+			
 		});
-	});
-	$(document).mouseup(function(e) {
-		$(document).unbind('mousemove');
-		// Initialize the graphs to resize the d3 graph
+		$(document).mouseup(function() {
+			$(document).unbind('mousemove');
+		});
 	});
 	
 	this.pollOverlaps = function() {
