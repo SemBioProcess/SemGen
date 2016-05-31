@@ -438,14 +438,14 @@ public class SBMLreader extends ModelReader{
 			*/
 						
 			if(sbmlmodel.getLevel()==3){
-				if(species.isSetSubstanceUnits()){
+				if(species.isSetSubstanceUnits())
 					substanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
-				}
-				else if(sbmlmodel.isSetSubstanceUnits()){
-					substanceunits = semsimmodel.getUnit(sbmlmodel.getSubstanceUnits());
-				}
 				
-				else{System.err.println("WARNING: Substance units for " + species.getId() + " were undefined");}
+				else if(sbmlmodel.isSetSubstanceUnits())
+					substanceunits = semsimmodel.getUnit(sbmlmodel.getSubstanceUnits());
+				
+				else
+					System.err.println("WARNING: Substance units for " + species.getId() + " were undefined");
 			}
 			
 			/*
@@ -553,13 +553,16 @@ public class SBMLreader extends ModelReader{
 						
 			// Set initial condition
 			if(species.isSetInitialAmount())
+				
 				if(hasonlysub)
 					ds.setStartValue(Double.toString(species.getInitialAmount()));
 				else{
 					double compartmentsize = sbmlmodel.getCompartment(compartmentname).getSize();
 					ds.setStartValue(Double.toString(species.getInitialAmount()/compartmentsize));
 				}
+			
 			else if(species.isSetInitialConcentration()){
+				
 				if(species.getHasOnlySubstanceUnits()){
 					double compartmentsize = sbmlmodel.getCompartment(compartmentname).getSize();
 					ds.setStartValue(Double.toString(species.getInitialConcentration()*compartmentsize));
@@ -953,8 +956,8 @@ public class SBMLreader extends ModelReader{
 			// Store the equations
 			if(eqstring.length()>0){
 				
-				// Strip first + or - operator if present, add compartment divisor if needed to computational code
-				if(eqstring.trim().startsWith("+") || eqstring.trim().startsWith("-")){
+				// Strip first + operator if present, add compartment divisor if needed to computational code
+				if(eqstring.trim().startsWith("+")){
 					eqstring = eqstring.substring(3, eqstring.length()); 
 					eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
 				}
