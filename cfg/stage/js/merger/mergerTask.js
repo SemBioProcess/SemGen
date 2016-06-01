@@ -28,7 +28,6 @@ function MergerTask(graph, state) {
 	
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
-		sender.requestOverlaps();
 	});
 	
 
