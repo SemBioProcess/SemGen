@@ -161,7 +161,6 @@ public class SemSimUtil {
 	public static Boolean replaceCodewordInAllEquations(DataStructure discardedds, DataStructure keptds, 
 			SemSimModel modelfordiscardedds, String oldtext, String replacementtext, Pair<Double, String> conversionfactor){
 		
-		System.out.println("Replacing " + discardedds.getName() + " with " + keptds.getName());
 		Boolean selfrefODE = false;
 		Set<DataStructure> dsstocheck = new HashSet<DataStructure>();
 		dsstocheck.add(discardedds);
@@ -204,11 +203,7 @@ public class SemSimUtil {
 					
 					Pattern p = Pattern.compile("<ci>\\s*" + olddsname + "\\s*</ci>");
 					Matcher m = p.matcher(oldmathml);
-					
-					if(m.find() && olddsname.equals("GLC")){
-						System.out.println("OLD TEXT FOUND: " + oldmathml.substring(m.start(), m.end()));
-					}
-					
+	
 					String replacementmathml = "";
 					
 					if(conversionfactor.getLeft() != 1.0){
