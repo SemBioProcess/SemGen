@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.regex.Pattern;
 
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
@@ -140,21 +139,17 @@ public class MMLwriter extends ModelWriter{
 				// Replace the old variable name with the new one in any equations that use it
 				for(DataStructure dependentds : ds.getUsedToCompute()){
 					String origdepcode = dependentds.getComputation().getComputationalCode();
-					String neweq = SemSimUtil.replaceCodewordsInString(origdepcode, dsname, newname);
+					String neweq = SemSimUtil.replaceCodewordsInString(origdepcode, newname, dsname);
 					dataStructureAndEquationMap.put(dependentds, neweq);
 				}
 			}
 			
 			// Replace occurrences of "pi", which is a SBML reserved codeword, with "PI"
 			// as long as there isn't a variable named pi in the model
-			if( ! alldsarray.contains("pi")){
-				Pattern p = Pattern.compile("\\W" + "pi" + "\\W");
-				String code = dataStructureAndEquationMap.containsKey(ds) ? dataStructureAndEquationMap.get(ds) : origcode;
-				
-				if(p.matcher(code).find()){
-					String repicode = SemSimUtil.replaceCodewordsInString(code, "PI", "pi");
-					dataStructureAndEquationMap.put(ds, repicode);
-				}
+			if( ! alldsarray.contains("pi") && origcode != null){
+				String code = dataStructureAndEquationMap.containsKey(ds) ? dataStructureAndEquationMap.get(ds) : origcode;				
+				String repicode = SemSimUtil.replaceCodewordsInString(code, "PI", "pi", SemSimUtil.regexQualifier.RELUCTANT);
+				dataStructureAndEquationMap.put(ds, repicode);
 			}
 		}
 		

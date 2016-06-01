@@ -48,6 +48,7 @@ public class SemSimUtil {
 	
 	private static final String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
 	private static final String mathMLtail = "</math>";
+	public static enum regexQualifier{GREEDY, RELUCTANT, POSSESSIVE, NONE}; 
 	
 	
 	/**
@@ -180,8 +181,7 @@ public class SemSimUtil {
 				
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
-					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());
-										
+					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());					
 					ds.getComputation().setComputationalCode(neweq);
 				}
 	
@@ -201,16 +201,20 @@ public class SemSimUtil {
 					String olddsname = oldtext;
 					String newdsname = keptds.getName();
 					
+					Pattern p = Pattern.compile("<ci>\\s*" + olddsname + "\\s*</ci>");
+					Matcher m = p.matcher(oldmathml);
+	
+					String replacementmathml = "";
+					
 					if(conversionfactor.getLeft() != 1.0){
 						String operator = conversionfactor.getRight().equals("*") ? "<times />" : "<divide />";
-						
-						newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", 
-							"<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
-							"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>");
+						replacementmathml = "<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
+						"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>";
 					}
-					else newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", "<ci>" + newdsname + "</ci>");
+					else replacementmathml = "<ci>" + newdsname + "</ci>";
 					
-					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
+					newmathml = m.replaceAll(replacementmathml);
+				    modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 					
 					// If the data structure that needs to have its computations edited is a derivative,
 					// Find the state variable and edit its computations, too.
@@ -233,19 +237,43 @@ public class SemSimUtil {
 	}
 	
 	/**
-	 * Replace all occurrences of a sub-string within a mathematical expression
+	 * Replace all occurrences of a sub-string within a mathematical expression. Uses greedy qualifier.
 	 *  @param exp The expression that will be processed for replacement
 	 *  @param kept The replacement string
 	 *  @param discarded The string to be replaced
 	 *  @return A string containing any replacements
 	 */
-	public static String replaceCodewordsInString(String exp, String kept, String discarded) {	
+	public static String replaceCodewordsInString(String exp, String kept, String discarded) {
+		return replaceCodewordsInString(exp, kept, discarded, regexQualifier.NONE);
+	}
+
+	
+	/**
+	 * Replace all occurrences of a sub-string within a mathematical expression. Overloaded method for specifying regex qualifier type.
+	 *  @param exp The expression that will be processed for replacement
+	 *  @param kept The replacement string
+	 *  @param discarded The string to be replaced
+	 *  @param qual The type of regex qualifier to use
+	 *  @return A string containing any replacements
+	 */
+	public static String replaceCodewordsInString(String exp, String kept, String discarded, regexQualifier qual) {	
 		if(exp.contains(discarded)){
+			
+			String qualstring = "";
+
+			if(qual==regexQualifier.NONE){}
+			else if(qual == regexQualifier.GREEDY) qualstring = "?";
+			else if(qual == regexQualifier.RELUCTANT) qualstring = "??";
+			else if(qual == regexQualifier.POSSESSIVE) qualstring = "?+";
+			else{}
+			
 			// need end of line delimiter so the pattern matches against codewords that end the line
 			String eqstring = " " + exp + " ";
 			// Match each time the codeword appears (surrounded by non-word characters)
-			Pattern p = Pattern.compile("\\W" + discarded + "\\W");
+			
+			Pattern p = Pattern.compile("\\W" + discarded + "\\W" + qualstring); 
 			Matcher m = p.matcher(eqstring);
+			
 			StringBuffer sb = new StringBuffer();
 			boolean result = m.find();
 	
