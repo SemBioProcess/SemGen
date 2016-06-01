@@ -22,18 +22,13 @@
 }
 
 #modelAStage {
-    width: 33vw;
+    width: 50%;
     left: 0;
     border-right: 2px solid black;
 }
 
-#modelABStage {
-    width: 34vw;
-    left: 33vw;
-}
-
 #modelBStage {
-    width: 33vw;
+    width: 50%;
     right: 0;
     border-left: 2px solid black;
 }
