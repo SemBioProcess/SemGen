@@ -34,7 +34,7 @@ function CreateCustomOverlap(_node) {
 					model.applytoChildren(function(n) {
 						if (n.hasClassName("dependencyNode")) {
 							if (n.rootElement) {
-								if (n.submodelinput) {
+								if (n.submodelinput || n.nodeType != _node.nodeType) {
 									invalidDepNodes.push(n); 
 									n.rootElement.selectAll("circle").attr("opacity", "0.1");
 								}
@@ -91,7 +91,7 @@ function CreateCustomOverlap(_node) {
 				});
 		        invalidDepNodes.forEach(function (node) {
 		        	if (node.rootElement) {
-		        		node.rootElement.selectAll("circle").attr("opacity", "0.5");
+		        		node.rootElement.selectAll("circle").attr("opacity", node.defaultopacity);
 		        	}
 				});
 		        if(mergeNode) {

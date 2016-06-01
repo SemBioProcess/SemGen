@@ -22,6 +22,7 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	this.hidden = false;
 	this.textlocx = 0;
 	this.wasfixed = false;
+	this.defaultopacity = 1.0;
 	
 	this.timer = null;
 	this.clicks = 0;

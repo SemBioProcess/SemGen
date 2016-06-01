@@ -99,7 +99,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			ModelAccessor modelfile = saveMerge();
 			String mergedname = workbench.getMergedModelName();
 			_models.put(mergedname, new ModelInfo(workbench.getMergedModel(), modelfile));
-			_commandSender.addModel(mergedname);
+			_commandSender.mergeCompleted(mergedname);
 		}
 		if (arg == MergeEvent.mappingadded) {	
 			generateOverlapDescriptors();

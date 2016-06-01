@@ -27,6 +27,7 @@ function DependencyNode (graph, data, parentNode) {
 DependencyNode.prototype.createVisualElement = function (element, graph) {
 	Node.prototype.createVisualElement.call(this,element, graph);
 	if (this.submodelinput) {
-		this.rootElement.selectAll("circle").attr("opacity", "0.6");
+		this.defaultopacity = 0.6;
+		this.rootElement.selectAll("circle").attr("opacity", this.defaultopacity);
 	}	
 }

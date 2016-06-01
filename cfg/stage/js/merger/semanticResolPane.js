@@ -4,7 +4,8 @@
 function SemanticResolutionPane() {
 	var pane = this;
 	var resolutions = [];
-
+	var choices = [];
+	
 	// Preview merge resolutions
 
 	var t = document.querySelector('#mergerContent');
@@ -109,6 +110,7 @@ function SemanticResolutionPane() {
 		data.forEach(function(d) {
 			pane.addResolutionPanel(d);	
 		});
+
 	});
 	
 	receiver.onShowPreview(function(data) {
@@ -139,7 +141,7 @@ function SemanticResolutionPane() {
 	});
 	
 	this.pollOverlaps = function() {
-		var choices = [];
+		choices = [];
 		resolutions.forEach(function(panel) {
 			choices.push(panel.poll());
 		});

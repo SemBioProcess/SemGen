@@ -31,18 +31,9 @@ function MergerTask(graph, state) {
 		sender.requestOverlaps();
 	});
 	
-
-	
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 
-	});
-	
-	// Adds a model node to the d3 graph
-	receiver.onAddModel(function (modelName) {
-		console.log("Adding model " + modelName);
-		merger.addModelNode(modelName, [DragToMerge]);
-		
 	});
 	
 	// Adds a dependency network to the d3 graph
@@ -65,6 +56,15 @@ function MergerTask(graph, state) {
 		});
 	});
 
+	receiver.onMergeCompleted(function(mergedname) {
+		for (x in merger.nodes) {
+			merger.nodes[x].hidden=true;
+		}
+		merger.addModelNode(mergedname, [DragToMerge]);
+		$('#taskModal').modal("hide");
+
+	});
+	
 	receiver.onReceiveReply(function (reply) {
 		CallWaiting(reply);
 	});
