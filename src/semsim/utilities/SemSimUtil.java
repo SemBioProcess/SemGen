@@ -161,6 +161,7 @@ public class SemSimUtil {
 	public static Boolean replaceCodewordInAllEquations(DataStructure discardedds, DataStructure keptds, 
 			SemSimModel modelfordiscardedds, String oldtext, String replacementtext, Pair<Double, String> conversionfactor){
 		
+		System.out.println("Replacing " + discardedds.getName() + " with " + keptds.getName());
 		Boolean selfrefODE = false;
 		Set<DataStructure> dsstocheck = new HashSet<DataStructure>();
 		dsstocheck.add(discardedds);
@@ -181,8 +182,7 @@ public class SemSimUtil {
 				
 				if(dscheck.getComputation().getComputationalCode()!=null){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
-					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());
-										
+					DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());					
 					ds.getComputation().setComputationalCode(neweq);
 				}
 	
@@ -202,16 +202,24 @@ public class SemSimUtil {
 					String olddsname = oldtext;
 					String newdsname = keptds.getName();
 					
+					Pattern p = Pattern.compile("<ci>\\s*" + olddsname + "\\s*</ci>");
+					Matcher m = p.matcher(oldmathml);
+					
+					if(m.find() && olddsname.equals("GLC")){
+						System.out.println("OLD TEXT FOUND: " + oldmathml.substring(m.start(), m.end()));
+					}
+					
+					String replacementmathml = "";
+					
 					if(conversionfactor.getLeft() != 1.0){
 						String operator = conversionfactor.getRight().equals("*") ? "<times />" : "<divide />";
-						
-						newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", 
-							"<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
-							"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>");
+						replacementmathml = "<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
+						"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>";
 					}
-					else newmathml = oldmathml.replace("<ci>" + olddsname + "</ci>", "<ci>" + newdsname + "</ci>");
+					else replacementmathml = "<ci>" + newdsname + "</ci>";
 					
-					modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
+					newmathml = m.replaceAll(replacementmathml);
+				    modelfordiscardedds.getAssociatedDataStructure(dscheck.getName()).getComputation().setMathML(newmathml);
 					
 					// If the data structure that needs to have its computations edited is a derivative,
 					// Find the state variable and edit its computations, too.

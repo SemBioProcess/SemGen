@@ -233,7 +233,6 @@ public class Merger {
 						uf.setBaseUnit(mirrorunitsmap.get(baseunit));
 					}
 				}
-
 			}
 		}
 		
@@ -248,7 +247,7 @@ public class Merger {
 		// Remove legacy code info
 		mergedmodel.setSourceFileLocation(null);
 		
-		//TODO: WHAT TO DO ABOUT ONTOLOGY-LEVEL ANNOTATIONS?
+		//TODO: WHAT TO DO ABOUT MODEL-LEVEL ANNOTATIONS?
 		mergedmodel.setNamespace(mergedmodel.generateNamespaceFromDateAndTime());
 		mergedmodel.setName("model_0");
 		
@@ -322,10 +321,10 @@ public class Merger {
 		// if the two terms have different names, or a conversion factor is required
 		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
 			String replacementtext = keptds.getName();
+			
 			if(conversionfactor.getLeft()!=1.0) 
 				replacementtext = "(" + keptds.getName() + conversionfactor.getRight() + String.valueOf(conversionfactor.getLeft()) + ")";
 			
-			 
 			 SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor);
 		}
@@ -341,9 +340,9 @@ public class Merger {
 		}
 		
 		// If the semantic resolution took care of a syntactic resolution
-		if(!choicelist.get(index).equals(ResolutionChoice.ignore)){
+		if(!choicelist.get(index).equals(ResolutionChoice.ignore))
 			overlapmap.getIdenticalNames().remove(discardedds.getName());
-		}
+		
 		return true;
 	}
 	
