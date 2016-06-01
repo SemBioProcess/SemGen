@@ -15,7 +15,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, 16, "Submodel", graph.nodecharge);
+	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, 12, "Submodel", graph.nodecharge);
 	this.dependencies = data.dependencies;
 	this.dependencytypecount = data.deptypecounts;
 

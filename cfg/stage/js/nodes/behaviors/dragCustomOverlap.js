@@ -97,6 +97,7 @@ function CreateCustomOverlap(_node) {
 		        if(mergeNode) {
 		        	var modelstomerge =  _node.parent.name + '.' + _node.name + "," + mergeNode.parent.name + '.' + mergeNode.name;
 		        	var modelindex = _node.getRootParent().index;
+		        	$('.merge').prop('disabled', 'true');
 		        	sender.createCustomOverlap(modelstomerge, modelindex);
 		        	mergeNode = null;
 		        	

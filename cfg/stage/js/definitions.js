@@ -26,9 +26,9 @@ var NodeTypeMap = {
 		"Null": NodeType.NULLNODE
 		};
 
-var defaultcharge = -300;
-var defaultlinklength = 300;
-var defaultchargedistance = 400;
+var defaultcharge = -700;
+var defaultlinklength = 100;
+var defaultchargedistance = 800;
 
 var DisplayModes = {
 	SHOWSUBMODELS: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
