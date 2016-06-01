@@ -98,7 +98,6 @@ function SemanticResolutionPane() {
 
 	//Preview graphs
 	this.leftgraph = new PreviewGraph("modelAStage");
-	this.midgraph = new PreviewGraph("modelABStage");
 	this.rightgraph = new PreviewGraph("modelBStage");
 
 	this.initialize = function(nodes) {
@@ -106,10 +105,6 @@ function SemanticResolutionPane() {
 		$(".leftModelName").append(nodearr[0].id);
 		$(".rightModelName").append(nodearr[1].id);
 		
-		this.leftgraph.initialize();
-		this.midgraph.initialize();
-		this.rightgraph.initialize();
-
 		sender.requestOverlaps();
 	};
 	
@@ -130,8 +125,10 @@ function SemanticResolutionPane() {
 	});
 	
 	receiver.onShowPreview(function(data) {
+		pane.leftgraph.initialize();
+		pane.rightgraph.initialize();
+
 		pane.leftgraph.update(data.left);
-		pane.midgraph.update(data.middle);
 		pane.rightgraph.update(data.right);
 	});
 
@@ -147,7 +144,6 @@ function SemanticResolutionPane() {
 			$('.mergePreview').css("height", e.pageY-95);
 			$('.modal-body').css("height", $(window).height()-e.pageY-95);
 			pane.leftgraph.initialize();
-			pane.midgraph.initialize();
 			pane.rightgraph.initialize();
 			
 		});
