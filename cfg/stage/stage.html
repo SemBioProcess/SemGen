@@ -156,15 +156,23 @@
 		<!-- Templates -->
 		<template id="mergerContent">
 			<div class="modal-header">
-				<h5 class="modal-title">Merge models</h5>
+				<h4 class="modal-title">Merge models</h4>
 				<div class="mergeResHeader">
 					<h6 class="leftModelName"></h6>
 					<h6 class="rightModelName"></h6>
 				</div>
 			</div>
 			<div class="mergePreview">
-				<div class="substage" id="modelAStage"></div>
-				<div class="substage" id="modelBStage"></div>
+				<div class="substage" id="modelAStage">
+					<div class="substageMenu">
+						<input type="checkbox" id="fixedNodesA"> Fix Nodes</input>
+					</div>
+				</div>
+				<div class="substage" id="modelBStage">
+					<div class="substageMenu">
+						<input type="checkbox" id="fixedNodesB"> Fix Nodes</input>
+					</div>
+				</div>
 			</div>
 			<div id="resizeHandle"></div>
 			<div class="modal-body">

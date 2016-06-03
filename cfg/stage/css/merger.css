@@ -6,6 +6,9 @@
     overflow-y: hidden;
 }
 
+.modal-title {
+    line-height: 1;
+}
 .mergePreview {
     position: relative;
     top: 0;
@@ -33,6 +36,11 @@
     border-left: 2px solid black;
 }
 
+.substageMenu {
+    position: absolute;
+    left: 3px;
+}
+
 .modal-body {
     height: 50vh;
     overflow: scroll;
@@ -57,6 +65,7 @@
     height: 6px;
     cursor: ns-resize;
     background-color: black;
+    z-index: 2;
 }
 
 .overlapPane {

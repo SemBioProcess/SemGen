@@ -128,6 +128,9 @@ function SemanticResolutionPane() {
 		pane.leftgraph.initialize();
 		pane.rightgraph.initialize();
 
+		$("#fixedNodesA").removeAttr("checked");
+		$("#fixedNodesB").removeAttr("checked");
+
 		pane.leftgraph.update(data.left);
 		pane.rightgraph.update(data.right);
 	});
@@ -159,5 +162,12 @@ function SemanticResolutionPane() {
 		});
 		return choices;
 	}
+
+	$("#fixedNodesA").bind('change', function(){
+		pane.leftgraph.toggleFixedMode(this.checked);
+	});
+	$("#fixedNodesB").bind('change', function(){
+		pane.rightgraph.toggleFixedMode(this.checked);
+	});
 }
 
