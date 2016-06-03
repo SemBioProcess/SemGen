@@ -7,7 +7,6 @@ public class SubModelDependencyNode extends DependencyNode {
 
 	// When we split the submodel name and the variable name string into an array
 	// we'll need to index into the array to get the correct parts
-	
 	public final static int SubmodelNamePart = 0;
 	public final static int VariableNamePart = 1;
 
@@ -23,21 +22,23 @@ public class SubModelDependencyNode extends DependencyNode {
 				String submodelName = nameParts[SubmodelNamePart];
 				String variableName = nameParts[VariableNamePart];
 
-				String submodelNameId = Node.buildId(submodelName, parentNode.parentModelId);
+				submodelId = Node.buildId(submodelName, parentNode.parentModelId);
 
 				// Mapped variables are treat special in the JS code.
 				// We need to know the parent model and submodel name
 				// so we can fetch the proper "mapped from" node
-				this.inputs.add(new Link(variableName, submodelNameId));
+				this.inputs.add(new Link(variableName, submodelId));
 			}
 		}
 	}
 
+	//Constructor for creating submodeldependencynodes for the merger previews
 	public SubModelDependencyNode(DataStructure dataStructure) {
 		super(dataStructure, "");
 		String[] parts = getNodeNameParts(dataStructure);
 		
 		parentModelId = parts[0];
+		submodelId = parts[0] + "." + parts[1];
 		for (Link link : inputs) {
 			link.parentModelId = "null";
 		}

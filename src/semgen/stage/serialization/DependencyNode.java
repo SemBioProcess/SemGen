@@ -13,6 +13,7 @@ public class DependencyNode extends Node {
 	
 	public String nodeType;
 	public Number typeIndex;
+	public String submodelId = "";
 	public boolean issubmodelinput;
 	
 	public DependencyNode(DataStructure dataStructure, String parentModelId) {

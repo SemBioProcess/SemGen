@@ -164,6 +164,12 @@ Node.prototype.getLinks = function () {
 			}
 			else {
 				inputNodeId = inputData.name;
+				if (this.submodelid) {
+					var branch = inputNodeId.split(".");
+					if (branch[0] + "." + branch[1] == this.submodelid) {
+						type = "internal";
+					}
+				}
 			}
 		}
 

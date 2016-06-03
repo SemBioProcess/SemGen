@@ -10,6 +10,7 @@ function DependencyNode (graph, data, parentNode) {
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 
 	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, graph.nodecharge);
+	this.submodelid = data.submodelId;
 	this.submodelinput = data.issubmodelinput;
 	
 	this.addClassName("dependencyNode");
