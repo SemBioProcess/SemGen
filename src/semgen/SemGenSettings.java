@@ -92,6 +92,12 @@ public class SemGenSettings extends Observable{
 	}
 	
 	public void setAppSize(Dimension dim) {
+		if (dim.width > screensize.width) {
+			dim.width = screensize.width;
+		}
+		if (dim.height > screensize.height) {
+			dim.height = screensize.height;
+		}
 		framesize.width = dim.width;
 		framesize.height = dim.height;
 	}
