@@ -100,10 +100,15 @@ function SemanticResolutionPane() {
 	this.leftgraph = new PreviewGraph("modelAStage");
 	this.rightgraph = new PreviewGraph("modelBStage");
 
+	var leftModelName = "";
+	var rightModelName = "";
+
 	this.initialize = function(nodes) {
 		var nodearr = getSymbolArray(nodes);
-		$(".leftModelName").append(nodearr[0].id);
-		$(".rightModelName").append(nodearr[1].id);
+		leftModelName = nodearr[0].id;
+		rightModelName = nodearr[1].id;
+		$(".leftModelName").append(leftModelName);
+		$(".rightModelName").append(rightModelName);
 		
 		sender.requestOverlaps();
 	};
@@ -133,6 +138,9 @@ function SemanticResolutionPane() {
 
 		pane.leftgraph.update(data.left);
 		pane.rightgraph.update(data.right);
+
+		// Different hull colors for different models
+		$("[id*=" + leftModelName +"] > .hull").attr("stroke", "rgb(96, 96, 191)").attr("fill", "rgb(96, 96, 191)");
 	});
 
 	// Prevent clicking on radio button from toggling collapse panel
