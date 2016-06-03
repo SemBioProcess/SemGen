@@ -29,7 +29,7 @@ function PreviewGraph(id) {
     
     this.initialize = function () {
 	    graph.w = div.width();
-	    graph.h = div.parent().height();
+	    graph.h = div.height();
 	    nullmodel = new ModelNode(graph, "null");
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
@@ -122,5 +122,17 @@ function PreviewGraph(id) {
 	        if (nodes[i].id === id)
 	        	return nodes[i];
 	    }
+	};
+
+	this.toggleFixedMode = function(setfixed) {
+		this.fixedMode = setfixed;
+		for (n in nodes) {
+			nodes[n].applytoChildren(function(d) {
+				if (setfixed) {
+					d.wasfixed = d.fixed;
+				}
+				d.fixed = setfixed || d.wasfixed;
+			});
+		}
 	};
 }
