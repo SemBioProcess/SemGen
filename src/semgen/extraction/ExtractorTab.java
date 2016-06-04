@@ -16,9 +16,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -27,7 +24,6 @@ import prefuse.data.Node;
 import prefuse.data.Schema;
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.encoding.Encoder;
 import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
 import semgen.extraction.workbench.ExtractorWorkbench;
@@ -53,10 +49,6 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
-import semsim.writing.CellMLwriter;
-import semsim.writing.JSimProjectFileWriter;
-import semsim.writing.MMLwriter;
-import semsim.writing.SemSimOWLwriter;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 

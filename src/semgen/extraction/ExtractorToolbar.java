@@ -8,7 +8,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
 import semgen.SemGenSettings;
-import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
 
@@ -28,7 +27,6 @@ public class ExtractorToolbar extends SemGenTabToolbar implements ActionListener
 		extractoritemopenann.setToolTipText("Open model in Annotator");
 		extractoritemopenann.addActionListener(this);
 		
-		includeMappedFromCheckBox.setFont(SemGenFont.defaultPlain(-2));
 		includeMappedFromCheckBox.setBorder(BorderFactory.createEmptyBorder());
 		includeMappedFromCheckBox.setSelected(false);
 		
