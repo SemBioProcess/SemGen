@@ -46,7 +46,7 @@ public class Extraction {
 	
 	/**
 	 * The keyset for this map includes all submodels that should be included in the extracted model.
-	 * The boolean values indicate whether to attempt to preserved the submodels within the submodel.
+	 * The boolean values indicate whether to attempt to preserve the submodels within the submodel.
 	 */
 	private Map<Submodel, Boolean> submodelstoextract;
 	

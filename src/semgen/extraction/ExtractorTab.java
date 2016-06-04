@@ -151,7 +151,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		extractionlevelchooserentities.setFont(SemGenFont.defaultPlain(-2));
 		extractionlevelchooserentities.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		extractionlevelchooserentities.addItemListener(this);
-		
+			
 		includepartipantscheckbox.setFont(SemGenFont.defaultPlain(-2));
 		includepartipantscheckbox.setBorder(BorderFactory.createEmptyBorder(0,35,0,0));
 		includepartipantscheckbox.setSelected(false);
@@ -177,6 +177,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		
 		createToolbar();
 		
+		toolbar.includeMappedFromCheckBox.addItemListener(this);
+		toolbar.includeMappedFromCheckBox.setVisible(semsimmodel.getFunctionalSubmodels().size()>0);
+
 		JPanel leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
 		leftpanel.add(toolbar);
@@ -287,7 +290,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	
 	public Map<DataStructure, Set<DataStructure>> createDataStructureMap() {
-		// Iinda weird that we do it this way, but it's because of the way it used to be
+		// Kinda weird that we do it this way, but it's because of the way it used to be
 		HashMap<DataStructure, Set<DataStructure>> table = new HashMap<DataStructure, Set<DataStructure>>();
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			Set<DataStructure> dsset = new HashSet<DataStructure>();
@@ -298,7 +301,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	}
 
 	// returns the preserved data structures in the extract
-	public Extraction primeextraction() {
+	public Extraction primeExtraction() {
 		
 		workbench.getExtraction().reset(); 
 		
@@ -388,6 +391,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 					for (DataStructure onedatastr : tempbox.associateddatastructures) {
 						
 						boolean isinputforsubmodel = false;
+						boolean includemappedfrom = false;
 						
 						// Don't get the computational inputs if the data structure is a mappable variable
 						// with a public "in" interface. This avoids adding in unnecessary variables that are
@@ -396,9 +400,11 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 						if(onedatastr instanceof MappableVariable){
 							MappableVariable mv = (MappableVariable)onedatastr;
 							isinputforsubmodel = mv.getPublicInterfaceValue().equals("in");
+							
+							if(isinputforsubmodel) includemappedfrom = toolbar.includeMappedFromCheckBox.isSelected();
 						}
 						
-						workbench.getExtraction().addDataStructureToExtraction(onedatastr, ! isinputforsubmodel);
+						workbench.getExtraction().addDataStructureToExtraction(onedatastr, includemappedfrom); // used to be ! isinputforsubmodel
 
 						if( ! isinputforsubmodel){
 							Set<DataStructure> requiredinputs = onedatastr.getComputationInputs();											
@@ -779,7 +785,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 		Object o = e.getSource();
 		if (o == extractbutton) {
 			
-			primeextraction();
+			primeExtraction();
 			
 			if ( ! workbench.getExtraction().isEmpty()) {
 				
@@ -943,7 +949,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	// Update whenever the set of items included in the extraction changes
 	public void itemStateChanged(ItemEvent arg0) {
 		try {
-			visualize(primeextraction(), false);
+			visualize(primeExtraction(), false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
