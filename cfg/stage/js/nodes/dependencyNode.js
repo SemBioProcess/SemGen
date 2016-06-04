@@ -9,7 +9,7 @@ function DependencyNode (graph, data, parentNode) {
 	// Ensure the node type is formatted properly
 	data.nodeType = data.nodeType.toLowerCase().capitalizeFirstLetter();
 
-	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 14, data.nodeType, graph.nodecharge);
+	Node.prototype.constructor.call(this, graph, data.name, parentNode, data.inputs, 5, 12, data.nodeType, graph.nodecharge);
 	this.submodelid = data.submodelId;
 	this.submodelinput = data.issubmodelinput;
 	
