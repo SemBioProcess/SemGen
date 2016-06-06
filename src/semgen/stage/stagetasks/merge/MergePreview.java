@@ -22,7 +22,8 @@ public class MergePreview {
 	 }
 	 
 	 private void generatePreview(Pair<String, String> names) {
-		 for (Pair<DataStructure, DataStructure> overlap : modelmap.getDataStructurePairs()) {
+		 for (int i = modelmap.getSolutionDomainCount(); i<modelmap.getMappingCount(); i++) {
+			 Pair<DataStructure, DataStructure> overlap = modelmap.getDataStructurePair(i);
 			 nodestomerge.add(new MergeChoice(overlap, names));
 		 }
 	 }

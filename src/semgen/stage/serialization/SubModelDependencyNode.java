@@ -38,13 +38,20 @@ public class SubModelDependencyNode extends DependencyNode {
 		String[] parts = getNodeNameParts(dataStructure);
 		
 		parentModelId = parts[0];
-		submodelId = parts[0] + "." + parts[1];
+		
 		for (Link link : inputs) {
 			link.parentModelId = "null";
 		}
-		
-		this.name = parts[1] + "." + parts[2];
-		this.id = parts[0] + "." + parts[1] + "." + parts[2];
+		if (parts.length > 2) {
+			submodelId = parts[0] + "." + parts[1];
+			this.name = parts[1] + "." + parts[2];
+			this.id = parts[0] + "." + parts[1] + "." + parts[2];
+		}
+		else {
+			submodelId = "";
+			this.name = parts[1];
+			this.id = parts[0] + "." + parts[1];
+		}
 		
 	}
 	

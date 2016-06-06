@@ -128,6 +128,10 @@ public class ModelOverlapMap {
 		return dsmap;
 	}
 	
+	public Pair<DataStructure, DataStructure> getDataStructurePair(int pairindex) {
+		return dsmap.get(pairindex);
+	}
+	
 	public HashMap<UnitOfMeasurement, UnitOfMeasurement> getEquivalentUnitPairs() {
 		return unitsmap;
 	}
