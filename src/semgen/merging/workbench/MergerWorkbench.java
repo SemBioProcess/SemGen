@@ -228,6 +228,14 @@ public class MergerWorkbench extends Workbench {
 				return exposeddslist.get(modind).indexOf(ds);
 			}
 		}
+		//If a datastructure with that name cannot be found, try searching with just the DS name
+		String[] names = cdwd.split("\\.");
+		String dsname = names[names.length-1];
+		for (DataStructure ds : exposeddslist.get(modind)) {
+			if (ds.getName().equals(dsname)) {
+				return exposeddslist.get(modind).indexOf(ds);
+			}
+		}
 		return -1;
 	}
 	
