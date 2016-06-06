@@ -140,6 +140,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onExecuteMerge(JSArray choicesmade) {
 			ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
 
+			int ndomains = workbench.getSolutionDomainCount();
+			for (int i = 0; i < ndomains; i++) {
+				choicelist.add(ResolutionChoice.first);
+			}
+			
 			for (int i=0; i<choicesmade.length(); i++) {
 				int choice = choicesmade.get(i).asNumber().getInteger();
 				switch(choice) {

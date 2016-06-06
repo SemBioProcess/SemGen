@@ -20,7 +20,7 @@ public class SubModelDependencyNode extends DependencyNode {
 			{
 				String[] nameParts = getNodeNameParts(input);
 				String submodelName = nameParts[SubmodelNamePart];
-				String variableName = nameParts[VariableNamePart];
+				String variableName = nameParts[nameParts.length-1];
 
 				submodelId = Node.buildId(submodelName, parentNode.parentModelId);
 
@@ -59,7 +59,7 @@ public class SubModelDependencyNode extends DependencyNode {
 		String[] nameParts = getNodeNameParts(dataStructure);
 		if(nameParts.length != 2)
 			return dataStructure.getName();
-		return nameParts[VariableNamePart];
+		return nameParts[nameParts.length-1];
 	}
 	
 	/**
