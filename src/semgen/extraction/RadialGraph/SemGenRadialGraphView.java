@@ -312,7 +312,7 @@ public class SemGenRadialGraphView extends Display {
 			eTab.codewordspanel.termandcheckboxmap.get(focusname).setSelected(true);
 			eTab.codewordspanel.scroller.scrollToComponent(eTab.codewordspanel.termandcheckboxmap.get(focusname));
 			try {
-				eTab.visualize(eTab.primeextraction(), false);
+				eTab.visualize(eTab.primeExtraction(), false);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}

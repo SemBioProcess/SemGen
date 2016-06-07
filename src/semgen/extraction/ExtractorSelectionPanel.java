@@ -153,7 +153,7 @@ public class ExtractorSelectionPanel extends JPanel implements ActionListener, M
 					checkbox.setSelected(markallbox.isSelected());
 				}
 			}
-			extractor.visualize(extractor.primeextraction(), false);
+			extractor.visualize(extractor.primeExtraction(), false);
 			
 			// Add the item listener back
 			for(Component c : checkboxpanel.getComponents()){
