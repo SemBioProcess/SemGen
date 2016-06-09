@@ -56,7 +56,7 @@ Link.prototype.tickHandler = function (element, graph) {
     	        d90 = Math.PI / 2,
     	        dtxs = d.target.x - d.target.r * Math.cos(theta),
     	        dtys = d.target.y - d.target.r * Math.sin(theta),
-    	        arrowHeadWidth = 5;
+    	        arrowHeadWidth = 2;
 
     	    return "M" + d.source.x + "," + d.source.y +
     	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
