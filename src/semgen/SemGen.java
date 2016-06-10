@@ -101,7 +101,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		semsimlib = new SemSimLibrary(cfgreadpath);
 		ModelReader.pointtoSemSimLibrary(semsimlib);
-		ModelWriter.pointtoSemSimLibrary(semsimlib);
+		ModelWriter.pointToSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 		// Need this for programmatic use of jsbatch
 		System.setProperty("jsim.home", cfgreadpath + "jsimhome");
@@ -179,11 +179,13 @@ public class SemGen extends JFrame implements Observer{
 	//Check which OS SemGen is being run under
 	private static void OSValidation() throws NoSuchMethodException, SecurityException{
 		int OS = 0;
+		
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
 		
 		switch (OS) { 
 		case WINDOWS :
+			
 			if (!new File(cfgreadpath).canRead()) {
 				cfgreadpath = System.getProperty("user.home") + "/AppData/local/SemGen/cfg/";
 				cfgwritepath = cfgreadpath;

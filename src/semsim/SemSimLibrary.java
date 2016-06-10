@@ -21,6 +21,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
 import semsim.definitions.PropertyType;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;
@@ -65,6 +66,11 @@ public class SemSimLibrary {
 	private Set<String> OPBamountProperties = new HashSet<String>();
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
+	
+	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154");
+	public static URI OPB_AREA_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295");
+	public static URI OPB_SPAN_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064");
+	
 	
 	private String cfgpath;
 	
