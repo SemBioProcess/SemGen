@@ -67,10 +67,29 @@ public class SemSimLibrary {
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
 	
-	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154");
+	public static URI OPB_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00147");
+	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00135");
+	public static URI OPB_FORCE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00574");
+	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00569");
+	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00573");
+	public static URI OPB_TEMPORAL_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01151");
+  	
+ 	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154");
 	public static URI OPB_AREA_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295");
 	public static URI OPB_SPAN_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064");
 	
+	public static URI OPB_CHEMICAL_MOLAR_AMOUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00425");
+	public static URI OPB_CHEMICAL_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00340");
+	public static URI OPB_PARTICLE_COUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01001");
+	public static URI OPB_PARTICLE_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01000");
+	public static URI OPB_MASS_OF_SOLID_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01226");
+	public static URI OPB_MASS_LINEAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00190");
+	public static URI OPB_MASS_AREAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00258");
+	public static URI OPB_MASS_VOLUMETRIC_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00101");
+	public static URI OPB_CHEMICAL_MOLAR_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00592");
+	public static URI OPB_PARTICLE_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00544");
+	public static URI OPB_MATERIAL_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01220");
+	public static URI OPB_TIME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01023");
 	
 	private String cfgpath;
 	
@@ -105,13 +124,13 @@ public class SemSimLibrary {
 		}
 
 		try {
-			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_00147", false);
-			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_00573", false);
-			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_01151", false);
+			OPBproperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_PHYSICAL_PROPERTY_URI.toString(), false);
+			OPBflowProperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_FLOW_RATE_PROPERTY_URI.toString(), false);
+			OPBprocessProperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_TEMPORAL_RATE_URI.toString(), false);
 			//OPBdynamicalProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespace() + "OPB_00568", false);
-			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_00135", false);
-			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_00574", false);
-			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + "OPB_00569", false);
+			OPBamountProperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_AMOUNT_PROPERTY_URI.toString(), false);
+			OPBforceProperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_FORCE_PROPERTY_URI.toString(), false);
+			OPBstateProperties = SemSimOWLFactory.getAllSubclasses(OPB, OPB_DYNAMICAL_STATE_PROPERTY_URI.toString(), false);
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	

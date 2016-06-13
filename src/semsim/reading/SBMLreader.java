@@ -303,7 +303,7 @@ public class SBMLreader extends ModelReader{
 				
 		timeds.setUnit(timeunits);
 
-		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01023"));
+		PhysicalProperty timeprop = new PhysicalProperty("Time", SemSimLibrary.OPB_TIME_URI);
 		semsimmodel.addPhysicalProperty(timeprop);
 		timeds.setSingularAnnotation(timeprop);
 		
@@ -511,23 +511,23 @@ public class SBMLreader extends ModelReader{
 				if(hasonlysub){
 					// look up factor for unit substance in semsimmodel and determine OPB property from that.
 					// but if substance not in model...(level 3) ...
-					prop = new PhysicalPropertyinComposite("Chemical molar amount", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00425"));
+					prop = new PhysicalPropertyinComposite("Chemical molar amount", SemSimLibrary.OPB_CHEMICAL_MOLAR_AMOUNT_URI);
 				}
-				else prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00340"));
+				else prop = new PhysicalPropertyinComposite("Chemical concentration", SemSimLibrary.OPB_CHEMICAL_CONCENTRATION_URI);
 			}
 			// Deal with particle units
 			else if(baseunitname.equals("item")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Particle count", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01001"));
+					prop = new PhysicalPropertyinComposite("Particle count", SemSimLibrary.OPB_PARTICLE_COUNT_URI);
 				
-				else prop = new PhysicalPropertyinComposite("Particle concentration", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01000"));
+				else prop = new PhysicalPropertyinComposite("Particle concentration", SemSimLibrary.OPB_PARTICLE_CONCENTRATION_URI);
 			}
 			// Deal with mass/density units
 			else if(baseunitname.equals("kilogram") || baseunitname.equals("gram")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Mass of solid entity", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01226"));
+					prop = new PhysicalPropertyinComposite("Mass of solid entity", SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI);
 				
 				else {
 					double compartmentdims = sbmlmodel.getCompartment(compartmentname).getSpatialDimensions();
@@ -538,13 +538,13 @@ public class SBMLreader extends ModelReader{
 					}
 					
 					else if(compartmentdims==1.0)
-						prop = new PhysicalPropertyinComposite("Mass lineal density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00190"));
+						prop = new PhysicalPropertyinComposite("Mass lineal density", SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);
 					
 					else if(compartmentdims==2.0)
-						prop = new PhysicalPropertyinComposite("Mass areal density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00258"));
+						prop = new PhysicalPropertyinComposite("Mass areal density", SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);
 					
 					else if(compartmentdims==3.0)
-						prop = new PhysicalPropertyinComposite("Mass volumetric density", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00101"));
+						prop = new PhysicalPropertyinComposite("Mass volumetric density", SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);
 					
 				}
 			}
@@ -772,13 +772,13 @@ public class SBMLreader extends ModelReader{
 			prop = new PhysicalPropertyinComposite(null,null);
 		
 		else if(basesubstanceunitsname.equals("mole"))
-			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00592"));
+			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", SemSimLibrary.OPB_CHEMICAL_MOLAR_FLOW_RATE_URI);
 		
 		else if(basesubstanceunitsname.equals("item"))
-			prop = new PhysicalPropertyinComposite("Particle flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00544"));
+			prop = new PhysicalPropertyinComposite("Particle flow rate", SemSimLibrary.OPB_PARTICLE_FLOW_RATE_URI);
 		
 		else if(basesubstanceunitsname.equals("kilogram") || basesubstanceunitsname.equals("gram"))
-			prop = new PhysicalPropertyinComposite("Material flow rate", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01220"));
+			prop = new PhysicalPropertyinComposite("Material flow rate", SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);
 		
 		else prop = new PhysicalPropertyinComposite(null,null);
 		
@@ -1072,7 +1072,7 @@ public class SBMLreader extends ModelReader{
 							ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
 							
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
-							if(ontdomain.domainhasReferenceOntology(refont)){
+							if(ontdomain.domainHasReferenceOntology(refont)){
 								Relation relation = (q==Qualifier.BQB_IS) ? 
 										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getBiologicalQualifierRelation(q);
 								

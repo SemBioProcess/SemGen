@@ -91,7 +91,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		ontologychooser.setSelectedIndex(0);
 
 		ontologychooser.addActionListener(this);
-		if(domain.domainhasReferenceOntology(library.getLastOntology())){
+		if(domain.domainHasReferenceOntology(library.getLastOntology())){
 			ontologychooser.setSelectedIndex(domain.getOrdinalofOntology(library.getLastOntology()));
 		}
 		else {

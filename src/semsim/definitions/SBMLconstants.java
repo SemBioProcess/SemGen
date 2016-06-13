@@ -12,7 +12,6 @@ public class SBMLconstants {
 	public static final Set<String> SBML_LEVEL_3_BASE_UNITS;
 	public static final Set<String> SBML_LEVEL_2_VERSION_4_BASE_UNITS;
 	public static final Set<String> SBML_LEVEL_2_VERSION_1_BASE_UNITS;
-//	public static final Map<String, String> SUBSTANCE_AMOUNT_UNITS_AND_OPB_PROPERTIES; 
 
 	static {
 		
@@ -71,12 +70,5 @@ public class SBMLconstants {
 		SBML_LEVEL_2_VERSION_1_BASE_UNITS = new HashSet<String>();
 		SBML_LEVEL_2_VERSION_1_BASE_UNITS.addAll(SBML_LEVEL_2_VERSION_4_BASE_UNITS);
 		SBML_LEVEL_2_VERSION_4_BASE_UNITS.add("Celsius");
-		
-		
-//		Map<String,String> map1 = new HashMap<String,String>();
-//		map1.put("mole", SemSimConstants.OPB_NAMESPACE + "OPB_00425"); // Chemical molar amount
-		
-		//'dimensionless', 
-//		 'mole', 'item', 'kilogram', 'gram'
 	}
 }
