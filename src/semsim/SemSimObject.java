@@ -38,7 +38,28 @@ public abstract class SemSimObject {
 	public String getName(){
 		return name;
 	}
-
+	
+	/**
+	 * Whether the object has an associated name
+	 */
+	public boolean hasName(){
+		return ( ! name.equals("") && name != null);
+	}
+	
+	/**
+	 * Whether the object has an associated textual description
+	 */
+	public boolean hasDescription(){
+		return ( ! description.equals("") && description != null);
+	}
+	
+	/**
+	 * Whether the object has an associated metadata ID
+	 */
+	public boolean hasMetadataID(){
+		return ( ! metadataID.equals("") && metadataID != null);
+	}
+	
 	/**
 	 * Set the object's name
 	 * 

@@ -411,7 +411,7 @@ public class SemSimUtil {
 					
 					Iterator<?> nexteldescit = nextel.getDescendants(new ElementFilter("diff"));
 					
-					Boolean isLHS = (nextel.getName().equals("ci") && nextel.getText().equals(solvedvarlocalname))
+					Boolean isLHS = (nextel.getName().equals("ci") && nextel.getText().trim().equals(solvedvarlocalname))
 									|| nexteldescit.hasNext();
 	
 					// If the element doesn't represent the LHS of the equation, or isn't the <eq> element,

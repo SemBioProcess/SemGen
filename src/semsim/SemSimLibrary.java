@@ -21,7 +21,6 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.ReferenceTerm;
 import semsim.definitions.PropertyType;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;

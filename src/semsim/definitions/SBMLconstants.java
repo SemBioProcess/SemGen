@@ -1,10 +1,13 @@
 package semsim.definitions;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import semsim.SemSimLibrary;
 
 public class SBMLconstants {
 
@@ -12,7 +15,11 @@ public class SBMLconstants {
 	public static final Set<String> SBML_LEVEL_3_BASE_UNITS;
 	public static final Set<String> SBML_LEVEL_2_VERSION_4_BASE_UNITS;
 	public static final Set<String> SBML_LEVEL_2_VERSION_1_BASE_UNITS;
-
+	
+	public static final Set<URI> OPB_PROPERTIES_FOR_COMPARTMENTS;
+	public static final Set<URI> OPB_PROPERTIES_FOR_SPECIES;
+	public static final Set<URI> OPB_PROPERTIES_FOR_REACTIONS;
+	
 	static {
 		
 		// Mapping between reserved units in SBML level 2 models and their default base units
@@ -63,6 +70,7 @@ public class SBMLconstants {
 
 		SBML_LEVEL_3_BASE_UNITS = Collections.unmodifiableSet(set0);
 		
+		
 		SBML_LEVEL_2_VERSION_4_BASE_UNITS = new HashSet<String>();
 		SBML_LEVEL_2_VERSION_4_BASE_UNITS.addAll(SBML_LEVEL_3_BASE_UNITS);
 		SBML_LEVEL_2_VERSION_4_BASE_UNITS.remove("avogadro");
@@ -70,5 +78,32 @@ public class SBMLconstants {
 		SBML_LEVEL_2_VERSION_1_BASE_UNITS = new HashSet<String>();
 		SBML_LEVEL_2_VERSION_1_BASE_UNITS.addAll(SBML_LEVEL_2_VERSION_4_BASE_UNITS);
 		SBML_LEVEL_2_VERSION_4_BASE_UNITS.add("Celsius");
+		
+		
+		Set<URI> set1 = new HashSet<URI>();
+		set1.add(SemSimLibrary.OPB_FLUID_VOLUME_URI);
+		set1.add(SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI);
+		set1.add(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI);
+		
+		OPB_PROPERTIES_FOR_COMPARTMENTS = Collections.unmodifiableSet(set1);
+		
+		Set<URI> set2 = new HashSet<URI>();
+		set2.add(SemSimLibrary.OPB_CHEMICAL_CONCENTRATION_URI);
+		set2.add(SemSimLibrary.OPB_CHEMICAL_MOLAR_AMOUNT_URI);
+		set2.add(SemSimLibrary.OPB_PARTICLE_COUNT_URI);
+		set2.add(SemSimLibrary.OPB_PARTICLE_CONCENTRATION_URI);
+		set2.add(SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI);
+		set2.add(SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);
+		set2.add(SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);
+		set2.add(SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);
+		
+		OPB_PROPERTIES_FOR_SPECIES = Collections.unmodifiableSet(set2);
+		
+		Set<URI> set3 = new HashSet<URI>();
+		set3.add(SemSimLibrary.OPB_CHEMICAL_MOLAR_FLOW_RATE_URI);
+		set3.add(SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);
+		set3.add(SemSimLibrary.OPB_PARTICLE_FLOW_RATE_URI);
+		
+		OPB_PROPERTIES_FOR_REACTIONS = Collections.unmodifiableSet(set3);
 	}
 }

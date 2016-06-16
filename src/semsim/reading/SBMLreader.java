@@ -74,8 +74,8 @@ import semsim.utilities.SemSimUtil;
 public class SBMLreader extends ModelReader{
 
 	private Model sbmlmodel;
-	private Map<String, PhysicalEntity> compartmentAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
-	private Map<String, CompositePhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
+	private Map<String, PhysicalEntity> compartmentAndEntitiesMap = new HashMap<String, PhysicalEntity>();
+	private Map<String, CompositePhysicalEntity> speciesAndEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
 	private Set<String> baseUnits = new HashSet<String>();
 	private Submodel parametersubmodel;
@@ -85,7 +85,7 @@ public class SBMLreader extends ModelReader{
 	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 	private static final String mathMLelementEnd = "</math>";
 	private String timedomainname = "t";
-	private static final String reactionprefix = "Reaction_";
+	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement timeunits;
 	private UnitOfMeasurement substanceunits;
 	
@@ -394,7 +394,7 @@ public class SBMLreader extends ModelReader{
 			
 			// Set the physical entity for the compartment
 			PhysicalEntity compartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
-			compartmentAndSemSimEntitiesMap.put(compid, compartmentent);
+			compartmentAndEntitiesMap.put(compid, compartmentent);
 						
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			entlist.add(compartmentent);
@@ -577,8 +577,8 @@ public class SBMLreader extends ModelReader{
 			
 			PhysicalEntity compartmentent = null;
 			
-			if(compartmentAndSemSimEntitiesMap.containsKey(species.getCompartment()))
-				compartmentent = compartmentAndSemSimEntitiesMap.get(species.getCompartment());
+			if(compartmentAndEntitiesMap.containsKey(species.getCompartment()))
+				compartmentent = compartmentAndEntitiesMap.get(species.getCompartment());
 			else System.err.println("WARNING: unknown compartment " + species.getCompartment() + " for species " + species.getId());
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
@@ -592,7 +592,7 @@ public class SBMLreader extends ModelReader{
 						
 			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
-			speciesAndSemSimEntitiesMap.put(species.getId(), compositeent);
+			speciesAndEntitiesMap.put(species.getId(), compositeent);
 						
 			collectSBaseData(species, compositeent);
 		}
@@ -695,6 +695,8 @@ public class SBMLreader extends ModelReader{
 				
 				Event ssevent = new Event();
 				ssevent.setName(sbmlevent.getId());
+				ssevent.setDescription(sbmlevent.getName());
+				ssevent.setMetadataID(sbmlevent.getMetaId());
 				
 				ssevent.setTriggerMathML(triggermathml);			
 				
@@ -831,7 +833,7 @@ public class SBMLreader extends ModelReader{
 			for(int s=0; s<reaction.getNumReactants(); s++){
 				String reactantname = reaction.getReactant(s).getSpecies();
 				double stoich = reaction.getReactant(s).getStoichiometry();
-				PhysicalEntity reactantent = speciesAndSemSimEntitiesMap.get(reactantname);
+				PhysicalEntity reactantent = speciesAndEntitiesMap.get(reactantname);
 				process.addSource(reactantent, stoich);
 									
 				// Store info about species conservation for use in outputting species equations
@@ -842,7 +844,7 @@ public class SBMLreader extends ModelReader{
 			for(int p=0; p<reaction.getNumProducts(); p++){
 				String productname = reaction.getProduct(p).getSpecies();
 				double stoich = reaction.getProduct(p).getStoichiometry();
-				PhysicalEntity productent = speciesAndSemSimEntitiesMap.get(productname);
+				PhysicalEntity productent = speciesAndEntitiesMap.get(productname);
 				process.addSink(productent, stoich);
 				
 				// Store info about species conservation for use in outputting species equations
@@ -852,7 +854,7 @@ public class SBMLreader extends ModelReader{
 			// Set mediators (modifiers)
 			for(int m=0; m<reaction.getNumModifiers(); m++){
 				String mediatorname = reaction.getModifier(m).getSpecies();
-				PhysicalEntity mediatorent = speciesAndSemSimEntitiesMap.get(mediatorname);
+				PhysicalEntity mediatorent = speciesAndEntitiesMap.get(mediatorname);
 				process.addMediator(mediatorent);
 			}
 			
@@ -916,7 +918,7 @@ public class SBMLreader extends ModelReader{
 				// spatial size portion of the concentration value (i.e., the denominator in the units formula substance/ size)
 				// are those indicated by the value of the 'units' attribute on the compartment in which the species is located.
 				
-				PhysicalEntity speciesent = speciesAndSemSimEntitiesMap.get(speciesid);
+				PhysicalEntity speciesent = speciesAndEntitiesMap.get(speciesid);
 				
 				for(String reactionid : speciesAndConservation.get(speciesid).producedby){
 					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSinkStoichiometry(speciesent);
@@ -940,7 +942,6 @@ public class SBMLreader extends ModelReader{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-1</cn>\n" + ws 
 								+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";					
 						eqstring = eqstring + " - " + reactionid;
-	
 					}
 					else{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-" + stoich + "</cn>\n" + ws 
@@ -956,12 +957,12 @@ public class SBMLreader extends ModelReader{
 			// Store the equations
 			if(eqstring.length()>0){
 				
-				// Strip first + operator if present, add compartment divisor if needed to computational code
-				if(eqstring.trim().startsWith("+")){
+				// Strip first + operator if present
+				if(eqstring.trim().startsWith("+"))
 					eqstring = eqstring.substring(3, eqstring.length()); 
-					eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
-				}
 				
+				//Add compartment divisor if needed to computational code
+				eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
 				eqstring = LHS + " = " + eqstring; // add LHS to computational code string
 				
 				DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
