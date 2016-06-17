@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class SBMLconstants {
 	static {
 		
 		// Mapping between reserved units in SBML level 2 models and their default base units
-		Map<String,String> map0 = new HashMap<String,String>();		
+		LinkedHashMap<String,String> map0 = new LinkedHashMap<String,String>();		
 		map0.put("substance", "mole");
 		map0.put("volume", "litre");
 		map0.put("area", "square metre");

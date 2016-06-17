@@ -156,6 +156,13 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	/**
+	 * @return Whether the computation uses any {@link Events}
+	 */
+	public boolean hasEvents(){
+		return ! events.isEmpty();
+	}
+	
+	/**
 	 * Add a discrete event to this computation
 	 * @param event The discrete event to add
 	 */

@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.ASTNode;
+import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.AssignmentRule;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.JSBML;
@@ -26,15 +27,21 @@ import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.Unit;
+import org.sbml.jsbml.UnitDefinition;
+import org.sbml.jsbml.Unit.Kind;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
+import semsim.SemSimObject;
 import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.units.UnitFactor;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -46,6 +53,8 @@ public class SBMLwriter extends ModelWriter {
 	
 	private SBMLDocument sbmldoc;
 	private Model sbmlmodel;
+	private static final int sbmllevel = 2;
+	private static final int sbmlversion = 4;
 	
 	private LinkedHashMap<CompositePhysicalEntity, Compartment> entityCompartmentMap = new LinkedHashMap<CompositePhysicalEntity, Compartment>();
 	private LinkedHashMap<CompositePhysicalEntity, Species> entitySpeciesMap = new LinkedHashMap<CompositePhysicalEntity, Species>();
@@ -54,7 +63,7 @@ public class SBMLwriter extends ModelWriter {
 	private Set<DataStructure> candidateDSsForCompartments = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForSpecies = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForReactions = new HashSet<DataStructure>();
-	private Set<DataStructure> globalParameters = new HashSet<DataStructure>();
+	private Set<DataStructure> globalParameters = new HashSet<DataStructure>(); // Boolean indicates whether to write out assignment for parameter
 	
 	
 	public SBMLwriter(SemSimModel model) {
@@ -63,12 +72,11 @@ public class SBMLwriter extends ModelWriter {
 
 	@Override
 	public void writeToFile(File destination) {
-		
-		// TODO: store metadataIDs
-		
+				
 		sbmldoc = new SBMLDocument();
+		sbmlmodel = sbmldoc.createModel(semsimmodel.getName());
 		
-		sbmlmodel = sbmldoc.createModel();
+		addNameAndMetadataID(semsimmodel, sbmlmodel);
 		
 		sortDataStructuresIntoSBMLgroups();
 		setLevelAndVersion();
@@ -81,6 +89,7 @@ public class SBMLwriter extends ModelWriter {
 		
 		// Catch errors
 		if(sbmldoc.getErrorCount() > 0){
+			
 			for(int i = 0; i< sbmldoc.getErrorCount(); i++)
 				System.err.println(sbmldoc.getError(i));
 			
@@ -122,15 +131,45 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	private void setLevelAndVersion(){
-		sbmldoc.setLevel(2);
-		sbmldoc.setVersion(4);
-		sbmlmodel.setLevel(2);
-		sbmlmodel.setVersion(4);
+		sbmldoc.setLevel(sbmllevel);
+		sbmldoc.setVersion(sbmlversion);
+		sbmlmodel.setLevel(sbmllevel);
+		sbmlmodel.setVersion(sbmlversion);
 	}
 	
 	// Collect units for SBML model
 	private void addUnits(){
 		
+		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
+			
+			if(Kind.isValidUnitKindString(uom.getName(), sbmllevel, sbmlversion)) 
+				continue;
+			
+			else if( ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(uom.getName())
+					&& ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
+				
+				UnitDefinition ud = sbmlmodel.createUnitDefinition(uom.getName());
+				addNameAndMetadataID(uom, ud);
+				
+				for(UnitFactor uf : uom.getUnitFactors()){
+					
+					String factorbasename = uf.getBaseUnit().getName();
+					
+					if(Kind.isValidUnitKindString(factorbasename, sbmllevel, sbmlversion)){
+						
+						Unit sbmluf = new Unit(sbmllevel, sbmlversion);
+						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase()));
+						sbmluf.setExponent(uf.getExponent());
+						sbmluf.setMultiplier(uf.getMultiplier());
+						
+						if(uf.getPrefix() != null && ! uf.getPrefix().equals(""))
+							sbmluf.setScale(sslib.getUnitPrefixesAndPowersMap().get(uf.getPrefix()));
+						
+						ud.addUnit(sbmluf);
+					}
+				}
+			}
+		}
 	}
 	
 	
@@ -175,6 +214,8 @@ public class SBMLwriter extends ModelWriter {
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				comp.setSize(Double.parseDouble(formula));
 			}
+			
+			addNameAndMetadataID(pmc, comp);
 		}
 	}
 	
@@ -244,6 +285,8 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				entitySpeciesMap.put(fullcpe, species);
+				
+				addNameAndMetadataID(fullcpe, species);
 			}
 			
 			// Otherwise the data structure is not associated with a physical entity
@@ -276,7 +319,6 @@ public class SBMLwriter extends ModelWriter {
 						SpeciesReference specref = new SpeciesReference((Species)tempsource);
 						specref.setStoichiometry(process.getSourceStoichiometry(source));
 						rxn.addReactant(specref);
-						
 					}
 				}
 				
@@ -321,6 +363,8 @@ public class SBMLwriter extends ModelWriter {
 				kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));	
 				rxn.setKineticLaw(kl);
 				
+				addNameAndMetadataID(process, rxn);
+				
 				// TODO: set units?
 			}
 			
@@ -360,9 +404,11 @@ public class SBMLwriter extends ModelWriter {
 			
 			// Store each event assignment
 			for(EventAssignment ea : e.getEventAssignments()){
-				String outputname = ea.getOutput().getName();
-				sbmle.createEventAssignment(outputname, getASTNodeFromRHSofMathML(ea.getMathML(), outputname));
+				DataStructure output = ea.getOutput();
+				sbmle.createEventAssignment(output.getName(), getASTNodeFromRHSofMathML(ea.getMathML(), output.getName()));
 			}
+			
+			addNameAndMetadataID(e, sbmle);
 		}
 	}
 	
@@ -372,29 +418,46 @@ public class SBMLwriter extends ModelWriter {
 		for(DataStructure ds : globalParameters){
 			
 			Parameter par = sbmlmodel.createParameter(ds.getName());
+			
 			String mathml = ds.getComputation().getMathML();
 
-			par.setConstant(ds.getComputationInputs().isEmpty());
+			boolean hasinputs = ! ds.getComputationInputs().isEmpty();
+			boolean usesevents = ds.getComputation().hasEvents();
+			boolean hasmathml = (mathml != null && ! mathml.equals(""));
 			
-			// If a static constant, assign value
-			if(ds.getComputationInputs().isEmpty()){
+			if(usesevents){
+				par.setConstant(false);
 				
+				if(hasmathml){
+					// TODO: probably need to get local name for mappableVariables here.
+					String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
+					par.setValue(Double.parseDouble(formula));
+				}
+				
+			}
+			else if(hasinputs){
+				AssignmentRule ar = sbmlmodel.createAssignmentRule();
+				ar.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
+				ar.setVariable(ds.getName());
+				par.setConstant(false);
+			}
+			else if(hasmathml){
 				// TODO: probably need to get local name for mappableVariables here.
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				par.setValue(Double.parseDouble(formula));
 			}
-			// Otherwise create assignment rule for parameter
+			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
-			else{
-				AssignmentRule ar = sbmlmodel.createAssignmentRule();
-				ar.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
-				ar.setVariable(ds.getName());
-			}
 
+			addNameAndMetadataID(ds, par);
+			
 			// TODO: set units
 
 		}
 	}
+	
+	
+	//*** HELPER METHODS ***//
 	
 	// Returns a JSBML ASTNode for the right-hand-side of a mathml expression
 	private ASTNode getASTNodeFromRHSofMathML(String mathml, String localname){
@@ -414,8 +477,14 @@ public class SBMLwriter extends ModelWriter {
 							
 			if(pmc.equals(testpmc)) return map.get(testpmc);
 		}
-		
 		return null;
+	}
+	
+	
+	// Fill in "name" and "metadataID" attributes on an SBase object
+	private void addNameAndMetadataID(SemSimObject sso, AbstractNamedSBase sbo){
+		if(sso.hasName()) sbo.setName(sso.getDescription());
+		if(sso.hasMetadataID()) sbo.setMetaId(sso.getMetadataID());
 	}
 	
 	
