@@ -14,6 +14,7 @@ import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.AssignmentRule;
 import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.Constraint;
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.LocalParameter;
@@ -38,6 +39,7 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
+import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
@@ -86,6 +88,7 @@ public class SBMLwriter extends ModelWriter {
 		addReactions();
 		addEvents();
 		addGlobalParameters();
+		addConstraints();
 		
 		// Catch errors
 		if(sbmldoc.getErrorCount() > 0){
@@ -96,7 +99,7 @@ public class SBMLwriter extends ModelWriter {
 			return;
 		}
 
-		// If no errors, write out
+		// If no errors, write out the model to a file
 		try {
 			new SBMLWriter().writeSBMLToFile(sbmldoc, destination.getAbsolutePath());
 		} catch (SBMLException | FileNotFoundException | XMLStreamException e) {
@@ -105,8 +108,10 @@ public class SBMLwriter extends ModelWriter {
 	}
 
 	
-	// Determine which data structures potentially simulate properties of SBML compartments,
-	// species, and reactions
+	/**
+	 *  Determine which data structures potentially simulate properties of SBML compartments,
+	 *  species, and reactions
+	 */
 	private void sortDataStructuresIntoSBMLgroups(){
 
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
@@ -137,7 +142,9 @@ public class SBMLwriter extends ModelWriter {
 		sbmlmodel.setVersion(sbmlversion);
 	}
 	
-	// Collect units for SBML model
+	/**
+	 *  Collect units for SBML model
+	 */
 	private void addUnits(){
 		
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
@@ -173,7 +180,9 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	// Collect compartments for SBML model
+	/**
+	 *  Collect compartments for SBML model
+	 */
 	private void addCompartments(){
 		for(DataStructure ds : candidateDSsForCompartments){
 			
@@ -219,7 +228,9 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	// Collect chemical species for SBML model
+	/**
+	 *  Collect chemical species for SBML model
+	 */
 	private void addSpecies(){
 		
 		int c = 0; // index number for any compartments that we add anew
@@ -294,7 +305,9 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	// Collect chemical reactions for SBML model
+	/**
+	 *  Collect chemical reactions for SBML model
+	 */
 	private void addReactions(){
 		
 		for(DataStructure ds : candidateDSsForReactions){
@@ -374,7 +387,9 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	// Collect discrete events for SBML model
+	/**
+	 *  Collect discrete events for SBML model
+	 */
 	private void addEvents(){
 		for(Event e : semsimmodel.getEvents()){
 			
@@ -412,7 +427,9 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	// Collect global parameters for SBML model
+	/**
+	 *  Collect global parameters for SBML model
+	 */
 	private void addGlobalParameters(){
 		
 		for(DataStructure ds : globalParameters){
@@ -433,7 +450,6 @@ public class SBMLwriter extends ModelWriter {
 					String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 					par.setValue(Double.parseDouble(formula));
 				}
-				
 			}
 			else if(hasinputs){
 				AssignmentRule ar = sbmlmodel.createAssignmentRule();
@@ -457,15 +473,37 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
+	/**
+	 *  Add the relational constraints to the SBML model
+	 */
+	private void addConstraints(){
+		
+		for(RelationalConstraint rc : semsimmodel.getRelationalConstraints()){
+			Constraint c = sbmlmodel.createConstraint();
+			c.setMath(getASTNodeFromRHSofMathML(rc.getMathML(), ""));
+		}
+	}
+	
+	
 	//*** HELPER METHODS ***//
 	
-	// Returns a JSBML ASTNode for the right-hand-side of a mathml expression
+	/**
+	 *  Returns a JSBML ASTNode for the right-hand-side of a mathml expression
+	 * @param mathml The MathML expression
+	 * @param localname The name of the variable solved by the expression
+	 * @return An ASTNode representation of the right-hand-side of the expression
+	 */
 	private ASTNode getASTNodeFromRHSofMathML(String mathml, String localname){
 		String RHS = SemSimUtil.getRHSofMathML(mathml, localname);
 		return JSBML.readMathMLFromString(RHS);
 	}
 	
-	// Returns a JSBML formula representation of the RHS of a mathml expression
+	/**
+	 *  Returns a JSBML formula representation of the RHS of a mathml expression
+	 * @param mathml The MathML expression
+	 * @param localname The name of the variable solved by the expression
+	 * @return An ASTNode representation of the right-hand-side of the expression
+	 */
 	private String getFormulaFromRHSofMathML(String mathml, String localname){
 		ASTNode node = getASTNodeFromRHSofMathML(mathml, localname);
 		return JSBML.formulaToString(node);	
@@ -481,7 +519,11 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	// Fill in "name" and "metadataID" attributes on an SBase object
+	/**
+	 *  Fill in "name" and "metadataID" attributes on an SBase object
+	 * @param sso The SemSimObject that contains the name and metadataID to be copied
+	 * @param sbo The AbstractNamedSBase object that the name and metadataID will be copied to
+	 */
 	private void addNameAndMetadataID(SemSimObject sso, AbstractNamedSBase sbo){
 		if(sso.hasName()) sbo.setName(sso.getDescription());
 		if(sso.hasMetadataID()) sbo.setMetaId(sso.getMetadataID());
