@@ -22,6 +22,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -146,7 +147,10 @@ public class SemGen extends JFrame implements Observer{
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
 		
+		//JXBrowser covers lightweight components by default, including menus. This turns that behavior off.
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
+		
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
