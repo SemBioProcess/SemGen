@@ -237,7 +237,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
-				if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.PHYSICAL_PROCESS)) {
+				if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) 
+						|| ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.REFERENCE_PHYSICAL_PROCESS)) {
 					dswprocs.add(ds);
 				}
 			}
