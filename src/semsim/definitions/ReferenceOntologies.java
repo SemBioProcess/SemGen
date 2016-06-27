@@ -83,7 +83,7 @@ public class ReferenceOntologies {
 			return domainontologies.indexOf(ont);
 		}
 
-		public boolean domainhasReferenceOntology(ReferenceOntology ont) {
+		public boolean domainHasReferenceOntology(ReferenceOntology ont) {
 			if (ont==null) return false;
 			return domainontologies.contains(ont);
 		}

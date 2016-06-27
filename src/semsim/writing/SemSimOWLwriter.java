@@ -266,7 +266,7 @@ public class SemSimOWLwriter extends ModelWriter {
 						dsuri + "_dependency", SemSimRelation.IS_DETERMINED_BY, SemSimRelation.DETERMINES, manager);
 				
 				// Create physical entity and physical process individuals, link to properties
-				processAssociatedCompositeofDataStructure(ds);
+				processAssociatedCompositeOfDataStructure(ds);
 				
 			}
 			
@@ -545,7 +545,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	//********************************************************************//
 	//*****************************HELPER METHODS*************************//
 	
-	private void processAssociatedCompositeofDataStructure(DataStructure ds) throws OWLException {
+	private void processAssociatedCompositeOfDataStructure(DataStructure ds) throws OWLException {
 		if(ds.hasAssociatedPhysicalComponent()){				
 			// Create the new physical model individual and get what it's a physical property of
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();

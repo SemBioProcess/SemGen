@@ -44,44 +44,48 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		initializeWarningMsg();
 	}
 	
-	public SemGenSaveFileChooser(String[] exts, String selectedext, String modelinarchivename) {
+	public SemGenSaveFileChooser(String[] exts, String selectedtype, String modelinarchivename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
 		addFilters(getFilter(exts));
-		setFileFilter(getFilter(selectedext));
+		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		initializeWarningMsg();
 		modelInArchiveName = modelinarchivename;
 	}
 	
 	public void setFileExtension() {
-		String extension = null;
+		String type = null;
 		File file = getSelectedFile();
 		
 		if(getFileFilter()==owlfilter){
-			extension = "owl";
+			type = "owl";
 			modeltype = ModelClassifier.SEMSIM_MODEL;
 		}
+		else if(getFileFilter()==sbmlfilter){
+			type = "xml";
+			modeltype = ModelClassifier.SBML_MODEL;
+		}
 		else if(getFileFilter()==cellmlfilter){
-			extension = "cellml";
+			type = "cellml";
 			modeltype = ModelClassifier.CELLML_MODEL;
 		}
 		else if(getFileFilter()==mmlfilter){
-			extension = "mod";
+			type = "mod";
 			modeltype = ModelClassifier.MML_MODEL;
 		}
 		else if(getFileFilter()==projfilter){
-			extension = "proj";
+			type = "proj";
 			modeltype = ModelClassifier.MML_MODEL_IN_PROJ;
 		}
 		else if(getFileFilter()==csvfilter){
-			extension = "csv";
+			type = "csv";
 		}
 
 		// If there's an extension for the file type, make sure the filename ends in it
-		if(extension!=null){
-			if (! file.getName().toLowerCase().endsWith("." + extension.toLowerCase())) {
-					setSelectedFile(new File(file.getAbsolutePath() + "." + extension));
+		if(type!=null){
+			if (! file.getName().toLowerCase().endsWith("." + type.toLowerCase())) {
+					setSelectedFile(new File(file.getAbsolutePath() + "." + type));
 			} 
 		}
 	}

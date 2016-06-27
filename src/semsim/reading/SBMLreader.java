@@ -74,8 +74,8 @@ import semsim.utilities.SemSimUtil;
 public class SBMLreader extends ModelReader{
 
 	private Model sbmlmodel;
-	private Map<String, PhysicalEntity> compartmentAndSemSimEntitiesMap = new HashMap<String, PhysicalEntity>();
-	private Map<String, CompositePhysicalEntity> speciesAndSemSimEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
+	private Map<String, PhysicalEntity> compartmentAndEntitiesMap = new HashMap<String, PhysicalEntity>();
+	private Map<String, CompositePhysicalEntity> speciesAndEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
 	private Set<String> baseUnits = new HashSet<String>();
 	private Submodel parametersubmodel;
@@ -85,7 +85,7 @@ public class SBMLreader extends ModelReader{
 	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 	private static final String mathMLelementEnd = "</math>";
 	private String timedomainname = "t";
-	private static final String reactionprefix = "Reaction_";
+	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement timeunits;
 	private UnitOfMeasurement substanceunits;
 	
@@ -302,7 +302,7 @@ public class SBMLreader extends ModelReader{
 				
 		timeds.setUnit(timeunits);
 
-		PhysicalProperty timeprop = new PhysicalProperty("Time", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01023"));
+		PhysicalProperty timeprop = new PhysicalProperty("Time", SemSimLibrary.OPB_TIME_URI);
 		semsimmodel.addPhysicalProperty(timeprop);
 		timeds.setSingularAnnotation(timeprop);
 		
@@ -393,7 +393,7 @@ public class SBMLreader extends ModelReader{
 			
 			// Set the physical entity for the compartment
 			PhysicalEntity compartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
-			compartmentAndSemSimEntitiesMap.put(compid, compartmentent);
+			compartmentAndEntitiesMap.put(compid, compartmentent);
 						
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			entlist.add(compartmentent);
@@ -510,24 +510,23 @@ public class SBMLreader extends ModelReader{
 				if(hasonlysub){
 					// look up factor for unit substance in semsimmodel and determine OPB property from that.
 					// but if substance not in model...(level 3) ...
-					prop = new PhysicalPropertyinComposite("Chemical molar amount", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00425"));
+
+					prop = new PhysicalPropertyinComposite("Chemical molar amount", SemSimLibrary.OPB_CHEMICAL_MOLAR_AMOUNT_URI);
 				}
-				else prop = new PhysicalPropertyinComposite("Chemical concentration", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00340"));
+				else prop = new PhysicalPropertyinComposite("Chemical concentration", SemSimLibrary.OPB_CHEMICAL_CONCENTRATION_URI);
 			}
 			// Deal with particle units
 			else if(baseunitname.equals("item")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Particle count", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01001"));
-				
-				else prop = new PhysicalPropertyinComposite("Particle concentration", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01000"));
+					prop = new PhysicalPropertyinComposite("Particle count", SemSimLibrary.OPB_PARTICLE_COUNT_URI);
+				else prop = new PhysicalPropertyinComposite("Particle concentration", SemSimLibrary.OPB_PARTICLE_CONCENTRATION_URI);
 			}
 			// Deal with mass/density units
 			else if(baseunitname.equals("kilogram") || baseunitname.equals("gram")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Mass of solid entity", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01226"));
-				
+					prop = new PhysicalPropertyinComposite("Mass of solid entity", SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI);				
 				else {
 					double compartmentdims = sbmlmodel.getCompartment(compartmentname).getSpatialDimensions();
 					
@@ -537,14 +536,11 @@ public class SBMLreader extends ModelReader{
 					}
 					
 					else if(compartmentdims==1.0)
-						prop = new PhysicalPropertyinComposite("Mass lineal density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00190"));
-					
+						prop = new PhysicalPropertyinComposite("Mass lineal density", SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);					
 					else if(compartmentdims==2.0)
-						prop = new PhysicalPropertyinComposite("Mass areal density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00258"));
-					
+						prop = new PhysicalPropertyinComposite("Mass areal density", SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);					
 					else if(compartmentdims==3.0)
-						prop = new PhysicalPropertyinComposite("Mass volumetric density", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00101"));
-					
+						prop = new PhysicalPropertyinComposite("Mass volumetric density", SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);					
 				}
 			}
 			else prop = new PhysicalPropertyinComposite(null,null);
@@ -576,8 +572,8 @@ public class SBMLreader extends ModelReader{
 			
 			PhysicalEntity compartmentent = null;
 			
-			if(compartmentAndSemSimEntitiesMap.containsKey(species.getCompartment()))
-				compartmentent = compartmentAndSemSimEntitiesMap.get(species.getCompartment());
+			if(compartmentAndEntitiesMap.containsKey(species.getCompartment()))
+				compartmentent = compartmentAndEntitiesMap.get(species.getCompartment());
 			else System.err.println("WARNING: unknown compartment " + species.getCompartment() + " for species " + species.getId());
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
@@ -591,7 +587,7 @@ public class SBMLreader extends ModelReader{
 						
 			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
-			speciesAndSemSimEntitiesMap.put(species.getId(), compositeent);
+			speciesAndEntitiesMap.put(species.getId(), compositeent);
 						
 			collectSBaseData(species, compositeent);
 		}
@@ -694,6 +690,8 @@ public class SBMLreader extends ModelReader{
 				
 				Event ssevent = new Event();
 				ssevent.setName(sbmlevent.getId());
+				ssevent.setDescription(sbmlevent.getName());
+				ssevent.setMetadataID(sbmlevent.getMetaId());
 				
 				ssevent.setTriggerMathML(triggermathml);			
 				
@@ -771,14 +769,12 @@ public class SBMLreader extends ModelReader{
 			prop = new PhysicalPropertyinComposite(null,null);
 		
 		else if(basesubstanceunitsname.equals("mole"))
-			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00592"));
+			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", SemSimLibrary.OPB_CHEMICAL_MOLAR_FLOW_RATE_URI);
 		
 		else if(basesubstanceunitsname.equals("item"))
-			prop = new PhysicalPropertyinComposite("Particle flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00544"));
-		
+			prop = new PhysicalPropertyinComposite("Particle flow rate", SemSimLibrary.OPB_PARTICLE_FLOW_RATE_URI);		
 		else if(basesubstanceunitsname.equals("kilogram") || basesubstanceunitsname.equals("gram"))
-			prop = new PhysicalPropertyinComposite("Material flow rate", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01220"));
-		
+			prop = new PhysicalPropertyinComposite("Material flow rate", SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);		
 		else prop = new PhysicalPropertyinComposite(null,null);
 		
 		semsimmodel.addAssociatePhysicalProperty(prop);
@@ -830,7 +826,7 @@ public class SBMLreader extends ModelReader{
 			for(int s=0; s<reaction.getNumReactants(); s++){
 				String reactantname = reaction.getReactant(s).getSpecies();
 				double stoich = reaction.getReactant(s).getStoichiometry();
-				PhysicalEntity reactantent = speciesAndSemSimEntitiesMap.get(reactantname);
+				PhysicalEntity reactantent = speciesAndEntitiesMap.get(reactantname);
 				process.addSource(reactantent, stoich);
 									
 				// Store info about species conservation for use in outputting species equations
@@ -841,7 +837,7 @@ public class SBMLreader extends ModelReader{
 			for(int p=0; p<reaction.getNumProducts(); p++){
 				String productname = reaction.getProduct(p).getSpecies();
 				double stoich = reaction.getProduct(p).getStoichiometry();
-				PhysicalEntity productent = speciesAndSemSimEntitiesMap.get(productname);
+				PhysicalEntity productent = speciesAndEntitiesMap.get(productname);
 				process.addSink(productent, stoich);
 				
 				// Store info about species conservation for use in outputting species equations
@@ -851,7 +847,7 @@ public class SBMLreader extends ModelReader{
 			// Set mediators (modifiers)
 			for(int m=0; m<reaction.getNumModifiers(); m++){
 				String mediatorname = reaction.getModifier(m).getSpecies();
-				PhysicalEntity mediatorent = speciesAndSemSimEntitiesMap.get(mediatorname);
+				PhysicalEntity mediatorent = speciesAndEntitiesMap.get(mediatorname);
 				process.addMediator(mediatorent);
 			}
 			
@@ -915,7 +911,7 @@ public class SBMLreader extends ModelReader{
 				// spatial size portion of the concentration value (i.e., the denominator in the units formula substance/ size)
 				// are those indicated by the value of the 'units' attribute on the compartment in which the species is located.
 				
-				PhysicalEntity speciesent = speciesAndSemSimEntitiesMap.get(speciesid);
+				PhysicalEntity speciesent = speciesAndEntitiesMap.get(speciesid);
 				
 				for(String reactionid : speciesAndConservation.get(speciesid).producedby){
 					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSinkStoichiometry(speciesent);
@@ -939,7 +935,6 @@ public class SBMLreader extends ModelReader{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-1</cn>\n" + ws 
 								+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";					
 						eqstring = eqstring + " - " + reactionid;
-	
 					}
 					else{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-" + stoich + "</cn>\n" + ws 
@@ -955,12 +950,12 @@ public class SBMLreader extends ModelReader{
 			// Store the equations
 			if(eqstring.length()>0){
 				
-				// Strip first + operator if present, add compartment divisor if needed to computational code
-				if(eqstring.trim().startsWith("+")){
+				// Strip first + operator if present
+				if(eqstring.trim().startsWith("+"))
 					eqstring = eqstring.substring(3, eqstring.length()); 
-					eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
-				}
 				
+				//Add compartment divisor if needed to computational code
+				eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
 				eqstring = LHS + " = " + eqstring; // add LHS to computational code string
 				
 				DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
@@ -1071,7 +1066,7 @@ public class SBMLreader extends ModelReader{
 							ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
 							
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
-							if(ontdomain.domainhasReferenceOntology(refont)){
+							if(ontdomain.domainHasReferenceOntology(refont)){
 								Relation relation = (q==Qualifier.BQB_IS) ? 
 										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getBiologicalQualifierRelation(q);
 								

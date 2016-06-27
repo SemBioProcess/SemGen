@@ -164,6 +164,10 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	public Set<UnitFactor> getUnitFactors() {
 		return unitFactors;
 	}
+	
+	public boolean hasUnitFactors(){
+		return unitFactors.size()>0;
+	}
 
 	// For Importable interface
 	public void setImported(boolean isImported) {

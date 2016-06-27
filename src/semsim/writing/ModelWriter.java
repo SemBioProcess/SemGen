@@ -24,7 +24,7 @@ public abstract class ModelWriter {
 		semsimmodel = model;
 	}
 	
-	public static void pointtoSemSimLibrary(SemSimLibrary lib) {
+	public static void pointToSemSimLibrary(SemSimLibrary lib) {
 		sslib = lib;
 	}
 	

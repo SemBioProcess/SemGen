@@ -39,7 +39,13 @@ public class Event extends ComputationalModelComponent{
 		return eventAssignments;
 	}
 
+	public boolean hasDelayMathML(){
+		return (delayMathML != null && ! delayMathML.equals(""));
+	}
 
+	public boolean hasPriorityMathML(){
+		return (priorityMathML !=null && ! priorityMathML.equals(""));
+	}
 
 	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
 		this.eventAssignments = eventAssignments;

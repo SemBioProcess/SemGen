@@ -91,6 +91,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public boolean sourceModelTypeCanStoreSemSimAnnotations() {
 		return (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || 
+				semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL ||
 				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL ||
 				semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL_IN_PROJ);
 	}
@@ -143,13 +144,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public ModelAccessor saveModelAs() {
 		
-		String selectedext = "owl";  // Default extension type
+		String selectedtype = "owl";  // Default extension type
 		int modtype = semsimmodel.getSourceModelType();
 		
-		if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
-		else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
+		if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedtype = "proj";
+		else if(modtype==ModelClassifier.CELLML_MODEL) selectedtype = "cellml";
+		else if(modtype==ModelClassifier.SBML_MODEL) selectedtype = "sbml";
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, selectedext, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, semsimmodel.getName());
 		
 		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
 
@@ -159,6 +161,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			
 			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
 				lastsavedas = ModelClassifier.SEMSIM_MODEL;
+			else if(filec.getFileFilter() == SemGenFileChooser.sbmlfilter)
+				lastsavedas = ModelClassifier.SBML_MODEL;
 			else if(filec.getFileFilter() == SemGenFileChooser.projfilter)
 				lastsavedas = ModelClassifier.MML_MODEL_IN_PROJ;
 			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)

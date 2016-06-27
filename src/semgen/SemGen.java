@@ -22,6 +22,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -42,7 +43,7 @@ import semsim.writing.ModelWriter;
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
-	public static String version = "3.0.5";
+	public static String version = "3.0.6";
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
@@ -111,7 +112,7 @@ public class SemGen extends JFrame implements Observer{
 		
 		semsimlib = new SemSimLibrary(cfgreadpath);
 		ModelReader.pointtoSemSimLibrary(semsimlib);
-		ModelWriter.pointtoSemSimLibrary(semsimlib);
+		ModelWriter.pointToSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 		// Need this for programmatic use of jsbatch
 		System.setProperty("jsim.home", cfgreadpath + "jsimhome");
@@ -156,7 +157,10 @@ public class SemGen extends JFrame implements Observer{
 		SemGenError.setFrame(this);
 		SemGenDialog.setFrame(this);
 		
+		//JXBrowser covers lightweight components by default, including menus. This turns that behavior off.
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		SemGenMenuBar menubar = new SemGenMenuBar(settings, gacts);
+		
 		contentpane = new SemGenGUI(settings, menubar, gacts);
 		setContentPane(contentpane);
 		setJMenuBar(menubar);
@@ -194,11 +198,13 @@ public class SemGen extends JFrame implements Observer{
 	//Check which OS SemGen is being run under
 	private static void OSValidation() throws NoSuchMethodException, SecurityException{
 		int OS = 0;
+		
 		if (OSValidator.isMac()) OS = MACOSX;
 		else if (OSValidator.isWindows()) OS = WINDOWS;
 		
 		switch (OS) { 
 		case WINDOWS :
+			
 			if (!new File(cfgreadpath).canRead()) {
 				cfgreadpath = System.getProperty("user.home") + "/AppData/local/SemGen/cfg/";
 				cfgwritepath = cfgreadpath;
