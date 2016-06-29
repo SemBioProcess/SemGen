@@ -84,11 +84,11 @@ MergerTask.prototype.onInitialize = function() {
 	$("#mergeStep2").hide();
 	$("#nextBtn").click(function() {
 		$("#mergeStep1").hide();
-		$("#mergeStep2").show();
+		$("#mergeStep2").slideDown();
 	});
 
 	$("#backBtn").click(function() {
-		$("#mergeStep1").show();
+		$("#mergeStep1").slideDown();
 		$("#mergeStep2").hide();
 	});
 	// $(".merge").prop('disabled', true)
