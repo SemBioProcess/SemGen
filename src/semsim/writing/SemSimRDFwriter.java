@@ -53,6 +53,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	
+	
 	// Constructor
 	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
 		super(null);
@@ -60,6 +61,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		this.semsimmodel = semsimmodel;
 		createSubmodelURIandNameMap();
 
+		// If rdfasstring is not null, add it as rdf model
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
@@ -621,7 +623,7 @@ public class SemSimRDFwriter extends ModelWriter{
 				newuri = URI.create(newnamespace + newfragment);
 			}
 			if(refont==ReferenceOntology.FMA){
-				// Need to figure out how to get FMAIDs!!!!
+				// TODO: Need to figure out how to get FMAIDs!!!!
 			}
 			if(refont==ReferenceOntology.MA){
 				String newfragment = fragment.replace("_", ":");

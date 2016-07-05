@@ -1,16 +1,24 @@
 package semsim.reading;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.filter.ElementFilter;
+import org.jdom.input.SAXBuilder;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -208,14 +216,14 @@ public class SBMLreader extends ModelReader{
 				// If the base unit for the unit factor was already added to model, retrieve it. Otherwise create anew.
 				if(semsimmodel.containsUnit(unitfactorname)) baseunit = semsimmodel.getUnit(unitfactorname);
 				
-				else if(! unitfactorname.equals("dimensionless")){  // don't add factor if it's dimensionless
+				else if( ! unitfactorname.equals("dimensionless")){  // don't add factor if it's dimensionless
 					baseunit = new UnitOfMeasurement(unitfactorname);
 					baseunit.setFundamental(baseUnits.contains(unitfactorname));
 					collectSBaseData(sbmlunit, baseunit);
 					semsimmodel.addUnit(baseunit);
 				}
 				else continue;
-
+				
 				UnitFactor unitfactor = new UnitFactor(baseunit, sbmlunit.getExponent(), null);
 				
 				// Set the unit factor prefix based on scale value
@@ -266,23 +274,57 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void setTimeDomain(){
 		
-		// Go through model compartments, species, and global parameters to see if we
+		boolean timenamepredefined = false;
+		
+		// Check if the time csymbol is used anywhere in the model's MathML.
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = null;
+		
+		try {
+			InputStream is = new ByteArrayInputStream(modelaccessor.getLocalModelTextAsString().getBytes("UTF-8"));
+			doc = builder.build(is);
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+			semsimmodel.addError(e.getLocalizedMessage());
+			return;
+		}	
+		
+		Iterator<?> descit = doc.getRootElement().getDescendants(new ElementFilter());
+		
+		while(descit.hasNext()){
+			Element el = (Element)descit.next();
+			
+			if(el.getName().equals("csymbol")){
+				
+				if(el.getAttributeValue("definitionURL").equals("http://www.sbml.org/sbml/symbols/time")){
+					timedomainname = el.getText().trim();
+					timenamepredefined = true;
+					break;
+				}
+			}
+		}
+		
+		
+		// If cysmbol time not found, go through model compartments, species, and global parameters to see if we
 		// can use the default name for our time domain data structure
-		Set<String> usedids = new HashSet<String>();
-		
-		for(Compartment c : sbmlmodel.getListOfCompartments())
-			usedids.add(c.getId());
-		
-		for(Species s : sbmlmodel.getListOfSpecies())
-			usedids.add(s.getId());
-		
-		for(Parameter p : sbmlmodel.getListOfParameters())
-			usedids.add(p.getId());
-		
-		Integer x = 0;
-		while(usedids.contains(timedomainname)){
-			timedomainname = timedomainname + x;
-			x++;
+		if( ! timenamepredefined){
+			Set<String> usedids = new HashSet<String>();
+			
+			for(Compartment c : sbmlmodel.getListOfCompartments())
+				usedids.add(c.getId());
+			
+			for(Species s : sbmlmodel.getListOfSpecies())
+				usedids.add(s.getId());
+			
+			for(Parameter p : sbmlmodel.getListOfParameters())
+				usedids.add(p.getId());
+			
+			Integer x = 0;
+			
+			while(usedids.contains(timedomainname)){
+				timedomainname = timedomainname + x;
+				x++;
+			}
 		}
 		
 		// Create a data structure that represents the temporal solution domain
@@ -291,15 +333,11 @@ public class SBMLreader extends ModelReader{
 		timeds.setDescription("Temporal solution domain");
 		timeds.setIsSolutionDomain(true);
 		
-		
 		if(sbmlmodel.getLevel()==3.0 && sbmlmodel.isSetTimeUnits()){
 			timeunits = new UnitOfMeasurement(sbmlmodel.getTimeUnits());
 			semsimmodel.addUnit(timeunits);
 		}
-		else if(semsimmodel.containsUnit("time")){
-			timeunits = semsimmodel.getUnit("time");
-		}
-		else{}
+		else if(semsimmodel.containsUnit("time")) timeunits = semsimmodel.getUnit("time");
 				
 		timeds.setUnit(timeunits);
 
@@ -755,6 +793,9 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void collectReactions(){
 		
+		// If there are no species defined in model or no reactions defined, return
+		if(sbmlmodel.getNumSpecies()==0 || sbmlmodel.getNumReactions()==0) return;
+		
 		// We assume that SBML Kinetic Laws are defined in units of substance/time.
 		// First add units to model
 		UnitOfMeasurement subpertimeuom = new UnitOfMeasurement("substance_per_time");
@@ -762,8 +803,8 @@ public class SBMLreader extends ModelReader{
 		UnitFactor substancefactor = new UnitFactor(substanceunits, 1.0, null);
 		UnitFactor timefactor = new UnitFactor(timeunits, -1.0, null);
 		subpertimeuom.addUnitFactor(substancefactor);
-		subpertimeuom.addUnitFactor(timefactor);	
-		
+		subpertimeuom.addUnitFactor(timefactor);
+				
 		semsimmodel.addUnit(subpertimeuom);
 		
 		// Assign OPB properties based on units
@@ -1251,9 +1292,14 @@ public class SBMLreader extends ModelReader{
 	private void setBaseUnits(){
 		baseUnits.clear();
 		
-		if( sbmlmodel.getLevel()==3) baseUnits.addAll(SBMLconstants.SBML_LEVEL_3_BASE_UNITS);
-		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()==4) baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_4_BASE_UNITS);
-		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()==1) baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_1_BASE_UNITS);
+		if( sbmlmodel.getLevel()==3) 
+			baseUnits.addAll(SBMLconstants.SBML_LEVEL_3_BASE_UNITS);
+		
+		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()==1) 
+			baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_1_BASE_UNITS);
+		
+		else if( sbmlmodel.getLevel()==2 && sbmlmodel.getVersion()>1) 
+			baseUnits.addAll(SBMLconstants.SBML_LEVEL_2_VERSION_2_BASE_UNITS);
 	}
 	
 	/**

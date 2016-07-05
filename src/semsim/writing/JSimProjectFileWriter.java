@@ -125,7 +125,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		rdfblock.setRDFforSubmodelAnnotations();
 		
 		// Add the RDF metadata to the appropriate element in the JSim project file
-		if(rdfblock.rdf.listStatements().hasNext()){
+		if( ! rdfblock.rdf.isEmpty()){
 			
 			String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
