@@ -17,9 +17,6 @@ import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.MergePreviewSubmodels;
-import semgen.stage.serialization.SemSimModelSerializer;
-import semgen.stage.serialization.StageState;
-import semgen.stage.serialization.SubModelNode;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
@@ -34,7 +31,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private MergeConflictResolvers resolvers;
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	
-	public MergerTask(ArrayList<ModelInfo> modelinfo, StageState state) {
+	public MergerTask(ArrayList<ModelInfo> modelinfo) {
 		workbench.addObserver(this);
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<ModelAccessor> files = new ArrayList<ModelAccessor>();
@@ -45,7 +42,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			files.add(model.accessor);
 			models.add(model.Model);
 		}
-		this.state = state;
 		workbench.addModels(files, models, true);
 		primeForMerging();
 
@@ -116,8 +112,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 			_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
 		}
-		public void onMinimizeTask(JSObject snapshot) {
-			createStageState(snapshot);
+		public void onMinimizeTask() {
 			switchTask(0);
 		}
 		
@@ -192,15 +187,15 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			// Execute the proper task
 			switch(task) {
 				case "dependencies":
-					_commandSender.showDependencyNetwork(model.getName(),
-							SemSimModelSerializer.getDependencyNetwork(model));
+//					_commandSender.showDependencyNetwork(model.getName(),
+//							SemSimModelSerializer.getDependencyNetwork(model));
 					break;
 				case "submodels":
-					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-					if(submodelNetwork.length <= 0)
-						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
-					else
-						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
+//					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+//					if(submodelNetwork.length <= 0)
+//						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
+//					else
+//						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");

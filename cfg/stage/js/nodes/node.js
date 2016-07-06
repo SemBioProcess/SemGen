@@ -3,14 +3,15 @@
  */
 
 
-function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
+function Node(graph, srcobj, parent, r, textSize, nodeType, charge) {
 	if(!graph)
 		return;
 
 	this.graph = graph;
-	this.name = name;
-	this.id = name;
-	this.displayName = name;
+	this.srcobj = srcobj;
+	this.name = srcobj.name;
+	this.id = srcobj.id;
+	this.displayName = this.name;
 	this.r = r;
 	this.textSize = textSize;
 	this.nodeType = NodeTypeMap[nodeType];
@@ -18,7 +19,6 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	this.className = "node";
 	this.element;
 	this.parent = parent;
-	this.inputs = inputs || [];
 	this.hidden = false;
 	this.textlocx = 0;
 	this.wasfixed = false;
@@ -26,18 +26,19 @@ function Node(graph, name, parent, inputs, r, textSize, nodeType, charge) {
 	
 	this.timer = null;
 	this.clicks = 0;
-	if(this.parent) {
-		// We need to keep the ids of each node unique by prefixing
-		// it with its parent node's id
-		if (this.parent.id != "null") {
-			this.id = this.parent.id + this.id;
-		}
-	}
 	validateNode(this);
 	this.dragstart = [];
 	this.drag = [];
 	this.dragend = [];
 	this.addBehavior(NodeDrag);
+	
+	this.xpos = function () {
+		return this.srcobj.xpos;
+	}
+
+	this.ypos = function () {
+		return this.srcobj.ypos;
+	}
 }
 
 //Get this node's top level parent
@@ -69,6 +70,14 @@ Node.prototype.addBehavior = function (behavior) {
 	// (e.g. this.addBehavior(SomeBehavior); )
 	behavior(this);
 }
+
+Node.prototype.setLocation = function (x, y) {
+	this.x = x; this.y = y;
+	this.srcobj.xpos = x;
+	this.srcobj.ypos = y;
+}
+
+
 
 Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
@@ -124,9 +133,6 @@ Node.prototype.canLink = function () {
 }
 
 Node.prototype.getLinks = function () {
-	if(!this.inputs)
-		return null;
-
 	// Don't show any inputs to this node can't link
 	if(!this.canLink())
 		return;
@@ -236,21 +242,23 @@ Node.prototype.tickHandler = function (element, graph) {
 	if (this.parent) {
 		if (this.parent.id != "null") {
 			var k = .0005;
-			forcey = (this.parent.y - this.y) * k;
-			forcex = (this.parent.x - this.x) * k;
+			forcey = (this.parent.ypos() - this.ypos()) * k;
+			forcex = (this.parent.xpos() - this.xpos()) * k;
 		}
 
 	}
-	this.x = Math.max(this.r, Math.min(graph.w - this.r, this.x)) + forcex;
-	this.y = Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.y)) + forcey;
+	this.setLocation(
+		Math.max(this.r, Math.min(graph.w - this.r, this.xpos())) + forcex,
+		Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.ypos())) + forcey
+	)
 
 	var root = d3.select(element);
 	//Keep the text above hull when an parent node is opened.
 	if (this.children) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
-		this.rootElement.selectAll("text").attr("x", -(this.x - (this.xmax + this.xmin)/2.0));
+		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
 	}
-	root.attr("transform", "translate(" + this.x + "," + this.y + ")");
+	root.attr("transform", "translate(" + this.xpos() + "," + this.ypos() + ")");
 
 	$(this).triggerHandler('postTick');
 }

@@ -2,39 +2,59 @@ package semgen.stage.serialization;
 
 import java.util.ArrayList;
 
+import com.google.gson.annotations.Expose;
+
+import semsim.SemSimObject;
+
 /**
  * Represents a node in a d3 graph
  * 
  * @author Ryan
  *
  */
-public abstract class Node {
-	public String id;
-	public String name;
-	public String parentModelId;
-	public int xpos = -1;
-	public int ypos = -1;
-	public Boolean hidden = false;
-	public ArrayList<Link> inputs = new ArrayList<Link>();
+public class Node<T extends SemSimObject> {
+	@Expose public String id;
+	@Expose public String name;
+	@Expose public String parentModelId = "";
+	@Expose public int xpos = -1;
+	@Expose public int ypos = -1;
+	@Expose public Boolean hidden = false;
+	@Expose public String type;
+
+	protected T sourceobj;
+	protected Node<?> parent = null;
 	
-	public Node(String name) {
+	//Named node
+	protected Node(String name) {
 		this.name = name;
-		this.id = buildId(this.name);
+		this.id = name;
+		this.parentModelId = name;
+		type = sourceobj.getSemSimType().getSparqlCode();
+	}
+	
+	//Named node with parent
+	protected Node(String name, Node<?> parent) {
+		this.name = name;
+		this.id = name;
+		this.parentModelId = name;
+		type = sourceobj.getSemSimType().getSparqlCode();
 	}
 
-	public Node(String name, String parentModelId) {
-		this.name = name;
-		this.parentModelId = parentModelId;
-		this.id = buildId(this.name, this.parentModelId);
+	protected Node(T obj) {
+		this.sourceobj = obj;
+		this.name = obj.getName();
+		this.id =  this.name;
+		type = sourceobj.getSemSimType().getSparqlCode();
 	}
 	
-	public static String buildId(String name) {
-		return name;
+	protected Node(T obj, Node<?> parent) {
+		this.sourceobj = obj;
+		this.name = obj.getName();
+		this.parent = parent;
+		this.parentModelId = parent.parentModelId;
+		this.id =  parent.id + "." + this.name;
 	}
 	
-	public static String buildId(String name, String parentModelId) {
-		return parentModelId + name;
-	}
 	//Dependency type array
 	protected static ArrayList<String> deptypes;
 	
@@ -44,5 +64,14 @@ public abstract class Node {
 		dtarray.add("Rate");
 		dtarray.add("Constitutive");
 		deptypes = dtarray;
+	}
+	
+	public Node<? extends SemSimObject> getFirstAncestor() {
+		Node<? extends SemSimObject> par =  parent;
+		while (par!=null) {
+			par = parent.parent;
+		}
+		
+		return par;
 	}
 }

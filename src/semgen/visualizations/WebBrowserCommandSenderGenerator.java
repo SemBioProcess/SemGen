@@ -1,6 +1,7 @@
 package semgen.visualizations;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -112,7 +113,7 @@ public class WebBrowserCommandSenderGenerator<T> {
 			
 			// Create a string of args to call the javascript method with
 			String argsString = "";
-			Gson gsonParser = new Gson();
+			Gson gsonParser = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 			if(args != null) {
 				for(int i = 0; i < args.length; i++) {
 					if(i != 0)

@@ -14,29 +14,17 @@ function Task(graph) {
 	var task = this;
 	$("#leftSidebar").empty();
 	
-	this.loadStageState = function (state) {
-		if (state.nodetree.length != 0) {
-			state.nodetree.forEach(function(branch) {
-				var modelName = branch.branchroot.name;
-				var modelNode = new ModelNode(graph, modelName);
-				
-				task.nodes[modelName] = modelNode;
-			});
-		};
-	}
-
-	
-	this.addModelNode = function(modelName, optbehaviors) {
-		if(this.nodes[modelName])
+	this.addModelNode = function(model, optbehaviors) {
+		if(this.nodes[model.name])
 			throw "Model already exists";
 		
-		var modelNode = new ModelNode(this.graph, modelName, modelindex);
+		var modelNode = new ModelNode(this.graph, model, modelindex);
 		modelindex++;
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
 		
-		this.nodes[modelName] = modelNode;
+		this.nodes[model.name] = modelNode;
 		task.graph.update();
 
 	};

@@ -6,15 +6,9 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
-import com.teamdev.jxbrowser.chromium.JSObject;
-
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
-import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
-import semgen.stage.serialization.SemSimModelSerializer;
-import semgen.stage.serialization.StageState;
-import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -25,7 +19,6 @@ import semsim.reading.ModelAccessor;
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
-		state = new StageState(Task.PROJECT);
 		_commandReceiver = new ProjectCommandReceiver();
 	}
 	
@@ -49,10 +42,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, accessor));
+				ModelInfo info = new ModelInfo(semsimmodel, accessor);
+				_models.put(semsimmodel.getName(), info);
 				
 				// Tell the view to add a model
-				_commandSender.addModel(semsimmodel.getName());
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
@@ -65,17 +59,14 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					return;
 				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+				ModelInfo info = new ModelInfo(semsimmodel, file);
+				_models.put(semsimmodel.getName(),info);
 
-				_commandSender.addModel(semsimmodel.getName());
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
 		public void onTaskClicked(String modelName, String task) {
-			onTaskClicked(modelName, task, null);
-		}
-		
-		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
 			// If the model doesn't exist throw an exception
 			if(!_models.containsKey(modelName))
 				throw new IllegalArgumentException(modelName);
@@ -90,32 +81,32 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
 					break;
 				case "dependencies":
-					_commandSender.showDependencyNetwork(model.getName(),
-							SemSimModelSerializer.getDependencyNetwork(model));
+				//	_commandSender.showDependencyNetwork(model.getName(),
+				//	modelInfo.modelnode.requestAllChildDependencies());
 					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
 					break;
 				case "merge":
-					onMerge(modelName, snapshot);
+					onMerge(modelName);
 					break;
 				case "close":
 					_models.remove(modelName);
 					_commandSender.removeModel(modelName);
 					break;
 				case "submodels":
-					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-					if(submodelNetwork.length <= 0)
-						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
-					else
-						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
+					//SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
+//					if(submodelNetwork.length <= 0)
+//						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
+//					else
+//						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
 					break;
 				case "physiomap":
-					PhysioMapNode[] physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
-					if(physiomapNetwork.length <= 0)
-						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
-					else
-						_commandSender.showPhysioMapNetwork(model.getName(), physiomapNetwork);
+//					PhysioMapNode[] physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
+//					if(physiomapNetwork.length <= 0)
+//						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
+//					else
+//						_commandSender.showPhysioMapNetwork(model.getName(), physiomapNetwork);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -132,8 +123,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String modelNames, JSObject snapshot) {
-			createStageState(snapshot);
+		public void onMerge(String modelNames) {
 			createMerger(modelNames);			
 		}
 		

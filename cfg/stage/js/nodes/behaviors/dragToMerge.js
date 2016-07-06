@@ -34,8 +34,8 @@ function DragToMerge(_node) {
 				models = _node.graph.getVisibleNodes();
 				// Save the original location
 				originalLocation = {
-					x: _node.x,
-					y: _node.y,
+					x: _node.xpos(),
+					y: _node.ypos(),
 				};
 				
 				
@@ -58,10 +58,10 @@ function DragToMerge(_node) {
 					var rightBound = node.x + node.r + DropZoneSideLength/2;
 					var upperBound = node.y + DropZoneSideLength;
 					var lowerBound = node.y - node.r*2;
-					if(_node.x >= leftBound &&
-						_node.x <= rightBound &&
-						_node.y >= lowerBound &&
-						_node.y <= upperBound)
+					if(_node.xpos() >= leftBound &&
+						_node.xpos() <= rightBound &&
+						_node.ypos() >= lowerBound &&
+						_node.ypos() <= upperBound)
 					{
 						mergeNode = node;
 						node.rootElement.classed("canDrop", true);
@@ -86,8 +86,7 @@ function DragToMerge(_node) {
 		        	// Move the node back to its original location
 		        	_node.px = originalLocation.x;
 		        	_node.py = originalLocation.y;
-		        	_node.x = originalLocation.x;
-		        	_node.y = originalLocation.y;
+		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        }
 		        
 		        // Remove any classes we may have set

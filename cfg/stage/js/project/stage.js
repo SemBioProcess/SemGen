@@ -16,9 +16,9 @@ function Stage(graph) {
 	var leftsidebar = this.leftsidebar;
 
 	// Adds a model node to the d3 graph
-	receiver.onAddModel(function (modelName) {
-		console.log("Adding model " + modelName);
-		stage.addModelNode(modelName, [DragToMerge]);
+	receiver.onAddModel(function (model) {
+		console.log("Adding model " + model.name);
+		stage.addModelNode(model, [DragToMerge]);
 		
 	});
 

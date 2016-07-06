@@ -15,7 +15,7 @@ function SubmodelNode (graph, data, parent) {
 		inputs = inputs.concat(dependency.inputs);
 	});
 
-	ParentNode.prototype.constructor.call(this, graph, data.name, parent, inputs, 10, 12, "Submodel", graph.nodecharge);
+	ParentNode.prototype.constructor.call(this, graph, data, parent, 10, 12, "Submodel", graph.nodecharge);
 	this.dependencies = data.dependencies;
 	this.dependencytypecount = data.deptypecounts;
 
@@ -24,26 +24,4 @@ function SubmodelNode (graph, data, parent) {
 	this.addBehavior(Hull);
 	this.addBehavior(parentDrag);
 	this.addBehavior(HiddenLabelNodeGenerator);
-}
-
-SubmodelNode.prototype.onDoubleClick = function () {
-		var node = this;
-
-		var visiblenodes = 0;
-		if (this.graph.nodesVisible[NodeType.STATE.id]) {
-			visiblenodes = this.dependencytypecount[0];
-		}
-		if (this.graph.nodesVisible[NodeType.RATE.id]) {
-			visiblenodes += this.dependencytypecount[1];
-		}
-		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
-			visiblenodes += this.dependencytypecount[2];
-		}
-		if (visiblenodes > 0) {
-			// Create dependency nodes from the submodel's dependency data
-			this.setChildren(node.dependencies, function (data) {
-				return new DependencyNode(node.graph, data, node);
-			});
-		}
-
 }

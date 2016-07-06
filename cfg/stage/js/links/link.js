@@ -6,9 +6,9 @@ function Link(graph, name, input, output, length, linkType) {
 		return;
 
 	this.graph = graph;
-	this.name = name;
+	//this.name = name;
 	this.id = input.id + "-" + output.id + "_" + name;
-	this.displayName = limitWords(this.name, 5);
+	//this.displayName = limitWords(this.name, 5);
 	this.className = "link";
 	this.source = input;
 	this.target = output;

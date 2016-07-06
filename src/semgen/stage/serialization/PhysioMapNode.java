@@ -1,12 +1,21 @@
 package semgen.stage.serialization;
 
-public class PhysioMapNode extends Node {
+import java.util.ArrayList;
 
-	public String nodeType;
+import com.google.gson.annotations.Expose;
 
-	public PhysioMapNode(String name, String parentModelId, String nodeType) {
-		super(name, parentModelId);
+import semsim.model.collection.SemSimCollection;
+import semsim.model.physical.PhysicalProcess;
+import semsim.model.physical.PhysicalEntity;
 
-		this.nodeType = nodeType;
+public class PhysioMapNode extends Node<PhysicalProcess> {
+
+	@Expose public ArrayList<Node<PhysicalEntity>> sources = new ArrayList<Node<PhysicalEntity>>();
+	@Expose public ArrayList<Node<PhysicalEntity>> sinks = new ArrayList<Node<PhysicalEntity>>();
+	@Expose public ArrayList<Node<PhysicalEntity>> mediators = new ArrayList<Node<PhysicalEntity>>();
+	
+	public PhysioMapNode(PhysicalProcess proc, Node<? extends SemSimCollection> parent) {
+		super(proc, parent);
+
 	}
 }

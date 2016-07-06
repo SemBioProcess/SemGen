@@ -58,19 +58,19 @@ function Hull(node) {
 					if(child.children)
 						analyzeChildren(getSymbolArray(child.children));
 					
-					vertexes.push([child.x, child.y]);
+					vertexes.push([child.ypos(), child.ypos()]);
 					//Find the most extreme node positions for each axis
-					minX = minX || child.x;
-					minX = child.x < minX ? child.x : minX;
+					minX = minX || child.ypos();
+					minX = child.ypos() < minX ? child.ypos() : minX;
 					
-					maxX = maxX || child.x;
-					maxX = child.x > maxX ? child.x : maxX;
+					maxX = maxX || child.ypos();
+					maxX = child.ypos() > maxX ? child.ypos() : maxX;
 					
-					minY = minY || child.y;
-					minY = child.y < minY ? child.y : minY;
+					minY = minY || child.ypos();
+					minY = child.ypos() < minY ? child.ypos() : minY;
 					
-					maxY = maxY || child.y;
-					maxY = child.y > maxY ? child.y : maxY;
+					maxY = maxY || child.ypos();
+					maxY = child.ypos() > maxY ? child.ypos() : maxY;
 				});
 			};
 			analyzeChildren(children);
@@ -101,7 +101,7 @@ function Hull(node) {
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))
 				.attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-				.attr("transform", "translate(" + -node.x + "," + -node.y + ")");
+				.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 		}
 	});
 }

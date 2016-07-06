@@ -6,15 +6,11 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.teamdev.jxbrowser.chromium.JSObject;
-
-import semgen.stage.serialization.StageState;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> extends Observable implements Observer {
 	// Maps semsim model name to a semsim model
 	protected TSender _commandSender;
-	protected StageState state;
 	protected CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	protected Map<String, ModelInfo> _models  = new HashMap<String, ModelInfo>();
 	protected StageTaskConf newtaskconf = null;
@@ -86,13 +82,5 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	public int getIndexofTasktoLoad() {
 		return existingtaskindex;
-	}
-	
-	protected void createStageState(JSObject jsstate) {
-		state = new StageState(jsstate, _models.keySet());
-	}
-	
-	public StageState getStageState() {
-		return state;
 	}
 }

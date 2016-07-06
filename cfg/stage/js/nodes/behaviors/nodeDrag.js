@@ -24,8 +24,7 @@ function NodeDrag(_node) {
 		    	if (!_node.children) {
 			        _node.px += d3.event.dx;
 			        _node.py += d3.event.dy;
-			        _node.x += d3.event.dx;
-			        _node.y += d3.event.dy; 
+			        _node.setLocation( _node.xpos() + d3.event.dx, _node.ypos() + d3.event.dy); 
 		    	}
 		    	
 		    	_node.drag.forEach(function(behavior) {

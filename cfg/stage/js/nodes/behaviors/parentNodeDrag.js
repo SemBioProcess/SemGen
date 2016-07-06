@@ -22,15 +22,13 @@ function parentDrag(parent) {
 				&& (d3.event.dy + d.ymax) < d.graph.h-10
 			){
 				d.globalApply(function(d) {
-				d.x += d3.event.dx;
-					d.y += d3.event.dy;
+				d.setLocation(d.xpos() + d3.event.dx, d.ypos() + d3.event.dy);
 					d.px += d3.event.dx;
 					d.py += d3.event.dy;
 				});
 			}
 			else {
-				d.x = d.x;
-				d.y = d.y;
+				d.setLocation(d.xpos(), d.ypos());
 				$(parent).triggerHandler("dragend");
 			}
 		}

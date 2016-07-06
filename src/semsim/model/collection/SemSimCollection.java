@@ -87,6 +87,33 @@ public abstract class SemSimCollection extends SemSimObject{
 	}
 	
 	/**
+	 * @return All {@link Submodel}s not contained in another submodel in the collection.
+	 */
+	public ArrayList<Submodel> getTopSubmodels() {
+		ArrayList<Submodel> toplevelsms = new ArrayList<Submodel>();
+		for (Submodel sm : submodels) {
+			boolean ischild = false;
+			for (Submodel sm2 : submodels) {
+				if (sm2 == sm) continue;
+				if (sm2.containsSubmodel(sm)) {
+					ischild = true;
+					break;
+				}
+			}
+			if (!ischild) toplevelsms.add(sm);
+		}
+		return toplevelsms;
+	}
+	
+	public boolean containsSubmodel(Submodel sm) {
+		return submodels.contains(sm);
+	}
+	
+	public boolean containsSubmodels() {
+		return !submodels.isEmpty();
+	}
+	
+	/**
 	 * @param name The name of a {@link Submodel} to retrieve
 	 * @return The Submodel with the specified name or null if no Submodel found with that name. 
 	 */
