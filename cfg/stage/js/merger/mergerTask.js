@@ -25,7 +25,7 @@ function MergerTask(graph, state) {
 	
 	$("#addModelButton").hide();
 	$(".stageSearch").hide();
-	
+
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
 		sender.requestOverlaps();
@@ -81,10 +81,20 @@ MergerTask.prototype.onInitialize = function() {
 		$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	}
 	merger.showResolutionPane();
-	$(".merge").prop('disabled', true)
-		.click(function() {
-			sender.executeMerge(merger.semrespane.pollOverlaps());
-		});
+	$("#mergeStep2").hide();
+	$("#nextBtn").click(function() {
+		$("#mergeStep1").hide();
+		$("#mergeStep2").slideDown();
+	});
+
+	$("#backBtn").click(function() {
+		$("#mergeStep1").slideDown();
+		$("#mergeStep2").hide();
+	});
+	// $(".merge").prop('disabled', true)
+	// 	.click(function() {
+	// 		sender.executeMerge(merger.semrespane.pollOverlaps());
+	// 	});
 }
 
 MergerTask.prototype.onMinimize = function() {
