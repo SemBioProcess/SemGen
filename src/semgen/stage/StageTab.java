@@ -4,6 +4,7 @@ import com.teamdev.jxbrowser.chromium.BrowserPreferences;
 import com.teamdev.jxbrowser.chromium.DialogParams;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import com.teamdev.jxbrowser.chromium.swing.DefaultDialogHandler;
+import com.teamdev.jxbrowser.chromium.DefaultLoadHandler;
 
 import semgen.GlobalActions;
 import semgen.SemGen;
@@ -71,6 +72,14 @@ public class StageTab extends SemGenTab implements Observer {
 			        JOptionPane.showMessageDialog(browserView, message, title,
 			                JOptionPane.PLAIN_MESSAGE);
 			    }
+			});
+
+			// Disable Backspace and Shift+Backspace navigation
+			browser.setLoadHandler(new DefaultLoadHandler() {
+				@Override
+				public boolean canNavigateOnBackspace() {
+					return false;
+				}
 			});
 			
 			this.add(browserView, BorderLayout.CENTER);
