@@ -7,13 +7,20 @@
 
 function Graph() {
 	var graph = this;
+
+	var zoom = d3.behavior.zoom()
+		.scaleExtent([1, 10])
+		.on("zoom", function zoomed() {
+			vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+		});
 	
 	// Get the stage and style it
 	var svg = d3.select("#stage")
 	    .append("svg:svg")
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
-	    .attr("perserveAspectRatio", "xMinYMid");
+	    .attr("perserveAspectRatio", "xMinYMid")
+		.call(zoom).on("mousedown.zoom", null).on("dblclick.zoom", null);
 
 	var vis = svg.append('svg:g');
 
