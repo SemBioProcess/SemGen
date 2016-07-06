@@ -152,8 +152,8 @@ function SemanticResolutionPane() {
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height", e.pageY-95);
-			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+			$('.mergePreview').css("height", e.pageY-94);
+			$('.modal-body').css("height", $(window).height()-e.pageY-94);
 			pane.leftgraph.initialize();
 			pane.rightgraph.initialize();
 			
