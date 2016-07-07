@@ -43,6 +43,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimCopy;
 import semsim.writing.SemSimOWLwriter;
 
@@ -85,7 +86,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
-	private int sourceModelType;
+	private ModelType sourceModelType;
 	private ModelAccessor sourcefilelocation;
 	private double semsimversion;
 	
@@ -870,7 +871,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * See {@link ModelClassifier} constants. 
 	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link ModelClassifier} ).
 	 */
-	public void setSourceModelType(int originalModelType) {
+	public void setSourceModelType(ModelType originalModelType) {
 		this.sourceModelType = originalModelType;
 	}
 
@@ -879,7 +880,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return An integer representing the format of the original model code (see {@link ModelClassifier} ) 
 	 * and associated constants.
 	 */
-	public int getSourceModelType() {
+	public ModelType getSourceModelType() {
 		return sourceModelType;
 	}
 	

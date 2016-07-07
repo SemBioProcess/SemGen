@@ -27,7 +27,7 @@ import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimModel semsimmodel;
@@ -38,7 +38,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private CodewordToolDrawer cwdrawer;
 	private SubModelToolDrawer smdrawer;
 	private boolean modelsaved = true;
-	private int lastsavedas = -1;
+	private ModelType lastsavedas = ModelType.UNKNOWN;
 	public static enum WBEvent {FREETEXT_REQUEST, IMPORT_FREETEXT, SMSELECTION, CWSELECTION}
 	public static enum LibraryRequest {REQUEST_IMPORT, REQUEST_LIBRARY, REQUEST_CREATOR, CLOSE_LIBRARY }
 	public static enum ModelEdit {PROPERTY_CHANGED, COMPOSITE_CHANGED, CODEWORD_CHANGED, SUBMODEL_CHANGED, MODEL_IMPORT, 
@@ -90,10 +90,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public boolean sourceModelTypeCanStoreSemSimAnnotations() {
-		return (semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL || 
-				semsimmodel.getSourceModelType()==ModelClassifier.SEMSIM_MODEL ||
-				semsimmodel.getSourceModelType()==ModelClassifier.CELLML_MODEL ||
-				semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL_IN_PROJ);
+		return (semsimmodel.getSourceModelType()==ModelType.SEMSIM_MODEL || 
+				semsimmodel.getSourceModelType()==ModelType.SEMSIM_MODEL ||
+				semsimmodel.getSourceModelType()==ModelType.CELLML_MODEL ||
+				semsimmodel.getSourceModelType()==ModelType.MML_MODEL_IN_PROJ);
 	}
 	
 	@Override
@@ -108,7 +108,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		notifyObservers(GlobalActions.appactions.SAVED);
 	}
 	
-	public int getLastSavedAs() {
+	public ModelType getLastSavedAs() {
 		return lastsavedas;
 	}
 
@@ -147,11 +147,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public File saveModelAs() {
 		
 		String selectedtype = "owl";  // Default extension type
-		int modtype = semsimmodel.getSourceModelType();
+		ModelType modtype = semsimmodel.getSourceModelType();
 		
-		if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedtype = "proj";
-		else if(modtype==ModelClassifier.CELLML_MODEL) selectedtype = "cellml";
-		else if(modtype==ModelClassifier.SBML_MODEL) selectedtype = "sbml";
+		if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
+		else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
+		else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
 		
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, semsimmodel.getName());
 		
@@ -162,15 +162,15 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			modelaccessor = newaccessor;
 			
 			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
-				lastsavedas = ModelClassifier.SEMSIM_MODEL;
+				lastsavedas = ModelType.SEMSIM_MODEL;
 			else if(filec.getFileFilter() == SemGenFileChooser.sbmlfilter)
-				lastsavedas = ModelClassifier.SBML_MODEL;
+				lastsavedas = ModelType.SBML_MODEL;
 			else if(filec.getFileFilter() == SemGenFileChooser.projfilter)
-				lastsavedas = ModelClassifier.MML_MODEL_IN_PROJ;
+				lastsavedas = ModelType.MML_MODEL_IN_PROJ;
 			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)
-				lastsavedas = ModelClassifier.CELLML_MODEL;
+				lastsavedas = ModelType.CELLML_MODEL;
 			else if(filec.getFileFilter() == SemGenFileChooser.mmlfilter)
-				lastsavedas = ModelClassifier.MML_MODEL;
+				lastsavedas = ModelType.MML_MODEL;
 				
 			saveModel();
 

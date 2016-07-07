@@ -53,14 +53,40 @@ public class SemSimRDFwriter extends ModelWriter{
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	
+	// Constructor without existing RDF block
+	public SemSimRDFwriter(SemSimModel semsimmodel){
+		super(null);
+		
+		initialize(semsimmodel);
+	}
 	
-	// Constructor
+	// Constructor with existing RDF block
 	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
 		super(null);
 		
+		initialize(semsimmodel);
+		intializeExistingRDF(rdfasstring, baseNamespace);
+	}
+	
+	
+	private void initialize(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
+		
 		createSubmodelURIandNameMap();
+		
+		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("model", semsimmodel.getNamespace());
+	}
+	
+	
+	private void intializeExistingRDF(String rdfasstring, String baseNamespace){
+		
 		// If rdfasstring is not null, add it as rdf model
 		if(rdfasstring != null){
 			try {
@@ -75,15 +101,6 @@ public class SemSimRDFwriter extends ModelWriter{
 				e.printStackTrace();
 			}
 		}
-		
-		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
-
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
-		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 
 	// Empty functions so that we can pass in sslib

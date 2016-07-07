@@ -44,6 +44,7 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
+import semsim.definitions.RDFNamespace;
 import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
@@ -59,6 +60,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SBMLwriter extends ModelWriter {
@@ -72,11 +74,11 @@ public class SBMLwriter extends ModelWriter {
 	private LinkedHashMap<CompositePhysicalEntity, Species> entitySpeciesMap = new LinkedHashMap<CompositePhysicalEntity, Species>();
 	private LinkedHashMap<CustomPhysicalProcess, Reaction> processReactionMap = new LinkedHashMap<CustomPhysicalProcess, Reaction>();
 	
-	// Data Structures whose annotations will be stored in the SemSimRDF block
-	// This includes compartment data structures (because we can't store composites using SBML-type annotations) and Parameters
-	// DataStructures representing properties of species and reactions will have their annotations stored
-	// in the usual SBML annotation element
-	private Set<DataStructure> DSsToStoreInSemSimRDF = new HashSet<DataStructure>();
+	// Data Structures whose annotations will be omitted in the SemSimRDF block.
+	// This includes species and reaction elements. DataStructures representing
+	// properties of species and reactions will have their annotations stored
+	// in the usual SBML annotation element.
+	private Set<DataStructure> DSsToOmitFromSemSimRDF = new HashSet<DataStructure>();
 	
 	private Set<DataStructure> candidateDSsForCompartments = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForSpecies = new HashSet<DataStructure>();
@@ -180,6 +182,7 @@ public class SBMLwriter extends ModelWriter {
 					&& ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
 				
 				UnitDefinition ud = sbmlmodel.createUnitDefinition(uom.getName());
+				
 				addNotesAndMetadataID(uom, ud);
 				
 				for(UnitFactor uf : uom.getUnitFactors()){
@@ -312,6 +315,10 @@ public class SBMLwriter extends ModelWriter {
 				}
 												
 				Species species = sbmlmodel.createSpecies(ds.getName(), cptmt);
+				
+				// Do not store the annotation for this data structure in the SemSim RDF
+				// Preserve semantics in <species> element
+				DSsToOmitFromSemSimRDF.add(ds);
 					
 				// In SBML Level 3 the hasSubstanceUnitsOnly must be set either way. In Level 2 the default is false.
 				URI physdefprop = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -321,6 +328,12 @@ public class SBMLwriter extends ModelWriter {
 						|| physdefprop.equals(SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI));
 				
 				species.setHasOnlySubstanceUnits(substanceonly);
+				
+				// Set isConstant value
+				species.setConstant(ds.getComputationInputs().isEmpty());
+				
+				// Set whether the species is a boundary condition (if set with a rule and/or event)
+				// TODO: species.setBoundaryCondition(boundaryCondition);
 				
 				// Set start value, if present.
 				// TODO: We assumed the start value is a constant double. Eventually need to accommodate
@@ -356,6 +369,10 @@ public class SBMLwriter extends ModelWriter {
 				CustomPhysicalProcess process = (CustomPhysicalProcess)pmc;
 				Reaction rxn = sbmlmodel.createReaction(ds.getName());
 				processReactionMap.put(process, rxn);
+				
+				// Do not store the annotation for this data structure in the SemSim RDF.
+				// Preserve semantics in <reaction> element.
+				DSsToOmitFromSemSimRDF.add(ds);
 				
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
@@ -406,7 +423,9 @@ public class SBMLwriter extends ModelWriter {
 						String localnm = fullnm.replace(SBMLreader.reactionprefix + ds.getName() + ".", "");
 						mathml = mathml.replaceAll("<ci>\\s*" + gp.getName() + "\\s*</ci>", "<ci>" + localnm + "</ci>");
 
-						kl.addLocalParameter(new LocalParameter(gp.getName().replace(SBMLreader.reactionprefix + ds.getName() + ".", "")));
+						LocalParameter lp = kl.createLocalParameter(localnm);
+						String formula = getFormulaFromRHSofMathML(gp.getComputation().getMathML(), fullnm);
+						lp.setValue(Double.parseDouble(formula));
 					}
 				}
 				
@@ -420,7 +439,6 @@ public class SBMLwriter extends ModelWriter {
 			
 			// Otherwise the data structure isn't associated with a process
 			else globalParameters.add(ds);
-			
 		}
 	}
 	
@@ -539,10 +557,17 @@ public class SBMLwriter extends ModelWriter {
 	 */ 
 	private Document addSemSimRDF(){
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
+		rdfblock = new SemSimRDFwriter(semsimmodel);
 		rdfblock.setRDFforModelLevelAnnotations();
-		rdfblock.setRDFforDataStructureAnnotations();
-
+		
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+		
+			// Only the info for compartments and parameters are stored (i.e. not species or reactions)
+			// because the <species> and <reaction> elements already contain the needed info
+			if(DSsToOmitFromSemSimRDF.contains(ds)) continue;
+			else rdfblock.setRDFforDataStructureAnnotations(ds);
+		}
+		
 		Document doc = null;
 
 		try {
@@ -562,17 +587,27 @@ public class SBMLwriter extends ModelWriter {
 				Namespace sbmlmodNS = Namespace.getNamespace("http://www.sbml.org/sbml/level" + sbmlmodel.getLevel() + "/version" + sbmlmodel.getVersion());
 				
 				Element modelel = doc.getRootElement().getChild("model", sbmlmodNS);
-				if(modelel == null)
-					System.err.println("SBML writer error - no 'model' element found in XML doc");
 				
-				Element ssannel = modelel.getChild(semsimAnnotationElementName, sbmlmodNS);
-				if(ssannel == null){
-					ssannel = new Element(semsimAnnotationElementName, sbmlmodNS); 
-					modelel.addContent(ssannel);
+				if(modelel == null){
+					System.err.println("SBML writer error - no 'model' element found in XML doc");
+					return doc;
 				}
 				
+				Element modelannel = modelel.getChild("annotation", sbmlmodNS);
+				
+				if(modelannel == null){
+					modelannel = new Element("annotation", sbmlmodNS);
+					modelel.addContent(modelannel);
+				}
+				
+				Element ssannel = modelannel.getChild(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace());
+				
+				if(ssannel == null){
+					ssannel = new Element(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace()); 
+					modelannel.addContent(ssannel);
+				}
 				// Remove old RDF if present
-				else modelel.removeChild(semsimAnnotationElementName, sbmlmodNS);
+				else modelannel.removeContent(ssannel);
 				
 				// Add the SemSim RDF
 				if(newrdf !=null) ssannel.addContent(newrdf);
@@ -632,6 +667,7 @@ public class SBMLwriter extends ModelWriter {
 			} catch (XMLStreamException e) {
 				e.printStackTrace();
 			}
+		
 		if(sso.hasMetadataID()){
 			
 			if( metaIDsUsed.contains(sso.getMetadataID()))

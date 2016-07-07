@@ -7,6 +7,8 @@ import java.util.HashMap;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import semsim.reading.ModelClassifier.ModelType;
+
 
 public abstract class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +24,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 	
 	Dimension filechooserdims = new Dimension(550,550);
 	public static File currentdirectory;
-	int modeltype = -1;
+	public ModelType modeltype = ModelType.UNKNOWN;
 	
 	public SemGenFileChooser(String title) {
 		super(currentdirectory);
@@ -68,7 +70,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		for(FileNameExtensionFilter filter : filters) addChoosableFileFilter(filter);
 	}
 	
-	public int getFileType() {
+	public ModelType getFileType() {
 		return modeltype;
 	}
 	

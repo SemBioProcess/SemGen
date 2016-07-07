@@ -21,7 +21,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
@@ -113,7 +113,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			flattenModelForMML(srccodeel.getText());
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
+		rdfblock = new SemSimRDFwriter(semsimmodel);
 		
 		// Write out model-level annotations
 		rdfblock.setRDFforModelLevelAnnotations();
@@ -181,7 +181,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		String modelText = null;
 		ModelAccessor sourceCodeLocation = semsimmodel.getLegacyCodeLocation();
 		
-		if(semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
+		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
 			modelText = sourceCodeLocation.getLocalModelTextAsString();
 		// TODO: if MML source code is online, retrieve it
 

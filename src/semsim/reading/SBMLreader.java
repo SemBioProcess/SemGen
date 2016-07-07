@@ -461,7 +461,39 @@ public class SBMLreader extends ModelReader{
 			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
 			speciessubmodel.addDataStructure(ds);
 			
-			speciesAndConservation.put(speciesid, new SpeciesConservation());
+			boolean isConstant = species.getConstant();
+			boolean isBoundaryCondition = species.getBoundaryCondition();
+			boolean isSetWithRuleAssignment = sbmlmodel.getRule(speciesid) != null;
+			
+			if(isConstant){
+				
+				if(isBoundaryCondition){
+					// don't apply conservation eq. set initial condition only
+					// CAN be a reactant or product
+				}
+				else{
+					// don't apply conservation eq. set IC only
+					// CANNOT be a reactant or product
+				}
+			}
+			else{
+				
+				SpeciesConservation nsc = new SpeciesConservation();
+				speciesAndConservation.put(speciesid, nsc);
+				
+				if(isBoundaryCondition){
+					// Can change by rules or events but not reactions
+					nsc.setWithConservationEquation = false;
+					// CAN be a reactant or product
+				}
+				else{
+					// Can change by reactions or rules (but not both at the same time), and events
+					nsc.setWithConservationEquation = ! isSetWithRuleAssignment;
+
+					// CAN be a reactant or product
+				}
+			}
+			
 					
 			// Deal with equations for species concentration/amount here
 			PhysicalPropertyinComposite prop = null;
@@ -658,8 +690,9 @@ public class SBMLreader extends ModelReader{
 			
 			if(((ExplicitRule)sbmlrule).isSetVariable()){
 				String varname = ((ExplicitRule) sbmlrule).getVariable();
-				
+								
 				DataStructure ds = null;
+				
 				if(semsimmodel.containsDataStructure(varname)) 
 					ds = semsimmodel.getAssociatedDataStructure(varname);
 				else {
@@ -682,7 +715,6 @@ public class SBMLreader extends ModelReader{
 				} catch (SBMLException | XMLStreamException e) {
 					e.printStackTrace();
 				}
-				
 				
 				// Remove start value if we are overwriting the computation for a species
 				if(sbmlmodel.getSpecies(varname)!=null && ! sbmlrule.isRate()) ds.setStartValue(null);
@@ -733,7 +765,6 @@ public class SBMLreader extends ModelReader{
 				
 				Event ssevent = new Event();
 				ssevent.setName(sbmlevent.getId());
-				ssevent.setDescription(sbmlevent.getName());
 				ssevent.setMetadataID(sbmlevent.getMetaId());
 				
 				ssevent.setTriggerMathML(triggermathml);			
@@ -878,7 +909,9 @@ public class SBMLreader extends ModelReader{
 				process.addSource(reactantent, stoich);
 									
 				// Store info about species conservation for use in outputting species equations
-				speciesAndConservation.get(reactantname).consumedby.add(reactionID);
+				SpeciesConservation sc = speciesAndConservation.get(reactantname);
+				
+				if(sc.setWithConservationEquation) sc.consumedby.add(reactionID);
 			}
 			
 			// Set sinks (products)
@@ -889,7 +922,9 @@ public class SBMLreader extends ModelReader{
 				process.addSink(productent, stoich);
 				
 				// Store info about species conservation for use in outputting species equations
-				speciesAndConservation.get(productname).producedby.add(reactionID);
+				SpeciesConservation sc = speciesAndConservation.get(productname);
+				
+				if(sc.setWithConservationEquation) sc.producedby.add(reactionID);
 			}
 			
 			// Set mediators (modifiers)
@@ -1353,10 +1388,12 @@ public class SBMLreader extends ModelReader{
 	
 	
 	private class SpeciesConservation{
+		public boolean setWithConservationEquation;
 		public ArrayList<String> consumedby;
 		public ArrayList<String> producedby;
 		
 		public SpeciesConservation(){
+			setWithConservationEquation = true;
 			consumedby = new ArrayList<String>();
 			producedby = new ArrayList<String>();
 		}

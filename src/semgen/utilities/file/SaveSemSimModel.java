@@ -7,7 +7,7 @@ import javax.swing.filechooser.FileFilter;
 import semgen.SemGen;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.CellMLwriter;
 import semsim.writing.JSimProjectFileWriter;
 import semsim.writing.SBMLwriter;
@@ -16,19 +16,19 @@ import semsim.writing.SemSimOWLwriter;
 public class SaveSemSimModel {
 
 	public static void writeToFile(SemSimModel semsimmodel,
-			ModelAccessor modelaccessor, File outputfile, int modelformat) {
+			ModelAccessor modelaccessor, File outputfile, ModelType modeltype) {
 		
 		try {
-			if(modelformat==ModelClassifier.SEMSIM_MODEL) {
+			if(modeltype==ModelType.SEMSIM_MODEL) {
 				new SemSimOWLwriter(semsimmodel).writeToFile(outputfile);
 			}
-			else if(modelformat==ModelClassifier.SBML_MODEL){
+			else if(modeltype==ModelType.SBML_MODEL){
 				new SBMLwriter(semsimmodel).writeToFile(outputfile);
 			}
-			else if(modelformat==ModelClassifier.CELLML_MODEL){
+			else if(modeltype==ModelType.CELLML_MODEL){
 				new CellMLwriter(semsimmodel).writeToFile(outputfile);
 			}
-			else if(modelformat==ModelClassifier.MML_MODEL_IN_PROJ){
+			else if(modeltype==ModelType.MML_MODEL_IN_PROJ){
 				new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(outputfile);
 			}
 			
@@ -43,19 +43,19 @@ public class SaveSemSimModel {
 	public static void writeToFile(SemSimModel semsimmodel,
 			ModelAccessor modelaccessor, File outputfile, FileFilter filter){
 		
-		int format = -1;
+		ModelType format = ModelType.UNKNOWN;
 		
 		if(filter == SemGenFileChooser.projfilter){
-			format = ModelClassifier.MML_MODEL_IN_PROJ;
+			format = ModelType.MML_MODEL_IN_PROJ;
 		}
 		else if(filter == SemGenFileChooser.owlfilter){
-			format = ModelClassifier.SEMSIM_MODEL;
+			format = ModelType.SEMSIM_MODEL;
 		}
 		else if(filter == SemGenFileChooser.cellmlfilter){
-			format = ModelClassifier.CELLML_MODEL;
+			format = ModelType.CELLML_MODEL;
 		}
 		else if(filter == SemGenFileChooser.sbmlfilter){
-			format = ModelClassifier.SBML_MODEL;
+			format = ModelType.SBML_MODEL;
 		}
 		
 		writeToFile(semsimmodel, modelaccessor, outputfile, format);
