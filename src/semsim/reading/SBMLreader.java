@@ -1,9 +1,7 @@
 package semsim.reading;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +14,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
-import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -78,9 +76,11 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
+import semsim.writing.SBMLwriter;
 
 public class SBMLreader extends ModelReader{
 
+	private SBMLDocument sbmldoc;
 	private Model sbmlmodel;
 	private Map<String, PhysicalEntity> compartmentAndEntitiesMap = new HashMap<String, PhysicalEntity>();
 	private Map<String, CompositePhysicalEntity> speciesAndEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
@@ -97,6 +97,8 @@ public class SBMLreader extends ModelReader{
 	private UnitOfMeasurement timeunits;
 	private UnitOfMeasurement substanceunits;
 	
+	private SemSimRDFreader rdfreader;
+	
 	
 	public SBMLreader(File file) {
 		super(file);
@@ -111,7 +113,7 @@ public class SBMLreader extends ModelReader{
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		SBMLDocument sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getLocalModelTextAsString());
+		sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getLocalModelTextAsString());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -163,6 +165,7 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getListOfSpecies().size()>0)
 			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
+		collectSemSimRDF();
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
@@ -277,17 +280,7 @@ public class SBMLreader extends ModelReader{
 		boolean timenamepredefined = false;
 		
 		// Check if the time csymbol is used anywhere in the model's MathML.
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		
-		try {
-			InputStream is = new ByteArrayInputStream(modelaccessor.getLocalModelTextAsString().getBytes("UTF-8"));
-			doc = builder.build(is);
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-			semsimmodel.addError(e.getLocalizedMessage());
-			return;
-		}	
+		Document doc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
 		
 		Iterator<?> descit = doc.getRootElement().getDescendants(new ElementFilter());
 		
@@ -372,7 +365,6 @@ public class SBMLreader extends ModelReader{
 			
 			String defaultunits = null;
 			PhysicalPropertyinComposite prop = null;
-			
 			String modelobjectspecifieddefaultunits = "";
 			
 			// Add physical property here
@@ -392,7 +384,6 @@ public class SBMLreader extends ModelReader{
 				defaultunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();
 			}
-			else{}
 						
 			// Set the units for the compartment
 			if(sbmlc.isSetUnits()){
@@ -427,21 +418,37 @@ public class SBMLreader extends ModelReader{
 			
 			// Otherwise the unit for the compartment is undefined
 			else System.err.println("WARNING: Units for compartment " + sbmlc.getId() + " were undefined");
-						
-			ds.setAssociatedPhysicalProperty(prop);
 			
-			// Set the physical entity for the compartment
-			PhysicalEntity compartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
-			compartmentAndEntitiesMap.put(compid, compartmentent);
-						
-			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
-			entlist.add(compartmentent);
-			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-			
-			CompositePhysicalEntity compositeent = new CompositePhysicalEntity(entlist, rellist);
-			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
-			ds.setAssociatedPhysicalModelComponent(compositeent);
+			// Collect the physical entity representation of the compartment
+			PhysicalEntity compartmentent = null;
 
+			// If the compartment is annotated with a SemSim annotation, collect it
+			if(rdfreader.hasPropertyAnnotationForDataStructure(ds)){				
+				rdfreader.getDataStructureAnnotations(ds);
+				
+				PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
+				
+				if(ds.hasAssociatedPhysicalComponent() && pmc instanceof PhysicalEntity)
+					compartmentent = (PhysicalEntity)pmc;
+				
+			}
+			// Otherwise we use the info in the SBML to get the physical entity 
+			// representation of the compartment
+			else{	
+				ds.setAssociatedPhysicalProperty(prop);
+				
+				PhysicalEntity singlecompartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
+							
+				ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
+				entlist.add(singlecompartmentent);
+				ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
+				
+				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
+				ds.setAssociatedPhysicalModelComponent(compartmentent);
+			}
+			
+			compartmentAndEntitiesMap.put(compid, compartmentent);
+			
 			collectSBaseData(sbmlc, compartmentent);
 		}
 	}
@@ -457,6 +464,7 @@ public class SBMLreader extends ModelReader{
 			String speciesid = species.getId();
 
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(speciesid));
+			
 			ds.setDeclared(true);
 			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
 			speciessubmodel.addDataStructure(ds);
@@ -489,7 +497,6 @@ public class SBMLreader extends ModelReader{
 				else{
 					// Can change by reactions or rules (but not both at the same time), and events
 					nsc.setWithConservationEquation = ! isSetWithRuleAssignment;
-
 					// CAN be a reactant or product
 				}
 			}
@@ -538,6 +545,7 @@ public class SBMLreader extends ModelReader{
 
 			UnitOfMeasurement unitforspecies = null;
 			String compartmentname = species.getCompartment();
+
 			UnitOfMeasurement compartmentunits = semsimmodel.getAssociatedDataStructure(compartmentname).getUnit();	
 			
 			// Deal with whether the species is expressed in substance units or not 
@@ -649,18 +657,25 @@ public class SBMLreader extends ModelReader{
 			
 			if(compartmentAndEntitiesMap.containsKey(species.getCompartment()))
 				compartmentent = compartmentAndEntitiesMap.get(species.getCompartment());
+			
 			else System.err.println("WARNING: unknown compartment " + species.getCompartment() + " for species " + species.getId());
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
-			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
-			entlist.add(speciesent);
-			entlist.add(compartmentent);
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
 			rellist.add(StructuralRelation.PART_OF);
+
+
+			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
+			entlist.add(speciesent);
 			
-			CompositePhysicalEntity compositeent = new CompositePhysicalEntity(entlist, rellist);
-						
-			compositeent = semsimmodel.addCompositePhysicalEntity(compositeent); // this also adds the singular physical entities to the model
+			if(compartmentent instanceof CompositePhysicalEntity){
+				entlist.addAll(((CompositePhysicalEntity) compartmentent).getArrayListOfEntities());
+				rellist.addAll(((CompositePhysicalEntity) compartmentent).getArrayListOfStructuralRelations());
+			}
+			else entlist.add(compartmentent);
+			
+			
+			CompositePhysicalEntity compositeent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 			speciesAndEntitiesMap.put(species.getId(), compositeent);
 						
@@ -806,7 +821,7 @@ public class SBMLreader extends ModelReader{
 					ssevent.setPriorityMathML(prioritymathml);
 				}
 				
-				// Set the time units (SBML level 2 version 2 or version 1)
+				// Set the time units (SBML level 2, versions 2 or 1)
 				if(sbmlmodel.getLevel()==3 && sbmlmodel.getVersion()<3 && sbmlevent.isSetTimeUnits()){
 					String timeunitsname = sbmlevent.getTimeUnits();
 					ssevent.setTimeUnit(semsimmodel.getUnit(timeunitsname));
@@ -864,6 +879,7 @@ public class SBMLreader extends ModelReader{
 			String reactionID = reaction.getId();
 			
 			DataStructure rateds = semsimmodel.addDataStructure(new Decimal(reactionID));
+			
 			rateds.setDeclared(true);
 			String thereactionprefix = reactionprefix + reactionID;
 			
@@ -1065,6 +1081,47 @@ public class SBMLreader extends ModelReader{
 			
 			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
 		}
+	}
+	
+	/**
+	 * Collect the SemSim annotations for data structures in the model.
+	 * This excludes data structures corresponding to species and reactions in the model.
+	 */
+	private void collectSemSimRDF(){
+		Document projdoc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
+		
+		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
+		Namespace modelns = projdoc.getRootElement().getNamespace();
+	
+		Namespace ssns = RDFNamespace.SEMSIM.createJdomNamespace();
+		String rdfstring = null;
+		
+		if(projdoc.hasRootElement()){
+			Element modelel = projdoc.getRootElement().getChild("model", modelns);
+				
+			if(modelel != null){
+				Element modelannel = modelel.getChild("annotation", modelns);
+						
+				if(modelannel != null){	
+					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, ssns);
+								
+					if(modelannssel != null){
+						Element rdfel = modelannssel.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
+						XMLOutputter xmloutputter = new XMLOutputter();
+						rdfstring = xmloutputter.outputString(rdfel);
+					}
+				}
+			}
+		}
+				
+		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, null);
+		
+		// Get the semsim namespace of the model, if present, according to the rdf block
+		String modelnamespace = rdfreader.getModelRDFnamespace();
+		if(modelnamespace == null )
+			modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
+		
+		semsimmodel.setNamespace(modelnamespace);
 	}
 	
 	
@@ -1294,8 +1351,11 @@ public class SBMLreader extends ModelReader{
 		String mathmlstring = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" 
 				+ ID + "</ci>\n  <cn>" + qwu.getValue() + "</cn>\n </apply>\n" + mathMLelementEnd;
 		ds.getComputation().setMathML(mathmlstring);
+
+		// Collect annotations
+		if(rdfreader.hasPropertyAnnotationForDataStructure(ds))
+			rdfreader.getDataStructureAnnotations(ds);
 		
-		// TODO: collect annotations
 		collectSBaseData(qwu, ds);
 		
 		return ds;

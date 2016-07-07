@@ -235,7 +235,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares){
 		
 		if(ds.hasPhysicalProperty()){
-			Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
+			Property iccfprop = SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty();
 			Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)ds);
 			Statement st = rdf.createStatement(ares, iccfprop, propres);
 			

@@ -21,6 +21,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.reading.ModelReader;
 
 public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -150,7 +151,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					
 					// If the output file already exists
 					if(filetosave.exists()){
-						Document projdoc = JSimProjectFileReader.getDocument(filetosave);
+						Document projdoc = ModelReader.getJDOMdocumentFromFile(filetosave);
 						existingmodelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);	
 					}
 					

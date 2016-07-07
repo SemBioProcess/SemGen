@@ -28,7 +28,7 @@ public class JSimProjectFileReader {
 		
 		if(ma.modelIsPartOfJSimProjectFile()){
 			
-			Document projdoc = getDocument(ma.getFileThatContainsModel());
+			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getFileThatContainsModel());
 			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
 			
 			// If there are no semsim annotations associated with the model, return false
@@ -51,19 +51,6 @@ public class JSimProjectFileReader {
 			}
 		}
 		else return false;
-	}
-	
-	public static Document getDocument(File file){
-		Document doc = null;
-		SAXBuilder builder = new SAXBuilder();
-		
-		try{ 
-			doc = builder.build(file);
-		}
-		catch(JDOMException | IOException e) {
-			e.printStackTrace();
-		}
-		return doc;
 	}
 	
 	

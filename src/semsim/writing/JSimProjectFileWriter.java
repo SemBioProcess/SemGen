@@ -22,6 +22,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.reading.ModelReader;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
@@ -59,7 +60,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		// If the file already exists...
 		if(destination.exists()){
 			
-			projdoc = JSimProjectFileReader.getDocument(outputProjectFile);
+			projdoc = ModelReader.getJDOMdocumentFromFile(outputProjectFile);
 		
 			// If the model already exists in the project file, overwrite the model code
 			// and the SemSim annotation control element. This will preserve parsets, etc. for the 
@@ -90,7 +91,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
-				Document origindoc = JSimProjectFileReader.getDocument(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
+				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			

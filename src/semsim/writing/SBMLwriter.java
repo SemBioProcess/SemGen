@@ -60,7 +60,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimRDFreader;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SBMLwriter extends ModelWriter {
@@ -264,6 +263,8 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else if(hasinputs && hasmathml) addRuleToModel(ds);
 			
+			// TODO: if composite entity for compartment only has one entity, exclude from 
+			// SemSim annotations and instead write it as an annotation on the <comp> element
 			addNotesAndMetadataID(pmc, comp);
 		}
 	}
@@ -308,9 +309,8 @@ public class SBMLwriter extends ModelWriter {
 				
 				// If we don't have a compartment for the species, create a new one and add to entity-compartment map
 				if(cptmt == null){
-					cptmt = new Compartment();
-					cptmt.setName("compartment_" + c);
 					c = c + 1;
+					cptmt = sbmlmodel.createCompartment("compartment_" + c);
 					entityCompartmentMap.put(compcpe, cptmt);
 				}
 												
