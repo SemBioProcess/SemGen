@@ -1,14 +1,13 @@
-package semsim.model.physical.object;
+package semsim.model.physical;
 
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
-import semsim.model.physical.PhysicalModelComponent;
 
-public class PhysicalDependency extends PhysicalModelComponent{
+public abstract class PhysicalDependency extends PhysicalModelComponent{
 	private Computation associatedComputation;
 	
-	public PhysicalDependency() {
-		super(SemSimTypes.PHYSICAL_DEPENDENCY);
+	public PhysicalDependency(SemSimTypes type) {
+		super(type);
 	}
 	
 	public PhysicalDependency(PhysicalDependency pdtocopy) {

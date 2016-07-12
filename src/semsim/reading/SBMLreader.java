@@ -72,6 +72,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
@@ -969,6 +970,8 @@ public class SBMLreader extends ModelReader{
 		
 		for(String speciesid : speciesAndConservation.keySet()){
 	      
+			DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
+
 			// The attribute hasOnlySubstanceUnits takes on a boolean value. 
 			// In SBML Level 3, the attribute has no default value and must always
 			// be set in a model; in SBML Level 2, it has a default value of false.
@@ -1044,6 +1047,11 @@ public class SBMLreader extends ModelReader{
 				
 				String eqmathmlend = subunits ? "" : "   <ci>" + compartmentid + "</ci>\n  </apply>\n"; // if concentration units, include the divide operation closer
 				eqmathml = eqmathml + "\n" + ws + "</apply>\n" + eqmathmlend + " </apply>\n" + mathMLelementEnd;  // end plus operation, end eq operation
+				
+				// Annotate the data structure's computation as an OPB Derivative Constraint
+				ReferencePhysicalDependency rpd = semsimmodel.addReferencePhysicalDependency(
+						new ReferencePhysicalDependency(SemSimLibrary.OPB_DERIVATIVE_CONSTRAINT_URI, "Derivative constraint"));
+				speciesds.getComputation().setPhysicalDependency(rpd);
 			}
 			
 			// Store the equations
@@ -1057,7 +1065,6 @@ public class SBMLreader extends ModelReader{
 				eqstring = subunits ? eqstring : "(" + eqstring + ")/" + compartmentid; // add compartment divisor if species in conc. units
 				eqstring = LHS + " = " + eqstring; // add LHS to computational code string
 				
-				DataStructure speciesds = semsimmodel.getAssociatedDataStructure(speciesid);
 				speciesds.getComputation().setComputationalCode(eqstring);
 				speciesds.getComputation().setMathML(eqmathml);
 			}

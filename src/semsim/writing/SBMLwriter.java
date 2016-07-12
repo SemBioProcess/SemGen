@@ -48,14 +48,18 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.model.physical.PhysicalDependency;
+import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
@@ -249,6 +253,9 @@ public class SBMLwriter extends ModelWriter {
 			
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
 			
+			// TODO: if composite physical entity is just one entity, store annotation in <compartment> block
+			// and omit writing SemSim annotation
+			
 			String mathml = ds.getComputation().getMathML();
 			
 			boolean hasinputs = ds.getComputationInputs().isEmpty();
@@ -276,6 +283,8 @@ public class SBMLwriter extends ModelWriter {
 		
 		int c = 0; // index number for any compartments that we add anew
 		for(DataStructure ds : candidateDSsForSpecies){
+			
+			Computation dscomputation = ds.getComputation();
 			
 			// Assume that the first index in the physical entity associated with the data structure
 			// is the chemical, item, or particle and the rest of the entity is the compartment
@@ -329,11 +338,40 @@ public class SBMLwriter extends ModelWriter {
 				
 				species.setHasOnlySubstanceUnits(substanceonly);
 				
-				// Set isConstant value
-				species.setConstant(ds.getComputationInputs().isEmpty());
 				
-				// Set whether the species is a boundary condition (if set with a rule and/or event)
-				// TODO: species.setBoundaryCondition(boundaryCondition);
+				boolean solvedwithconservation = false;
+				
+				if( dscomputation.hasPhysicalDependency()){
+					PhysicalDependency dep = dscomputation.getPhysicalDependency();
+					
+					if(dep.hasPhysicalDefinitionAnnotation()){
+						URI uri = ((ReferencePhysicalDependency)dep).getPhysicalDefinitionURI();
+						
+						if(uri.equals(SemSimLibrary.OPB_DERIVATIVE_CONSTRAINT_URI)) 
+							solvedwithconservation = true;
+					}
+				}
+				
+				boolean hasinputs = ds.getComputationInputs().size()>0;
+				
+				// See if the species is a source or sink in a process
+				boolean isourceorsink = false;
+				
+				for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
+					if(proc.getSourcePhysicalEntities().contains(fullcpe)
+							|| proc.getSinkPhysicalEntities().contains(fullcpe)){
+						isourceorsink = true;
+						break;
+					}
+				}
+								
+				// Set isConstant and isBoundaryCondition values
+				species.setConstant( ! hasinputs);
+
+				if( ! hasinputs) species.setBoundaryCondition(isourceorsink);
+				else species.setBoundaryCondition( ! solvedwithconservation);
+				
+				if( ! solvedwithconservation && ! species.getConstant()) addRuleToModel(ds);
 				
 				// Set start value, if present.
 				// TODO: We assumed the start value is a constant double. Eventually need to accommodate

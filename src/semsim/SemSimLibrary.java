@@ -72,11 +72,9 @@ public class SemSimLibrary {
 	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00569");
 	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00573");
 	public static URI OPB_TEMPORAL_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01151");
-  	
  	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154");
 	public static URI OPB_AREA_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295");
 	public static URI OPB_SPAN_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064");
-	
 	public static URI OPB_CHEMICAL_MOLAR_AMOUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00425");
 	public static URI OPB_CHEMICAL_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00340");
 	public static URI OPB_PARTICLE_COUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01001");
@@ -89,6 +87,7 @@ public class SemSimLibrary {
 	public static URI OPB_PARTICLE_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00544");
 	public static URI OPB_MATERIAL_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01220");
 	public static URI OPB_TIME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01023");
+	public static URI OPB_DERIVATIVE_CONSTRAINT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01180");
 	
 	private String cfgpath;
 	

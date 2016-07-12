@@ -5,15 +5,18 @@ import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalDependency;
 
 /** A Computation represents how the value of a SemSim {@link DataStructure} is determined, computationally. */
 
 public class Computation extends ComputationalModelComponent{
+	
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
 	private String computationalCode = null;
 	private String mathML = new String("");
 	private Set<Event> events = new HashSet<Event>();
+	private PhysicalDependency dependency = null;
 	
 	/**
 	 * Class constructor with no output(s) specified
@@ -91,6 +94,13 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	/**
+	 * @ return The physical dependency associated with this computation
+	 */
+	public PhysicalDependency getPhysicalDependency(){
+		return dependency;
+	}
+	
+	/**
 	 * Set the string representation of the computational code used to solve
 	 * the output(s)
 	 * @param code
@@ -123,6 +133,14 @@ public class Computation extends ComputationalModelComponent{
 	 */
 	public void setOutputs(Set<DataStructure> outputs) {
 		this.outputs = outputs;
+	}
+	
+	/**
+	 * Set the physical dependency associated with this computation
+	 * @param dep The physical dependency to associate with this computation
+	 */
+	public void setPhysicalDependency(PhysicalDependency dep){
+		dependency = dep;
 	}
 	
 	/**
@@ -177,5 +195,12 @@ public class Computation extends ComputationalModelComponent{
 	public void removeEvent(Event event){
 		this.getEvents().remove(event);
 	}
-
+	
+	
+	/**
+	 * @return Whether there is a {@link PhysicalDependency} associated with the computation 
+	 */
+	public boolean hasPhysicalDependency(){
+		return dependency != null;
+	}
 }
