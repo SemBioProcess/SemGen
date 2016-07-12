@@ -1091,19 +1091,19 @@ public class SBMLreader extends ModelReader{
 		Document projdoc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
-		Namespace modelns = projdoc.getRootElement().getNamespace();
+		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();
 	
-		Namespace ssns = RDFNamespace.SEMSIM.createJdomNamespace();
+		Namespace semsimns = RDFNamespace.SEMSIM.createJdomNamespace();
 		String rdfstring = null;
 		
 		if(projdoc.hasRootElement()){
-			Element modelel = projdoc.getRootElement().getChild("model", modelns);
+			Element modelel = projdoc.getRootElement().getChild("model", sbmlmodelns);
 				
 			if(modelel != null){
-				Element modelannel = modelel.getChild("annotation", modelns);
+				Element modelannel = modelel.getChild("annotation", sbmlmodelns);
 						
 				if(modelannel != null){	
-					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, ssns);
+					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, semsimns);
 								
 					if(modelannssel != null){
 						Element rdfel = modelannssel.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
@@ -1118,6 +1118,7 @@ public class SBMLreader extends ModelReader{
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespace = rdfreader.getModelRDFnamespace();
+		
 		if(modelnamespace == null )
 			modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
 		
