@@ -186,45 +186,10 @@
 				</div>
 			</div>
 
+			<!--Duplicate name and unit conflicts resolution step -->
 			<div id="mergeStep2">
 				<div class="panel-group">
-					<div class="panel panel-default">
-						<div class="panel-heading" data-toggle="collapse" data-target="#dupSubName1">
-							<h4 class="panel-title">
-								<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
-								Duplicate submodel name: "A"
-							</h4>
-						</div>
-						<div class="panel-collapse collapse in" id="dupSubName1">
-							<div class="panel-body mergeStep2Body">
-								Enter a new name for the submodel from
-								<select name="modelChoice">
-									<option value="modelA">Model A</option>
-									<option value="modelB">Model B</option>
-								</select>
-								<input name="newSubmodelName" type="text" size="31" placeholder="No special character, no space.">
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" data-toggle="collapse" data-target="#unitConv1">
-							<h4 class="panel-title">
-								<span class="glyphicon glyphicon-ok" style="color:#5CB85C" aria-hidden="true"></span>
-								Unit conversion
-							</h4>
-						</div>
-						<div class="panel-collapse collapse in" id="unitConv1">
-							<div class="panel-body mergeStep2Body">
-								<p>Please enter unit conversion below:</p>
-								(<span class="unitA">s</span>) = (<span class="unitB">ms</span>)
-								<select name="multiplyChoice">
-									<option value="multiply">*</option>
-									<option value="divide">/</option>
-								</select>
-								<input name="unitConvFactor" type="text" placeholder="1000">
-							</div>
-						</div>
-					</div>
+					<!--Where #dupNameResolution and #unitConversionResolution templates go-->
 				</div>
 
 				<div class="modal-footer">
@@ -273,6 +238,56 @@
 							<div class="collapsePanelLabel">Unit</div>
 							<div class="unit"></div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="dupNameResolution">
+			<div class="panel panel-default">
+				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
+				<div class="panel-heading" data-toggle="collapse" data-target="#dupSubName1">
+					<h4 class="panel-title">
+						<!--Check value in <input name="newSubmodelName"> and change glyphicon to "glyphicon glyphicon-ok" if value is good-->
+						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
+						<!--Fill name in JS-->
+						Duplicate submodel name: "duplicate_submodel_name"
+					</h4>
+				</div>
+				<div class="panel-collapse collapse in" id="dupSubName1">
+					<div class="panel-body mergeStep2Body">
+						Enter a new name for the submodel from
+						<select name="modelChoice">
+							<!--Fill name in JS-->
+							<option value="modelA">Model A</option>
+							<option value="modelB">Model B</option>
+						</select>
+						<input name="newSubmodelName" type="text" size="31" placeholder="No special character, no space.">
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="unitConversionResolution">
+			<div class="panel panel-default">
+				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
+				<div class="panel-heading" data-toggle="collapse" data-target="#unitConv1">
+					<h4 class="panel-title">
+						<!--Check value in <input name="unitConvFactor"> and change glyphicon to "glyphicon glyphicon-ok" style="color:#5CB85C" if value is good-->
+						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
+						Unit conversion
+					</h4>
+				</div>
+				<div class="panel-collapse collapse in" id="unitConv1">
+					<div class="panel-body mergeStep2Body">
+						<p>Please enter unit conversion below:</p>
+						<!--Fill units in JS-->
+						(<span class="unitA">s</span>) = (<span class="unitB">ms</span>)
+						<select name="multiplyChoice">
+							<option value="multiply">*</option>
+							<option value="divide">/</option>
+						</select>
+						<input name="unitConvFactor" type="text" placeholder="1000">
 					</div>
 				</div>
 			</div>
