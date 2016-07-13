@@ -15,29 +15,28 @@ function Task(graph) {
 	$("#leftSidebar").empty();
 	
 	this.addModelNode = function(model, optbehaviors) {
-		if(this.nodes[model.name])
-			throw "Model already exists";
 		
 		var modelNode = new ModelNode(this.graph, model, modelindex);
 		modelindex++;
+		modelNode.createChildren();
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
 		
-		this.nodes[model.name] = modelNode;
+		this.nodes[model.id] = modelNode;
 		task.graph.update();
 
 	};
 	
 	//Get a model node
-	this.getModelNode = function(modelName) {
-		var modelNode = this.nodes[modelName];
+	this.getModelNode = function(model) {
+		var modelNode = this.nodes[model];
 		if(!modelNode)
 			throw "model doesn't exist";
 		
 		return modelNode;
 	};
-
+	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
 		sender.taskClicked(this.getFirstSelectedModel().id, taskid, this);

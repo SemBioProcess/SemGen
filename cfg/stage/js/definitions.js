@@ -26,7 +26,20 @@ var NodeTypeMap = {
 		"Null": NodeType.NULLNODE
 		};
 
-var defaultcharge = -700;
+var NodeTypeArray = [
+		NodeType.MODEL,
+		NodeType.SUBMODEL,
+		NodeType.STATE,
+		NodeType.RATE,
+		NodeType.CONSTITUTIVE,
+		NodeType.ENTITY,
+		NodeType.PROCESS,
+		NodeType.MEDIATOR,
+		NodeType.NULLNODE
+		];
+
+
+var defaultcharge = -100;
 var defaultlinklength = 100;
 var defaultchargedistance = 800;
 

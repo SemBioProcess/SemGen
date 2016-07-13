@@ -16,6 +16,6 @@ public class PhysioMapNode extends Node<PhysicalProcess> {
 	
 	public PhysioMapNode(PhysicalProcess proc, Node<? extends SemSimCollection> parent) {
 		super(proc, parent);
-
+		typeIndex = PROCESS;
 	}
 }

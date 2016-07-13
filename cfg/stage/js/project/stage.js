@@ -23,31 +23,11 @@ function Stage(graph) {
 	});
 
 	//Remove the named model node
-	receiver.onRemoveModel(function(modelName) {
-		sender.consoleOut("Removing model " + modelName);
-		delete nodes[modelName];
+	receiver.onRemoveModel(function(model) {
+		sender.consoleOut("Removing model " + model.name);
+		delete nodes[model];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
-	});
-
-	// Adds a dependency network to the d3 graph
-	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
-		console.log("Showing dependencies for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(dependencyNodeData, function (data) {
-			return new DependencyNode(graph, data, modelNode);
-		});
-	});
-
-	// Adds a submodel network to the d3 graph
-	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
-		console.log("Showing submodels for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWSUBMODELS;
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(submodelData, function (data) {
-			return new SubmodelNode(graph, data, modelNode);
-		});
 	});
 
 	// Adds a PhysioMap network to the d3 graph

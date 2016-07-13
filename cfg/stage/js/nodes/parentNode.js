@@ -5,22 +5,34 @@ ParentNode.prototype = new Node();
 ParentNode.prototype.constructor = ParentNode;
 
 function ParentNode(graph, srcobj, parent, r, group, textSize, nodeType, charge) {
-	Node.prototype.constructor.call(this, graph, srcobj, parent, r, group, textSize, nodeType, charge);
-	this.children;
-	this.showchildren;
+	Node.prototype.constructor.call(this, graph, srcobj, parent, r, group, textSize, charge);
 	
+	this.children = {};
+	this.showchildren = false;
+
 	this.xmin = null;
 	this.xmax = null;
 	this.ymin = null;
 	this.ymax = null;
 	
-	//this.createChildren(srcobj.);
 }
+
+ParentNode.prototype.createChildren = function() {
+	
+	var node = this;
+	node.dependencytypecount = node.srcobj.deptypecounts;
+
+		node.children = {};
+		var data = node.srcobj.childsubmodels.concat(node.srcobj.dependencies);
+			data.forEach(function (d) {
+				node.createChild(d);
+			}, this);
+	}
 
 ParentNode.prototype.createVisualElement = function (element, graph) {
 
 	Node.prototype.createVisualElement.call(this, element, graph);
-	this.rootElement.select("circle").style("display", this.children ? "none" : "inherit");
+	this.rootElement.select("circle").style("display", this.showchildren ? "none" : "inherit");
 	
 	this.lockhull = false; //Set to true to lock the node in the expanded or closed position
 	
@@ -29,42 +41,46 @@ ParentNode.prototype.createVisualElement = function (element, graph) {
 //If children are displayed, keep text above the highest node.
 ParentNode.prototype.spaceBetweenTextAndNode = function() {
 	var dist = this.r * 0.2 + this.textSize; 
-	if (this.children && this.ymin) {
+	if (this.showchildren && this.ymin) {
 		dist += (this.ypos() - this.ymin)+4; 
 	}
 	return dist;
 }
 
-ParentNode.prototype.canLink = function () {
-	return !this.children;
-}
-
 ParentNode.prototype.createChild = function(data) {
 	var node = this;
-	if (data.type=="Submodel") {
-		return new SubmodelNode(node.graph, data, node);
+	var child;
+	if (data.typeIndex==1) {
+		child = new SubmodelNode(node.graph, data, node);
+		child.createChildren();
 	}
-	else if (data.type=="Dependency") {
-		return new DependencyNode(node.graph, data, node);		
+	else if (data.typeIndex==6) {}
+	else {
+		child = new DependencyNode(node.graph, data, node);		
 	}
-	else if (data.type=="PhysProc") {}
-	else if (data.type=="PhysEnt") {}
 	
-	return null;
-}
-
-ParentNode.prototype.createChildren = function(data) {
-	this.children = {};
-		data.forEach(function (d) {
-			var child = createChild(d);
-			if (!child) return null;
-			child.setLocation(this.xpos() + Math.random(),	this.ypos() + Math.random());
-			this.children[d] = child;
-		}, this);
+	if (!child) return;
+	
+	node.children[data.id] = child;
+	
 }
 
 ParentNode.prototype.showChildren = function () {
+	if (this.srcobj.childsubmodels.length == 0) {
+		var visiblenodes = 0;
+		if (this.graph.nodesVisible[NodeType.STATE.id]) {
+			visiblenodes = this.dependencytypecount[0];
+		}
+		if (this.graph.nodesVisible[NodeType.RATE.id]) {
+			visiblenodes += this.dependencytypecount[1];
+		}
+		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
+			visiblenodes += this.dependencytypecount[2];
+		}
+		if (visiblenodes == 0) return;
+	}
 	
+	this.showchildren = true;
 	 $(this).triggerHandler('childrenSet', [this.children]);
 	this.graph.update();
 
@@ -111,24 +127,36 @@ ParentNode.prototype.globalApply = function(funct) {
 	}	
 }
 
+ParentNode.prototype.globalApplyUntilTrue = function(funct) {
+	var stop = funct(this);
+	for (var key in this.children) {
+		if (stop) return true;
+		var child = this.children[key];
+		stop = child.globalApplyUntilTrue(funct);
+	}
+	return stop;
+}
+
+//Apply function for visible nodes only
+ParentNode.prototype.visibleGlobalApply = function(funct) {
+	if (!this.isVisible()) return;
+	funct(this);
+	if (!this.showchildren) return;
+	for (var key in this.children) {
+		var child = this.children[key];
+		child.globalApply(funct);
+	}	
+}
+
 ParentNode.prototype.onDoubleClick = function () {
-	node = this;
-	if (this.srcobj.childsubmodels.length>0) {
-		// Create submodel nodes from the model's dependency data
-		this.showSubmodelNetwork();
-	}
-	else {
-		this.showDependencyNetwork();
-	}
+	this.showChildren();
 }
 
 ParentNode.prototype.showSubmodelNetwork = function () {
 	var node = this;
 	console.log("Showing submodels for " + this.name);
 	this.graph.displaymode = DisplayModes.SHOWSUBMODELS;
-	this.setChildren(this.srcobj.childsubmodels, function (data) {
-		return new SubmodelNode(node.graph, data, node);
-	});
+	this.showChildren();
 };
 
 ParentNode.prototype.showDependencyNetwork = function () {
@@ -136,21 +164,10 @@ ParentNode.prototype.showDependencyNetwork = function () {
 	this.graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
 	var node = this;
 
-	var visiblenodes = 0;
-	if (this.graph.nodesVisible[NodeType.STATE.id]) {
-		visiblenodes = this.dependencytypecount[0];
-	}
-	if (this.graph.nodesVisible[NodeType.RATE.id]) {
-		visiblenodes += this.dependencytypecount[1];
-	}
-	if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
-		visiblenodes += this.dependencytypecount[2];
-	}
-	if (visiblenodes > 0) {
+
 		// Create dependency nodes from the submodel's dependency data
 		this.setChildren(node.requestAllChildDependencies(), function (data) {
 			return new DependencyNode(node.graph, data, node);
 		});
-	}
 
 };

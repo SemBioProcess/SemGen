@@ -19,17 +19,17 @@ public class Node<T extends SemSimObject> {
 	@Expose public int xpos = -1;
 	@Expose public int ypos = -1;
 	@Expose public Boolean hidden = false;
-	@Expose public String type;
+	@Expose public Number typeIndex;
 
 	protected T sourceobj;
 	protected Node<?> parent = null;
 	
 	//Named node
-	protected Node(String name) {
+	protected Node(String name, Number type) {
 		this.name = name;
 		this.id = name;
 		this.parentModelId = name;
-		type = sourceobj.getSemSimType().getSparqlCode();
+		this.typeIndex = type;
 	}
 	
 	//Named node with parent
@@ -37,14 +37,12 @@ public class Node<T extends SemSimObject> {
 		this.name = name;
 		this.id = name;
 		this.parentModelId = name;
-		type = sourceobj.getSemSimType().getSparqlCode();
 	}
 
 	protected Node(T obj) {
 		this.sourceobj = obj;
 		this.name = obj.getName();
 		this.id =  this.name;
-		type = sourceobj.getSemSimType().getSparqlCode();
 	}
 	
 	protected Node(T obj, Node<?> parent) {
@@ -55,16 +53,34 @@ public class Node<T extends SemSimObject> {
 		this.id =  parent.id + "." + this.name;
 	}
 	
-	//Dependency type array
-	protected static ArrayList<String> deptypes;
+	//Node type array - must correspond to var NodeType in definitions.js 
+	protected static ArrayList<String> nodetypes;
 	
 	static {
 		ArrayList<String> dtarray = new ArrayList<String>();
+
+		dtarray.add("Model");
+		dtarray.add("Submodel");
 		dtarray.add("State");
 		dtarray.add("Rate");
 		dtarray.add("Constitutive");
-		deptypes = dtarray;
+		dtarray.add("Entity");
+		dtarray.add("Process");
+		dtarray.add("Mediator");
+		dtarray.add("Null");
+
+		nodetypes = dtarray;
 	}
+	
+	static Number MODEL = 0;
+	static Number SUBMODEL = 1;
+	static Number STATE = 2;
+	static Number RATE = 3;
+	static Number CONSTITUTIVE = 4;
+	static Number ENTITY = 5;
+	static Number PROCESS = 6;
+	static Number MEDIATOR = 7;
+	static Number NULL = 8;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;

@@ -19,7 +19,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			addLinkKeysToParent(graph, visibleLinkKeys, graph.force.links(), "hideLinks");
 
 			// Update keys for hidden links
-			addLinkKeysToParent(graph, hiddenLinkKeys, graph.getHiddenLinks(), "showLinks");
+			//addLinkKeysToParent(graph, hiddenLinkKeys, graph.getHiddenLinks(), "showLinks");
 		});
 	};
 	

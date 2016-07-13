@@ -1,20 +1,20 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, name, input, output, length, linkType) {
+function Link(graph, srclink, output, input, length) {
 	if(!graph)
 		return;
 
 	this.graph = graph;
-	//this.name = name;
-	this.id = input.id + "-" + output.id + "_" + name;
+	this.srclink = srclink;
+	this.id = srclink.id;
 	//this.displayName = limitWords(this.name, 5);
 	this.className = "link";
 	this.source = input;
 	this.target = output;
 	this.length = length;
 	this.value = 1;
-	this.linkType = linkType;
+	//this.linkType = srclink.linkType;
 	this.hidden = false;
 	this.userCanHide = false;
 
@@ -35,7 +35,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className);
 
 	this.rootElement.append("svg:path")
-			.attr("id", this.source.id + "-" + this.target.id)
+			.attr("id", this.id)
 			.attr("class", "link " + this.linkType);
 
 	// Create the text elements
@@ -49,18 +49,18 @@ Link.prototype.tickHandler = function (element, graph) {
 	// Display and update links
 	var root = d3.select(element);
 	root.select("path").attr("d", function(d) {
-    	    var dx = d.target.x - d.source.x,
-    	        dy = d.target.y - d.source.y,
+    	    var dx = d.target.xpos() - d.source.xpos(),
+    	        dy = d.target.ypos() - d.source.ypos(),
     	        dr = 0;
     	        theta = Math.atan2(dy, dx) + Math.PI * 2,
     	        d90 = Math.PI / 2,
-    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
-    	        dtys = d.target.y - d.target.r * Math.sin(theta),
+    	        dtxs = d.target.xpos() - d.target.r * Math.cos(theta),
+    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta),
     	        arrowHeadWidth = 2;
 
-    	    return "M" + d.source.x + "," + d.source.y +
-    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
-    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
+    	    return "M" + d.source.xpos() + "," + d.source.ypos() +
+    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
+    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
     	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"z";
@@ -68,8 +68,8 @@ Link.prototype.tickHandler = function (element, graph) {
 
 	// Display and update the link labels
 	var text = root.selectAll("text");
-	text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
-	text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
+	text.attr("x", function(d) { return d.source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
+	text.attr("y", function(d) { return d.source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
 
 }
 

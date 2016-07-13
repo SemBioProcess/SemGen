@@ -3,7 +3,7 @@
  */
 
 
-function Node(graph, srcobj, parent, r, textSize, nodeType, charge) {
+function Node(graph, srcobj, parent, r, textSize, charge) {
 	if(!graph)
 		return;
 
@@ -13,13 +13,15 @@ function Node(graph, srcobj, parent, r, textSize, nodeType, charge) {
 	this.id = srcobj.id;
 	this.displayName = this.name;
 	this.r = r;
+	this.showchildren = false;
 	this.textSize = textSize;
-	this.nodeType = NodeTypeMap[nodeType];
+	this.nodeType = NodeTypeArray[srcobj.typeIndex];
 	this.charge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;
 	this.hidden = false;
+	this.canlink = true;
 	this.textlocx = 0;
 	this.wasfixed = false;
 	this.defaultopacity = 1.0;
@@ -32,13 +34,21 @@ function Node(graph, srcobj, parent, r, textSize, nodeType, charge) {
 	this.dragend = [];
 	this.addBehavior(NodeDrag);
 	
+	this.x = srcobj.xpos;
+	this.y = srcobj.ypos;
+	
 	this.xpos = function () {
-		return this.srcobj.xpos;
+		return this.x;
 	}
 
 	this.ypos = function () {
-		return this.srcobj.ypos;
+		return this.y;
 	}
+	
+	this.isHidden = function() {
+		return this.srcobj.hidden;
+	}
+	
 }
 
 //Get this node's top level parent
@@ -80,6 +90,18 @@ Node.prototype.setLocation = function (x, y) {
 
 
 Node.prototype.createVisualElement = function (element, graph) {
+	if (this.xpos()==-1 || this.ypos() == -1) {
+		if (this.parent) {
+			this.setLocation(this.parent.xpos() + Math.random(), this.parent.ypos() + Math.random());
+		}
+		else {
+			this.setLocation(
+					(Math.random() * (graph.w-graph.w/3))+graph.w/6,
+					(Math.random() * (graph.h-graph.h/2))+graph.h/6
+				);
+		}
+	} 
+	
 	this.rootElement = d3.select(element);
 	this.rootElement.attr("class", this.className)
 		.call(graph.force.drag)
@@ -97,7 +119,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 											graph.highlightMode(null);
 										});
 
-	if(this.nodeType.nodeType == "Null") {
+	if(this.nodeType == NodeType.NULL) {
 		circleSelection.attr("stroke", "black")
 			.attr("stroke-width", 0.5);
 		this.rootElement.append("svg:line")
@@ -128,108 +150,8 @@ Node.prototype.createVisualElement = function (element, graph) {
 	
 }
 
-Node.prototype.canLink = function () {
-	return true;
-}
-
 Node.prototype.getLinks = function () {
-	// Don't show any inputs to this node can't link
-	if(!this.canLink())
-		return;
-
-
-	// Build an array of links from our list of inputs
-	var links = [];
-
-	for(var i = 0; i < this.inputs.length; i++) {
-		var inputData = this.inputs[i];
-		var inputNodeId;
-		var outputNodeId;
-		var type;
-		var linkLabel = inputData.label;
-
-		// If the linked node is in a different parent, mark it as external
-		if(inputData.parentModelId != this.parent.id) {
-			type = "external";
-			if (this.parent.id != "null" && inputData.parentModelId != "null") { 
-				
-				var parent = this.graph.findVisibleNode(inputData.parentModelId);
-				if (!parent) {
-					console.log("External link without a parent!");
-					continue;
-				}
-	
-				// If the parent can link add a link to it
-				if (parent.canLink())
-					inputNodeId = parent.id;
-				// Otherwise, add a link to its child
-				else {
-					type = "internal";
-					inputNodeId = this.parent.id + inputData.name;
-				}
-			}
-			else {
-				inputNodeId = inputData.name;
-				if (this.submodelid) {
-					var branch = inputNodeId.split(".");
-					if (branch[0] + "." + branch[1] == this.submodelid) {
-						type = "internal";
-					}
-				}
-			}
-		}
-
-		else if(this.nodeType == NodeType.ENTITY || this.nodeType == NodeType.PROCESS || this.nodeType == NodeType.NULLNODE) {
-			type = "physiomap";
-			inputNodeId = inputData.sourceId;
-			outputNodeId = inputData.sinkId;
-			if(inputData.linkType == "Mediator") {
-				type = "Mediator";
-			}
-
-		}
-
-		else {
-			type = "internal";
-			inputNodeId = inputData.sourceId;
-			outputNodeId = inputData.sinkId;
-		}
-
-		// Get the input node
-		var inputNode = this.graph.findVisibleNode(inputNodeId);
-
-		// Get the sink node
-		var outputNode = outputNodeId === undefined ? this : this.graph.findVisibleNode(outputNodeId);
-
-		if(!inputNode) {
-			console.log("input node '" + inputNodeId + "' does not exist. Can't build link.");
-			continue;
-		}
-
-		if(!outputNode) {
-			console.log("sink node '" + outputNodeId + "' does not exist. Can't build link.");
-			continue;
-		}
-
-		// If the parent has children it's circle is hidden
-		// so we don't want to show any inputs to it
-		if(!inputNode.canLink()) {
-			console.log("input node '" + inputNodeId + "' has its circle hidden. Can't build link.");
-			continue;
-		}
-
-		if(type == "external") length = this.graph.linklength;
-		else if(type == "physiomap") length = Math.round(this.graph.linklength/3);
-		else length = Math.round(this.graph.linklength/5);
-
-		if(type == "Mediator")
-			var newLink = new MediatorLink(this.graph, linkLabel, inputNode, outputNode, length, type);
-		else var newLink = new Link(this.graph, linkLabel, inputNode, outputNode, length, type);
-		links.push(newLink);
-
-	}
-
-	return links;
+	return [];
 }
 
 Node.prototype.tickHandler = function (element, graph) {
@@ -254,7 +176,7 @@ Node.prototype.tickHandler = function (element, graph) {
 
 	var root = d3.select(element);
 	//Keep the text above hull when an parent node is opened.
-	if (this.children) {
+	if (this.showchildren) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
 		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
 	}
@@ -306,7 +228,13 @@ Node.prototype.onClick = function () {
 }
 
 Node.prototype.isVisible = function () {
-	return (!this.hidden && this.graph.nodesVisible[this.nodeType.id]);
+	var parent = this.parent;
+	var show = true;
+	while (parent && show) {
+		show = parent.showchildren;
+		parent = parent.parent;
+	} 
+	return (show && !this.hidden && this.graph.nodesVisible[this.nodeType.id]);
 }
 
 Node.prototype.onDoubleClick = function () {}
@@ -314,6 +242,12 @@ Node.prototype.onDoubleClick = function () {}
 Node.prototype.globalApply = function (funct) {
 	funct(this);
 }
+
+//Traverse children until condition is met or all children are traversed
+Node.prototype.globalApplyUntilTrue = function (funct) {
+	return funct(this);
+}
+
 
 Node.prototype.applytoChildren = function(funct) {}
 
@@ -329,9 +263,6 @@ function validateNode(nodeData) {
 
 	if(typeof nodeData.charge != "number")
 		throw "Charge must be a number";
-
-	if(typeof nodeData.getLinks != "function")
-		throw "Node getLinks is not defined";
 
 	if(typeof nodeData.createVisualElement != "function")
 		throw "Node createVisualElement is not defined";

@@ -17,17 +17,15 @@ import semsim.model.computational.datastructures.DataStructure;
  */
 public class DependencyNode extends Node<DataStructure> {	
 	
-	@Expose public String nodeType;
-	@Expose public Number typeIndex;
 	@Expose public String submodelId = "";
-	public ArrayList<DependencyNode> inputs = new ArrayList<DependencyNode>();
+	@Expose public ArrayList<Link> inputs = new ArrayList<Link>();
 	@Expose public boolean issubmodelinput;
 	
 	public DependencyNode(DataStructure dataStructure, Node<? extends SemSimCollection> parent) {
 		super(dataStructure, parent);
-		
-		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
-		this.typeIndex = deptypes.indexOf(nodeType);
+
+		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
+		this.typeIndex = nodetypes.indexOf(nodeType);
 		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
 	}
 	
@@ -35,7 +33,7 @@ public class DependencyNode extends Node<DataStructure> {
 		if (sourceobj.hasComputation()) {
 			for (DataStructure input : sourceobj.getComputationInputs()) {
 				if (sourceobj!=input) {
-					inputs.add(dsnodemap.get(input));
+					inputs.add(new Link(this, dsnodemap.get(input)));
 				}
 			}
 		}
@@ -50,9 +48,5 @@ public class DependencyNode extends Node<DataStructure> {
 				name = sourceobj.getName();
 			}
 		}
-	}
-	
-	public ArrayList<DependencyNode> getInputs() {
-		return inputs;
 	}
 }

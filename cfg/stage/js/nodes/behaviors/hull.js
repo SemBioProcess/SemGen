@@ -4,7 +4,7 @@
  */
 function Hull(node) {
 	var hull;
-	var children;
+	var children = null;
 	
 	$(node).on('createVisualization', function (e, root) {
 		hull = root.append("path")
@@ -14,8 +14,10 @@ function Hull(node) {
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
 				if (!node.lockhull) {
-					node.setChildren(null, null);
+					node.showchildren = false;
+					chidren = null;
 					node.rootElement.selectAll("text").attr("x", 0);
+					node.graph.update();
 				}
 			});
 	});
@@ -35,7 +37,7 @@ function Hull(node) {
 	$(node).on('preTick', function () {
 		if (node.id==null) return; 
 		// Draw the hull around child nodes
-		if(children) {
+		if(node.showchildren) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull
 			// 2) Calculate the center of the child nodes and the top of the child nodes so 
 			// 		we can position the text and parent node appropriately
@@ -58,13 +60,13 @@ function Hull(node) {
 					if(child.children)
 						analyzeChildren(getSymbolArray(child.children));
 					
-					vertexes.push([child.ypos(), child.ypos()]);
+					vertexes.push([child.xpos(), child.ypos()]);
 					//Find the most extreme node positions for each axis
-					minX = minX || child.ypos();
-					minX = child.ypos() < minX ? child.ypos() : minX;
+					minX = minX || child.xpos();
+					minX = child.xpos() < minX ? child.xpos() : minX;
 					
 					maxX = maxX || child.ypos();
-					maxX = child.ypos() > maxX ? child.ypos() : maxX;
+					maxX = child.xpos() > maxX ? child.xpos() : maxX;
 					
 					minY = minY || child.ypos();
 					minY = child.ypos() < minY ? child.ypos() : minY;

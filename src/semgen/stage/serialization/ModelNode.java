@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import com.google.gson.annotations.Expose;
 
-import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -15,13 +14,15 @@ public class ModelNode extends ParentNode<SemSimModel>{
 	
 	//null model
 	public ModelNode(String modname) {
-		super(modname, SemSimTypes.MODEL);
+		super(modname, MODEL);
+		
 	}
 	
 	public ModelNode(SemSimModel sourcemod) {
 		super(sourcemod);
 		serializeModel();
 		generatePhysioMapNetwork();
+		typeIndex = MODEL;
 	}
 	
 	private void serializeModel() {
@@ -35,6 +36,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		for (DataStructure ads : sourceobj.getAssociatedDataStructures()) {
 			if (!depnodemap.containsKey(ads)) {
 				DependencyNode dnode = depnodemap.put(ads, new DependencyNode(ads, this));
+				incrementType(dnode.typeIndex);
 				dependencies.add(dnode);
 			}
 		}
