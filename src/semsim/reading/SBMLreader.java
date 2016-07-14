@@ -733,10 +733,10 @@ public class SBMLreader extends ModelReader{
 				}
 				
 				// Remove start value if we are overwriting the computation for a species
-				if(sbmlmodel.getSpecies(varname)!=null && ! sbmlrule.isRate()) ds.setStartValue(null);
+				if(sbmlmodel.getSpecies(varname) != null && ! sbmlrule.isRate()) ds.setStartValue(null);
 				
 				// If we're assigning a rate rule to a parameter, use it's value attribute as the initial condition
-				if(sbmlmodel.getParameter(varname)!=null && sbmlrule.isRate()){
+				if(sbmlmodel.getParameter(varname) != null && sbmlrule.isRate()){
 					Parameter par = sbmlmodel.getParameter(varname);
 					ds.setStartValue(Double.toString(par.getValue()));
 				}
@@ -926,9 +926,11 @@ public class SBMLreader extends ModelReader{
 				process.addSource(reactantent, stoich);
 									
 				// Store info about species conservation for use in outputting species equations
-				SpeciesConservation sc = speciesAndConservation.get(reactantname);
+				if(speciesAndConservation.containsKey(reactantname)){
+					SpeciesConservation sc = speciesAndConservation.get(reactantname);
 				
-				if(sc.setWithConservationEquation) sc.consumedby.add(reactionID);
+					if(sc.setWithConservationEquation) sc.consumedby.add(reactionID);
+				}
 			}
 			
 			// Set sinks (products)
@@ -939,9 +941,11 @@ public class SBMLreader extends ModelReader{
 				process.addSink(productent, stoich);
 				
 				// Store info about species conservation for use in outputting species equations
-				SpeciesConservation sc = speciesAndConservation.get(productname);
+				if(speciesAndConservation.containsKey(productname)){
+					SpeciesConservation sc = speciesAndConservation.get(productname);
 				
-				if(sc.setWithConservationEquation) sc.producedby.add(reactionID);
+					if(sc.setWithConservationEquation) sc.producedby.add(reactionID);
+				}
 			}
 			
 			// Set mediators (modifiers)
@@ -997,14 +1001,19 @@ public class SBMLreader extends ModelReader{
 			
 			eqmathml = mathMLelementStart + makeLHSforStateVariable(speciesid);
 			
+			SpeciesConservation speccon = speciesAndConservation.get(speciesid);
+			
+			
 			// If the species is set as a boundary condition, set RHS to zero
 			if(sbmlspecies.getBoundaryCondition()==true || sbmlspecies.getConstant()==true){
 				eqmathml = eqmathml + "  <cn>0</cn>\n </apply>\n" + mathMLelementEnd;
 				eqstring = "0";
 			}
 			
-			// Otherwise create the RHS of the ODE
-			else{
+			// Otherwise create the RHS of the ODE for the conservation equation
+			// but only if the species is actually a reactant or product one of the reactions.
+			// If not a reactant or product, do not create a new equation for its solution.
+			else if (speccon.consumedby.size()>0 || speccon.producedby.size()>0){
 				String RHSstart = subunits ? "" : "  <divide/>\n   <apply>\n";
 				eqmathml = eqmathml + "  <apply>\n" + RHSstart + ws + "<plus/>";
 			
@@ -1015,7 +1024,7 @@ public class SBMLreader extends ModelReader{
 				
 				PhysicalEntity speciesent = speciesAndEntitiesMap.get(speciesid);
 				
-				for(String reactionid : speciesAndConservation.get(speciesid).producedby){
+				for(String reactionid : speccon.producedby){
 					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSinkStoichiometry(speciesent);
 					
 					if(stoich==1){
@@ -1030,7 +1039,7 @@ public class SBMLreader extends ModelReader{
 					}
 				}
 				
-				for(String reactionid : speciesAndConservation.get(speciesid).consumedby){
+				for(String reactionid : speccon.consumedby){
 					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSourceStoichiometry(speciesent);
 					
 					if(stoich==1){

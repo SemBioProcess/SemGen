@@ -355,12 +355,12 @@ public class SBMLwriter extends ModelWriter {
 				boolean hasinputs = ds.getComputationInputs().size()>0;
 				
 				// See if the species is a source or sink in a process
-				boolean isourceorsink = false;
+				boolean issourceorsink = false;
 				
 				for(PhysicalProcess proc : semsimmodel.getPhysicalProcesses()){
 					if(proc.getSourcePhysicalEntities().contains(fullcpe)
 							|| proc.getSinkPhysicalEntities().contains(fullcpe)){
-						isourceorsink = true;
+						issourceorsink = true;
 						break;
 					}
 				}
@@ -368,7 +368,7 @@ public class SBMLwriter extends ModelWriter {
 				// Set isConstant and isBoundaryCondition values
 				species.setConstant( ! hasinputs);
 
-				if( ! hasinputs) species.setBoundaryCondition(isourceorsink);
+				if( ! hasinputs) species.setBoundaryCondition(issourceorsink);
 				else species.setBoundaryCondition( ! solvedwithconservation);
 				
 				if( ! solvedwithconservation && ! species.getConstant()) addRuleToModel(ds);
@@ -535,7 +535,7 @@ public class SBMLwriter extends ModelWriter {
 			boolean usesevents = ds.getComputation().hasEvents();
 			boolean hasmathml = (mathml != null && ! mathml.equals(""));
 			boolean hasIC = ds.hasStartValue();
-			
+						
 			if(usesevents){
 				par.setConstant(false);
 				
@@ -547,6 +547,7 @@ public class SBMLwriter extends ModelWriter {
 						RateRule rr = sbmlmodel.createRateRule();
 						rr.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
 						rr.setVariable(ds.getName());
+						par.setValue(Double.parseDouble(ds.getStartValue()));
 					}
 					else{
 						// TODO: probably need to get local name for mappableVariables here.
@@ -722,7 +723,10 @@ public class SBMLwriter extends ModelWriter {
 		ExplicitRule rule = null;
 		String mathml = ds.getComputation().getMathML();
 		
-		if(ds.hasStartValue()) rule = sbmlmodel.createRateRule();
+		if(ds.hasStartValue()){
+			rule = sbmlmodel.createRateRule();
+			sbmlmodel.getParameter(ds.getName()).setValue(Double.parseDouble(ds.getStartValue())); // Set IC
+		}
 		else rule = sbmlmodel.createAssignmentRule();
 		
 		rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
