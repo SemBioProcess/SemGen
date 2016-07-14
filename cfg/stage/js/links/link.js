@@ -8,16 +8,15 @@ function Link(graph, srclink, output, input, length) {
 	this.graph = graph;
 	this.srclink = srclink;
 	this.id = srclink.id;
-	//this.displayName = limitWords(this.name, 5);
-	this.className = "link";
 	this.source = input;
 	this.target = output;
 	this.length = length;
 	this.value = 1;
-	//this.linkType = srclink.linkType;
 	this.hidden = false;
 	this.userCanHide = false;
+	this.linkType = NodeTypeArray[srclink.linkType];
 
+	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 2;
 }
 
 //  Link.prototype.addBehavior = function (behavior) {
@@ -36,8 +35,19 @@ Link.prototype.createVisualElement = function (element, graph) {
 
 	this.rootElement.append("svg:path")
 			.attr("id", this.id)
-			.attr("class", "link " + this.linkType);
+			.attr("class", "link");
+	
+	if (this.srclink.external) {
+		this.rootElement.select("path")
+			.attr("stroke-dasharray", 5);
+	}
 
+	if (this.linkType == NodeType.MEDIATOR) {
+		this.rootElement.select("path")
+			.attr("stroke-dasharray", 2, 5)
+			.attr("stroke-width", 2);
+	}
+	
 	// Create the text elements
 	this.createTextElement("shadow");
 	this.createTextElement("real");
@@ -55,14 +65,13 @@ Link.prototype.tickHandler = function (element, graph) {
     	        theta = Math.atan2(dy, dx) + Math.PI * 2,
     	        d90 = Math.PI / 2,
     	        dtxs = d.target.xpos() - d.target.r * Math.cos(theta),
-    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta),
-    	        arrowHeadWidth = 2;
+    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta);
 
     	    return "M" + d.source.xpos() + "," + d.source.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
-    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-    	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"M" + dtxs + "," + dtys + "l" + (this.arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-this.arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"L" + (dtxs - this.arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + this.arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"z";
     	});
 
@@ -88,7 +97,7 @@ Link.prototype.createTextElement = function (className) {
 			.attr("fill", "green")
 			.attr("class", className)
 			.attr("text-anchor", "middle")
-			.text(this.displayName);
+			.text("");
 }
 
 // Limit displayName to 5 words

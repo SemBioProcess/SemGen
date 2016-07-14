@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 
 public class Link {
 	@Expose public String id;
-	@Expose public String linkType;
+	@Expose public Number linkType;
 	@Expose public Boolean external;
 	@Expose public Node<? extends SemSimComponent> input;
 	@Expose public Node<? extends SemSimComponent> output;
@@ -15,6 +15,15 @@ public class Link {
 		input = inputnode;
 		output = outputnode;
 		
+		id = inputnode.id + "-" + outputnode.id;
+		linkType = inputnode.typeIndex;
+		external = (inputnode.parent.id!=outputnode.parent.id); 
+	}
+	
+	public Link(Node<? extends SemSimComponent> outputnode, Node<? extends SemSimComponent> inputnode, Number type) {
+		input = inputnode;
+		output = outputnode;
+		linkType = type;
 		id = inputnode.id + "-" + outputnode.id;
 		
 		external = (inputnode.parent.id!=outputnode.parent.id); 

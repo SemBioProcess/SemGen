@@ -39,13 +39,13 @@ public class SemSimModelSerializer {
 		PhysioMapNode pmnode = new PhysioMapNode(proc, model);
 
 		for (PhysicalEntity part : proc.getSourcePhysicalEntities()) {
-			pmnode.sources.add(getParticipantNode(part));
+			pmnode.addSourceLink(getParticipantNode(part));
 		}
 		for (PhysicalEntity part : proc.getSinkPhysicalEntities()) {
-			pmnode.sinks.add(getParticipantNode(part));
+			pmnode.addSinkLink(getParticipantNode(part));
 		}
 		for (PhysicalEntity part : proc.getMediatorPhysicalEntities()) {
-			pmnode.mediators.add(getParticipantNode(part));
+			pmnode.addMediatorLink(getParticipantNode(part));
 		}
 
 		return pmnode;

@@ -68,7 +68,6 @@ DependencyNode.prototype.getLinks = function () {
 	});
 
 	
-//		if(type == "external") length = this.graph.linklength;
 //		else if(type == "physiomap") length = Math.round(this.graph.linklength/3);
 
 

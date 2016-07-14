@@ -3,20 +3,6 @@ path.link {
   stroke: #A8A8A8;
   stroke-width: 1.5px;
 }
-
-path.link.external {
-	stroke-dasharray: 5;
-}
-
-path.link.Mediator {
-	stroke-dasharray: 2, 5;
-	stroke-width: 2;
-}
-
-path.link.Mediator {
-	stroke-dasharray: 1, 5;
-}
-
 .node {
 	cursor: move;
 	stroke: none;

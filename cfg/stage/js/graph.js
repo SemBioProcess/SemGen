@@ -324,6 +324,7 @@ function Graph() {
 
 	this.setNodeCharge = function(charge) {
 		if (isNaN(charge)) return;
+		this.force.stop();
 		this.nodecharge = charge;
 		for (n in nodes) {
 			nodes[n].applytoChildren(function(d) {

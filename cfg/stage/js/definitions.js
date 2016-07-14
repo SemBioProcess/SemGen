@@ -10,7 +10,7 @@ var NodeType = {
 		CONSTITUTIVE: {id: 4, nodeType: "Constitutive", color: "#FF7F0E", canShowHide: true},
 		ENTITY: {id: 5, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
 		PROCESS: {id: 6, nodeType: "Process", color: "#2CA02C", canShowHide: true},
-		MEDIATOR: {id: 7, nodeType: "Mediator", color: "#1F77B4", canShowHide: true},
+		MEDIATOR: {id: 7, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
 		NULLNODE: {id: 8, nodeType: "Null", color: "#FFFFFF", canShowHide: true}
 };
 
@@ -46,5 +46,5 @@ var defaultchargedistance = 800;
 var DisplayModes = {
 	SHOWSUBMODELS: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
 	SHOWDEPENDENCIES: [NodeType.MODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
-	SHOWPHYSIOMAP: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS, NodeType.MEDIATOR]
+	SHOWPHYSIOMAP: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS]
 };
