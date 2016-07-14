@@ -56,7 +56,7 @@ public class SemSimRDFreader extends ModelReader{
 	private Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	public Model rdf = ModelFactory.createDefaultModel();
 	private String unnamedstring = "[unnamed!]";
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
+	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
 
 	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, String baseNamespace) {
@@ -208,7 +208,7 @@ public class SemSimRDFreader extends ModelReader{
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceAsString()))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -493,7 +493,7 @@ public class SemSimRDFreader extends ModelReader{
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = RDFNamespace.OPB.getNamespaceAsString() + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
 		
 		return URI.create(uristring);
 	}

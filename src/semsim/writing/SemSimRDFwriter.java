@@ -50,7 +50,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>();
 
 	
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
+	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	
 	// Constructor without existing RDF block
@@ -76,11 +76,11 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
 		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 	

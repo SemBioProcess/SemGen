@@ -370,17 +370,17 @@ public class SBMLreader extends ModelReader{
 			
 			// Add physical property here
 			if(sbmlc.getSpatialDimensions()==3.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00154"));
 				defaultunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==2.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00295"));
 				defaultunits = "area";
 				modelobjectspecifieddefaultunits = sbmlmodel.getAreaUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==1.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064"));
+				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01064"));
 
 				defaultunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();

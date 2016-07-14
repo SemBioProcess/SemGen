@@ -51,7 +51,7 @@ public class CellMLwriter extends ModelWriter {
 		outputter.setFormat(Format.getPrettyFormat());
 		
 		try{	
-			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
+			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
 			
 			// Check for events, if present write out error msg
 			if(semsimmodel.getEvents().size()>0){

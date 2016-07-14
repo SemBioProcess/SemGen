@@ -15,7 +15,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import semsim.definitions.RDFNamespace;
 
 public class CurationalMetadata {
-	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceAsString();
+	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceasString();
 	
 	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
 	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");

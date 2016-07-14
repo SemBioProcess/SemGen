@@ -29,7 +29,7 @@ public enum RDFNamespace  {
 		owlid = id;
 	}
 	
-	public String getNamespaceAsString() {
+	public String getNamespaceasString() {
 		return namespace;
 	}
 	
@@ -38,6 +38,6 @@ public enum RDFNamespace  {
 	}
 	
 	public Namespace createJdomNamespace() {
-		return Namespace.getNamespace(getOWLid(), getNamespaceAsString());
+		return Namespace.getNamespace(getOWLid(), getNamespaceasString());
 	}
 }
