@@ -15,6 +15,8 @@ public enum SemSimTypes {
 	REFERENCE_PHYSICAL_ENTITY("Reference Physical Entity", RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_entity", 
 			"A reference term that defines a physical entity represented in the model.", "SemSim:Reference_physical_entity"),
 	PHYSICAL_DEPENDENCY("Physical Dependency", RDFNamespace.SEMSIM.getNamespaceasString() + "Physical_dependency", "", ""),
+	REFERENCE_PHYSICAL_DEPENDENCY("Reference Physical Dependency", RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_dependency",
+			"A reference term that defines a physical dependency represented in the model.", "SemSim:Reference_physical_dependency"),
 	PHYSICAL_ENTITY("Physical Entity", RDFNamespace.SEMSIM.getNamespaceasString() + "Physical_entity", "", ""),
 	CUSTOM_PHYSICAL_ENTITY("Custom Physical Entity", RDFNamespace.SEMSIM.getNamespaceasString() + "Custom_physical_entity", 
 			"A physical entity which is not defined against a reference term, but instead created and defined in an ad hoc manner within a model.", ""),

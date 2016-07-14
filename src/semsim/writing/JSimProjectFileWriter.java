@@ -21,7 +21,8 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
+import semsim.reading.ModelReader;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
@@ -59,7 +60,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		// If the file already exists...
 		if(destination.exists()){
 			
-			projdoc = JSimProjectFileReader.getDocument(outputProjectFile);
+			projdoc = ModelReader.getJDOMdocumentFromFile(outputProjectFile);
 		
 			// If the model already exists in the project file, overwrite the model code
 			// and the SemSim annotation control element. This will preserve parsets, etc. for the 
@@ -90,7 +91,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
-				Document origindoc = JSimProjectFileReader.getDocument(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
+				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			
@@ -113,7 +114,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			flattenModelForMML(srccodeel.getText());
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, null, null);
+		rdfblock = new SemSimRDFwriter(semsimmodel);
 		
 		// Write out model-level annotations
 		rdfblock.setRDFforModelLevelAnnotations();
@@ -125,7 +126,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		rdfblock.setRDFforSubmodelAnnotations();
 		
 		// Add the RDF metadata to the appropriate element in the JSim project file
-		if(rdfblock.rdf.listStatements().hasNext()){
+		if( ! rdfblock.rdf.isEmpty()){
 			
 			String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
@@ -181,7 +182,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		String modelText = null;
 		ModelAccessor sourceCodeLocation = semsimmodel.getLegacyCodeLocation();
 		
-		if(semsimmodel.getSourceModelType()==ModelClassifier.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
+		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
 			modelText = sourceCodeLocation.getLocalModelTextAsString();
 		// TODO: if MML source code is online, retrieve it
 

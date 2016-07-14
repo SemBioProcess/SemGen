@@ -6,15 +6,19 @@ import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.model.physical.PhysicalDependency;
 import semsim.owl.SemSimOWLFactory;
 
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
-	public ReferencePhysicalDependency(URI uri, String description, SemSimLibrary lib){
-		addReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, uri, description, lib);
+	public ReferencePhysicalDependency(URI uri, String description){
+		super(SemSimTypes.REFERENCE_PHYSICAL_DEPENDENCY);
+		referenceuri = uri;
+		setName(description);
 	}
-
+	
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
 			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
@@ -22,15 +26,15 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 		return null;
 	}
 	
+	public URI getPhysicalDefinitionURI() {
+		return URI.create(referenceuri.toString());
+	}
+	
 	/**
 	 * @return The name of the knowledge base that contains the URI used as the annotation value
 	 */
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
 		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
-	}
-	
-	public URI getPhysicalDefinitionURI() {
-		return URI.create(referenceuri.toString());
 	}
 	
 	@Override

@@ -110,6 +110,14 @@ public class ModelAccessor {
 			}
 		}
 
+		else if(modelIsPartOfArchive()){
+			
+			if(modelIsPartOfJSimProjectFile()){
+				Document projdoc = ModelReader.getJDOMdocumentFromFile(getFileThatContainsModel());
+				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
+			}
+		}
+			
 		return returnstring;
 	}
 	

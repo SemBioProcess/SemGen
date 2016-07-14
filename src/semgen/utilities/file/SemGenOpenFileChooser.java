@@ -12,6 +12,7 @@ import org.jdom.Document;
 import semgen.SemGen;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelReader;
 import semsim.utilities.SemSimUtil;
 
 public class SemGenOpenFileChooser extends SemGenFileChooser {
@@ -86,7 +87,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 		
 		if(file.exists() && file.getName().toLowerCase().endsWith(".proj")){
 			
-			Document projdoc = JSimProjectFileReader.getDocument(file);
+			Document projdoc = ModelReader.getJDOMdocumentFromFile(file);
 			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
 			if(modelnames.size()==1)  modelaccessors.add(new ModelAccessor(file, modelnames.get(0)));

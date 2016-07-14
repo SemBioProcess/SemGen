@@ -12,45 +12,43 @@ import org.sbml.jsbml.SBMLReader;
 
 public class ModelClassifier {
 	
-	public static final int SEMSIM_MODEL = 0;
-	public static final int SBML_MODEL = 1;
-	public static final int CELLML_MODEL = 2;
-	public static final int MML_MODEL = 3;
-	public static final int MML_MODEL_IN_PROJ = 4;
+	public static enum ModelType{
+		SEMSIM_MODEL, SBML_MODEL, CELLML_MODEL, MML_MODEL, MML_MODEL_IN_PROJ, UNKNOWN
+	}
 	
 	
-	public static int classify(File file){
+	public static ModelType classify(File file){
 		return classify(new ModelAccessor(file));
 	}
 	
-	public static int classify(ModelAccessor accessor){
-		int type = -1;
+	public static ModelType classify(ModelAccessor accessor){
+		ModelType type = ModelType.UNKNOWN;
 		try{
 			
 			if(accessor.modelIsPartOfArchive()){
 				
 				if(accessor.modelIsPartOfJSimProjectFile()){
-					type = MML_MODEL_IN_PROJ;
+					type = ModelType.MML_MODEL_IN_PROJ;
 				}
 			}
 			else{
 				File file = accessor.getFileThatContainsModel();
 				if (file.toString().toLowerCase().endsWith(".mod")){
-					type = MML_MODEL;
+					type = ModelType.MML_MODEL;
 				}
 				else if (file.toString().endsWith(".owl")) {
-					type =  SEMSIM_MODEL;
+					type =  ModelType.SEMSIM_MODEL;
 				}
 				else if(isCellMLmodel(file)){
-					type =  CELLML_MODEL;
+					type =  ModelType.CELLML_MODEL;
 				}
 				else if(isValidSBML(file)){
-					type =  SBML_MODEL;
+					type =  ModelType.SBML_MODEL;
 				}
 				else if(file.toString().toLowerCase().endsWith(".xml")){
-					if(isValidSBML(file)) type =  SBML_MODEL;
+					if(isValidSBML(file)) type =  ModelType.SBML_MODEL;
 					else
-						if(isCellMLmodel(file)) type =  CELLML_MODEL;
+						if(isCellMLmodel(file)) type =  ModelType.CELLML_MODEL;
 				}
 			}
 		}

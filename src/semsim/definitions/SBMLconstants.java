@@ -2,7 +2,6 @@ package semsim.definitions;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class SBMLconstants {
 
 	public static final Map<String,String> SBML_LEVEL_2_RESERVED_UNITS_MAP;
 	public static final Set<String> SBML_LEVEL_3_BASE_UNITS;
-	public static final Set<String> SBML_LEVEL_2_VERSION_4_BASE_UNITS;
+	public static final Set<String> SBML_LEVEL_2_VERSION_2_BASE_UNITS;
 	public static final Set<String> SBML_LEVEL_2_VERSION_1_BASE_UNITS;
 	
 	public static final Set<URI> OPB_PROPERTIES_FOR_COMPARTMENTS;
@@ -72,13 +71,13 @@ public class SBMLconstants {
 		SBML_LEVEL_3_BASE_UNITS = Collections.unmodifiableSet(set0);
 		
 		
-		SBML_LEVEL_2_VERSION_4_BASE_UNITS = new HashSet<String>();
-		SBML_LEVEL_2_VERSION_4_BASE_UNITS.addAll(SBML_LEVEL_3_BASE_UNITS);
-		SBML_LEVEL_2_VERSION_4_BASE_UNITS.remove("avogadro");
+		SBML_LEVEL_2_VERSION_2_BASE_UNITS = new HashSet<String>();
+		SBML_LEVEL_2_VERSION_2_BASE_UNITS.addAll(SBML_LEVEL_3_BASE_UNITS);
+		SBML_LEVEL_2_VERSION_2_BASE_UNITS.remove("avogadro");
 		
 		SBML_LEVEL_2_VERSION_1_BASE_UNITS = new HashSet<String>();
-		SBML_LEVEL_2_VERSION_1_BASE_UNITS.addAll(SBML_LEVEL_2_VERSION_4_BASE_UNITS);
-		SBML_LEVEL_2_VERSION_4_BASE_UNITS.add("Celsius");
+		SBML_LEVEL_2_VERSION_1_BASE_UNITS.addAll(SBML_LEVEL_2_VERSION_2_BASE_UNITS);
+		SBML_LEVEL_2_VERSION_1_BASE_UNITS.add("Celsius");
 		
 		
 		Set<URI> set1 = new HashSet<URI>();
