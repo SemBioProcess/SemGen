@@ -10,9 +10,7 @@ import semsim.model.physical.PhysicalEntity;
 
 public class PhysioMapNode extends Node<PhysicalProcess> {
 
-	@Expose public ArrayList<Link> sources = new ArrayList<Link> ();
-	@Expose public ArrayList<Link> sinks = new ArrayList<Link>();
-	@Expose public ArrayList<Link> mediators = new ArrayList<Link> ();
+	@Expose public ArrayList<Link> inputs = new ArrayList<Link>();
 	
 	public PhysioMapNode(PhysicalProcess proc, Node<? extends SemSimCollection> parent) {
 		super(proc, parent);
@@ -20,15 +18,15 @@ public class PhysioMapNode extends Node<PhysicalProcess> {
 	}
 	
 	public void addSourceLink(Node<PhysicalEntity> source) {
-		sources.add(new Link(this, source));
+		inputs.add(new Link(this, source));
 	}
 	
 	public void addSinkLink(Node<PhysicalEntity> sink) {
-		sources.add(new Link(this, sink));
+		inputs.add(new Link(sink, this));
 	}
 
 	public void addMediatorLink(Node<PhysicalEntity> mediator) {
-		new Link(this, mediator, Node.MEDIATOR);
+		inputs.add(new Link(this, mediator, Node.MEDIATOR));
 	}
 	
 	

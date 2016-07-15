@@ -30,17 +30,6 @@ function Stage(graph) {
 		graph.update();
 	});
 
-	// Adds a PhysioMap network to the d3 graph
-	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
-		console.log("Showing PhysioMap for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWPHYSIOMAP;
-
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(physiomapData, function (data) {
-			return new PhysioMapNode(graph, data, modelNode);
-		});
-	});
-
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
 		console.log("Showing search results");

@@ -18,7 +18,7 @@ function Task(graph) {
 		
 		var modelNode = new ModelNode(this.graph, model, modelindex);
 		modelindex++;
-		modelNode.createChildren();
+		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
@@ -41,6 +41,10 @@ function Task(graph) {
 		var taskid = element.innerHTML.toLowerCase();
 		sender.taskClicked(this.getFirstSelectedModel().id, taskid, this);
 	};
+	
+	this.doModelAction = function(action) {
+		action(this.getFirstSelectedModel());
+	}
 	
 	this.getFirstSelectedModel = function () {
 		if (this.selectedModels.length > 0) {

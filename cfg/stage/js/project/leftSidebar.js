@@ -28,9 +28,12 @@ function LeftSidebar(graph) {
 			"</ul>" +
 			"Visualize" +
 			"<ul>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Submodels</a></li>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Dependencies</a></li>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>PhysioMap</a></li>" +
+				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(0, true);});'>Submodels</a></li>" +
+				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(1, true);});'>Dependencies</a></li>" +
+				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(2, true);});'>PhysioMap</a></li>" +
 			"</ul>"
 
 		);

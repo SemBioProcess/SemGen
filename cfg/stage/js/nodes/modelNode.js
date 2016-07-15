@@ -11,7 +11,7 @@ function ModelNode (graph, srcobj, index) {
 	this.index = index;
 	this.addClassName("modelNode");
 	this.canlink = false;
-	
+	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
 	
 	this.addBehavior(Hull);	
 	
@@ -25,4 +25,37 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 	
 }
 
+ModelNode.prototype.createVisualization = function (modeid, expand) {
+	this.children = {};
+	
+	if (modeid == 0) {
+		this.createChildren();
+	}
+	else if (modeid == 2) {
+		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
+		physionodes.forEach(function (d) {
+			node.createChild(d);
+		}, this);
+		console.log("Showing PhysioMap for model " + this.name);
+	}
+	else if (modeid == 1) {
+	}
+	else {
+		throw "Display mode not recognized";
+		return;
+	}
+	this.displaymode = modeid;
+	if (expand) {
+		this.showChildren();
+	}
+}
 
+ModelNode.prototype.showChildren = function() {
+	if (this.mode == 0) {
+		ParentNode.prototype.showChildren.call();
+		return;
+	}
+	this.showchildren = true;
+	$(this).triggerHandler('childrenSet', [this.children]);
+	this.graph.update();
+}

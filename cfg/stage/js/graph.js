@@ -34,7 +34,6 @@ function Graph() {
 	this.linklength = defaultlinklength;
 	this.color = d3.scale.category10();
 
-	this.displaymode = DisplayModes.SHOWSUBMODELS;
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
 	this.nodesVisible = [true, true, true, true, false, true, true, true, true];

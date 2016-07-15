@@ -47,15 +47,11 @@ Link.prototype.createVisualElement = function (element, graph) {
 			.attr("stroke-dasharray", 2, 5)
 			.attr("stroke-width", 2);
 	}
-	
-	// Create the text elements
-	this.createTextElement("shadow");
-	this.createTextElement("real");
 
 }
 
 Link.prototype.tickHandler = function (element, graph) {
-
+var arrowHeadWidth = this.arrowHeadWidth;
 	// Display and update links
 	var root = d3.select(element);
 	root.select("path").attr("d", function(d) {
@@ -70,8 +66,8 @@ Link.prototype.tickHandler = function (element, graph) {
     	    return "M" + d.source.xpos() + "," + d.source.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
-    	    		"M" + dtxs + "," + dtys + "l" + (this.arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-this.arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-    	    		"L" + (dtxs - this.arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + this.arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"z";
     	});
 
@@ -87,33 +83,4 @@ Link.prototype.getKeyInfo = function () {
 		linkType: this.linkType,
 		canShowHide: this.userCanHide,
 	};
-}
-
-Link.prototype.createTextElement = function (className) {
-	this.rootElement.append("svg:text")
-			.attr("class", "linkLabel")
-			.attr("font-size", "14px")
-			.attr("font-style", "italic")
-			.attr("fill", "green")
-			.attr("class", className)
-			.attr("text-anchor", "middle")
-			.text("");
-}
-
-// Limit displayName to 5 words
-var limitWords = function (text, wordLimit) {
-	if(text == null) return;
-	var finalText = "";
-	var text2 = text.replace(/\s+/g, ' ');
-	var text3 = text2.split(' ');
-	var numberOfWords = text3.length;
-	var i=0;
-	if(numberOfWords > wordLimit)
-	{
-		for(i=0; i< wordLimit; i++)
-			finalText = finalText+" "+ text3[i];
-
-		return finalText+"...";
-	}
-	return text;
 }

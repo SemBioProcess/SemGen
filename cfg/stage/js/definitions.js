@@ -44,7 +44,7 @@ var defaultlinklength = 100;
 var defaultchargedistance = 800;
 
 var DisplayModes = {
-	SHOWSUBMODELS: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
-	SHOWDEPENDENCIES: [NodeType.MODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE],
-	SHOWPHYSIOMAP: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS]
+	SHOWSUBMODELS: { id: 0, keys: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
+	SHOWDEPENDENCIES: { id: 1, keys: [NodeType.MODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
+	SHOWPHYSIOMAP: { id: 2, keys: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS]}
 };

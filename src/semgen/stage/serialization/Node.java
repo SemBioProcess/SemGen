@@ -53,6 +53,15 @@ public class Node<T extends SemSimObject> {
 		this.id =  parent.id + "." + this.name;
 	}
 	
+	protected Node(T obj, Node<?> parent, Number typeindex) {
+		this.sourceobj = obj;
+		this.name = obj.getName();
+		this.parent = parent;
+		this.parentModelId = parent.parentModelId;
+		this.id =  parent.id + "." + this.name;
+		typeIndex = typeindex;
+	}
+	
 	//Node type array - must correspond to var NodeType in definitions.js 
 	protected static ArrayList<String> nodetypes;
 	

@@ -54,7 +54,9 @@ ParentNode.prototype.createChild = function(data) {
 		child = new SubmodelNode(node.graph, data, node);
 		child.createChildren();
 	}
-	else if (data.typeIndex==6) {}
+	else if (data.typeIndex==6) {
+		child = new PhysioMapNode(node.graph, data, node);
+	}
 	else {
 		child = new DependencyNode(node.graph, data, node);		
 	}
@@ -151,13 +153,6 @@ ParentNode.prototype.visibleGlobalApply = function(funct) {
 ParentNode.prototype.onDoubleClick = function () {
 	this.showChildren();
 }
-
-ParentNode.prototype.showSubmodelNetwork = function () {
-	var node = this;
-	console.log("Showing submodels for " + this.name);
-	this.graph.displaymode = DisplayModes.SHOWSUBMODELS;
-	this.showChildren();
-};
 
 ParentNode.prototype.showDependencyNetwork = function () {
 	console.log("Showing dependencies for " + this.name);	

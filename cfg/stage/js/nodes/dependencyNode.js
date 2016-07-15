@@ -19,8 +19,6 @@ function DependencyNode (graph, data, parentNode) {
 		_node.addBehavior(b);
 	});
 	this.addBehavior(HiddenLabelNodeGenerator);
-	
-
 
 }
 
@@ -46,7 +44,7 @@ DependencyNode.prototype.getLinks = function () {
 	
 	// Build an array of links from our list of inputs
 	var links = [];
-	if (!this.graph.nodesVisible[this.nodeType.id]) {
+	if (!this.graph.nodesVisible[this.nodeType.id] || this.nodeType.id == NodeType.ENTITY.id) {
 		return links;
 	}
 	var outputNode = this.getFirstLinkableAncestor();
@@ -66,10 +64,6 @@ DependencyNode.prototype.getLinks = function () {
 		}
 		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length));
 	});
-
-	
-//		else if(type == "physiomap") length = Math.round(this.graph.linklength/3);
-
 
 	return links;
 }

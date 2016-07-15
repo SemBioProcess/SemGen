@@ -10,7 +10,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class ModelNode extends ParentNode<SemSimModel>{
-	@Expose public ArrayList<PhysioMapNode> PhysioNetwork = new ArrayList<PhysioMapNode>();
+	@Expose public PhysioMap physionetwork;
 	
 	//null model
 	public ModelNode(String modname) {
@@ -48,7 +48,6 @@ public class ModelNode extends ParentNode<SemSimModel>{
 
 	
 	private void generatePhysioMapNetwork() {
-		SemSimModelSerializer serializer = new SemSimModelSerializer(this);
-		PhysioNetwork = serializer.generatePhysioMapNetwork();
+		physionetwork = new PhysioMap(this);
 	}
 }
