@@ -2,10 +2,10 @@
  * 
  */
 
-function Task(graph) {
+function Task(graph, stagestate) {
 	
 	this.graph = graph;
-	
+	this.state = stagestate;
 	
 	this.nodes = {};
 	this.selectedModels = [];
@@ -77,9 +77,8 @@ function Task(graph) {
 		
 		node.highlight();
 	};
-	
-
 }
+
 Task.prototype.onInitialize = function() {}
 
 Task.prototype.onMinimize = function() {}

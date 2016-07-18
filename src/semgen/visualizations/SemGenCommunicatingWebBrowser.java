@@ -3,9 +3,11 @@ package semgen.visualizations;
 import javax.naming.InvalidNameException;
 
 import semgen.SemGen;
+import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 
+import com.google.gson.GsonBuilder;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
@@ -41,10 +43,10 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	}
 
 	public void changeTask(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, 
-			CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
+			CommunicatingWebBrowserCommandReceiver commandReceiver, StageState state) throws InvalidNameException {
 		
 		String javascript = this.setBrowserListeners(commandSenderInterface, commandReceiver);
-			javascript += "main.changeTask();";
+			javascript += "main.changeTask(" + (new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(state) + ");";
 		
 		executeJavascriptAndHandleErrors(javascript);
 	}

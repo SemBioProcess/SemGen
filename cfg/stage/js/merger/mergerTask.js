@@ -6,8 +6,8 @@
 MergerTask.prototype = new Task();
 MergerTask.prototype.constructor = MergerTask;
 
-function MergerTask(graph, state) {
-	Task.prototype.constructor.call(this, graph, state);
+function MergerTask(graph, stagestate) {
+	Task.prototype.constructor.call(this, graph, stagestate);
 	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
 	
@@ -77,6 +77,11 @@ function MergerTask(graph, state) {
 
 MergerTask.prototype.onInitialize = function() {
 	var merger = this;
+	
+	merger.state.models.forEach(function(model) {
+		merger.addModelNode(model, []);
+	});
+
 	if($("#mergerIcon").length == 0	) {
 		$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
 	}

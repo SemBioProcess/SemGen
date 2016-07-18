@@ -1,8 +1,8 @@
 
 Stage.prototype = new Task();
 Stage.prototype.constructor = Stage;
-function Stage(graph) {
-	Task.prototype.constructor.call(this, graph);
+function Stage(graph, stagestate) {
+	Task.prototype.constructor.call(this, graph, stagestate);
 
 	var stage = this;
 	var nodes = this.nodes;
@@ -47,10 +47,6 @@ function Stage(graph) {
 			searchResultsList.append(makeResultSet(searchResultSet));
 		});
 	});
-	
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
-	});
 
 	receiver.onReceiveReply(function (reply) {
 		CallWaiting(reply);
@@ -83,6 +79,16 @@ function Stage(graph) {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
+}
+
+Stage.prototype.onInitialize = function() {
+	var stage = this;
+
+	if (stage.state.models.length > 0) {
+		stage.state.models.forEach(function(model) {
+			stage.addModelNode(model, [DragToMerge]);
+		});
+	}
 }
 
 Stage.prototype.onModelSelection = function(node) {

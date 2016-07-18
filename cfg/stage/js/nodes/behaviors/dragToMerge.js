@@ -29,7 +29,7 @@ function DragToMerge(_node) {
 		var mergeNode = null;
 		
 		_node.dragstart.push(function (d) {
-				if (_node.children) return;
+				if (_node.showchildren) return;
 				//Refresh node references
 				models = _node.graph.getVisibleNodes();
 				// Save the original location
@@ -46,7 +46,7 @@ function DragToMerge(_node) {
 				});
 			});
 		    _node.drag.push(function (d) {
-		    	if (_node.children) return;
+		    	if (_node.showchildren) return;
 		        
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.
@@ -74,13 +74,13 @@ function DragToMerge(_node) {
 				});
 		    });
 		    _node.dragend.push(function (d) {
-		    	if (_node.children) {
+		    	if (_node.showchildren) {
 		    		return;
 		    	}
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
 		        	var modelstomerge = _node.name + "," + mergeNode.name;
-		        	sender.merge(modelstomerge, main.task);
+		        	sender.merge(modelstomerge);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location

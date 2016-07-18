@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
+import semgen.stage.serialization.StageState;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -20,6 +21,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
 		_commandReceiver = new ProjectCommandReceiver();
+		state = new StageState(Task.PROJECT);
 	}
 	
 	/**
@@ -94,20 +96,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					_models.remove(modelName);
 					_commandSender.removeModel(modelName);
 					break;
-				case "submodels":
-					//SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-//					if(submodelNetwork.length <= 0)
-//						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
-//					else
-//						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
-					break;
-				case "physiomap":
-//					PhysioMapNode[] physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
-//					if(physiomapNetwork.length <= 0)
-//						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
-//					else
-//						_commandSender.showPhysioMapNetwork(model.getName(), physiomapNetwork);
-					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;
@@ -124,7 +112,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		}
 		
 		public void onMerge(String modelNames) {
-			createMerger(modelNames);			
+			createMerger(modelNames);
 		}
 		
 		public void onQueryModel(String modelName, String query) {

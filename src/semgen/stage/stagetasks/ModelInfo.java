@@ -16,8 +16,8 @@ public class ModelInfo {
 	}
 	
 	public ModelInfo(ModelInfo info) {
-		Model = Model.clone();
-		accessor = null;
+		Model = info.Model.clone();
+		accessor = info.accessor;
 		modelnode = new ModelNode(Model);
 	}
 	

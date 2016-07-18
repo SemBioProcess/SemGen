@@ -17,6 +17,7 @@ import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.MergePreviewSubmodels;
+import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
@@ -38,11 +39,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
 		
 		for (ModelInfo model : modelinfo) {
-			_models.put(model.getModelName(), model);
-			files.add(model.accessor);
-			models.add(model.Model);
+			ModelInfo info = new ModelInfo(model);
+			_models.put(info.getModelName(), info);
+			files.add(info.accessor);
+			models.add(info.Model);
 		}
 		workbench.addModels(files, models, true);
+		state = new StageState(Task.MERGER, modelinfo);
+		
 		primeForMerging();
 
 		resolvers = new MergeConflictResolvers(workbench);
@@ -182,21 +186,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 			// Get the model
 			ModelInfo modelInfo = _models.get(modelName);
-			SemSimModel model = modelInfo.Model;
 
 			// Execute the proper task
 			switch(task) {
-				case "dependencies":
-//					_commandSender.showDependencyNetwork(model.getName(),
-//							SemSimModelSerializer.getDependencyNetwork(model));
-					break;
-				case "submodels":
-//					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-//					if(submodelNetwork.length <= 0)
-//						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
-//					else
-//						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
-					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;
