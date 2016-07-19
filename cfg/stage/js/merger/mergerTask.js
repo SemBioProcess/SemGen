@@ -35,26 +35,6 @@ function MergerTask(graph, stagestate) {
 	$("#quitMergerBtn").click(function() {
 
 	});
-	
-	// Adds a dependency network to the d3 graph
-	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
-		console.log("Showing dependencies for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
-		var modelNode = merger.getModelNode(modelName);
-		modelNode.setChildren(dependencyNodeData, function (data) {
-			return new DependencyNode(graph, data, modelNode);
-		});
-	});
-
-	// Adds a submodel network to the d3 graph
-	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
-		console.log("Showing submodels for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWSUBMODELS;
-		var modelNode = merger.getModelNode(modelName);
-		modelNode.setChildren(submodelData, function (data) {
-			return new SubmodelNode(graph, data, modelNode);
-		});
-	});
 
 	receiver.onMergeCompleted(function(mergedname) {
 		for (x in merger.nodes) {

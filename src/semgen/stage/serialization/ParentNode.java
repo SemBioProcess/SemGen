@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.google.gson.annotations.Expose;
 
+import semsim.model.SemSimComponent;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -65,8 +66,50 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		return dsnodemap;
 	}
 	
+	public DependencyNode getDependencyNode(DataStructure sourceds) {
+			for (DependencyNode dn : dependencies) {
+				if (dn.sourceobj == sourceds) {
+					return dn;
+				}
+			}
+			for (SubModelNode smn : childsubmodels) {
+				DependencyNode dn = smn.getDependencyNode(sourceds);
+				if (dn!=null) return dn;
+			}
+			return null;
+		}
+
+	public ArrayList<Link> findLinksWithInput(LinkableNode<? extends SemSimComponent> node) {
+		ArrayList<Link> links = new ArrayList<Link>();
+		
+		for (DependencyNode dnode : dependencies) {
+			if (node == dnode) continue;
+			for (Link link : dnode.inputs) {
+				if (link.hasInput(dnode)) links.add(link);
+			}
+		}
+		for (SubModelNode smn : this.childsubmodels) {
+			links.addAll(smn.findLinksWithInput(node));
+		}
+		return links;
+	}
 	
 	protected void incrementType(Number type) {
 		deptypecounts[(int) type-2]++;
+	}
+	
+	protected void copyInLinkedDependencyArray(ArrayList<DependencyNode> linkeddeps) {
+		HashMap<DependencyNode, DependencyNode> copymap = new HashMap<DependencyNode, DependencyNode>();
+		ArrayList<DependencyNode> newlinkeddeps = new ArrayList<DependencyNode>();
+		for (DependencyNode dn : linkeddeps) {
+			DependencyNode copy = new DependencyNode(dn, this);
+			newlinkeddeps.add(copy);
+			copymap.put(dn, copy);
+		}
+		
+		for (DependencyNode dn : newlinkeddeps) {
+			dn.replaceLinks(copymap);
+		}
+		dependencies.addAll(newlinkeddeps);
 	}
 }

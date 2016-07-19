@@ -1,6 +1,5 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gson.annotations.Expose;
@@ -15,10 +14,9 @@ import semsim.model.computational.datastructures.DataStructure;
  * @author Ryan
  *
  */
-public class DependencyNode extends Node<DataStructure> {	
+public class DependencyNode extends LinkableNode<DataStructure> {	
 	
 	@Expose public String submodelId = "";
-	@Expose public ArrayList<Link> inputs = new ArrayList<Link>();
 	@Expose public boolean issubmodelinput;
 	
 	public DependencyNode(DataStructure dataStructure, Node<? extends SemSimCollection> parent) {
@@ -27,6 +25,18 @@ public class DependencyNode extends Node<DataStructure> {
 		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		this.typeIndex = nodetypes.indexOf(nodeType);
 		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
+	}
+	
+	DependencyNode(DependencyNode original) {
+		super(original);
+		submodelId = new String(submodelId);
+		issubmodelinput = original.issubmodelinput;
+	}
+	
+	DependencyNode(DependencyNode original, Node<? extends SemSimCollection> parent) {
+		super(original, parent);
+		submodelId = new String(submodelId);
+		issubmodelinput = original.issubmodelinput;
 	}
 	
 	public void setInputs(HashMap<DataStructure, DependencyNode> dsnodemap) {

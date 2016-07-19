@@ -46,8 +46,22 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		}
 	}
 
-	
 	private void generatePhysioMapNetwork() {
 		physionetwork = new PhysioMap(this);
 	}
+	
+	public ArrayList<DependencyNode> getLinkedNodes(DependencyNode target) {
+		
+		ArrayList<DependencyNode> deps = new ArrayList<DependencyNode>();
+		for (Link targlink : target.inputs) {
+			deps.add((DependencyNode) targlink.input);
+		}
+		
+		for (Link targlink : this.findLinksWithInput(target)) {
+			deps.add((DependencyNode) targlink.output);
+		}
+		
+		return deps;
+	}
+	
 }

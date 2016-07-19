@@ -2,11 +2,12 @@ package semgen.stage.stagetasks.merge;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.stage.serialization.SubModelNode;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class MergeChoice {
-	private Submodel[] choices = new Submodel[]{null, null, null};
+	private SubModelNode[] choices = new SubModelNode[]{null, null, null};
 
 	public MergeChoice(Pair<DataStructure, DataStructure> dsoverlap, Pair<String, String> modelnames) {
 		//Four models have to be generated per choice. One to be used as the base of a choice and the other
@@ -22,14 +23,8 @@ public class MergeChoice {
 		CenteredSubmodel notrelated = new CenteredSubmodel(centerleft, "center");
 		
 		notrelated.addSubmodel(new CenteredSubmodel(centerright));
-		//for (DataStructure dstoadd : centerright.getAssociatedDataStructures()) {
-		//	notrelated.addDataStructure(dstoadd);
-		//}
 		
-		
-		choices[0] = generateChoice(left, righttodiscard);
-		choices[1] = generateChoice(right, lefttodiscard);
-		choices[2] = notrelated;
+
 
 	}
 	
@@ -41,6 +36,6 @@ public class MergeChoice {
 	}
 	
 	public Submodel getChoice(int choice) {
-		return choices[choice];
+		return null;
 	}
 }

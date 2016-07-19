@@ -28,4 +28,8 @@ public class Link {
 		
 		external = (inputnode.parent.id!=outputnode.parent.id); 
 	}
+	
+	public boolean hasInput(Node<? extends SemSimComponent> node) {
+		return input==node;
+	}
 }

@@ -2,7 +2,6 @@ package semgen.stage.serialization;
 
 import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.Submodel;
-import semsim.model.computational.datastructures.DataStructure;
 
 /**
  * Represents a submodel node in a d3 graph
@@ -22,19 +21,7 @@ public class SubModelNode extends ParentNode<Submodel> {
 	public SubModelNode(Submodel subModel) {
 		super(subModel);
 
-			loadDataStructuresfromCenteredSubmodel(subModel);
 			typeIndex=SUBMODEL;
 	}
-	
-
-	
-
-	
-	private void loadDataStructuresfromCenteredSubmodel(Submodel subModel) {
-		for(DataStructure dependency : subModel.getAssociatedDataStructures()) {
-			   
-		}
-	}
-
 
 }

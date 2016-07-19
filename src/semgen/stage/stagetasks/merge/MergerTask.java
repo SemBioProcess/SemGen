@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.gson.annotations.Expose;
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
@@ -16,6 +17,7 @@ import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.MergePreviewSubmodels;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
@@ -24,13 +26,14 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
-	private MergePreview preview;
 	private MergeConflictResolvers resolvers;
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
+	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo) {
 		workbench.addObserver(this);
@@ -66,7 +69,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			return;
 		}
 		generateOverlapDescriptors();
-		preview = workbench.generateMergePreview();
 	}
 
 	private void generateOverlapDescriptors() {
@@ -103,7 +105,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		if (arg == MergeEvent.mappingadded) {	
 			generateOverlapDescriptors();
-			preview = workbench.generateMergePreview();
+		}
+	}
+	
+	private void getOverlappingNodes() {
+		overlaps.clear();
+		ArrayList<Pair<DataStructure,DataStructure>> overlaps = workbench.getOverlapPairs();
+		for (Pair<DataStructure,DataStructure> overlap : overlaps) {
+			
 		}
 	}
 	
@@ -121,8 +130,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onRequestPreview(Double index) {
-			MergePreviewSubmodels psms = preview.getPreviewSerializationforSelection(index);
-			_commandSender.showPreview(psms);
+
+		//	_commandSender.showPreview(psms);
 		}
 
 		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
@@ -133,7 +142,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			else {
 				workbench.addManualCodewordMapping(nodestolink[1], nodestolink[0]);
 			}
-			preview = workbench.generateMergePreview();
 		}
 
 		public void onExecuteMerge(JSArray choicesmade) {
@@ -184,9 +192,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			if(!_models.containsKey(modelName))
 				throw new IllegalArgumentException(modelName);
 
-			// Get the model
-			ModelInfo modelInfo = _models.get(modelName);
-
 			// Execute the proper task
 			switch(task) {
 				default:
@@ -220,8 +225,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	//Classes for passing information to the stage
 	public class Overlap {
-		public StageDSDescriptor dsleft;
-		public StageDSDescriptor dsright; 
+		@Expose public StageDSDescriptor dsleft;
+		@Expose public StageDSDescriptor dsright; 
 		
 		protected Overlap(Pair<DataStructureDescriptor, DataStructureDescriptor> dsdesc) {
 			dsleft = new StageDSDescriptor(dsdesc.getLeft());
@@ -230,12 +235,12 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	public class StageDSDescriptor {
-		public String name;
-		public String type;
-		public String description;
-		public String annotation;
-		public String equation;
-		public String unit;
+		@Expose public String name;
+		@Expose public String type;
+		@Expose public String description;
+		@Expose public String annotation;
+		@Expose public String equation;
+		@Expose public String unit;
 
 		protected StageDSDescriptor(DataStructureDescriptor dsdesc) {
 			name = dsdesc.getDescriptorValue(Descriptor.name);

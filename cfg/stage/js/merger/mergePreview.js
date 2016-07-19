@@ -48,16 +48,9 @@ function PreviewGraph(id) {
     	data.childsubmodels.forEach(function(sm) {
     		var smnode = new SubmodelNode(graph, sm, nullmodel);
     		
-    		smnode.x = Math.random() * graph.w;
-			smnode.y = Math.random() * graph.h;
 			smnodes.push(smnode);
 			nodes.push(smnode);
-			smnode.createChildren(sm.dependencies, function (data) {
-    			var dnode = new DependencyNode(smnode.graph, data, smnode);
-    			dnode.id = data.id;
-    			nodes.push(dnode);
-				return dnode;
-			});
+
 			
     	}); 
 	

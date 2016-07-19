@@ -1,17 +1,11 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-
-import com.google.gson.annotations.Expose;
-
 import semsim.model.collection.SemSimCollection;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalEntity;
 
-public class PhysioMapNode extends Node<PhysicalProcess> {
+public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 
-	@Expose public ArrayList<Link> inputs = new ArrayList<Link>();
-	
 	public PhysioMapNode(PhysicalProcess proc, Node<? extends SemSimCollection> parent) {
 		super(proc, parent);
 		typeIndex = PROCESS;

@@ -12,7 +12,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
-import semgen.stage.stagetasks.merge.MergePreview;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
@@ -252,6 +251,10 @@ public class MergerWorkbench extends Workbench {
 		return null;
 	}
 	
+	public ArrayList<Pair<DataStructure,DataStructure>> getOverlapPairs() {
+		return overlapmap.getDataStructurePairs();
+	}
+	
 	public int getMappingCount() {
 		return overlapmap.getMappingCount();
 	}
@@ -382,10 +385,6 @@ public class MergerWorkbench extends Workbench {
 			namelist.add(desc);
 		}
 		return namelist;
-	}
-
-	public MergePreview generateMergePreview() {
-		return new MergePreview(overlapmap, Pair.of(this.getModelName(0), this.getModelName(1)));
 	}
 	
 	@Override

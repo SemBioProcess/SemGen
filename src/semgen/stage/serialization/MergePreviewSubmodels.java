@@ -1,11 +1,13 @@
 package semgen.stage.serialization;
 
+import com.google.gson.annotations.Expose;
+
 import semgen.stage.stagetasks.merge.MergeChoice;
 
 public class MergePreviewSubmodels {
-	public SubModelNode left;
-	public SubModelNode middle;
-	public SubModelNode right;
+	@Expose public SubModelNode left;
+	@Expose public SubModelNode middle;
+	@Expose public SubModelNode right;
 	
 	public MergePreviewSubmodels(MergeChoice choices) {
 		left = new SubModelNode(choices.getChoice(0));
