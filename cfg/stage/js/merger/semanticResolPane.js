@@ -13,6 +13,9 @@ function SemanticResolutionPane() {
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
 	
+	pane.confrespane = new ConflictResolutionPane();
+
+	
 	//Checks to see if requirements are met for merging.
 	this.allchoicesmade = function () {
 		var disable = false;
@@ -127,6 +130,7 @@ function SemanticResolutionPane() {
 		for (i=0; i<choices.length; i++) {
 			resolutions[i].setSelection(choices[i]);
 		}
+		sender.requestConflicts();
 	});
 	
 	receiver.onShowPreview(function(data) {

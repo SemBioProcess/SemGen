@@ -32,6 +32,7 @@
 		<script src="js/taskprototype.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
 		<script src="js/merger/mergePreview.js"></script>
+		<script src="js/merger/conflictResolPane.js"></script>
 		<script src="js/merger/semanticResolPane.js"></script>
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/project/stage.js"></script>
@@ -189,7 +190,10 @@
 			<!--Duplicate name and unit conflicts resolution step -->
 			<div id="mergeStep2">
 				<div class="panel-group">
+					
 					<!--Where #dupNameResolution and #unitConversionResolution templates go-->
+					<div id="DupSubModels"></div>
+					<div id="UnitConf"></div>
 				</div>
 
 				<div class="modal-footer">
@@ -251,7 +255,8 @@
 						<!--Check value in <input name="newSubmodelName"> and change glyphicon to "glyphicon glyphicon-ok" if value is good-->
 						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
 						<!--Fill name in JS-->
-						Duplicate submodel name: "duplicate_submodel_name"
+							<div class="dupsmname"></div>
+						
 					</h4>
 				</div>
 				<div class="panel-collapse collapse in" id="dupSubName1">
@@ -282,7 +287,7 @@
 					<div class="panel-body mergeStep2Body">
 						<p>Please enter unit conversion below:</p>
 						<!--Fill units in JS-->
-						(<span class="unitA">s</span>) = (<span class="unitB">ms</span>)
+						(<span class="unitA"></span>) = (<span class="unitB"></span>)
 						<select name="multiplyChoice">
 							<option value="multiply">*</option>
 							<option value="divide">/</option>

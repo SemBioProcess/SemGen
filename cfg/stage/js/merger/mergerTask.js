@@ -73,6 +73,8 @@ function MergerTask(graph, state) {
 	receiver.onReceiveReply(function (reply) {
 		CallWaiting(reply);
 	});
+	
+
 }
 
 MergerTask.prototype.onInitialize = function() {
