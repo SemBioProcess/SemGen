@@ -1,9 +1,9 @@
 @CHARSET "ISO-8859-1";
 
 #rightSidebar {
-	top: 100px;
+	top: 75px;
 	right: 15px;
-	height: 650px;
+	height: 575px;
 	width: 0px;
 	transition: width 1s ease;
 	overflow: hidden;
@@ -14,11 +14,15 @@
 	width: 250px;
 }
 
+#rightSidebar>.panel-heading {
+    padding: 5px 15px;
+}
+
 #rightSidebarButton {
 	position: absolute;
-	top: 100px;
+	top: 75px;
 	right: 0px;
-	height: 650px;
+	height: 575px;
 	width: 15px;
 	opacity: 0.8;
 }
