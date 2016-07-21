@@ -2,7 +2,30 @@
 
 #rightSidebar {
 	top: 100px;
-	right: 5px;
+	right: 15px;
+	height: 650px;
+	width: 0px;
+	transition: width 1s ease;
+	overflow: hidden;
+	overflow-x: hidden;
+}
+
+#rightSidebar.in {
+	width: 250px;
+}
+
+#rightSidebarButton {
+	position: absolute;
+	top: 100px;
+	right: 0px;
+	height: 650px;
+	width: 15px;
+	opacity: 0.8;
+}
+
+#rightSidebarButton:hover {
+	opacity: 1;
+	cursor: pointer;
 }
 
 #stagekey {

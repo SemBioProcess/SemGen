@@ -54,6 +54,13 @@ function main() {
 	$("#activeTaskTray").click(function() {
 		$("#activeTaskPanel").slideToggle();
 	});
+
+	// Slide horizontal for sidebars
+	$(".sidebarButton").click(function() {
+		var selector = $(this).data("target");
+		$(selector).toggleClass('in');
+		$(this).text($(this).text() == '»' ? '«' : '»');
+	});
 }
 
 $(window).bind("cwb-initialized", function(e) {
