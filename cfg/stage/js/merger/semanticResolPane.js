@@ -1,7 +1,7 @@
 /**
  * 
  */
-function SemanticResolutionPane() {
+function SemanticResolutionPane(accessor) {
 	var pane = this;
 	var resolutions = [];
 	var choices = [];
@@ -13,7 +13,7 @@ function SemanticResolutionPane() {
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
 	
-	pane.confrespane = new ConflictResolutionPane();
+	pane.confrespane = new ConflictResolutionPane(accessor);
 
 	
 	//Checks to see if requirements are met for merging.
@@ -48,6 +48,7 @@ function SemanticResolutionPane() {
 		
 		var radioClick = function(val) {
 			clone.choice = val;
+			
 			pane.allchoicesmade();
 		}
 		
@@ -130,6 +131,7 @@ function SemanticResolutionPane() {
 		for (i=0; i<choices.length; i++) {
 			resolutions[i].setSelection(choices[i]);
 		}
+		
 		sender.requestConflicts();
 	});
 	

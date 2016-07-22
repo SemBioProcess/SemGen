@@ -39,6 +39,7 @@ function main() {
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph);
 		}
+		sender.initialized(this.task);
 		this.task.loadStageState(stagestate);
 		this.task.onInitialize();
 		

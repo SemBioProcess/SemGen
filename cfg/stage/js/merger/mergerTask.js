@@ -10,6 +10,7 @@ function MergerTask(graph, state) {
 	Task.prototype.constructor.call(this, graph, state);
 	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
+	this.conflictsj = null;
 	
 	this.semrespane;
 	
@@ -19,7 +20,7 @@ function MergerTask(graph, state) {
 	document.querySelector('#leftSidebar').appendChild(clone);
 
 	this.showResolutionPane = function() {
-		merger.semrespane = new SemanticResolutionPane();
+		merger.semrespane = new SemanticResolutionPane(this.conflictsj);
 		merger.semrespane.initialize(this.nodes);
 	}
 	
@@ -70,11 +71,6 @@ function MergerTask(graph, state) {
 		CallWaiting(reply);
 	});
 
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
-	});
-	
-
 }
 
 MergerTask.prototype.onInitialize = function() {
@@ -93,10 +89,10 @@ MergerTask.prototype.onInitialize = function() {
 		$("#mergeStep1").slideDown();
 		$("#mergeStep2").hide();
 	});
-	// $(".merge").prop('disabled', true)
-	// 	.click(function() {
-	// 		sender.executeMerge(merger.semrespane.pollOverlaps());
-	// 	});
+	$(".merge").prop('disabled', true)
+		.click(function() {
+	 		sender.executeMerge(merger.semrespane.pollOverlaps());
+	 	});
 }
 
 MergerTask.prototype.onMinimize = function() {

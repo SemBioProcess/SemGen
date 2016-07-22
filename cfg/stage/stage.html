@@ -193,6 +193,7 @@
 					
 					<!--Where #dupNameResolution and #unitConversionResolution templates go-->
 					<div id="DupSubModels"></div>
+					<div id="DupCodewords"></div>
 					<div id="UnitConf"></div>
 				</div>
 
@@ -250,24 +251,24 @@
 		<template id="dupNameResolution">
 			<div class="panel panel-default">
 				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
-				<div class="panel-heading" data-toggle="collapse" data-target="#dupSubName1">
+				<div class="panel-heading" data-toggle="collapse" data-target="#dupName1">
 					<h4 class="panel-title">
 						<!--Check value in <input name="newSubmodelName"> and change glyphicon to "glyphicon glyphicon-ok" if value is good-->
 						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
 						<!--Fill name in JS-->
-							<div class="dupsmname"></div>
+						<div class="dupname"></div>
 						
 					</h4>
 				</div>
-				<div class="panel-collapse collapse in" id="dupSubName1">
+				<div class="panel-collapse collapse in" id="dupName1">
 					<div class="panel-body mergeStep2Body">
-						Enter a new name for the submodel from
-						<select name="modelChoice">
+						Enter new name:
+						<!--  <select name="modelChoice">
 							<!--Fill name in JS-->
-							<option value="modelA">Model A</option>
-							<option value="modelB">Model B</option>
-						</select>
-						<input name="newSubmodelName" type="text" size="31" placeholder="No special character, no space.">
+							<!-- <option value="modelA"></option>
+							<option value="modelB"></option>
+						</select> -->
+						<input class="newName" type="text" size="31" placeholder="No special character, no space.">
 					</div>
 				</div>
 			</div>
@@ -288,11 +289,11 @@
 						<p>Please enter unit conversion below:</p>
 						<!--Fill units in JS-->
 						(<span class="unitA"></span>) = (<span class="unitB"></span>)
-						<select name="multiplyChoice">
+						<select class="multiplyChoice">
 							<option value="multiply">*</option>
 							<option value="divide">/</option>
 						</select>
-						<input name="unitConvFactor" type="text" placeholder="1000">
+						<input class="unitConvFactor" type="number" placeholder="1000">
 					</div>
 				</div>
 			</div>
@@ -331,9 +332,9 @@
 				<div class="panel subpanel">
 					<ul>
 						<li><a id="resolPanels" href="#">Resolve Overlaps</a></li>
-						<li><a id="mergeModels" href="#">Execute Merge</a></li>
+						<li><a id="mergeModels" class="merge" href="#">Execute Merge</a></li>
 						<li><a id="minimize" href="#">Return to Project</a></li>
-						<li><a id="quitMergerBtn" class="merge" href="#">Close Merge</a></li>
+						<li><a id="quitMergerBtn" href="#">Close Merge</a></li>
 					</ul>
 				</div>
 			</div>

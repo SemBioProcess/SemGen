@@ -7,6 +7,7 @@ import java.util.Observable;
 import javax.swing.JOptionPane;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
+import com.teamdev.jxbrowser.chromium.JSValue;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
@@ -35,7 +36,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 *
 	 */
 	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-
+		
+		public void onInitialized(JSObject jstaskobj) {
+			jstask = jstaskobj;
+		}
+		
 		/**
 		 * Receives the add model command
 		 */
@@ -49,6 +54,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
+				if (_models.containsKey(semsimmodel.getName())) {
+					
+					continue;
+				}
+				
 				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, accessor));
 				
 				// Tell the view to add a model
@@ -134,7 +144,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		public void onMerge(String modelNames, JSObject snapshot) {
 			createStageState(snapshot);
-			createMerger(modelNames);			
+			createMerger(modelNames);
 		}
 		
 		public void onQueryModel(String modelName, String query) {

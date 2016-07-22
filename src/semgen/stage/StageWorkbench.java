@@ -3,6 +3,8 @@ package semgen.stage;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import com.teamdev.jxbrowser.chromium.JSValue;
+
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
