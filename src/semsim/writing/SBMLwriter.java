@@ -53,6 +53,7 @@ import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalDependency;
@@ -104,6 +105,9 @@ public class SBMLwriter extends ModelWriter {
 		sbmldoc = new SBMLDocument();
 		sbmlmodel = sbmldoc.createModel(semsimmodel.getName());
 		
+		// If we're writing from a model with FunctionalSubmodels, flatten model first
+		if(semsimmodel.getFunctionalSubmodels().size() > 0)
+			SemSimUtil.flattenModel(semsimmodel);
 		
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
@@ -202,7 +206,9 @@ public class SBMLwriter extends ModelWriter {
 						Unit sbmluf = new Unit(sbmllevel, sbmlversion);
 						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase()));
 						sbmluf.setExponent(uf.getExponent());
-						sbmluf.setMultiplier(uf.getMultiplier());
+						
+						if(Double.valueOf(uf.getMultiplier()) != 0)
+							sbmluf.setMultiplier(uf.getMultiplier());
 						
 						if(uf.getPrefix() != null && ! uf.getPrefix().equals("")){
 							Integer power = sslib.getUnitPrefixesAndPowersMap().get(uf.getPrefix());
@@ -258,8 +264,8 @@ public class SBMLwriter extends ModelWriter {
 			
 			String mathml = ds.getComputation().getMathML();
 			
-			boolean hasinputs = ds.getComputationInputs().isEmpty();
-			boolean hasmathml = mathml != null;
+			boolean hasinputs = ! ds.getComputationInputs().isEmpty();
+			boolean hasmathml = mathml != null && ! mathml.equals("");
 			
 			// TODO: if size of compartment is variable, need to create an assignment
 			if( ! hasinputs && hasmathml){
@@ -528,14 +534,14 @@ public class SBMLwriter extends ModelWriter {
 		for(DataStructure ds : globalParameters){
 			
 			Parameter par = sbmlmodel.createParameter(ds.getName());
-			
+						
 			String mathml = ds.getComputation().getMathML();
 
 			boolean hasinputs = ds.getComputationInputs().size() > 0;
 			boolean usesevents = ds.getComputation().hasEvents();
 			boolean hasmathml = (mathml != null && ! mathml.equals(""));
 			boolean hasIC = ds.hasStartValue();
-						
+			
 			if(usesevents){
 				par.setConstant(false);
 				
@@ -550,7 +556,6 @@ public class SBMLwriter extends ModelWriter {
 						par.setValue(Double.parseDouble(ds.getStartValue()));
 					}
 					else{
-						// TODO: probably need to get local name for mappableVariables here.
 						String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 						par.setValue(Double.parseDouble(formula));
 					}
@@ -561,7 +566,6 @@ public class SBMLwriter extends ModelWriter {
 				addRuleToModel(ds);
 			}
 			else if(hasmathml){
-				// TODO: probably need to get local name for mappableVariables here.
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				try {
 		            Double d = Double.parseDouble(formula);
@@ -570,6 +574,11 @@ public class SBMLwriter extends ModelWriter {
 		        	// If we're here we have some equation that just uses numbers, not variables
 		        	addRuleToModel(ds);
 		        }
+			}
+			else if(ds instanceof MappableVariable){
+				MappableVariable mv = (MappableVariable)ds;
+				par.setValue(Double.parseDouble(mv.getCellMLinitialValue()));
+				par.setConstant(true);
 			}
 			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
@@ -669,6 +678,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private ASTNode getASTNodeFromRHSofMathML(String mathml, String localname){
 		String RHS = SemSimUtil.getRHSofMathML(mathml, localname);
+		System.out.println("here: " + localname + ": " + mathml);
 		return JSBML.readMathMLFromString(RHS);
 	}
 	
@@ -725,7 +735,10 @@ public class SBMLwriter extends ModelWriter {
 		
 		if(ds.hasStartValue()){
 			rule = sbmlmodel.createRateRule();
-			sbmlmodel.getParameter(ds.getName()).setValue(Double.parseDouble(ds.getStartValue())); // Set IC
+			
+			Parameter par = sbmlmodel.getParameter(ds.getName());
+			if(par != null)
+				par.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
 		}
 		else rule = sbmlmodel.createAssignmentRule();
 		

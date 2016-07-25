@@ -74,7 +74,7 @@ public class SemSimUtil {
 			
 			if(ds instanceof MappableVariable){	
 				
-				// Need to flatten names of variables. Can we get rid of the inputs?
+				// TODO: Need to flatten names of variables. Can we get rid of the inputs?
 				// How to deal with solution domain resolution?
 				MappableVariable mv = (MappableVariable)ds;
 								

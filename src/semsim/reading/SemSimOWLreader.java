@@ -66,6 +66,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
@@ -75,6 +76,7 @@ import semsim.utilities.SemSimUtil;
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
 	private Map<String, PhysicalModelComponent> identitymap = new HashMap<String, PhysicalModelComponent>();
+	private Map<String, ReferencePhysicalDependency> iddependencymap = new HashMap<String, ReferencePhysicalDependency>();
 
 	private Map<String, PhysicalPropertyinComposite> idpropertymap = new HashMap<String, PhysicalPropertyinComposite>();
 	private OWLOntology ont;
@@ -181,6 +183,8 @@ public class SemSimOWLreader extends ModelReader {
 	}
 
 	private void collectReferenceClasses() throws OWLException {
+		
+		// Collect physical properties
 		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.PHYSICAL_PROPERTY.getURIasString(),false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
@@ -191,10 +195,11 @@ public class SemSimOWLreader extends ModelReader {
 			idpropertymap.put(refuri, pp);
 		}
 
+		// Collect physical entities
 		for (String rperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.REFERENCE_PHYSICAL_ENTITY.getURIasString(), false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(rperef)))[0];
 			PhysicalEntity pe;
-			if(!rperef.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
+			if( ! rperef.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
 				
 				// If an identical reference entity was already added to the model, this will return the original, 
 				// otherwise it creates a new physical entity
@@ -210,6 +215,14 @@ public class SemSimOWLreader extends ModelReader {
 
 		for (String cuperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimTypes.CUSTOM_PHYSICAL_ENTITY.getURIasString())) {
 			makeCustomEntity(cuperef);
+		}
+		
+		// Collect reference physical dependencies
+		for(String rpdcls : SemSimOWLFactory.getAllSubclasses(ont, SemSimTypes.REFERENCE_PHYSICAL_DEPENDENCY.getURIasString(), false)){
+			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(rpdcls)))[0];
+			ReferencePhysicalDependency rpd = new ReferencePhysicalDependency(URI.create(rpdcls), label);
+			semsimmodel.addReferencePhysicalDependency(rpd);
+			iddependencymap.put(rpdcls, rpd);
 		}
 	}
 	
@@ -258,7 +271,7 @@ public class SemSimOWLreader extends ModelReader {
 			// Create reference physical process, if there is an annotation
 			String hasphysicaldef = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, processind, physicaldefinitionURI.toString());
 			
-			if (!hasphysicaldef.isEmpty())
+			if ( ! hasphysicaldef.isEmpty())
 				pproc = semsimmodel.addReferencePhysicalProcess(new ReferencePhysicalProcess(URI.create(hasphysicaldef), processlabel));
 			
 			// Otherwise create a custom physical process
@@ -312,6 +325,7 @@ public class SemSimOWLreader extends ModelReader {
 			String computationind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimRelation.IS_OUTPUT_FOR.getURIasString());
 			String compcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, computationind, SemSimRelation.HAS_COMPUTATIONAL_CODE.getURIasString());
 			String mathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, computationind, SemSimRelation.HAS_MATHML.getURIasString());
+			String depind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, computationind, SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 			String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(dsind)));
 			
 			DataStructure ds = null;
@@ -365,7 +379,7 @@ public class SemSimOWLreader extends ModelReader {
 			// If the data structure is annotated, store annotation
 			if( ! physdefvalds.equals("")){	
 				String reflabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(dsind)))[0];
-				ds.setSingularAnnotation((PhysicalProperty)getReferenceTerm(physdefvalds, reflabel));
+				ds.setSingularAnnotation((PhysicalProperty)getReferenceProperty(physdefvalds, reflabel));
 			}
 			
 			// If a CellML-type variable, get interface values and initial value
@@ -388,7 +402,7 @@ public class SemSimOWLreader extends ModelReader {
 			String units = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimRelation.HAS_UNIT.getURIasString());
 			String propind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 			
-			if(!units.equals("") || !propind.equals("")){
+			if( ! units.equals("") || ! propind.equals("")){
 				String physdefval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, physicaldefinitionURI.toString());	
 				
 				if (!physdefval.isEmpty())	ds.setAssociatedPhysicalProperty(idpropertymap.get(physdefval));
@@ -396,13 +410,23 @@ public class SemSimOWLreader extends ModelReader {
 				// Set the connection between the physical property and what it's a property of
 				String propofind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, propind, SemSimRelation.PHYSICAL_PROPERTY_OF.getURIasString());
 				
-				if (!propofind.isEmpty()) {
+				if ( ! propofind.isEmpty()) {
 					PhysicalModelComponent pmc = identitymap.get(propofind);
 					
 					if (pmc==null) pmc = createSingularComposite(propofind);
 					
 					ds.setAssociatedPhysicalModelComponent(pmc);
 				}
+			}
+			
+			if( ! depind.equals("")){
+				// We assume that if there is an explicit dependency associated with the computation, 
+				// then it's annotated against a reference dependency from the OPB.
+				String reflabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(depind)))[0];
+				String physdefvaldep = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, depind, physicaldefinitionURI.toString());
+
+				ReferencePhysicalDependency rpd = (ReferencePhysicalDependency) getReferenceDependency(physdefvaldep, reflabel);
+				ds.getComputation().setPhysicalDependency(rpd);
 			}
 		}
 	}
@@ -417,7 +441,7 @@ public class SemSimOWLreader extends ModelReader {
 				for(String mappedvaruri : SemSimOWLFactory.getIndObjectProperty(ont, dsind, SemSimRelation.MAPPED_TO.getURIasString())){
 					DataStructure mappedvar = semsimmodel.getAssociatedDataStructure(SemSimOWLFactory.getURIdecodedFragmentFromIRI(mappedvaruri));
 					
-					if(mappedvar!=null && (mappedvar instanceof MappableVariable)){
+					if(mappedvar != null && (mappedvar instanceof MappableVariable)){
 						((MappableVariable)ds).addVariableMappingTo((MappableVariable)mappedvar);
 						// Use mapping info in input/output network
 						((MappableVariable)mappedvar).getComputation().addInput((MappableVariable)ds);
@@ -434,11 +458,11 @@ public class SemSimOWLreader extends ModelReader {
 			
 			UnitOfMeasurement uom = semsimmodel.getUnit(unitcode);
 			
-			if(uom==null){
+			if(uom == null){
 				String importedfromval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, unitind, SemSimRelation.IMPORTED_FROM.getURIasString());
 				
 				// If the unit is imported, collect import info
-				if(importedfromval.equals("") || importedfromval==null){
+				if(importedfromval.equals("") || importedfromval == null){
 					uom = new UnitOfMeasurement(unitcode);
 					semsimmodel.addUnit(uom);
 				}
@@ -875,16 +899,29 @@ public class SemSimOWLreader extends ModelReader {
 		return val;
 	}
 	
-	private PhysicalModelComponent getReferenceTerm(String referencekey, String description) {
+	// TODO: something is up here - looks in idpropertymap but if not found writes to identitymap
+	private PhysicalModelComponent getReferenceProperty(String referencekey, String description) {
 		PhysicalModelComponent term = idpropertymap.get(referencekey);
 		
-		if (term==null) {
+		if (term == null) {
 			term = new PhysicalProperty(description, URI.create(referencekey));
 			identitymap.put(referencekey, term);
 			semsimmodel.addPhysicalProperty((PhysicalProperty) term);
 		}
 		return term;
 	}
+	
+	private ReferencePhysicalDependency getReferenceDependency(String refuri, String desc){
+		ReferencePhysicalDependency rpd = iddependencymap.get(refuri);
+		
+		if(rpd == null){
+			rpd = new ReferencePhysicalDependency(URI.create(refuri), desc);
+			iddependencymap.put(refuri, rpd);
+			rpd = semsimmodel.addReferencePhysicalDependency(rpd);
+		}
+		return rpd;
+	}
+	
 	
 	private PhysicalModelComponent getClassofIndividual(String ind) throws OWLException {
 		String indclass = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, ind, physicaldefinitionURI.toString());

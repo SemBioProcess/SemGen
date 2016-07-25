@@ -177,7 +177,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	 * @param val A string representing the start value
 	 */
 	public void setStartValue(String val){
-		startValue = val;
+		
+		if(val.equals("")) return;
+		else startValue = val;
 	}
 	
 	/**

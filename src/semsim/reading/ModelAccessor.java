@@ -140,7 +140,7 @@ public class ModelAccessor {
 			return getModelURI().getFragment();
 		else{
 			String filename = getFileThatContainsModel().getName();
-			return filename.substring(0, filename.lastIndexOf("."));
+			return filename.substring(0, filename.indexOf("."));
 		}
 	}
 	

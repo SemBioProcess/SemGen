@@ -50,7 +50,8 @@ public abstract class SemSimObject {
 	 * Whether the object has an associated textual description
 	 */
 	public boolean hasDescription(){
-		return ( ! description.equals("") && description != null);
+		if( description != null && ! description.equals("")) return true;
+		else return false;
 	}
 	
 	/**
