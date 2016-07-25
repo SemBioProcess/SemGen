@@ -589,7 +589,7 @@ public class CellMLreader extends ModelReader {
 				}
 			Property pred = st.getPredicate();
 			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceAsString())){
+				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceasString())){
 					listofremovedstatements.add(st);
 				}
 			}
@@ -601,14 +601,14 @@ public class CellMLreader extends ModelReader {
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
 		
-		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceAsString());
+		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceasString());
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
 		Element childel = getElementForOutputVariableFromComponentMathML(cvarname, compmathmlit);
 				
 		if(childel!=null){
 			
 			Element childelclone = (Element)childel.clone();
-			childelclone.removeNamespaceDeclaration(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString()));
+			childelclone.removeNamespaceDeclaration(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString()));
 			mathmlheadel.addContent(childelclone);
 			
 			return mathmlheadel;

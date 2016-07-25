@@ -338,7 +338,7 @@ public class MATLABwriter extends ModelWriter{
 		try {
 			doc = saxbuilder.build(new StringReader(mathmlstring));
 			
-			Namespace mathns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString());
+			Namespace mathns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
 			if(doc.getRootElement().getChild("piecewise", mathns)!=null){
 				Iterator<?> piecesit = doc.getRootElement().getChild("piecewise",mathns).getChildren("piece", mathns).iterator();
 				
