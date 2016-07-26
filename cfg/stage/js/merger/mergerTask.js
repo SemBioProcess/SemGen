@@ -89,9 +89,13 @@ MergerTask.prototype.onInitialize = function() {
 		$("#mergeStep1").slideDown();
 		$("#mergeStep2").hide();
 	});
+	
+
 	$(".merge").prop('disabled', true)
 		.click(function() {
-	 		sender.executeMerge(merger.semrespane.pollOverlaps());
+			if (!$(".merge").prop('disabled')) {
+				sender.executeMerge(merger.semrespane.pollOverlaps());
+			}
 	 	});
 }
 

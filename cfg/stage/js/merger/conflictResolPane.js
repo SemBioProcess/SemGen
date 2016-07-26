@@ -2,8 +2,11 @@
  * 
  */
 
-function ConflictResolutionPane(accessor) {
+function ConflictResolutionPane(accessor, sempane) {
 	var pane = this;
+	
+	var semrespane = sempane;
+	this.readyformerge = false;
 	var conflictobj;
 	var javaaccessor = accessor;
 	var unitconflicts = [];
@@ -17,6 +20,7 @@ function ConflictResolutionPane(accessor) {
 		clone.id = 'smcon' + smconflicts.length;
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
+		clone.resolved = false;
 		
 		clone.querySelector('.dupname').innerHTML = "Duplicate submodel name: " + smconf.duplicate;
 		//var choice = clone.querySelector('.newSubmodelName');
@@ -25,6 +29,9 @@ function ConflictResolutionPane(accessor) {
 		input.value = clone.srcobj.replacement;
 		input.onchange = function () {
 			javaaccessor.setSubmodelName(clone.index, true, input.value);
+			clone.resolved = input.value != "";
+			checkAllResolved();
+			semrespane.allchoicesmade();
 		} 
 		
 		smconflicts.push(clone);
@@ -39,7 +46,8 @@ function ConflictResolutionPane(accessor) {
 		clone.id = 'cwcon' + cwconflicts.length;
 		clone.index = cwconflicts.length;
 		clone.srcobj = cwconf;
-		
+		clone.resolved = false;
+
 		clone.querySelector('.dupname').innerHTML = "Duplicate codeword name: " + cwconf.duplicate;
 		//var choice = clone.querySelector('.newSubmodelName');
 		var input = clone.querySelector('.newName');
@@ -47,6 +55,9 @@ function ConflictResolutionPane(accessor) {
 		input.value = clone.srcobj.replacement;
 		input.onchange = function () {
 			javaaccessor.setCodewordName(clone.index, true, input.value);
+			clone.resolved = input.value != "";
+			checkAllResolved();
+			semrespane.allchoicesmade();
 		} 
 		
 		cwconflicts.push(clone);
@@ -61,7 +72,8 @@ function ConflictResolutionPane(accessor) {
 		clone.id = 'ucon' + unitconflicts.length;
 		clone.index = unitconflicts.length;
 		clone.srcobj = unitconf;
-		
+		clone.resolved = true;
+
 		clone.querySelector('.unitA').innerHTML = unitconf.unitleft;
 		clone.querySelector('.unitB').innerHTML = unitconf.unitright;
 		
@@ -70,8 +82,11 @@ function ConflictResolutionPane(accessor) {
 		input.value = clone.srcobj.conversion;
 		
 		operatorsel.selectedIndex = clone.srcobj.multiply ? 0 : 1;
-		 input.onchange = function () {
+		input.onchange = function () {
 			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
+			clone.resolved = input.value != "";
+			checkAllResolved();
+			semrespane.allchoicesmade();
 		} 
 		 operatorsel.onchange = function () {
 				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
@@ -80,11 +95,6 @@ function ConflictResolutionPane(accessor) {
 		document.querySelector('#modalContent #UnitConf').appendChild(clone);
 
 	}
-	
-	receiver.onShowConflicts(function(data) {
-		conflictobj = data;
-		pane.refreshConflicts();
-	});
 	
 	this.refreshConflicts = function() {
 		unitconflicts.length = 0;
@@ -116,4 +126,26 @@ function ConflictResolutionPane(accessor) {
 			addCodewordConflictPanel(con);
 		});
 	}
+	
+	var checkAllResolved = function() {
+		var resolved = true;
+		var panelchecker = function(panel) {
+			resolved = panel.resolved;
+		}
+		
+		while (resolved) {
+			unitconflicts.forEach(function(panel) { panelchecker(panel); });
+			smconflicts.forEach(function(panel) { panelchecker(panel); });
+			cwconflicts.forEach(function(panel) { panelchecker(panel); });
+			break;
+		}
+		
+		pane.readyformerge = resolved;
+	}
+	
+	receiver.onShowConflicts(function(data) {
+		conflictobj = data;
+		pane.refreshConflicts();
+	});
+	
 }

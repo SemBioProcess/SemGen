@@ -13,13 +13,15 @@ function SemanticResolutionPane(accessor) {
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
 	
-	pane.confrespane = new ConflictResolutionPane(accessor);
+	pane.confrespane = new ConflictResolutionPane(accessor, this);
 
 	
 	//Checks to see if requirements are met for merging.
 	this.allchoicesmade = function () {
-		var disable = false;
 		var choices = pane.pollOverlaps();
+		if (!pane.confrespane.readyformerge) {return;}
+		
+		var disable = false;
 		choices.forEach(function(c) {
 			if (c==-1) disable = true; 
 		});
