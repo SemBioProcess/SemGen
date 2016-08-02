@@ -37,6 +37,7 @@ function Graph() {
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
 	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
+	
 	this.depBehaviors = [];
 	
 	var nodes;

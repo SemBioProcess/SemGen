@@ -24,6 +24,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		state = new StageState(Task.PROJECT);
 	}
 	
+	
+	protected void removeModel(Integer index) {
+		_models.set(index, null);
+	}
 	/**
 	 * Receives commands from javascript
 	 * @author Ryan
@@ -44,8 +48,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
-				ModelInfo info = new ModelInfo(semsimmodel, accessor);
-				_models.put(semsimmodel.getName(), info);
+				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+				_models.add(info);
 				
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
@@ -61,21 +65,17 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					return;
 				}
-				ModelInfo info = new ModelInfo(semsimmodel, file);
-				_models.put(semsimmodel.getName(),info);
+				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
+				_models.add(info);
 
 				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
-		public void onTaskClicked(String modelName, String task) {
-			// If the model doesn't exist throw an exception
-			if(!_models.containsKey(modelName))
-				throw new IllegalArgumentException(modelName);
+		public void onTaskClicked(Integer modelindex, String task) {
 			
 			// Get the model
-			ModelInfo modelInfo = _models.get(modelName);
-			SemSimModel model = modelInfo.Model;
+			ModelInfo modelInfo = _models.get(modelindex);
 			
 			// Execute the proper task
 			switch(task) {
@@ -83,18 +83,16 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
 					break;
 				case "dependencies":
-				//	_commandSender.showDependencyNetwork(model.getName(),
 				//	modelInfo.modelnode.requestAllChildDependencies());
 					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
 					break;
 				case "merge":
-					onMerge(modelName);
 					break;
 				case "close":
-					_models.remove(modelName);
-					_commandSender.removeModel(modelName);
+					removeModel(modelindex);
+					_commandSender.removeModel(modelindex);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -111,12 +109,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String modelNames) {
-			createMerger(modelNames);
+		public void onMerge(Double model1, Double model2) {
+			createMerger(model1.intValue(), model2.intValue());
 		}
 		
-		public void onQueryModel(String modelName, String query) {
-			ModelInfo modelInfo = _models.get(modelName);
+		public void onQueryModel(Integer modelindex, String query) {
+			ModelInfo modelInfo = _models.get(modelindex);
 			switch (query) {
 			case "hassubmodels":
 				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();

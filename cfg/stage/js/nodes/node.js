@@ -23,6 +23,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.hidden = false;
 	this.canlink = true;
 	this.textlocx = 0;
+	this.locked = false; //Make node immutable on stage (allow dragging and selection)
+
 	this.wasfixed = false;
 	this.defaultopacity = 1.0;
 	
@@ -33,6 +35,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.drag = [];
 	this.dragend = [];
 	this.addBehavior(NodeDrag);
+	
 	
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
@@ -107,45 +110,47 @@ Node.prototype.createVisualElement = function (element, graph) {
 		.call(graph.force.drag)
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
-
-	var circleSelection = this.rootElement.append("svg:circle")
-										.attr("r", this.r)
-
-										.attr("class","nodeStrokeClass")
-										.on("mouseover", function (d) {
-											graph.highlightMode(d);
-										})
-										.on("mouseout", function () {
-											graph.highlightMode(null);
-										});
-
-	if(this.nodeType == NodeType.NULL) {
-		circleSelection.attr("stroke", "black")
-			.attr("stroke-width", 0.5);
-		this.rootElement.append("svg:line")
-			.attr("x1", this.r)
-			.attr("x2", -this.r)
-			.attr("y1", -this.r)
-			.attr("y2", this.r)
-			.attr("stroke", "black")
-			.attr("stroke-width", 1);
-	};
-
-	this.rootElement.on("click", function (node) {
-		node.onClick();
-	});
-
-	//Append highlight circle
-	this.rootElement.append("svg:circle")
-		.attr("class", "highlight")
-		.attr("r", this.r + 4)
-		.attr("stroke", "yellow")
-		.attr("stroke-width", "4");
-
-	// Create the text elements
-	this.createTextElement("shadow");
-	this.createTextElement("real");
 	
+	if(this.nodeType != NodeType.NULLNODE) {
+	
+		var circleSelection = this.rootElement.append("svg:circle")
+											.attr("r", this.r)
+	
+											.attr("class","nodeStrokeClass")
+											.on("mouseover", function (d) {
+												graph.highlightMode(d);
+											})
+											.on("mouseout", function () {
+												graph.highlightMode(null);
+											});
+	
+		
+			circleSelection.attr("stroke", "black")
+				.attr("stroke-width", 0.5);
+			
+//			this.rootElement.append("svg:line")
+//				.attr("x1", this.r)
+//				.attr("x2", -this.r)
+//				.attr("y1", -this.r)
+//				.attr("y2", this.r)
+//				.attr("stroke", "black")
+//				.attr("stroke-width", 1);
+//	
+		this.rootElement.on("click", function (node) {
+			node.onClick();
+		});
+	
+		//Append highlight circle
+		this.rootElement.append("svg:circle")
+			.attr("class", "highlight")
+			.attr("r", this.r + 4)
+			.attr("stroke", "yellow")
+			.attr("stroke-width", "4");
+	
+		// Create the text elements
+		this.createTextElement("shadow");
+		this.createTextElement("real");
+	}
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 	
 }
@@ -162,11 +167,9 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent) {
-		if (this.parent.id != "null") {
 			var k = .0005;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
-		}
 
 	}
 	this.setLocation(
@@ -176,7 +179,7 @@ Node.prototype.tickHandler = function (element, graph) {
 
 	var root = d3.select(element);
 	//Keep the text above hull when an parent node is opened.
-	if (this.showchildren) {
+	if ((this.showchildren) && (this.nodeType != NodeType.NULLNODE)) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
 		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
 	}

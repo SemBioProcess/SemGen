@@ -136,8 +136,8 @@ function SemanticResolutionPane() {
 		$("#fixedNodesA").removeAttr("checked");
 		$("#fixedNodesB").removeAttr("checked");
 
-		pane.leftgraph.update(data.left);
-		pane.rightgraph.update(data.right);
+		pane.leftgraph.setPreviewData(data.choices[0]);
+		pane.rightgraph.setPreviewData(data.choices[1]);
 
 		// Different hull colors for different models
 		$("[id*=" + leftModelName +"] > .hull").attr("stroke", "rgb(96, 96, 191)").attr("fill", "rgb(96, 96, 191)");

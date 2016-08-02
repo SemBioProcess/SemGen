@@ -10,14 +10,13 @@ function Task(graph, stagestate) {
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
-	var modelindex = 0;
+
 	var task = this;
 	$("#leftSidebar").empty();
 	
 	this.addModelNode = function(model, optbehaviors) {
 		
-		var modelNode = new ModelNode(this.graph, model, modelindex);
-		modelindex++;
+		var modelNode = new ModelNode(this.graph, model);
 		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);

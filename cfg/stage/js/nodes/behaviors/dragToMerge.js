@@ -79,8 +79,8 @@ function DragToMerge(_node) {
 		    	}
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
-		        	var modelstomerge = _node.name + "," + mergeNode.name;
-		        	sender.merge(modelstomerge);
+		        	
+		        	sender.merge(_node.index, mergeNode.index);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location

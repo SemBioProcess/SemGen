@@ -9,16 +9,16 @@ public class ModelInfo {
 	public ModelAccessor accessor;
 	public ModelNode modelnode;
 	
-	public ModelInfo(SemSimModel model, ModelAccessor path) {
+	public ModelInfo(SemSimModel model, ModelAccessor path, Integer modindex) {
 		Model = model;
 		accessor = path;
-		modelnode = new ModelNode(model);
+		modelnode = new ModelNode(model, modindex);
 	}
 	
-	public ModelInfo(ModelInfo info) {
+	public ModelInfo(ModelInfo info, Integer modindex) {
 		Model = info.Model.clone();
 		accessor = info.accessor;
-		modelnode = new ModelNode(Model);
+		modelnode = new ModelNode(Model, modindex);
 	}
 	
 	public String getModelName() {

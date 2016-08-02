@@ -5,23 +5,25 @@
 ModelNode.prototype = new ParentNode();
 ModelNode.prototype.constructor = ModelNode;
 
-function ModelNode (graph, srcobj, index) {
+function ModelNode (graph, srcobj) {
 	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
 	this.fixed = true;
-	this.index = index;
+	this.index = srcobj.modelindex;
 	this.addClassName("modelNode");
 	this.canlink = false;
 	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
-	
-	this.addBehavior(Hull);	
-	
-	this.addBehavior(parentDrag);
+
+		this.addBehavior(Hull);	
+		this.addBehavior(parentDrag);	
+
+
 	
 }
 
 ModelNode.prototype.createVisualElement = function (element, graph) {
 	
 	ParentNode.prototype.createVisualElement.call(this, element, graph);
+
 	
 }
 
@@ -45,9 +47,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 		return;
 	}
 	this.displaymode = modeid;
-	if (expand) {
-		this.showChildren();
-	}
+	this.showchildren = expand;
 }
 
 ModelNode.prototype.showChildren = function() {
@@ -57,5 +57,4 @@ ModelNode.prototype.showChildren = function() {
 	}
 	this.showchildren = true;
 	$(this).triggerHandler('childrenSet', [this.children]);
-	this.graph.update();
 }

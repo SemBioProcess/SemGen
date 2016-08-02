@@ -18,7 +18,6 @@ import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
 import semgen.stage.serialization.DependencyNode;
-import semgen.stage.serialization.MergePreviewSubmodels;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
@@ -42,8 +41,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
 		
 		for (ModelInfo model : modelinfo) {
-			ModelInfo info = new ModelInfo(model);
-			_models.put(info.getModelName(), info);
+			ModelInfo info = new ModelInfo(model, _models.size());
+			_models.add(info);
 			files.add(info.accessor);
 			models.add(info.Model);
 		}
@@ -69,6 +68,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			return;
 		}
 		generateOverlapDescriptors();
+		getOverlappingNodes();
 	}
 
 	private void generateOverlapDescriptors() {
@@ -79,6 +79,17 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			descriptors.add(workbench.getDSDescriptors(i));
 		}
 		dsdescriptors = descriptors;
+	}
+	
+	private void getOverlappingNodes() {
+		overlaps.clear();
+		ArrayList<Pair<DataStructure,DataStructure>> dsoverlaps = workbench.getOverlapPairs();
+		
+		for (Pair<DataStructure,DataStructure> overlap : dsoverlaps) {
+			DependencyNode left = _models.get(0).modelnode.getDependencyNode(overlap.getLeft());
+			DependencyNode right = _models.get(1).modelnode.getDependencyNode(overlap.getRight());
+			overlaps.add(Pair.of(left, right));
+		}
 	}
 	
 	public ModelAccessor saveMerge() {
@@ -100,22 +111,16 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		if (arg == MergeEvent.mergecompleted) {
 			ModelAccessor modelfile = saveMerge();
 			String mergedname = workbench.getMergedModelName();
-			_models.put(mergedname, new ModelInfo(workbench.getMergedModel(), modelfile));
+			_models.add(new ModelInfo(workbench.getMergedModel(), modelfile, _models.size()));
 			_commandSender.mergeCompleted(mergedname);
 		}
 		if (arg == MergeEvent.mappingadded) {	
 			generateOverlapDescriptors();
+			getOverlappingNodes();
 		}
 	}
 	
-	private void getOverlappingNodes() {
-		overlaps.clear();
-		ArrayList<Pair<DataStructure,DataStructure>> overlaps = workbench.getOverlapPairs();
-		for (Pair<DataStructure,DataStructure> overlap : overlaps) {
-			
-		}
-	}
-	
+
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
 		public void onRequestOverlaps() {
@@ -130,8 +135,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onRequestPreview(Double index) {
-
-		//	_commandSender.showPreview(psms);
+			MergeChoice choices = new MergeChoice(overlaps.get(index.intValue()), getModelNodes());
+			_commandSender.showPreview(choices);
 		}
 
 		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
@@ -170,8 +175,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		}
 
-		public void onQueryModel(String modelName, String query) {
-			ModelInfo modelInfo = _models.get(modelName);
+		public void onQueryModel(Integer modelindex, String query) {
+			ModelInfo modelInfo = _models.get(modelindex);
 			switch (query) {
 			case "hassubmodels":
 				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
@@ -189,8 +194,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
 			// If the model doesn't exist throw an exception
-			if(!_models.containsKey(modelName))
-				throw new IllegalArgumentException(modelName);
 
 			// Execute the proper task
 			switch(task) {

@@ -9,7 +9,6 @@ function ParentNode(graph, srcobj, parent, r, group, textSize, nodeType, charge)
 	
 	this.children = {};
 	this.showchildren = false;
-
 	this.xmin = null;
 	this.xmax = null;
 	this.ymin = null;
@@ -35,7 +34,9 @@ ParentNode.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.select("circle").style("display", this.showchildren ? "none" : "inherit");
 	
 	this.lockhull = false; //Set to true to lock the node in the expanded or closed position
-	
+	if (this.showchildren) {
+		this.showChildren();
+	}
 }
 
 //If children are displayed, keep text above the highest node.
@@ -84,7 +85,6 @@ ParentNode.prototype.showChildren = function () {
 	
 	this.showchildren = true;
 	 $(this).triggerHandler('childrenSet', [this.children]);
-	this.graph.update();
 
 }
 
@@ -152,6 +152,7 @@ ParentNode.prototype.visibleGlobalApply = function(funct) {
 
 ParentNode.prototype.onDoubleClick = function () {
 	this.showChildren();
+	this.graph.update();
 }
 
 ParentNode.prototype.showDependencyNetwork = function () {

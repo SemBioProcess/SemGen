@@ -38,7 +38,7 @@ function MergerTask(graph, stagestate) {
 
 	receiver.onMergeCompleted(function(mergedname) {
 		for (x in merger.nodes) {
-			merger.nodes[x].setChildren(null, null);
+			merger.nodes[x].showchildren = false;
 			merger.nodes[x].hidden=true;
 		}
 		merger.addModelNode(mergedname, [DragToMerge]);

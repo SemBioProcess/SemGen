@@ -50,7 +50,7 @@ public class Node<T extends SemSimObject> {
 		this.name = obj.getName();
 		this.parent = parent;
 		this.parentModelId = parent.parentModelId;
-		this.id =  parent.id + "." + this.name;
+		this.id =  parent.id + "." + getBaseName(this.name);
 	}
 	
 	protected Node(T obj, Node<?> parent, Number typeindex) {
@@ -118,5 +118,14 @@ public class Node<T extends SemSimObject> {
 		}
 		
 		return par;
+	}
+	
+	//Get the base name (remove any parent names that may be in the DataStructure name)
+	protected String getBaseName(String name) {
+		int lastper = name.lastIndexOf('.');
+		if (lastper>-1) {
+			name = name.substring(lastper);
+		}
+		return name;
 	}
 }

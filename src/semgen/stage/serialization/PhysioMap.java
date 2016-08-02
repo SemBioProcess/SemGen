@@ -11,7 +11,7 @@ import com.google.gson.annotations.Expose;
 
 public class PhysioMap {
 	@Expose public ArrayList<PhysioMapNode> processes = new ArrayList<PhysioMapNode>();
-	@Expose public ArrayList<Node<PhysicalEntity>> entities = new ArrayList<Node<PhysicalEntity>>();
+	@Expose public ArrayList<LinkableNode<PhysicalEntity>> entities = new ArrayList<LinkableNode<PhysicalEntity>>();
 	
 	
 	public PhysioMap(ModelNode model) {
@@ -19,7 +19,7 @@ public class PhysioMap {
 	}
 	
 	private class PhysiomapFactory {
-		private HashMap<PhysicalEntity, Node<PhysicalEntity>> nodeMap = new HashMap<PhysicalEntity, Node<PhysicalEntity>>();
+		private HashMap<PhysicalEntity, LinkableNode<PhysicalEntity>> nodeMap = new HashMap<PhysicalEntity, LinkableNode<PhysicalEntity>>();
 		private ModelNode model;
 		
 		public PhysiomapFactory(ModelNode mod) {
@@ -63,10 +63,10 @@ public class PhysioMap {
 		}
 		
 		
-		private Node<PhysicalEntity> getParticipantNode(PhysicalEntity cpe) {
-			Node<PhysicalEntity> cpenode = nodeMap.get(cpe);
+		private LinkableNode<PhysicalEntity> getParticipantNode(PhysicalEntity cpe) {
+			LinkableNode<PhysicalEntity> cpenode = nodeMap.get(cpe);
 			if (cpenode==null) {
-				cpenode = new Node<PhysicalEntity>(cpe, model, Node.ENTITY);
+				cpenode = new LinkableNode<PhysicalEntity>(cpe, model, Node.ENTITY);
 				nodeMap.put(cpe, cpenode);
 			}
 			return cpenode;

@@ -18,10 +18,9 @@ public class SubModelNode extends ParentNode<Submodel> {
 		typeIndex=SUBMODEL;
 	}
 	
-	public SubModelNode(Submodel subModel) {
-		super(subModel);
-
-			typeIndex=SUBMODEL;
+	
+	public SubModelNode(String name) {
+		super(name, SUBMODEL);
 	}
 
 }

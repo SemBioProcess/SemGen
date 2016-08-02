@@ -1,11 +1,10 @@
 package semgen.stage.stagetasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.StageState;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
@@ -15,7 +14,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	protected CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	
 	protected StageState state;
-	protected Map<String, ModelInfo> _models  = new HashMap<String, ModelInfo>();
+	protected ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
 	protected StageTaskConf newtaskconf = null;
 
 	private int existingtaskindex = 0;
@@ -44,8 +43,8 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		_commandSender = sender;
 	}
 	
-	public ModelInfo getModel(String name) {
-		return _models.get(name);
+	public ModelInfo getModel(int index) {
+		return _models.get(index);
 	}
 	
 	public StageTaskConf getNewTaskConfiguration() {
@@ -56,22 +55,27 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		newtaskconf = null;
 	} 
 	
+	public ArrayList<ModelNode> getModelNodes() {
+		ArrayList<ModelNode> modelnodes = new ArrayList<ModelNode>();
+		
+		for (ModelInfo info : _models) {
+			modelnodes.add(info.modelnode);
+		}
+		return modelnodes;
+	}
+	
 	protected void configureTask(Task task, ArrayList<ModelInfo> info) {
 		newtaskconf = new StageTaskConf(task, info);
 		this.setChanged();
 		this.notifyObservers(StageTaskEvent.NEWTASK);
 	}
 
-	protected void createMerger(String modelnames) {
+	protected void createMerger(Integer modind1, Integer modind2) {
 		ArrayList<ModelInfo> mods = new ArrayList<ModelInfo>();
 		
-		for (String name : modelnames.split(",")) {
-		// If the models don't exist throw an exception
-			if(!_models.containsKey(name))
-				throw new IllegalArgumentException(name);
-			
-			mods.add(_models.get(name));
-		}
+		mods.add(_models.get(modind1));
+		mods.add(_models.get(modind2));
+		
 		configureTask(Task.MERGER, mods);
 	}
 	

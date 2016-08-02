@@ -13,9 +13,8 @@ function Hull(node) {
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
-				if (!node.lockhull) {
+				if (!node.locked) {
 					node.showchildren = false;
-					chidren = null;
 					node.rootElement.selectAll("text").attr("x", 0);
 					node.graph.update();
 				}
@@ -23,19 +22,12 @@ function Hull(node) {
 	});
 	
 	$(node).on('childrenSet', function (e, newChildren) {
-		if (newChildren) {
-			children = getSymbolArray(newChildren);
-		}
-		else {
-			children = null;
-		}
-		
 		// If there are children show the hull. Otherwise, show the node
-		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
+		this.rootElement.select(".hull").style("display", node.showchildren ? "inherit" : "none");
 	});
 	
 	$(node).on('preTick', function () {
-		if (node.id==null) return; 
+		
 		// Draw the hull around child nodes
 		if(node.showchildren) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull
@@ -52,7 +44,7 @@ function Hull(node) {
 			var analyzeChildren = function (childrenArr) {
 				childrenArr.forEach(function (child) {
 					// Hull position shouldn't be effected
-					// by hidden models
+					// by hidden nodes
 					if(!child.isVisible())
 						return;
 
@@ -75,7 +67,7 @@ function Hull(node) {
 					maxY = child.ypos() > maxY ? child.ypos() : maxY;
 				});
 			};
-			analyzeChildren(children);
+			analyzeChildren(getSymbolArray(node.children));
 			
 						//If there is only one visible child, make the hull a circle with a radius of 6
 			if (minX == maxX) {
@@ -98,7 +90,7 @@ function Hull(node) {
 			node.xmax = maxX;
 			node.ymin = minY;
 			node.ymax = maxY;
-			
+			if (node.nodeType==NodeType.NULLNODE) return; 
 			// Center the node at the top of the hull
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))

@@ -14,6 +14,7 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 	@Expose public ArrayList<SubModelNode> childsubmodels = new ArrayList<SubModelNode>();
 	@Expose public ArrayList<DependencyNode> dependencies = new ArrayList<DependencyNode>();
 	@Expose public int[] deptypecounts = {0, 0 ,0};
+	@Expose public Boolean expanded = false;
 
 	
 	protected ParentNode(String name, Number type) {
@@ -79,37 +80,52 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 			return null;
 		}
 
-	public ArrayList<Link> findLinksWithInput(LinkableNode<? extends SemSimComponent> node) {
+	public ArrayList<Link> findAllLinksContaining(LinkableNode<? extends SemSimComponent> node) {
 		ArrayList<Link> links = new ArrayList<Link>();
-		
-		for (DependencyNode dnode : dependencies) {
-			if (node == dnode) continue;
+		for (LinkableNode<?> dnode : dependencies) {
 			for (Link link : dnode.inputs) {
-				if (link.hasInput(dnode)) links.add(link);
+				if (link.input == link.output) continue;
+				if (link.hasInput(node) || link.hasOutput(node)) links.add(link);
 			}
 		}
 		for (SubModelNode smn : this.childsubmodels) {
-			links.addAll(smn.findLinksWithInput(node));
+			links.addAll(smn.findAllLinksContaining(node));
 		}
 		return links;
 	}
 	
-	protected void incrementType(Number type) {
-		deptypecounts[(int) type-2]++;
+	public ArrayList<DependencyNode> findAllDependenciesConnectedto(DependencyNode node) {
+		ArrayList<Link> links = findAllLinksContaining(node);
+		ArrayList<DependencyNode> linkednodes = new ArrayList<DependencyNode>();
+		for (Link link : links) {
+			if (link.input == node) {
+				linkednodes.add((DependencyNode) link.output);
+			}
+			else {
+				linkednodes.add((DependencyNode) link.input);
+			}
+		}
+
+		return linkednodes;
 	}
 	
-	protected void copyInLinkedDependencyArray(ArrayList<DependencyNode> linkeddeps) {
-		HashMap<DependencyNode, DependencyNode> copymap = new HashMap<DependencyNode, DependencyNode>();
-		ArrayList<DependencyNode> newlinkeddeps = new ArrayList<DependencyNode>();
-		for (DependencyNode dn : linkeddeps) {
-			DependencyNode copy = new DependencyNode(dn, this);
-			newlinkeddeps.add(copy);
-			copymap.put(dn, copy);
+	public ArrayList<DependencyNode> findAllDependenciesWithInput(DependencyNode node) {
+		ArrayList<Link> links = findAllLinksContaining(node);
+		ArrayList<DependencyNode> linkednodes = new ArrayList<DependencyNode>();
+		for (Link link : links) {
+			if (link.input == node) {
+				linkednodes.add((DependencyNode) link.output);
+			}
 		}
-		
-		for (DependencyNode dn : newlinkeddeps) {
-			dn.replaceLinks(copymap);
-		}
-		dependencies.addAll(newlinkeddeps);
+
+		return linkednodes;
+	}
+	
+	public void setDependencies(ArrayList<DependencyNode> newdeps) {
+		dependencies = newdeps;
+	}
+	
+	protected void incrementType(Number type) {
+		deptypecounts[(int) type-2]++;
 	}
 }

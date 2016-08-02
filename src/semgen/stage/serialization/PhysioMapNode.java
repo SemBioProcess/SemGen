@@ -11,17 +11,18 @@ public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 		typeIndex = PROCESS;
 	}
 	
-	public void addSourceLink(Node<PhysicalEntity> source) {
+	public void addSourceLink(LinkableNode<PhysicalEntity> source) {
 		inputs.add(new Link(this, source));
 	}
 	
-	public void addSinkLink(Node<PhysicalEntity> sink) {
+	public void addSinkLink(LinkableNode<PhysicalEntity> sink) {
 		inputs.add(new Link(sink, this));
 	}
 
-	public void addMediatorLink(Node<PhysicalEntity> mediator) {
+	public void addMediatorLink(LinkableNode<PhysicalEntity> mediator) {
 		inputs.add(new Link(this, mediator, Node.MEDIATOR));
 	}
 	
+
 	
 }
