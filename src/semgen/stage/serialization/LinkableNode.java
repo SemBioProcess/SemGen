@@ -10,6 +10,7 @@ import semsim.model.SemSimComponent;
 public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 
 	@Expose public ArrayList<Link> inputs = new ArrayList<Link>();
+	@Expose public boolean isorphaned = false;
 	
 	protected LinkableNode(O obj, Node<?> parent) {
 		super(obj, parent);

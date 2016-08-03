@@ -2,6 +2,7 @@ package semgen.stage.serialization;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.google.gson.annotations.Expose;
 
@@ -37,16 +38,17 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		return alldeps;
 	}
 	
-	public HashMap<DataStructure, DependencyNode> serialize() {
+	public HashMap<DataStructure, DependencyNode> serialize(HashSet<DataStructure> soldomainbounds) {
 		HashMap<DataStructure, DependencyNode> depmap = new HashMap<DataStructure, DependencyNode>();
 		if (!sourceobj.getSubmodels().isEmpty()) {
 			for (Submodel sm : sourceobj.getSubmodels()) {
 				SubModelNode smn = new SubModelNode(sm, this);
-				depmap.putAll(smn.serialize());
+				depmap.putAll(smn.serialize(soldomainbounds));
 				childsubmodels.add(smn);
 			}
 		}
 		for(DataStructure dependency : sourceobj.getAssociatedDataStructures()) {
+			if (soldomainbounds.contains(dependency)) continue;
 			DependencyNode sdn = new DependencyNode(dependency, this);
 			depmap.put(dependency, sdn);
 			dependencies.add(sdn);

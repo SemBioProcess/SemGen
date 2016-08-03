@@ -124,7 +124,7 @@ public class Node<T extends SemSimObject> {
 	protected String getBaseName(String name) {
 		int lastper = name.lastIndexOf('.');
 		if (lastper>-1) {
-			name = name.substring(lastper);
+			name = name.substring(lastper+1);
 		}
 		return name;
 	}

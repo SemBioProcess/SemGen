@@ -41,13 +41,24 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
+				boolean alreadyopen = false;
+				
 				ModelAccessor accessor = new ModelAccessor(file);
+				
+				for (ModelInfo info : _models) {
+					alreadyopen = info.accessor.equals(accessor);
+					if (alreadyopen) break;
+				}
+				if (alreadyopen) continue;
+				
 				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
+				
+				
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
 				_models.add(info);
 				

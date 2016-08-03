@@ -24,6 +24,7 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 		super(dataStructure, parent);
 		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		this.typeIndex = nodetypes.indexOf(nodeType);
+		isorphaned = dataStructure.getComputationInputs().isEmpty() && dataStructure.getUsedToCompute().isEmpty();
 		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
 	}
 	
@@ -44,7 +45,7 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 		inputs = new ArrayList<Link>();
 		if (sourceobj.hasComputation()) {
 			for (DataStructure input : sourceobj.getComputationInputs()) {
-				if (sourceobj!=input) {
+				if (sourceobj!=input && dsnodemap.get(input)!=null) {
 					inputs.add(new Link(this, dsnodemap.get(input)));
 				}
 			}

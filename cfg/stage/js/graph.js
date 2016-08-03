@@ -37,14 +37,11 @@ function Graph() {
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
 	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
+	this.showorphans = false;
 	
 	this.depBehaviors = [];
 	
 	var nodes;
-
-	var orphanNodes = [];
-
-	var hiddenLinks = {};
 
 	this.setTaskNodes = function(tasknodes) {
 		nodes = tasknodes;
@@ -100,43 +97,6 @@ function Graph() {
 		this.update();
 	}
 
-	// Hide visibleNodes without links
-	this.hideOrphanNodes = function (linkToHide) {
-		var nodesWithLink = [];
-		var nodesFromLinkToHide = [];
-
-		nodesFromLinkToHide.push(linkToHide.source);
-		nodesFromLinkToHide.push(linkToHide.target);
-
-		nodesFromLinkToHide.forEach(function (node) {
-			// Model visibleNodes and hiddenLabel visibleNodes don't count as orphan visibleNodes
-			if(node.nodeType === undefined || node.nodeType == NodeType.MODEL) {
-				return;
-			}
-
-			for(var i = 0; i < links.length; i++) {
-				if(nodesWithLink.indexOf(links[i].source.id) == -1) {
-					nodesWithLink.push(links[i].source.id);
-				}
-				if(nodesWithLink.indexOf(links[i].target.id) == -1) {
-					nodesWithLink.push(links[i].target.id);
-				}
-			}
-
-			if(nodesWithLink.indexOf(node.id) == -1) {
-				orphanNodes.push(node);
-				this.removeNode(node.id);
-			}
-		}, this);
-	}
-
-	// Add orphan visibleNodes back
-	this.showOrphanNodes = function () {
-		orphanNodes.forEach(function (node) {
-			this.addNode(node);
-		}, this);
-	}
-	
 	/**
 	 * Updates the graph
 	 */

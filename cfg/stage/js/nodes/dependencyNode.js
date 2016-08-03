@@ -20,6 +20,9 @@ function DependencyNode (graph, data, parentNode) {
 	});
 	this.addBehavior(HiddenLabelNodeGenerator);
 
+	this.isOrphaned = function() {
+		return data.isorphaned;
+	}
 }
 
 DependencyNode.prototype.createVisualElement = function (element, graph) {
@@ -66,4 +69,9 @@ DependencyNode.prototype.getLinks = function () {
 	});
 
 	return links;
+}
+
+DependencyNode.prototype.isVisible = function () {
+	if (this.srcobj.isorphaned && !this.graph.showorphans) return false;  
+	return Node.prototype.isVisible.call(this);
 }
