@@ -43,6 +43,7 @@ function Task(graph, stagestate) {
 	
 	this.doModelAction = function(action) {
 		action(this.getFirstSelectedModel());
+		task.graph.update();
 	}
 	
 	this.getFirstSelectedModel = function () {

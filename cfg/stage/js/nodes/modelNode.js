@@ -28,6 +28,7 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 }
 
 ModelNode.prototype.createVisualization = function (modeid, expand) {
+	modelnode = this;
 	this.children = {};
 	
 	if (modeid == 0) {
@@ -41,6 +42,16 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 		console.log("Showing PhysioMap for model " + this.name);
 	}
 	else if (modeid == 1) {
+		this.createChildren();
+		var dependencies = {};
+			
+		this.globalApply(function(node){
+			if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE) {
+				dependencies[node.name] = node;
+				node.parent = modelnode;
+			}
+		});
+		this.children = dependencies;
 	}
 	else {
 		throw "Display mode not recognized";
