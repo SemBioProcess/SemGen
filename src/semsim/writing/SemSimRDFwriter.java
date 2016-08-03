@@ -51,13 +51,41 @@ public class SemSimRDFwriter extends ModelWriter{
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	
-	// Constructor
+	// Constructor without existing RDF block
+	public SemSimRDFwriter(SemSimModel semsimmodel){
+		super(null);
+		
+		initialize(semsimmodel);
+	}
+	
+	// Constructor with existing RDF block
 	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
 		super(null);
 		
+		initialize(semsimmodel);
+		intializeExistingRDF(rdfasstring, baseNamespace);
+	}
+	
+	
+	private void initialize(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
+		
 		createSubmodelURIandNameMap();
+		
+		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
+		rdf.setNsPrefix("model", semsimmodel.getNamespace());
+	}
+	
+	
+	private void intializeExistingRDF(String rdfasstring, String baseNamespace){
+		
+		// If rdfasstring is not null, add it as rdf model
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
@@ -71,15 +99,6 @@ public class SemSimRDFwriter extends ModelWriter{
 				e.printStackTrace();
 			}
 		}
-		
-		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
-
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("model", semsimmodel.getNamespace());
 	}
 
 	// Empty functions so that we can pass in sslib
@@ -214,7 +233,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares){
 		
 		if(ds.hasPhysicalProperty()){
-			Property iccfprop = ResourceFactory.createProperty(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
+			Property iccfprop = SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty();
 			Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)ds);
 			Statement st = rdf.createStatement(ares, iccfprop, propres);
 			
@@ -619,7 +638,7 @@ public class SemSimRDFwriter extends ModelWriter{
 				newuri = URI.create(newnamespace + newfragment);
 			}
 			if(refont==ReferenceOntology.FMA){
-				// Need to figure out how to get FMAIDs!!!!
+				// TODO: Need to figure out how to get FMAIDs!!!!
 			}
 			if(refont==ReferenceOntology.MA){
 				String newfragment = fragment.replace("_", ":");

@@ -33,6 +33,7 @@ import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
@@ -41,9 +42,11 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimCopy;
 import semsim.writing.SemSimOWLwriter;
 
@@ -86,7 +89,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
-	private int sourceModelType;
+	private ModelType sourceModelType;
 	private ModelAccessor sourcefilelocation;
 	private double semsimversion;
 	
@@ -105,6 +108,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
 	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
+	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
 
 	/**
 	 * Constructor without namespace
@@ -165,10 +169,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The new Submodel added.
 	 */
 	public Submodel addSubmodel(Submodel sub){
+		
 		while(getSubmodel(sub.getName())!=null){
 			sub.setName(sub.getName() + "_");
 		}
 		submodels.add(sub);
+		
 		return sub;
 	}
 	
@@ -180,12 +186,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param unit The UnitOfMeasurement to be added.
 	 */
 	public void addUnit(UnitOfMeasurement unit){
-		if(!containsUnit(unit.getName())){
-			units.add(unit);
-		}
-		else{
-			System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
-		}
+		
+		if( ! containsUnit(unit.getName())) units.add(unit);
+		else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 	}
 	
 	public void setUnits(HashSet<UnitOfMeasurement> units) {
@@ -211,21 +214,22 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(ArrayList<PhysicalEntity> entlist, ArrayList<StructuralRelation> rellist){
 		CompositePhysicalEntity newcpe = new CompositePhysicalEntity(entlist, rellist);
+		
 		for(CompositePhysicalEntity cpe : getCompositePhysicalEntities()){
 			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
-			if(newcpe.equals(cpe)){
-				return cpe;
-			}
+			
+			if(newcpe.equals(cpe)) return cpe;
 		}
 		physicalentities.add(newcpe);
 		
 		// If there are physical entities that are part of the composite but not yet added to the model, add them
 		// This comes into play when importing annotations from other models
 		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
+			
 			if(!getPhysicalEntities().contains(ent)){
-				if(ent.hasPhysicalDefinitionAnnotation()){
+				
+				if(ent.hasPhysicalDefinitionAnnotation())
 					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
-				}
 				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
 			}
 		}
@@ -241,10 +245,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Otherwise a new CustomPhysicalEntity with the name and description specified is returned.
 	 */
 	public CustomPhysicalEntity addCustomPhysicalEntity(CustomPhysicalEntity cupe){
+		
 		if(getCustomPhysicalEntityByName(cupe.getName())!=null) cupe = getCustomPhysicalEntityByName(cupe.getName());
-		else{
-			physicalentities.add(cupe);
-		}
+		else physicalentities.add(cupe);
 		return cupe;
 	}
 	
@@ -258,27 +261,27 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Otherwise a new CustomPhysicalProcess with the name and description specified is returned.
 	 */
 	public CustomPhysicalProcess addCustomPhysicalProcess(CustomPhysicalProcess custompp){
+		
 		if(getCustomPhysicalProcessByName(custompp.getName())!=null) custompp = getCustomPhysicalProcessByName(custompp.getName());
-		else{
-			physicalprocesses.add(custompp);
-		}
+		else physicalprocesses.add(custompp);
+		
 		return custompp;
 	}
 	
 	
 	public PhysicalPropertyinComposite addAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
+		
 		if(getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
-		else{
-			associatephysicalproperties.add(pp);
-		}
+		else associatephysicalproperties.add(pp);
+		
 		return pp;
 	}
 	
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
+		
 		if(getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
-		else{
-			physicalproperties.add(pp);
-		}
+		else physicalproperties.add(pp);
+		
 		return pp;
 	}
 	
@@ -303,14 +306,14 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the entity.
 	 * @param description A free-text description of the entity. Usually taken from the reference ontology.
-	 * @return If the model already contains a ReferencePhysicalEntity with the same URI, it is returned.
+	 * @return If the model already contains a ReferencePhysicalEntity with the same URI, that entity is returned.
 	 * Otherwise a new ReferencePhysicalEntity with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalEntity addReferencePhysicalEntity(ReferencePhysicalEntity rpe){
+		
 		if(getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI())!=null) rpe = getPhysicalEntityByReferenceURI(rpe.getPhysicalDefinitionURI());
-		else{
-			physicalentities.add(rpe);
-		}
+		else physicalentities.add(rpe);
+		
 		return rpe;
 	}
 	
@@ -321,13 +324,33 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * 
 	 * @param uri The URI of the reference ontology term that defines the process.
 	 * @param description A free-text description of the process. Usually taken from the reference ontology.
-	 * @return If the model already contains a ReferencePhysicalProcess with the same URI, it is returned.
+	 * @return If the model already contains a ReferencePhysicalProcess with the same URI, that process is returned.
 	 * Otherwise a new ReferencePhysicalProcess with the URI and description specified is returned.
 	 */
 	public ReferencePhysicalProcess addReferencePhysicalProcess(ReferencePhysicalProcess rpp){
-		if(getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI())!=null) rpp = getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI());
+		
+		if(getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI())!=null) 
+			rpp = getPhysicalProcessByReferenceURI(rpp.getPhysicalDefinitionURI());
 		else physicalprocesses.add(rpp);
+		
 		return rpp;
+	}
+	
+	/**
+	 * Add a new ReferencePhysicalDependency to the model.
+	 * 
+	 * @param uri The URI of the reference ontology term that defines the dependency.
+	 * @param description A free-text description of the dependency. Usually taken from the reference ontology.
+	 * @return If the model already contains a ReferencePhysicalDependency with the same URI, that dependency is returned.
+	 * Otherwise a new ReferencePhysicalDependency with the URI and description specified is returned.
+	 */
+	public ReferencePhysicalDependency addReferencePhysicalDependency(ReferencePhysicalDependency dep){
+		
+		if(getPhysicalDependencyByReferenceURI(dep.getPhysicalDefinitionURI()) != null) 
+				dep = getPhysicalDependencyByReferenceURI(dep.getPhysicalDefinitionURI());
+		else physicaldependencies.add(dep);
+		
+		return dep;
 	}
 	
 	/**
@@ -583,10 +606,28 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public ReferencePhysicalProcess getPhysicalProcessByReferenceURI(URI uri){
 		for (PhysicalProcess pp : physicalprocesses) {
+			
 			if (pp.hasPhysicalDefinitionAnnotation()) {
-					if (((ReferenceTerm)pp).getPhysicalDefinitionURI().equals(uri)) {
-						return (ReferencePhysicalProcess)pp;
-					}
+				
+				if (((ReferenceTerm)pp).getPhysicalDefinitionURI().equals(uri))
+					return (ReferencePhysicalProcess)pp;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param uri A reference term URI
+	 * @return The {@link ReferencePhysicalDependency} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
+	 * If no ReferencePhysicalDependency has been annotated against the URI, null is returned.
+	 */
+	public ReferencePhysicalDependency getPhysicalDependencyByReferenceURI(URI uri){
+		for(PhysicalDependency dep : physicaldependencies){
+			
+			if(dep.hasPhysicalDefinitionAnnotation()){
+				
+				if(((ReferenceTerm)dep).getPhysicalDefinitionURI().equals(uri))
+					return (ReferencePhysicalDependency)dep;
 			}
 		}
 		return null;
@@ -598,9 +639,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<CustomPhysicalEntity> getCustomPhysicalEntities(){
 		Set<CustomPhysicalEntity> custs = new HashSet<CustomPhysicalEntity>();
+		
 		for(PhysicalEntity ent : getPhysicalEntities()){
 			if(ent.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY)) custs.add((CustomPhysicalEntity) ent);
 		}
+		
 		return custs;
 	}
 	
@@ -610,7 +653,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The CustomPhysicalEntity with the specified name or null if no match was found.
 	 */
 	public CustomPhysicalEntity getCustomPhysicalEntityByName(String name){
+		
 		for(PhysicalEntity apmc : getPhysicalEntities()){
+			
 			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalEntity)apmc;
 			}
@@ -624,7 +669,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<CustomPhysicalProcess> getCustomPhysicalProcesses(){
 		Set<CustomPhysicalProcess> custs = new HashSet<CustomPhysicalProcess>();
+		
 		for(PhysicalProcess proc : getPhysicalProcesses()){
+			
 			if(!proc.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalProcess) proc);
 		}
 		return custs;
@@ -636,7 +683,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The CustomPhysicalProcess with the specified name or null if no match was found.
 	 */
 	public CustomPhysicalProcess getCustomPhysicalProcessByName(String name){
+		
 		for(PhysicalProcess apmc : getPhysicalProcesses()){
+			
 			if(!apmc.hasPhysicalDefinitionAnnotation()){
 				if(apmc.getName().equals(name)) return (CustomPhysicalProcess)apmc;
 			}
@@ -651,7 +700,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * is a solution domain was found with that name.
 	 */
 	public DataStructure getSolutionDomainByName(String nametomatch){
+		
 		for(DataStructure ds : getSolutionDomains()){
+			
 			if(ds.getName().equals(nametomatch)) return ds;
 		}
 		return null;
@@ -675,7 +726,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The UnitOfMeasurement with the specified name or null if no UnitOfMeasurement found with that name. 
 	 */
 	public UnitOfMeasurement getUnit(String name){
+		
 		for(UnitOfMeasurement unit : getUnits()){
+			
 			if(unit.getName().equals(name)) return unit;
 		}
 		return null;
@@ -694,7 +747,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Boolean hasSolutionDomainName(String nametomatch){
 		Boolean test = false;
+		
 		for(DataStructure ds : getSolutionDomains()){
+			
 			if(ds.getName().equals(nametomatch)) test = true;
 		}
 		return test;
@@ -705,6 +760,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<String> getSolutionDomainNames(){
 		Set<String> sdnames = new HashSet<String>();
+		
 		for(DataStructure ds : getSolutionDomains()){
 			sdnames.add(ds.getName());
 		}
@@ -741,7 +797,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations() {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
+		
 		for(Annotation ann : getAnnotations()){
+			
 			if(ann instanceof ReferenceOntologyAnnotation) raos.add((ReferenceOntologyAnnotation)ann);
 		}
 		return raos;
@@ -769,7 +827,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<ReferencePhysicalProcess> getReferencePhysicalProcesses(){
 		Set<ReferencePhysicalProcess> refprocs = new HashSet<ReferencePhysicalProcess>();
+		
 		for(PhysicalProcess proc : getPhysicalProcesses()){
+			
 			if(proc.hasPhysicalDefinitionAnnotation()) refprocs.add((ReferencePhysicalProcess) proc);
 		}
 		return refprocs;
@@ -896,7 +956,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * See {@link ModelClassifier} constants. 
 	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link ModelClassifier} ).
 	 */
-	public void setSourceModelType(int originalModelType) {
+	public void setSourceModelType(ModelType originalModelType) {
 		this.sourceModelType = originalModelType;
 	}
 
@@ -905,7 +965,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return An integer representing the format of the original model code (see {@link ModelClassifier} ) 
 	 * and associated constants.
 	 */
-	public int getSourceModelType() {
+	public ModelType getSourceModelType() {
 		return sourceModelType;
 	}
 	
@@ -968,7 +1028,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
+		
 		for(Annotation ann : getAnnotations()){
+			
 			if(ann instanceof ReferenceOntologyAnnotation && ann.getRelation()==relation)
 				raos.add((ReferenceOntologyAnnotation)ann);
 		}
@@ -1019,17 +1081,20 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void replacePhysicalProperty(PhysicalPropertyinComposite tobereplaced, PhysicalPropertyinComposite toreplace) {
 		Set<PhysicalPropertyinComposite> pps = new HashSet<PhysicalPropertyinComposite>();
 		pps.addAll(associatephysicalproperties);
+		
 		for (PhysicalPropertyinComposite pp : pps) {
+			
 			if (pp.equals(tobereplaced)) {
 				associatephysicalproperties.remove(pp);
 				associatephysicalproperties.add(toreplace);
 			}
 		}
+		
 		for (DataStructure ds : dataStructures) {
+			
 			if (ds.hasPhysicalProperty()) {
-				if (ds.getPhysicalProperty().equals(tobereplaced)) {
+				if (ds.getPhysicalProperty().equals(tobereplaced))
 					ds.setAssociatedPhysicalProperty(toreplace);
-				}
 			}
 		}
 	}

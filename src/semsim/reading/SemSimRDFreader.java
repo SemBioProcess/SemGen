@@ -76,6 +76,11 @@ public class SemSimRDFreader extends ModelReader{
 			}
 		}	
 	}
+	
+	public boolean hasPropertyAnnotationForDataStructure(DataStructure ds){
+		return rdf.contains(rdf.getResource(semsimmodel.getNamespace() + ds.getName()), 
+				SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty());
+	}
 
 	private void createSubmodelURIandObjectMap(){
 		
@@ -103,6 +108,10 @@ public class SemSimRDFreader extends ModelReader{
 			OWLException, CloneNotSupportedException, XMLStreamException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String getModelRDFnamespace(){
+		return rdf.getNsPrefixURI("model");
 	}
 	
 	// Get model-level annotations

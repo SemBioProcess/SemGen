@@ -299,34 +299,60 @@ public class SemSimUtil {
 	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
 
 		Set<DataStructure> inputs = new HashSet<DataStructure>();
+		Map<String,String> inputnames = new HashMap<String,String>();
 
 		if(semsimmodel!=null && mathmlstring!=null){
 			
-			Pattern p = Pattern.compile("<ci>.+</ci>");
-			Matcher m = p.matcher(mathmlstring);
-			boolean result = m.find();
+			Pattern p1 = Pattern.compile("<ci>.+</ci>");
+			Matcher m1 = p1.matcher(mathmlstring);
+			boolean result1 = m1.find();
 			
-			while(result){
+			while(result1){
+				String inputname = mathmlstring.substring(m1.start()+4, m1.end()-5).trim();
+				inputnames.put(inputname, nameprefix + "." + inputname);
+				result1 = m1.find();
+			}	
+			
+			// Look for instances where csymbols are used for controlled symbols
+			// as in SBML's use of the 't' symbol for time
+			Pattern p2 = Pattern.compile("<csymbol.+</csymbol>");
+			Matcher m2 = p2.matcher(mathmlstring);
+			boolean result2 = m2.find();
+			
+			while(result2){
+				String matchedstring = mathmlstring.substring(m2.start(), m2.end());
 				
-				String inputname = mathmlstring.substring(m.start()+4, m.end()-5).trim();
-				String inputnameprefixed = nameprefix + "." + inputname;
-				String inputnametouse = inputname;
-							
+				// Store csymbol text as an input only if it's not the "delay" csymbol used in SBML
+				if( ! matchedstring.contains("definitionURL=\"http://www.sbml.org/sbml/symbols/delay\"")){
+					String inputname = matchedstring.substring(matchedstring.indexOf(">")+1, matchedstring.lastIndexOf("<")-1).trim();
+					inputnames.put(inputname, nameprefix + "." + inputname);
+				}
+				
+				result2 = m2.find();
+			}
+			
+			// Go through all the input names we found, make sure they are in the model
+			// and if so, add them to the returned list of inputs
+			for(String inputname : inputnames.keySet()){
+				
+				String theinputnametouse = inputname;
+				
 				if(! semsimmodel.containsDataStructure(inputname)){
 					
-					if(! semsimmodel.containsDataStructure(inputnameprefixed)){
-						String errmsg = "SEMSIM MODEL ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
+					String prefixedinputname = inputnames.get(inputname);
+					
+					if(! semsimmodel.containsDataStructure(prefixedinputname)){
+						String errmsg = "SEMSIM ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
 						semsimmodel.addError(errmsg);
 						System.err.println(errmsg);
 						return new HashSet<DataStructure>();
 					}
-					else inputnametouse = inputnameprefixed;
+					else theinputnametouse = prefixedinputname;
 				}
 				
-				DataStructure inputds = semsimmodel.getAssociatedDataStructure(inputnametouse);
+				DataStructure inputds = semsimmodel.getAssociatedDataStructure(theinputnametouse);
 				inputs.add(inputds);
-				result = m.find();
-			}			
+			}
 		}
 		return inputs;
 	}

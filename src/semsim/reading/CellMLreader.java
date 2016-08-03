@@ -1,9 +1,6 @@
 package semsim.reading;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,9 +11,7 @@ import java.util.Set;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.ASTNode;
@@ -63,17 +58,7 @@ public class CellMLreader extends ModelReader {
 		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		
-		try {
-			InputStream is = new ByteArrayInputStream(srccode.getBytes("UTF-8"));
-			doc = builder.build(is);
-		} catch (JDOMException | IOException e) {
-			e.printStackTrace();
-			semsimmodel.addError(e.getLocalizedMessage());
-			return semsimmodel;
-		}
+		Document doc = getJDOMdocumentFromString(semsimmodel, srccode);
 		
 		if(doc.getRootElement()==null){
 			semsimmodel.addError("Could not parse original model: Root element of XML document was null");
@@ -103,8 +88,9 @@ public class CellMLreader extends ModelReader {
 		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, mainNS.getURI().toString());
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
-		if(rdfblock.rdf.getNsPrefixURI("model") !=null ) semsimmodel.setNamespace(rdfblock.rdf.getNsPrefixURI("model"));
-		else semsimmodel.setNamespace(semsimmodel.generateNamespaceFromDateAndTime());
+		String modelnamespace = rdfblock.getModelRDFnamespace();
+		if(modelnamespace == null ) modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
+		semsimmodel.setNamespace(modelnamespace);
 		
 		// Get imported components
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
@@ -276,25 +262,8 @@ public class CellMLreader extends ModelReader {
 				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
 
 				// Collect the singular biological annotation, if present
-				if(cvar.getMetadataID() != null){
-					
-					rdfblock.getDataStructureAnnotations(cvar);
-					// TODO: Might need to redo this section once BiologicalRDFblock is done.
-					
-//					URI termURI = rdfblock.collectSingularBiologicalAnnotation(cvar);
-//					
-//					if(termURI!=null){
-//						
-//						if(termURI.toString().startsWith("http:identifiers.org/opb"))
-//							termURI = rdfblock.swapInOPBnamespace(termURI);
-//						
-//						PhysicalProperty prop = rdfblock.getSingularPhysicalProperty(termURI);
-//						cvar.setSingularAnnotation(prop);
-//					}
-//					
-//					rdfblock.collectCompositeAnnotation(cvar);
-					
-				}
+				if(cvar.getMetadataID() != null) rdfblock.getDataStructureAnnotations(cvar);
+
 				semsimmodel.addDataStructure(cvar);
 			}
 			

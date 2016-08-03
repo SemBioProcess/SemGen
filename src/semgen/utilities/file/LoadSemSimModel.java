@@ -19,6 +19,7 @@ import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.BioPortalSearcher;
@@ -52,18 +53,18 @@ public class LoadSemSimModel extends SemGenJob {
 		
     	setStatus("Reading " + modelaccessor.getShortLocation());
 
-		int modeltype = ModelClassifier.classify(modelaccessor);
+    	ModelType modeltype = ModelClassifier.classify(modelaccessor);
 		try {
 			switch (modeltype){
 			
-			case ModelClassifier.SEMSIM_MODEL:
+			case SEMSIM_MODEL:
 				if(modelaccessor.modelIsPartOfArchive())
 					ErrorLog.addError("Cannot load a SemSim model from within an archive file.", true, false);
 				else
 					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
 				break;
 			
-			case ModelClassifier.CELLML_MODEL:
+			case CELLML_MODEL:
 				CellMLreader reader = new CellMLreader(modelaccessor);
 				semsimmodel = reader.read();
 				
@@ -85,16 +86,16 @@ public class LoadSemSimModel extends SemGenJob {
 
 				break;
 				
-			case ModelClassifier.SBML_MODEL:
+			case SBML_MODEL:
 				semsimmodel = new SBMLreader(modelaccessor).read();			
 				nameOntologyTerms();
 				break;
 				
-			case ModelClassifier.MML_MODEL:
+			case MML_MODEL:
 				loadMML(modelaccessor);
 				break;
 				
-			case ModelClassifier.MML_MODEL_IN_PROJ:
+			case MML_MODEL_IN_PROJ:
 				loadMML(modelaccessor);
 				break;
 				

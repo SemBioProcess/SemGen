@@ -31,6 +31,7 @@
 		<script src="js/taskprototype.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
 		<script src="js/merger/mergePreview.js"></script>
+		<script src="js/merger/conflictResolPane.js"></script>
 		<script src="js/merger/semanticResolPane.js"></script>
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/project/stage.js"></script>
@@ -147,7 +148,7 @@
 		<!--Merger modal-->
 		<div id="taskModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
-				<div class="modal-content" id="modalContent">
+						<div class="modal-content" id="modalContent"></div>
 				</div>
 			</div>
 		</div>
@@ -161,27 +162,47 @@
 					<h6 class="rightModelName"></h6>
 				</div>
 			</div>
-			<div class="mergePreview">
-				<div class="substage" id="modelAStage">
-					<div class="substageMenu">
-						<input type="checkbox" id="fixedNodesA"> Fix Nodes</input>
+			<div id="mergeStep1">
+				<div class="mergePreview">
+					<div class="substage" id="modelAStage">
+						<div class="substageMenu">
+							<input type="checkbox" id="fixedNodesA"> Fix Nodes</input>
+						</div>
+					</div>
+					<div class="substage" id="modelBStage">
+						<div class="substageMenu">
+							<input type="checkbox" id="fixedNodesB"> Fix Nodes</input>
+						</div>
 					</div>
 				</div>
-				<div class="substage" id="modelBStage">
-					<div class="substageMenu">
-						<input type="checkbox" id="fixedNodesB"> Fix Nodes</input>
+				<div id="resizeHandle"></div>
+				<div class="modal-body">
+					<div class="panel-group" id="overlapPanels">
 					</div>
 				</div>
-			</div>
-			<div id="resizeHandle"></div>
-			<div class="modal-body">
-				<div class="panel-group" id="overlapPanels">
+				<div class="modal-footer">
+					<button id="nextBtn" type="button" class="btn btn-success">Resolve Merge Conflicts</button>
+					<button type="button" class="btn btn-default hideResolutionsBtn">Hide Dialog</button>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success merge">Merge!</button>
-				<button id="hideResolutionsBtn" type="button" class="btn btn-default">Hide Dialog</button>
+
+			<!--Duplicate name and unit conflicts resolution step -->
+			<div id="mergeStep2">
+				<div class="panel-group">
+					
+					<!--Where #dupNameResolution and #unitConversionResolution templates go-->
+					<div id="DupSubModels"></div>
+					<div id="DupCodewords"></div>
+					<div id="UnitConf"></div>
+				</div>
+
+				<div class="modal-footer">
+					<button id="backBtn" type="button" class="btn btn-warning">Back</button>
+					<button id="saveBtn" type="button" class="btn btn-success">Save and Finish</button>
+					<button type="button" class="btn btn-default hideResolutionsBtn">Hide Dialog</button>
+				</div>
 			</div>
+
 		</template>
 
 
@@ -189,7 +210,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a class="collapsePane" data-toggle="collapse">
+						<a class="collapsePane mergeResCollapsePane" data-toggle="collapse">
 							<div class="overlapPane">
 								<div class="radio leftRes"></div>
 								<div class="radio ignoreRes"></div>
@@ -198,7 +219,7 @@
 						</a>
 					</h4>
 				</div>
-				<div class="panel-collapse collapse">
+				<div class="panel-collapse collapse mergeResCollapse">
 					<div class="panel-body">
 						<div class="leftCollapsePanel">
 							<div class="collapsePanelLabel">Name</div>
@@ -221,6 +242,57 @@
 							<div class="collapsePanelLabel">Unit</div>
 							<div class="unit"></div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="dupNameResolution">
+			<div class="panel panel-default">
+				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
+				<div class="panel-heading" data-toggle="collapse" data-target="#dupName1">
+					<h4 class="panel-title">
+						<!--Check value in <input name="newSubmodelName"> and change glyphicon to "glyphicon glyphicon-ok" if value is good-->
+						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
+						<!--Fill name in JS-->
+						<div class="dupname"></div>
+						
+					</h4>
+				</div>
+				<div class="panel-collapse collapse in" id="dupName1">
+					<div class="panel-body mergeStep2Body">
+						Enter new name:
+						<!--  <select name="modelChoice">
+							<!--Fill name in JS-->
+							<!-- <option value="modelA"></option>
+							<option value="modelB"></option>
+						</select> -->
+						<input class="newName" type="text" size="31" placeholder="No special character, no space.">
+					</div>
+				</div>
+			</div>
+		</template>
+
+		<template id="unitConversionResolution">
+			<div class="panel panel-default">
+				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
+				<div class="panel-heading" data-toggle="collapse" data-target="#unitConv1">
+					<h4 class="panel-title">
+						<!--Check value in <input name="unitConvFactor"> and change glyphicon to "glyphicon glyphicon-ok" style="color:#5CB85C" if value is good-->
+						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
+						Unit conversion
+					</h4>
+				</div>
+				<div class="panel-collapse collapse in" id="unitConv1">
+					<div class="panel-body mergeStep2Body">
+						<p>Please enter unit conversion below:</p>
+						<!--Fill units in JS-->
+						(<span class="unitA"></span>) = (<span class="unitB"></span>)
+						<select class="multiplyChoice">
+							<option value="multiply">*</option>
+							<option value="divide">/</option>
+						</select>
+						<input class="unitConvFactor" type="number" placeholder="1000">
 					</div>
 				</div>
 			</div>
@@ -259,12 +331,14 @@
 				<div class="panel subpanel">
 					<ul>
 						<li><a id="resolPanels" href="#">Resolve Overlaps</a></li>
-						<li><a id="mergeModels" href="#">Execute Merge</a></li>
+						<li><a id="mergeModels" class="merge" href="#">Execute Merge</a></li>
 						<li><a id="minimize" href="#">Return to Project</a></li>
-						<li><a id="quitMergerBtn" class="merge" href="#">Close Merge</a></li>
+						<li><a id="quitMergerBtn" href="#">Close Merge</a></li>
 					</ul>
 				</div>
 			</div>
 		</template>
+
+
 	</body>
 </html>

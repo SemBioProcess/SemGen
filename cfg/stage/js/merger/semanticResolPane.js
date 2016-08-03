@@ -1,7 +1,7 @@
 /**
  * 
  */
-function SemanticResolutionPane() {
+function SemanticResolutionPane(accessor) {
 	var pane = this;
 	var resolutions = [];
 	var choices = [];
@@ -13,10 +13,15 @@ function SemanticResolutionPane() {
 	var clone = document.importNode(t.content, true);
 	document.querySelector('#modalContent').appendChild(clone);
 	
+	pane.confrespane = new ConflictResolutionPane(accessor, this);
+
+	
 	//Checks to see if requirements are met for merging.
 	this.allchoicesmade = function () {
-		var disable = false;
 		var choices = pane.pollOverlaps();
+		if (!pane.confrespane.readyformerge) {return;}
+		
+		var disable = false;
 		choices.forEach(function(c) {
 			if (c==-1) disable = true; 
 		});
@@ -45,6 +50,7 @@ function SemanticResolutionPane() {
 		
 		var radioClick = function(val) {
 			clone.choice = val;
+			
 			pane.allchoicesmade();
 		}
 		
@@ -64,8 +70,8 @@ function SemanticResolutionPane() {
 		clone.querySelector('.ignoreRes').onclick = function() {radioClick(2);};
 		clone.querySelector('.ignoreRes').setAttribute("id", 'ignoreRes' + clone.index);
 		
-		clone.querySelector('.collapsePane').setAttribute("data-target", "#collapsePane" + clone.id);
-		clone.querySelector('.collapse').setAttribute("id", "collapsePane" + clone.id);
+		clone.querySelector('.mergeResCollapsePane').setAttribute("data-target", "#collapsePane" + clone.id);
+		clone.querySelector('.mergeResCollapse').setAttribute("id", "collapsePane" + clone.id);
 
 		clone.querySelector('.leftCollapsePanel > .equation').innerHTML = overlap.dsleft.equation;
 		clone.querySelector('.rightCollapsePanel > .equation').innerHTML = overlap.dsright.equation;
@@ -90,7 +96,7 @@ function SemanticResolutionPane() {
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
-		$("#hideResolutionsBtn").click(function() {
+		$(".hideResolutionsBtn").click(function() {
 			$('#taskModal').modal("hide");
 		})
 	}
@@ -127,6 +133,8 @@ function SemanticResolutionPane() {
 		for (i=0; i<choices.length; i++) {
 			resolutions[i].setSelection(choices[i]);
 		}
+		
+		sender.requestConflicts();
 	});
 	
 	receiver.onShowPreview(function(data) {
@@ -152,8 +160,8 @@ function SemanticResolutionPane() {
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height", e.pageY-95);
-			$('.modal-body').css("height", $(window).height()-e.pageY-95);
+			$('.mergePreview').css("height", e.pageY-94);
+			$('.modal-body').css("height", $(window).height()-e.pageY-94);
 			pane.leftgraph.initialize();
 			pane.rightgraph.initialize();
 			

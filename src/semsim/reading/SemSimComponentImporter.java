@@ -10,6 +10,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class SemSimComponentImporter {
 /**
@@ -35,15 +36,15 @@ public class SemSimComponentImporter {
 			return null;
 		}
 		SemSimModel importedmodel = null;
-		int modeltype = ModelClassifier.classify(importedmodelfile);
-		if(modeltype == ModelClassifier.SEMSIM_MODEL){
+		ModelType modeltype = ModelClassifier.classify(importedmodelfile);
+		if(modeltype == ModelType.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelfile).read();
 			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}
-		else if(modeltype == ModelClassifier.CELLML_MODEL){
+		else if(modeltype == ModelType.CELLML_MODEL){
 			try {
 				importedmodel = new CellMLreader(importedmodelfile).read();
 			} catch (Exception e) {

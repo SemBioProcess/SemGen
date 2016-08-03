@@ -166,6 +166,14 @@ public class MergerWorkbench extends Workbench {
 		return namemap;
 	}
 	
+	public HashMap<String, String> createIdenticalNameMap() {
+		HashMap<String, String> namemap = new HashMap<String, String>();
+		for (String name : overlapmap.getIdenticalNames()) {
+			namemap.put(new String(name), "");
+		}
+		return namemap;
+	}
+	
 	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, Set<String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();

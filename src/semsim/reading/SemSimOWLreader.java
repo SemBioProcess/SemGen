@@ -135,7 +135,6 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	private void setPhysicalDefinitionURI(){
-
 		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo")))
 			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo");
 		

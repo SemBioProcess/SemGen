@@ -1,6 +1,7 @@
 package semgen.stage.stagetasks.merge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -30,9 +31,9 @@ import semsim.reading.ModelAccessor;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
-	private MergeConflictResolvers resolvers;
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
+	protected MergeConflicts conflicts = new MergeConflicts();
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo) {
 		workbench.addObserver(this);
@@ -51,7 +52,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		
 		primeForMerging();
 
-		resolvers = new MergeConflictResolvers(workbench);
 	}
 
 	public void primeForMerging() {
@@ -69,6 +69,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		generateOverlapDescriptors();
 		getOverlappingNodes();
+		collectConflicts();
 	}
 
 	private void generateOverlapDescriptors() {
@@ -89,6 +90,25 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			DependencyNode left = _models.get(0).modelnode.getDependencyNode(overlap.getLeft());
 			DependencyNode right = _models.get(1).modelnode.getDependencyNode(overlap.getRight());
 			overlaps.add(Pair.of(left, right));
+		}
+	}
+			
+	private void collectConflicts() {
+		ArrayList<Boolean> units = workbench.getUnitOverlaps();
+		for (int i=0; i<units.size(); i++) {
+			if (units.get(i)) {
+				conflicts.unitconflicts.add(new UnitConflict(dsdescriptors.get(i), i));
+			}
+		}
+		HashMap<String, String> smoverlaps = workbench.createIdenticalSubmodelNameMap();
+		
+		for (String overlap : smoverlaps.keySet()) {
+			conflicts.dupesubmodels.add(new SyntacticDuplicate(overlap));
+		}
+		HashMap<String, String> cwoverlaps = workbench.createIdenticalNameMap();
+		
+		for (String overlap : cwoverlaps.keySet()) {
+			conflicts.dupecodewords.add(new SyntacticDuplicate(overlap));
 		}
 	}
 	
@@ -123,6 +143,15 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
+		public void onInitialized(JSObject jstaskobj) {
+			jstask = jstaskobj;
+			jstask.setProperty("conflictsj", new MergerBridge());
+		}
+		
+		public void onRequestConflicts() {
+			_commandSender.showConflicts(conflicts);
+		}
+		
 		public void onRequestOverlaps() {
 			ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 			for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
@@ -130,6 +159,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 			_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
 		}
+		
 		public void onMinimizeTask() {
 			switchTask(0);
 		}
@@ -171,7 +201,18 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					break;
 				}
 			}
-			resolvers.mergeButtonAction(choicelist);
+			
+			SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
+			String error = workbench.executeMerge(conflicts.buildCodewordNameMap(), 
+					conflicts.buildSubmodelNameMap(), 
+					choicelist, 
+					conflicts.buildConversionList(), 
+					progframe);
+			
+			if (error!=null){
+				SemGenError.showError(
+						"ERROR: " + error, "Merge Failed");
+			}
 
 		}
 
@@ -253,5 +294,103 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			equation = dsdesc.getDescriptorValue(Descriptor.computationalcode);
 			unit = dsdesc.getDescriptorValue(Descriptor.units);
 		}
+	}
+	
+	public class MergeConflicts {
+		@Expose public ArrayList<SyntacticDuplicate> dupecodewords = new ArrayList<SyntacticDuplicate>();
+		@Expose public ArrayList<SyntacticDuplicate> dupesubmodels = new ArrayList<SyntacticDuplicate>();
+		@Expose public ArrayList<UnitConflict> unitconflicts = new ArrayList<UnitConflict>();
+	
+		public HashMap<String,String> buildCodewordNameMap() {
+			HashMap<String,String> dupemap = new HashMap<String, String>();
+			for (SyntacticDuplicate dcw : dupecodewords) {
+				dupemap.put(dcw.duplicate, dcw.replacement);
+			}
+			
+			return dupemap;
+		}
+		
+		public HashMap<String,String> buildSubmodelNameMap() {
+			HashMap<String,String> dupemap = new HashMap<String, String>();
+			for (SyntacticDuplicate dsm : dupesubmodels) {
+				dupemap.put(dsm.duplicate, dsm.replacement);
+			}
+			
+			return dupemap;
+		}
+		
+		public ArrayList<Pair<Double,String>> buildConversionList() {
+			ArrayList<Pair<Double,String>> conversions = new ArrayList<Pair<Double,String>>();
+			for (UnitConflict uc : unitconflicts) {
+				conversions.add(uc.getConversion());
+			}
+			
+			return conversions;
+		}
+	}
+	
+	public class SyntacticDuplicate {
+		@Expose public String duplicate;
+		@Expose public String replacement = "";
+		@Expose public boolean userightmodel = true;
+		
+		protected SyntacticDuplicate(String dupe) {
+			duplicate = dupe;
+		}
+		
+		public void setReplacementName(boolean rightmodel, String rep) {
+			replacement = rep;
+			userightmodel = rightmodel;
+		}
+	}
+	
+	public static class Jjstest {
+		public void test() {
+			System.out.println("Sucess!");
+		}
+	}
+	
+	public class UnitConflict {
+		@Expose public String cdwdleft;
+		@Expose public String cwdright;
+		@Expose public String unitleft;
+		@Expose public String unitright;
+		@Expose public boolean multiply = true;
+		@Expose public Float conversion = 1.0f;
+		@Expose public int index;
+		
+		protected UnitConflict(Pair<DataStructureDescriptor, DataStructureDescriptor> descs, int index) {
+			cdwdleft = descs.getLeft().getDescriptorValue(Descriptor.name);
+			unitleft = descs.getLeft().getDescriptorValue(Descriptor.units);
+			cwdright = descs.getRight().getDescriptorValue(Descriptor.name);
+			unitright = descs.getRight().getDescriptorValue(Descriptor.units);
+			this.index = index;
+		}
+		
+		public void setConversion(Float val, boolean mult) {
+			conversion = val;
+			multiply = mult;
+		}
+		
+		public Pair<Double, String> getConversion() {
+			String operator = "*";
+			if (!multiply) operator = "/"; 
+			return Pair.of(conversion.doubleValue(), operator);
+		}
+	}
+	
+	public class MergerBridge {
+		public void setUnitConversion(Integer index, boolean multiply, String conversion) {
+			conflicts.unitconflicts.get(index).setConversion(Float.valueOf(conversion), multiply);
+		}
+		
+		public void setSubmodelName(Integer index, boolean rightmodel, String name) {
+			conflicts.dupesubmodels.get(index).setReplacementName(rightmodel, name);
+		}
+		
+		public void setCodewordName(Integer index, boolean rightmodel, String name) {
+			conflicts.dupecodewords.get(index).setReplacementName(rightmodel, name);
+		}
+		
 	}
 }

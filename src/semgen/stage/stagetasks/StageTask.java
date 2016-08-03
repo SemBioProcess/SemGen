@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.teamdev.jxbrowser.chromium.JSObject;
+
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.StageState;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
@@ -15,8 +17,8 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	protected StageState state;
 	protected ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
+	protected JSObject jstask;
 	protected StageTaskConf newtaskconf = null;
-
 	private int existingtaskindex = 0;
 
 	public enum Task {

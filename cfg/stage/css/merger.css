@@ -42,7 +42,7 @@
 }
 
 .modal-body {
-    height: 50vh;
+    height: 55vh;
     overflow: scroll;
 }
 
@@ -71,7 +71,6 @@
 .overlapPane {
     height: 15px;
     text-align: center;
-    cursor: context-menu;
 }
 
 .panel-title {
@@ -161,6 +160,18 @@
 
 .collapsePanelLabel {
     font-weight: bold;
+}
+
+.panel-heading {
+    cursor: context-menu;
+}
+
+.mergeStep2Body {
+    text-align: left;
+}
+
+textarea[name=newSubmodelName] {
+    resize: none;
 }
 
 #quitMergerBtn {

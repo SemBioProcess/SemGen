@@ -48,7 +48,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -780,10 +780,10 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				
 				// Choose file location for extraction
 				String selectedext = "owl";  // Default extension type
-				int modtype = semsimmodel.getSourceModelType();
+				ModelType modtype = semsimmodel.getSourceModelType();
 				
-				if(modtype==ModelClassifier.MML_MODEL_IN_PROJ || modtype==ModelClassifier.MML_MODEL) selectedext = "proj";
-				else if(modtype==ModelClassifier.CELLML_MODEL) selectedext = "cellml";
+				if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedext = "proj";
+				else if(modtype==ModelType.CELLML_MODEL) selectedext = "cellml";
 				
 				// Create the extracted semsim model
 				try {

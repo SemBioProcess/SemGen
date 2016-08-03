@@ -6,6 +6,7 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
@@ -34,7 +35,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 *
 	 */
 	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-
+		
 		/**
 		 * Receives the add model command
 		 */
@@ -57,8 +58,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
-				
-				
+
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
 				_models.add(info);
 				
@@ -92,9 +92,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			switch(task) {
 				case "annotate":
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
-					break;
-				case "dependencies":
-				//	modelInfo.modelnode.requestAllChildDependencies());
 					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
