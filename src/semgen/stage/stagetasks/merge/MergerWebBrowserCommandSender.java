@@ -1,5 +1,6 @@
 package semgen.stage.stagetasks.merge;
 
+import semgen.stage.serialization.ModelNode;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 import semgen.stage.stagetasks.merge.MergerTask.MergeConflicts;
 import semgen.stage.stagetasks.merge.MergerTask.Overlap;
@@ -15,5 +16,5 @@ public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSe
 	 * 
 	 * @param modelName Name of model
 	 */
-	public void mergeCompleted(String mergedName);
+	public void mergeCompleted(ModelNode modelnode);
 }

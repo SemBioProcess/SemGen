@@ -39,8 +39,8 @@ function main() {
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph, stagestate);
 		}
+		sender.initialized(this.task);
 		this.task.onInitialize();
-		
 		this.graph.setTaskNodes(this.task.nodes);
 		
 		this.graph.update();
