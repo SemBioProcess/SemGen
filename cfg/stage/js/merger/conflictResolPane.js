@@ -17,7 +17,7 @@ function ConflictResolutionPane(accessor, sempane) {
 		var t = document.querySelector('#dupNameResolution');
 		var clone = document.importNode(t.content, true);
 		
-		clone.id = 'smcon' + smconflicts.length;
+		clone.id = 'smcon' + smconflicts.length;02
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
 		clone.resolved = false;
@@ -100,6 +100,7 @@ function ConflictResolutionPane(accessor, sempane) {
 		unitconflicts.length = 0;
 		smconflicts.length = 0;
 		cwconflicts.length = 0;
+
 		
 		var olaps = document.querySelector('#modalContent #UnitConf');
 		while (olaps.firstChild) {

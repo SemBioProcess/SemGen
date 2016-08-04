@@ -49,8 +49,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		workbench.addModels(files, models, true);
 		state = new StageState(Task.MERGER, modelinfo);
-		
-		primeForMerging();
 
 	}
 
@@ -94,6 +92,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 			
 	private void collectConflicts() {
+		conflicts.clearConflicts();
 		ArrayList<Boolean> units = workbench.getUnitOverlaps();
 		for (int i=0; i<units.size(); i++) {
 			if (units.get(i)) {
@@ -130,9 +129,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		if (arg == MergeEvent.mergecompleted) {
 			ModelAccessor modelfile = saveMerge();
+			
 			String mergedname = workbench.getMergedModelName();
-			_models.add(new ModelInfo(workbench.getMergedModel(), modelfile, _models.size()));
-			_commandSender.mergeCompleted(mergedname);
+			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), modelfile, _models.size());
+			_models.add(mergedmodel);
+			_commandSender.mergeCompleted(mergedmodel.modelnode);
 		}
 		if (arg == MergeEvent.mappingadded) {	
 			generateOverlapDescriptors();
@@ -326,6 +327,12 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 			
 			return conversions;
+		}
+		
+		public void clearConflicts() {
+			dupesubmodels.clear();
+			dupecodewords.clear();
+			unitconflicts.clear();
 		}
 	}
 	

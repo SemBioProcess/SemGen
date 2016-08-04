@@ -355,6 +355,7 @@ public class MergerWorkbench extends Workbench {
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		
 		if (ma != null) {
+			mergedmodel.setName(ma.getModelName());
 			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 			return ma;
 		}
