@@ -55,15 +55,22 @@ function main() {
 	});
 }
 
+//The window is receiving two seperate initialization messages which is resulting in 
+//two seperate svg HTML objects being created.
+var initialized = false;
 $(window).bind("cwb-initialized", function(e) {
-	sender = e.originalEvent.commandSender;
-
-	receiver = e.originalEvent.commandReceiver;
-	main = new main();	
-
-	window.onresize = function () {
-		main.graph.updateHeightAndWidth();
-		main.graph.update();
-	};
-
+	if (initialized) {
+		initialized = true;
+		sender = e.originalEvent.commandSender;
+	
+		receiver = e.originalEvent.commandReceiver;
+		main = new main();	
+	
+		window.onresize = function () {
+			main.graph.updateHeightAndWidth();
+			main.graph.update();
+		};
+		
+	}
+	initialized = true;
 });

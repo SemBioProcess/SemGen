@@ -48,6 +48,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			models.add(info.Model);
 		}
 		workbench.addModels(files, models, true);
+		primeForMerging();
 		state = new StageState(Task.MERGER, modelinfo);
 
 	}
@@ -87,7 +88,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		for (Pair<DataStructure,DataStructure> overlap : dsoverlaps) {
 			DependencyNode left = _models.get(0).modelnode.getDependencyNode(overlap.getLeft());
 			DependencyNode right = _models.get(1).modelnode.getDependencyNode(overlap.getRight());
+			
 			overlaps.add(Pair.of(left, right));
+			//Add a link to the graph
+			left.addLink(right);
 		}
 	}
 			
@@ -130,7 +134,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg==MergeEvent.modellistupdated) {
-			primeForMerging();
+			
 		}
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("SemGen can only merge two models at a time.", "Too many models");

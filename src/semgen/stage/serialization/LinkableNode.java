@@ -28,6 +28,10 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 		copyLinks(original.inputs);
 	}
 	
+	public void addLink(LinkableNode<O> inputnode) {
+		inputs.add(new Link(this, inputnode));
+	}
+	
 	public LinkableNode(LinkableNode<O> original, Node<?> parent) {
 		super(original, parent);
 		copyLinks(original.inputs);

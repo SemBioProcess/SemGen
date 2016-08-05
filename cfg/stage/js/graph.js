@@ -7,15 +7,6 @@
 
 function Graph() {
 	var graph = this;
-	
-	// Get the stage and style it
-	var svg = d3.select("#stage")
-	    .append("svg:svg")
-	    .attr("id", "svg")
-	    .attr("pointer-events", "all")
-	    .attr("perserveAspectRatio", "xMinYMid");
-
-	var vis = svg.append('svg:g');
 
 	var visibleNodes = [];
 	var links = [];
@@ -29,6 +20,15 @@ function Graph() {
 	    .linkDistance(function (d) { return d.length; })
 	    .nodes(visibleNodes)
 	    .links(links);
+	
+	// Get the stage and style it
+	var svg = d3.select("#stage")
+	    .append("svg")
+	    .attr("id", "svg")
+	    .attr("pointer-events", "all")
+	    .attr("perserveAspectRatio", "xMinYMid");
+
+	var vis = svg.append('g');
 	
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
