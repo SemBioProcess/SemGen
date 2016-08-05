@@ -128,4 +128,8 @@ public class Node<T extends SemSimObject> {
 		}
 		return name;
 	}
+	
+	public String getSourceObjectName() {
+		return sourceobj.getName();
+	}
 }

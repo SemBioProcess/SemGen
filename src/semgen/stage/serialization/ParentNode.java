@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.google.gson.annotations.Expose;
 
+import semsim.SemSimObject;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.Submodel;
@@ -67,6 +68,22 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 			dsnodemap.put(dep.sourceobj, dep);
 		}
 		return dsnodemap;
+	}
+	
+	public Node<?> getNodebyId(String id) {
+		if (this.id.equals(id)) return this;
+		
+		
+		for (DependencyNode dep : dependencies) {
+			if (dep.id.equals(id)) return dep;
+		}
+		Node<? extends SemSimObject> returnnode = null;	
+		for (SubModelNode child : childsubmodels) {
+			returnnode = child.getNodebyId(id);
+			if (returnnode != null) break;
+		}
+		return returnnode;
+		
 	}
 	
 	public DependencyNode getDependencyNode(DataStructure sourceds) {

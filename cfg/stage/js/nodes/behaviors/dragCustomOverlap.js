@@ -95,7 +95,7 @@ function CreateCustomOverlap(_node) {
 		        	}
 				});
 		        if(mergeNode) {
-		        	var modelstomerge =  _node.parent.name + '.' + _node.name + "," + mergeNode.parent.name + '.' + mergeNode.name;
+		        	var modelstomerge =  _node.id + "," + mergeNode.id;
 		        	var modelindex = _node.getRootParent().index;
 		        	$('.merge').prop('disabled', 'true');
 		        	sender.createCustomOverlap(modelstomerge, modelindex);
@@ -104,8 +104,7 @@ function CreateCustomOverlap(_node) {
 		        	// Move the node back to its original location
 		        	_node.px = originalLocation.x;
 		        	_node.py = originalLocation.y;
-		        	_node.xpos() = originalLocation.x;
-		        	_node.ypos() = originalLocation.y;
+		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        	
 		        }
 		        

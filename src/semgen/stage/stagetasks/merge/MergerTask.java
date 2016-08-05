@@ -104,9 +104,21 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		for (String overlap : smoverlaps.keySet()) {
 			conflicts.dupesubmodels.add(new SyntacticDuplicate(overlap));
 		}
+		
 		HashMap<String, String> cwoverlaps = workbench.createIdenticalNameMap();
 		
 		for (String overlap : cwoverlaps.keySet()) {
+			//Don't include if renaming the submodel would resolve the overlap.
+			String submodelname = overlap.substring(0, overlap.lastIndexOf("."));
+			boolean smresolves = false;
+			for (String smoverlap : smoverlaps.keySet()) {
+				if (smoverlap.equals(submodelname)) {
+					smresolves = true;
+					break;
+				}
+			}
+			if (smresolves) continue;
+			
 			conflicts.dupecodewords.add(new SyntacticDuplicate(overlap));
 		}
 	}
@@ -130,7 +142,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		if (arg == MergeEvent.mergecompleted) {
 			ModelAccessor modelfile = saveMerge();
 			
-			String mergedname = workbench.getMergedModelName();
 			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), modelfile, _models.size());
 			_models.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode);
@@ -169,15 +180,21 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			MergeChoice choices = new MergeChoice(overlaps.get(index.intValue()), getModelNodes());
 			_commandSender.showPreview(choices);
 		}
-
+		
+		//Model id has to be included because we don't know the which model's node is being passed in
 		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
 			String[] nodestolink = nodes.split(",");
+			String firstnodeid = "";
+			String secondnodeid = "";
 			if (nodemodelindex.intValue()==0) {
-				workbench.addManualCodewordMapping(nodestolink[0], nodestolink[1]);
+				firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
+				secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
 			}
 			else {
-				workbench.addManualCodewordMapping(nodestolink[1], nodestolink[0]);
+				firstnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
+				secondnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
 			}
+			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 		}
 
 		public void onExecuteMerge(JSArray choicesmade) {
@@ -301,15 +318,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		@Expose public ArrayList<SyntacticDuplicate> dupecodewords = new ArrayList<SyntacticDuplicate>();
 		@Expose public ArrayList<SyntacticDuplicate> dupesubmodels = new ArrayList<SyntacticDuplicate>();
 		@Expose public ArrayList<UnitConflict> unitconflicts = new ArrayList<UnitConflict>();
-	
-		public HashMap<String,String> buildCodewordNameMap() {
-			HashMap<String,String> dupemap = new HashMap<String, String>();
-			for (SyntacticDuplicate dcw : dupecodewords) {
-				dupemap.put(dcw.duplicate, dcw.replacement);
-			}
-			
-			return dupemap;
-		}
 		
 		public HashMap<String,String> buildSubmodelNameMap() {
 			HashMap<String,String> dupemap = new HashMap<String, String>();
@@ -319,6 +327,17 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			return dupemap;
 		}
+		
+		public HashMap<String,String> buildCodewordNameMap() {
+			HashMap<String,String> dupemap = new HashMap<String, String>();
+			for (SyntacticDuplicate dcw : dupecodewords) {
+				dupemap.put(dcw.duplicate, dcw.replacement);
+			}
+			
+			return dupemap;
+		}
+		
+
 		
 		public ArrayList<Pair<Double,String>> buildConversionList() {
 			ArrayList<Pair<Double,String>> conversions = new ArrayList<Pair<Double,String>>();
