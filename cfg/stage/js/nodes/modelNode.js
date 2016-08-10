@@ -15,9 +15,6 @@ function ModelNode (graph, srcobj) {
 
 		this.addBehavior(Hull);	
 		this.addBehavior(parentDrag);	
-
-
-	
 }
 
 ModelNode.prototype.createVisualElement = function (element, graph) {

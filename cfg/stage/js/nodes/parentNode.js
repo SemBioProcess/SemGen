@@ -14,6 +14,13 @@ function ParentNode(graph, srcobj, parent, r, group, textSize, nodeType, charge)
 	this.ymin = null;
 	this.ymax = null;
 	
+	var parent = this;
+	
+	this.hasChildWithName = function(name) {
+		return parent.globalApplyUntilTrue(function(node) {
+			return node.name == name;
+		});
+	}
 }
 
 ParentNode.prototype.createChildren = function() {
@@ -68,6 +75,7 @@ ParentNode.prototype.createChild = function(data) {
 	
 }
 
+//Expand node and show children and hull. Do not expand if there are no visible children.
 ParentNode.prototype.showChildren = function () {
 	if (this.srcobj.childsubmodels.length == 0) {
 		var visiblenodes = 0;
@@ -88,6 +96,7 @@ ParentNode.prototype.showChildren = function () {
 
 }
 
+//Find the child node with the matching id
 ParentNode.prototype.getChildNode = function(id) {
 	var node = this.children[id];
 	if (node) {
@@ -114,6 +123,7 @@ ParentNode.prototype.getAllChildNodes = function() {
 	return childnodes;
 }
 
+//Apply to all children
 ParentNode.prototype.applytoChildren = function(funct) {
 	for (var key in this.children) {
 		var child = this.children[key];
@@ -121,6 +131,7 @@ ParentNode.prototype.applytoChildren = function(funct) {
 	}	
 }
 
+//Apply to self and children
 ParentNode.prototype.globalApply = function(funct) {
 	funct(this);
 	for (var key in this.children) {
@@ -129,6 +140,7 @@ ParentNode.prototype.globalApply = function(funct) {
 	}	
 }
 
+//Apply to children until the function returns true
 ParentNode.prototype.globalApplyUntilTrue = function(funct) {
 	var stop = funct(this);
 	for (var key in this.children) {
@@ -154,16 +166,3 @@ ParentNode.prototype.onDoubleClick = function () {
 	this.showChildren();
 	this.graph.update();
 }
-
-ParentNode.prototype.showDependencyNetwork = function () {
-	console.log("Showing dependencies for " + this.name);	
-	this.graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
-	var node = this;
-
-
-		// Create dependency nodes from the submodel's dependency data
-		this.setChildren(node.requestAllChildDependencies(), function (data) {
-			return new DependencyNode(node.graph, data, node);
-		});
-
-};

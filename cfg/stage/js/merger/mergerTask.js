@@ -10,18 +10,44 @@ function MergerTask(graph, stagestate) {
 	Task.prototype.constructor.call(this, graph, stagestate);
 	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
-	this.conflictsj = null;
+	this.conflictsj = null; //Handle for calling java functions
 	
 	this.semrespane;
+	this.confrespane;
 	
 	var t = document.querySelector('#leftMergerMenus');
 	var clone = document.importNode(t.content, true);
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
+	//Create the resolution pane
+	
+	var t = document.querySelector('#mergerContent');
+
+	var clone = document.importNode(t.content, true);
+	document.querySelector('#modalContent').appendChild(clone);
+
+	this.readyforMerge = function() {
+		var ready = confrespane.readyformerge && merger.semrespane.readyformerge;
+			$('.merge').prop('disabled', !ready);
+
+	}
+	
 	this.showResolutionPane = function() {
-		merger.semrespane = new SemanticResolutionPane(this.conflictsj);
+		merger.semrespane = new SemanticResolutionPane(this);
+		confrespane = new ConflictResolutionPane(this);
+		
 		merger.semrespane.initialize(this.nodes);
+
+	}
+	
+	this.isNameAlreadyUsed = function (name) {
+		for (x in merger.nodes) {
+			 if (merger.nodes[x].hasChildWithName(name)) {
+				return true; 
+			 }
+		}
+		return false;
 	}
 	
 	$("#addModelButton").hide();

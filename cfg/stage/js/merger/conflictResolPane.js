@@ -2,13 +2,14 @@
  * 
  */
 
-function ConflictResolutionPane(accessor, sempane) {
+function ConflictResolutionPane(merger) {
 	var pane = this;
-	
-	var semrespane = sempane;
+	var task = merger;
+	var javaaccessor = task.conflictsj;
+		
 	this.readyformerge = false;
 	var conflictobj;
-	var javaaccessor = accessor;
+	
 	var unitconflicts = [];
 	var smconflicts = [];
 	var cwconflicts = [];
@@ -23,15 +24,18 @@ function ConflictResolutionPane(accessor, sempane) {
 		clone.resolved = false;
 		
 		clone.querySelector('.dupname').innerHTML = "Duplicate submodel name: " + smconf.duplicate;
-		//var choice = clone.querySelector('.newSubmodelName');
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
 		input.onchange = function () {
+			if (task.isNameAlreadyUsed(input.value)) {
+				input.value = "";
+				alert("A node with that name already exists.");
+				return;
+			}
 			javaaccessor.setSubmodelName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			semrespane.allchoicesmade();
 		} 
 		
 		smconflicts.push(clone);
@@ -54,10 +58,14 @@ function ConflictResolutionPane(accessor, sempane) {
 		
 		input.value = clone.srcobj.replacement;
 		input.onchange = function () {
+			if (task.isNameAlreadyUsed(input.value)) {
+				input.value = "";
+				alert("A node with that name already exists.");
+				return;
+			}
 			javaaccessor.setCodewordName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			semrespane.allchoicesmade();
 		} 
 		
 		cwconflicts.push(clone);
@@ -86,7 +94,6 @@ function ConflictResolutionPane(accessor, sempane) {
 			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			semrespane.allchoicesmade();
 		} 
 		 operatorsel.onchange = function () {
 				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
@@ -126,6 +133,8 @@ function ConflictResolutionPane(accessor, sempane) {
 		conflictobj.dupecodewords.forEach(function(con) {
 			addCodewordConflictPanel(con);
 		});
+		
+		checkAllResolved();
 	}
 	
 	var checkAllResolved = function() {
@@ -142,6 +151,7 @@ function ConflictResolutionPane(accessor, sempane) {
 		}
 		
 		pane.readyformerge = resolved;
+		task.readyforMerge();
 	}
 	
 	receiver.onShowConflicts(function(data) {
