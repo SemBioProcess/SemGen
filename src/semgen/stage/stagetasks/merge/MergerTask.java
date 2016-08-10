@@ -49,7 +49,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		workbench.addModels(files, models, true);
 		primeForMerging();
-		state = new StageState(Task.MERGER, modelinfo);
+		state = new StageState(Task.MERGER, _models);
 
 	}
 

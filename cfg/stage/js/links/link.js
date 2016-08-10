@@ -37,9 +37,14 @@ Link.prototype.createVisualElement = function (element, graph) {
 			.attr("id", this.id)
 			.attr("class", "link");
 	
-	if (this.srclink.external) {
+	if (this.srclink.linklevel != 0) {
 		this.rootElement.select("path")
 			.attr("stroke-dasharray", 5);
+	}
+	if (this.srclink.linklevel == 2) {
+		this.rootElement.select("path.link")
+			.attr("class", "intermodel")
+			.attr("stroke", "green");
 	}
 
 	if (this.linkType == NodeType.MEDIATOR) {
