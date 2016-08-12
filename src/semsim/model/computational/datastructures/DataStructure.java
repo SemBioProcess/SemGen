@@ -178,7 +178,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	 */
 	public void setStartValue(String val){
 		
-		if(val.equals("")) return;
+		if(val == null) startValue = null;
+		else if(val.equals("")) return;
 		else startValue = val;
 	}
 	

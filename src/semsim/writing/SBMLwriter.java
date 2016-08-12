@@ -40,6 +40,7 @@ import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
+import org.sbml.jsbml.validator.SyntaxChecker;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
@@ -103,7 +104,12 @@ public class SBMLwriter extends ModelWriter {
 	public void writeToFile(File destination) {
 				
 		sbmldoc = new SBMLDocument();
-		sbmlmodel = sbmldoc.createModel(semsimmodel.getName());
+		String sbmlmodname = semsimmodel.getName();
+		
+		// Create a valid model name if current name is invalid
+		if( ! SyntaxChecker.isValidId(sbmlmodname, sbmllevel, sbmlversion)) sbmlmodname = "default_name";
+		
+		sbmlmodel = sbmldoc.createModel(sbmlmodname);
 		
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
@@ -185,9 +191,29 @@ public class SBMLwriter extends ModelWriter {
 			if(Kind.isValidUnitKindString(uom.getName(), sbmllevel, sbmlversion)) 
 				continue;
 			
-			else if( ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(uom.getName())
-					&& ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
+			// If we're not looking at an SBML reserved base unit...
+			else if( ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
 				
+				// If we're looking at a unit with one of the level 2 reserved names, see if we need to 
+				// explicitly write it out. This happens if the model re-defines the reserved unit. For example
+				// if the model uses hours instead of seconds for the reserved unit "time".
+				if(SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(uom.getName())){
+			
+					String baseunitname = SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get(uom.getName());
+	
+					if(uom.getUnitFactors().size()==1){
+						
+						UnitFactor uf = uom.getUnitFactors().toArray(new UnitFactor[]{})[0];
+						double exp = uf.getExponent();
+						double mult = uf.getMultiplier();
+						String prefix = uf.getPrefix();
+						
+						if(uf.getBaseUnit().getName().equals(baseunitname) && (exp==1 || exp==0) && (mult==1 || mult==0) && (prefix == null))
+								continue;  // Do not write out the unit if it matches the default settings for an SBML reserved unit
+					}
+				}
+			
+				// If we're here we are explicitly writing out the unit to the SBML file
 				UnitDefinition ud = sbmlmodel.createUnitDefinition(uom.getName());
 				
 				addNotesAndMetadataID(uom, ud);
@@ -476,12 +502,10 @@ public class SBMLwriter extends ModelWriter {
 				kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));	
 				rxn.setKineticLaw(kl);
 				
-				addNotesAndMetadataID(process, rxn);
-				
-				// TODO: set units?
+				addNotesAndMetadataID(process, rxn);	
 			}
 			
-			// Otherwise the data structure isn't associated with a process
+			// Otherwise the data structure is not associated with a process
 			else globalParameters.add(ds);
 		}
 	}
@@ -584,7 +608,7 @@ public class SBMLwriter extends ModelWriter {
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			
-			// TODO: set units
+			if(ds.hasUnits()) par.setUnits(ds.getUnit().getName());
 		}
 	}
 	
@@ -678,7 +702,6 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private ASTNode getASTNodeFromRHSofMathML(String mathml, String localname){
 		String RHS = SemSimUtil.getRHSofMathML(mathml, localname);
-		System.out.println("here: " + localname + ": " + mathml);
 		return JSBML.readMathMLFromString(RHS);
 	}
 	
