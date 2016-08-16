@@ -36,9 +36,24 @@ function Task(graph, stagestate) {
 		return modelNode;
 	};
 	
+	//Get a model node
+	this.getModelNodebyIndex = function(modelindex) {
+		var modelNode;
+		for (x in this.nodes) {
+			if (this.nodes[x].index == modelindex) {
+				modelNode = this.nodes[x];
+				break;
+			}
+		}
+		if(!modelNode)
+			throw "model doesn't exist";
+		
+		return modelNode;
+	};
+	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
-		sender.taskClicked(this.getFirstSelectedModel().id, taskid, this);
+		sender.taskClicked(parseInt(this.getFirstSelectedModel().index), taskid);
 	};
 	
 	this.doModelAction = function(action) {

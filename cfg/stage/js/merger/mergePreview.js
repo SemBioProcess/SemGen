@@ -11,7 +11,7 @@ function PreviewGraph(id) {
 	var graph = this;
 	var svg;
 	
-    this.nodecharge = -120;
+    this.nodecharge = -180;
     this.linklength = 120;
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
@@ -24,6 +24,8 @@ function PreviewGraph(id) {
     this.force = d3.layout.force()
 	    .charge(function (d) { return d.charge; })
 		.linkDistance(function (d) { return d.length; });
+    
+    
     
     var links = this.force.links();
     var nodes = this.force.nodes();

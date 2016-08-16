@@ -20,20 +20,20 @@ function LeftSidebar(graph) {
 		}
 
 		pane.append(
-			"<h5>" + model.id + "</h5>" +
-			"<ul>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Annotate</a></li>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Extract</a></li>" +
-				"<li><a href='#' onclick='main.task.taskClicked(this);'>Close</a></li>" +
+			"<span class='subheading'>" + model.id + "</span>" +
+			"<ul class='menulist'>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Close</button></li>" +
 			"</ul>" +
-			"Visualize" +
-			"<ul>" +
-				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(0, true);});'>Submodels</a></li>" +
-				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(1, true);});'>Dependencies</a></li>" +
-				"<li><a href='#' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(2, true);});'>PhysioMap</a></li>" +
+			"<span class='subheading'>Visualize</span>" + 
+			"<ul class='menulist'>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(0, true);});'>Submodels</button></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(1, true);});'>Dependencies</buttona></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(2, true);});'>PhysioMap</button></li>" +
 			"</ul>"
 
 		);

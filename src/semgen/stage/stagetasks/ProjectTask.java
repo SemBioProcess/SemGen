@@ -47,7 +47,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				ModelAccessor accessor = new ModelAccessor(file);
 				
 				for (ModelInfo info : _models) {
-					alreadyopen = info.accessor.equals(accessor);
+					if (info != null) {
+						alreadyopen = info.accessor.equals(accessor);
+					}
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
@@ -83,10 +85,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onTaskClicked(Integer modelindex, String task) {
+		public void onTaskClicked(Double modelindex, String task) {
 			
 			// Get the model
-			ModelInfo modelInfo = _models.get(modelindex);
+			ModelInfo modelInfo = _models.get(modelindex.intValue());
 			
 			// Execute the proper task
 			switch(task) {
@@ -99,8 +101,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				case "merge":
 					break;
 				case "close":
-					removeModel(modelindex);
-					_commandSender.removeModel(modelindex);
+					removeModel(modelindex.intValue());
+					_commandSender.removeModel(modelindex.intValue());
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");

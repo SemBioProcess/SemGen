@@ -23,9 +23,10 @@ function Stage(graph, stagestate) {
 	});
 
 	//Remove the named model node
-	receiver.onRemoveModel(function(model) {
+	receiver.onRemoveModel(function(modelindex) {
+		var model = stage.getModelNodebyIndex(modelindex);
 		sender.consoleOut("Removing model " + model.name);
-		delete nodes[model];
+		delete nodes[model.id];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
 	});

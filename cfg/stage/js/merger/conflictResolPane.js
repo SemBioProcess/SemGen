@@ -18,9 +18,10 @@ function ConflictResolutionPane(merger) {
 		var t = document.querySelector('#dupNameResolution');
 		var clone = document.importNode(t.content, true);
 		
-		clone.id = 'smcon' + smconflicts.length;02
+		clone.id = 'smcon' + smconflicts.length;
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
+		
 		clone.resolved = false;
 		
 		clone.querySelector('.dupname').innerHTML = "Duplicate submodel name: " + smconf.duplicate;
@@ -51,9 +52,9 @@ function ConflictResolutionPane(merger) {
 		clone.index = cwconflicts.length;
 		clone.srcobj = cwconf;
 		clone.resolved = false;
-
+		clone.disable = merger.mergecomplete;
+		
 		clone.querySelector('.dupname').innerHTML = "Duplicate codeword name: " + cwconf.duplicate;
-		//var choice = clone.querySelector('.newSubmodelName');
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
@@ -67,6 +68,7 @@ function ConflictResolutionPane(merger) {
 			clone.resolved = input.value != "";
 			checkAllResolved();
 		} 
+		
 		
 		cwconflicts.push(clone);
 		document.querySelector('#modalContent #DupCodewords').appendChild(clone);
@@ -95,12 +97,20 @@ function ConflictResolutionPane(merger) {
 			clone.resolved = input.value != "";
 			checkAllResolved();
 		} 
-		 operatorsel.onchange = function () {
-				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
-			} 
+		
+		operatorsel.onchange = function () {
+			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
+		} 
+	 
 		unitconflicts.push(clone);
 		document.querySelector('#modalContent #UnitConf').appendChild(clone);
 
+	}
+	
+	var modifyAllPanels = function (action) {
+		unitconflicts.forEach(function(panel) {action(panel);});
+		smconflicts.forEach(function(panel) {action(panel);});
+		cwconflicts.forEach(function(panel) {action(panel);});
 	}
 	
 	this.refreshConflicts = function() {
@@ -135,6 +145,9 @@ function ConflictResolutionPane(merger) {
 		});
 		
 		checkAllResolved();
+		$('input.newName').prop('disabled', merger.mergecomplete);
+		$('input.multiplyChoice').prop('disabled', merger.mergecomplete);
+		$('input.unitConvFactor').prop('disabled', merger.mergecomplete);
 	}
 	
 	var checkAllResolved = function() {
@@ -144,15 +157,17 @@ function ConflictResolutionPane(merger) {
 		}
 		
 		while (resolved) {
-			unitconflicts.forEach(function(panel) { panelchecker(panel); });
-			smconflicts.forEach(function(panel) { panelchecker(panel); });
-			cwconflicts.forEach(function(panel) { panelchecker(panel); });
+			modifyAllPanels(function(panel) { panelchecker(panel); });
 			break;
 		}
 		
 		pane.readyformerge = resolved;
 		task.readyforMerge();
 	}
+	
+	this.afterMerge = function() {
+		modifyAllPanels(function(panel) { panel.disable(); });
+	}	
 	
 	receiver.onShowConflicts(function(data) {
 		conflictobj = data;
