@@ -1,8 +1,8 @@
 
 Stage.prototype = new Task();
 Stage.prototype.constructor = Stage;
-function Stage(graph) {
-	Task.prototype.constructor.call(this, graph);
+function Stage(graph, stagestate) {
+	Task.prototype.constructor.call(this, graph, stagestate);
 
 	var stage = this;
 	var nodes = this.nodes;
@@ -16,49 +16,18 @@ function Stage(graph) {
 	var leftsidebar = this.leftsidebar;
 
 	// Adds a model node to the d3 graph
-	receiver.onAddModel(function (modelName) {
-		console.log("Adding model " + modelName);
-		stage.addModelNode(modelName, [DragToMerge]);
+	receiver.onAddModel(function (model) {
+		console.log("Adding model " + model.name);
+		stage.addModelNode(model, [DragToMerge]);
 		
 	});
 
 	//Remove the named model node
-	receiver.onRemoveModel(function(modelName) {
-		sender.consoleOut("Removing model " + modelName);
-		delete nodes[modelName];
+	receiver.onRemoveModel(function(model) {
+		sender.consoleOut("Removing model " + model.name);
+		delete nodes[model];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
-	});
-
-	// Adds a dependency network to the d3 graph
-	receiver.onShowDependencyNetwork(function (modelName, dependencyNodeData) {
-		console.log("Showing dependencies for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWDEPENDENCIES;
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(dependencyNodeData, function (data) {
-			return new DependencyNode(graph, data, modelNode);
-		});
-	});
-
-	// Adds a submodel network to the d3 graph
-	receiver.onShowSubmodelNetwork(function (modelName, submodelData) {
-		console.log("Showing submodels for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWSUBMODELS;
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(submodelData, function (data) {
-			return new SubmodelNode(graph, data, modelNode);
-		});
-	});
-
-	// Adds a PhysioMap network to the d3 graph
-	receiver.onShowPhysioMapNetwork(function (modelName, physiomapData) {
-		console.log("Showing PhysioMap for model " + modelName);
-		graph.displaymode = DisplayModes.SHOWPHYSIOMAP;
-
-		var modelNode = stage.getModelNode(modelName);
-		modelNode.setChildren(physiomapData, function (data) {
-			return new PhysioMapNode(graph, data, modelNode);
-		});
 	});
 
 	// Show search results on stage
@@ -77,10 +46,6 @@ function Stage(graph) {
 
 			searchResultsList.append(makeResultSet(searchResultSet));
 		});
-	});
-	
-	receiver.onReceiveReply(function (reply) {
-		CallWaiting(reply);
 	});
 
 	receiver.onReceiveReply(function (reply) {
@@ -114,6 +79,16 @@ function Stage(graph) {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
+}
+
+Stage.prototype.onInitialize = function() {
+	var stage = this;
+
+	if (stage.state.models.length > 0) {
+		stage.state.models.forEach(function(model) {
+			stage.addModelNode(model, [DragToMerge]);
+		});
+	}
 }
 
 Stage.prototype.onModelSelection = function(node) {

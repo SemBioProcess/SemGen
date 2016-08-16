@@ -1,6 +1,12 @@
 package semgen.stage.serialization;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.google.gson.annotations.Expose;
+
 import semgen.SemGen;
+import semsim.model.collection.SemSimCollection;
 import semsim.model.computational.datastructures.DataStructure;
 
 /**
@@ -9,48 +15,40 @@ import semsim.model.computational.datastructures.DataStructure;
  * @author Ryan
  *
  */
-public class DependencyNode extends Node {	
+public class DependencyNode extends LinkableNode<DataStructure> {	
 	
-	public String nodeType;
-	public Number typeIndex;
-	public String submodelId = "";
-	public boolean issubmodelinput;
+	@Expose public String submodelId = "";
+	@Expose public boolean issubmodelinput;
 	
-	public DependencyNode(DataStructure dataStructure, String parentModelId) {
-		this(dataStructure.getName(), dataStructure, parentModelId);
+	public DependencyNode(DataStructure dataStructure, Node<? extends SemSimCollection> parent) {
+		super(dataStructure, parent);
+		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
+		this.typeIndex = nodetypes.indexOf(nodeType);
+		isorphaned = dataStructure.getComputationInputs().isEmpty() && dataStructure.getUsedToCompute().isEmpty();
+		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
 	}
 	
-	/**
-	 * Allow descendant classes to pass in a node name
-	 * @param name of node
-	 * @param dataStructure node data
-	 */
-	protected DependencyNode(String name, DataStructure dataStructure, String parentModelId) {
-		super(name, parentModelId);
-		
-		this.nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
-		this.typeIndex = deptypes.indexOf(nodeType);
-		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
-		// Are there intra-model inputs?
-		if(dataStructure.getComputation() != null) {
-			for(DataStructure input : dataStructure.getComputation().getInputs()) {	
-				// Don't add self pointing links
-				if (dataStructure == input) continue;
-				
-				String inputName = getName(input);
-				
-				if(!this.name.equals(inputName))
-					this.inputs.add(new Link(inputName, this.parentModelId));
+	//Copy with same parent
+	DependencyNode(DependencyNode original) {
+		super(original);
+		submodelId = new String(submodelId);
+		issubmodelinput = original.issubmodelinput;
+	}
+	//Copy with new parent
+	public DependencyNode(DependencyNode original, Node<? extends SemSimCollection> parent) {
+		super(original, parent);
+		submodelId = new String(submodelId);
+		issubmodelinput = original.issubmodelinput;
+	}
+	
+	public void setInputs(HashMap<DataStructure, DependencyNode> dsnodemap) {
+		inputs = new ArrayList<Link>();
+		if (sourceobj.hasComputation()) {
+			for (DataStructure input : sourceobj.getComputationInputs()) {
+				if (sourceobj!=input && dsnodemap.get(input)!=null) {
+					inputs.add(new Link(this, dsnodemap.get(input)));
+				}
 			}
 		}
-	}
-
-	/**
-	 * Get the data structure's name
-	 * @param dataStructure
-	 * @return the data structure's name
-	 */
-	protected String getName(DataStructure dataStructure) {
-		return dataStructure.getName();
 	}
 }

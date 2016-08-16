@@ -7,7 +7,7 @@ import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 
 import java.io.File;
@@ -46,7 +46,7 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 			CommunicatingWebBrowserCommandReceiver commandReceiver, StageState state) throws InvalidNameException {
 		
 		String javascript = this.setBrowserListeners(commandSenderInterface, commandReceiver);
-			javascript += "main.changeTask(" + (new Gson()).toJson(state) + ");";
+			javascript += "main.changeTask(" + (new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(state) + ");";
 		
 		executeJavascriptAndHandleErrors(javascript);
 	}

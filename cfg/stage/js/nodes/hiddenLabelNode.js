@@ -39,10 +39,10 @@ function HiddenLabelNode(anchorNode, percentageFromLeftOfLabel, charge) {
 	// When the anchor node moves update the position of this node
 	var thisArg = this;
 	var postTickHandler = function () {
-		var textElementBBox = anchorTextElement.getBBox();
+		var textElementBBox = anchorTextElement.getBBoxpos();
 		
-		thisArg.x = anchorNode.x - textElementBBox.width / 2 + textElementBBox.width * percentageFromLeftOfLabel;
-		thisArg.y = anchorNode.y + textElementBBox.y + textElementBBox.height / 2;
+		thisArg.x = anchorNode.xpos() - textElementBBox.width / 2 + textElementBBox.width * percentageFromLeftOfLabel;
+		thisArg.y = anchorNode.ypos() + textElementBBox.y + textElementBBox.height / 2;
 	}
 	
 	// Attach handlers when the anchor node is added to the graph

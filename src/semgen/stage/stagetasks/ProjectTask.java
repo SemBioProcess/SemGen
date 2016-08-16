@@ -6,15 +6,11 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
-import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
-import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
-import semgen.stage.serialization.SemSimModelSerializer;
 import semgen.stage.serialization.StageState;
-import semgen.stage.serialization.SubModelNode;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -25,34 +21,49 @@ import semsim.reading.ModelAccessor;
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
-		state = new StageState(Task.PROJECT);
 		_commandReceiver = new ProjectCommandReceiver();
+		state = new StageState(Task.PROJECT);
 	}
 	
+	
+	protected void removeModel(Integer index) {
+		_models.set(index, null);
+	}
 	/**
 	 * Receives commands from javascript
 	 * @author Ryan
 	 *
 	 */
 	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-
+		
 		/**
 		 * Receives the add model command
 		 */
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
 			for (File file : sgc.getSelectedFiles()) {
+				boolean alreadyopen = false;
+				
 				ModelAccessor accessor = new ModelAccessor(file);
+				
+				for (ModelInfo info : _models) {
+					alreadyopen = info.accessor.equals(accessor);
+					if (alreadyopen) break;
+				}
+				if (alreadyopen) continue;
+				
 				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
 					continue;
 				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, accessor));
+
+				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+				_models.add(info);
 				
 				// Tell the view to add a model
-				_commandSender.addModel(semsimmodel.getName());
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
@@ -65,57 +76,31 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (SemGenError.showSemSimErrors()) {
 					return;
 				}
-				_models.put(semsimmodel.getName(), new ModelInfo(semsimmodel, file));
+				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
+				_models.add(info);
 
-				_commandSender.addModel(semsimmodel.getName());
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
-		public void onTaskClicked(String modelName, String task) {
-			onTaskClicked(modelName, task, null);
-		}
-		
-		public void onTaskClicked(String modelName, String task, JSObject snapshot) {
-			// If the model doesn't exist throw an exception
-			if(!_models.containsKey(modelName))
-				throw new IllegalArgumentException(modelName);
+		public void onTaskClicked(Integer modelindex, String task) {
 			
 			// Get the model
-			ModelInfo modelInfo = _models.get(modelName);
-			SemSimModel model = modelInfo.Model;
+			ModelInfo modelInfo = _models.get(modelindex);
 			
 			// Execute the proper task
 			switch(task) {
 				case "annotate":
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
 					break;
-				case "dependencies":
-					_commandSender.showDependencyNetwork(model.getName(),
-							SemSimModelSerializer.getDependencyNetwork(model));
-					break;
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
 					break;
 				case "merge":
-					onMerge(modelName, snapshot);
 					break;
 				case "close":
-					_models.remove(modelName);
-					_commandSender.removeModel(modelName);
-					break;
-				case "submodels":
-					SubModelNode[] submodelNetwork = SemSimModelSerializer.getSubmodelNetwork(model);
-					if(submodelNetwork.length <= 0)
-						JOptionPane.showMessageDialog(null, "'" + model.getName() + "' does not have any submodels");
-					else
-						_commandSender.showSubmodelNetwork(model.getName(), submodelNetwork);
-					break;
-				case "physiomap":
-					PhysioMapNode[] physiomapNetwork = SemSimModelSerializer.getPhysioMapNetwork(model);
-					if(physiomapNetwork.length <= 0)
-						JOptionPane.showMessageDialog(null,  "'" + model.getName() + "' does not have a PhysioMap");
-					else
-						_commandSender.showPhysioMapNetwork(model.getName(), physiomapNetwork);
+					removeModel(modelindex);
+					_commandSender.removeModel(modelindex);
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -132,13 +117,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(String modelNames, JSObject snapshot) {
-			createStageState(snapshot);
-			createMerger(modelNames);			
+		public void onMerge(Double model1, Double model2) {
+			createMerger(model1.intValue(), model2.intValue());
 		}
 		
-		public void onQueryModel(String modelName, String query) {
-			ModelInfo modelInfo = _models.get(modelName);
+		public void onQueryModel(Integer modelindex, String query) {
+			ModelInfo modelInfo = _models.get(modelindex);
 			switch (query) {
 			case "hassubmodels":
 				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();

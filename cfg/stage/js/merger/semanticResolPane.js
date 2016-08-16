@@ -1,26 +1,24 @@
 /**
  * 
  */
-function SemanticResolutionPane() {
+function SemanticResolutionPane(merger) {
 	var pane = this;
+	var task = merger;
 	var resolutions = [];
 	var choices = [];
-	
-	// Preview merge resolutions
+	this.readyformerge = false;
 
-	var t = document.querySelector('#mergerContent');
-
-	var clone = document.importNode(t.content, true);
-	document.querySelector('#modalContent').appendChild(clone);
-	
 	//Checks to see if requirements are met for merging.
 	this.allchoicesmade = function () {
-		var disable = false;
 		var choices = pane.pollOverlaps();
+		
+		var disable = false;
 		choices.forEach(function(c) {
 			if (c==-1) disable = true; 
 		});
-		$('.merge').prop('disabled', disable);
+		
+		this.readyformerge = !disable;
+		merger.readyforMerge();
 	}
 	
 	//Create the resolution panel
@@ -45,6 +43,7 @@ function SemanticResolutionPane() {
 		
 		var radioClick = function(val) {
 			clone.choice = val;
+			
 			pane.allchoicesmade();
 		}
 		
@@ -127,6 +126,9 @@ function SemanticResolutionPane() {
 		for (i=0; i<choices.length; i++) {
 			resolutions[i].setSelection(choices[i]);
 		}
+		
+		//This is done here to prevent synchronicity issues between this and the conflict pane
+		sender.requestConflicts();
 	});
 	
 	receiver.onShowPreview(function(data) {
@@ -136,8 +138,8 @@ function SemanticResolutionPane() {
 		$("#fixedNodesA").removeAttr("checked");
 		$("#fixedNodesB").removeAttr("checked");
 
-		pane.leftgraph.update(data.left);
-		pane.rightgraph.update(data.right);
+		pane.leftgraph.setPreviewData(data.choices[0]);
+		pane.rightgraph.setPreviewData(data.choices[1]);
 
 		// Different hull colors for different models
 		$("[id*=" + leftModelName +"] > .hull").attr("stroke", "rgb(96, 96, 191)").attr("fill", "rgb(96, 96, 191)");

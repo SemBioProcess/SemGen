@@ -707,6 +707,19 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		return null;
 	}
+	
+	public HashSet<DataStructure> getSolutionDomainBoundaries() {
+		Set<String> soldomname = getSolutionDomainNames();
+		
+		HashSet<DataStructure> boundaries = new HashSet<DataStructure>();
+		for (String boundary : soldomname) {
+			boundaries.add(getAssociatedDataStructure(boundary + ".min"));
+			boundaries.add(getAssociatedDataStructure(boundary + ".max"));
+			boundaries.add(getAssociatedDataStructure(boundary + ".delta"));
+		}
+		
+		return boundaries;
+	}
 
 	/**
 	 * @param name The name of a {@link UnitOfMeasurement} to retrieve

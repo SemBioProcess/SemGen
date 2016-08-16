@@ -5,36 +5,64 @@
 ModelNode.prototype = new ParentNode();
 ModelNode.prototype.constructor = ModelNode;
 
-function ModelNode (graph, name, index) {
-	ParentNode.prototype.constructor.call(this, graph, name, null, null, 16, 20, "Model", 0);
+function ModelNode (graph, srcobj) {
+	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
 	this.fixed = true;
-	this.index = index;
+	this.index = srcobj.modelindex;
 	this.addClassName("modelNode");
-	this.x = (Math.random() * (graph.w-graph.w/3))+graph.w/6;
-	this.y = (Math.random() * (graph.h-graph.h/2))+graph.h/6;
-	this.addBehavior(Hull);	
-	
-	this.addBehavior(parentDrag);
-	
+	this.canlink = false;
+	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
+
+		this.addBehavior(Hull);	
+		this.addBehavior(parentDrag);	
 }
 
 ModelNode.prototype.createVisualElement = function (element, graph) {
 	
 	ParentNode.prototype.createVisualElement.call(this, element, graph);
+
 	
 }
 
-ModelNode.prototype.onDoubleClick = function () {
-	node = this;
-	CallWaiting = function(hassubmodels) {
-		if (hassubmodels=="true") {
-			// Create submodel nodes from the model's dependency data
-			sender.taskClicked(node.id, "submodels");
-		}
-		else {
-			sender.taskClicked(node.id, "dependencies");
-		}
-
+ModelNode.prototype.createVisualization = function (modeid, expand) {
+	modelnode = this;
+	this.children = {};
+	
+	if (modeid == 0) {
+		this.createChildren();
 	}
-	sender.queryModel(node.name, "hassubmodels");
+	else if (modeid == 2) {
+		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
+		physionodes.forEach(function (d) {
+			node.createChild(d);
+		}, this);
+		console.log("Showing PhysioMap for model " + this.name);
+	}
+	else if (modeid == 1) {
+		this.createChildren();
+		var dependencies = {};
+			
+		this.globalApply(function(node){
+			if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE) {
+				dependencies[node.name] = node;
+				node.parent = modelnode;
+			}
+		});
+		this.children = dependencies;
+	}
+	else {
+		throw "Display mode not recognized";
+		return;
+	}
+	this.displaymode = modeid;
+	this.showchildren = expand;
+}
+
+ModelNode.prototype.showChildren = function() {
+	if (this.mode == 0) {
+		ParentNode.prototype.showChildren.call();
+		return;
+	}
+	this.showchildren = true;
+	$(this).triggerHandler('childrenSet', [this.children]);
 }

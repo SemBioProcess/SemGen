@@ -49,8 +49,8 @@ function CreateCustomOverlap(_node) {
 				
 				// Save the original location
 				originalLocation = {
-					x: _node.x,
-					y: _node.y,
+					x: _node.xpos(),
+					y: _node.ypos(),
 				};
 				
 				
@@ -62,14 +62,14 @@ function CreateCustomOverlap(_node) {
 		        // any of the other nodes. If it is update the UI.
 		    	validDepNodes.forEach(function (node) {
 
-					var leftBound = node.x - node.r - DropZoneSideLength/2;
-					var rightBound = node.x + node.r + DropZoneSideLength/2;
-					var upperBound = node.y + DropZoneSideLength;
-					var lowerBound = node.y - node.r*2;
-					if(_node.x >= leftBound &&
-						_node.x <= rightBound &&
-						_node.y >= lowerBound &&
-						_node.y <= upperBound)
+					var leftBound = node.xpos() - node.r - DropZoneSideLength/2;
+					var rightBound = node.xpos() + node.r + DropZoneSideLength/2;
+					var upperBound = node.ypos() + DropZoneSideLength;
+					var lowerBound = node.ypos() - node.r*2;
+					if(_node.xpos() >= leftBound &&
+						_node.xpos() <= rightBound &&
+						_node.ypos() >= lowerBound &&
+						_node.ypos() <= upperBound)
 					{
 						mergeNode = node;
 						node.rootElement.selectAll("circle").attr("r", node.r*2);
@@ -95,7 +95,7 @@ function CreateCustomOverlap(_node) {
 		        	}
 				});
 		        if(mergeNode) {
-		        	var modelstomerge =  _node.parent.name + '.' + _node.name + "," + mergeNode.parent.name + '.' + mergeNode.name;
+		        	var modelstomerge =  _node.id + "," + mergeNode.id;
 		        	var modelindex = _node.getRootParent().index;
 		        	$('.merge').prop('disabled', 'true');
 		        	sender.createCustomOverlap(modelstomerge, modelindex);
@@ -104,8 +104,7 @@ function CreateCustomOverlap(_node) {
 		        	// Move the node back to its original location
 		        	_node.px = originalLocation.x;
 		        	_node.py = originalLocation.y;
-		        	_node.x = originalLocation.x;
-		        	_node.y = originalLocation.y;
+		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        	
 		        }
 		        

@@ -4,7 +4,7 @@
  */
 function Hull(node) {
 	var hull;
-	var children;
+	var children = null;
 	
 	$(node).on('createVisualization', function (e, root) {
 		hull = root.append("path")
@@ -13,29 +13,23 @@ function Hull(node) {
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
-				if (!node.lockhull) {
-					node.setChildren(null, null);
+				if (!node.locked) {
+					node.showchildren = false;
 					node.rootElement.selectAll("text").attr("x", 0);
+					node.graph.update();
 				}
 			});
 	});
 	
 	$(node).on('childrenSet', function (e, newChildren) {
-		if (newChildren) {
-			children = getSymbolArray(newChildren);
-		}
-		else {
-			children = null;
-		}
-		
 		// If there are children show the hull. Otherwise, show the node
-		this.rootElement.select(".hull").style("display", children ? "inherit" : "none");
+		this.rootElement.select(".hull").style("display", node.showchildren ? "inherit" : "none");
 	});
 	
 	$(node).on('preTick', function () {
-		if (node.id==null) return; 
+		
 		// Draw the hull around child nodes
-		if(children) {
+		if(node.showchildren) {
 			// 1) Convert the child positions into vertices that we'll use to create the hull
 			// 2) Calculate the center of the child nodes and the top of the child nodes so 
 			// 		we can position the text and parent node appropriately
@@ -50,7 +44,7 @@ function Hull(node) {
 			var analyzeChildren = function (childrenArr) {
 				childrenArr.forEach(function (child) {
 					// Hull position shouldn't be effected
-					// by hidden models
+					// by hidden nodes
 					if(!child.isVisible())
 						return;
 
@@ -58,22 +52,22 @@ function Hull(node) {
 					if(child.children)
 						analyzeChildren(getSymbolArray(child.children));
 					
-					vertexes.push([child.x, child.y]);
+					vertexes.push([child.xpos(), child.ypos()]);
 					//Find the most extreme node positions for each axis
-					minX = minX || child.x;
-					minX = child.x < minX ? child.x : minX;
+					minX = minX || child.xpos();
+					minX = child.xpos() < minX ? child.xpos() : minX;
 					
-					maxX = maxX || child.x;
-					maxX = child.x > maxX ? child.x : maxX;
+					maxX = maxX || child.ypos();
+					maxX = child.xpos() > maxX ? child.xpos() : maxX;
 					
-					minY = minY || child.y;
-					minY = child.y < minY ? child.y : minY;
+					minY = minY || child.ypos();
+					minY = child.ypos() < minY ? child.ypos() : minY;
 					
-					maxY = maxY || child.y;
-					maxY = child.y > maxY ? child.y : maxY;
+					maxY = maxY || child.ypos();
+					maxY = child.ypos() > maxY ? child.ypos() : maxY;
 				});
 			};
-			analyzeChildren(children);
+			analyzeChildren(getSymbolArray(node.children));
 			
 						//If there is only one visible child, make the hull a circle with a radius of 6
 			if (minX == maxX) {
@@ -96,12 +90,12 @@ function Hull(node) {
 			node.xmax = maxX;
 			node.ymin = minY;
 			node.ymax = maxY;
-			
+			if (node.nodeType==NodeType.NULLNODE) return; 
 			// Center the node at the top of the hull
 			// Draw hull
 			hull.datum(d3.geom.hull(vertexes))
 				.attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-				.attr("transform", "translate(" + -node.x + "," + -node.y + ")");
+				.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 		}
 	});
 }

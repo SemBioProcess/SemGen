@@ -1,6 +1,7 @@
 package semgen.stage.stagetasks;
 
 import semgen.stage.serialization.DependencyNode;
+import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SubModelNode;
@@ -12,10 +13,10 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	 * 
 	 * @param testString
 	 */
-	void addModel(String modelName);
+	void addModel(ModelNode modelName);
 	
 	
-	void removeModel(String modelName);
+	void removeModel(Integer modelindex);
 	/**
 	 * Tell the browser to render the dependencies
 	 * 

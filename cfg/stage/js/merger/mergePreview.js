@@ -6,7 +6,7 @@
 
 function PreviewGraph(id) {
 	var selector = "#" + id;
-	var nullmodel;
+	var previewmodel;
 	var div = $(selector);
 	var graph = this;
 	var svg;
@@ -14,7 +14,8 @@ function PreviewGraph(id) {
     this.nodecharge = -120;
     this.linklength = 120;
 	this.depBehaviors = [];
-	
+	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
+
     var color = d3.scale.category10();
     var svg = d3.select(selector)
     	.append("svg");
@@ -30,43 +31,41 @@ function PreviewGraph(id) {
     this.initialize = function () {
 	    graph.w = div.width();
 	    graph.h = div.height();
-	    nullmodel = new ModelNode(graph, "null");
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
     }
     
+
+    this.setPreviewData = function(data) {
+    	previewmodel = new ModelNode(graph, data);
+    	previewmodel.nodeType = NodeType.NULLNODE;
+    	previewmodel.showchildren = true;
+    	previewmodel.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
+    	this.update();
+    }
     var path;
     var node;
     
-    this.update = function(data) {
+    this.update = function() {
     	$(this).triggerHandler("preupdate");
     	svg.selectAll("*").remove();
     	nodes.length = 0;
     	links.length = 0;
-    	
-    	var smnodes = [];
-    	data.childsubmodels.forEach(function(sm) {
-    		var smnode = new SubmodelNode(graph, sm, nullmodel);
-    		
-    		smnode.x = Math.random() * graph.w;
-			smnode.y = Math.random() * graph.h;
-			smnodes.push(smnode);
-			nodes.push(smnode);
-			smnode.createChildren(sm.dependencies, function (data) {
-    			var dnode = new DependencyNode(smnode.graph, data, smnode);
-    			dnode.id = data.id;
-    			nodes.push(dnode);
-				return dnode;
-			});
-			
+
+
+    	previewmodel.globalApply(function(node) {
+    		if (node.nodeType == NodeType.SUBMODEL) {
+    			node.showchildren = true;
+    		}
+    			nodes.push(node);
     	}); 
 	
-		nodes.forEach(function (n) {		
+		nodes.forEach(function (n) {	
+			n.locked = true;
 			n.isVisible = function() {return true;};
 			var nodelinks = n.getLinks();
 			if (nodelinks) {
 				nodelinks.forEach(function(l){
-					//l.id = l.id + graph.id;
 					links.push(l);
 				});
 			}
@@ -90,11 +89,6 @@ function PreviewGraph(id) {
 	
 	    node.exit().remove();
 	    
-	    smnodes.forEach(function(sn) {
-	    	$(sn).triggerHandler('childrenSet', [sn.children]);
-	    	sn.lockhull = true;
-	    });
-	    
 	    this.force.on("tick", this.tick);
 	    
 	    graph.force.size([graph.w, graph.h])
@@ -115,13 +109,15 @@ function PreviewGraph(id) {
 	    	};
     
     this.highlightMode = function (highlightNode) {}
-    
+	
 	// Find a node by its id
-	this.findVisibleNode = function(id) {
-	    for (var i in nodes) {
-	        if (nodes[i].id === id)
-	        	return nodes[i];
-	    }
+	this.findNode = function(id) {
+		for (i in nodes) {
+			if (nodes[i].id == id) {
+				return nodes[i];
+			}
+		}
+		return null;
 	};
 
 	this.toggleFixedMode = function(setfixed) {

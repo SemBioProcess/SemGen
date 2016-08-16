@@ -3,6 +3,8 @@ package semgen.stage;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import com.teamdev.jxbrowser.chromium.JSValue;
+
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
@@ -121,7 +123,8 @@ public class StageWorkbench extends Workbench {
 	public Task getTaskType() {
 		return activetask.getTaskType();
 	}
-	public StageState getActiveStageState() {
-		return activetask.getStageState();
+	
+	public StageState getActiveStageState() {		
+		return activetask.getStageState();		
 	}
 }

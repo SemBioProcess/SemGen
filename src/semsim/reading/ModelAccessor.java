@@ -167,5 +167,4 @@ public class ModelAccessor {
 	public boolean equals(ModelAccessor ma){
 		return modelURI.toString().equals(ma.getModelURI().toString());
 	}
-
 }

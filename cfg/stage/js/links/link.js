@@ -1,23 +1,22 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, name, input, output, length, linkType) {
+function Link(graph, srclink, output, input, length) {
 	if(!graph)
 		return;
 
 	this.graph = graph;
-	this.name = name;
-	this.id = input.id + "-" + output.id + "_" + name;
-	this.displayName = limitWords(this.name, 5);
-	this.className = "link";
+	this.srclink = srclink;
+	this.id = srclink.id;
 	this.source = input;
 	this.target = output;
 	this.length = length;
 	this.value = 1;
-	this.linkType = linkType;
 	this.hidden = false;
 	this.userCanHide = false;
+	this.linkType = NodeTypeArray[srclink.linkType];
 
+	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 2;
 }
 
 //  Link.prototype.addBehavior = function (behavior) {
@@ -35,32 +34,38 @@ Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className);
 
 	this.rootElement.append("svg:path")
-			.attr("id", this.source.id + "-" + this.target.id)
-			.attr("class", "link " + this.linkType);
+			.attr("id", this.id)
+			.attr("class", "link");
+	
+	if (this.srclink.external) {
+		this.rootElement.select("path")
+			.attr("stroke-dasharray", 5);
+	}
 
-	// Create the text elements
-	this.createTextElement("shadow");
-	this.createTextElement("real");
+	if (this.linkType == NodeType.MEDIATOR) {
+		this.rootElement.select("path")
+			.attr("stroke-dasharray", 2, 5)
+			.attr("stroke-width", 2);
+	}
 
 }
 
 Link.prototype.tickHandler = function (element, graph) {
-
+var arrowHeadWidth = this.arrowHeadWidth;
 	// Display and update links
 	var root = d3.select(element);
 	root.select("path").attr("d", function(d) {
-    	    var dx = d.target.x - d.source.x,
-    	        dy = d.target.y - d.source.y,
+    	    var dx = d.target.xpos() - d.source.xpos(),
+    	        dy = d.target.ypos() - d.source.ypos(),
     	        dr = 0;
     	        theta = Math.atan2(dy, dx) + Math.PI * 2,
     	        d90 = Math.PI / 2,
-    	        dtxs = d.target.x - d.target.r * Math.cos(theta),
-    	        dtys = d.target.y - d.target.r * Math.sin(theta),
-    	        arrowHeadWidth = 2;
+    	        dtxs = d.target.xpos() - d.target.r * Math.cos(theta),
+    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta);
 
-    	    return "M" + d.source.x + "," + d.source.y +
-    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.x + "," + d.target.y +
-    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.x + "," + d.source.y +
+    	    return "M" + d.source.xpos() + "," + d.source.ypos() +
+    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
+    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
     	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
     	    		"z";
@@ -68,8 +73,8 @@ Link.prototype.tickHandler = function (element, graph) {
 
 	// Display and update the link labels
 	var text = root.selectAll("text");
-	text.attr("x", function(d) { return d.source.x + (d.target.x - d.source.x)/2; });
-	text.attr("y", function(d) { return d.source.y + (d.target.y - d.source.y)/2; });
+	text.attr("x", function(d) { return d.source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
+	text.attr("y", function(d) { return d.source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
 
 }
 
@@ -78,33 +83,4 @@ Link.prototype.getKeyInfo = function () {
 		linkType: this.linkType,
 		canShowHide: this.userCanHide,
 	};
-}
-
-Link.prototype.createTextElement = function (className) {
-	this.rootElement.append("svg:text")
-			.attr("class", "linkLabel")
-			.attr("font-size", "14px")
-			.attr("font-style", "italic")
-			.attr("fill", "green")
-			.attr("class", className)
-			.attr("text-anchor", "middle")
-			.text(this.displayName);
-}
-
-// Limit displayName to 5 words
-var limitWords = function (text, wordLimit) {
-	if(text == null) return;
-	var finalText = "";
-	var text2 = text.replace(/\s+/g, ' ');
-	var text3 = text2.split(' ');
-	var numberOfWords = text3.length;
-	var i=0;
-	if(numberOfWords > wordLimit)
-	{
-		for(i=0; i< wordLimit; i++)
-			finalText = finalText+" "+ text3[i];
-
-		return finalText+"...";
-	}
-	return text;
 }

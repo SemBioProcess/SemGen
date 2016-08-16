@@ -29,13 +29,13 @@ function DragToMerge(_node) {
 		var mergeNode = null;
 		
 		_node.dragstart.push(function (d) {
-				if (_node.children) return;
+				if (_node.showchildren) return;
 				//Refresh node references
 				models = _node.graph.getVisibleNodes();
 				// Save the original location
 				originalLocation = {
-					x: _node.x,
-					y: _node.y,
+					x: _node.xpos(),
+					y: _node.ypos(),
 				};
 				
 				
@@ -46,7 +46,7 @@ function DragToMerge(_node) {
 				});
 			});
 		    _node.drag.push(function (d) {
-		    	if (_node.children) return;
+		    	if (_node.showchildren) return;
 		        
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.
@@ -58,10 +58,10 @@ function DragToMerge(_node) {
 					var rightBound = node.x + node.r + DropZoneSideLength/2;
 					var upperBound = node.y + DropZoneSideLength;
 					var lowerBound = node.y - node.r*2;
-					if(_node.x >= leftBound &&
-						_node.x <= rightBound &&
-						_node.y >= lowerBound &&
-						_node.y <= upperBound)
+					if(_node.xpos() >= leftBound &&
+						_node.xpos() <= rightBound &&
+						_node.ypos() >= lowerBound &&
+						_node.ypos() <= upperBound)
 					{
 						mergeNode = node;
 						node.rootElement.classed("canDrop", true);
@@ -74,20 +74,19 @@ function DragToMerge(_node) {
 				});
 		    });
 		    _node.dragend.push(function (d) {
-		    	if (_node.children) {
+		    	if (_node.showchildren) {
 		    		return;
 		    	}
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
-		        	var modelstomerge = _node.name + "," + mergeNode.name;
-		        	sender.merge(modelstomerge, main.task);
+		        	
+		        	sender.merge(_node.index, mergeNode.index);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location
 		        	_node.px = originalLocation.x;
 		        	_node.py = originalLocation.y;
-		        	_node.x = originalLocation.x;
-		        	_node.y = originalLocation.y;
+		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        }
 		        
 		        // Remove any classes we may have set

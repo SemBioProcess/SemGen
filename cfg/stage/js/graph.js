@@ -7,39 +7,41 @@
 
 function Graph() {
 	var graph = this;
+
+	var visibleNodes = [];
+	var links = [];
 	
-	// Get the stage and style it
-	var svg = d3.select("#stage")
-	    .append("svg:svg")
-	    .attr("id", "svg")
-	    .attr("pointer-events", "all")
-	    .attr("perserveAspectRatio", "xMinYMid");
-
-	var vis = svg.append('svg:g');
-
 	this.force = d3.layout.force()
 		.gravity(0)
 		.chargeDistance(defaultchargedistance)
 		.friction(0.7)
-		.charge(function (d) { return d.charge; })
-	    .linkDistance(function (d) { return d.length; });
+		.charge(function (d) { 
+			return d.charge; })
+	    .linkDistance(function (d) { return d.length; })
+	    .nodes(visibleNodes)
+	    .links(links);
+	
+	// Get the stage and style it
+	var svg = d3.select("#stage")
+	    .append("svg")
+	    .attr("id", "svg")
+	    .attr("pointer-events", "all")
+	    .attr("perserveAspectRatio", "xMinYMid");
+
+	var vis = svg.append('g');
 	
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
 	this.color = d3.scale.category10();
 
-	this.displaymode = DisplayModes.SHOWSUBMODELS;
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
 	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
+	this.showorphans = false;
+	
 	this.depBehaviors = [];
 	
 	var nodes;
-	var visibleNodes = this.force.nodes();
-	var orphanNodes = [];
-	
-	var links = this.force.links();
-	var hiddenLinks = {};
 
 	this.setTaskNodes = function(tasknodes) {
 		nodes = tasknodes;
@@ -52,17 +54,6 @@ function Graph() {
 
 	this.getModels = function() {
 		return getSymbolArray(nodes);
-	}
-	
-	// Add a link to the graph
-	this.addLink = function (link) {
-		// If the link already exists don't add it again
-		if(this.findLink(link.id)) {
-			console.log("link already exists. Link id: " + link.id);
-			return;
-		}
-
-		links.push(link);
 	}
 
 	// Remove a node from the graph
@@ -77,24 +68,6 @@ function Graph() {
 	    }
 	    graph.update();
 	    $(this).triggerHandler("nodeRemoved", [node]);
-	};
-
-	// Remove a link from the graph
-	this.removeLink = function(id) {
-		var link = this.findLink(id);
-
-		// If we did not find the link it must be hidden
-		if(!link) {
-			// Remove it from the hidden list
-			for(type in hiddenLinks)
-				for(var i = 0; i < hiddenLinks[type].length; i++)
-					if(hiddenLinks[type][i].id == id) {
-						hiddenLinks[type].splice(i, 1);
-						return;
-					}
-			return;
-		}
-		links.splice(findLinkIndex(id), 1);
 	};
 
 	// Remove all links
@@ -114,7 +87,6 @@ function Graph() {
 
 	// Hide all visibleNodes of the given type
 	this.showNodes = function (type) {
-
 		this.nodesVisible[NodeTypeMap[type].id] = true;
 		this.update();
 	}
@@ -123,97 +95,6 @@ function Graph() {
 	this.hideNodes = function (type) {
 		this.nodesVisible[NodeTypeMap[type].id] = false;
 		this.update();
-	}
-
-	// Hide all links of the give type
-	this.hideLinks = function (type) {
-		var linksToHide = [];
-		links.forEach(function (link) {
-			if(link.linkType == type) {
-				linksToHide.push(link);
-				link.hidden = true;
-			}
-		});
-
-		// Remove the hidden links from the graph
-		linksToHide.forEach(function (link) {
-			this.removeLink(link.id);
-			this.hideOrphanNodes(link);
-		}, this);
-
-		if(!hiddenLinks[type])
-			hiddenLinks[type] = [];
-
-		// Save the hidden links in case we want to add them back
-		hiddenLinks[type] = hiddenLinks[type].concat(linksToHide);
-
-		this.update();
-	}
-
-	// Hide visibleNodes without links
-	this.hideOrphanNodes = function (linkToHide) {
-		var nodesWithLink = [];
-		var nodesFromLinkToHide = [];
-
-		nodesFromLinkToHide.push(linkToHide.source);
-		nodesFromLinkToHide.push(linkToHide.target);
-
-		nodesFromLinkToHide.forEach(function (node) {
-			// Model visibleNodes and hiddenLabel visibleNodes don't count as orphan visibleNodes
-			if(node.nodeType === undefined || node.nodeType == "Model") {
-				return;
-			}
-
-			for(var i = 0; i < links.length; i++) {
-				if(nodesWithLink.indexOf(links[i].source.id) == -1) {
-					nodesWithLink.push(links[i].source.id);
-				}
-				if(nodesWithLink.indexOf(links[i].target.id) == -1) {
-					nodesWithLink.push(links[i].target.id);
-				}
-			}
-
-			if(nodesWithLink.indexOf(node.id) == -1) {
-				orphanNodes.push(node);
-				this.removeNode(node.id);
-			}
-		}, this);
-	}
-
-	// Add orphan visibleNodes back
-	this.showOrphanNodes = function () {
-		orphanNodes.forEach(function (node) {
-			this.addNode(node);
-		}, this);
-	}
-
-	// Show all links of the given type
-	this.showLinks = function (type) {
-		if(!hiddenLinks[type])
-			return;
-
-		// Add all links back to the graph
-		hiddenLinks[type].forEach(function (link) {
-			link.hidden = false;
-			this.addLink(link);
-		}, this);
-
-		// These links are no longer hidden
-		delete hiddenLinks[type];
-
-		// Add orphan visibleNodes back
-		this.showOrphanNodes();
-
-		this.update();
-	}
-
-	// Get an array of the hidden links
-	this.getHiddenLinks = function () {
-		var hiddenLinksArr = [];
-		for(type in hiddenLinks)
-			hiddenLinksArr = hiddenLinksArr.concat(hiddenLinks[type]);
-
-		return hiddenLinksArr;
 	}
 
 	/**
@@ -273,6 +154,7 @@ function Graph() {
 			return;
 
 		refreshing = true;
+		//Remove all graph objects
 		vis.selectAll("*").remove();
 		// Remove all visibleNodes from the graph
 		visibleNodes.length = 0;
@@ -280,35 +162,17 @@ function Graph() {
 		// Remove all links from the graph
 		this.removeAllLinks();
 
-
-		var node;
 		// Add the visibleNodes back
 		for (var x in nodes) {
-			node = nodes[x];
-			node.globalApply(function(d) {
+			nodes[x].globalApplyUntilTrue(function(d) {
 				if (d.isVisible()) {
 					visibleNodes.push(d);
 				}
+				if (!d.canlink && !d.showchildren) return true;
+				links = links.concat(d.getLinks());
+				return false;
 			});
 		}
-
-		// Process links for each node
-		visibleNodes.forEach(function (n) {
-			var nodeLinks = n.getLinks();
-
-			// If the node doesnt have any links move on
-			if(!nodeLinks)
-				return;
-
-			nodeLinks.forEach( function (link) {
-				if (!link.source.hidden && !hiddenLinks[link.linkType]) {
-					links = links.concat(link);
-				}
-			});
-
-		}, this);
-
-		this.force.links(links);
 
 		refreshing = false;
 	}
@@ -327,6 +191,21 @@ function Graph() {
 	};
 
 	// Find a node by its id
+	this.findNode = function(id) {
+		var nodewithid = null;
+		for (var x in nodes) {
+			nodes[x].globalApplyUntilTrue(function(n) {
+				if (n.id == id) {
+					nodewithid = n;
+					return true;
+				}
+				return false;
+			});
+		}
+	   return nodewithid;
+	};
+	
+	// Find a visible node by its id
 	this.findVisibleNode = function(id) {
 	    for (var i in visibleNodes) {
 	        if (visibleNodes[i].id === id)
@@ -405,6 +284,7 @@ function Graph() {
 
 	this.setNodeCharge = function(charge) {
 		if (isNaN(charge)) return;
+		this.force.stop();
 		this.nodecharge = charge;
 		for (n in nodes) {
 			nodes[n].applytoChildren(function(d) {

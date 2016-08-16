@@ -6,20 +6,31 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			visibleNodeKeys.empty();
 			hiddenNodeKeys.empty();
 			
-			graph.displaymode.forEach(function(type) {
-				if (graph.nodesVisible[type.id]) {
-					addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
-				}
-				else {
-					addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
-				}
+			var activemodes = [false, false, false];
+			graph.getModels().forEach(function (model) {
+				activemodes[model.displaymode] = true;
 			});
 			
+			var i = 0;
+			for (x in DisplayModes) {
+				if (activemodes[i]) {
+					DisplayModes[x].keys.forEach(function(type) {
+						if (graph.nodesVisible[type.id]) {
+							addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
+						}
+						else {
+							addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
+						}
+					});
+				}
+				i++;
+			}
+
 			// Update keys for visible links
 			addLinkKeysToParent(graph, visibleLinkKeys, graph.force.links(), "hideLinks");
 
 			// Update keys for hidden links
-			addLinkKeysToParent(graph, hiddenLinkKeys, graph.getHiddenLinks(), "showLinks");
+			//addLinkKeysToParent(graph, hiddenLinkKeys, graph.getHiddenLinks(), "showLinks");
 		});
 	};
 	

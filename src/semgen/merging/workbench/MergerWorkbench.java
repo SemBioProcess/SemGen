@@ -12,7 +12,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
-import semgen.stage.stagetasks.merge.MergePreview;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
@@ -167,6 +166,14 @@ public class MergerWorkbench extends Workbench {
 		return namemap;
 	}
 	
+	public HashMap<String, String> createIdenticalNameMap() {
+		HashMap<String, String> namemap = new HashMap<String, String>();
+		for (String name : overlapmap.getIdenticalNames()) {
+			namemap.put(new String(name), "");
+		}
+		return namemap;
+	}
+	
 	public HashMap<String, String> createIdenticalNameMap(ArrayList<ResolutionChoice> choicelist, Set<String> submodelnamemap) {
 		HashMap<String, String> identicalmap = new HashMap<String,String>();
 		Set<String> identolnames = new HashSet<String>();
@@ -250,6 +257,10 @@ public class MergerWorkbench extends Workbench {
 		setChanged();
 		notifyObservers(MergeEvent.mappingadded);
 		return null;
+	}
+	
+	public ArrayList<Pair<DataStructure,DataStructure>> getOverlapPairs() {
+		return overlapmap.getDataStructurePairs();
 	}
 	
 	public int getMappingCount() {
@@ -344,6 +355,7 @@ public class MergerWorkbench extends Workbench {
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		
 		if (ma != null) {
+			mergedmodel.setName(ma.getModelName());
 			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 			return ma;
 		}
@@ -382,10 +394,6 @@ public class MergerWorkbench extends Workbench {
 			namelist.add(desc);
 		}
 		return namelist;
-	}
-
-	public MergePreview generateMergePreview() {
-		return new MergePreview(overlapmap, Pair.of(this.getModelName(0), this.getModelName(1)));
 	}
 	
 	@Override

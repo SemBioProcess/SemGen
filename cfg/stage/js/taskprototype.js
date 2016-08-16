@@ -2,58 +2,49 @@
  * 
  */
 
-function Task(graph) {
+function Task(graph, stagestate) {
 	
 	this.graph = graph;
-	
+	this.state = stagestate;
 	
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
-	var modelindex = 0;
+
 	var task = this;
 	$("#leftSidebar").empty();
 	
-	this.loadStageState = function (state) {
-		if (state.nodetree.length != 0) {
-			state.nodetree.forEach(function(branch) {
-				var modelName = branch.branchroot.name;
-				var modelNode = new ModelNode(graph, modelName);
-				
-				task.nodes[modelName] = modelNode;
-			});
-		};
-	}
-
-	
-	this.addModelNode = function(modelName, optbehaviors) {
-		if(this.nodes[modelName])
-			throw "Model already exists";
+	this.addModelNode = function(model, optbehaviors) {
 		
-		var modelNode = new ModelNode(this.graph, modelName, modelindex);
-		modelindex++;
+		var modelNode = new ModelNode(this.graph, model);
+		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
 		
-		this.nodes[modelName] = modelNode;
+		this.nodes[model.id] = modelNode;
 		task.graph.update();
 
 	};
 	
 	//Get a model node
-	this.getModelNode = function(modelName) {
-		var modelNode = this.nodes[modelName];
+	this.getModelNode = function(model) {
+		var modelNode = this.nodes[model];
 		if(!modelNode)
 			throw "model doesn't exist";
 		
 		return modelNode;
 	};
-
+	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
 		sender.taskClicked(this.getFirstSelectedModel().id, taskid, this);
 	};
+	
+	this.doModelAction = function(action) {
+		action(this.getFirstSelectedModel());
+		task.graph.update();
+	}
 	
 	this.getFirstSelectedModel = function () {
 		if (this.selectedModels.length > 0) {
@@ -86,9 +77,8 @@ function Task(graph) {
 		
 		node.highlight();
 	};
-	
-
 }
+
 Task.prototype.onInitialize = function() {}
 
 Task.prototype.onMinimize = function() {}
