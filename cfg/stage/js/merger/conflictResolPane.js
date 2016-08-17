@@ -111,21 +111,7 @@ function ConflictResolutionPane(merger) {
 		smconflicts.length = 0;
 		cwconflicts.length = 0;
 
-		// What is this for??
-		// var olaps = document.querySelector('#modalContent #UnitConf');
-		// while (olaps.firstChild) {
-		// 	olaps.removeChild(olaps.firstChild);
-		// }
-        //
-		// olaps = document.querySelector('#modalContent #DupSubModels');
-		// while (olaps.firstChild) {
-		// 	olaps.removeChild(olaps.firstChild);
-		// }
-        //
-		// olaps = document.querySelector('#modalContent #DupCodewords');
-		// while (olaps.firstChild) {
-		// 	olaps.removeChild(olaps.firstChild);
-		// }
+		$("#DupSubModels, #DupCodewords, #UnitConf").contents(":not(.mergeStep2Heading)").remove();
 		
 		conflictobj.unitconflicts.forEach(function(con) {
 			addUnitConflictPanel(con);
