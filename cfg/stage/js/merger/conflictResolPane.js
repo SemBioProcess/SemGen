@@ -18,12 +18,12 @@ function ConflictResolutionPane(merger) {
 		var t = document.querySelector('#dupNameResolution');
 		var clone = document.importNode(t.content, true);
 		
-		clone.id = 'smcon' + smconflicts.length;02
+		clone.id = 'smcon' + smconflicts.length;
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
 		clone.resolved = false;
-		
-		clone.querySelector('.dupname').innerHTML = "Duplicate submodel name: " + smconf.duplicate;
+
+		clone.querySelector('.dupname').innerHTML = smconf.duplicate;
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
@@ -36,6 +36,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setSubmodelName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
+			clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		smconflicts.push(clone);
@@ -52,7 +53,7 @@ function ConflictResolutionPane(merger) {
 		clone.srcobj = cwconf;
 		clone.resolved = false;
 
-		clone.querySelector('.dupname').innerHTML = "Duplicate codeword name: " + cwconf.duplicate;
+		clone.querySelector('.dupname').innerHTML = cwconf.duplicate;
 		//var choice = clone.querySelector('.newSubmodelName');
 		var input = clone.querySelector('.newName');
 		
@@ -66,6 +67,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setCodewordName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
+			clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		cwconflicts.push(clone);
@@ -94,6 +96,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
+			clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		 operatorsel.onchange = function () {
 				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
@@ -108,21 +111,21 @@ function ConflictResolutionPane(merger) {
 		smconflicts.length = 0;
 		cwconflicts.length = 0;
 
-		
-		var olaps = document.querySelector('#modalContent #UnitConf');
-		while (olaps.firstChild) {
-			olaps.removeChild(olaps.firstChild);
-		}
-		
-		olaps = document.querySelector('#modalContent #DupSubModels');
-		while (olaps.firstChild) {
-			olaps.removeChild(olaps.firstChild);
-		}
-		
-		olaps = document.querySelector('#modalContent #DupCodewords');
-		while (olaps.firstChild) {
-			olaps.removeChild(olaps.firstChild);
-		}
+		// What is this for??
+		// var olaps = document.querySelector('#modalContent #UnitConf');
+		// while (olaps.firstChild) {
+		// 	olaps.removeChild(olaps.firstChild);
+		// }
+        //
+		// olaps = document.querySelector('#modalContent #DupSubModels');
+		// while (olaps.firstChild) {
+		// 	olaps.removeChild(olaps.firstChild);
+		// }
+        //
+		// olaps = document.querySelector('#modalContent #DupCodewords');
+		// while (olaps.firstChild) {
+		// 	olaps.removeChild(olaps.firstChild);
+		// }
 		
 		conflictobj.unitconflicts.forEach(function(con) {
 			addUnitConflictPanel(con);
@@ -133,6 +136,13 @@ function ConflictResolutionPane(merger) {
 		conflictobj.dupecodewords.forEach(function(con) {
 			addCodewordConflictPanel(con);
 		});
+
+		if(unitconflicts.length == 0)
+			$("#UnitConf").hide();
+		if(smconflicts.length == 0)
+			$("#DupSubModels").hide();
+		if(cwconflicts.length == 0)
+			$("#DupCodewords").hide();
 		
 		checkAllResolved();
 	}

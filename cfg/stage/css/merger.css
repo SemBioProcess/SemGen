@@ -175,6 +175,23 @@
     text-align: left;
 }
 
+.dupname {
+    font-weight: bold;
+    display: inline-block;
+}
+
+.dupNameResolution > .panel-body {
+    display: inline;
+}
+
+.panel-body > p {
+    display: inline-block;
+}
+
+.unitA, .unitB {
+    font-weight: bold;
+}
+
 textarea[name=newSubmodelName] {
     resize: none;
 }
