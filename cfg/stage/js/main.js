@@ -22,16 +22,16 @@ function main() {
 	KeyElement.getInstance().initialize(this.graph);
 
 	this.task = new Stage(this.graph);
+	sender.initialized(this.task);
 	graph.setTaskNodes(this.task.nodes);
 	
 	//If a change task request is received from Java
 	this.changeTask = function changeTask(stagestate) {
 		graph.depBehaviors = [];
 		
-		var content = document.querySelector('#modalContent');
-		if (content.firstChild!=null) {
-			content.removeChild(content.firstChild);
-		}
+		$('#modalContent').empty();
+		
+		
 		var taskname = stagestate.tasktype;
 		if (taskname=="proj") {
 			this.task = new Stage(graph, stagestate);
@@ -44,7 +44,6 @@ function main() {
 		this.graph.setTaskNodes(this.task.nodes);
 		
 		this.graph.update();
-		$('#taskModal').modal('toggle');
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
 		$("#activeTaskText").addClass('blink');
 	}

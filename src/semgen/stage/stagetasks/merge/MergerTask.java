@@ -266,6 +266,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 		}
 
+		public void onSendModeltoStage() {
+			stagemodelqueue.add(_models.get(2));
+		}
+		
 		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}

@@ -10,6 +10,7 @@ function Stage(graph, stagestate) {
 	$("#addModelButton").show();
 	$(".stageSearch").show();
 	
+	
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
 
@@ -90,6 +91,7 @@ Stage.prototype.onInitialize = function() {
 			stage.addModelNode(model, [DragToMerge]);
 		});
 	}
+	$('#taskModal').hide();
 }
 
 Stage.prototype.onModelSelection = function(node) {

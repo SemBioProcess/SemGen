@@ -6,6 +6,7 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
@@ -28,6 +29,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	protected void removeModel(Integer index) {
 		_models.set(index, null);
+		state.updateModelNodes(_models);
 	}
 	/**
 	 * Receives commands from javascript
@@ -35,6 +37,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 *
 	 */
 	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+		
+		public void onInitialized(JSObject jstaskobj) {
+			jstask = jstaskobj;
+		}
+		
 		
 		/**
 		 * Receives the add model command
@@ -62,7 +69,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				_models.add(info);
+				addModeltoTask(info);
 				
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
@@ -79,8 +86,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					return;
 				}
 				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				_models.add(info);
-
+				
+				addModeltoTask(info);
 				_commandSender.addModel(info.modelnode);
 			}
 		}

@@ -102,7 +102,7 @@ li.searchResultSet li:hover {
 	position: absolute;
 	max-width: 250px;
 	opacity: 1;
-	background: -webkit-linear-gradient(left, #d5d5d5 0%, whitesmoke 50%, #d5d5d5 100%);
+	background: #eeeeee;
 	padding-left: 2px;
 	padding-right: 2px;
 	padding-bottom: 2px;

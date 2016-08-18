@@ -17,6 +17,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	protected StageState state;
 	protected ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
+	protected ArrayList<ModelInfo> stagemodelqueue = new ArrayList<ModelInfo>();
 	protected JSObject jstask;
 	protected StageTaskConf newtaskconf = null;
 	private int existingtaskindex = 0;
@@ -56,6 +57,22 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	public void clearNewTaskConfiguration() {
 		newtaskconf = null;
 	} 
+	public ArrayList<ModelInfo> getQueuedModels() {
+		ArrayList<ModelInfo> queue = new ArrayList<ModelInfo>(stagemodelqueue);
+		stagemodelqueue.clear();
+		
+		return queue;
+	}
+	
+	public void addModeltoTask(ModelInfo newmodel) {
+		_models.add(newmodel);
+		state.updateModelNodes(_models);
+	}
+	
+	public void addModelstoTask(ArrayList<ModelInfo> newmodels) {
+		_models.addAll(newmodels);
+		state.updateModelNodes(_models);
+	}
 	
 	public ArrayList<ModelNode> getModelNodes() {
 		ArrayList<ModelNode> modelnodes = new ArrayList<ModelNode>();

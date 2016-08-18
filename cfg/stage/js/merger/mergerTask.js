@@ -22,6 +22,10 @@ function MergerTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
+	$("#addModelButton").hide();
+	$(".stageSearch").hide();
+	$("#stageModel").prop('disabled', !merger.mergecomplete);
+	
 	//Create the resolution pane
 	
 	var t = document.querySelector('#mergerContent');
@@ -32,7 +36,6 @@ function MergerTask(graph, stagestate) {
 	this.readyforMerge = function() {
 		var ready = merger.confrespane.readyformerge && merger.semrespane.readyformerge;
 			$('.merge').prop('disabled', !ready);
-
 	}
 	
 	this.showResolutionPane = function() {
@@ -51,13 +54,18 @@ function MergerTask(graph, stagestate) {
 		}
 		return false;
 	}
-	
-	$("#addModelButton").hide();
-	$(".stageSearch").hide();
 
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
 		sender.requestOverlaps();
+	});
+	
+	$("#stageModel").click(function() {
+		sender.sendModeltoStage();
+	});
+	
+	$("#minimize").click(function() {
+		sender.minimizeTask();
 	});
 	
 	// Quit merger
@@ -74,6 +82,7 @@ function MergerTask(graph, stagestate) {
 		$('#taskModal').modal("hide");
 		$('.merge').prop('disabled', true);
 		merger.mergecomplete = true;
+		$("#stageModel").prop('disabled', false);
 	});
 	
 	receiver.onReceiveReply(function (reply) {
@@ -111,6 +120,7 @@ MergerTask.prototype.onInitialize = function() {
 				sender.executeMerge(merger.semrespane.pollOverlaps());
 			}
 	 	});
+	$('#taskModal').modal("show");
 }
 
 MergerTask.prototype.onMinimize = function() {
