@@ -37,7 +37,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setSubmodelName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+			//clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		smconflicts.push(clone);
@@ -70,7 +70,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setCodewordName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		
@@ -100,7 +100,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		operatorsel.onchange = function () {
