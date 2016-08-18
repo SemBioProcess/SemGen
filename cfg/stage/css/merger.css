@@ -166,8 +166,30 @@
     cursor: context-menu;
 }
 
+#mergeStep2 > .panel-group {
+    height: 79vh;
+    overflow-y: scroll;
+}
+
 .mergeStep2Body {
     text-align: left;
+}
+
+.dupname {
+    font-weight: bold;
+    display: inline-block;
+}
+
+.dupNameResolution > .panel-body {
+    display: inline;
+}
+
+.panel-body > p {
+    display: inline-block;
+}
+
+.unitA, .unitB {
+    font-weight: bold;
 }
 
 textarea[name=newSubmodelName] {

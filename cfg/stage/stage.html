@@ -76,19 +76,25 @@
 
 		<!-- Sidebars -->
 		<!-- Left Sidebar -->
-		<div id="leftSidebar" class="panel panel-default sidebar">
+		<button id="leftSidebarButton" class="sidebarButton" type="button" data-toggle="toggle" data-target="#leftSidebar">
+			»
+		</button>
 
+		<div id="leftSidebar" class="panel panel-default sidebar">
 		</div>
 
 		<!-- Right Sidebar -->
-		<div id="rightSidebar" class="panel panel-default sidebar on">
-		
-				<a data-toggle="collapse" href="#rightmenu"><span class="caret-left"></span></a>
-			<div id="rightmenu" class="panel-collapse collapse in">
+
+		<button id="rightSidebarButton" class="sidebarButton" type="button" data-toggle="toggle" data-target="#rightSidebar">
+			«
+		</button>
+
+		<div id="rightSidebar" class="panel panel-default sidebar">
+			<div id="rightmenu" class="panel-default">
 				<div class="panel-heading">
-					<a data-toggle="collapse" href="#stagemenu">Stage Options<span class="caret"></span></a>
+					Stage Options
 				</div>
-				<div id="stagemenu" class="panel-collapse collapse subpanel">
+				<div id="stagemenu" class="panel-default subpanel">
 					<div id="stagekey">
 						<span class="subheading">Node key:</span>
 						<ul class="visibleNodeKeys"></ul>
@@ -102,27 +108,25 @@
 						<ul>
 							<li >Fix Nodes: <input type="checkbox" id="fixedNodes"></li>
 							<li>
-								Node charge: <input type="number" id="nodecharge" value="-300">
+								Node charge:<br><input type="number" id="nodecharge" value="-300">
 							</li>
 							<li>
-								Link length: <input type="number" id="linklength" value="300">
+								Link length:<br><input type="number" id="linklength" value="300">
 							</li>
 							<li>
-								Charge distance: <input type="number" id="chargedist" value="400">
+								Charge distance:<br><input type="number" id="chargedist" value="400">
 							</li>
 							<li>
 								Friction: <input type="number" id="friction" value="0.7" max="1.0" min="0.1" step="0.1">
-							</li>
-							<li>
 								Gravity: <input type="checkbox" id="gravity" value="">
 							</li>
 						</ul>
 					</div>
 				</div>
 					<div class="panel-heading">
-						<a data-toggle="collapse" href="#nodemenu">Node Options<span class="caret"></span></a>
+						Node Options
 					</div>
-					<div id="nodemenu" class="panel-collapse collapse subpanel">
+					<div id="nodemenu" class="panel-default subpanel">
 						<div class="panel-body">Information about selected node goes here</div>
 					</div>
 			</div>
@@ -177,16 +181,20 @@
 			<!--Duplicate name and unit conflicts resolution step -->
 			<div id="mergeStep2">
 				<div class="panel-group">
-					
-					<!--Where #dupNameResolution and #unitConversionResolution templates go-->
-					<div id="DupSubModels"></div>
-					<div id="DupCodewords"></div>
-					<div id="UnitConf"></div>
+					<div class="panel panel-default" id="DupSubModels">
+						<div class="panel-heading mergeStep2Heading">Duplicate submodel names - Please enter new names:</div>
+					</div>
+					<div class="panel panel-default" id="DupCodewords">
+						<div class="panel-heading mergeStep2Heading">Duplicate codeword names - Please enter new names:</div>
+					</div>
+					<div class="panel panel-default" id="UnitConf">
+						<div class="panel-heading mergeStep2Heading">Unit conflicts - Please enter unit conversions:</div>
+					</div>
 				</div>
 
 				<div class="modal-footer">
 					<button id="backBtn" type="button" class="btn btn-warning">Back</button>
-					<button id="saveBtn" type="button" class="btn btn-success">Save and Finish</button>
+					<button id="saveBtn" type="button" class="btn btn-success">Merge</button>
 					<button type="button" class="btn btn-default hideResolutionsBtn">Hide Dialog</button>
 				</div>
 			</div>
@@ -236,65 +244,39 @@
 		</template>
 
 		<template id="dupNameResolution">
-			<div class="panel panel-default conflict-resol">
-				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
-				<div class="subheading" data-toggle="collapse" data-target="#dupName1">
-						<!--Check value in <input name="newSubmodelName"> and change glyphicon to "glyphicon glyphicon-ok" if value is good-->
-						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
-						<!--Fill name in JS-->
-						<div class="dupname"></div>
-					</div>
-				<div class="panel-collapse collapse in" id="dupName1">
-					<div class="panel-body mergeStep2Body">
-						Enter new name:
-						<input class="newName" type="text" size="31" placeholder="No special character, no space.">
-					</div>
-				</div>
+			<div class="panel-body mergeStep2Body">
+				<div class="dupname"></div>:
+				<input class="newName" type="text" size="31" placeholder="No special character, no space.">
 			</div>
 		</template>
 
 		<template id="unitConversionResolution">
-			<div class="panel panel-default conflictresol">
-				<!--Create and match data-target with id in <div class="panel-collapse collapse in" id="">-->
-				<div class="subheading" data-toggle="collapse" data-target="#unitConv1">
-					<h4 class="panel-title">
-						<!--Check value in <input name="unitConvFactor"> and change glyphicon to "glyphicon glyphicon-ok" style="color:#5CB85C" if value is good-->
-						<span class="glyphicon glyphicon-exclamation-sign" style="color:#d9534f" aria-hidden="true"></span>
-						Unit conversion
-					</h4>
-				</div>
-				<div class="panel-collapse collapse in" id="unitConv1">
-					<div class="panel-body mergeStep2Body">
-						<p>Please enter unit conversion below:</p>
-						<!--Fill units in JS-->
-						(<span class="unitA"></span>) = (<span class="unitB"></span>)
-						<select class="multiplyChoice">
-							<option value="multiply">*</option>
-							<option value="divide">/</option>
-						</select>
-						<input class="unitConvFactor" type="number" placeholder="1000">
-					</div>
-				</div>
+			<div class="panel-body mergeStep2Body">
+				<span class="unitA"></span> = <span class="unitB"></span>
+				<select class="multiplyChoice">
+					<option value="multiply">*</option>
+					<option value="divide">/</option>
+				</select>
+				<input class="unitConvFactor" type="number" placeholder="1000">
 			</div>
 		</template>
 
 		<template id="leftProjectMenus">
-			<a data-toggle="collapse" href="#leftmenu"><span class="caret-left"></span></a>
-			<div id="leftmenu" class="panel-collapse collapse in">
+			<div id="leftmenu" class="panel-default">
 				<div class="panel-heading">
-					<a data-toggle="collapse" href="#projmenu">Project<span class="caret"></span></a>
+					Project
 				</div>
-				<div id="projmenu" class="panel-collapse collapse subpanel">
+				<div id="projmenu" class="panel-collapse subpanel">
 					<ul class='menulist'>
 						<li><button type="button" class="panelbutton" id="addModel" >Import Models</button></li>
 						<li class="subheading">Project Models</li>
 					</ul>
 				</div>
 				<div class="panel-heading">
-					<a data-toggle="collapse" href="#modelmenu">Model Options<span class="caret"></span></a>
+					Model Options
 				</div>
-				<div id="modelmenu" class="panel-collapse collapse subpanel">
-					<div id="modelinfo">
+				<div id="modelmenu" class="panel-default subpanel">
+					<div id="modelinfo"">
 						No model selected
 					</div>
 				</div>
@@ -302,11 +284,7 @@
 		</template>
 
 		<template id="leftMergerMenus">
-			<a data-toggle="collapse" href="#leftmenu"><span class="caret-left"></span></a>
-			<div id="leftmenu" class="panel-collapse collapse in">
-				<div class="panel-heading">
-					<a data-toggle="collapse" href="#projmenu">Merger Options<span class="caret"></span></a>
-				</div>
+			<div id="leftmenu" class="panel-default">
 				<div class="panel subpanel">
 					<ul class='menulist'>
 						<li><button id="resolPanels" type="button" class="panelbutton">Resolve Overlaps</button></li>

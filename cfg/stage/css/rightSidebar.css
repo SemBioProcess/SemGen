@@ -1,8 +1,35 @@
 @CHARSET "ISO-8859-1";
 
 #rightSidebar {
-	top: 100px;
-	right: 5px;
+	top: 75px;
+	right: 15px;
+	height: 575px;
+	width: 0px;
+	transition: width 1s ease;
+	overflow: hidden;
+	overflow-x: hidden;
+}
+
+#rightSidebar.in {
+	width: 250px;
+}
+
+#rightSidebar>.panel-heading {
+    padding: 5px 15px;
+}
+
+#rightSidebarButton {
+	position: absolute;
+	top: 75px;
+	right: 0px;
+	height: 575px;
+	width: 15px;
+	opacity: 0.8;
+}
+
+#rightSidebarButton:hover {
+	opacity: 1;
+	cursor: pointer;
 }
 
 #stagekey {

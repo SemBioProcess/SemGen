@@ -1,8 +1,35 @@
 @CHARSET "ISO-8859-1";
 
 #leftSidebar {
-	top: 100px;
-	left: 5px;
+	top: 75px;
+	left: 15px;
+	height: 575px;
+	width: 0px;
+	transition: width 1s ease;
+	overflow: hidden;
+	overflow-x: hidden;
+}
+
+#leftSidebar.in {
+	width: 200px;
+}
+
+#leftSidebar>.panel-heading {
+	padding: 5px 15px;
+}
+
+#leftSidebarButton {
+	position: absolute;
+	top: 75px;
+	left: 0px;
+	height: 575px;
+	width: 15px;
+	opacity: 0.8;
+}
+
+#leftSideButton:hover {
+	opacity: 1;
+	cursor: pointer;
 }
 
 ul.modelPopover li {				

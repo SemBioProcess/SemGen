@@ -52,6 +52,13 @@ function main() {
 	$("#activeTaskTray").click(function() {
 		$("#activeTaskPanel").slideToggle();
 	});
+
+	// Slide horizontal for sidebars
+	$(".sidebarButton").click(function() {
+		var selector = $(this).data("target");
+		$(selector).toggleClass('in');
+		$(this).text($(this).text() == '»' ? '«' : '»');
+	});
 }
 
 //The window is receiving two seperate initialization messages which is resulting in 
