@@ -89,6 +89,11 @@ public class MappableVariable extends Decimal {
 	public String getCellMLinitialValue() {
 		return CellMLinitialValue;
 	}
+	
+	/** @return Whether the initial value is set on the variable*/
+	public boolean hasCellMLinitialValue(){
+		return  ! CellMLinitialValue.isEmpty() && CellMLinitialValue != null;
+	}
 
 	/** @return The set of MappableVariables to which this variable is mapped.
 	 * In other words, the set of variables which receive this variable's value

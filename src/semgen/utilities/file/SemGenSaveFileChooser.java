@@ -132,9 +132,10 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 
 				setFileExtension();
 				File filetosave = getSelectedFile();
+				javax.swing.filechooser.FileFilter savefilter = getFileFilter();
 				
 				// If we're attempting to write a CellML model with discrete events, show error
-				if( ! semsimmodel.getEvents().isEmpty() && getFileFilter()==SemGenFileChooser.cellmlfilter){
+				if( ! semsimmodel.getEvents().isEmpty() && savefilter == SemGenFileChooser.cellmlfilter){
 					JOptionPane.showMessageDialog(this, 
 							"Cannot save as CellML because model contains discrete events", 
 							"Cannot write to CellML", JOptionPane.WARNING_MESSAGE);
@@ -144,7 +145,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				boolean overwriting = false;
 
 				// If we're saving to a JSim project file
-				if(getFileFilter()==SemGenFileChooser.projfilter){
+				if(savefilter == SemGenFileChooser.projfilter){
 					
 					String modelname = null;
 					ArrayList<String> existingmodelnames = new ArrayList<String>();
