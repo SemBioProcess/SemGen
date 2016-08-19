@@ -39,6 +39,7 @@ import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.Symbol;
 import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
@@ -117,7 +118,7 @@ public class SBMLwriter extends ModelWriter {
 		if( ! SyntaxChecker.isValidId(sbmlmodname, sbmllevel, sbmlversion)) sbmlmodname = "default_name";
 		
 		sbmlmodel = sbmldoc.createModel(sbmlmodname);
-
+		
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
 			SemSimUtil.flattenModel(semsimmodel);
@@ -175,6 +176,7 @@ public class SBMLwriter extends ModelWriter {
 					candidateDSsForReactions.add(ds);
 				
 				else globalParameters.add(ds);
+				
 			}
 			else if ( ! ds.isSolutionDomain()) globalParameters.add(ds);
 		}
@@ -300,19 +302,16 @@ public class SBMLwriter extends ModelWriter {
 				comp.addCVTerm(cvterm);
 			}
 			
-			String mathml = ds.getComputation().getMathML();
+			boolean hasinputs = ds.getComputationInputs().size()>0;
+			boolean hasIC = ds.hasStartValue();
 			
-			boolean hasinputs = ! ds.getComputationInputs().isEmpty();
-			boolean hasmathml = mathml != null && ! mathml.equals("");
-			
-			// TODO: if size of compartment is variable, need to create an assignment
-			if( ! hasinputs && hasmathml){
-				
-				//TODO: if mappable variable, need to use local name of datastructure as second parameter here
-				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
-				comp.setSize(Double.parseDouble(formula));
+			// If the compartment is a constant size
+			if( ! hasinputs && ! hasIC){
+				Double sizeAsDouble = getConstantValueForPropertyOfEntity(ds);	
+				comp.setSize(sizeAsDouble); // Same as setValue();
 			}
-			else if(hasinputs && hasmathml) addRuleToModel(ds);
+			// Otherwise create rule in model for compartment
+			else if(ds.getComputation().hasMathML()) addRuleToModel(ds, comp);
 			
 			// TODO: Deal with units on compartments if needed
 			
@@ -399,6 +398,7 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				boolean hasinputs = ds.getComputationInputs().size()>0;
+				boolean hasIC = ds.hasStartValue();
 				
 				// See if the species is a source or sink in a process
 				boolean issourceorsink = false;
@@ -417,7 +417,19 @@ public class SBMLwriter extends ModelWriter {
 				if( ! hasinputs) species.setBoundaryCondition(issourceorsink);
 				else species.setBoundaryCondition( ! solvedwithconservation);
 				
-				if( ! solvedwithconservation && ! species.getConstant()) addRuleToModel(ds);
+				// If the species amount isn't solved with a conservation equation...
+				if( ! solvedwithconservation){
+					
+					// ...if the species amount is constant
+					if( ! hasinputs && ! hasIC){
+						Double formulaAsDouble = getConstantValueForPropertyOfEntity(ds);		
+					
+						if(substanceonly) species.setInitialAmount(formulaAsDouble);
+						else species.setInitialConcentration(formulaAsDouble);
+					}
+					// ...or if the species amount is set with a rule
+					else addRuleToModel(ds, species);
+				}
 				
 				// Set start value, if present.
 				// TODO: We assumed the start value is a constant double. Eventually need to accommodate
@@ -434,9 +446,9 @@ public class SBMLwriter extends ModelWriter {
 				addNotesAndMetadataID(fullcpe, species);
 			}
 			
-			// Otherwise the data structure is not associated with a physical entity
+			// Otherwise the data structure is not associated with a physical entity and we 
+			// treat it as a global parameter
 			else globalParameters.add(ds);
-
 		}
 	}
 	
@@ -604,9 +616,10 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else if(hasinputs){
 				par.setConstant(false);
-				addRuleToModel(ds);
+				addRuleToModel(ds, par);
 			}
 			else if(hasmathml){
+				par.setConstant(true);
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				
 				// TODO: formula shouldn't ever be null here, right? Remove if statement?
@@ -616,15 +629,13 @@ public class SBMLwriter extends ModelWriter {
 						par.setValue(d);
 			        } catch (NumberFormatException e) {
 			        	// If we're here we have some equation that just uses numbers, not variables
-			        	addRuleToModel(ds);
+			        	addRuleToModel(ds, par);
 			        }
 				}
 			}
 			else if(ds instanceof MappableVariable){
-				MappableVariable mv = (MappableVariable)ds;
-				if(mv.hasCellMLinitialValue()){
-					par.setValue(Double.parseDouble(mv.getCellMLinitialValue()));
-				}
+				Double doubleval = getConstantValueForPropertyOfEntity(ds);
+				par.setValue(doubleval);
 				par.setConstant(true);
 			}
 			
@@ -632,7 +643,6 @@ public class SBMLwriter extends ModelWriter {
 			addNotesAndMetadataID(ds, par);
 			
 			if(ds.hasUnits()) par.setUnits(ds.getUnit().getName());
-
 		}
 	}
 	
@@ -736,17 +746,8 @@ public class SBMLwriter extends ModelWriter {
 			RHS = RHS.replace("cellml:units", "sbml3_1:units");
 		}
 		
-//		if(RHS.contains("e-notation"))
-//		RHS = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" xmlns:sbml=\"" + SBMLDocument.URI_NAMESPACE_L3V1Core + "\">" + 
-//        "<apply>" + 
-//          "<times/>"+
-//           "<cn sbml:units=\"ms\">1000</cn>" + 
-////           "<cn type=\"e-notation\" sbml:units=\"mM\"> 1.8 <sep/> -7 </cn>" +
-////           "<cn type=\"e-notation\" sbml:units=\"mM\">1.8</cn>" +
-//
-//           "<cn>3</cn>" + 
-//        "</apply>" + 
-//  "</math>";
+		// TODO: In JSBML 1.1. there is a bug that prevents <cn> elements with type="e-notation"
+		// AND units to be written out correctly. Will be fixed in 1.2 release.
 		
 		return JSBML.readMathMLFromString(RHS);
 	}
@@ -800,21 +801,36 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	private void addRuleToModel(DataStructure ds){
+	private void addRuleToModel(DataStructure ds, Symbol sbmlobj){
 		ExplicitRule rule = null;
 		String mathml = ds.getComputation().getMathML();
 		
 		if(ds.hasStartValue()){
 			rule = sbmlmodel.createRateRule();
-			
-			Parameter par = sbmlmodel.getParameter(ds.getName());
-			if(par != null)
-				par.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
+			sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
 		}
 		else rule = sbmlmodel.createAssignmentRule();
 		
 		rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
 		rule.setVariable(ds.getName());
+	}
+	
+	private Double getConstantValueForPropertyOfEntity(DataStructure ds){
+		Double formulaAsDouble = null;
+		
+		if(ds.getComputation().hasMathML()){
+			String formula = getFormulaFromRHSofMathML(ds.getComputation().getMathML(), ds.getName());
+			formulaAsDouble = Double.parseDouble(formula);
+		}
+		
+		// If the Data Structure is a MappableVariable and constant it won't have
+		// any MathML associated with it in the computation, so we look up the CellMLintialValue
+		else if(ds instanceof MappableVariable){
+			MappableVariable mv = (MappableVariable)ds;
+			formulaAsDouble = Double.parseDouble(mv.getCellMLinitialValue());
+		}
+		
+		return formulaAsDouble;
 	}
 	
 	

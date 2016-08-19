@@ -19,7 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -48,8 +47,6 @@ import semsim.writing.CaseInsensitiveComparator;
  */
 public class SemSimUtil {
 
-	private static final String mathMLhead = "<math xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\">";
-	private static final String mathMLtail = "</math>";
 	public static enum regexQualifier{GREEDY, RELUCTANT, POSSESSIVE, NONE}; 
 	
 	
@@ -127,12 +124,12 @@ public class SemSimUtil {
 					model.removeDataStructure(mv.getName());
 				}
 				
-			mv.setPublicInterfaceValue("");
-			mv.setPrivateInterfaceValue("");
-				
-				// Clear mappings
-			mv.getMappedFrom().clear();
-			mv.getMappedTo().clear();
+				mv.setPublicInterfaceValue("");
+				mv.setPrivateInterfaceValue("");
+					
+					// Clear mappings
+				mv.getMappedFrom().clear();
+				mv.getMappedTo().clear();
 			}
 		}
 			
