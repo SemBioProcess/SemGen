@@ -35,6 +35,7 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 	
 	private void copyLinks(ArrayList<Link> oldlinks) {		
 		for (Link oldlink : oldlinks) {
+			//if (oldlink.linklevel.intValue() == 2) continue;
 			inputs.add(new Link(oldlink, this));
 		}
 	}
@@ -47,6 +48,7 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 	public void replaceLinkInputs(HashMap<LinkableNode<?>, LinkableNode<?>> dsnodemap) {
 		ArrayList<Link> linklist = new ArrayList<Link>();
 		for (Link input : inputs) {
+			//If the node map contains the corresponding node and the link is not inter-model, add it
 			if (input.replaceInput(dsnodemap)) linklist.add(input);			
 		}
 		inputs = linklist;

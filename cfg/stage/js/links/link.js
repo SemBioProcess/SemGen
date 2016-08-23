@@ -17,6 +17,10 @@ function Link(graph, srclink, output, input, length) {
 	this.linkType = NodeTypeArray[srclink.linkType];
 
 	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 2;
+	
+	this.getLinkLevel = function() {
+		return this.srclink.linklevel;
+	}
 }
 
 //  Link.prototype.addBehavior = function (behavior) {

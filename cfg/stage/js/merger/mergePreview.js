@@ -37,7 +37,6 @@ function PreviewGraph(id) {
 	       .attr("height", graph.h);
     }
     
-
     this.setPreviewData = function(data) {
     	previewmodel = new ModelNode(graph, data);
     	previewmodel.nodeType = NodeType.NULLNODE;
@@ -68,7 +67,10 @@ function PreviewGraph(id) {
 			var nodelinks = n.getLinks();
 			if (nodelinks) {
 				nodelinks.forEach(function(l){
-					links.push(l);
+					if (l.getLinkLevel != 2) {
+						links.push(l);
+					}
+					
 				});
 			}
 		});

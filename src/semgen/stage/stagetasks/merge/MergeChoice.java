@@ -55,6 +55,7 @@ public class MergeChoice {
 		 mnode.childsubmodels.add(inputsm);
 		 mnode.childsubmodels.add(newfocus.getLeft());
 		 
+		 //mnode.prefixChildrenwithID(mnode.id);
 		 return mnode;
 	}
 	

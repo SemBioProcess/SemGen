@@ -99,9 +99,6 @@ MergerTask.prototype.onInitialize = function() {
 		merger.addModelNode(model, []);
 	});
 
-
-	//$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
-
 	merger.showResolutionPane();
 	$("#mergeStep2").hide();
 	$("#nextBtn").click(function() {
