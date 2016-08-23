@@ -35,7 +35,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	protected MergeConflicts conflicts = new MergeConflicts();
 	
-	public MergerTask(ArrayList<ModelInfo> modelinfo) {
+	public MergerTask(ArrayList<ModelInfo> modelinfo, int index) {
+		super(index);
 		workbench.addObserver(this);
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<ModelAccessor> files = new ArrayList<ModelAccessor>();
@@ -49,7 +50,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		workbench.addModels(files, models, true);
 		primeForMerging();
-		state = new StageState(Task.MERGER, _models);
+		state = new StageState(Task.MERGER, _models, index);
 
 	}
 
@@ -176,8 +177,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
 		}
 		
-		public void onMinimizeTask() {
-			switchTask(0);
+		public void onChangeTask(Double index) {
+			switchTask(index.intValue());
 		}
 		
 		public void onRequestPreview(Double index) {
@@ -344,9 +345,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			return dupemap;
 		}
-		
 
-		
 		public ArrayList<Pair<Double,String>> buildConversionList() {
 			ArrayList<Pair<Double,String>> conversions = new ArrayList<Pair<Double,String>>();
 			for (UnitConflict uc : unitconflicts) {
@@ -375,12 +374,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void setReplacementName(boolean rightmodel, String rep) {
 			replacement = rep;
 			userightmodel = rightmodel;
-		}
-	}
-	
-	public static class Jjstest {
-		public void test() {
-			System.out.println("Sucess!");
 		}
 	}
 	

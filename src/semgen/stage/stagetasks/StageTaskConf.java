@@ -14,10 +14,10 @@ public class StageTaskConf {
 		taskmodels = models;
 	}
 	
-	public StageTask<? extends SemGenWebBrowserCommandSender> createTask() {
+	public StageTask<? extends SemGenWebBrowserCommandSender> createTask(int taskindex) {
 		switch (tasktype) {
 		case MERGER: 
-			return new MergerTask(taskmodels);
+			return new MergerTask(taskmodels, taskindex);
 		case EXTRACTOR:
 			return null;
 		case EDITOR:

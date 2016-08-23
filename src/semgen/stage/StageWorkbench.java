@@ -28,7 +28,6 @@ public class StageWorkbench extends Workbench {
 		projtask.addObserver(this);
 		tasks.add(projtask);
 		setActiveTask(0);
-
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class StageWorkbench extends Workbench {
 	}
 
 	/**
-	 * Get an object that listens for javascript commands
+	 * Get an object that sends javascript commands
 	 * @return
 	 */
 	public Class<? extends SemGenWebBrowserCommandSender> getCommandSenderInterface() {
@@ -63,23 +62,18 @@ public class StageWorkbench extends Workbench {
 				activetask.addModelstoTask(stagetask.getQueuedModels());
 			}
 		}
-	}
-	
-	private void switchTask() {
-		setActiveTask(activetask.getIndexofTasktoLoad());
 		this.setChanged();
 		this.notifyObservers(StageEvent.CHANGETASK);
 	}
-	
+
 	private void createTask() {
-		StageTask<?> newtask = activetask.getNewTaskConfiguration().createTask();
+		StageTask<?> newtask = activetask.getNewTaskConfiguration().createTask(tasks.size());
 		newtask.addObserver(this);
 		tasks.add(newtask);
 		activetask.clearNewTaskConfiguration();	
 		
 		this.setActiveTask(tasks.size()-1);
-		this.setChanged();
-		this.notifyObservers(StageEvent.CHANGETASK);
+
 	}
 
 	@Override
@@ -113,7 +107,7 @@ public class StageWorkbench extends Workbench {
 			createTask();
 		}
 		if (arg1 == StageTaskEvent.SWITCHTASK) {
-			switchTask();
+			setActiveTask(activetask.getIndexofTasktoLoad());
 		}
 	}
 	

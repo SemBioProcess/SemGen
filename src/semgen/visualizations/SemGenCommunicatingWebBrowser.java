@@ -4,7 +4,6 @@ import javax.naming.InvalidNameException;
 
 import semgen.SemGen;
 import semgen.stage.serialization.StageState;
-import semgen.stage.stagetasks.ProjectWebBrowserCommandSender;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 
 import com.google.gson.GsonBuilder;
@@ -18,8 +17,8 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	// Stage html in resource dir
 	private final static String StageHtml = SemGen.cfgreadpath + "stage/stage.html?testMode="+SemGen.debug;
 	
-	public SemGenCommunicatingWebBrowser(CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException, IOException {
-		super(ProjectWebBrowserCommandSender.class, commandReceiver);
+	public SemGenCommunicatingWebBrowser() throws InvalidNameException, IOException {
+		super();
 
 		System.out.println("Loading SemGen web browser");
         
@@ -51,4 +50,6 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 		executeJavascriptAndHandleErrors(javascript);
 	}
 	
+	
+
 }

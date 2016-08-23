@@ -5,6 +5,7 @@ import javax.naming.InvalidNameException;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
 
 import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.events.FinishLoadingEvent;
 import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
 
@@ -52,7 +53,7 @@ import com.teamdev.jxbrowser.chromium.events.LoadAdapter;
  * @param <TSender> - Type of interface used as a contract for communication between java and javascript
  */
 public class CommunicatingWebBrowser extends Browser {
-	
+	private Runnable postloadinstructions = null;
 	// Name of the variable in javascript that receives commands
 	private final String JavascriptCommandReceiverVariableName = "javaCommandReciever";
 	
@@ -111,10 +112,8 @@ public class CommunicatingWebBrowser extends Browser {
 	// Command receiver
 	private CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	
-	public CommunicatingWebBrowser(Class<? extends SemGenWebBrowserCommandSender> commandSenderInterface, CommunicatingWebBrowserCommandReceiver commandReceiver) throws InvalidNameException {
-		super();
-		createBrowserListeners(commandSenderInterface, commandReceiver);
-
+	public CommunicatingWebBrowser() throws InvalidNameException {
+		createBrowserListeners(DummySender.class, new GenericReceiver());
 		// Insert the adapter that facilitates communication
 		addLoadListener(new CommunicatingWebBrowserLoadAdapter());
 	}
@@ -179,6 +178,18 @@ public class CommunicatingWebBrowser extends Browser {
 		return	javascriptCommandReceiver + CommunicationHelpers.NLJS +
 				javascriptCommandSender + CommunicationHelpers.NLJS;
 	}
+
+	/**
+	 * @param postloadinstructions the postloadinstructions to set
+	 */
+	public void setPostloadinstructions(Runnable postloadinstructions) {
+		this.postloadinstructions = postloadinstructions;
+	}
+
+	private void addProperty(Object prop) {
+		JSValue window = this.executeJavaScriptAndReturnValue("window");
+		window.asObject().setProperty("onloadfinally", prop);
+	}
 	
 	/**
 	 * Inserts an initialization script into the page header while the page is loading.
@@ -204,6 +215,11 @@ public class CommunicatingWebBrowser extends Browser {
 			e.getBrowser().removeLoadListener(this);
 			listenForCommands();
 			
+			//This is for any instructions that require the senders and receivers to be loaded before they're executed
+			if (postloadinstructions != null) {
+				addProperty(postloadinstructions);
+			}
+
 			// Stitch together the script html
 			String scriptInnerHtml = generateReceiverandSenderHtml() +
 					TriggerInitializationEventScript + CommunicationHelpers.NLJS +
@@ -214,9 +230,20 @@ public class CommunicatingWebBrowser extends Browser {
 			String initializationScript = CommunicationHelpers.appendScript(scriptInnerHtml, javajsbridgeid) +
 					"cwb_triggerInitialized(" + JavascriptCommandReceiverVariableName + ", " + JavascriptCommandSenderVariableName + ");";
 
+			if (postloadinstructions != null) {
+				initializationScript += "window.onloadfinally.run();";
+			}
 			// Execute the initialization script
 			e.getBrowser().executeJavaScript(initializationScript);
+
 		}
 	}
 	
+	
+	private class GenericReceiver extends CommunicatingWebBrowserCommandReceiver {
+		protected GenericReceiver() {}
+	}
+	
+	private interface DummySender extends SemGenWebBrowserCommandSender {}
+
 }

@@ -50,16 +50,17 @@ public class StageTab extends SemGenTab implements Observer {
 			if (SemGen.debug) {
 				browserprefs.add("--remote-debugging-port=9222"); // Uncomment to debug JS
 			}
+
 			BrowserPreferences.setChromiumSwitches(browserprefs.toArray(new String[]{}));
-			_workbench.initialize();
-			browser = new SemGenCommunicatingWebBrowser(_workbench.getCommandReceiver());
-			_workbench.setCommandSender(browser.getCommandSenderGenerator());
+			browser = new SemGenCommunicatingWebBrowser();
 			
 			if (SemGen.debug) {
 				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
 				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
 				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
+			
+			browser.setPostloadinstructions(new WorkbenchInitializer());
 			
 			final BrowserView browserView = new BrowserView(browser);
 
@@ -81,13 +82,17 @@ public class StageTab extends SemGenTab implements Observer {
 					return false;
 				}
 			});
+
+			       
+
 			
 			this.add(browserView, BorderLayout.CENTER);
+
 		} catch (InvalidNameException | IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public boolean isSaved() {
 		return false;
@@ -95,12 +100,12 @@ public class StageTab extends SemGenTab implements Observer {
 
 	@Override
 	public void requestSave() {
-
+		_workbench.saveModel();
 	}
 
 	@Override
 	public void requestSaveAs() {
-
+		_workbench.saveModelAs();
 	}
 
 	public boolean closeTab() {
@@ -117,6 +122,12 @@ public class StageTab extends SemGenTab implements Observer {
 			} catch (InvalidNameException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public class WorkbenchInitializer implements Runnable {
+		public void run() {
+			_workbench.initialize();
 		}
 	}
 }

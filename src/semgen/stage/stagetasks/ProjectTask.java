@@ -22,8 +22,9 @@ import semsim.reading.ModelAccessor;
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
+		super(0);
 		_commandReceiver = new ProjectCommandReceiver();
-		state = new StageState(Task.PROJECT);
+		state = new StageState(Task.PROJECT, taskindex);
 	}
 	
 	
@@ -144,8 +145,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onChangeTask(Number index) {
-			
+		public void onChangeTask(Double index) {
+			switchTask(index.intValue());
 		}
 		
 		public void onConsoleOut(String msg) {

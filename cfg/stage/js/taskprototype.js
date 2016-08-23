@@ -10,7 +10,7 @@ function Task(graph, stagestate) {
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
-
+	
 	var task = this;
 	$("#leftSidebar").empty();
 	
@@ -99,3 +99,5 @@ Task.prototype.onInitialize = function() {}
 Task.prototype.onMinimize = function() {}
 Task.prototype.onModelSelection = function(node) {}
 Task.prototype.onClose = function() {}
+
+Task.prototype.getTaskType = function() {}

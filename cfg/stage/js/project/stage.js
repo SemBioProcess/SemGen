@@ -6,6 +6,7 @@ function Stage(graph, stagestate) {
 
 	var stage = this;
 	var nodes = this.nodes;
+	this.taskindex = 0;
 	
 	$("#addModelButton").show();
 	$(".stageSearch").show();
@@ -126,3 +127,5 @@ function makeResultSet(searchResultSet) {
     resultSet.append(list);
     return resultSet;
 };
+
+Stage.prototype.getTaskType = function() { return StageTasks.PROJECT; }
