@@ -20,6 +20,9 @@ function MergerTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
+	$("#modeIndicator").append("Currently in: <strong>Merger mode</strong>");
+	$("#modeIndicator").show();
+
 	//Create the resolution pane
 	
 	var t = document.querySelector('#mergerContent');

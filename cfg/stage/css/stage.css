@@ -97,6 +97,10 @@ li.searchResultSet li:hover {
 	cursor: pointer;
 }
 
+#modeIndicator {
+	display: none;
+}
+
 .panel.panel-default.sidebar {
 	list-style-type:none;
 	position: absolute;
