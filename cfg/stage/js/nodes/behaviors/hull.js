@@ -70,6 +70,20 @@ function Hull(node) {
 			};
 			analyzeChildren(getSymbolArray(node.children));
 			
+			//If there are zero children make a hull centered on the parent node (used for merge previews)
+			if (vertexes.length ==0) {
+				
+				minX = node.xpos() - 6;
+				maxX = node.xpos() + 6;
+				minY = node.ypos() - 6;
+				maxY = node.ypos() + 6;
+				vertexes.push([minX, minY]);
+				vertexes.push([maxX, minY]);
+				vertexes.push([minX, maxY]);
+				vertexes.push([maxX, maxY]);
+
+			}
+			
 						//If there is only one visible child, make the hull a circle with a radius of 6
 			if (vertexes.length ==1) {
 				

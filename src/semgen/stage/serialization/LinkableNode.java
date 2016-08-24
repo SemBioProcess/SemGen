@@ -35,7 +35,6 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 	
 	private void copyLinks(ArrayList<Link> oldlinks) {		
 		for (Link oldlink : oldlinks) {
-			//if (oldlink.linklevel.intValue() == 2) continue;
 			inputs.add(new Link(oldlink, this));
 		}
 	}
