@@ -132,7 +132,10 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 	protected ArrayList<Integer> pollSelectors() {
 		selections.clear();
 		for (SelectorPanel sel : selectors) {
-			selections.add(sel.getSelection());
+			if (sel.getSelection() != -1) {
+				selections.add(sel.getSelection());
+			}
+			
 		}
 		return selections;
 	}
