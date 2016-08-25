@@ -25,6 +25,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimLibrary;
@@ -45,9 +46,7 @@ import semsim.writing.CaseInsensitiveComparator;
  * A collection of utility methods for working with SemSim models
  */
 public class SemSimUtil {
-	
-	private static final String mathMLhead = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
-	private static final String mathMLtail = "</math>";
+
 	public static enum regexQualifier{GREEDY, RELUCTANT, POSSESSIVE, NONE}; 
 	
 	
@@ -74,7 +73,7 @@ public class SemSimUtil {
 			
 			if(ds instanceof MappableVariable){	
 				
-				// Need to flatten names of variables. Can we get rid of the inputs?
+				// TODO: Need to flatten names of variables. Can we get rid of the inputs?
 				// How to deal with solution domain resolution?
 				MappableVariable mv = (MappableVariable)ds;
 								
@@ -125,12 +124,12 @@ public class SemSimUtil {
 					model.removeDataStructure(mv.getName());
 				}
 				
-			mv.setPublicInterfaceValue("");
-			mv.setPrivateInterfaceValue("");
-				
-				// Clear mappings
-			mv.getMappedFrom().clear();
-			mv.getMappedTo().clear();
+				mv.setPublicInterfaceValue("");
+				mv.setPrivateInterfaceValue("");
+					
+					// Clear mappings
+				mv.getMappedFrom().clear();
+				mv.getMappedTo().clear();
 			}
 		}
 			
@@ -138,8 +137,14 @@ public class SemSimUtil {
 		for(DataStructure ds : model.getAssociatedDataStructures()){
 			String oldname = ds.getName();
 			String newname = oldname.substring(oldname.lastIndexOf(".")+1, oldname.length());
-			ds.setName(newname); 
 			
+			// if model already contains a data structure with the new name, use prefix name without "."
+			if(model.containsDataStructure(newname)){
+				newname = oldname.replace(".", "_");
+				replaceCodewordInAllEquations(ds, ds, model, oldname, newname, Pair.of(1.0, "*"));
+			}
+			
+			ds.setName(newname); 
 			renamingmap.put(oldname, newname);
 		}
 		
@@ -444,7 +449,11 @@ public class SemSimUtil {
 					// then we've found our RHS
 					if(! isLHS && ! iseqel){
 						XMLOutputter outputter = new XMLOutputter();
-						return mathMLhead + "\n" + outputter.outputString(nextel) + "\n" + mathMLtail;
+						outputter.setFormat(Format.getPrettyFormat());
+						Element newtopel = new Element("math");
+						newtopel.setNamespace(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString()));
+						newtopel.addContent(nextel.detach());
+						return outputter.outputString(newtopel);
 					}
 				}
 			}

@@ -21,6 +21,8 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.AbstractNamedSBase;
+import org.sbml.jsbml.CVTerm;
+import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.Constraint;
 import org.sbml.jsbml.ExplicitRule;
@@ -37,9 +39,11 @@ import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.Symbol;
 import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
+import org.sbml.jsbml.validator.SyntaxChecker;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
@@ -53,6 +57,7 @@ import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalDependency;
@@ -62,6 +67,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
+import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
@@ -70,8 +76,12 @@ public class SBMLwriter extends ModelWriter {
 	
 	private SBMLDocument sbmldoc;
 	private Model sbmlmodel;
-	private static final int sbmllevel = 2;
-	private static final int sbmlversion = 4;
+	private static final int sbmllevel = 3;
+	private static final int sbmlversion = 1;
+	
+	private static final Namespace sbmlNS = Namespace.getNamespace(SBMLDocument.URI_NAMESPACE_L3V1Core);
+	
+	private static final String cellmlInlineUnitsNSdeclaration = "xmlns:cellml=\"http://www.cellml.org/cellml/1.0#\"";	
 	
 	private LinkedHashMap<CompositePhysicalEntity, Compartment> entityCompartmentMap = new LinkedHashMap<CompositePhysicalEntity, Compartment>();
 	private LinkedHashMap<CompositePhysicalEntity, Species> entitySpeciesMap = new LinkedHashMap<CompositePhysicalEntity, Species>();
@@ -101,9 +111,17 @@ public class SBMLwriter extends ModelWriter {
 	@Override
 	public void writeToFile(File destination) {
 				
-		sbmldoc = new SBMLDocument();
-		sbmlmodel = sbmldoc.createModel(semsimmodel.getName());
+		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
+		String sbmlmodname = semsimmodel.getName();
 		
+		// Create a valid model name if current name is invalid
+		if( ! SyntaxChecker.isValidId(sbmlmodname, sbmllevel, sbmlversion)) sbmlmodname = "default_name";
+		
+		sbmlmodel = sbmldoc.createModel(sbmlmodname);
+		
+		// If we're writing from a model with FunctionalSubmodels, flatten model first
+		if(semsimmodel.getFunctionalSubmodels().size() > 0)
+			SemSimUtil.flattenModel(semsimmodel);
 		
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
@@ -111,7 +129,6 @@ public class SBMLwriter extends ModelWriter {
 		addNotesAndMetadataID(semsimmodel, sbmlmodel);
 		
 		sortDataStructuresIntoSBMLgroups();
-		setLevelAndVersion();
 		addUnits();
 		addCompartments();
 		addSpecies();
@@ -159,17 +176,12 @@ public class SBMLwriter extends ModelWriter {
 					candidateDSsForReactions.add(ds);
 				
 				else globalParameters.add(ds);
+				
 			}
 			else if ( ! ds.isSolutionDomain()) globalParameters.add(ds);
 		}
 	}
 	
-	private void setLevelAndVersion(){
-		sbmldoc.setLevel(sbmllevel);
-		sbmldoc.setVersion(sbmlversion);
-		sbmlmodel.setLevel(sbmllevel);
-		sbmlmodel.setVersion(sbmlversion);
-	}
 	
 	/**
 	 *  Collect units for SBML model
@@ -178,12 +190,32 @@ public class SBMLwriter extends ModelWriter {
 		
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
 			
+			// Do not overwrite base units
 			if(Kind.isValidUnitKindString(uom.getName(), sbmllevel, sbmlversion)) 
 				continue;
 			
-			else if( ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(uom.getName())
-					&& ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
+			// If we're not looking at an SBML Level 2 reserved base unit...
+			else if( ! SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsValue(uom.getName())){
 				
+				// ...see if we need to explicitly write it out. This happens if the model re-defines
+				// the reserved unit. For example if the model uses hours instead of seconds for the reserved unit "time".
+				if(SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(uom.getName())){
+			
+					String baseunitname = SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get(uom.getName());
+	
+					if(uom.getUnitFactors().size()==1){
+						
+						UnitFactor uf = uom.getUnitFactors().toArray(new UnitFactor[]{})[0];
+						double exp = uf.getExponent();
+						double mult = uf.getMultiplier();
+						String prefix = uf.getPrefix();
+						
+						if(uf.getBaseUnit().getName().equals(baseunitname) && (exp==1 || exp==0) && (mult==1 || mult==0) && (prefix == null))
+								continue;  // Do not write out the unit if it matches the default settings for an SBML reserved unit
+					}
+				}
+			
+				// If we're here we are explicitly writing out the unit to the SBML file
 				UnitDefinition ud = sbmlmodel.createUnitDefinition(uom.getName());
 				
 				addNotesAndMetadataID(uom, ud);
@@ -202,7 +234,9 @@ public class SBMLwriter extends ModelWriter {
 						Unit sbmluf = new Unit(sbmllevel, sbmlversion);
 						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase()));
 						sbmluf.setExponent(uf.getExponent());
-						sbmluf.setMultiplier(uf.getMultiplier());
+						
+						if(Double.valueOf(uf.getMultiplier()) != 0)
+							sbmluf.setMultiplier(uf.getMultiplier());
 						
 						if(uf.getPrefix() != null && ! uf.getPrefix().equals("")){
 							Integer power = sslib.getUnitPrefixesAndPowersMap().get(uf.getPrefix());
@@ -250,29 +284,39 @@ public class SBMLwriter extends ModelWriter {
 			// Go to next data structure if we didn't find an appropriate OPB property
 			// or if the associated physical entity is NOT a composite physical entity
 			if(comp == null || ! (pmc instanceof CompositePhysicalEntity)) continue;
-			
+						
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
-			
-			// TODO: if composite physical entity is just one entity, store annotation in <compartment> block
+
+			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
+			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
+			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).hasPhysicalDefinitionAnnotation();
+						
+			// If composite physical entity is just one entity, store annotation in <compartment> block
 			// and omit writing SemSim annotation
-			
-			String mathml = ds.getComputation().getMathML();
-			
-			boolean hasinputs = ds.getComputationInputs().isEmpty();
-			boolean hasmathml = mathml != null;
-			
-			// TODO: if size of compartment is variable, need to create an assignment
-			if( ! hasinputs && hasmathml){
-				
-				//TODO: if mappable variable, need to use local name of datastructure as second parameter here
-				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
-				comp.setSize(Double.parseDouble(formula));
+			if(onerefentity){
+				DSsToOmitFromSemSimRDF.add(ds);
+				CVTerm cvterm = new CVTerm();
+				cvterm.setQualifier(Qualifier.BQB_IS);
+				ReferencePhysicalEntity refent = (ReferencePhysicalEntity) pmcAsCPE.getArrayListOfEntities().get(0);
+				cvterm.addResourceURI(refent.getPhysicalDefinitionURI().toString());
+				comp.addCVTerm(cvterm);
 			}
-			else if(hasinputs && hasmathml) addRuleToModel(ds);
 			
-			// TODO: if composite entity for compartment only has one entity, exclude from 
-			// SemSim annotations and instead write it as an annotation on the <comp> element
+			boolean hasinputs = ds.getComputationInputs().size()>0;
+			boolean hasIC = ds.hasStartValue();
+			
+			// If the compartment is a constant size
+			if( ! hasinputs && ! hasIC){
+				Double sizeAsDouble = getConstantValueForPropertyOfEntity(ds);	
+				comp.setSize(sizeAsDouble); // Same as setValue();
+			}
+			// Otherwise create rule in model for compartment
+			else if(ds.getComputation().hasMathML()) addRuleToModel(ds, comp);
+			
+			// TODO: Deal with units on compartments if needed
+			
 			addNotesAndMetadataID(pmc, comp);
+			
 		}
 	}
 	
@@ -283,7 +327,7 @@ public class SBMLwriter extends ModelWriter {
 		
 		int c = 0; // index number for any compartments that we add anew
 		for(DataStructure ds : candidateDSsForSpecies){
-			
+						
 			Computation dscomputation = ds.getComputation();
 			
 			// Assume that the first index in the physical entity associated with the data structure
@@ -338,6 +382,7 @@ public class SBMLwriter extends ModelWriter {
 				
 				species.setHasOnlySubstanceUnits(substanceonly);
 				
+				//TODO: deal with units on species if needed
 				
 				boolean solvedwithconservation = false;
 				
@@ -353,6 +398,7 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				boolean hasinputs = ds.getComputationInputs().size()>0;
+				boolean hasIC = ds.hasStartValue();
 				
 				// See if the species is a source or sink in a process
 				boolean issourceorsink = false;
@@ -371,7 +417,19 @@ public class SBMLwriter extends ModelWriter {
 				if( ! hasinputs) species.setBoundaryCondition(issourceorsink);
 				else species.setBoundaryCondition( ! solvedwithconservation);
 				
-				if( ! solvedwithconservation && ! species.getConstant()) addRuleToModel(ds);
+				// If the species amount isn't solved with a conservation equation...
+				if( ! solvedwithconservation){
+					
+					// ...if the species amount is constant
+					if( ! hasinputs && ! hasIC){
+						Double formulaAsDouble = getConstantValueForPropertyOfEntity(ds);		
+					
+						if(substanceonly) species.setInitialAmount(formulaAsDouble);
+						else species.setInitialConcentration(formulaAsDouble);
+					}
+					// ...or if the species amount is set with a rule
+					else addRuleToModel(ds, species);
+				}
 				
 				// Set start value, if present.
 				// TODO: We assumed the start value is a constant double. Eventually need to accommodate
@@ -388,7 +446,8 @@ public class SBMLwriter extends ModelWriter {
 				addNotesAndMetadataID(fullcpe, species);
 			}
 			
-			// Otherwise the data structure is not associated with a physical entity
+			// Otherwise the data structure is not associated with a physical entity and we 
+			// treat it as a global parameter
 			else globalParameters.add(ds);
 		}
 	}
@@ -464,19 +523,19 @@ public class SBMLwriter extends ModelWriter {
 						LocalParameter lp = kl.createLocalParameter(localnm);
 						String formula = getFormulaFromRHSofMathML(gp.getComputation().getMathML(), fullnm);
 						lp.setValue(Double.parseDouble(formula));
+						//TODO: deal with local par units
 					}
 				}
 				
-				kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));	
+				kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
 				rxn.setKineticLaw(kl);
 				
-				addNotesAndMetadataID(process, rxn);
-				
-				// TODO: set units?
+				addNotesAndMetadataID(process, rxn);	
 			}
 			
-			// Otherwise the data structure isn't associated with a process
+			// Otherwise the data structure is not associated with a process
 			else globalParameters.add(ds);
+
 		}
 	}
 	
@@ -528,14 +587,14 @@ public class SBMLwriter extends ModelWriter {
 		for(DataStructure ds : globalParameters){
 			
 			Parameter par = sbmlmodel.createParameter(ds.getName());
-			
+						
 			String mathml = ds.getComputation().getMathML();
-
+			
 			boolean hasinputs = ds.getComputationInputs().size() > 0;
 			boolean usesevents = ds.getComputation().hasEvents();
 			boolean hasmathml = (mathml != null && ! mathml.equals(""));
 			boolean hasIC = ds.hasStartValue();
-						
+			
 			if(usesevents){
 				par.setConstant(false);
 				
@@ -550,7 +609,6 @@ public class SBMLwriter extends ModelWriter {
 						par.setValue(Double.parseDouble(ds.getStartValue()));
 					}
 					else{
-						// TODO: probably need to get local name for mappableVariables here.
 						String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 						par.setValue(Double.parseDouble(formula));
 					}
@@ -558,24 +616,33 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else if(hasinputs){
 				par.setConstant(false);
-				addRuleToModel(ds);
+				addRuleToModel(ds, par);
 			}
 			else if(hasmathml){
-				// TODO: probably need to get local name for mappableVariables here.
+				par.setConstant(true);
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
-				try {
-		            Double d = Double.parseDouble(formula);
-					par.setValue(d);
-		        } catch (NumberFormatException e) {
-		        	// If we're here we have some equation that just uses numbers, not variables
-		        	addRuleToModel(ds);
-		        }
+				
+				// TODO: formula shouldn't ever be null here, right? Remove if statement?
+				if(formula != null){
+					try {
+			            Double d = Double.parseDouble(formula);
+						par.setValue(d);
+			        } catch (NumberFormatException e) {
+			        	// If we're here we have some equation that just uses numbers, not variables
+			        	addRuleToModel(ds, par);
+			        }
+				}
+			}
+			else if(ds instanceof MappableVariable){
+				Double doubleval = getConstantValueForPropertyOfEntity(ds);
+				par.setValue(doubleval);
+				par.setConstant(true);
 			}
 			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			
-			// TODO: set units
+			if(ds.hasUnits()) par.setUnits(ds.getUnit().getName());
 		}
 	}
 	
@@ -623,19 +690,18 @@ public class SBMLwriter extends ModelWriter {
 				
 				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
 				Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
-				Namespace sbmlmodNS = Namespace.getNamespace("http://www.sbml.org/sbml/level" + sbmlmodel.getLevel() + "/version" + sbmlmodel.getVersion());
 				
-				Element modelel = doc.getRootElement().getChild("model", sbmlmodNS);
+				Element modelel = doc.getRootElement().getChild("model", sbmlNS);
 				
 				if(modelel == null){
 					System.err.println("SBML writer error - no 'model' element found in XML doc");
 					return doc;
 				}
 				
-				Element modelannel = modelel.getChild("annotation", sbmlmodNS);
+				Element modelannel = modelel.getChild("annotation", sbmlNS);
 				
 				if(modelannel == null){
-					modelannel = new Element("annotation", sbmlmodNS);
+					modelannel = new Element("annotation", sbmlNS);
 					modelel.addContent(modelannel);
 				}
 				
@@ -668,7 +734,21 @@ public class SBMLwriter extends ModelWriter {
 	 * @return An ASTNode representation of the right-hand-side of the expression
 	 */
 	private ASTNode getASTNodeFromRHSofMathML(String mathml, String localname){
+		
 		String RHS = SemSimUtil.getRHSofMathML(mathml, localname);
+		
+		// Deal with unit declarations on <cn> elements in MathML 
+		if(RHS.contains("cellml:units")){
+			RHS = RHS.replaceFirst("xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"",
+					"xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"" + " "
+							+ "xmlns:sbml3_1=\"" + SBMLDocument.URI_NAMESPACE_L3V1Core + "\"");
+			RHS = RHS.replace(cellmlInlineUnitsNSdeclaration, "");
+			RHS = RHS.replace("cellml:units", "sbml3_1:units");
+		}
+		
+		// TODO: In JSBML 1.1. there is a bug that prevents <cn> elements with type="e-notation"
+		// AND units to be written out correctly. Will be fixed in 1.2 release.
+		
 		return JSBML.readMathMLFromString(RHS);
 	}
 	
@@ -700,12 +780,14 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractNamedSBase sbo){
 		
-		if(sso.hasDescription())
-			try {
-				sbo.setNotes(sso.getDescription());
-			} catch (XMLStreamException e) {
-				e.printStackTrace();
-			}
+		//TODO: When the jsbml fix the issue with redeclaring xml namespaces in notes, uncomment block below
+//		if(sso.hasDescription()){
+//			try {
+//				sbo.setNotes(sso.getDescription());
+//			} catch (XMLStreamException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		if(sso.hasMetadataID()){
 			
@@ -719,18 +801,36 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	private void addRuleToModel(DataStructure ds){
+	private void addRuleToModel(DataStructure ds, Symbol sbmlobj){
 		ExplicitRule rule = null;
 		String mathml = ds.getComputation().getMathML();
 		
 		if(ds.hasStartValue()){
 			rule = sbmlmodel.createRateRule();
-			sbmlmodel.getParameter(ds.getName()).setValue(Double.parseDouble(ds.getStartValue())); // Set IC
+			sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
 		}
 		else rule = sbmlmodel.createAssignmentRule();
 		
 		rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
 		rule.setVariable(ds.getName());
+	}
+	
+	private Double getConstantValueForPropertyOfEntity(DataStructure ds){
+		Double formulaAsDouble = null;
+		
+		if(ds.getComputation().hasMathML()){
+			String formula = getFormulaFromRHSofMathML(ds.getComputation().getMathML(), ds.getName());
+			formulaAsDouble = Double.parseDouble(formula);
+		}
+		
+		// If the Data Structure is a MappableVariable and constant it won't have
+		// any MathML associated with it in the computation, so we look up the CellMLintialValue
+		else if(ds instanceof MappableVariable){
+			MappableVariable mv = (MappableVariable)ds;
+			formulaAsDouble = Double.parseDouble(mv.getCellMLinitialValue());
+		}
+		
+		return formulaAsDouble;
 	}
 	
 	
@@ -739,5 +839,4 @@ public class SBMLwriter extends ModelWriter {
 		writeToFile(new File(uri));
 
 	}
-
 }
