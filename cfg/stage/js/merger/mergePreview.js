@@ -11,8 +11,8 @@ function PreviewGraph(id) {
 	var graph = this;
 	var svg;
 	
-    this.nodecharge = -180;
-    this.linklength = 120;
+    this.nodecharge = -280;
+    this.linklength =420;
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
 
@@ -55,6 +55,8 @@ function PreviewGraph(id) {
 
     	previewmodel.globalApply(function(node) {
     		if (node.nodeType == NodeType.SUBMODEL) {
+    			 node.nodecharge = -400;
+    			node.textSize = 16;
     			node.showchildren = true;
     		}
     		nodes.push(node);
