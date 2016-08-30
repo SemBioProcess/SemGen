@@ -2,6 +2,12 @@
  * 
  */
 
+var StageTasks = {
+		PROJECT: {thumb: '../../src/semgen/icons/stageicon2020.png'},
+		MERGER: {thumb: '../../src/semgen/icons/mergeicon2020.png'},
+		EXTRACTOR: {thumb: '../../src/semgen/icons/extractoricon2020.png'}
+};
+
 var NodeType = {
 		MODEL: {id: 0, nodeType: "Model", color: "#000000", canShowHide: false},
 		SUBMODEL: {id: 1, nodeType: "Submodel", color: "#CA9485", canShowHide: false},

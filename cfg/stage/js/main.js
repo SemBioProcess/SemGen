@@ -11,27 +11,24 @@ var main;
 var CallWaiting;
 
 function main() {
+	var main = this;
 	this.graph = new Graph();
 	var graph = this.graph;
-
+	
 	if(!this.graph) {
 		alert("Graph initialization failed.");
 		return;
 	}
 
 	KeyElement.getInstance().initialize(this.graph);
+	this.tasktray = new TaskTray();
 
-	this.task = new Stage(this.graph);
-	graph.setTaskNodes(this.task.nodes);
-	
 	//If a change task request is received from Java
 	this.changeTask = function changeTask(stagestate) {
 		graph.depBehaviors = [];
 		
-		var content = document.querySelector('#modalContent');
-		if (content.firstChild!=null) {
-			content.removeChild(content.firstChild);
-		}
+		$('#modalContent').empty();
+		
 		var taskname = stagestate.tasktype;
 		if (taskname=="proj") {
 			this.task = new Stage(graph, stagestate);
@@ -39,21 +36,21 @@ function main() {
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph, stagestate);
 		}
-		sender.initialized(this.task);
+		sender.initialized(main.task);
 		this.task.onInitialize();
 		this.graph.setTaskNodes(this.task.nodes);
 		
 		this.graph.update();
-		$('#taskModal').modal('toggle');
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
-		$("#activeTaskText").addClass('blink');
+		//$("#activeTaskText").addClass('blink');
+		if (this.tasktray.hasIndex(this.task.taskindex)) {
+			
+		}
+		else {
+			this.tasktray.addTask(this.task.getTaskType(), this.task.taskindex);
+		}
 	}
 	
-	// Slide up panel for Active Task Tray
-	$("#activeTaskTray").click(function() {
-		$("#activeTaskPanel").slideToggle();
-	});
-
 	// Slide horizontal for sidebars
 	$(".sidebarButton").click(function() {
 		var selector = $(this).data("target");

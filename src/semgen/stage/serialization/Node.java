@@ -113,8 +113,8 @@ public class Node<T extends SemSimObject> {
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;
-		while (par!=null) {
-			par = parent.parent;
+		while (par.parent!=null) {
+			par = par.parent;
 		}
 		
 		return par;

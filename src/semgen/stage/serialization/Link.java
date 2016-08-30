@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 public class Link {
 	@Expose public String id;
 	@Expose public Number linkType;
-	@Expose public Boolean external;
+	@Expose public Number linklevel = 0;
 	@Expose public Node<?> input;
 	@Expose public Node<?> output;
 	
@@ -17,7 +17,7 @@ public class Link {
 		
 		id = inputnode.id + "-" + outputnode.id;
 		linkType = inputnode.typeIndex;
-		external = (inputnode.parent.id!=outputnode.parent.id); 
+		findLinkLevel();
 	}
 	
 	public Link(LinkableNode<?> outputnode, LinkableNode<?> inputnode, Number type) {
@@ -26,13 +26,13 @@ public class Link {
 		linkType = type;
 		id = inputnode.id + "-" + outputnode.id;
 		
-		external = (inputnode.parent.id!=outputnode.parent.id); 
+		findLinkLevel();
 	}
 	
 	public Link(Link linktocopy, LinkableNode<?> outputnode) {
 		this.id = new String(linktocopy.id);
 		this.linkType = linktocopy.linkType;
-		this.external = new Boolean(linktocopy.external);
+		this.linklevel = linktocopy.linklevel;
 		this.input = linktocopy.input;
 		this.output = outputnode;
 	}
@@ -51,5 +51,14 @@ public class Link {
 			return true;
 		}
 		return false;
+	}
+	
+	public void findLinkLevel() {
+		if (input.getFirstAncestor() != output.getFirstAncestor()) {
+			linklevel = 2;
+		}
+		else if (input.parent.id!=output.parent.id) {
+			linklevel = 1;
+		}
 	}
 }

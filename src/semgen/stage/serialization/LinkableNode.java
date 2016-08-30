@@ -27,11 +27,7 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 		this.inputs = new ArrayList<Link>(original.inputs);
 		copyLinks(original.inputs);
 	}
-	
-	public void addLink(LinkableNode<O> inputnode) {
-		inputs.add(new Link(this, inputnode));
-	}
-	
+
 	public LinkableNode(LinkableNode<O> original, Node<?> parent) {
 		super(original, parent);
 		copyLinks(original.inputs);
@@ -43,6 +39,10 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 		}
 	}
 
+	public void addLink(LinkableNode<O> inputnode) {
+		inputs.add(new Link(this, inputnode));
+	}
+	
 	//Use the provide hashmap to replace link inputs, discard any links that don't have a corresponding object
 	public void replaceLinkInputs(HashMap<LinkableNode<?>, LinkableNode<?>> dsnodemap) {
 		ArrayList<Link> linklist = new ArrayList<Link>();

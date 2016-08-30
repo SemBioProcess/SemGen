@@ -6,9 +6,11 @@ function Stage(graph, stagestate) {
 
 	var stage = this;
 	var nodes = this.nodes;
+	this.taskindex = 0;
 	
 	$("#addModelButton").show();
 	$(".stageSearch").show();
+	
 	
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
@@ -23,9 +25,10 @@ function Stage(graph, stagestate) {
 	});
 
 	//Remove the named model node
-	receiver.onRemoveModel(function(model) {
+	receiver.onRemoveModel(function(modelindex) {
+		var model = stage.getModelNodebyIndex(modelindex);
 		sender.consoleOut("Removing model " + model.name);
-		delete nodes[model];
+		delete nodes[model.id];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
 	});
@@ -89,6 +92,7 @@ Stage.prototype.onInitialize = function() {
 			stage.addModelNode(model, [DragToMerge]);
 		});
 	}
+	$('#taskModal').hide();
 }
 
 Stage.prototype.onModelSelection = function(node) {
@@ -123,3 +127,5 @@ function makeResultSet(searchResultSet) {
     resultSet.append(list);
     return resultSet;
 };
+
+Stage.prototype.getTaskType = function() { return StageTasks.PROJECT; }

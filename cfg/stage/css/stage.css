@@ -106,17 +106,21 @@ li.searchResultSet li:hover {
 	position: absolute;
 	max-width: 250px;
 	opacity: 1;
-	background-color: whitesmoke;
+	background: #eeeeee;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 2px;
+    /*background-color: whitesmoke; */
 }
 
 .panel.panel-default.sidebar a{
-
 	text-decoration: none;
 	border: none;
 }
 
 .panel-heading{
-	font-size: 16px;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .panel .subpanel ul{
@@ -125,6 +129,47 @@ li.searchResultSet li:hover {
 
 .panel .subpanel {
 	background-color: white;
+	border-style: groove;
+}
+
+.subheading {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.menulist {
+	padding: 0;
+}
+
+.panelbutton {
+	position: relative;
+	width: 100%;
+    background-color: #ffffff;
+    border: none;
+    font-size: 14px;
+    color: #000000;
+    padding: 2px;
+    text-align: center;
+    transition-duration: 0.4s;
+    text-decoration: none;
+    cursor: pointer;
+    border-style: ridge none ridge none;
+    border-size: 2px 0px 2px 0px;
+}
+
+.panelbutton:disabled {
+		background-color: #cccccc;
+		color: #111111;
+	}
+
+.panelbutton:hover {
+	background-color: #cccccc;
+
+}
+
+.panelbutton:active {
+	background-color: #aaaaaa;
+	border-style: inset;
 }
 
 #activeTaskPanel, #activeTaskTray {
@@ -159,6 +204,9 @@ li.searchResultSet li:hover {
 	animation: blinker 1s linear infinite;
 }
 
+.disabled {
+
+}
 @keyframes blinker {
 	50% { opacity: 0.0; }
 }

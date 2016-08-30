@@ -6,6 +6,7 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
@@ -21,13 +22,15 @@ import semsim.reading.ModelAccessor;
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
 	public ProjectTask() {
+		super(0);
 		_commandReceiver = new ProjectCommandReceiver();
-		state = new StageState(Task.PROJECT);
+		state = new StageState(Task.PROJECT, taskindex);
 	}
 	
 	
 	protected void removeModel(Integer index) {
 		_models.set(index, null);
+		state.updateModelNodes(_models);
 	}
 	/**
 	 * Receives commands from javascript
@@ -35,6 +38,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 *
 	 */
 	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+		
+		public void onInitialized(JSObject jstaskobj) {
+			jstask = jstaskobj;
+		}
+		
 		
 		/**
 		 * Receives the add model command
@@ -47,7 +55,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				ModelAccessor accessor = new ModelAccessor(file);
 				
 				for (ModelInfo info : _models) {
-					alreadyopen = info.accessor.equals(accessor);
+					if (info != null) {
+						alreadyopen = info.accessor.equals(accessor);
+					}
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
@@ -60,7 +70,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				_models.add(info);
+				addModeltoTask(info);
 				
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
@@ -77,16 +87,16 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					return;
 				}
 				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				_models.add(info);
-
+				
+				addModeltoTask(info);
 				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
-		public void onTaskClicked(Integer modelindex, String task) {
+		public void onTaskClicked(Double modelindex, String task) {
 			
 			// Get the model
-			ModelInfo modelInfo = _models.get(modelindex);
+			ModelInfo modelInfo = _models.get(modelindex.intValue());
 			
 			// Execute the proper task
 			switch(task) {
@@ -99,8 +109,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				case "merge":
 					break;
 				case "close":
-					removeModel(modelindex);
-					_commandSender.removeModel(modelindex);
+					removeModel(modelindex.intValue());
+					_commandSender.removeModel(modelindex.intValue());
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -135,8 +145,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onChangeTask(Number index) {
-			
+		public void onChangeTask(Double index) {
+			switchTask(index.intValue());
 		}
 		
 		public void onConsoleOut(String msg) {

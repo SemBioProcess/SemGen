@@ -11,7 +11,11 @@ function MergerTask(graph, stagestate) {
 	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
 	this.conflictsj = null; //Handle for calling java functions
-	
+	merger.mergecomplete = false;
+	merger.mergesaved = true;
+
+	this.taskindex = stagestate.taskindex;
+
 	this.semrespane;
 	this.confrespane;
 	
@@ -23,6 +27,9 @@ function MergerTask(graph, stagestate) {
 	$("#modeIndicator").append("Currently in: <strong>Merger mode</strong>");
 	$("#modeIndicator").show();
 
+	$("#addModelButton, .stageSearch").hide();
+	$("#stageModel").prop('disabled', !merger.mergecomplete);
+
 	//Create the resolution pane
 	
 	var t = document.querySelector('#mergerContent');
@@ -31,14 +38,13 @@ function MergerTask(graph, stagestate) {
 	document.querySelector('#modalContent').appendChild(clone);
 
 	this.readyforMerge = function() {
-		var ready = confrespane.readyformerge && merger.semrespane.readyformerge;
+		var ready = merger.confrespane.readyformerge && merger.semrespane.readyformerge;
 			$('.merge').prop('disabled', !ready);
-
 	}
 	
 	this.showResolutionPane = function() {
 		merger.semrespane = new SemanticResolutionPane(this);
-		confrespane = new ConflictResolutionPane(this);
+		merger.confrespane = new ConflictResolutionPane(this);
 		
 		merger.semrespane.initialize(this.nodes);
 
@@ -52,15 +58,20 @@ function MergerTask(graph, stagestate) {
 		}
 		return false;
 	}
-	
-	$("#addModelButton").hide();
-	$(".stageSearch").hide();
 
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
 		sender.requestOverlaps();
 	});
 	
+	$("#stageModel").click(function() {
+		sender.sendModeltoStage();
+	});
+
+	$("#minimize").click(function() {
+		sender.changeTask(0);
+	});
+
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 
@@ -73,7 +84,9 @@ function MergerTask(graph, stagestate) {
 		}
 		merger.addModelNode(mergedname, [DragToMerge]);
 		$('#taskModal').modal("hide");
-
+		$('.merge').prop('disabled', true);
+		merger.mergecomplete = true;
+		$("#stageModel").prop('disabled', false);
 	});
 	
 	receiver.onReceiveReply(function (reply) {
@@ -89,9 +102,9 @@ MergerTask.prototype.onInitialize = function() {
 		merger.addModelNode(model, []);
 	});
 
-	if($("#mergerIcon").length == 0	) {
-		$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
-	}
+
+	//$("#activeTaskPanel").append("<a data-toggle='modal' href='#taskModal'><img id='mergerIcon' src='../../src/semgen/icons/mergeicon2020.png' /></a>");
+
 	merger.showResolutionPane();
 	$("#mergeStep2").hide();
 	$("#nextBtn").click(function() {
@@ -111,6 +124,7 @@ MergerTask.prototype.onInitialize = function() {
 				sender.executeMerge(merger.semrespane.pollOverlaps());
 			}
 	 	});
+	$('#taskModal').modal("show");
 }
 
 MergerTask.prototype.onMinimize = function() {
@@ -124,6 +138,7 @@ MergerTask.prototype.onModelSelection = function(node) {
 
 MergerTask.prototype.onClose = function() {
 	$("#activeTaskText").removeClass('blink');
-	$("#mergerIcon").remove();
 	sender.minimizeTask(this.task);
 }
+
+MergerTask.prototype.getTaskType = function() { return StageTasks.MERGER; }

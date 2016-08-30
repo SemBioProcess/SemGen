@@ -25,6 +25,7 @@
 
 		<script src="js/links/link.js"></script>
 
+		<script src="js/taskTray.js"></script>
 		<script src="js/project/leftSidebar.js"></script>
 		<script src="js/project/rightSidebar.js"></script>
 		<script src="js/graph.js"></script>
@@ -97,22 +98,17 @@
 				</div>
 				<div id="stagemenu" class="panel-default subpanel">
 					<div id="stagekey">
-						Node key:
+						<span class="subheading">Node key:</span>
 						<ul class="visibleNodeKeys"></ul>
 						<ul class="hiddenNodeKeys"></ul>
-						Link key:
+						<span class="subheading">Link key:</span>
 						<ul class="visibleLinkKeys"></ul>
 						<ul class="hiddenLinkKeys"></ul>
 					</div>
-					<div id="modes">
-						Graph:
+					<div id="d3opts">
+						<span class="subheading">Graph Settings:</span>
 						<ul>
-							<li>
-								<input type="checkbox" id="fixedNodes"> Fix Nodes</input>
-							</li>
-							<!--   <li>
-								<input type="checkbox" class="columnView"> Column View</input>
-							</li>-->
+							<li >Fix Nodes: <input type="checkbox" id="fixedNodes"></li>
 							<li>
 								Node charge:<br><input type="number" id="nodecharge" value="-300">
 							</li>
@@ -140,15 +136,14 @@
 
 		<!-- Active Task Tray -->
 		<div id="activeTaskTray"><span id="activeTaskText">Active Tasks</span></div>
-		<div id="activeTaskPanel"></div>
+		<span id="activeTaskPanel"></span>
 
 		<div id="stage"></div>
 
-		<!--Merger modal-->
+		<!--Task modal dialog-->
 		<div id="taskModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog modal-lg">
-						<div class="modal-content" id="modalContent"></div>
-				</div>
+				<div class="modal-content" id="modalContent"></div>
 			</div>
 		</div>
 
@@ -165,12 +160,12 @@
 				<div class="mergePreview">
 					<div class="substage" id="modelAStage">
 						<div class="substageMenu">
-							<input type="checkbox" id="fixedNodesA"> Fix Nodes</input>
+							<input type="checkbox" id="fixedNodesA"> Fix Nodes
 						</div>
 					</div>
 					<div class="substage" id="modelBStage">
 						<div class="substageMenu">
-							<input type="checkbox" id="fixedNodesB"> Fix Nodes</input>
+							<input type="checkbox" id="fixedNodesB"> Fix Nodes
 						</div>
 					</div>
 				</div>
@@ -189,13 +184,13 @@
 			<div id="mergeStep2">
 				<div class="panel-group">
 					<div class="panel panel-default" id="DupSubModels">
-						<div class="panel-heading mergeStep2Heading">Duplicate Submodel Name</div>
+						<div class="panel-heading mergeStep2Heading">Duplicate submodel names - Please enter new names:</div>
 					</div>
 					<div class="panel panel-default" id="DupCodewords">
-						<div class="panel-heading mergeStep2Heading">Duplicate Codeword Name</div>
+						<div class="panel-heading mergeStep2Heading">Duplicate codeword names - Please enter new names:</div>
 					</div>
 					<div class="panel panel-default" id="UnitConf">
-						<div class="panel-heading mergeStep2Heading">Unit Conversion</div>
+						<div class="panel-heading mergeStep2Heading">Unit conflicts - Please enter unit conversions:</div>
 					</div>
 				</div>
 
@@ -252,19 +247,13 @@
 
 		<template id="dupNameResolution">
 			<div class="panel-body mergeStep2Body">
-				Enter new name for <div class="dupname"></div>:
-				<!--  <select name="modelChoice">
-                    <!--Fill name in JS-->
-				<!-- <option value="modelA"></option>
-                <option value="modelB"></option>
-            </select> -->
+				<div class="dupname"></div>:
 				<input class="newName" type="text" size="31" placeholder="No special character, no space.">
 			</div>
 		</template>
 
 		<template id="unitConversionResolution">
 			<div class="panel-body mergeStep2Body">
-				<p>Please enter unit conversion for: </p>
 				<span class="unitA"></span> = <span class="unitB"></span>
 				<select class="multiplyChoice">
 					<option value="multiply">*</option>
@@ -279,17 +268,17 @@
 				<div class="panel-heading">
 					Project
 				</div>
-				<div id="projmenu" class="panel-default subpanel">
-					<ul>
-						<li><a id="addModel" href="#">Import Models</a></li>
-						<li><a href="#">Project Models</a></li>
+				<div id="projmenu" class="panel-collapse subpanel">
+					<ul class='menulist'>
+						<li><button type="button" class="panelbutton" id="addModel" >Import Models</button></li>
+						<li class="subheading">Project Models</li>
 					</ul>
 				</div>
 				<div class="panel-heading">
 					Model Options
 				</div>
 				<div id="modelmenu" class="panel-default subpanel">
-					<div id="modelinfo" class="panel">
+					<div id="modelinfo"">
 						No model selected
 					</div>
 				</div>
@@ -299,11 +288,12 @@
 		<template id="leftMergerMenus">
 			<div id="leftmenu" class="panel-default">
 				<div class="panel subpanel">
-					<ul>
-						<li><a id="resolPanels" href="#">Resolve Overlaps</a></li>
-						<li><a id="mergeModels" class="merge" href="#">Execute Merge</a></li>
-						<li><a id="minimize" href="#">Return to Project</a></li>
-						<li><a id="quitMergerBtn" href="#">Close Merge</a></li>
+					<ul class='menulist'>
+						<li><button id="resolPanels" type="button" class="panelbutton">Resolve Overlaps</button></li>
+						<li><button id="mergeModels" class="merge panelbutton" type="button">Execute Merge</button></li>
+						<li><button id="stageModel" class="panelbutton" type="button">Add Model to Stage</button></li>
+						<li><button id="minimize" type="button" class="panelbutton">Return to Project</button></li>
+						<li><button id="quitMergerBtn" type="button" class="panelbutton">Close Merge</button></li>
 					</ul>
 				</div>
 			</div>

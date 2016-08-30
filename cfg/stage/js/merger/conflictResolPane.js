@@ -21,6 +21,7 @@ function ConflictResolutionPane(merger) {
 		clone.id = 'smcon' + smconflicts.length;
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
+		
 		clone.resolved = false;
 
 		clone.querySelector('.dupname').innerHTML = smconf.duplicate;
@@ -36,7 +37,7 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setSubmodelName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+			//clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		smconflicts.push(clone);
@@ -53,8 +54,10 @@ function ConflictResolutionPane(merger) {
 		clone.srcobj = cwconf;
 		clone.resolved = false;
 
+		clone.disable = merger.mergecomplete;
+		
 		clone.querySelector('.dupname').innerHTML = cwconf.duplicate;
-		//var choice = clone.querySelector('.newSubmodelName');
+
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
@@ -67,8 +70,9 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setCodewordName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
+		
 		
 		cwconflicts.push(clone);
 		document.querySelector('#modalContent #DupCodewords').appendChild(clone);
@@ -96,14 +100,22 @@ function ConflictResolutionPane(merger) {
 			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
 			clone.resolved = input.value != "";
 			checkAllResolved();
-			clone.querySelector('.glyphicon').style.visibility = "hidden";
+		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
-		 operatorsel.onchange = function () {
-				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
-			} 
+		
+		operatorsel.onchange = function () {
+			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
+		} 
+	 
 		unitconflicts.push(clone);
 		document.querySelector('#modalContent #UnitConf').appendChild(clone);
 
+	}
+	
+	var modifyAllPanels = function (action) {
+		unitconflicts.forEach(function(panel) {action(panel);});
+		smconflicts.forEach(function(panel) {action(panel);});
+		cwconflicts.forEach(function(panel) {action(panel);});
 	}
 	
 	this.refreshConflicts = function() {
@@ -131,6 +143,9 @@ function ConflictResolutionPane(merger) {
 			$("#DupCodewords").hide();
 		
 		checkAllResolved();
+		$('input.newName').prop('disabled', merger.mergecomplete);
+		$('input.multiplyChoice').prop('disabled', merger.mergecomplete);
+		$('input.unitConvFactor').prop('disabled', merger.mergecomplete);
 	}
 	
 	var checkAllResolved = function() {
@@ -140,15 +155,17 @@ function ConflictResolutionPane(merger) {
 		}
 		
 		while (resolved) {
-			unitconflicts.forEach(function(panel) { panelchecker(panel); });
-			smconflicts.forEach(function(panel) { panelchecker(panel); });
-			cwconflicts.forEach(function(panel) { panelchecker(panel); });
+			modifyAllPanels(function(panel) { panelchecker(panel); });
 			break;
 		}
 		
 		pane.readyformerge = resolved;
 		task.readyforMerge();
 	}
+	
+	this.afterMerge = function() {
+		modifyAllPanels(function(panel) { panel.disable(); });
+	}	
 	
 	receiver.onShowConflicts(function(data) {
 		conflictobj = data;

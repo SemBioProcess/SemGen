@@ -52,10 +52,12 @@ function SemanticResolutionPane(merger) {
 		clone.querySelector('.leftRes').innerHTML = dsradiobutton('leftNode', overlap.dsleft, clone.id);
 		clone.querySelector('.leftRes').onclick = function() {radioClick(0);};
 		
+		
 		clone.radiobtns.push(clone.querySelector('.rightRes'));
 		clone.querySelector('.rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
 		clone.querySelector('.rightRes').onclick = function() {radioClick(1);};
 		clone.querySelector('.rightRes').setAttribute("id", 'rightRes' + clone.index);
+		
 		
 		clone.radiobtns.push(clone.querySelector('.ignoreRes'));
 		clone.querySelector(".ignoreRes").innerHTML = '<label><div class="ignoreLabel">Ignore</div>' +
@@ -75,6 +77,7 @@ function SemanticResolutionPane(merger) {
 		clone.querySelector('.leftCollapsePanel > .unit').innerHTML = overlap.dsleft.unit;
 		clone.querySelector('.rightCollapsePanel > .unit').innerHTML = overlap.dsright.unit;
 		
+		clone.querySelector('input.mergeResRadio').disabled = merger.mergecomplete;
 		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
 		clone.setSelection = function(sel) {
@@ -86,6 +89,7 @@ function SemanticResolutionPane(merger) {
 		clone.poll = function() {
 			return clone.choice;
 		}
+		
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
 		
@@ -111,7 +115,7 @@ function SemanticResolutionPane(merger) {
 		
 		sender.requestOverlaps();
 	};
-	
+
 	receiver.onShowOverlaps(function(data) {
 		resolutions = [];
 		var olaps = document.querySelector('#modalContent #overlapPanels');
@@ -126,7 +130,8 @@ function SemanticResolutionPane(merger) {
 		for (i=0; i<choices.length; i++) {
 			resolutions[i].setSelection(choices[i]);
 		}
-		
+		//Disable radio buttons if the merge has been performed.
+		$('input.mergeResRadio').prop('disabled', merger.mergecomplete);
 		//This is done here to prevent synchronicity issues between this and the conflict pane
 		sender.requestConflicts();
 	});
