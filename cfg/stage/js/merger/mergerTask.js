@@ -69,6 +69,8 @@ function MergerTask(graph, stagestate) {
 	});
 
 	$("#minimize").click(function() {
+		$("#modeIndicator").empty();
+		$("#modeIndicator").hide();
 		sender.changeTask(0);
 	});
 
