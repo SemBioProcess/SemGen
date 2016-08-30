@@ -190,9 +190,10 @@ public class CellMLreader extends ModelReader {
 			
 			String mathmltext = null;
 			List<?> compMathMLelements = comp.getChildren("math", RDFNamespace.MATHML.createJdomNamespace());
-			if(compMathMLelements!=null){
+			
+			if(compMathMLelements!=null)
 				mathmltext = xmloutputter.outputString(comp.getChildren("math", RDFNamespace.MATHML.createJdomNamespace()));
-			}
+			
 
 			// Iterate through variables to find the outputs
 			ArrayList<DataStructure> allvars = new ArrayList<DataStructure>();
@@ -619,7 +620,9 @@ public class CellMLreader extends ModelReader {
 	
 	// Returns the mathML Element representing the equation for the specified variable
 	public static Element getElementForOutputVariableFromComponentMathML(String cvarname, Iterator<?> compmathmlit){
+		
 		Element childel = null;
+		
 		while(compmathmlit.hasNext()){
 			Element MathMLelement = (Element) compmathmlit.next();
 			Iterator<?> applyit = MathMLelement.getChildren("apply", RDFNamespace.MATHML.createJdomNamespace()).iterator();
@@ -635,6 +638,7 @@ public class CellMLreader extends ModelReader {
 					}
 				}
 				else if(subappel.getName().equals("ci")){
+					
 					if(subappel.getText().trim().equals(cvarname))
 						return childel;
 				}

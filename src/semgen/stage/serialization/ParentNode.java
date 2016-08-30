@@ -117,6 +117,7 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		ArrayList<Link> links = findAllLinksContaining(node);
 		ArrayList<DependencyNode> linkednodes = new ArrayList<DependencyNode>();
 		for (Link link : links) {
+			if (link.linklevel.intValue()==2) continue;
 			if (link.input == node) {
 				linkednodes.add((DependencyNode) link.output);
 			}
@@ -146,5 +147,15 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 	
 	protected void incrementType(Number type) {
 		deptypecounts[(int) type-2]++;
+	}
+	
+	public void prefixChildrenwithID(String prefix) {
+		for (LinkableNode<?> dnode : dependencies) {
+			dnode.setID(prefix  + "." + dnode.getID());
+		}
+		for (SubModelNode smn : this.childsubmodels) {
+			smn.setID(prefix + "." + smn.getID());
+			smn.prefixChildrenwithID(prefix);
+		}
 	}
 }

@@ -25,8 +25,7 @@ function PreviewGraph(id) {
 	    .charge(function (d) { return d.charge; })
 		.linkDistance(function (d) { return d.length; });
     
-    
-    
+
     var links = this.force.links();
     var nodes = this.force.nodes();
     
@@ -37,7 +36,6 @@ function PreviewGraph(id) {
 	       .attr("height", graph.h);
     }
     
-
     this.setPreviewData = function(data) {
     	previewmodel = new ModelNode(graph, data);
     	previewmodel.nodeType = NodeType.NULLNODE;
@@ -59,7 +57,7 @@ function PreviewGraph(id) {
     		if (node.nodeType == NodeType.SUBMODEL) {
     			node.showchildren = true;
     		}
-    			nodes.push(node);
+    		nodes.push(node);
     	}); 
 	
 		nodes.forEach(function (n) {	

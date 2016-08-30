@@ -93,6 +93,11 @@ public class Computation extends ComputationalModelComponent{
 		return mathML;
 	}
 	
+	/** @return Whether the MathML for this computation is set*/
+	public boolean hasMathML(){
+		return ! mathML.equals("") && mathML!=null;
+	}
+	
 	/**
 	 * @ return The physical dependency associated with this computation
 	 */

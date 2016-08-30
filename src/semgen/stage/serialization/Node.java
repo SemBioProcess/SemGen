@@ -132,4 +132,11 @@ public class Node<T extends SemSimObject> {
 	public String getSourceObjectName() {
 		return sourceobj.getName();
 	}
+	
+	public String getID() {
+		return id;
+	}
+	public void setID(String newid) {
+		id = newid;
+	}
 }

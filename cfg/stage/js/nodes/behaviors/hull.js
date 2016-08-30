@@ -48,8 +48,9 @@ function Hull(node) {
 					if(!child.isVisible())
 						return;
 
+					//if (!(child.xpos() > 0) || !(child.ypos() > 0)) throw "halt";
 					// If the child has children analyze them as well
-					if(child.children)
+					if(child.showchildren)
 						analyzeChildren(getSymbolArray(child.children));
 					
 					vertexes.push([child.xpos(), child.ypos()]);
@@ -69,8 +70,22 @@ function Hull(node) {
 			};
 			analyzeChildren(getSymbolArray(node.children));
 			
+			//If there are zero children make a hull centered on the parent node (used for merge previews)
+			if (vertexes.length ==0) {
+				
+				minX = node.xpos() - 6;
+				maxX = node.xpos() + 6;
+				minY = node.ypos() - 6;
+				maxY = node.ypos() + 6;
+				vertexes.push([minX, minY]);
+				vertexes.push([maxX, minY]);
+				vertexes.push([minX, maxY]);
+				vertexes.push([maxX, maxY]);
+
+			}
+			
 						//If there is only one visible child, make the hull a circle with a radius of 6
-			if (minX == maxX) {
+			if (vertexes.length ==1) {
 				
 				minX = minX - 6;
 				maxX = maxX + 6;
@@ -81,6 +96,10 @@ function Hull(node) {
 				vertexes.push([minX, maxY]);
 				vertexes.push([maxX, maxY]);
 
+			}
+			//If there are only two visible children, add a vertex centered between the two nodes
+			if (vertexes.length ==2) {
+				vertexes.push([(maxX + minX)/2, (maxY + minY)/2]);
 			}
 			
 			if(!vertexes.length)
@@ -93,9 +112,10 @@ function Hull(node) {
 			if (node.nodeType==NodeType.NULLNODE) return; 
 			// Center the node at the top of the hull
 			// Draw hull
-			hull.datum(d3.geom.hull(vertexes))
-				.attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-				.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
+				hull.datum(d3.geom.hull(vertexes))
+					.attr("d", function(d) { 
+						return  "M" + d.join("L") + "Z";})
+					.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 		}
 	});
 }
