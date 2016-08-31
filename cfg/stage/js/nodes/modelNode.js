@@ -8,7 +8,7 @@ ModelNode.prototype.constructor = ModelNode;
 function ModelNode (graph, srcobj) {
 	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
 	this.fixed = true;
-	this.index = srcobj.modelindex;
+	this.modelindex = srcobj.modelindex;
 	this.addClassName("modelNode");
 	this.canlink = false;
 	this.displaymode = DisplayModes.SHOWSUBMODELS.id;

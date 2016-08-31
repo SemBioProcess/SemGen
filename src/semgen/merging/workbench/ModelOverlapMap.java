@@ -20,7 +20,7 @@ public class ModelOverlapMap {
 	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
 	private int slndomcnt = 0;
 	
-	protected static enum maptype {
+	public static enum maptype {
 		exactsemaoverlap("exact semantic match"), 
 		manualmapping("manual mapping"),
 		automapping("automated solution domain mapping");
@@ -65,6 +65,11 @@ public class ModelOverlapMap {
 	
 	public Set<String> getIdenticalSubmodelNames(){
 		return identicalsubmodelnames;
+	}
+	
+	public void removeOverlap(int index) {
+		dsmap.remove(index);
+		maptypelist.remove(index);
 	}
 	
 	public Set<String> getIdenticalNames(){

@@ -80,6 +80,11 @@ function SemanticResolutionPane(merger) {
 		clone.querySelector('input.mergeResRadio').disabled = merger.mergecomplete;
 		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
+		if (overlap.custom) {
+			clone.querySelector('.removeMappingBtn').style.display = 'inherit';
+			clone.querySelector('.removeMappingBtn').setAttribute("onclick", 'sender.removeCustomOverlap(' + clone.index + ');');
+		}
+
 		clone.setSelection = function(sel) {
 			if (sel==-1) return;
 			clone.choice = sel;
@@ -118,10 +123,8 @@ function SemanticResolutionPane(merger) {
 
 	receiver.onShowOverlaps(function(data) {
 		resolutions = [];
-		var olaps = document.querySelector('#modalContent #overlapPanels');
-		while (olaps.firstChild) {
-			olaps.removeChild(olaps.firstChild);
-		}
+		//var olaps = document.querySelector('#modalContent #overlapPanels');
+		$('#modalContent #overlapPanels').contents().remove();
 		
 		data.forEach(function(d) {
 			pane.addResolutionPanel(d);	

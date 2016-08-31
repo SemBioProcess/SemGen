@@ -149,6 +149,11 @@
     display: inline-block;
     font-size: 11px;
 }
+.overlapButtons {
+	width: 68px;
+    float: center;
+    display: inline-block;
+}
 
 .rightCollapsePanel {
     width: 350px;
@@ -178,6 +183,10 @@
 .dupname {
     font-weight: bold;
     display: inline-block;
+}
+
+.removeMappingBtn {
+	margin-top: 5px;
 }
 
 .dupNameResolution > .panel-body {

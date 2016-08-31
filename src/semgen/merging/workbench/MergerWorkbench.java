@@ -33,7 +33,7 @@ public class MergerWorkbench extends Workbench {
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
 	public enum MergeEvent {
-		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingadded, mergecompleted;
+		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingevent, mergecompleted;
 		
 		String message = null;
 		
@@ -229,6 +229,12 @@ public class MergerWorkbench extends Workbench {
 		return addManualCodewordMapping(index1,index2);
 	}
 	
+	public void removeManualCodewordMapping(int overlapindex) {
+		overlapmap.removeOverlap(overlapindex);
+		setChanged();
+		notifyObservers(MergeEvent.mappingevent);
+	}
+	
 	private int getExposedCodewordIndexbyName(int modind, String cdwd) {
 		for (DataStructure ds : exposeddslist.get(modind)) {
 			if (ds.getName().equals(cdwd)) {
@@ -255,7 +261,7 @@ public class MergerWorkbench extends Workbench {
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
 		addCodewordMapping(ds1, ds2, maptype.manualmapping);
 		setChanged();
-		notifyObservers(MergeEvent.mappingadded);
+		notifyObservers(MergeEvent.mappingevent);
 		return null;
 	}
 	

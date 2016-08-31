@@ -18,6 +18,7 @@ import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.MergerWorkbench;
 import semgen.merging.workbench.MergerWorkbench.MergeEvent;
+import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
@@ -32,6 +33,7 @@ import semsim.reading.ModelAccessor;
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
+	
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	protected MergeConflicts conflicts = new MergeConflicts();
 	
@@ -151,12 +153,24 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			_models.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode);
 		}
-		if (arg == MergeEvent.mappingadded) {	
+		if (arg == MergeEvent.mappingevent) {	
 			generateOverlapDescriptors();
 			getOverlappingNodes();
+			updateOverlaps();
 		}
 	}
 	
+	protected void updateOverlaps() {
+		ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
+		int i = 0;
+		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
+			Overlap overlap = new Overlap(dsd);
+			overlap.custom = workbench.getMapPairType(i).equals(maptype.manualmapping.getLabel());
+			overlaps.add(overlap);
+			i++;
+		}
+		_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
+	}
 
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
@@ -170,11 +184,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onRequestOverlaps() {
-			ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
-			for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
-				overlaps.add(new Overlap(dsd));
-			}
-			_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
+			updateOverlaps();
 		}
 		
 		public void onChangeTask(Double index) {
@@ -187,19 +197,16 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		//Model id has to be included because we don't know the which model's node is being passed in
-		public void onCreateCustomOverlap(String nodes, Double nodemodelindex) {
+		public void onCreateCustomOverlap(String nodes) {
 			String[] nodestolink = nodes.split(",");
-			String firstnodeid = "";
-			String secondnodeid = "";
-			if (nodemodelindex.intValue()==0) {
-				firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
-				secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
-			}
-			else {
-				firstnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
-				secondnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
-			}
+			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
+			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
+			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
+		}
+		
+		public void onRemoveCustomOverlap(Double customindex) {
+			workbench.removeManualCodewordMapping(customindex.intValue());
 		}
 
 		public void onExecuteMerge(JSArray choicesmade) {
@@ -298,6 +305,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	public class Overlap {
 		@Expose public StageDSDescriptor dsleft;
 		@Expose public StageDSDescriptor dsright; 
+		@Expose public Boolean custom = false;
 		
 		protected Overlap(Pair<DataStructureDescriptor, DataStructureDescriptor> dsdesc) {
 			dsleft = new StageDSDescriptor(dsdesc.getLeft());

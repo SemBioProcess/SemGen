@@ -52,9 +52,7 @@ function CreateCustomOverlap(_node) {
 					x: _node.xpos(),
 					y: _node.ypos(),
 				};
-				
-				
-				
+
 			});
 		    _node.drag.push(function (d) {
 		        
@@ -95,10 +93,15 @@ function CreateCustomOverlap(_node) {
 		        	}
 				});
 		        if(mergeNode) {
-		        	var modelstomerge =  _node.id + "," + mergeNode.id;
-		        	var modelindex = _node.getRootParent().index;
+		        	var modelstomerge;
+		        	if (_node.getRootParent().modelindex==0) {
+		        		modelstomerge =  _node.id + "," + mergeNode.id;
+		        	}
+		        	else {
+		        		modelstomerge =  mergeNode.id + "," + _node.id;
+		        	}
 		        	$('.merge').prop('disabled', 'true');
-		        	sender.createCustomOverlap(modelstomerge, modelindex);
+		        	sender.createCustomOverlap(modelstomerge);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location
@@ -107,9 +110,7 @@ function CreateCustomOverlap(_node) {
 		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        	
 		        }
-		        
-		        
-		        
+
 		    });	
 };
 
