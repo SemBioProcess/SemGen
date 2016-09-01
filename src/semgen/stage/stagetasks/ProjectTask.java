@@ -153,7 +153,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			System.out.println(msg);
 		}
 		
-		public void onConsoleOut(Number msg) {
+		public void onConsoleOut(Double msg) {
 			System.out.println(msg.toString());
 		}
 		

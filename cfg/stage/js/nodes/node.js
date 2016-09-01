@@ -175,6 +175,7 @@ Node.prototype.tickHandler = function (element, graph) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
 		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
 	}
+	
 	root.attr("transform", "translate(" + this.xpos() + "," + this.ypos() + ")");
 
 	$(this).triggerHandler('postTick');

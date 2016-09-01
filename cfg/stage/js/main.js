@@ -50,12 +50,20 @@ function main() {
 			this.tasktray.addTask(this.task.getTaskType(), this.task.taskindex);
 		}
 	}
+	$(".sidebar").contents().hide();
 	
 	// Slide horizontal for sidebars
 	$(".sidebarButton").click(function() {
 		var selector = $(this).data("target");
 		$(selector).toggleClass('in');
 		$(this).text($(this).text() == '»' ? '«' : '»');
+		//If the sidebar is collapsed, hide contents
+		if ($(selector).hasClass("in")) {
+			$(selector).contents().show();
+		}
+		else {
+			$(selector).contents().hide();
+		}
 	});
 }
 

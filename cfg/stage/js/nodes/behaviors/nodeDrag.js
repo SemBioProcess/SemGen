@@ -22,9 +22,29 @@ function NodeDrag(_node) {
 			})
 		    .on("drag", function (d, i) {
 		    	if (!_node.showchildren) {
-			        _node.px += d3.event.dx;
+		    		var posx =  _node.xpos() + d3.event.dx;
+		    		var posy = _node.ypos() + d3.event.dy;
+		    		_node.px += d3.event.dx;
 			        _node.py += d3.event.dy;
-			        _node.setLocation( _node.xpos() + d3.event.dx, _node.ypos() + d3.event.dy); 
+		    		if (posx > _node.graph.w-15 ) {
+		    			posx = _node.graph.w-15;
+		    			_node.px = posx;
+		    		}
+		    		else if (posx < 15 ) {
+		    			posx = 15;
+		    			_node.px = posx;
+		    		}
+		    		if (posy > _node.graph.h-30 ) {
+		    			posy = _node.graph.h-30;
+		    			_node.py = posy;
+		    		}
+		    		else if (posy < 15 ) {
+		    			posy = 15;
+		    			_node.py = posy;
+		    		}
+
+
+			        _node.setLocation(posx, posy); 
 		    	}
 		    	
 		    	_node.drag.forEach(function(behavior) {

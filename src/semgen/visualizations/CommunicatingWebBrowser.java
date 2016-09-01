@@ -239,9 +239,21 @@ public class CommunicatingWebBrowser extends Browser {
 		}
 	}
 	
-	
-	private class GenericReceiver extends CommunicatingWebBrowserCommandReceiver {
+	//This receiver is for initialization purposes; it just contains functions for error output
+	public class GenericReceiver extends CommunicatingWebBrowserCommandReceiver {
 		protected GenericReceiver() {}
+		
+		public void onConsoleOut(String msg) {
+			System.out.println(msg);
+		}
+		
+		public void onConsoleOut(Double msg) {
+			System.out.println(msg.toString());
+		}
+		
+		public void onConsoleOut(boolean msg) {
+			System.out.println(msg);
+		}
 	}
 	
 	private interface DummySender extends SemGenWebBrowserCommandSender {}

@@ -83,6 +83,7 @@ function SemanticResolutionPane(merger) {
 		if (overlap.custom) {
 			clone.querySelector('.removeMappingBtn').style.display = 'inherit';
 			clone.querySelector('.removeMappingBtn').setAttribute("onclick", 'sender.removeCustomOverlap(' + clone.index + ');');
+			clone.querySelector('.removeMappingBtn').disabled = merger.mergecomplete;
 		}
 
 		clone.setSelection = function(sel) {
