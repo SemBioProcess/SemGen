@@ -42,8 +42,6 @@ function NodeDrag(_node) {
 		    			posy = 15;
 		    			_node.py = posy;
 		    		}
-
-
 			        _node.setLocation(posx, posy); 
 		    	}
 		    	

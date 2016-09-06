@@ -95,12 +95,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				semsimmodel.getSourceModelType()==ModelType.CELLML_MODEL ||
 				semsimmodel.getSourceModelType()==ModelType.MML_MODEL_IN_PROJ);
 	}
-	
-	@Override
-	public boolean getModelSaved(){
-		return modelsaved;
-	}
-	
+
 	@Override
 	public void setModelSaved(boolean val){
 		modelsaved = val;

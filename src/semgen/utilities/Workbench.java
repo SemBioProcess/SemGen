@@ -14,10 +14,12 @@ import java.util.Observer;
 import semsim.reading.ModelAccessor;
 
 public abstract class Workbench extends Observable implements Observer, PropertyChangeListener{
+	protected boolean modelsaved = true;
+	
 	public abstract void initialize();
 	
-	public boolean getModelSaved() {
-		return false;
+	public boolean getModelSaved(){
+		return modelsaved;
 	}
 	
 	public abstract ModelAccessor saveModel();

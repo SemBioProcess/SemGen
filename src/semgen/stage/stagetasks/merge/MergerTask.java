@@ -151,7 +151,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), modelfile, _models.size());
 			_models.add(mergedmodel);
-			_commandSender.mergeCompleted(mergedmodel.modelnode);
+			_commandSender.mergeCompleted(mergedmodel.modelnode, workbench.getModelSaved());
 		}
 		if (arg == MergeEvent.mappingevent) {	
 			generateOverlapDescriptors();
@@ -276,6 +276,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		public void onSendModeltoStage() {
 			stagemodelqueue.add(_models.get(2));
+		}
+		
+		public void onSave() {
+			if (workbench.saveModel() != null) _commandSender.saved(true);
+		}
+		
+		public void onClose() {
+			
 		}
 		
 		public void onConsoleOut(String msg) {
@@ -427,5 +435,5 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			conflicts.dupecodewords.get(index).setReplacementName(rightmodel, name);
 		}
 		
-	}
+	} 
 }

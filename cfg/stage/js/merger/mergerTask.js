@@ -26,7 +26,7 @@ function MergerTask(graph, stagestate) {
 
 	$("#addModelButton, .stageSearch").hide();
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
-	
+	merger.setSavedState(true);
 	//Create the resolution pane
 	
 	var t = document.querySelector('#mergerContent');
@@ -69,12 +69,16 @@ function MergerTask(graph, stagestate) {
 		sender.changeTask(0);
 	});
 	
+	$("#saveModel").click(function() {
+		sender.save();
+	});
+	
 	// Quit merger
 	$("#quitMergerBtn").click(function() {
 
 	});
 
-	receiver.onMergeCompleted(function(mergedname) {
+	receiver.onMergeCompleted(function(mergedname, wassaved) {
 		for (x in merger.nodes) {
 			merger.nodes[x].showchildren = false;
 			merger.nodes[x].hidden=true;
@@ -82,16 +86,25 @@ function MergerTask(graph, stagestate) {
 		merger.addModelNode(mergedname, [DragToMerge]);
 		$('#taskModal').modal("hide");
 		$('.merge').prop('disabled', true);
+		
 		merger.mergecomplete = true;
+		merger.setSavedState(wassaved);
 		$("#stageModel").prop('disabled', false);
 	});
 	
 	receiver.onReceiveReply(function (reply) {
 		CallWaiting(reply);
 	});
+	
+	receiver.onSaved(function(wassaved) {
+		merger.setSavedState(wassaved);
+	});
 
 }
-
+MergerTask.prototype.setSavedState = function (issaved) {
+	Task.prototype.setSavedState.call(issaved);
+	$('#saveModel').prop('disabled', issaved);
+}
 MergerTask.prototype.onInitialize = function() {
 	var merger = this;
 	
@@ -119,6 +132,7 @@ MergerTask.prototype.onInitialize = function() {
 			}
 	 	});
 	$('#taskModal').modal("show");
+
 }
 
 MergerTask.prototype.onMinimize = function() {
@@ -131,8 +145,7 @@ MergerTask.prototype.onModelSelection = function(node) {
 }
 
 MergerTask.prototype.onClose = function() {
-	$("#activeTaskText").removeClass('blink');
-	sender.minimizeTask(this.task);
+
 }
 
 MergerTask.prototype.getTaskType = function() { return StageTasks.MERGER; }

@@ -1,5 +1,7 @@
 package semgen.merging.workbench;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class MergerWorkbench extends Workbench {
@@ -326,15 +329,10 @@ public class MergerWorkbench extends Workbench {
 		
 		return null;
 	}
-	
-	@Override
-	public boolean getModelSaved() {
-		return false;
-	}
 
 	@Override
 	public void setModelSaved(boolean val) {
-		
+		modelsaved = val;
 	}
 
 	@Override
@@ -351,8 +349,17 @@ public class MergerWorkbench extends Workbench {
 
 	@Override
 	public ModelAccessor saveModel() {
-		return null;
-
+		if (modelaccessorlist.size() >= 3) {
+			URI fileuri = modelaccessorlist.get(2).getFileThatContainsModelAsURI();
+			
+			if(fileuri != null){
+				File file = new File(fileuri);
+				SaveSemSimModel.writeToFile(mergedmodel,  modelaccessorlist.get(2), file, ModelType.SEMSIM_MODEL);
+				setModelSaved(true);
+				return  modelaccessorlist.get(2);
+			}
+		}
+		return saveModelAs();		
 	}
 
 	@Override
@@ -362,10 +369,15 @@ public class MergerWorkbench extends Workbench {
 		
 		if (ma != null) {
 			mergedmodel.setName(ma.getModelName());
+			
 			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
-			return ma;
+			if (modelaccessorlist.size() != 3) {
+				modelaccessorlist.add(null);
+			}
+			modelaccessorlist.set(2, ma);
 		}
-		return null;
+		this.modelsaved = ma!=null;
+		return ma;
 	}
 	
 	private void notifyModelListUpdated() {

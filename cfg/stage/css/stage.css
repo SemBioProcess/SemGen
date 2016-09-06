@@ -16,7 +16,7 @@ body {
 	margin: 5px;
 	width:25px;
 	height:25px;
-	top: 15px;
+	top: 10px;
 	left: 10px;
 	line-height:25px;
 	font-size: 25px;
@@ -29,6 +29,30 @@ body {
 }
 
 #addModelButton:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
+#saveButton {
+	position: absolute;
+	margin: 5px;
+	width:25px;
+	height:25px;
+	top: 10px;
+	left: 45px;
+	padding-left: 1px;
+	padding-top: 2px;
+	line-height:25px;
+	font-size: 15px;
+	border: hidden;
+	border-radius:250px;
+	color:#ffffff;
+	text-align:center;
+	background:#3b5998;
+	opacity: .8;
+}
+
+#saveButton:hover:enabled {
 	opacity: 1;
 	cursor: pointer;
 }
@@ -46,7 +70,7 @@ body {
 	position: absolute;
 	margin: 1px;
 	top: 6px;
-	left: 50px;
+	left: 80px;
 	padding: 10px;
 	opacity: 1;
 }

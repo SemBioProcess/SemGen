@@ -176,5 +176,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	public Class<ProjectWebBrowserCommandSender> getSenderInterface() {
 		return ProjectWebBrowserCommandSender.class;
 	}
+
+
+	@Override
+	public void closeTask() {
+		
+	}
 	
 }

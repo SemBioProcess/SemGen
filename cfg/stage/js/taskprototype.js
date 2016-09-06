@@ -10,6 +10,7 @@ function Task(graph, stagestate) {
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
+	this.saved = true;
 	
 	var task = this;
 	$("#leftSidebar").empty();
@@ -92,6 +93,19 @@ function Task(graph, stagestate) {
 		
 		node.highlight();
 	};
+	
+	this.setSavedState(false);
+}
+
+Task.prototype.setSavedState = function(issaved) {
+	this.saved = issaved;
+	if (issaved) {
+		$("#saveButton").innerHTML = '<span class="glyphicon glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>';
+	}
+	else {
+		$("#saveButton").innerHTML = '<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>';
+	}
+	$("#saveButton").prop('disabled', issaved);
 }
 
 Task.prototype.onInitialize = function() {}
