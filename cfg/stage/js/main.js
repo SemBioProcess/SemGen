@@ -50,6 +50,10 @@ function main() {
 			this.tasktray.addTask(this.task.getTaskType(), this.task.taskindex);
 		}
 	}
+	
+	this.closeTask = function(taskindex) {
+		this.tasktray.removeTask(taskindex);
+	}
 	$(".sidebar").contents().hide();
 	
 	// Slide horizontal for sidebars

@@ -282,8 +282,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			if (workbench.saveModel() != null) _commandSender.saved(true);
 		}
 		
+		public void onSaveandClose() {
+			if (workbench.saveModel() != null) {
+				closeTask();
+			}
+		}
+		
 		public void onClose() {
-			
+				closeTask();
 		}
 		
 		public void onConsoleOut(String msg) {

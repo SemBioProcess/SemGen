@@ -35,7 +35,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		}
 	};
 	
-	public enum StageTaskEvent {SWITCHTASK, NEWTASK, CLOSETASK};
+	public enum StageTaskEvent {SWITCHTASK, NEWTASK, CLOSETASK, CLOSEPROJECT};
 	
 	public StageTask(int index) {
 		taskindex = index;
@@ -111,6 +111,8 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	public abstract Class<TSender> getSenderInterface();
 	
 	public void closeTask() {
+		
+		setChanged();
 		this.notifyObservers(StageTaskEvent.CLOSETASK);
 		
 	}
@@ -121,5 +123,13 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 
 	public StageState getStageState() {
 		return state;
+	}
+	
+	public int getTaskIndex() {
+		return taskindex;
+	}
+	
+	public void setTaskIndex(int newindex) {
+		taskindex = newindex;
 	}
 }

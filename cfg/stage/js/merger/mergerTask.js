@@ -74,8 +74,22 @@ function MergerTask(graph, stagestate) {
 	});
 	
 	// Quit merger
-	$("#quitMergerBtn").click(function() {
-
+	$("#quitMergerBtn").click(function(e) {
+		if (!merger.mergesaved) {
+			e.preventDefault();
+            var dialog = $('<p>Save merged model?</p>').dialog({
+                buttons: {
+                    "Yes": function() {sender.saveandClose();},
+                    "No":  function() {sender.close();},
+                    "Cancel":  function() {
+                        dialog.dialog('close');
+                    }
+                }
+            });
+		}
+		else {
+			sender.close();
+		}
 	});
 
 	receiver.onMergeCompleted(function(mergedname, wassaved) {

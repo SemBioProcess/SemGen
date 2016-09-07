@@ -10,6 +10,7 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.stage.StageWorkbench.StageEvent;
+import semgen.stage.stagetasks.StageTask.StageTaskEvent;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -119,6 +120,13 @@ public class StageTab extends SemGenTab implements Observer {
 			try {
 				browser.changeTask(_workbench.getCommandSenderInterface(), _workbench.getCommandReceiver(), _workbench.getActiveStageState());
 				_workbench.setCommandSender(browser.getCommandSenderGenerator());
+			} catch (InvalidNameException e) {
+				e.printStackTrace();
+			}
+		}
+		if (arg == StageTaskEvent.CLOSETASK) {
+			try {
+				browser.closeTask(_workbench.getActiveTaskIndex());
 			} catch (InvalidNameException e) {
 				e.printStackTrace();
 			}

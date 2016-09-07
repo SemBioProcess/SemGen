@@ -50,6 +50,11 @@ public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 		executeJavascriptAndHandleErrors(javascript);
 	}
 	
-	
+	public void closeTask(int taskindex) throws InvalidNameException {
+		
+		String javascript = "main.closeTask(" + taskindex + ");";
+		
+		executeJavascriptAndHandleErrors(javascript);
+	}
 
 }

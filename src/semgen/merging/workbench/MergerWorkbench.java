@@ -376,7 +376,7 @@ public class MergerWorkbench extends Workbench {
 			}
 			modelaccessorlist.set(2, ma);
 		}
-		this.modelsaved = ma!=null;
+		this.modelsaved = (ma!=null);
 		return ma;
 	}
 	

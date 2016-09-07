@@ -61,11 +61,20 @@ function TaskTray() {
 		}
 	}
 	
+	this.removeTask = function(index) {
+		opentasks[index] = null;
+		this.refresh();
+	}
+	
 	this.hasIndex = function(index) {
 		for (x in opentasks) {
-			if (opentasks[x].indexMatches(index)) {
-				return true;
+			if (opentasks[x] != null) {
+				if (opentasks[x].indexMatches(index)) {
+					return true;
+				}
 			}
+				
+			
 		}
 		return false;
 	}

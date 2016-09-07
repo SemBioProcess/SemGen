@@ -59,7 +59,9 @@ public class StageWorkbench extends Workbench {
 		activetask = tasks.get(task);
 		if (task==0) {
 			for (StageTask<?> stagetask : tasks) {
-				activetask.addModelstoTask(stagetask.getQueuedModels());
+				if (stagetask!= null) {
+					activetask.addModelstoTask(stagetask.getQueuedModels());
+				}
 			}
 		}
 		this.setChanged();
@@ -88,7 +90,7 @@ public class StageWorkbench extends Workbench {
 
 	@Override
 	public void setModelSaved(boolean val) {
-
+		
 	}
 
 	@Override
@@ -109,6 +111,9 @@ public class StageWorkbench extends Workbench {
 		if (arg1 == StageTaskEvent.SWITCHTASK) {
 			setActiveTask(activetask.getIndexofTasktoLoad());
 		}
+		if (arg1 == StageTaskEvent.CLOSETASK) {
+			closeTask();
+		}
 	}
 	
 	private class CommandInterfaceSetter<T extends SemGenWebBrowserCommandSender> {
@@ -123,5 +128,20 @@ public class StageWorkbench extends Workbench {
 	
 	public StageState getActiveStageState() {		
 		return activetask.getStageState();		
+	}
+	
+	public void closeTask() {
+		tasks.set(activetask.getTaskIndex(), null);
+		
+		//Remove task icon
+		setChanged();
+		this.notifyObservers(StageTaskEvent.CLOSETASK);
+		activetask.deleteObservers();
+		//set active task
+		this.setActiveTask(0);
+	}
+
+	public int getActiveTaskIndex() {
+		return activetask.getTaskIndex();
 	}
 }
