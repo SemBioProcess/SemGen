@@ -120,7 +120,7 @@ MergerTask.prototype.onInitialize = function() {
 	});
 	
 
-	$(".merge").prop('disabled', true)
+	$(".merge").prop('disabled', true) // Change it to false to enable Merge button?
 		.click(function() {
 			if (!$(".merge").prop('disabled')) {
 				sender.executeMerge(merger.semrespane.pollOverlaps());
