@@ -12,7 +12,6 @@ function MergerTask(graph, stagestate) {
 	var merger = this;
 	this.conflictsj = null; //Handle for calling java functions
 	merger.mergecomplete = false;
-	merger.mergesaved = true;
 	
 	this.taskindex = stagestate.taskindex;
 	
@@ -26,7 +25,6 @@ function MergerTask(graph, stagestate) {
 
 	$("#addModelButton, .stageSearch").hide();
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
-	merger.setSavedState(true);
 	//Create the resolution pane
 	
 	var t = document.querySelector('#mergerContent');
@@ -75,17 +73,12 @@ function MergerTask(graph, stagestate) {
 	
 	// Quit merger
 	$("#quitMergerBtn").click(function(e) {
-		if (!merger.mergesaved) {
+		if (!merger.isSaved()) {
 			e.preventDefault();
-            var dialog = $('<p>Save merged model?</p>').dialog({
-                buttons: {
-                    "Yes": function() {sender.saveandClose();},
-                    "No":  function() {sender.close();},
-                    "Cancel":  function() {
-                        dialog.dialog('close');
-                    }
-                }
-            });
+            var r = confirm("Close without saving?");
+            if (r) {
+            	sender.close();
+            }
 		}
 		else {
 			sender.close();
@@ -115,17 +108,22 @@ function MergerTask(graph, stagestate) {
 	});
 
 }
+
 MergerTask.prototype.setSavedState = function (issaved) {
 	Task.prototype.setSavedState.call(issaved);
+	this.setSaved(this.isSaved());
 	$('#saveModel').prop('disabled', issaved);
 }
+
+//Everything that needs to be called after the stage and graph are set up.
 MergerTask.prototype.onInitialize = function() {
 	var merger = this;
 	
 	merger.state.models.forEach(function(model) {
 		merger.addModelNode(model, []);
 	});
-
+	merger.setSavedState(true);
+	
 	merger.showResolutionPane();
 	$("#mergeStep2").hide();
 	$("#nextBtn").click(function() {
@@ -146,7 +144,7 @@ MergerTask.prototype.onInitialize = function() {
 			}
 	 	});
 	$('#taskModal').modal("show");
-
+	
 }
 
 MergerTask.prototype.onMinimize = function() {

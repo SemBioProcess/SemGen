@@ -92,7 +92,9 @@ Stage.prototype.onInitialize = function() {
 			stage.addModelNode(model, [DragToMerge]);
 		});
 	}
+	
 	$('#taskModal').hide();
+	this.setSavedState(true);
 }
 
 Stage.prototype.onModelSelection = function(node) {

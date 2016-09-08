@@ -10,8 +10,7 @@ function Task(graph, stagestate) {
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
-	this.saved = true;
-	
+
 	var task = this;
 	$("#leftSidebar").empty();
 	
@@ -23,13 +22,13 @@ function Task(graph, stagestate) {
 			modelNode.addBehavior(b);
 		});
 		
-		this.nodes[model.id] = modelNode;
+		task.nodes[model.id] = modelNode;
 		task.graph.update();
 
 	};
 	
 	//Get a model node
-	this.getModelNode = function(model) {
+	task.getModelNode = function(model) {
 		var modelNode = this.nodes[model];
 		if(!modelNode)
 			throw "model doesn't exist";
@@ -52,17 +51,25 @@ function Task(graph, stagestate) {
 		return modelNode;
 	};
 	
+	task.isSaved =function() {
+		return this.saved;
+	}
+	
+	task.setSaved = function(savestate) {
+		this.saved = savestate;
+	}
+	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
 		sender.taskClicked(parseInt(this.getFirstSelectedModel().index), taskid);
 	};
 	
-	this.doModelAction = function(action) {
+	task.doModelAction = function(action) {
 		action(this.getFirstSelectedModel());
 		task.graph.update();
 	}
 	
-	this.getFirstSelectedModel = function () {
+	task.getFirstSelectedModel = function () {
 		if (this.selectedModels.length > 0) {
 			return this.selectedModels[0];
 		}
@@ -93,8 +100,7 @@ function Task(graph, stagestate) {
 		
 		node.highlight();
 	};
-	
-	this.setSavedState(false);
+
 }
 
 Task.prototype.setSavedState = function(issaved) {
