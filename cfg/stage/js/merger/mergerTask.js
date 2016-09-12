@@ -126,9 +126,7 @@ MergerTask.prototype.onInitialize = function() {
 	merger.showResolutionPane();
 	$("#mergeStep2").hide();
 	
-	if (!merger.confrespane.hasConflicts()) {
-		$("#nextBtn").hide();
-	}
+
 	$("#nextBtn").click(function() {
 		$("#mergeStep1").hide();
 		$("#mergeStep2").slideDown();
@@ -148,6 +146,7 @@ MergerTask.prototype.onInitialize = function() {
 	 	});
 	$('#taskModal').modal("show");
 	
+
 }
 
 MergerTask.prototype.onMinimize = function() {

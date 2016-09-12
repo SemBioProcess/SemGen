@@ -104,8 +104,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		conflicts.clearConflicts();
 		ArrayList<Boolean> units = workbench.getUnitOverlaps();
 		for (int i=0; i<units.size(); i++) {
-			if (units.get(i)) {
-				conflicts.unitconflicts.add(new UnitConflict(dsdescriptors.get(i), i));
+			if (!units.get(i)) {
+				
+				conflicts.unitconflicts.add(new UnitConflict(workbench.getDSDescriptors(i), i));
 			}
 		}
 		HashMap<String, String> smoverlaps = workbench.createIdenticalSubmodelNameMap();

@@ -142,6 +142,10 @@ function ConflictResolutionPane(merger) {
 		if(cwconflicts.length == 0)
 			$("#DupCodewords").hide();
 		
+		if (!this.hasConflicts()) {
+			$("#nextBtn").hide();
+		}
+		
 		checkAllResolved();
 		$('input.newName').prop('disabled', merger.mergecomplete);
 		$('input.multiplyChoice').prop('disabled', merger.mergecomplete);
@@ -168,7 +172,7 @@ function ConflictResolutionPane(merger) {
 	}	
 	
 	this.hasConflicts = function() {
-		return unitconflicts.length >0 && smconflicts.length >0 && cwconflicts.length >0;
+		return unitconflicts.length >0 || smconflicts.length >0 || cwconflicts.length >0;
 	}
 	
 	receiver.onShowConflicts(function(data) {

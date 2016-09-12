@@ -162,9 +162,7 @@ public class ModelOverlapMap {
 		}
 		return unitmatchlist;
 	}
-	
 
-	
 	public int getSolutionDomainCount() {
 		return slndomcnt;
 	}
