@@ -40,9 +40,11 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		for (DataStructure ads : sourceobj.getAssociatedDataStructures()) {
 			if (bounds.contains(ads)) continue;
 			if (!depnodemap.containsKey(ads)) {
-				DependencyNode dnode = depnodemap.put(ads, new DependencyNode(ads, this));
+				DependencyNode dnode = new DependencyNode(ads, this);
+				depnodemap.put(ads, dnode);
 				incrementType(dnode.typeIndex);
 				dependencies.add(dnode);
+
 			}
 		}
 		
