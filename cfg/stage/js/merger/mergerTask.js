@@ -42,7 +42,6 @@ function MergerTask(graph, stagestate) {
 		merger.confrespane = new ConflictResolutionPane(this);
 		
 		merger.semrespane.initialize(this.nodes);
-
 	}
 	
 	this.isNameAlreadyUsed = function (name) {
@@ -126,6 +125,10 @@ MergerTask.prototype.onInitialize = function() {
 	
 	merger.showResolutionPane();
 	$("#mergeStep2").hide();
+	
+	if (!merger.confrespane.hasConflicts()) {
+		$("#nextBtn").hide();
+	}
 	$("#nextBtn").click(function() {
 		$("#mergeStep1").hide();
 		$("#mergeStep2").slideDown();

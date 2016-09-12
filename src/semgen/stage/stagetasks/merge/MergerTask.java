@@ -88,7 +88,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		overlaps.clear();
 		ArrayList<Pair<DataStructure,DataStructure>> dsoverlaps = workbench.getOverlapPairs();
 		
-		for (Pair<DataStructure,DataStructure> overlap : dsoverlaps) {
+		int n = workbench.getSolutionDomainCount();
+		for (int i = n; i < (workbench.getMappingCount()); i++) {
+			Pair<DataStructure,DataStructure> overlap = dsoverlaps.get(i);
 			DependencyNode left = _models.get(0).modelnode.getDependencyNode(overlap.getLeft());
 			DependencyNode right = _models.get(1).modelnode.getDependencyNode(overlap.getRight());
 			
@@ -162,7 +164,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	protected void updateOverlaps() {
 		ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
-		int i = 0;
+		int i = workbench.getSolutionDomainCount();
 		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
 			Overlap overlap = new Overlap(dsd);
 			overlap.custom = workbench.getMapPairType(i).equals(maptype.manualmapping.getLabel());
@@ -246,19 +248,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		}
 
-		public void onQueryModel(Integer modelindex, String query) {
-			ModelInfo modelInfo = _models.get(modelindex);
-			switch (query) {
-			case "hassubmodels":
-				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
-				_commandSender.receiveReply(hassubmodels.toString());
-				break;
-			case "hasdependencies":
-				Boolean hasdependencies = !modelInfo.Model.getAssociatedDataStructures().isEmpty();
-				_commandSender.receiveReply(hasdependencies.toString());
-				break;
-			}
-		}
 		public void onTaskClicked(String modelName, String task) {
 			onTaskClicked(modelName, task, null);
 		}

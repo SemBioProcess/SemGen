@@ -167,9 +167,15 @@ function ConflictResolutionPane(merger) {
 		modifyAllPanels(function(panel) { panel.disable(); });
 	}	
 	
+	this.hasConflicts = function() {
+		return unitconflicts.length >0 && smconflicts.length >0 && cwconflicts.length >0;
+	}
+	
 	receiver.onShowConflicts(function(data) {
 		conflictobj = data;
 		pane.refreshConflicts();
 	});
+	
+
 	
 }
