@@ -43,12 +43,13 @@ public class MergeChoice {
 					link.input = newfocus.getRight();
 					newlinklist.add(link);
 				}
-				newlinklist.add(link);
+				//newlinklist.add(link);
 			}
 			input.inputs = newlinklist;
 		}
 		SubModelNode inputsm = newinputs.getLeft();
 		inputsm.setDependencies(inputs);
+		
 		
 		String modelside = (target==0) ? "left" : "right";
 		ModelNode mnode = new ModelNode(modelside);
