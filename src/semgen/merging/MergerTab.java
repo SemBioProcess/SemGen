@@ -372,7 +372,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	public void saveMerge() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
 		
 		if (ma != null) {
