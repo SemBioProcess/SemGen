@@ -67,8 +67,11 @@ function ConflictResolutionPane(merger) {
 				alert("A node with that name already exists.");
 				return;
 			}
-			javaaccessor.setCodewordName(clone.index, true, input.value);
 			clone.resolved = input.value != "";
+			if (input.value != "") {
+				javaaccessor.setCodewordName(clone.index, true, input.value);
+			}
+			
 			checkAllResolved();
 		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
@@ -97,7 +100,9 @@ function ConflictResolutionPane(merger) {
 		
 		operatorsel.selectedIndex = clone.srcobj.multiply ? 0 : 1;
 		input.onchange = function () {
-			javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
+			if (input.value != "") {
+				javaaccessor.setUnitConversion(clone.index, operatorsel.selectedIndex==0, input.value);
+			}
 			clone.resolved = input.value != "";
 			checkAllResolved();
 		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
@@ -155,6 +160,7 @@ function ConflictResolutionPane(merger) {
 	var checkAllResolved = function() {
 		var resolved = true;
 		var panelchecker = function(panel) {
+			if (!resolved) return;
 			resolved = panel.resolved;
 		}
 		

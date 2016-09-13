@@ -33,6 +33,7 @@ function MergerTask(graph, stagestate) {
 	document.querySelector('#modalContent').appendChild(clone);
 
 	this.readyforMerge = function() {
+		$('#nextBtn').prop('disabled', !merger.semrespane.readyformerge)
 		var ready = merger.confrespane.readyformerge && merger.semrespane.readyformerge;
 			$('.merge').prop('disabled', !ready);
 	}
