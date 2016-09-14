@@ -13,11 +13,9 @@ function Hull(node) {
 			.attr("stroke", root.style("fill"))
 			.attr("fill", root.style("fill"))
 			.on("dblclick", function(d) {
-				if (!node.locked) {
 					node.showchildren = false;
 					node.rootElement.selectAll("text").attr("x", 0);
 					node.graph.update();
-				}
 			});
 	});
 	

@@ -21,6 +21,10 @@ function Link(graph, srclink, output, input, length) {
 	this.getLinkLevel = function() {
 		return this.srclink.linklevel;
 	}
+	
+	this.linksNodes = function(innode, outnode) {
+		return this.source==innode && this.target == outnode;
+	}
 }
 
 //  Link.prototype.addBehavior = function (behavior) {
@@ -50,8 +54,8 @@ Link.prototype.createVisualElement = function (element, graph) {
 	if (this.srclink.linklevel == 2) {
 		this.rootElement.select("path.link")
 			.attr("class", "intermodel")
-			.attr("stroke-width", "2")
-			.attr("stroke", "green");
+			.attr("stroke-width", "3")
+			.attr("stroke", "Cyan");
 	}
 
 	if (this.linkType == NodeType.MEDIATOR) {
@@ -73,13 +77,17 @@ var arrowHeadWidth = this.arrowHeadWidth;
     	        theta = Math.atan2(dy, dx) + Math.PI * 2,
     	        d90 = Math.PI / 2,
     	        dtxs = d.target.xpos() - d.target.r * Math.cos(theta),
-    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta);
-
+    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta),
+    	        cth = 10*Math.cos(theta),
+    	        sth = 10*Math.sin(theta),
+    	        c90th = Math.cos(d90 - theta),
+    	        s90th = Math.sin(d90 - theta);
+       	        
     	    return "M" + d.source.xpos() + "," + d.source.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
     	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
-    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (-arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
-    	    		"L" + (dtxs - arrowHeadWidth * Math.cos(d90 - theta) - 10 * Math.cos(theta)) + "," + (dtys + arrowHeadWidth * Math.sin(d90 - theta) - 10 * Math.sin(theta)) +
+    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * c90th - cth) + "," + (-arrowHeadWidth * s90th - sth) +
+    	    		"L" + (dtxs - arrowHeadWidth * c90th - cth) + "," + (dtys + arrowHeadWidth * s90th - sth) +
     	    		"z";
     	});
 

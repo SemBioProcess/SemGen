@@ -216,8 +216,9 @@ Node.prototype.onClick = function () {
     else {
         clearTimeout(this.timer);    //prevent single-click action
         this.clicks = 0;             //after action performed, reset counter
-    	this.onDoubleClick();
-
+        if (!this.locked) {
+        	this.onDoubleClick();
+        }
     }
       d3.event.stopPropagation();
 

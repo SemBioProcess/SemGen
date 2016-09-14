@@ -105,12 +105,6 @@ function Task(graph, stagestate) {
 
 Task.prototype.setSavedState = function(issaved) {
 	this.saved = issaved;
-	if (issaved) {
-		$("#saveButton").innerHTML = '<span class="glyphicon glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>';
-	}
-	else {
-		$("#saveButton").innerHTML = '<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>';
-	}
 	$("#saveButton").prop('disabled', issaved);
 }
 

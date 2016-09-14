@@ -169,7 +169,7 @@ function Graph() {
 					visibleNodes.push(d);
 				}
 				if (!d.canlink && !d.showchildren) return true;
-				links = links.concat(d.getLinks());
+				links = links.concat(d.getLinks(links));
 				return false;
 			});
 		}

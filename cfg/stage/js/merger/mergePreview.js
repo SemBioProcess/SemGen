@@ -65,7 +65,7 @@ function PreviewGraph(id) {
 		nodes.forEach(function (n) {	
 			n.locked = true;
 			n.isVisible = function() {return true;};
-			var nodelinks = n.getLinks();
+			var nodelinks = n.getLinks(links);
 			if (nodelinks) {
 				nodelinks.forEach(function(l){
 					links.push(l);

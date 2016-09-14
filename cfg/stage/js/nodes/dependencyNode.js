@@ -43,7 +43,7 @@ DependencyNode.prototype.getFirstLinkableAncestor = function() {
 	return outputNode;
 }
 
-DependencyNode.prototype.getLinks = function () {
+DependencyNode.prototype.getLinks = function (linklist) {
 	
 	// Build an array of links from our list of inputs
 	var links = [];
@@ -60,6 +60,12 @@ DependencyNode.prototype.getLinks = function () {
 		}
 		inputNode = inputNode.getFirstLinkableAncestor();
 		if (!inputNode || inputNode==outputNode) return;
+		//Check for dupliate links
+			for (l in linklist) {
+				if (linklist[l].linksNodes(inputNode, outputNode)) {
+					return;
+				}
+			}
 		
 		var length = outputNode.graph.linklength;
 		if (!link.external) {
