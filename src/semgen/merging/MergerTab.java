@@ -35,7 +35,9 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.SemGenTask;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -177,29 +179,38 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 				addmanualmappingbutton.setEnabled(false);
 				
 				HashMap<String, String> smnamemap = workbench.createIdenticalSubmodelNameMap();
+				
 				for(String oldsubmodelname : smnamemap.keySet()){
 					String newsubmodelname = changeSubmodelNameDialog(oldsubmodelname);
+					
 					if (newsubmodelname==null) return;
+					
 					smnamemap.put(oldsubmodelname, newsubmodelname);
 				}
 				
 				// Then refresh the identical codeword name mappings in ModelOverlapMap
 				
 				HashMap<String, String> cwnamemap = workbench.createIdenticalNameMap(choicelist, smnamemap.keySet());
+				
 				for (String name : cwnamemap.keySet()) {
 					String newname = changeCodeWordNameDialog(name);
+					
 					if (newname==null) return;
+					
 					cwnamemap.put(name, newname);
 				}
 				
 				ArrayList<Boolean> unitoverlaps = workbench.getUnitOverlaps();
 				
 				ArrayList<Pair<Double,String>> conversionlist = new ArrayList<Pair<Double,String>>(); 
+				
 				for (int i=0; i<unitoverlaps.size(); i++) {
-					if (!unitoverlaps.get(i)) {
+					
+					if ( ! unitoverlaps.get(i)) {
 						ResolutionChoice choice = choicelist.get(i);
-						if (!choice.equals(ResolutionChoice.ignore)) {
-							if (!getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
+						
+						if ( ! choice.equals(ResolutionChoice.ignore)) {
+							if ( ! getConversion(conversionlist, i, choice.equals(ResolutionChoice.first))) return;
 							continue;
 						}
 					}
@@ -208,10 +219,8 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 
 				SemGenProgressBar progframe = new SemGenProgressBar("Merging...", true);
 				String error = workbench.executeMerge(cwnamemap, smnamemap, choicelist, conversionlist, progframe);
-				if (error!=null){
-					SemGenError.showError(
-							"ERROR: " + error, "Merge Failed");
-				}
+				
+				if (error!=null) SemGenError.showError("ERROR: " + error, "Merge Failed");
 		}
 		else {
 			JOptionPane.showMessageDialog(this, "Some codeword overlaps are unresolved.");
@@ -363,15 +372,12 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	}
 	
 	public void saveMerge() {
-<<<<<<< HEAD
 		if (workbench.saveModelAs() != null) {
-=======
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(workbench.mergedmodel);
 		
 		if (ma != null) {
 			SaveSemSimModel.writeToFile(workbench.mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
->>>>>>> refs/remotes/origin/master
 			addmanualmappingbutton.setEnabled(true);
 		}
 	}
@@ -379,7 +385,7 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == MergeEvent.threemodelerror) {
-			SemGenError.showError("SemGen can only merge two models at a time.", "Too many models");
+			SemGenError.showError("Currently, SemGen can only merge two models at a time.", "Too many models");
 		}	
 		if (arg == MergeEvent.modelerrors) {
 			JOptionPane.showMessageDialog(this, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
