@@ -229,21 +229,25 @@ public class SBMLwriter extends ModelWriter {
 					
 					String factorbasename = uf.getBaseUnit().getName();
 					
+ 					// SBML Validation Rule #20421) A Unit object must have the required attributes 
+					// 'kind', 'exponent', 'scale' and 'multiplier', and may have the optional attributes 
+					// 'metaid' and 'sboTerm'. 
 					if(Kind.isValidUnitKindString(factorbasename, sbmllevel, sbmlversion)){
 						
 						Unit sbmluf = new Unit(sbmllevel, sbmlversion);
-						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase()));
-						sbmluf.setExponent(uf.getExponent());
+						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase())); // set Kind attribute
+						sbmluf.setExponent(uf.getExponent()); // set Exponent attribute
 						
-						if(Double.valueOf(uf.getMultiplier()) != 0)
-							sbmluf.setMultiplier(uf.getMultiplier());
-						
-						if(uf.getPrefix() != null && ! uf.getPrefix().equals("")){
+						if(uf.getMultiplier() == 0 ) sbmluf.setMultiplier(1); // set Multiplier attribute
+						else sbmluf.setMultiplier(uf.getMultiplier());
+												
+						if(uf.getPrefix() != null && ! uf.getPrefix().equals("")){ // set Scale attribute
 							Integer power = sslib.getUnitPrefixesAndPowersMap().get(uf.getPrefix());
 							
 							if(power!=null) sbmluf.setScale(power);
 							else System.err.println("Couldn't find power for prefix " + uf.getPrefix());
 						}
+						else sbmluf.setScale(1);
 						
 						ud.addUnit(sbmluf);
 					}
@@ -280,6 +284,11 @@ public class SBMLwriter extends ModelWriter {
 				comp = sbmlmodel.createCompartment(ds.getName());
 				comp.setSpatialDimensions(1);
 			}
+			
+			 // A Compartment object must have the required attributes 
+			// 'id' and 'constant', and may have the optional attributes 
+			// 'metaid', 'sboTerm', 'name', 'spatialDimensions', 'size' and 'units'. 
+			comp.setConstant(ds.getComputationInputs().size()==0);
 			
 			// Go to next data structure if we didn't find an appropriate OPB property
 			// or if the associated physical entity is NOT a composite physical entity
@@ -364,6 +373,7 @@ public class SBMLwriter extends ModelWriter {
 				if(cptmt == null){
 					c = c + 1;
 					cptmt = sbmlmodel.createCompartment("compartment_" + c);
+					cptmt.setConstant(true); // TODO: check whether assuming a constant compartment here is ok
 					entityCompartmentMap.put(compcpe, cptmt);
 				}
 												
@@ -467,6 +477,12 @@ public class SBMLwriter extends ModelWriter {
 				Reaction rxn = sbmlmodel.createReaction(ds.getName());
 				processReactionMap.put(process, rxn);
 				
+				// A <reaction> object must have the required attributes 'id',
+				// 'reversible' and 'fast', and may have the optional attributes
+				// 'metaid', 'sboTerm', 'name' and 'compartment'.
+				rxn.setReversible(true); // TODO: extend SemSim object model to include this "reversible" attribute somewhere
+				rxn.setFast(false); // TODO: extend SemSim object model to include this "fast" attribute somewhere
+				
 				// Do not store the annotation for this data structure in the SemSim RDF.
 				// Preserve semantics in <reaction> element.
 				DSsToOmitFromSemSimRDF.add(ds);
@@ -481,9 +497,14 @@ public class SBMLwriter extends ModelWriter {
 					
 					if( tempsource != null && (tempsource instanceof Species)){
 						SpeciesReference specref = new SpeciesReference((Species)tempsource);
+						
+						// Assume that the 'constant' attribute here is the same as that 
+						// for the Species object.
+						specref.setConstant(((Species)tempsource).isConstant()); 
 						specref.setStoichiometry(process.getSourceStoichiometry(source));
 						rxn.addReactant(specref);
 					}
+					else System.err.println("Couldn't find source " + source.getName() + " in map for reaction " + ds.getName());
 				}
 				
 				// Sinks next...
@@ -492,9 +513,11 @@ public class SBMLwriter extends ModelWriter {
 					
 					if( tempsink != null && (tempsink instanceof Species)){
 						SpeciesReference specref = new SpeciesReference((Species)tempsink);
+						specref.setConstant(((Species)tempsink).isConstant()); 
 						specref.setStoichiometry(process.getSinkStoichiometry(sink));
 						rxn.addProduct(specref);
 					}
+					else System.err.println("Couldn't find sink " + sink.getName() + " in map for reaction " + ds.getName());
 				}
 				
 				// Then mediators.
@@ -638,6 +661,7 @@ public class SBMLwriter extends ModelWriter {
 				par.setValue(doubleval);
 				par.setConstant(true);
 			}
+			else par.setConstant(true);
 			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);

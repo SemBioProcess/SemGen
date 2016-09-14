@@ -884,33 +884,38 @@ public class SBMLreader extends ModelReader{
 			semsimmodel.addSubmodel(rxnsubmodel);
 			rxnsubmodel.addDataStructure(rateds);
 			
-			KineticLaw kineticlaw = reaction.getKineticLaw();
+			if(reaction.isSetKineticLaw()){
+				KineticLaw kineticlaw = reaction.getKineticLaw();
+				
+				rateds.setUnit(subpertimeuom);
+				
+				// Deal with kinetic law
+				String mathmlstring = null;
+				try {
+					
+					if(kineticlaw.isSetMath()){
+						mathmlstring = JSBML.writeMathMLToString(kineticlaw.getMath());
+					
+						// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
+						mathmlstring = stripXMLheader(mathmlstring);
+						mathmlstring = addLHStoMathML(mathmlstring, reactionID, false);
+									
+						for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
+							LocalParameter lp = kineticlaw.getLocalParameter(l);
+							DataStructure localds = addParameter(lp, thereactionprefix);
+							mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
+							rxnsubmodel.addDataStructure(localds);
+						}
 			
-			rateds.setUnit(subpertimeuom);
-			
-			// Deal with kinetic law
-			String mathmlstring = null;
-			try {
-				mathmlstring = JSBML.writeMathMLToString(kineticlaw.getMath());
-			
-				// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
-				mathmlstring = stripXMLheader(mathmlstring);
-				mathmlstring = addLHStoMathML(mathmlstring, reactionID, false);
-							
-				for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
-					LocalParameter lp = kineticlaw.getLocalParameter(l);
-					DataStructure localds = addParameter(lp, thereactionprefix);
-					mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
-					rxnsubmodel.addDataStructure(localds);
+						rateds.getComputation().setMathML(mathmlstring);
+						rateds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getMath().toFormula());
+					}
+				} catch (SBMLException | XMLStreamException e) {
+					e.printStackTrace();
 				}
-	
-				rateds.getComputation().setMathML(mathmlstring);
-				rateds.getComputation().setComputationalCode(reactionID + " = " + reaction.getKineticLaw().getMath().toFormula());
-			} catch (SBMLException | XMLStreamException e) {
-				e.printStackTrace();
+				
+				rateds.setAssociatedPhysicalProperty(prop);
 			}
-			
-			rateds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
 						
@@ -1100,6 +1105,7 @@ public class SBMLreader extends ModelReader{
 	 * This excludes data structures corresponding to species and reactions in the model.
 	 */
 	private void collectSemSimRDF(){
+		
 		Document projdoc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
@@ -1107,6 +1113,8 @@ public class SBMLreader extends ModelReader{
 	
 		Namespace semsimns = RDFNamespace.SEMSIM.createJdomNamespace();
 		String rdfstring = null;
+		
+		//TODO: should change this so that it only reads in the semsim annotation into the JDOM document (saves time)
 		
 		if(projdoc.hasRootElement()){
 			Element modelel = projdoc.getRootElement().getChild("model", sbmlmodelns);
@@ -1125,7 +1133,7 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-				
+		
 		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, null);
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
