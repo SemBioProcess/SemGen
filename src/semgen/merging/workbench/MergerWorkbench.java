@@ -364,7 +364,7 @@ public class MergerWorkbench extends Workbench {
 
 	@Override
 	public ModelAccessor saveModelAs() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml"}, "owl");
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		
 		if (ma != null) {
