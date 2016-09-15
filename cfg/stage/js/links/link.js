@@ -11,6 +11,7 @@ function Link(graph, srclink, output, input, length) {
 	this.source = input;
 	this.target = output;
 	this.length = length;
+	this.bidirectional = false;
 	this.value = 1;
 	this.hidden = false;
 	this.userCanHide = false;
@@ -25,6 +26,29 @@ function Link(graph, srclink, output, input, length) {
 	this.linksNodes = function(innode, outnode) {
 		return this.source==innode && this.target == outnode;
 	}
+	
+	this.drawArrow = function (source, target) {
+		var arrowHeadWidth = this.arrowHeadWidth;
+		var dx = target.xpos() - source.xpos(),
+	    dy = target.ypos() - source.ypos(),
+	    dr = 0;
+	    theta = Math.atan2(dy, dx) + Math.PI * 2,
+	    d90 = Math.PI / 2,
+	    dtxs = target.xpos() - target.r * Math.cos(theta),
+	    dtys = target.ypos() - target.r * Math.sin(theta),
+	    cth = 10*Math.cos(theta),
+	    sth = 10*Math.sin(theta),
+	    c90th = Math.cos(d90 - theta),
+	    s90th = Math.sin(d90 - theta);
+	       
+		return "M" + source.xpos() + "," + source.ypos() +
+				"A" + dr + "," + dr + " 0 0 1," + target.xpos() + "," + target.ypos() +
+				"A" + dr + "," + dr + " 0 0 0," + source.xpos() + "," + source.ypos() +
+				"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * c90th - cth) + "," + (-arrowHeadWidth * s90th - sth) +
+				"L" + (dtxs - arrowHeadWidth * c90th - cth) + "," + (dtys + arrowHeadWidth * s90th - sth) +
+				"z";
+	}
+
 }
 
 //  Link.prototype.addBehavior = function (behavior) {
@@ -67,34 +91,21 @@ Link.prototype.createVisualElement = function (element, graph) {
 }
 
 Link.prototype.tickHandler = function (element, graph) {
-var arrowHeadWidth = this.arrowHeadWidth;
+	var link = this;
 	// Display and update links
 	var root = d3.select(element);
 	root.select("path").attr("d", function(d) {
-    	    var dx = d.target.xpos() - d.source.xpos(),
-    	        dy = d.target.ypos() - d.source.ypos(),
-    	        dr = 0;
-    	        theta = Math.atan2(dy, dx) + Math.PI * 2,
-    	        d90 = Math.PI / 2,
-    	        dtxs = d.target.xpos() - d.target.r * Math.cos(theta),
-    	        dtys = d.target.ypos() - d.target.r * Math.sin(theta),
-    	        cth = 10*Math.cos(theta),
-    	        sth = 10*Math.sin(theta),
-    	        c90th = Math.cos(d90 - theta),
-    	        s90th = Math.sin(d90 - theta);
-       	        
-    	    return "M" + d.source.xpos() + "," + d.source.ypos() +
-    	    		"A" + dr + "," + dr + " 0 0 1," + d.target.xpos() + "," + d.target.ypos() +
-    	    		"A" + dr + "," + dr + " 0 0 0," + d.source.xpos() + "," + d.source.ypos() +
-    	    		"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * c90th - cth) + "," + (-arrowHeadWidth * s90th - sth) +
-    	    		"L" + (dtxs - arrowHeadWidth * c90th - cth) + "," + (dtys + arrowHeadWidth * s90th - sth) +
-    	    		"z";
+    	    return link.drawArrow(d.source, d.target);
     	});
+	
+	if (link.bidirectional) {
+
+	}
 
 	// Display and update the link labels
 	var text = root.selectAll("text");
-	text.attr("x", function(d) { return d.source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
-	text.attr("y", function(d) { return d.source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
+	text.attr("x", function(d) { return source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
+	text.attr("y", function(d) { return source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
 
 }
 

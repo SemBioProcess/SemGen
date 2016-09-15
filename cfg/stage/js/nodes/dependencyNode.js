@@ -62,7 +62,12 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		if (!inputNode || inputNode==outputNode) return;
 		//Check for dupliate links
 			for (l in linklist) {
-				if (linklist[l].linksNodes(inputNode, outputNode)) {
+				var exisstinglink = linklist[l];
+				if (exisstinglink.linksNodes(inputNode, outputNode)) {
+					return;
+				}
+				else if (exisstinglink.linksNodes(outputNode, inputNode)) {
+					exisstinglink.bidirectional = true;
 					return;
 				}
 			}
