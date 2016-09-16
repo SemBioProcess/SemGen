@@ -14,10 +14,11 @@ function Graph() {
 	this.force = d3.layout.force()
 		.gravity(0)
 		.chargeDistance(defaultchargedistance)
-		.friction(0.7)
+		.friction(0.6)
 		.charge(function (d) { 
 			return d.charge; })
 	    .linkDistance(function (d) { return d.length; })
+	    .theta(0.6)
 	    .nodes(visibleNodes)
 	    .links(links);
 	

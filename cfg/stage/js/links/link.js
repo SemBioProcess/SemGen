@@ -27,7 +27,7 @@ function Link(graph, srclink, output, input, length) {
 		return this.source==innode && this.target == outnode;
 	}
 	
-	this.drawArrow = function (source, target) {
+	this.draw = function (source, target) {
 		var arrowHeadWidth = this.arrowHeadWidth;
 		var dx = target.xpos() - source.xpos(),
 	    dy = target.ypos() - source.ypos(),
@@ -95,7 +95,7 @@ Link.prototype.tickHandler = function (element, graph) {
 	// Display and update links
 	var root = d3.select(element);
 	root.select("path").attr("d", function(d) {
-    	    return link.drawArrow(d.source, d.target);
+    	    return link.draw(d.source, d.target);
     	});
 	
 	if (link.bidirectional) {

@@ -93,9 +93,10 @@ Node.prototype.setLocation = function (x, y) {
 
 
 Node.prototype.createVisualElement = function (element, graph) {
+	//Randomly choose a location if one has not been set
 	if (this.xpos()==-1 || this.ypos() == -1) {
 		if (this.parent) {
-			this.setLocation(this.parent.xpos() + Math.random(), this.parent.ypos() + Math.random());
+			this.setLocation(this.parent.xpos() + Math.random()*200 - 100, this.parent.ypos() + Math.random()*200 - 100);
 		}
 		else {
 			this.setLocation(

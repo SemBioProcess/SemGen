@@ -84,7 +84,7 @@ function Hull(node) {
 			
 						//If there is only one visible child, make the hull a circle with a radius of 6
 			if (vertexes.length ==1) {
-				
+				vertexes.length = 0;
 				minX = minX - 6;
 				maxX = maxX + 6;
 				minY = minY - 6;
