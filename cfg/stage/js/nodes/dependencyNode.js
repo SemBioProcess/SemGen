@@ -82,6 +82,15 @@ DependencyNode.prototype.getLinks = function (linklist) {
 	return links;
 }
 
+DependencyNode.prototype.hasIntermodalLink = function() {
+	for (x in this.srcobj.inputs) {
+		if (this.srcobj.inputs[x].linklevel > 1) {
+			return true;
+		}
+	}
+	return false;
+}
+
 DependencyNode.prototype.isVisible = function () {
 	if (this.srcobj.isorphaned && !this.graph.showorphans) return false;  
 	return Node.prototype.isVisible.call(this);

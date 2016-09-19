@@ -18,6 +18,8 @@ function CreateCustomOverlap(_node) {
 		var mergeNode = null;
 		
 		_node.dragstart.push(function (d) {
+			//if (_node.hasIntermodalLink()) return; 
+			
 				//Refresh node references
 			validDepNodes = [];
 			invalidDepNodes = [];
@@ -34,7 +36,7 @@ function CreateCustomOverlap(_node) {
 					model.applytoChildren(function(n) {
 						if (n.hasClassName("dependencyNode")) {
 							if (n.rootElement) {
-								if (n.submodelinput || n.nodeType != _node.nodeType) {
+								if (n.submodelinput || n.nodeType != _node.nodeType || n.hasIntermodalLink()) {
 									invalidDepNodes.push(n); 
 									n.rootElement.selectAll("circle").attr("opacity", "0.1");
 								}
@@ -55,7 +57,7 @@ function CreateCustomOverlap(_node) {
 
 			});
 		    _node.drag.push(function (d) {
-		        
+		    	//if (_node.hasIntermodalLink()) return; 
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.
 		    	validDepNodes.forEach(function (node) {
@@ -81,6 +83,7 @@ function CreateCustomOverlap(_node) {
 				});
 		    });
 		    _node.dragend.push(function (d) {
+		    	//if (_node.hasIntermodalLink()) return; 
 		    	// If the node was dropped on another node then merge the two
 		    	
 		    	// Remove any classes we may have set
@@ -102,6 +105,19 @@ function CreateCustomOverlap(_node) {
 		        	}
 		        	$('.merge').prop('disabled', 'true');
 		        	sender.createCustomOverlap(modelstomerge);
+		        	
+		        	var customlink = {
+		        			id : _node.id + "-" + mergeNode.id,
+		        			linklevel: 3,
+		        			linkType: _node.nodeType.id,
+		        			input: mergeNode,
+		        			output: _node,
+		        			length: 100,
+		        			external: true,
+		        	
+		        	}
+		        	_node.srcobj.inputs.push(customlink);
+		        	
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location
@@ -109,6 +125,7 @@ function CreateCustomOverlap(_node) {
 		        	_node.py = originalLocation.y;
 		        	_node.setLocation(originalLocation.x, originalLocation.y);
 		        	
+		        	_node.graph.update();
 		        }
 
 		    });	

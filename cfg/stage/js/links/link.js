@@ -12,7 +12,7 @@ function Link(graph, srclink, output, input, length) {
 	this.target = output;
 	this.length = length;
 	this.bidirectional = false;
-	this.value = 1;
+	//this.value = 1;
 	this.hidden = false;
 	this.userCanHide = false;
 	this.linkType = NodeTypeArray[srclink.linkType];
@@ -82,6 +82,14 @@ Link.prototype.createVisualElement = function (element, graph) {
 			.attr("stroke", "Cyan");
 	}
 
+	//Custom link
+	if (this.srclink.linklevel == 3) {
+		this.rootElement.select("path.link")
+			.attr("class", "custom")
+			.attr("stroke-width", "3")
+			.attr("stroke", "Lime");
+	}
+	
 	if (this.linkType == NodeType.MEDIATOR) {
 		this.rootElement.select("path")
 			.attr("stroke-dasharray", 2, 5)
