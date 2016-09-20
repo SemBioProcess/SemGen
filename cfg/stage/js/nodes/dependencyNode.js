@@ -91,6 +91,21 @@ DependencyNode.prototype.hasIntermodalLink = function() {
 	return false;
 }
 
+DependencyNode.prototype.removeLink = function(inputnode) {
+	var srcinputs =this.srcobj.inputs;
+	var loc = null;
+	for (i in srcinputs) {
+		if (srcinputs[i].output == inputnode.id) {
+			loc = i;
+			break;
+		}
+	}
+	if (i != null) {
+		srcinputs.splice(i, 1);
+	}
+	return false;
+}
+
 DependencyNode.prototype.isVisible = function () {
 	if (this.srcobj.isorphaned && !this.graph.showorphans) return false;  
 	return Node.prototype.isVisible.call(this);

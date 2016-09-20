@@ -107,6 +107,15 @@ function MergerTask(graph, stagestate) {
 		merger.setSavedState(wassaved);
 	});
 
+	receiver.onClearLink(function(overlaps, leftid, rightid) {
+		var leftnode = merger.graph.findNode(leftid);
+		var rightnode = merger.graph.findNode(rightid);
+		if (!leftnode.removeLink(rightnode)) {
+			rightnode.removeLink(leftnode);
+		}
+		merger.semrespane.updateOverlaps(overlaps);
+		merger.graph.update();
+	});
 }
 
 MergerTask.prototype.setSavedState = function (issaved) {

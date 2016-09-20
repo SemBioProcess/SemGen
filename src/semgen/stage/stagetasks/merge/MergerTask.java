@@ -139,9 +139,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg==MergeEvent.modellistupdated) {
-			
-		}
 		if (arg == MergeEvent.threemodelerror) {
 			SemGenError.showError("SemGen can only merge two models at a time.", "Too many models");
 		}	
@@ -156,14 +153,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			_models.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode, workbench.getModelSaved());
 		}
-		if (arg == MergeEvent.mappingevent) {	
+		if (arg == MergeEvent.mappingevent) {
 			generateOverlapDescriptors();
 			getOverlappingNodes();
-			updateOverlaps();
-		}
+			_commandSender.showOverlaps(updateOverlaps().toArray(new Overlap[]{}));
+			}
 	}
 	
-	protected void updateOverlaps() {
+	protected ArrayList<Overlap> updateOverlaps() {
 		ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 		int i = workbench.getSolutionDomainCount();
 		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
@@ -172,7 +169,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			overlaps.add(overlap);
 			i++;
 		}
-		_commandSender.showOverlaps(overlaps.toArray(new Overlap[]{}));
+		return overlaps;
 	}
 
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
@@ -187,7 +184,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onRequestOverlaps() {
-			updateOverlaps();
+			_commandSender.showOverlaps(updateOverlaps().toArray(new Overlap[]{}));
+			
 		}
 		
 		public void onChangeTask(Double index) {
@@ -209,7 +207,12 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onRemoveCustomOverlap(Double customindex) {
+			Pair<DependencyNode, DependencyNode> ol = overlaps.get(customindex.intValue());
 			workbench.removeManualCodewordMapping(customindex.intValue());
+			generateOverlapDescriptors();
+			getOverlappingNodes();
+			_commandSender.clearLink(updateOverlaps().toArray(new Overlap[]{}), ol.getLeft().id, ol.getRight().id);
+			
 		}
 
 		public void onExecuteMerge(JSArray choicesmade) {

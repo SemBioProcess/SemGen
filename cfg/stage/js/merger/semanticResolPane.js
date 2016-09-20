@@ -122,12 +122,11 @@ function SemanticResolutionPane(merger) {
 		sender.requestOverlaps();
 	};
 
-	receiver.onShowOverlaps(function(data) {
+	this.updateOverlaps = function(overlaps) {
 		resolutions = [];
-		//var olaps = document.querySelector('#modalContent #overlapPanels');
 		$('#modalContent #overlapPanels').contents().remove();
 		
-		data.forEach(function(d) {
+		overlaps.forEach(function(d) {
 			pane.addResolutionPanel(d);	
 		});
 		
@@ -138,6 +137,10 @@ function SemanticResolutionPane(merger) {
 		$('input.mergeResRadio').prop('disabled', merger.mergecomplete);
 		//This is done here to prevent synchronicity issues between this and the conflict pane
 		sender.requestConflicts();
+	}
+	
+	receiver.onShowOverlaps(function(data) {
+		pane.updateOverlaps(data);
 	});
 	
 	receiver.onShowPreview(function(data) {
