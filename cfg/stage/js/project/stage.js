@@ -82,6 +82,7 @@ function Stage(graph, stagestate) {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
 	});
+	
 }
 
 Stage.prototype.onInitialize = function() {

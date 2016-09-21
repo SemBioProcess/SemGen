@@ -46,7 +46,6 @@ function Hull(node) {
 					if(!child.isVisible())
 						return;
 
-					//if (!(child.xpos() > 0) || !(child.ypos() > 0)) throw "halt";
 					// If the child has children analyze them as well
 					if(child.showchildren)
 						analyzeChildren(getSymbolArray(child.children));
@@ -56,7 +55,7 @@ function Hull(node) {
 					minX = minX || child.xpos();
 					minX = child.xpos() < minX ? child.xpos() : minX;
 					
-					maxX = maxX || child.ypos();
+					maxX = maxX || child.xpos();
 					maxX = child.xpos() > maxX ? child.xpos() : maxX;
 					
 					minY = minY || child.ypos();

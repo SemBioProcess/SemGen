@@ -17,4 +17,5 @@ public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSe
 	 * @param modelName Name of model
 	 */
 	public void mergeCompleted(ModelNode modelnode, Boolean wassaved);
+	public void clearLink(Overlap[] overlaps, String leftid, String rightid);
 }

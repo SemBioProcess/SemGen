@@ -36,7 +36,7 @@ public class MergerWorkbench extends Workbench {
 	private ArrayList<ArrayList<DataStructure>> exposeddslist = new ArrayList<ArrayList<DataStructure>>();
 	
 	public enum MergeEvent {
-		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingevent, mergecompleted;
+		threemodelerror, modellistupdated, modelerrors,	mapfocuschanged, mappingevent, MAPPINGREMOVED, mergecompleted;
 		
 		String message = null;
 		
@@ -235,7 +235,7 @@ public class MergerWorkbench extends Workbench {
 	public void removeManualCodewordMapping(int overlapindex) {
 		overlapmap.removeOverlap(overlapindex);
 		setChanged();
-		notifyObservers(MergeEvent.mappingevent);
+		notifyObservers(MergeEvent.MAPPINGREMOVED);
 	}
 	
 	private int getExposedCodewordIndexbyName(int modind, String cdwd) {
