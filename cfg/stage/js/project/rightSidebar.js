@@ -6,7 +6,7 @@ function RightSidebar(graph) {
 	this.graph = graph;
 
 	// Fix all nodes when ctrl + M is pressed
-	$("#modes #fixedNodes").bind('change', function(){
+	$("#fixedNodes").bind('change', function(){
 		//Columns.columnModeOn = this.checked;
 
 		graph.toggleFixedMode(this.checked);
