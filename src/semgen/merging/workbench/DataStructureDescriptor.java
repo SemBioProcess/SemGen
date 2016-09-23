@@ -1,5 +1,6 @@
 package semgen.merging.workbench;
 
+import org.apache.axis.utils.StringUtils;
 import semgen.SemGen;
 import semsim.model.computational.datastructures.DataStructure;
 
@@ -15,7 +16,10 @@ public class DataStructureDescriptor {
 	
 	public DataStructureDescriptor(DataStructure ds) {
 		descriptormap.put(Descriptor.name, ds.getName());
-		descriptormap.put(Descriptor.description, ds.getDescription());
+		if(StringUtils.isEmpty(ds.getDescription()))
+			descriptormap.put(Descriptor.description, "No description available (" + ds.getName() + ")");
+		else descriptormap.put(Descriptor.description, ds.getDescription());
+
 		descriptormap.put(Descriptor.type, ds.getPropertyType(SemGen.semsimlib).toString());
 		if(ds.hasUnits())
 			descriptormap.put(Descriptor.units, ds.getUnit().getComputationalCode());
