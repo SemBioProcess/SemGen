@@ -105,7 +105,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		ArrayList<Boolean> units = workbench.getUnitOverlaps();
 		for (int i=0; i<units.size(); i++) {
 			if (!units.get(i)) {
-				
 				conflicts.unitconflicts.add(new UnitConflict(workbench.getDSDescriptors(i), i));
 			}
 		}
@@ -171,6 +170,22 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		return overlaps;
 	}
+	
+	
+	private void removeUnitConflict(int conindex) {
+		UnitConflict toremove = null;
+		for (UnitConflict conflict : conflicts.unitconflicts) {
+			if (conflict.index == conindex) {
+				toremove = conflict;
+			}
+			//Reindex
+			else if (conflict.index > conindex) {
+				conflict.index = conflict.index--;
+			}
+		}
+		conflicts.unitconflicts.remove(toremove);
+	}
+
 
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
@@ -204,6 +219,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
 			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
+			ArrayList<Boolean> units = workbench.getUnitOverlaps();
+			int i = units.size()-1;
+			if (!units.get(i)) {
+				conflicts.unitconflicts.add(new UnitConflict(workbench.getDSDescriptors(i), i));
+			}
 		}
 		
 		public void onRemoveCustomOverlap(Double customindex) {
@@ -211,6 +231,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			workbench.removeManualCodewordMapping(customindex.intValue());
 			generateOverlapDescriptors();
 			getOverlappingNodes();
+			removeUnitConflict(customindex.intValue());
+			
 			_commandSender.clearLink(updateOverlaps().toArray(new Overlap[]{}), ol.getLeft().id, ol.getRight().id);
 			
 		}

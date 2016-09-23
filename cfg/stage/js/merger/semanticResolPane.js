@@ -57,8 +57,7 @@ function SemanticResolutionPane(merger) {
 		clone.querySelector('.rightRes').innerHTML = dsradiobutton('rightNode', overlap.dsright, clone.id);
 		clone.querySelector('.rightRes').onclick = function() {radioClick(1);};
 		clone.querySelector('.rightRes').setAttribute("id", 'rightRes' + clone.index);
-		
-		
+
 		clone.radiobtns.push(clone.querySelector('.ignoreRes'));
 		clone.querySelector(".ignoreRes").innerHTML = '<label><div class="ignoreLabel">Ignore</div>' +
 			'<input class="mergeResRadio" type="radio" name="mergeResRadio' + clone.id + '"></label>';
@@ -80,9 +79,13 @@ function SemanticResolutionPane(merger) {
 		clone.querySelector('input.mergeResRadio').disabled = merger.mergecomplete;
 		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
 		
+		//Custom mappings can be removed
 		if (overlap.custom) {
 			clone.querySelector('.removeMappingBtn').style.display = 'inherit';
-			clone.querySelector('.removeMappingBtn').setAttribute("onclick", 'sender.removeCustomOverlap(' + clone.index + ');');
+			clone.querySelector('.removeMappingBtn').onclick = function() {
+				choices.splice(clone.index, 1);
+				sender.removeCustomOverlap(clone.index);
+			};
 			clone.querySelector('.removeMappingBtn').disabled = merger.mergecomplete;
 		}
 
@@ -135,6 +138,7 @@ function SemanticResolutionPane(merger) {
 		}
 		//Disable radio buttons if the merge has been performed.
 		$('input.mergeResRadio').prop('disabled', merger.mergecomplete);
+		pane.allchoicesmade();
 		//This is done here to prevent synchronicity issues between this and the conflict pane
 		sender.requestConflicts();
 	}

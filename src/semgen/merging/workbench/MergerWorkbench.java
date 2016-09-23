@@ -223,6 +223,12 @@ public class MergerWorkbench extends Workbench {
 		}
 		return names;
 	}
+
+	public void removeManualCodewordMapping(int overlapindex) {
+		overlapmap.removeOverlap(overlapindex);
+		setChanged();
+		notifyObservers(MergeEvent.MAPPINGREMOVED);
+	}
 	
 	//Add manual codeword mapping to the list of equivalent terms
 	public Pair<String,String> addManualCodewordMapping(String cdwd1, String cdwd2) {
@@ -232,10 +238,18 @@ public class MergerWorkbench extends Workbench {
 		return addManualCodewordMapping(index1,index2);
 	}
 	
-	public void removeManualCodewordMapping(int overlapindex) {
-		overlapmap.removeOverlap(overlapindex);
+	
+	//Add manual codeword mapping to the list of equivalent terms
+	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
+		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
+		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
+		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
+				
+		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
+		addCodewordMapping(ds1, ds2, maptype.manualmapping);
 		setChanged();
-		notifyObservers(MergeEvent.MAPPINGREMOVED);
+		notifyObservers(MergeEvent.mappingevent);
+		return null;
 	}
 	
 	private int getExposedCodewordIndexbyName(int modind, String cdwd) {
@@ -254,20 +268,7 @@ public class MergerWorkbench extends Workbench {
 		}
 		return -1;
 	}
-	
-	//Add manual codeword mapping to the list of equivalent terms
-	public Pair<String,String> addManualCodewordMapping(int cdwd1, int cdwd2) {
-		Pair<Integer, Integer> minds = overlapmap.getModelIndicies();
-		DataStructure ds1 = exposeddslist.get(minds.getLeft()).get(cdwd1);
-		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
-				
-		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
-		addCodewordMapping(ds1, ds2, maptype.manualmapping);
-		setChanged();
-		notifyObservers(MergeEvent.mappingevent);
-		return null;
-	}
-	
+
 	public ArrayList<Pair<DataStructure,DataStructure>> getOverlapPairs() {
 		return overlapmap.getDataStructurePairs();
 	}

@@ -33,8 +33,10 @@ function MergerTask(graph, stagestate) {
 	document.querySelector('#modalContent').appendChild(clone);
 
 	this.readyforMerge = function() {
-		$('#nextBtn').prop('disabled', !merger.semrespane.readyformerge)
+		
 		var ready = merger.confrespane.readyformerge && merger.semrespane.readyformerge;
+
+		$('#nextBtn').prop('disabled', !merger.semrespane.readyformerge);
 			$('.merge').prop('disabled', !ready);
 	}
 	
@@ -56,6 +58,10 @@ function MergerTask(graph, stagestate) {
 
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
+		if (!merger.semrespane.readyformerge) {
+			$("#mergeStep1").slideDown();
+			$("#mergeStep2").hide();
+		}
 		sender.requestOverlaps();
 	});
 	

@@ -21,13 +21,12 @@ function ConflictResolutionPane(merger) {
 		clone.id = 'smcon' + smconflicts.length;
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
-		
-		clone.resolved = false;
 
 		clone.querySelector('.dupname').innerHTML = smconf.duplicate;
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
+		clone.resolved = input.value != "";
 		input.onchange = function () {
 			if (task.isNameAlreadyUsed(input.value)) {
 				input.value = "";
@@ -52,7 +51,7 @@ function ConflictResolutionPane(merger) {
 		clone.id = 'cwcon' + cwconflicts.length;
 		clone.index = cwconflicts.length;
 		clone.srcobj = cwconf;
-		clone.resolved = false;
+		
 
 		clone.disable = merger.mergecomplete;
 		
@@ -61,6 +60,7 @@ function ConflictResolutionPane(merger) {
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
+		clone.resolved = input.value != "";
 		input.onchange = function () {
 			if (task.isNameAlreadyUsed(input.value)) {
 				input.value = "";
@@ -68,6 +68,7 @@ function ConflictResolutionPane(merger) {
 				return;
 			}
 			clone.resolved = input.value != "";
+			
 			if (input.value != "") {
 				javaaccessor.setCodewordName(clone.index, true, input.value);
 			}
