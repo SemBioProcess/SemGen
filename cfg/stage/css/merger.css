@@ -3,7 +3,7 @@
 }
 
 .modal-open .modal {
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .modal-title {
