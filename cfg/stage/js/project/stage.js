@@ -21,13 +21,14 @@ function Stage(graph, stagestate) {
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
 		stage.addModelNode(model, [DragToMerge]);
-		
+		stage.leftsidebar.addModeltoList(model);
 	});
 
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelindex) {
 		var model = stage.getModelNodebyIndex(modelindex);
 		sender.consoleOut("Removing model " + model.name);
+		leftsidebar.removeModelfromList(model.id);
 		delete nodes[model.id];
 		leftsidebar.updateModelPanel(null);
 		graph.update();

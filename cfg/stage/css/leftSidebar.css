@@ -14,8 +14,13 @@
 	width: 200px;
 }
 
-#leftSidebar>.panel-heading {
+#leftSidebar.panel-heading {
 	padding: 5px 15px;
+}
+
+
+#projmodeldiv {
+	overflow-y: auto;
 }
 
 #leftSidebarButton {

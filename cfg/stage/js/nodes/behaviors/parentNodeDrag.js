@@ -22,7 +22,7 @@ function parentDrag(parent) {
 				&& (d3.event.dy + d.ymax) < d.graph.h-10
 			){
 				d.globalApply(function(d) {
-				d.setLocation(d.xpos() + d3.event.dx, d.ypos() + d3.event.dy);
+					d.setLocation(d.xpos() + d3.event.dx, d.ypos() + d3.event.dy);
 					d.px += d3.event.dx;
 					d.py += d3.event.dy;
 				});
@@ -31,6 +31,20 @@ function parentDrag(parent) {
 				d.setLocation(d.xpos(), d.ypos());
 				$(parent).triggerHandler("dragend");
 			}
+		}
+		else {
+			if (
+					(d3.event.dx + d.xmin) > 10
+					&& (d3.event.dx + d.xmax) < d.graph.w-10
+					&& (d3.event.dy + d.ymin) > 10
+					&& (d3.event.dy + d.ymax) < d.graph.h-10
+				){
+					d.applytoChildren(function(d) {
+						d.setLocation(d.xpos() + d3.event.dx, d.ypos() + d3.event.dy);
+						d.px += d3.event.dx;
+						d.py += d3.event.dy;
+					});
+				}
 		}
 	});
 

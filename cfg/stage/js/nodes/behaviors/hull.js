@@ -47,8 +47,10 @@ function Hull(node) {
 						return;
 
 					// If the child has children analyze them as well
-					if(child.showchildren)
+					if(child.showchildren) {
 						analyzeChildren(getSymbolArray(child.children));
+						return;
+					}
 					
 					vertexes.push([child.xpos(), child.ypos()]);
 					//Find the most extreme node positions for each axis

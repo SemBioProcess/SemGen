@@ -96,7 +96,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	//Randomly choose a location if one has not been set
 	if (this.xpos()==-1 || this.ypos() == -1) {
 		if (this.parent) {
-			this.setLocation(this.parent.xpos() + Math.random()*200 - 100, this.parent.ypos() + Math.random()*200 - 100);
+			this.setLocation(this.parent.x + Math.random()*200 - 100, this.parent.y + Math.random()*200 - 100);
 		}
 		else {
 			this.setLocation(
@@ -104,6 +104,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 					(Math.random() * (graph.h-graph.h/2))+graph.h/6
 				);
 		}
+
 	} 
 	
 	this.rootElement = d3.select(element);
@@ -175,6 +176,9 @@ Node.prototype.tickHandler = function (element, graph) {
 	if ((this.showchildren) && (this.nodeType != NodeType.NULLNODE)) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
 		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
+	}
+	if (this.xpos() < 0 || this.ypos() < 0) {
+		throw "Bad location";
 	}
 	
 	root.attr("transform", "translate(" + this.xpos() + "," + this.ypos() + ")");
