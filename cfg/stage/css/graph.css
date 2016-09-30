@@ -61,3 +61,7 @@ path.link {
 	display: block;
 	fill: #50D050;
 }
+
+.submodelNode > text {
+	font-weight: bold;
+}
