@@ -663,6 +663,8 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else par.setConstant(true);
 			
+			System.out.println(ds.getName() + " is constant = " + par.getConstant() + " " + usesevents + " " + hasinputs + " " + hasmathml + " " + (ds instanceof MappableVariable));
+			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			

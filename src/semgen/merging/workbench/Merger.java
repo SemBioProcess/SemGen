@@ -361,8 +361,6 @@ public class Merger {
 		submodel.setAssociatedDataStructures(componentmodel.getUngroupedDataStructures());
 		submodel.setSubmodels(componentmodel.getSubmodels());
 		mergedmodel.addSubmodel(submodel);
-		System.out.println("Added submodel " + componentmodel.getName());
-		System.out.println(mergedmodel.getTopSubmodels());
 	}
 	
 	// Remove empty submodels
