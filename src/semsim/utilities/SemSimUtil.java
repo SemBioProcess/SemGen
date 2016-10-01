@@ -79,17 +79,25 @@ public class SemSimUtil {
 								
 				if(mv.isFunctionalSubmodelInput()){
 										
+					System.out.println("Looking for source of " + mv.getName());
 					MappableVariable sourcemv = mv;
+					MappableVariable tempmv = null;
 					
 					boolean sourcefound = ! sourcemv.isMapped();
 					
 					// follow mappings until source variable is found
 					while( ! sourcefound){		
 						
-						sourcemv = sourcemv.getMappedFrom().toArray(new MappableVariable[]{})[0];
+						tempmv = sourcemv;
+						sourcemv = tempmv.getMappedFrom().toArray(new MappableVariable[]{})[0]; //TODO: should getMappedFrom() just return a single DS (or null if not mapped from)?
+						
+						//Remove the computational dependency between source and input var
+						sourcemv.getUsedToCompute().remove(tempmv); // remove mapping link because we are flattening
 						
 						if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
 					}
+					
+					System.out.println("Found source " + sourcemv.getName());
 					
 					String sourcevarglobalname = sourcemv.getName();
 					String sourcelocalname = sourcevarglobalname.substring(sourcevarglobalname.lastIndexOf(".")+1, sourcevarglobalname.length());
@@ -97,15 +105,17 @@ public class SemSimUtil {
 					String mvglobalname = mv.getName();
 					String mvlocalname = mvglobalname.substring(mvglobalname.lastIndexOf(".")+1, mvglobalname.length());
 					
-					//Remove the computational dependency between source and input var
-					sourcemv.getUsedToCompute().remove(mv);
-											
+								
 					// Go through all the variables that are computed from the one we're going to remove
 					// and set them dependent on the source variable
 					for(DataStructure dependentmv : mv.getUsedToCompute()){
 						
-						dependentmv.getComputationInputs().remove(mv);
-						dependentmv.getComputation().addInput(sourcemv);
+						if( ! mv.getMappedTo().contains(dependentmv)){ // Only process the mathematical dependencies, not the mappings
+							dependentmv.getComputationInputs().remove(mv);
+							System.out.println("removed " + mv.getName() + " from list of inputs for " + dependentmv.getName());
+							dependentmv.getComputation().addInput(sourcemv);
+							System.out.println("added " + sourcemv.getName() + " as input for " + dependentmv.getName());
+						}
 						
 						// If the local name of the input doesn't match that of its source,
 						// replace all occurrences of the input's name in the equations that use it

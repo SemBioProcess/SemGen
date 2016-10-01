@@ -42,7 +42,7 @@
 }
 
 .modal-body {
-    height: 55vh;
+    height: calc(75vh - 200px);
     overflow: scroll;
 }
 
@@ -172,7 +172,7 @@
 }
 
 #mergeStep2 > .panel-group {
-    height: 79vh;
+    height: calc(100vh - 200px);
     overflow-y: scroll;
 }
 

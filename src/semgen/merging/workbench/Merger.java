@@ -74,6 +74,7 @@ public class Merger {
 		 else if(fxnalsubsinmodel2 && ! fxnalsubsinmodel1){
 			 mod2renamemap = SemSimUtil.flattenModel(ssm2clone);
 		 }
+		
 		 
 		int i = 0;
 		
@@ -163,6 +164,11 @@ public class Merger {
 		// What if both models have a custom phys component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
+		// Create two submodels within the merged model where one consists of all data structures
+		// from the first model used in the merge, and the second consists of all those from the second.
+		createSubmodelForMergeComponent(mergedmodel, ssm1clone);
+		createSubmodelForMergeComponent(mergedmodel, ssm2clone);
+		
 		//Add processes to the merged model
 		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses())
 			mergedmodel.addCustomPhysicalProcess(pp);
@@ -205,6 +211,7 @@ public class Merger {
 			fswithcon.getComputation().setMathML(newmathml);
 		}
 		
+
 		// Copy in all data structures
 		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
 			mergedmodel.addDataStructure(dsfrom2);
@@ -236,6 +243,7 @@ public class Merger {
 			}
 		}
 		
+
 		// Copy in the submodels
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){
 			mergedmodel.addSubmodel(subfrom2);
@@ -346,6 +354,15 @@ public class Merger {
 		return true;
 	}
 	
+	// Collects ungrouped data structures from one of the models used in the merge, along with all
+	// its submodels and puts them into a single parent submodel
+	private void createSubmodelForMergeComponent(SemSimModel mergedmodel, SemSimModel componentmodel){
+		Submodel submodel = new Submodel(componentmodel.getName());
+		submodel.setAssociatedDataStructures(componentmodel.getUngroupedDataStructures());
+		submodel.setSubmodels(componentmodel.getSubmodels());
+		mergedmodel.addSubmodel(submodel);
+	}
+	
 	// Remove empty submodels
 	private void pruneSubmodels(SemSimModel model){
 		Set<Submodel> tempset = new HashSet<Submodel>();
@@ -353,7 +370,7 @@ public class Merger {
 		
 		for(Submodel sub : tempset){
 			
-			if(sub.getAssociatedDataStructures().isEmpty()){
+			if(sub.getAssociatedDataStructures().isEmpty() && sub.getSubmodels().isEmpty()){
 				model.removeSubmodel(sub);
 			}
 		}

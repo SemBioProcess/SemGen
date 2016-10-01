@@ -184,6 +184,24 @@ public abstract class SemSimCollection extends SemSimObject{
 		
 		return dsset;
 	}
+	
+	/**
+	 * @return The set of DataStructures that are not included in any Submodel.
+	 */
+	public ArrayList<DataStructure> getUngroupedDataStructures(){
+		ArrayList<DataStructure> returnset = new ArrayList<DataStructure>();
+		ArrayList<DataStructure> allds = getAssociatedDataStructures();
+		returnset.addAll(allds);
+		
+		for(Submodel sub : getSubmodels()){
+			
+			for(DataStructure ds : sub.getAssociatedDataStructures())
+				returnset.remove(ds);
+		}
+		
+		return returnset;
+		
+	}
 		
 	/**
 	 * @return True if the model contains a DataStructure with the specified name, otherwise false.

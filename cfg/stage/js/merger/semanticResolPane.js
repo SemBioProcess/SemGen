@@ -170,8 +170,8 @@ function SemanticResolutionPane(merger) {
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height", e.pageY-94);
-			$('.modal-body').css("height", $(window).height()-e.pageY-94);
+			$('.mergePreview').css("height", e.pageY-100);
+			$('.modal-body').css("height", $(window).height()-e.pageY-100);
 			pane.leftgraph.initialize();
 			pane.rightgraph.initialize();
 			
@@ -180,7 +180,12 @@ function SemanticResolutionPane(merger) {
 			$(document).unbind('mousemove');
 		});
 	});
-	
+
+	// Dynamically adjust modal body height
+	$(window).on('load resize', function(){
+		$('.modal-body').css("height", $(window).height()-$('.mergePreview').height()-200);
+	});
+
 	this.pollOverlaps = function() {
 		choices = [];
 		resolutions.forEach(function(panel) {
