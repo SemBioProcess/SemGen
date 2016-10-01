@@ -36,6 +36,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	protected MergeConflicts conflicts = new MergeConflicts();
+	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, int index) {
 		super(index);
@@ -104,9 +105,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		conflicts.clearConflicts();
 		ArrayList<Boolean> units = workbench.getUnitOverlaps();
 		for (int i=0; i<units.size(); i++) {
-			if (!units.get(i)) {
-				conflicts.unitconflicts.add(new UnitConflict(workbench.getDSDescriptors(i), i));
-			}
+			checkUnitConflict(i, units.get(i));
+			
 		}
 		HashMap<String, String> smoverlaps = workbench.createIdenticalSubmodelNameMap();
 		
@@ -130,6 +130,25 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			conflicts.dupecodewords.add(new SyntacticDuplicate(overlap));
 		}
+	}
+	
+	private void checkUnitConflict(int i, boolean doesconflict) {
+		UnitConflict conflict = null;
+		if (!doesconflict) {
+			Pair<DataStructureDescriptor, DataStructureDescriptor> descs = workbench.getDSDescriptors(i);
+			String leftunit = descs.getLeft().getDescriptorValue(Descriptor.units);
+			String rightunit = descs.getRight().getDescriptorValue(Descriptor.units);
+			for (UnitConflict con : conflicts.unitconflicts) {
+				if (leftunit.equalsIgnoreCase(con.unitleft) && rightunit.equalsIgnoreCase(con.unitright)) {
+					con.incrementPairCount();
+					unitpairs.add(con);
+					return;
+				}
+			}
+			UnitConflict newcon = new UnitConflict(descs);
+			conflicts.unitconflicts.add(newcon);
+		}
+		unitpairs.add(conflict);
 	}
 	
 	public ModelAccessor saveMerge() {
@@ -170,21 +189,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		return overlaps;
 	}
-	
-	
-	private void removeUnitConflict(int conindex) {
-		UnitConflict toremove = null;
-		for (UnitConflict conflict : conflicts.unitconflicts) {
-			if (conflict.index == conindex) {
-				toremove = conflict;
-			}
-			//Reindex
-			else if (conflict.index > conindex) {
-				conflict.index = conflict.index--;
-			}
-		}
-		conflicts.unitconflicts.remove(toremove);
-	}
 
 
 	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
@@ -220,18 +224,19 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 			ArrayList<Boolean> units = workbench.getUnitOverlaps();
+			
 			int i = units.size()-1;
-			if (!units.get(i)) {
-				conflicts.unitconflicts.add(new UnitConflict(workbench.getDSDescriptors(i), i));
-			}
+			checkUnitConflict(i, units.get(i));
 		}
 		
 		public void onRemoveCustomOverlap(Double customindex) {
-			Pair<DependencyNode, DependencyNode> ol = overlaps.get(customindex.intValue());
-			workbench.removeManualCodewordMapping(customindex.intValue());
+			int intval = customindex.intValue();
+			Pair<DependencyNode, DependencyNode> ol = overlaps.get(intval);
+			workbench.removeManualCodewordMapping(intval);
 			generateOverlapDescriptors();
 			getOverlappingNodes();
-			removeUnitConflict(customindex.intValue());
+			conflicts.decrementUnitConflict(unitpairs.get(intval));
+			unitpairs.remove(intval);
 			
 			_commandSender.clearLink(updateOverlaps().toArray(new Overlap[]{}), ol.getLeft().id, ol.getRight().id);
 			
@@ -385,8 +390,13 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 		public ArrayList<Pair<Double,String>> buildConversionList() {
 			ArrayList<Pair<Double,String>> conversions = new ArrayList<Pair<Double,String>>();
-			for (UnitConflict uc : unitconflicts) {
-				conversions.add(uc.getConversion());
+			for (UnitConflict uc : unitpairs) {
+				if (uc==null) {
+					conversions.add(Pair.of(1.0, "*"));
+				}
+				else {
+					conversions.add(uc.getConversion());
+				}
 			}
 			
 			return conversions;
@@ -396,6 +406,12 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			dupesubmodels.clear();
 			dupecodewords.clear();
 			unitconflicts.clear();
+		}
+		
+		public void decrementUnitConflict(UnitConflict conflict) {
+			if (conflict.decrementPairCount()) {
+				unitconflicts.remove(conflict);
+			}
 		}
 	}
 	
@@ -415,20 +431,16 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	public class UnitConflict {
-		@Expose public String cdwdleft;
-		@Expose public String cwdright;
 		@Expose public String unitleft;
 		@Expose public String unitright;
 		@Expose public boolean multiply = true;
 		@Expose public Float conversion = 1.0f;
-		@Expose public int index;
+		private int numpairs = 1;
 		
-		protected UnitConflict(Pair<DataStructureDescriptor, DataStructureDescriptor> descs, int index) {
-			cdwdleft = descs.getLeft().getDescriptorValue(Descriptor.name);
+		protected UnitConflict(Pair<DataStructureDescriptor, DataStructureDescriptor> descs) {
 			unitleft = descs.getLeft().getDescriptorValue(Descriptor.units);
-			cwdright = descs.getRight().getDescriptorValue(Descriptor.name);
 			unitright = descs.getRight().getDescriptorValue(Descriptor.units);
-			this.index = index;
+
 		}
 		
 		public void setConversion(Float val, boolean mult) {
@@ -440,6 +452,15 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			String operator = "*";
 			if (!multiply) operator = "/"; 
 			return Pair.of(conversion.doubleValue(), operator);
+		}
+		
+		public void incrementPairCount() {
+			numpairs++;
+		}
+		
+		public boolean decrementPairCount() {
+			numpairs--;
+			return numpairs == 0;
 		}
 	}
 	

@@ -323,7 +323,7 @@ public class MergerWorkbench extends Workbench {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				setChanged();
-				notifyObservers(MergeEvent.mergecompleted);			
+				notifyObservers(MergeEvent.mergecompleted);
 			}
 		};
 		task.execute();
