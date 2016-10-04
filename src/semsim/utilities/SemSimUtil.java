@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,7 +69,7 @@ public class SemSimUtil {
 		// Remove mapping info on MappableVariables, set eqs. for variables that are inputs
 		ArrayList<String> dslist = new ArrayList<String>();
 		dslist.addAll(model.getDataStructureNames());
-		dslist.sort(new CaseInsensitiveComparator());
+		Collections.sort(dslist, new CaseInsensitiveComparator());
 		
 		ArrayList<DataStructure> dsListToRemove = new ArrayList<DataStructure>();
 				
