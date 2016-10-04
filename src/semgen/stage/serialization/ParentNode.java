@@ -51,6 +51,12 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		for(DataStructure dependency : sourceobj.getAssociatedDataStructures()) {
 			if (soldomainbounds.contains(dependency)) continue;
 			DependencyNode sdn = new DependencyNode(dependency, this);
+			for (SubModelNode smn : childsubmodels) {
+				if (smn.id.equalsIgnoreCase(sdn.id)) {
+					sdn.id = "dep#" + sdn.id;
+					break;
+				}
+			}
 			depmap.put(dependency, sdn);
 			dependencies.add(sdn);
 			incrementType(sdn.typeIndex);

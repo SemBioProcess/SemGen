@@ -72,7 +72,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	//Check if link is intra-submodel
 	if (this.srclink.linklevel != 0) {
 		this.rootElement.select("path")
-			.attr("stroke-dasharray", 5);
+			.attr("stroke-dasharray", 3, 6);
 	}
 	//Intermodel link
 	if (this.srclink.linklevel == 2) {

@@ -97,6 +97,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	if (this.xpos()==-1 || this.ypos() == -1) {
 		if (this.parent) {
 			this.setLocation(this.parent.x + Math.random()*200 - 100, this.parent.y + Math.random()*200 - 100);
+			
 		}
 		else {
 			this.setLocation(
@@ -167,7 +168,7 @@ Node.prototype.tickHandler = function (element, graph) {
 
 	}
 	this.setLocation(
-		Math.max(this.r, Math.min(graph.w - this.r, this.xpos())) + forcex,
+		Math.max(this.r, Math.min(graph.w - this.r*2, this.xpos())) + forcex,
 		Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.ypos())) + forcey
 	)
 
@@ -177,10 +178,6 @@ Node.prototype.tickHandler = function (element, graph) {
 		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
 		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
 	}
-	if (this.xpos() < 0 || this.ypos() < 0) {
-		throw "Bad location";
-	}
-	
 	root.attr("transform", "translate(" + this.xpos() + "," + this.ypos() + ")");
 
 	$(this).triggerHandler('postTick');
