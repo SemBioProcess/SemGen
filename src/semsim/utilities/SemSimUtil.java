@@ -66,10 +66,15 @@ public class SemSimUtil {
 		for(FunctionalSubmodel fs : fsset) model.removeSubmodel(fs);
 		
 		// Remove mapping info on MappableVariables, set eqs. for variables that are inputs
-		Set<DataStructure> dsset = new HashSet<DataStructure>();
-		dsset.addAll(model.getAssociatedDataStructures());
+		ArrayList<String> dslist = new ArrayList<String>();
+		dslist.addAll(model.getDataStructureNames());
+		dslist.sort(new CaseInsensitiveComparator());
+		
+		ArrayList<DataStructure> dsListToRemove = new ArrayList<DataStructure>();
 				
-		for(DataStructure ds : dsset){
+		for(String dsname : dslist){
+			
+			DataStructure ds = model.getAssociatedDataStructure(dsname);
 			
 			if(ds instanceof MappableVariable){	
 				
@@ -84,6 +89,7 @@ public class SemSimUtil {
 					MappableVariable tempmv = null;
 					
 					boolean sourcefound = ! sourcemv.isMapped();
+					System.out.println("Is " + mv.getName() + " mapped? " + sourcemv.isMapped());
 					
 					// follow mappings until source variable is found
 					while( ! sourcefound){		
@@ -93,6 +99,7 @@ public class SemSimUtil {
 						
 						//Remove the computational dependency between source and input var
 						sourcemv.getUsedToCompute().remove(tempmv); // remove mapping link because we are flattening
+						System.out.println(sourcemv.getName() + " no longer used to compute " + tempmv.getName());
 						
 						if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
 					}
@@ -131,19 +138,16 @@ public class SemSimUtil {
 						}
 					}
 					
-					model.removeDataStructure(mv.getName());
+					dsListToRemove.add(mv);
+					System.out.println("Flagging for removal: " + mv.getName());
 				}
-				
-				mv.setPublicInterfaceValue("");
-				mv.setPrivateInterfaceValue("");
-					
-					// Clear mappings
-				mv.getMappedFrom().clear();
-				mv.getMappedTo().clear();
 			}
 		}
 			
-		// Second pass through new data structures to remove the prefixes on their names
+		// Remove those data structures that were flagged for removal
+		for(DataStructure ds : dsListToRemove) model.removeDataStructure(ds.getName());
+		
+		// Second pass through new data structures to remove the prefixes on their names and clear mapping info
 		for(DataStructure ds : model.getAssociatedDataStructures()){
 			String oldname = ds.getName();
 			String newname = oldname.substring(oldname.lastIndexOf(".")+1, oldname.length());
@@ -156,6 +160,20 @@ public class SemSimUtil {
 			
 			ds.setName(newname); 
 			renamingmap.put(oldname, newname);
+			
+			if(ds instanceof MappableVariable){
+				MappableVariable mv = (MappableVariable)ds;
+			
+				mv.setPublicInterfaceValue("");
+				mv.setPrivateInterfaceValue("");
+					
+					// Clear mappings
+				mv.getMappedFrom().clear();
+				mv.getMappedTo().clear();
+				
+				System.out.println("Clearing getMappedFrom() " + " for " + mv.getName());
+				System.out.println("Clearing getMappedTo() " + " for " + mv.getName());
+			}
 		}
 		
 		return renamingmap;
