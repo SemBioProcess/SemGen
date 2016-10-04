@@ -278,7 +278,6 @@ function Graph() {
 	this.updateHeightAndWidth = function () {
 		this.w = $(window).width();
 		this.h = $(window).height();
-		sender.consoleOut(this.h);
 		svg.attr("width", this.w)
 	    	.attr("height", this.h)
 	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)

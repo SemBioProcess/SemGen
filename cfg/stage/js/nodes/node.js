@@ -85,7 +85,13 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
+	if (x < this.r) x=this.r
+	else if (x > this.graph.w-this.r) x = this.graph.w-this.r; 
+	
+	if (y < 25) y=25
+	else if (y > this.graph.h-20) y = this.graph.h-20; 
 	this.x = x; this.y = y;
+	
 	this.srcobj.xpos = x;
 	this.srcobj.ypos = y;
 }
