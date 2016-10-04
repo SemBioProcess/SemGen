@@ -85,11 +85,9 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
-	if (x < this.r) x=this.r
-	else if (x > this.graph.w-this.r) x = this.graph.w-this.r; 
-	
-	if (y < 25) y=25
-	else if (y > this.graph.h-20) y = this.graph.h-20; 
+	x = Math.max(this.r, Math.min(this.graph.w - this.r*2, x));
+	y = Math.max(this.r, Math.min(this.graph.h - this.r + this.spaceBetweenTextAndNode(), y));
+
 	this.x = x; this.y = y;
 	
 	this.srcobj.xpos = x;
@@ -107,8 +105,8 @@ Node.prototype.createVisualElement = function (element, graph) {
 		}
 		else {
 			this.setLocation(
-					(Math.random() * (graph.w-graph.w/3))+graph.w/6,
-					(Math.random() * (graph.h-graph.h/2))+graph.h/6
+					(Math.random() * (graph.w-graph.w/3))+this.graph.w/6,
+					(Math.random() * (graph.h-graph.h/2))+this.graph.h/6
 				);
 		}
 
@@ -174,8 +172,7 @@ Node.prototype.tickHandler = function (element, graph) {
 
 	}
 	this.setLocation(
-		Math.max(this.r, Math.min(graph.w - this.r*2, this.xpos())) + forcex,
-		Math.max(this.r, Math.min(graph.h - this.r + this.spaceBetweenTextAndNode(), this.ypos())) + forcey
+			this.xpos()+forcex, this.ypos()+forcey
 	)
 
 	var root = d3.select(element);
