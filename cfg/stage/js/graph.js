@@ -326,6 +326,7 @@ function Graph() {
 				d.fixed = setfixed || d.wasfixed;
 			});
 		}
+		this.tick();
 	}
 
 	this.toggleGravity = function(enabled) {
