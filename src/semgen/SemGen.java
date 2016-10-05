@@ -5,8 +5,20 @@
 
 package semgen;
 
-import java.awt.Color;
-import java.awt.HeadlessException;
+import org.semanticweb.owlapi.model.OWLException;
+import semgen.menu.SemGenMenuBar;
+import semgen.utilities.OntologyCache;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.file.SemGenFileChooser;
+import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.SemSimLibrary;
+import semsim.reading.ModelReader;
+import semsim.utilities.ErrorLog;
+import semsim.writing.ModelWriter;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -21,25 +33,6 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFrame;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
-import org.semanticweb.owlapi.model.OWLException;
-
-import semgen.SemGenGUI;
-import semgen.menu.SemGenMenuBar;
-import semgen.utilities.OntologyCache;
-import semgen.utilities.SemGenError;
-import semgen.utilities.SemGenFont;
-import semgen.utilities.file.SemGenFileChooser;
-import semgen.utilities.uicomponent.SemGenDialog;
-import semsim.SemSimLibrary;
-import semsim.reading.ModelReader;
-import semsim.utilities.ErrorLog;
-import semsim.writing.ModelWriter;
-
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +41,7 @@ public class SemGen extends JFrame implements Observer{
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache;
-	public static boolean debug = false;
+	public static boolean debug = true;
 	private static boolean openstage = false;
 	
 	//A class for application level events such as exiting and creating new tabs
