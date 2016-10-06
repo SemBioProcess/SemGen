@@ -170,8 +170,8 @@ function SemanticResolutionPane(merger) {
 	$('#resizeHandle').mousedown(function(e) {
 		e.preventDefault();
 		$(document).mousemove(function(e) {
-			$('.mergePreview').css("height", e.pageY-100);
-			$('.modal-body').css("height", $(window).height()-e.pageY-100);
+			$('.mergePreview').css("height", e.pageY-75);
+			$('.modal-body').css("height", $(window).height()-e.pageY-75);
 			pane.leftgraph.initialize();
 			pane.rightgraph.initialize();
 			
@@ -183,7 +183,7 @@ function SemanticResolutionPane(merger) {
 
 	// Dynamically adjust modal body height
 	$(window).on('load resize', function(){
-		$('.modal-body').css("height", $(window).height()-$('.mergePreview').height()-200);
+		$('.modal-body').css("height", $(window).height()-$('.mergePreview').height()-150);
 	});
 
 	this.pollOverlaps = function() {

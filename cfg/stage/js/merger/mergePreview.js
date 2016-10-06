@@ -56,7 +56,7 @@ function PreviewGraph(id) {
     	previewmodel.globalApply(function(node) {
     		if (node.nodeType == NodeType.SUBMODEL) {
     			 node.nodecharge = -400;
-    			node.textSize = 16;
+    			node.textSize = 12;
     			node.showchildren = true;
     		}
     		nodes.push(node);

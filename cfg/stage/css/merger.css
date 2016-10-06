@@ -1,5 +1,6 @@
 .modal-dialog {
     width: 95vw;
+    margin-top: 10px;
 }
 
 .modal-open .modal {
@@ -8,6 +9,7 @@
 
 .modal-title {
     line-height: 1;
+    margin: auto;
 }
 .mergePreview {
     position: relative;
@@ -42,7 +44,7 @@
 }
 
 .modal-body {
-    height: calc(75vh - 200px);
+    height: calc(75vh - 150px);
     overflow: scroll;
 }
 
@@ -57,7 +59,7 @@
 }
 
 .mergeResHeader {
-    padding-bottom: 15px;
+    display: flex;
     clear: both;
 }
 
@@ -172,7 +174,7 @@
 }
 
 #mergeStep2 > .panel-group {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 150px);
     overflow-y: scroll;
 }
 
