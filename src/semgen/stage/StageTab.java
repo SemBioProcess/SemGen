@@ -46,18 +46,17 @@ public class StageTab extends SemGenTab implements Observer {
 		// Create the browser
 		
 		try {
-			//Allows local files to be accessed - security vulnerability if not running locally
 			ArrayList<String> browserprefs = new ArrayList<String>();
 			if (SemGen.debug) {
-				browserprefs.add("--remote-debugging-port=9222"); // Uncomment to debug JS
+				browserprefs.add("--remote-debugging-port=9222"); 
 			}
 
 			BrowserPreferences.setChromiumSwitches(browserprefs.toArray(new String[]{}));
 			browser = new SemGenCommunicatingWebBrowser();
 			
 			if (SemGen.debug) {
-				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); // Uncomment to debug JS
-				System.out.println(remoteDebuggingURL); // Uncomment to debug JS. Past this url in chrome to begin debugging JS
+				String remoteDebuggingURL = browser.getRemoteDebuggingURL(); 
+				System.out.println(remoteDebuggingURL);
 				BrowserLauncher.openURL(remoteDebuggingURL);
 			}
 			
@@ -83,10 +82,6 @@ public class StageTab extends SemGenTab implements Observer {
 					return false;
 				}
 			});
-
-			       
-
-			
 			this.add(browserView, BorderLayout.CENTER);
 
 		} catch (InvalidNameException | IOException e) {

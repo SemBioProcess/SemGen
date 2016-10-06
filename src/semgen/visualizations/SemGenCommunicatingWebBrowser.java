@@ -15,13 +15,15 @@ import java.util.logging.*;
 
 public class SemGenCommunicatingWebBrowser extends CommunicatingWebBrowser {
 	// Stage html in resource dir
-	private final static String StageHtml = SemGen.cfgreadpath + "stage/stage.html?testMode="+SemGen.debug;
+	private static String StageHtml = SemGen.cfgreadpath + "stage/stage.html";
 	
 	public SemGenCommunicatingWebBrowser() throws InvalidNameException, IOException {
 		super();
 
 		System.out.println("Loading SemGen web browser");
-        
+        if (SemGen.debug) {
+        	StageHtml += "?testMode="+"true";
+        }
 		File stageHtmlFile = new File(StageHtml);
 		String stageHtmlPath = stageHtmlFile.getAbsolutePath();
 		
