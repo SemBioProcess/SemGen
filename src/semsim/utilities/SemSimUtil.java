@@ -85,12 +85,10 @@ public class SemSimUtil {
 								
 				if(mv.isFunctionalSubmodelInput()){
 										
-					System.out.println("Looking for source of " + mv.getName());
 					MappableVariable sourcemv = mv;
 					MappableVariable tempmv = null;
 					
 					boolean sourcefound = ! sourcemv.isMapped();
-					System.out.println("Is " + mv.getName() + " mapped? " + sourcemv.isMapped());
 					
 					// follow mappings until source variable is found
 					while( ! sourcefound){		
@@ -100,12 +98,9 @@ public class SemSimUtil {
 						
 						//Remove the computational dependency between source and input var
 						sourcemv.getUsedToCompute().remove(tempmv); // remove mapping link because we are flattening
-						System.out.println(sourcemv.getName() + " no longer used to compute " + tempmv.getName());
 						
 						if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
 					}
-					
-					System.out.println("Found source " + sourcemv.getName());
 					
 					String sourcevarglobalname = sourcemv.getName();
 					String sourcelocalname = sourcevarglobalname.substring(sourcevarglobalname.lastIndexOf(".")+1, sourcevarglobalname.length());
@@ -120,9 +115,7 @@ public class SemSimUtil {
 						
 						if( ! mv.getMappedTo().contains(dependentmv)){ // Only process the mathematical dependencies, not the mappings
 							dependentmv.getComputationInputs().remove(mv);
-							System.out.println("removed " + mv.getName() + " from list of inputs for " + dependentmv.getName());
 							dependentmv.getComputation().addInput(sourcemv);
-							System.out.println("added " + sourcemv.getName() + " as input for " + dependentmv.getName());
 						}
 						
 						// If the local name of the input doesn't match that of its source,
@@ -140,7 +133,6 @@ public class SemSimUtil {
 					}
 					
 					dsListToRemove.add(mv);
-					System.out.println("Flagging for removal: " + mv.getName());
 				}
 			}
 		}
@@ -171,9 +163,6 @@ public class SemSimUtil {
 					// Clear mappings
 				mv.getMappedFrom().clear();
 				mv.getMappedTo().clear();
-				
-				System.out.println("Clearing getMappedFrom() " + " for " + mv.getName());
-				System.out.println("Clearing getMappedTo() " + " for " + mv.getName());
 			}
 		}
 		
@@ -568,6 +557,8 @@ public class SemSimUtil {
 	}
 	
 	// Used in tandem with getFundamentalBaseUnits
+	// TODO: should add a parameter here that allows the user to choose whether they want to decompose into
+	// CellML OR SBML base units
 	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, SemSimLibrary sslib) {
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();

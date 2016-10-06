@@ -220,21 +220,26 @@ public class SBMLwriter extends ModelWriter {
 				
 				addNotesAndMetadataID(uom, ud);
 				
-				for(UnitFactor uf : uom.getUnitFactors()){
+				Set<UnitFactor> ufset = SemSimUtil.recurseBaseUnits(uom, 1.0, ModelWriter.sslib);
+				
+				for(UnitFactor uf : ufset){
 					
-					if(uf.getBaseUnit()==null){
-						System.err.println("Found a null base unit for a unit factor in unit " + uom.getName());
-						continue;
-					}
+					//if(uf.getBaseUnit()==null){
+					//	System.err.println("Found a null base unit for a unit factor in unit " + uom.getName());
+					//	continue;
+					//}
+					//else System.out.println(uom.getName() + " has unit factor " + uf.getBaseUnit().getName());
 					
 					String factorbasename = uf.getBaseUnit().getName();
 					
+					Unit sbmluf = new Unit(sbmllevel, sbmlversion);
+
  					// SBML Validation Rule #20421) A Unit object must have the required attributes 
 					// 'kind', 'exponent', 'scale' and 'multiplier', and may have the optional attributes 
 					// 'metaid' and 'sboTerm'. 
+										
 					if(Kind.isValidUnitKindString(factorbasename, sbmllevel, sbmlversion)){
 						
-						Unit sbmluf = new Unit(sbmllevel, sbmlversion);
 						sbmluf.setKind(Kind.valueOf(factorbasename.toUpperCase())); // set Kind attribute
 						sbmluf.setExponent(uf.getExponent()); // set Exponent attribute
 						
@@ -251,6 +256,8 @@ public class SBMLwriter extends ModelWriter {
 						
 						ud.addUnit(sbmluf);
 					}
+					else System.err.println("Error adding unit factor " + uf.getBaseUnit().getName()
+							+ " to declaration for " + uom.getName() + ": " + uf.getBaseUnit().getName() + " is not a valid SBML unit Kind");
 				}
 			}
 		}
@@ -662,9 +669,7 @@ public class SBMLwriter extends ModelWriter {
 				par.setConstant(true);
 			}
 			else par.setConstant(true);
-			
-			System.out.println(ds.getName() + " is constant = " + par.getConstant() + " " + usesevents + " " + hasinputs + " " + hasmathml + " " + (ds instanceof MappableVariable));
-			
+						
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			
