@@ -86,7 +86,6 @@ $(window).bind("cwb-initialized", function(e) {
 			main.graph.updateHeightAndWidth();
 			main.graph.update();
 		};
-		
 	}
 	initialized = true;
 });

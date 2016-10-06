@@ -211,7 +211,7 @@ public class CommunicatingWebBrowser extends Browser {
 			if(!e.isMainFrame())
 				return;
 
-			// We don't need to listen for anymore events
+			// We don't need to listen for any more events
 			e.getBrowser().removeLoadListener(this);
 			listenForCommands();
 			
