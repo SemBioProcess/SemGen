@@ -163,6 +163,6 @@ ParentNode.prototype.visibleGlobalApply = function(funct) {
 }
 
 ParentNode.prototype.onDoubleClick = function () {
-	this.showChildren();
-	this.graph.update();
+		this.showChildren();
+		this.graph.update();
 }

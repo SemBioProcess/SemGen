@@ -10,7 +10,7 @@ function PreviewGraph(id) {
 	var div = $(selector);
 	var graph = this;
 	var svg;
-	
+	var fixedMode = false;
     this.nodecharge = -280;
     this.linklength =420;
 	this.depBehaviors = [];
@@ -58,6 +58,7 @@ function PreviewGraph(id) {
     			 node.nodecharge = -400;
     			node.textSize = 12;
     			node.showchildren = true;
+    			node.fixed = fixedMode;
     		}
     		nodes.push(node);
     	}); 
@@ -123,14 +124,15 @@ function PreviewGraph(id) {
 	};
 
 	this.toggleFixedMode = function(setfixed) {
-		this.fixedMode = setfixed;
+
+		fixedMode = setfixed;
 		for (n in nodes) {
-			nodes[n].applytoChildren(function(d) {
-				if (setfixed) {
-					d.wasfixed = d.fixed;
-				}
-				d.fixed = setfixed || d.wasfixed;
-			});
+			var d = nodes[n];
+			if (setfixed) {
+				d.wasfixed = d.fixed;
+			}
+			d.fixed = setfixed || d.wasfixed;
 		}
 	};
+	
 }
