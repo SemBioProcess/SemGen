@@ -100,10 +100,10 @@ public class Merger {
 				//Flip the conversion operator
 				Pair<Double, String> factor = conversionfactors.get(i);
 				if (factor.getRight()=="*") {
-					factor.setValue("/");
+					conversionfactors.set(i, Pair.of(factor.getLeft(), "/"));
 				}
 				else {
-					factor.setValue("*");
+					conversionfactors.set(i, Pair.of(factor.getLeft(), "*"));
 				}
 				
 				String keptname = dsp.getRight().getName();
