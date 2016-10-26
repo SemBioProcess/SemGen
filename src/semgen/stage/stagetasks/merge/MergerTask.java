@@ -36,7 +36,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	protected MergeConflicts conflicts = new MergeConflicts();
-	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
+	protected ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	
 	public MergerTask(ArrayList<ModelInfo> modelinfo, int index) {
 		super(index);
@@ -150,8 +150,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					return;
 				}
 			}
-			UnitConflict newcon = new UnitConflict(descs);
-			conflicts.unitconflicts.add(newcon);
+			conflict = new UnitConflict(descs);
+			conflicts.unitconflicts.add(conflict);
 		}
 		unitpairs.add(conflict);
 	}

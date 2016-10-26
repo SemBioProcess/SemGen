@@ -82,13 +82,13 @@ public class Merger {
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
-				String newname = oldnewdsnamemap.get(dsp.getLeft().getName());
+				String keptname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				
-				if (newname==null) newname=dsp.getLeft().getName();
+				if (keptname==null) keptname=dsp.getLeft().getName();
 				
-				if(mod1renamemap.containsKey(newname)) newname = mod1renamemap.get(newname);
+				if(mod1renamemap.containsKey(keptname)) keptname = mod1renamemap.get(keptname);
 
-				keptds = ssm1clone.getAssociatedDataStructure(newname);
+				keptds = ssm1clone.getAssociatedDataStructure(keptname);
 				modelfordiscardedds = ssm2clone;
 				String discardedname = dsp.getRight().getName();
 				
@@ -97,6 +97,15 @@ public class Merger {
 				discardedds = modelfordiscardedds.getAssociatedDataStructure(discardedname);
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
+				//Flip the conversion operator
+				Pair<Double, String> factor = conversionfactors.get(i);
+				if (factor.getRight()=="*") {
+					factor.setValue("/");
+				}
+				else {
+					factor.setValue("*");
+				}
+				
 				String keptname = dsp.getRight().getName();
 				
 				if(mod2renamemap.containsKey(keptname)) keptname = mod2renamemap.get(keptname);
@@ -327,7 +336,7 @@ public class Merger {
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		
 		// if the two terms have different names, or a conversion factor is required
-		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1){
+		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1.0){
 			String replacementtext = keptds.getName();
 			
 			if(conversionfactor.getLeft()!=1.0) 

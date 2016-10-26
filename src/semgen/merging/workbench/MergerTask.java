@@ -42,6 +42,7 @@ public class MergerTask extends SemGenTask {
     			removeDomainBounds(solutiondomds.getName());
     			
     			HashMap<String, String> oldnewdsnamemap = resolveSyntacticOverlap();
+    			
 				Merger merger = new Merger(ssm1clone, ssm2clone, overlapmap, oldnewdsnamemap, choicelist, conversionfactors);
 				
     			mergedmodel = merger.merge();
@@ -75,7 +76,9 @@ public class MergerTask extends SemGenTask {
 		// Then resolve for data structures
 		for (String dsname : cwnamemap.keySet()) {
 			String newdsname = new String(cwnamemap.get(dsname));
-			ssm1clone.getAssociatedDataStructure(dsname).setName(newdsname);
+			DataStructure ds1 = ssm1clone.getAssociatedDataStructure(dsname);
+			ds1.setName(newdsname);
+			oldnewdsnamemap.put(dsname, newdsname);
 			Boolean derivreplace = false;
 			String derivname = null;
 			
