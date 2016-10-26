@@ -117,16 +117,21 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		HashMap<String, String> cwoverlaps = workbench.createIdenticalNameMap();
 		
 		for (String overlap : cwoverlaps.keySet()) {
-			//Don't include if renaming the submodel would resolve the overlap.
-			String submodelname = overlap.substring(0, overlap.lastIndexOf("."));
-			boolean smresolves = false;
-			for (String smoverlap : smoverlaps.keySet()) {
-				if (smoverlap.equals(submodelname)) {
-					smresolves = true;
-					break;
+			
+			//If the codeword name uses the submodel.codeword convention, 
+			// don't include if renaming the submodel would resolve the codeword name overlap.
+			if(overlap.contains(".")){
+				
+				String submodelname = overlap.substring(0, overlap.lastIndexOf("."));
+				boolean smresolves = false;
+				for (String smoverlap : smoverlaps.keySet()) {
+					if (smoverlap.equals(submodelname)) {
+						smresolves = true;
+						break;
+					}
 				}
+				if (smresolves) continue;
 			}
-			if (smresolves) continue;
 			
 			conflicts.dupecodewords.add(new SyntacticDuplicate(overlap));
 		}
