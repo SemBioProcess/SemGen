@@ -32,6 +32,7 @@ import org.sbml.jsbml.LocalParameter;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Parameter;
+import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.RateRule;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
@@ -329,8 +330,8 @@ public class SBMLwriter extends ModelWriter {
 			// Otherwise create rule in model for compartment
 			else if(ds.getComputation().hasMathML()) addRuleToModel(ds, comp);
 			
-			// Deal with units on compartments if needed
-			if(ds.hasUnits()) comp.setUnits(ds.getUnit().getName());
+			// Add units if needed
+			setUnitsForModelComponent(comp, ds);
 			
 			addNotesAndMetadataID(pmc, comp);
 			
@@ -561,7 +562,8 @@ public class SBMLwriter extends ModelWriter {
 						lp.setValue(Double.parseDouble(formula));
 						
 						// Add units, if needed
-						if(gp.hasUnits()) lp.setUnits(gp.getUnit().getName());
+						// Deal with units on compartments if needed
+						setUnitsForModelComponent(lp, gp);
 					}
 				}
 				
@@ -835,6 +837,17 @@ public class SBMLwriter extends ModelWriter {
 			else{
 				sbo.setMetaId(sso.getMetadataID());
 				metaIDsUsed.add(sso.getMetadataID());
+			}
+		}
+	}
+	
+	private void setUnitsForModelComponent(QuantityWithUnit qwu, DataStructure ds){
+		
+		if(ds.hasUnits()){
+			String uomname = ds.getUnit().getName();
+			
+			if( sbmlmodel.containsUnitDefinition(uomname)){ 
+				qwu.setUnits(uomname);
 			}
 		}
 	}
