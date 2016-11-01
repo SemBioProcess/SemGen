@@ -11,20 +11,22 @@ function Graph() {
 	var visibleNodes = [];
 	var links = [];
 	
-	this.force = d3.layout.force()
-		.gravity(0)
-		.chargeDistance(defaultchargedistance)
-		.friction(0.6)
-		.charge(function (d) { 
-			return d.charge; })
-	    .linkDistance(function (d) { return d.length; })
-	    .theta(0.6)
-	    .nodes(visibleNodes)
-	    .links(links);
+	this.force = d3.forceSimulation(visibleNodes)
+		//.chargeDistance(defaultchargedistance)
+		//.friction(0.6)
+		.force("charge", d3.forceManyBody().strength(function (d) { 
+			return d.charge; }))
+		.force("link", d3.forceLink(links)
+			.distance(function (d) { return d.length; }))
+		.force("y", d3.forceY(0))
+        .force("x", d3.forceX(0));
+			
+	    //.theta(0.6)
+	   
 	
 	// Get the stage and style it
 	var svg = d3.select("#stage")
-	    .append("svg")
+	    .append("svg")	    
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
@@ -33,7 +35,7 @@ function Graph() {
 	
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
-	this.color = d3.scale.category10();
+	this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
@@ -105,20 +107,21 @@ function Graph() {
 	var node;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
-
+		
+		
 		bruteForceRefresh.call(this);
 
 		// Add the links
 		path = vis.selectAll("g.link")
 			.data(links, function(d) { return d.id; });
 
-		path.enter().append("g")
-        	.each(function (d) { d.createVisualElement(this, graph); });
+		//path.enter().append("g")
+        //	.each(function (d) { d.createVisualElement(this, graph); });
 
 		path.exit().remove();
 
 		// Build the visibleNodes
-	    node = vis.selectAll("g.node")
+	    node = vis.selectAll("node")
 	        .data(visibleNodes, function(d) { return d.id; });
 
 	    node.enter().append("g")
@@ -127,12 +130,11 @@ function Graph() {
 	    node.exit().remove();
 	    
 	    // Define the tick function
-	    this.force.on("tick", this.tick);
 
-	    // Restart the force layout.
 	    this.force
-			    .size([this.w, this.h])
-			    .start(); 
+	    	.on("tick", this.tick)
+	    	.alpha(1)
+			.restart(); 
 	    
 	    $(this).triggerHandler("postupdate");
 	    
@@ -279,8 +281,12 @@ function Graph() {
 		this.w = $(window).width();
 		this.h = $(window).height();
 		svg.attr("width", this.w)
-	    	.attr("height", this.h)
-	    	.attr("viewBox","0 0 "+ this.w +" "+ this.h)
+	    	.attr("height", this.h);
+		
+		vis.attr("width", this.w)
+    	.attr("height", this.h);
+		
+	    	//.attr("viewBox","0 0 "+ this.w +" "+ this.h);
 	}
 
 	this.setNodeCharge = function(charge) {
@@ -310,7 +316,7 @@ function Graph() {
 	
 	this.setChargeDistance = function(dist) {
 		if (isNaN(dist)) return;
-		this.force.chargeDistance(dist);
+		//this.force.chargeDistance(dist);
 		
 		this.update();
 
@@ -331,17 +337,17 @@ function Graph() {
 
 	this.toggleGravity = function(enabled) {
 		if (enabled) {
-			this.force.gravity(1.0);
+			//this.force.gravity(1.0);
 		}
 		else {
-			this.force.gravity(0.0);
+			//this.force.gravity(0.0);
 		}
 		this.update();
 
 	}
 
 	this.setFriction = function(friction) {
-		this.force.friction(friction);
+		//this.force.friction(friction);
 	}
 
 	this.updateHeightAndWidth();

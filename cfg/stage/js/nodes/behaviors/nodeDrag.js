@@ -10,8 +10,9 @@ function NodeDrag(_node) {
 
 	
 	$(_node).on('createVisualization', function (e, root) {
-		var nodeDrag = d3.behavior.drag()
-			.on("dragstart", function (d, i) {
+		var nodeDrag = d3.drag()
+			.subject(_node)
+			.on("start", function (d, i) {
 				_node.graph.force.stop();
 				_node.rootElement.selectAll("circle").attr("r", _node.r*2);
 				_node.dragstart.forEach(function(behavior) {
@@ -51,12 +52,12 @@ function NodeDrag(_node) {
 				_node.graph.tick();
 		    	
 		    })
-		    .on("dragend", function (d, i) {
+		    .on("end", function (d, i) {
 		    	_node.rootElement.selectAll("circle").attr("r", _node.r);
 		    	_node.dragend.forEach(function(behavior) {
 		    		behavior(_node);
 				});
-		    	_node.graph.force.start();
+		    	_node.graph.force.restart();
 		        _node.graph.tick();
 		        
 		    });

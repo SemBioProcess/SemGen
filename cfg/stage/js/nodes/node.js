@@ -111,16 +111,16 @@ Node.prototype.createVisualElement = function (element, graph) {
 		}
 
 	} 
-	
+	var node = this;
 	this.rootElement = d3.select(element);
 	this.rootElement.attr("class", this.className)
-		.call(graph.force.drag)
+		//.call(graph.force.drag)
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
 	
 	if(this.nodeType != NodeType.NULLNODE) {
 	
-		var circleSelection = this.rootElement.append("svg:circle")
+		var circleSelection = this.rootElement.append("circle")
 											.attr("r", this.r)
 	
 											.attr("class","nodeStrokeClass")
@@ -140,7 +140,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 		});
 	
 		//Append highlight circle
-		this.rootElement.append("svg:circle")
+		this.rootElement.append("circle")
 			.attr("class", "highlight")
 			.attr("r", this.r + 4)
 			.attr("stroke", "yellow")
