@@ -8,22 +8,22 @@
 function Graph() {
 	var graph = this;
 
-	var visibleNodes = [];
-	var links = [];
 	
-	this.force = d3.forceSimulation(visibleNodes)
+	var links = [];
+		var visibleNodes = [];
+	this.force = d3.forceSimulation()
 		//.chargeDistance(defaultchargedistance)
 		//.friction(0.6)
 		.force("charge", d3.forceManyBody().strength(function (d) { 
 			return d.charge; }))
 		.force("link", d3.forceLink(links)
-			.distance(function (d) { return d.length; }))
-		.force("y", d3.forceY(0))
-        .force("x", d3.forceX(0));
+			.distance(function (d) { return d.length; }));
+		//.force("y", d3.forceY(0))
+      //  .force("x", d3.forceX(0));
 			
 	    //.theta(0.6)
 	   
-	
+
 	// Get the stage and style it
 	var svg = d3.select("#stage")
 	    .append("svg")	    
@@ -31,7 +31,7 @@ function Graph() {
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
 
-	var vis = svg.append('g');
+	var vis = svg.append('g').attr("class", "nodes");
 	
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
@@ -107,35 +107,36 @@ function Graph() {
 	var node;
 	this.update = function () {
 		$(this).triggerHandler("preupdate");
-		
-		
+
 		bruteForceRefresh.call(this);
 
 		// Add the links
-		path = vis.selectAll("g.link")
+		path = vis.selectAll(".link")
 			.data(links, function(d) { return d.id; });
 
-		//path.enter().append("g")
-        //	.each(function (d) { d.createVisualElement(this, graph); });
+		path.enter().append("g")
+        	.each(function (d) { d.createVisualElement(this, graph); });
 
 		path.exit().remove();
 
 		// Build the visibleNodes
-	    node = vis.selectAll("node")
+	    node = vis.selectAll(".node")
 	        .data(visibleNodes, function(d) { return d.id; });
 
 	    node.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
 
-	    node.exit().remove();
+	   node.exit().remove();
 	    
 	    // Define the tick function
-
+//
 	    this.force
+	    	.nodes(node)
 	    	.on("tick", this.tick)
-	    	.alpha(1)
-			.restart(); 
-	    
+	    	.alphaTarget(0.1)
+	    	.restart();
+	    //	.force('link').links(path);
+
 	    $(this).triggerHandler("postupdate");
 	    
 	    if (this.fixedMode) {
@@ -183,12 +184,12 @@ function Graph() {
 
 	this.tick = function () {
 		// Execute the tick handler for each link
-		path.each(function (d) {
+		path.enter().each(function (d) {
 			d.tickHandler(this, graph);
 		})
 
     	// Execute the tick handler for each node
-    	node.each(function (d) {
+    	node.enter().each(function (d) {
     		d.tickHandler(this, graph);
     	});
 	};
@@ -286,7 +287,6 @@ function Graph() {
 		vis.attr("width", this.w)
     	.attr("height", this.h);
 		
-	    	//.attr("viewBox","0 0 "+ this.w +" "+ this.h);
 	}
 
 	this.setNodeCharge = function(charge) {

@@ -39,6 +39,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
+	this.cx = srcobj.xpos;
+	this.cy = srcobj.ypos;
 	
 	this.xpos = function () {
 		return this.x;
@@ -89,6 +91,7 @@ Node.prototype.setLocation = function (x, y) {
 	y = Math.max(this.r, Math.min(this.graph.h - this.r + this.spaceBetweenTextAndNode(), y));
 
 	this.x = x; this.y = y;
+	this.cy = x; this.cy=y;
 	
 	this.srcobj.xpos = x;
 	this.srcobj.ypos = y;
@@ -114,9 +117,9 @@ Node.prototype.createVisualElement = function (element, graph) {
 	var node = this;
 	this.rootElement = d3.select(element);
 	this.rootElement.attr("class", this.className)
-		//.call(graph.force.drag)
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
+    	
 	
 	if(this.nodeType != NodeType.NULLNODE) {
 	
@@ -149,9 +152,10 @@ Node.prototype.createVisualElement = function (element, graph) {
 		// Create the text elements
 		this.createTextElement("shadow");
 		this.createTextElement("real");
+		
 	}
-	$(this).triggerHandler('createVisualization', [this.rootElement]);
 	
+	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 
 Node.prototype.getLinks = function () {
@@ -160,7 +164,7 @@ Node.prototype.getLinks = function () {
 
 Node.prototype.tickHandler = function (element, graph) {
 	$(this).triggerHandler('preTick');
-
+	var node = this;
 	//Keep child nodes centered on parent
 	var forcey = 0;
 	var forcex = 0;
@@ -174,24 +178,24 @@ Node.prototype.tickHandler = function (element, graph) {
 	this.setLocation(
 			this.xpos()+forcex, this.ypos()+forcey
 	)
-
+	
 	var root = d3.select(element);
 	//Keep the text above hull when an parent node is opened.
 	if ((this.showchildren) && (this.nodeType != NodeType.NULLNODE)) {
-		this.rootElement.selectAll("text").attr("y", -this.spaceBetweenTextAndNode());
-		this.rootElement.selectAll("text").attr("x", -(this.xpos() - (this.xmax + this.xmin)/2.0));
+		this.rootElement.selectAll("text").attr("y", -node.spaceBetweenTextAndNode())
+		this.rootElement.selectAll("text").attr("x", -(node.xpos() - (this.xmax + this.xmin)/2.0));
 	}
-	root.attr("transform", "translate(" + this.xpos() + "," + this.ypos() + ")");
-
+	
+	this.rootElement.attr("transform", "translate(" + node.xpos() + "," + node.ypos() + ")");
 	$(this).triggerHandler('postTick');
 }
 
 Node.prototype.createTextElement = function (className) {
-
+	var node = this;
 	this.rootElement.append("svg:text")
 		.attr("font-size", this.textSize + "px")
 	    .attr("x", 0)
-	    .attr("y", -this.spaceBetweenTextAndNode())
+	    .attr("y", -node.spaceBetweenTextAndNode())
 	    .text(this.displayName)
 	    .attr("class", className)
 	    .attr("text-anchor", "middle");

@@ -111,10 +111,9 @@ function Hull(node) {
 			if (node.nodeType==NodeType.NULLNODE) return; 
 			// Center the node at the top of the hull
 			// Draw hull
-				hull.datum(d3.geom.hull(vertexes))
-					.attr("d", function(d) { 
+				hull.datum(d3.polygonHull(vertexes)).attr("d", function(d) { 
 						return  "M" + d.join("L") + "Z";})
-					.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
+						.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 		}
 	});
 }

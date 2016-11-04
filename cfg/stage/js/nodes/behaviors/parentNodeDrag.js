@@ -15,8 +15,7 @@ function parentDrag(parent) {
 	parent.drag.push(function (d) {
 		   // Drag functionality
 		if (d.showchildren) {
-			var dx = 0;
-			var dy = 0;
+			var dx = dy = 0;
 			if (
 				(d3.event.dx + d.xmin) > 10
 				&& (d3.event.dx + d.xmax) < d.graph.w-10) {
@@ -33,10 +32,6 @@ function parentDrag(parent) {
 				n.px += dx;
 				n.py += dy;
 			});
-		
-	
-				//d.setLocation(d.xpos(), d.ypos());
-			//	$(parent).triggerHandler("dragend");
 		}
 		else {
 			if (

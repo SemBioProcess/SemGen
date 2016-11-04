@@ -45,7 +45,7 @@ var NodeTypeArray = [
 		];
 
 
-var defaultcharge = -100;
+var defaultcharge = -300;
 var defaultlinklength = 100;
 var defaultchargedistance = 400;
 

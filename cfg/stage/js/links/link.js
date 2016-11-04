@@ -65,7 +65,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 
 	this.rootElement.attr("class", this.className);
 
-	this.rootElement.append("svg:path")
+	this.rootElement.append("path")
 			.attr("id", this.id)
 			.attr("class", "link");
 	
@@ -102,6 +102,8 @@ Link.prototype.tickHandler = function (element, graph) {
 	var link = this;
 	// Display and update links
 	var root = d3.select(element);
+	
+
 	root.select("path").attr("d", function(d) {
     	    return link.draw(d.source, d.target);
     	});
@@ -111,9 +113,9 @@ Link.prototype.tickHandler = function (element, graph) {
 	}
 
 	// Display and update the link labels
-	var text = root.selectAll("text");
-	text.attr("x", function(d) { return source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
-	text.attr("y", function(d) { return source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
+	//var text = root.selectAll("text");
+	//text.attr("x", function(d) { return source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
+	//text.attr("y", function(d) { return source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
 
 }
 

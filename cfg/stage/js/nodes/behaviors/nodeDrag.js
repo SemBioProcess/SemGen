@@ -15,6 +15,7 @@ function NodeDrag(_node) {
 			.on("start", function (d, i) {
 				_node.graph.force.stop();
 				_node.rootElement.selectAll("circle").attr("r", _node.r*2);
+	
 				_node.dragstart.forEach(function(behavior) {
 					behavior(_node);
 				});
