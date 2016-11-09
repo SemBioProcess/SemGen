@@ -12,14 +12,16 @@ function Graph() {
 	var links = [];
 	
 	this.force = d3.layout.force()
-		.gravity(0)
+		.gravity(0.0)
 		.chargeDistance(defaultchargedistance)
-		.friction(0.6)
+		.friction(0.9)
 		.charge(function (d) { 
 			return d.charge; })
 	    .linkDistance(function (d) { return d.length; })
-	    .theta(0.6)
-	    .nodes(visibleNodes)
+	    .theta(0.8)
+		.alpha(0.1)
+		.linkStrength(0.1)
+		.nodes(visibleNodes)
 	    .links(links);
 	
 	// Get the stage and style it
