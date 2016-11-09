@@ -9,20 +9,22 @@ function Graph() {
 	var graph = this;
 
 	
-	var links = [];
+	
 		var visibleNodes = [];
 	this.force = d3.forceSimulation()
 		//.chargeDistance(defaultchargedistance)
-		//.friction(0.6)
-		.force("charge", d3.forceManyBody().strength(function (d) { 
-			return d.charge; }))
-		.force("link", d3.forceLink(links)
-			.distance(function (d) { return d.length; }));
+		.velocityDecay(0.6)
+		.force("charge", d3.forceManyBody().strength(function(d) {return d.charge;}))
+		.force("link", d3.forceLink()
+			.id(function(d) { return d.id; })
+			.strength(function (d) 
+					{ return d.length; }
+			));
 		//.force("y", d3.forceY(0))
       //  .force("x", d3.forceX(0));
 			
 	    //.theta(0.6)
-	   
+	  var links = this.force.force("link").links(); 
 
 	// Get the stage and style it
 	var svg = d3.select("#stage")
@@ -31,7 +33,7 @@ function Graph() {
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
 
-	var vis = svg.append('g').attr("class", "nodes");
+	var vis = svg.append('g').attr("class", "canvas");
 	
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
@@ -129,13 +131,11 @@ function Graph() {
 	   node.exit().remove();
 	    
 	    // Define the tick function
-//
 	    this.force
-	    	.nodes(node)
+	    	.nodes(visibleNodes)
 	    	.on("tick", this.tick)
-	    	.alphaTarget(0.1)
+	    	.alphaTarget(1)
 	    	.restart();
-	    //	.force('link').links(path);
 
 	    $(this).triggerHandler("postupdate");
 	    
@@ -347,7 +347,7 @@ function Graph() {
 	}
 
 	this.setFriction = function(friction) {
-		//this.force.friction(friction);
+		this.force.velocityDecay(friction);
 	}
 
 	this.updateHeightAndWidth();

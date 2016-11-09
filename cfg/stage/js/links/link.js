@@ -63,10 +63,11 @@ function Link(graph, srclink, output, input, length) {
 Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
 
-	this.rootElement.attr("class", this.className);
-
-	this.rootElement.append("path")
+	this.rootElement
 			.attr("id", this.id)
+			.attr("class", this.className);
+			//.attr("class", "link")
+	this.rootElement.append("svg:path")
 			.attr("class", "link");
 	
 	//Check if link is intra-submodel
@@ -76,7 +77,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	}
 	//Intermodel link
 	if (this.srclink.linklevel == 2) {
-		this.rootElement.select("path.link")
+		this.rootElement.select("path")
 			.attr("class", "intermodel")
 			.attr("stroke-width", "3")
 			.attr("stroke", "Cyan");
@@ -84,7 +85,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 
 	//Custom link
 	if (this.srclink.linklevel == 3) {
-		this.rootElement.select("path.link")
+		this.rootElement.select("path")
 			.attr("class", "custom")
 			.attr("stroke-width", "3")
 			.attr("stroke", "Lime");
@@ -101,17 +102,18 @@ Link.prototype.createVisualElement = function (element, graph) {
 Link.prototype.tickHandler = function (element, graph) {
 	var link = this;
 	// Display and update links
-	var root = d3.select(element);
+	//var root = d3.select(element);
 	
 
-	root.select("path").attr("d", function(d) {
-    	    return link.draw(d.source, d.target);
-    	});
+	this.rootElement.select("path").attr("d", link.draw(this.source, this.target));
 	
-	if (link.bidirectional) {
-
-	}
-
+//	if (link.bidirectional) {
+//
+//		
+//	}.attr("x1", function(d) { return d.source.x; })
+//	    .attr("y1", function(d) { return d.source.y; })
+//	    .attr("x2", function(d) { return d.target.x; })
+//	    .attr("y2", function(d) { return d.target.y; })
 	// Display and update the link labels
 	//var text = root.selectAll("text");
 	//text.attr("x", function(d) { return source.xpos() + (d.target.xpos() - d.source.xpos())/2; });

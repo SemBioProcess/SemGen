@@ -16,18 +16,22 @@ function PreviewGraph(id) {
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
 
-    var color = d3.scale.category10();
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
     var svg = d3.select(selector)
     	.append("svg");
 
     svg.id = "svg" + id;
-    this.force = d3.layout.force()
-	    .charge(function (d) { return d.charge; })
-		.linkDistance(function (d) { return d.length; });
+    this.force = d3.forceSimulation()
+	.velocityDecay(0.6)
+	.force("charge", d3.forceManyBody().strength(function(d) {return d.charge;}))
+	.force("link", d3.forceLink()
+		.distance(function (d) 
+				{ return d.length; }
+		));
     
 
-    var links = this.force.links();
-    var nodes = this.force.nodes();
+    var links = this.force.force("link").links();//.links();
+    var nodes = [];
     
     this.initialize = function () {
 	    graph.w = div.width();
@@ -91,22 +95,24 @@ function PreviewGraph(id) {
 	        .each(function (d) { d.createVisualElement(this, graph); });
 	
 	    node.exit().remove();
-	    
-	    this.force.on("tick", this.tick);
-	    
-	    graph.force.size([graph.w, graph.h])
-        	.start();
+	    	    
+	    this.force
+    	.nodes(nodes)
+    	
+    	.on("tick", this.tick)
+    	.alphaTarget(1)
+    	.restart();
 	    $(this).triggerHandler("postupdate");
     }
     
     this.tick = function () {
-	    		path.each(function (d) {
+	    		path.enter().each(function (d) {
 	    			
 	    			d.tickHandler(this, graph);
 	    		})
 	
 	        	// Execute the tick handler for each node
-	        	node.each(function (d) {
+	        	node.enter().each(function (d) {
 	        		d.tickHandler(this, graph);
 	        	});
 	    	};

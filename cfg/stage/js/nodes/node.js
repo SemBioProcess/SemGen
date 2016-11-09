@@ -39,8 +39,6 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
-	this.cx = srcobj.xpos;
-	this.cy = srcobj.ypos;
 	
 	this.xpos = function () {
 		return this.x;
@@ -91,7 +89,6 @@ Node.prototype.setLocation = function (x, y) {
 	y = Math.max(this.r, Math.min(this.graph.h - this.r + this.spaceBetweenTextAndNode(), y));
 
 	this.x = x; this.y = y;
-	this.cy = x; this.cy=y;
 	
 	this.srcobj.xpos = x;
 	this.srcobj.ypos = y;
@@ -170,7 +167,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent) {
-			var k = .0005;
+			var k = .005;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 
