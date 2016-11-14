@@ -11,8 +11,8 @@ function PreviewGraph(id) {
 	var graph = this;
 	var svg;
 	var fixedMode = false;
-    this.nodecharge = -280;
-    this.linklength =420;
+    this.nodecharge = -100;
+    this.linklength =50;
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
 	this.active = true;
@@ -23,15 +23,18 @@ function PreviewGraph(id) {
 
     svg.id = "svg" + id;
     this.force = d3.forceSimulation()
-	.velocityDecay(0.6)
-	.force("charge", d3.forceManyBody().strength(function(d) {return d.charge;}))
-	.force("link", d3.forceLink()
-		.distance(function (d) 
-				{ return d.length; }
-		));
-    
+		.velocityDecay(0.6)
+		.force("charge", d3.forceManyBody()
+				.strength(function(d) {return d.charge;})
+				.distanceMin(50)
+				.distanceMax(200))
+		.force("link", d3.forceLink()
+			.id(function(d) { return d.id; })
+			.distance(function (d) 
+					{ return d.length; })
+			.strength(function(link) {return 1;}));    
 
-    var links = this.force.force("link").links();//.links();
+    var links = this.force.force("link").links();
     var nodes = [];
     
     this.initialize = function () {
@@ -39,11 +42,14 @@ function PreviewGraph(id) {
 	    graph.h = div.height();
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
+	    this.force.force("center", d3.forceCenter(graph.w/2, graph.h/2));
     }
     
     this.setPreviewData = function(data) {
+    	
     	previewmodel = new ModelNode(graph, data);
     	previewmodel.nodeType = NodeType.NULLNODE;
+    	previewmodel.setLocation(graph.w/2, graph.h/2);
     	previewmodel.showchildren = true;
     	previewmodel.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
     	this.update();
@@ -60,7 +66,7 @@ function PreviewGraph(id) {
 
     	previewmodel.globalApply(function(node) {
     		if (node.nodeType == NodeType.SUBMODEL) {
-    			 node.nodecharge = -400;
+    			 node.nodecharge = -200;
     			node.textSize = 12;
     			node.showchildren = true;
     			node.fixed = fixedMode;
@@ -80,7 +86,7 @@ function PreviewGraph(id) {
 		});
 		
 		// Add the links
-		path = svg.selectAll("g.link")
+		path = svg.selectAll(".link")
 			.data(links, function(d) { return d.id; });
 	
 		path.enter().append("g")
@@ -89,7 +95,7 @@ function PreviewGraph(id) {
 		path.exit().remove();
 	
 		// Build the visibleNodes
-		node = svg.selectAll("node")
+		node = svg.selectAll(".node")
 	        .data(nodes, function(d) { return d.id; });
 	
 	    node.enter().append("g")
@@ -99,9 +105,8 @@ function PreviewGraph(id) {
 	    	    
 	    this.force
     	.nodes(nodes)
-    	
     	.on("tick", this.tick)
-    	.alphaTarget(1)
+    	.alphaTarget(0.5)
     	.restart();
 	    $(this).triggerHandler("postupdate");
     }
@@ -131,15 +136,15 @@ function PreviewGraph(id) {
 	};
 
 	this.toggleFixedMode = function(setfixed) {
-
-		fixedMode = setfixed;
-		for (n in nodes) {
-			var d = nodes[n];
-			if (setfixed) {
-				d.wasfixed = d.fixed;
-			}
-			d.fixed = setfixed || d.wasfixed;
+		this.fixedMode = setfixed;
+		
+		if (setfixed) {
+			this.pause();
 		}
+		else {
+		    this.resume();
+		}
+		this.tick();
 	};
 	
 	this.pause = function() {
