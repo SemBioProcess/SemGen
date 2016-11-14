@@ -15,7 +15,8 @@ function PreviewGraph(id) {
     this.linklength =420;
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
-
+	this.active = true;
+	
     var color = d3.scaleOrdinal(d3.schemeCategory10);
     var svg = d3.select(selector)
     	.append("svg");
@@ -140,5 +141,16 @@ function PreviewGraph(id) {
 			d.fixed = setfixed || d.wasfixed;
 		}
 	};
+	
+	this.pause = function() {
+		this.active = false;
+		this.force.stop();
+	}
+	this.resume = function() {
+		this.active = true;
+		this.force
+    	.alphaTarget(1)
+    	.restart();
+	}
 	
 }

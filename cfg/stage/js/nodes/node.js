@@ -36,7 +36,6 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.dragend = [];
 	this.addBehavior(NodeDrag);
 	
-	
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
 	
@@ -92,15 +91,17 @@ Node.prototype.setLocation = function (x, y) {
 	
 	this.srcobj.xpos = x;
 	this.srcobj.ypos = y;
+	if (this.fixed || this.fx !=null) {
+		this.fx = x;
+		this.fy = y;
+	}
 }
-
-
 
 Node.prototype.createVisualElement = function (element, graph) {
 	//Randomly choose a location if one has not been set
-	if (this.xpos()==-1 || this.ypos() == -1) {
+	if (this.srcobj.xpos<=10 || this.srcobj.ypos <= 10) {
 		if (this.parent) {
-			this.setLocation(this.parent.x + Math.random()*200 - 100, this.parent.y + Math.random()*200 - 100);
+			this.setLocation(this.parent.xpos() + Math.random()*200 - 100, this.parent.ypos() + Math.random()*200 - 100);
 			
 		}
 		else {
@@ -151,7 +152,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 		this.createTextElement("real");
 		
 	}
-	
+	this.rootElement.attr("transform", "translate(" + node.xpos() + "," + node.ypos() + ")");
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 
@@ -166,7 +167,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcey = 0;
 	var forcex = 0;
 
-	if (this.parent) {
+	if (this.parent && this.graph.active) {
 			var k = .005;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
@@ -244,6 +245,12 @@ Node.prototype.onDoubleClick = function () {}
 
 Node.prototype.globalApply = function (funct) {
 	funct(this);
+}
+
+Node.setFixed = function(fixate) {
+	if (fixate) {
+		
+	}
 }
 
 //Traverse children until condition is met or all children are traversed

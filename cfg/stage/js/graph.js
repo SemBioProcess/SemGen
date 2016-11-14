@@ -7,25 +7,14 @@
 
 function Graph() {
 	var graph = this;
-
-	
+	this.w = $(window).width();
+	this.h = $(window).height();
 	
 		var visibleNodes = [];
-	this.force = d3.forceSimulation()
-		//.chargeDistance(defaultchargedistance)
-		.velocityDecay(0.6)
-		.force("charge", d3.forceManyBody().strength(function(d) {return d.charge;}))
-		.force("link", d3.forceLink()
-			.id(function(d) { return d.id; })
-			.strength(function (d) 
-					{ return d.length; }
-			));
-		//.force("y", d3.forceY(0))
-      //  .force("x", d3.forceX(0));
+
 			
 	    //.theta(0.6)
-	  var links = this.force.force("link").links(); 
-
+	  
 	// Get the stage and style it
 	var svg = d3.select("#stage")
 	    .append("svg")	    
@@ -35,6 +24,22 @@ function Graph() {
 
 	var vis = svg.append('g').attr("class", "canvas");
 	
+	this.force = d3.forceSimulation()
+	//.chargeDistance(defaultchargedistance)
+	.velocityDecay(0.6)
+	.force("charge", d3.forceManyBody()
+			.strength(function(d) {return d.charge;})
+			.distanceMax(400))
+	.force("link", d3.forceLink()
+		.id(function(d) { return d.id; })
+		.distance(function (d) 
+				{ return d.length; }
+		));
+		
+	//.force("y", d3.forceY(0))
+  //  .force("x", d3.forceX(0));
+	var links = this.force.force("link").links(); 
+
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
 	this.color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -46,6 +51,7 @@ function Graph() {
 	
 	this.depBehaviors = [];
 	
+	this.active = true;
 	var nodes;
 
 	this.setTaskNodes = function(tasknodes) {
@@ -141,7 +147,7 @@ function Graph() {
 	    
 	    if (this.fixedMode) {
 	    	setTimeout(function() {
-	    		graph.toggleFixedMode(true);
+	    		this.pause();
 	    	}, 7000);
 	    }
 	};
@@ -316,7 +322,7 @@ function Graph() {
 	
 	this.setChargeDistance = function(dist) {
 		if (isNaN(dist)) return;
-		//this.force.chargeDistance(dist);
+		this.force.force("charge").distanceMax(dist);
 		
 		this.update();
 
@@ -324,32 +330,41 @@ function Graph() {
 
 	this.toggleFixedMode = function(setfixed) {
 		this.fixedMode = setfixed;
-		for (n in nodes) {
-			nodes[n].applytoChildren(function(d) {
-				if (setfixed) {
-					d.wasfixed = d.fixed;
-				}
-				d.fixed = setfixed || d.wasfixed;
-			});
+		
+		if (setfixed) {
+			this.pause();
+		}
+		else {
+		    this.resume();
 		}
 		this.tick();
 	}
 
 	this.toggleGravity = function(enabled) {
 		if (enabled) {
-			//this.force.gravity(1.0);
-		}
+			this.force.force("center", d3.forceCenter(this.w/2, this.h/2));		}
 		else {
-			//this.force.gravity(0.0);
+			this.force.force("center", null);
 		}
 		this.update();
 
 	}
-
+	
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
 
+	this.pause = function() {
+		this.active = false;
+		this.force.stop();
+	}
+	this.resume = function() {
+		this.active = true;
+		this.force
+    	.alphaTarget(1)
+    	.restart();
+	}
+	
 	this.updateHeightAndWidth();
 	// Run it
 	this.update();
