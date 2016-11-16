@@ -32,8 +32,9 @@ function Graph() {
 	.force("link", d3.forceLink()
 		.id(function(d) { return d.id; })
 		.distance(function (d) 
-				{ return d.length; }
-		));
+				{ return d.length; })
+		.strength(0.01)
+	);
 		
 	//.force("y", d3.forceY(0))
   //  .force("x", d3.forceX(0));

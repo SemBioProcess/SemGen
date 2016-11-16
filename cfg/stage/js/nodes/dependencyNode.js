@@ -68,7 +68,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 				}
 				else if (exisstinglink.linksNodes(outputNode, inputNode)) {
 					exisstinglink.bidirectional = true;
-					//return;
+					return;
 				}
 			}
 		
