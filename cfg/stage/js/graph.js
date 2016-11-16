@@ -178,7 +178,12 @@ function Graph() {
 					visibleNodes.push(d);
 				}
 				if (!d.canlink && !d.showchildren) return true;
-				links = links.concat(d.getLinks(links));
+				var nodelinks = d.getLinks(links);
+				if (nodelinks) {
+					nodelinks.forEach(function(l) {
+						links.push(l);
+					});
+				}
 				return false;
 			});
 		}
