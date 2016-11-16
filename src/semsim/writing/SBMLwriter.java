@@ -188,7 +188,7 @@ public class SBMLwriter extends ModelWriter {
 	 *  Collect units for SBML model
 	 */
 	private void addUnits(){
-		
+
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
 			
 			// Do not overwrite base units
@@ -682,7 +682,7 @@ public class SBMLwriter extends ModelWriter {
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			
-			if(ds.hasUnits()) par.setUnits(ds.getUnit().getName());
+			setUnitsForModelComponent(par, ds);
 		}
 	}
 	
@@ -854,16 +854,19 @@ public class SBMLwriter extends ModelWriter {
 	
 	private void addRuleToModel(DataStructure ds, Symbol sbmlobj){
 		ExplicitRule rule = null;
-		String mathml = ds.getComputation().getMathML();
 		
-		if(ds.hasStartValue()){
-			rule = sbmlmodel.createRateRule();
-			sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
+		if(ds.getComputation().hasMathML()){
+			String mathml = ds.getComputation().getMathML();
+			
+			if(ds.hasStartValue()){
+				rule = sbmlmodel.createRateRule();
+				sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
+			}
+			else rule = sbmlmodel.createAssignmentRule();
+			
+			rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
+			rule.setVariable(ds.getName());
 		}
-		else rule = sbmlmodel.createAssignmentRule();
-		
-		rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
-		rule.setVariable(ds.getName());
 	}
 	
 	private Double getConstantValueForPropertyOfEntity(DataStructure ds){

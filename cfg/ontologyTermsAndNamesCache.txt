@@ -48,6 +48,7 @@ http://identifiers.org/chebi/CHEBI:39548; atorvastatin
 http://identifiers.org/obo.go/GO:0006850; mitochondrial pyruvate transport
 http://identifiers.org/obo.go/GO:0004430; 1-phosphatidylinositol 4-kinase activity
 http://identifiers.org/go/GO:0015137; citrate transmembrane transporter activity
+http://identifiers.org/go/GO:0030512; negative regulation of transforming growth factor beta receptor signaling pathway
 http://identifiers.org/obo.chebi/CHEBI:29052; D-glyceraldehyde 3-phosphate
 http://identifiers.org/go/GO:0002039; p53 binding
 http://identifiers.org/obo.go/GO:0005515; protein binding
@@ -116,6 +117,7 @@ http://identifiers.org/obo.go/GO:0009935; obsolete nutrient import
 http://identifiers.org/go/GO:0005525; GTP binding
 http://identifiers.org/chebi/CHEBI:16450; 2'-deoxyuridine
 http://identifiers.org/go/GO:0005524; ATP binding
+http://identifiers.org/go/GO:0004675; transmembrane receptor protein serine/threonine kinase activity
 http://identifiers.org/go/GO:0005764; lysosome
 http://identifiers.org/go/GO:0006611; protein export from nucleus
 http://identifiers.org/chebi/CHEBI:15366; acetic acid
@@ -629,6 +631,7 @@ urn:miriam:obo.chebi:CHEBI%3A16863; 6-phospho-D-gluconate
 http://identifiers.org/go/GO:0006002; fructose 6-phosphate metabolic process
 http://identifiers.org/chebi/CHEBI:17230; homocysteine
 http://identifiers.org/obo.chebi/CHEBI:15713; UTP
+http://identifiers.org/go/GO:0005160; transforming growth factor beta receptor binding
 http://identifiers.org/obo.go/GO:0008054; negative regulation of cyclin-dependent protein serine/threonine kinase by cyclin degradation
 http://identifiers.org/chebi/CHEBI:16389; ubiquinones
 http://identifiers.org/chebi/CHEBI:17234; glucose
@@ -977,6 +980,7 @@ http://identifiers.org/obo.chebi/CHEBI:16480; nitric oxide
 http://identifiers.org/go/GO:0004737; pyruvate decarboxylase activity
 http://identifiers.org/go/GO:0006914; autophagy
 http://identifiers.org/go/GO:0000139; Golgi membrane
+http://identifiers.org/go/GO:0006913; nucleocytoplasmic transport
 http://identifiers.org/go/GO:0006919; activation of cysteine-type endopeptidase activity involved in apoptotic process
 http://identifiers.org/go/GO:0005829; cytosol
 urn:miriam:kegg.compound:C00022; Pyruvate
@@ -1027,6 +1031,7 @@ http://identifiers.org/chebi/CHEBI:26523; reactive oxygen species
 http://identifiers.org/obo.go/GO:0015031; protein transport
 http://identifiers.org/go/GO:0005811; lipid particle
 http://identifiers.org/go/GO:0004721; phosphoprotein phosphatase activity
+http://identifiers.org/go/GO:0004722; protein serine/threonine phosphatase activity
 http://identifiers.org/go/GO:0003872; 6-phosphofructokinase activity
 http://identifiers.org/fma/FMA:9641; Portion of muscle tissue
 urn:miriam:obo.go:GO%3A0042866; pyruvate biosynthetic process
@@ -1427,8 +1432,8 @@ http://identifiers.org/go/GO:0015031; protein transport
 http://identifiers.org/obo.go/GO:0048408; epidermal growth factor binding
 http://identifiers.org/uniprot/P20936; Ras GTPase-activating protein 1
 http://identifiers.org/go/GO:0005227; calcium activated cation channel activity
-http://identifiers.org/chebi/CHEBI:16077; D-glucopyranose 1-phosphate
 http://purl.obolibrary.org/obo/PR_000009054; insulin
+http://identifiers.org/chebi/CHEBI:16077; D-glucopyranose 1-phosphate
 http://identifiers.org/obo.chebi/CHEBI:15625; S-adenosylmethioninamine
 http://identifiers.org/obo.chebi/CHEBI:34146; 12(S)-HETE
 http://identifiers.org/obo.go/GO:0009070; serine family amino acid biosynthetic process
