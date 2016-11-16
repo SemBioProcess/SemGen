@@ -21,7 +21,7 @@ function Graph() {
 	var vis = svg.append('g').attr("class", "canvas");
 	
 	this.force = d3.forceSimulation()
-	.velocityDecay(0.6)
+	// .velocityDecay(0.5)
 	.force("charge", d3.forceManyBody()
 			.strength(function(d) {return d.charge;})
 			.distanceMax(400))
@@ -29,7 +29,7 @@ function Graph() {
 		.id(function(d) { return d.id; })
 		.distance(function (d) 
 				{ return d.length; })
-		.strength(0.01)
+	// .strength(0.5)
 	);
 		
 	var links = this.force.force("link").links(); 
