@@ -32,6 +32,7 @@ import org.sbml.jsbml.LocalParameter;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Parameter;
+import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.RateRule;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
@@ -187,7 +188,7 @@ public class SBMLwriter extends ModelWriter {
 	 *  Collect units for SBML model
 	 */
 	private void addUnits(){
-		
+
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
 			
 			// Do not overwrite base units
@@ -329,7 +330,8 @@ public class SBMLwriter extends ModelWriter {
 			// Otherwise create rule in model for compartment
 			else if(ds.getComputation().hasMathML()) addRuleToModel(ds, comp);
 			
-			// TODO: Deal with units on compartments if needed
+			// Add units if needed
+			setUnitsForModelComponent(comp, ds);
 			
 			addNotesAndMetadataID(pmc, comp);
 			
@@ -356,6 +358,7 @@ public class SBMLwriter extends ModelWriter {
 				// From libSBML 5 spec:
 				// It is important to note that there is no default value for the 'compartment'
 				// attribute on Species; every species in an SBML model must be assigned a compartment explicitly. 
+				
 				// ...So we assign the compartment
 				
 				ArrayList<PhysicalEntity> compentlist = new ArrayList<PhysicalEntity>();
@@ -372,15 +375,18 @@ public class SBMLwriter extends ModelWriter {
 				
 				SBase temp = lookupSBaseComponentInEntityMap(compcpe, entityCompartmentMap);
 				
+				// If we've found a suitable compartment in our SBase-component/physical entity map, use it...
 				if(temp != null && (temp instanceof Compartment))
 					cptmt = (Compartment)temp;
 				
 				
-				// If we don't have a compartment for the species, create a new one and add to entity-compartment map
+				// .. if we don't have a compartment for the species, create a new one and add to entity-compartment map
 				if(cptmt == null){
 					c = c + 1;
 					cptmt = sbmlmodel.createCompartment("compartment_" + c);
-					cptmt.setConstant(true); // TODO: check whether assuming a constant compartment here is ok
+					cptmt.setConstant(true); // Assume compartment is constant since we don't have any other info about it in the model
+					cptmt.setSpatialDimensions(3); // Assuming a 3-D compartment
+					cptmt.setSize(1.0); // Assuming size = 1
 					entityCompartmentMap.put(compcpe, cptmt);
 				}
 												
@@ -399,10 +405,11 @@ public class SBMLwriter extends ModelWriter {
 				
 				species.setHasOnlySubstanceUnits(substanceonly);
 				
-				//TODO: deal with units on species if needed
+				//TODO: deal with units on species if needed?
 				
 				boolean solvedwithconservation = false;
 				
+				// Get whether the species is computed using a conservation equation
 				if( dscomputation.hasPhysicalDependency()){
 					PhysicalDependency dep = dscomputation.getPhysicalDependency();
 					
@@ -553,7 +560,10 @@ public class SBMLwriter extends ModelWriter {
 						LocalParameter lp = kl.createLocalParameter(localnm);
 						String formula = getFormulaFromRHSofMathML(gp.getComputation().getMathML(), fullnm);
 						lp.setValue(Double.parseDouble(formula));
-						//TODO: deal with local par units
+						
+						// Add units, if needed
+						// Deal with units on compartments if needed
+						setUnitsForModelComponent(lp, gp);
 					}
 				}
 				
@@ -652,7 +662,6 @@ public class SBMLwriter extends ModelWriter {
 				par.setConstant(true);
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				
-				// TODO: formula shouldn't ever be null here, right? Remove if statement?
 				if(formula != null){
 					try {
 			            Double d = Double.parseDouble(formula);
@@ -673,7 +682,7 @@ public class SBMLwriter extends ModelWriter {
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 			addNotesAndMetadataID(ds, par);
 			
-			if(ds.hasUnits()) par.setUnits(ds.getUnit().getName());
+			setUnitsForModelComponent(par, ds);
 		}
 	}
 	
@@ -811,7 +820,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractNamedSBase sbo){
 		
-		//TODO: When the jsbml fix the issue with redeclaring xml namespaces in notes, uncomment block below
+		//TODO: When the jsbml folks fix the issue with redeclaring xml namespaces in notes, uncomment block below
 //		if(sso.hasDescription()){
 //			try {
 //				sbo.setNotes(sso.getDescription());
@@ -832,18 +841,32 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
+	private void setUnitsForModelComponent(QuantityWithUnit qwu, DataStructure ds){
+		
+		if(ds.hasUnits()){
+			String uomname = ds.getUnit().getName();
+			
+			if( sbmlmodel.containsUnitDefinition(uomname)){ 
+				qwu.setUnits(uomname);
+			}
+		}
+	}
+	
 	private void addRuleToModel(DataStructure ds, Symbol sbmlobj){
 		ExplicitRule rule = null;
-		String mathml = ds.getComputation().getMathML();
 		
-		if(ds.hasStartValue()){
-			rule = sbmlmodel.createRateRule();
-			sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
+		if(ds.getComputation().hasMathML()){
+			String mathml = ds.getComputation().getMathML();
+			
+			if(ds.hasStartValue()){
+				rule = sbmlmodel.createRateRule();
+				sbmlobj.setValue(Double.parseDouble(ds.getStartValue())); // Set IC for parameters
+			}
+			else rule = sbmlmodel.createAssignmentRule();
+			
+			rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
+			rule.setVariable(ds.getName());
 		}
-		else rule = sbmlmodel.createAssignmentRule();
-		
-		rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
-		rule.setVariable(ds.getName());
 	}
 	
 	private Double getConstantValueForPropertyOfEntity(DataStructure ds){

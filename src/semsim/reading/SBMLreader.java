@@ -90,14 +90,12 @@ public class SBMLreader extends ModelReader{
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
-	
 	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 	private static final String mathMLelementEnd = "</math>";
 	private String timedomainname = "t";
 	public static final String reactionprefix = "Reaction_";
-	private UnitOfMeasurement timeunits;
-	private UnitOfMeasurement substanceunits;
-	
+	private UnitOfMeasurement modeltimeunits;
+	private UnitOfMeasurement modelsubstanceunits;
 	private SemSimRDFreader rdfreader;
 	
 	
@@ -166,10 +164,12 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getListOfSpecies().size()>0)
 			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
+		
 		collectSemSimRDF();
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
+		setSubstanceUnits();
 		setTimeDomain();
 		collectCompartments();
 		collectSpecies();
@@ -196,6 +196,7 @@ public class SBMLreader extends ModelReader{
 		
 		// TODO: collect model-level annotations here, too.		
 	}
+	
 	
 	/**
 	 * Collect the model's units
@@ -247,31 +248,82 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getLevel()==2) addSBMLlevel2reservedUnits();
 	}
 	
+	
 	// For SBML level 2, add the reserved units, if not already stated in listOfUnitDefinitions
 	private void addSBMLlevel2reservedUnits() {
 			
 		for(String resunitname : SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.keySet()){
 			
-			if( ! semsimmodel.containsUnit(resunitname)){
+			if( ! semsimmodel.containsUnit(resunitname))
+				addReservedUnit(resunitname, SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get(resunitname));
+		}
+	}
+	
+	// Add one reserved unit
+	private UnitOfMeasurement addReservedUnit(String resunitname, String baseunitname){
+		
+		UnitOfMeasurement resuom = new UnitOfMeasurement(resunitname);
+		UnitOfMeasurement baseuom = null;
+		
+		// Add base unit, if not already in model
+		if( ! semsimmodel.containsUnit(baseunitname)){
+			baseuom = new UnitOfMeasurement(baseunitname);
+			baseuom.setFundamental(baseUnits.contains(baseunitname));
+			semsimmodel.addUnit(baseuom);
+		}
+		else baseuom = semsimmodel.getUnit(baseunitname);
+		
+		UnitFactor uf = new UnitFactor(baseuom, 1, null);		
+		resuom.addUnitFactor(uf);
+		semsimmodel.addUnit(resuom);
 				
-				UnitOfMeasurement resuom = new UnitOfMeasurement(resunitname);
-				String baseunitname = SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get(resunitname);
-				UnitOfMeasurement baseuom = null;
-				
-				// Add base unit, if not already in model
-				if( ! semsimmodel.containsUnit(baseunitname)){
-					baseuom = new UnitOfMeasurement(baseunitname);
-					baseuom.setFundamental(baseUnits.contains(baseunitname));
-					semsimmodel.addUnit(baseuom);
-				}
-				else baseuom = semsimmodel.getUnit(baseunitname);
-				
-				resuom.addUnitFactor(new UnitFactor(baseuom, 1, null));
-				semsimmodel.addUnit(resuom);
-			}
+		return resuom;
+	}
+		
+		
+	/**
+	 * Get the default substance units for the model
+	 */
+	private void setSubstanceUnits(){
+		/*
+		From http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/Species.html
+		In SBML Level 3, if the 'substanceUnits' attribute is not set on a given
+		Species object instance, then the unit of amount for that species is inherited
+		from the 'substanceUnits' attribute on the enclosing Model object instance. 
+		If that attribute on Model is not set either, then the unit associated with the
+		species' quantity is undefined.
+		*/
+					
+		if(sbmlmodel.getLevel()==3){
+						
+			// If already added as an explicit UnitDefinition, retrieve UnitOfMeasurement from SemSim model
+			if(semsimmodel.containsUnit("substance"))
+				modelsubstanceunits = semsimmodel.getUnit("substance");
+			
+			// Otherwise use default substance units
+			else modelsubstanceunits = addReservedUnit("substance", SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get("substance"));
 		}
 		
+		
+		/*
+		In SBML Level 2, if the 'substanceUnits' attribute is not set on a given Species object instance,
+		 then the unit of amount for that species is taken from the predefined SBML unit identifier 
+		 'substance'. The value assigned to 'substanceUnits' must be chosen from one of the following 
+		 possibilities: one of the base unit identifiers defined in SBML, the built-in unit identifier 
+		 'substance', or the identifier of a new unit defined in the list of unit definitions in the 
+		 enclosing Model object. The chosen units for 'substanceUnits' must be be 'dimensionless', 
+		 'mole', 'item', 'kilogram', 'gram', or units derived from these.
+		 */
+		else if(sbmlmodel.getLevel()==2){  // "substance" unit should have already been added as part of Level 2 reserved units
+			String subid = sbmlmodel.getPredefinedUnitDefinition("substance").getId();
+			
+			if(semsimmodel.containsUnit(subid)) modelsubstanceunits = semsimmodel.getUnit(subid);
+		}
+		
+			
+		if(modelsubstanceunits == null) System.err.println("WARNING: Could not determine default substance units for model");
 	}
+	
 	
 	/**
 	 * Set the temporal solution domain for the SemSim model
@@ -327,15 +379,19 @@ public class SBMLreader extends ModelReader{
 		timeds.setDescription("Temporal solution domain");
 		timeds.setIsSolutionDomain(true);
 		
-		if(sbmlmodel.getLevel()==3.0 && sbmlmodel.isSetTimeUnits()){
-			timeunits = new UnitOfMeasurement(sbmlmodel.getTimeUnits());
-			semsimmodel.addUnit(timeunits);
+		
+		if(semsimmodel.containsUnit("time")){  // Time unit should have already been added for level 2 models
+			modeltimeunits = semsimmodel.getUnit("time");
 		}
-		else if(semsimmodel.containsUnit("time")){
-			timeunits = semsimmodel.getUnit("time");
+		else{
+			if(sbmlmodel.isSetTimeUnits()){
+				modeltimeunits = new UnitOfMeasurement(sbmlmodel.getTimeUnits());
+				semsimmodel.addUnit(modeltimeunits);
+			}
+			else modeltimeunits = addReservedUnit("time", SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get("time"));
 		}
 		
-		timeds.setUnit(timeunits);
+		timeds.setUnit(modeltimeunits);
 
 		PhysicalProperty timeprop = new PhysicalProperty("Time", SemSimLibrary.OPB_TIME_URI);
 		semsimmodel.addPhysicalProperty(timeprop);
@@ -346,6 +402,7 @@ public class SBMLreader extends ModelReader{
 		if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);		
 	}
 
+	
 	/**
 	 *  Collect the SBML model's compartment data
 	 */
@@ -366,33 +423,34 @@ public class SBMLreader extends ModelReader{
 			ds.getComputation().setMathML(mathml);
 			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 			
-			String defaultunits = null;
+			String reservedunits = null;
 			PhysicalPropertyinComposite prop = null;
 			String modelobjectspecifieddefaultunits = "";
 			
 			// Add physical property here
 			if(sbmlc.getSpatialDimensions()==3.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00154"));
-				defaultunits = "volume";
+				reservedunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==2.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00295"));
-				defaultunits = "area";
+				reservedunits = "area";
 				modelobjectspecifieddefaultunits = sbmlmodel.getAreaUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==1.0){
 				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01064"));
-
-				defaultunits = "length";
+				reservedunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();
 			}
 						
 			// Set the units for the compartment
+			UnitOfMeasurement compuom = null;
+			
 			if(sbmlc.isSetUnits()){
 				
 				if(semsimmodel.containsUnit(sbmlc.getUnits()))
-					ds.setUnit(semsimmodel.getUnit(sbmlc.getUnits()));
+					compuom = semsimmodel.getUnit(sbmlc.getUnits());
 				
 				// If the units are set but weren't found in the semsim model
 				// try a case-insensitive check. This is to account for an issue
@@ -402,23 +460,37 @@ public class SBMLreader extends ModelReader{
 				// stored in the semsim model, not "litre".
 				else{ 
 					for(UnitOfMeasurement uom : semsimmodel.getUnits()){
+						
 						if(uom.getName().toLowerCase().equals(sbmlc.getUnits().toLowerCase()))
-							ds.setUnit(uom);
+							compuom = uom;
 					}
 				}
 			}
-			else if(semsimmodel.containsUnit(defaultunits))
-				ds.setUnit(semsimmodel.getUnit(defaultunits));
-			
 			// If the model is SBML Level 3 and the SBML Model object specifies the units
 			// for compartments with this compartment's spatial dimension, then create the
 			// unit in the SemSim model and assign it to the compartment
-			else if( ! modelobjectspecifieddefaultunits.isEmpty() && sbmlmodel.getLevel()==3.0){
-				UnitOfMeasurement uom = new UnitOfMeasurement(modelobjectspecifieddefaultunits);
-				semsimmodel.addUnit(uom);
-				ds.setUnit(uom);
+			else if(sbmlmodel.getLevel() == 3){
+								
+				String unitname = (! modelobjectspecifieddefaultunits.isEmpty()) ? modelobjectspecifieddefaultunits : reservedunits;
+
+				if(semsimmodel.containsUnit(unitname)) compuom = semsimmodel.getUnit(unitname);
+				else{
+					if(SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.containsKey(unitname))
+						compuom = addReservedUnit(unitname, SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get(unitname));
+				}
+			}
+			else{
+				if(semsimmodel.containsUnit(reservedunits)) 
+					compuom = semsimmodel.getUnit(reservedunits);
 			}
 			
+			// If we've got the unit
+			if(compuom != null){
+				ds.setUnit(compuom);
+				
+				if( ! semsimmodel.containsUnit(compuom.getName())) 
+					semsimmodel.addUnit(compuom);
+			}
 			// Otherwise the unit for the compartment is undefined
 			else System.err.println("WARNING: Units for compartment " + sbmlc.getId() + " were undefined");
 			
@@ -456,6 +528,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
+	
 	/**
 	 *  Collect the SBML model's chemical species data
 	 */
@@ -479,12 +552,10 @@ public class SBMLreader extends ModelReader{
 			if(isConstant){
 				
 				if(isBoundaryCondition){
-					// don't apply conservation eq. set initial condition only
-					// CAN be a reactant or product
+					// don't apply conservation eq. set initial condition only. CAN be a reactant or product
 				}
 				else{
-					// don't apply conservation eq. set IC only
-					// CANNOT be a reactant or product
+					// don't apply conservation eq. set IC only. CANNOT be a reactant or product
 				}
 			}
 			else{
@@ -508,42 +579,16 @@ public class SBMLreader extends ModelReader{
 			// Deal with equations for species concentration/amount here
 			PhysicalPropertyinComposite prop = null;
 			
-			/*
-			From http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/Species.html
-			In SBML Level 3, if the 'substanceUnits' attribute is not set on a given
-			Species object instance, then the unit of amount for that species is inherited
-			from the 'substanceUnits' attribute on the enclosing Model object instance. 
-			If that attribute on Model is not set either, then the unit associated with the
-			species' quantity is undefined.
-			*/
-						
-			if(sbmlmodel.getLevel()==3){
-				if(species.isSetSubstanceUnits())
-					substanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
-				
-				else if(sbmlmodel.isSetSubstanceUnits())
-					substanceunits = semsimmodel.getUnit(sbmlmodel.getSubstanceUnits());
-				
-				else
-					System.err.println("WARNING: Substance units for " + species.getId() + " were undefined");
-			}
+			UnitOfMeasurement speciessubstanceunits = null;
 			
-			/*
-			In SBML Level 2, if the 'substanceUnits' attribute is not set on a given Species object instance,
-			 then the unit of amount for that species is taken from the predefined SBML unit identifier 
-			 'substance'. The value assigned to 'substanceUnits' must be chosen from one of the following 
-			 possibilities: one of the base unit identifiers defined in SBML, the built-in unit identifier 
-			 'substance', or the identifier of a new unit defined in the list of unit definitions in the 
-			 enclosing Model object. The chosen units for 'substanceUnits' must be be 'dimensionless', 
-			 'mole', 'item', 'kilogram', 'gram', or units derived from these.
-			 */
-			else if(sbmlmodel.getLevel()==2){
-				if(species.isSetSubstanceUnits())
-					substanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
-				else 
-					substanceunits = semsimmodel.getUnit("substance");
-			}
+			if(species.isSetSubstanceUnits())
+				speciessubstanceunits = semsimmodel.getUnit(species.getSubstanceUnits());
 			
+			else if(modelsubstanceunits != null) speciessubstanceunits = modelsubstanceunits;
+			
+			else System.err.println("WARNING: Substance units for " + species.getId() + " were undefined");;
+			
+			// Deal with whether the species is expressed in substance units or not 
 			boolean hasonlysub = species.getHasOnlySubstanceUnits();
 
 			UnitOfMeasurement unitforspecies = null;
@@ -551,20 +596,19 @@ public class SBMLreader extends ModelReader{
 
 			UnitOfMeasurement compartmentunits = semsimmodel.getAssociatedDataStructure(compartmentname).getUnit();	
 			
-			// Deal with whether the species is expressed in substance units or not 
-			if(hasonlysub && substanceunits!=null) unitforspecies = substanceunits;
+			if(hasonlysub && speciessubstanceunits!=null) unitforspecies = speciessubstanceunits;
 			
-			else if(substanceunits!=null && compartmentunits!=null){
+			else if(speciessubstanceunits != null && compartmentunits != null){
 				
 				// Make unit for concentration of species
-				String unitname = substanceunits.getName() + "_per_" + compartmentunits.getName();
+				String unitname = speciessubstanceunits.getName() + "_per_" + compartmentunits.getName();
 				
 				// If the substance/compartment unit was already added to the model, use it, otherwise create anew
 				if(semsimmodel.containsUnit(unitname)) unitforspecies = semsimmodel.getUnit(unitname);
 				
 				else{
 					unitforspecies = new UnitOfMeasurement(unitname);
-					UnitFactor substancefactor = new UnitFactor(substanceunits, 1.0, null);
+					UnitFactor substancefactor = new UnitFactor(speciessubstanceunits, 1.0, null);
 					unitforspecies.addUnitFactor(substancefactor);
 					UnitFactor compartmentfactor = new UnitFactor(compartmentunits, -1.0, null);
 					unitforspecies.addUnitFactor(compartmentfactor);
@@ -580,7 +624,7 @@ public class SBMLreader extends ModelReader{
 			// statements in the meantime. Currently assuming that if hasOnlySubstanceUnits is false, 
 			// that the same OPB term can be used regardless of the compartment dimensionality.
 			
-			String baseunitname = getSubstanceBaseUnits(substanceunits);
+			String baseunitname = getSubstanceBaseUnits(speciessubstanceunits);
 			
 			// Assign OPB properties
 			if(baseunitname.equals("dimensionless"))
@@ -845,15 +889,15 @@ public class SBMLreader extends ModelReader{
 		// First add units to model
 		UnitOfMeasurement subpertimeuom = new UnitOfMeasurement("substance_per_time");
 				
-		UnitFactor substancefactor = new UnitFactor(substanceunits, 1.0, null);
-		UnitFactor timefactor = new UnitFactor(timeunits, -1.0, null);
+		UnitFactor substancefactor = new UnitFactor(modelsubstanceunits, 1.0, null);
+		UnitFactor timefactor = new UnitFactor(modeltimeunits, -1.0, null);
 		subpertimeuom.addUnitFactor(substancefactor);
 		subpertimeuom.addUnitFactor(timefactor);
 				
 		semsimmodel.addUnit(subpertimeuom);
 		
 		// Assign OPB properties based on units
-		String basesubstanceunitsname = getSubstanceBaseUnits(substanceunits);
+		String basesubstanceunitsname = getSubstanceBaseUnits(modelsubstanceunits);
 		PhysicalPropertyinComposite prop = null;
 
 		if(basesubstanceunitsname.equals("dimensionless"))
@@ -1385,13 +1429,14 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 *  Get the base unit name for the model's "substance units"
-	 * @param substanceunits The "substance" units in the SemSim model
+	 * @param modelsubstanceunits The "substance" units in the SemSim model
 	 * @return The name of the base unit for the "substance" unit in the SemSim model
 	 */
 	private String getSubstanceBaseUnits(UnitOfMeasurement substanceunits){
 		String val = "mole";
 		
-		if(substanceunits!=null){
+		if(substanceunits != null){
+			
 			if(substanceunits.getUnitFactors().size()==1){
 				
 				for(UnitFactor uf : substanceunits.getUnitFactors())

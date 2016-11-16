@@ -560,24 +560,25 @@ public class SemSimUtil {
 	// TODO: should add a parameter here that allows the user to choose whether they want to decompose into
 	// CellML OR SBML base units
 	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, SemSimLibrary sslib) {
+
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
 		Set<UnitFactor> newUnitFactors = new HashSet<UnitFactor>();
 		
 		for(UnitFactor factor : unitFactors) {
+						
 			UnitOfMeasurement baseuom = factor.getBaseUnit();
 			
 			double newExp = factor.getExponent()*oldExp;
 			
 			String prefix = factor.getPrefix();
 			
+			
 			if(sslib.isCellMLBaseUnit(baseuom.getName())) {
 				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix);
 				newUnitFactors.add(baseUnitFactor);
 			}
 			
-			else {
-				newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp, sslib));
-			}
+			else newUnitFactors.addAll(recurseBaseUnits(baseuom, newExp, sslib));
 		}
 		return newUnitFactors;
 	}

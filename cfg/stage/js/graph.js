@@ -12,10 +12,6 @@ function Graph() {
 	
 		var visibleNodes = [];
 
-			
-	    //.theta(0.6)
-	  
-	// Get the stage and style it
 	var svg = d3.select("#stage")
 	    .append("svg")	    
 	    .attr("id", "svg")
@@ -36,8 +32,6 @@ function Graph() {
 		.strength(0.01)
 	);
 		
-	//.force("y", d3.forceY(0))
-  //  .force("x", d3.forceX(0));
 	var links = this.force.force("link").links(); 
 
 	this.nodecharge = defaultcharge;

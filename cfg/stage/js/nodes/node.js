@@ -247,12 +247,6 @@ Node.prototype.globalApply = function (funct) {
 	funct(this);
 }
 
-Node.setFixed = function(fixate) {
-	if (fixate) {
-		
-	}
-}
-
 //Traverse children until condition is met or all children are traversed
 Node.prototype.globalApplyUntilTrue = function (funct) {
 	return funct(this);
