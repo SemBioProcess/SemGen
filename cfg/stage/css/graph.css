@@ -2,7 +2,6 @@ path.link {
   fill: #A8A8A8;
   stroke: #A8A8A8;
   stroke-width: 1.5px;
-  stroke-dasharray: 3, 6;
 }
 .node {
 	cursor: move;
