@@ -25,7 +25,6 @@ function Graph() {
 	var vis = svg.append('g').attr("class", "canvas");
 	
 	this.force = d3.forceSimulation()
-	//.chargeDistance(defaultchargedistance)
 	.velocityDecay(0.6)
 	.force("charge", d3.forceManyBody()
 			.strength(function(d) {return d.charge;})

@@ -11,7 +11,7 @@ function PreviewGraph(id) {
 	var graph = this;
 	var svg;
 	var fixedMode = false;
-    this.nodecharge = -100;
+    this.nodecharge = -800;
     this.linklength =50;
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
@@ -24,15 +24,19 @@ function PreviewGraph(id) {
     svg.id = "svg" + id;
     this.force = d3.forceSimulation()
 		.velocityDecay(0.6)
+		
 		.force("charge", d3.forceManyBody()
+				//.strength(-800)
+				.theta(0.6)
 				.strength(function(d) {return d.charge;})
 				.distanceMin(50)
-				.distanceMax(200))
+				.distanceMax(400))
 		.force("link", d3.forceLink()
 			.id(function(d) { return d.id; })
 			.distance(function (d) 
 					{ return d.length; })
-			.strength(function(link) {return 1;}));    
+			.strength(function(link) {return 0.5;})
+		);    
 
     var links = this.force.force("link").links();
     var nodes = [];
@@ -42,7 +46,9 @@ function PreviewGraph(id) {
 	    graph.h = div.height();
 	    svg.attr("width", graph.w)
 	       .attr("height", graph.h);
-	    this.force.force("center", d3.forceCenter(graph.w/2, graph.h/2));
+	   this.force
+		   .force("y", d3.forceY(graph.h/2).strength(0.5))
+		   .force("x", d3.forceX(graph.w/2));
     }
     
     this.setPreviewData = function(data) {
@@ -66,7 +72,7 @@ function PreviewGraph(id) {
 
     	previewmodel.globalApply(function(node) {
     		if (node.nodeType == NodeType.SUBMODEL) {
-    			 node.nodecharge = -200;
+    		//	 node.charge = -200;
     			node.textSize = 12;
     			node.showchildren = true;
     			node.fixed = fixedMode;
@@ -106,7 +112,7 @@ function PreviewGraph(id) {
 	    this.force
     	.nodes(nodes)
     	.on("tick", this.tick)
-    	.alphaTarget(0.5)
+    	.alphaTarget(0.3)
     	.restart();
 	    $(this).triggerHandler("postupdate");
     }
@@ -154,7 +160,7 @@ function PreviewGraph(id) {
 	this.resume = function() {
 		this.active = true;
 		this.force
-    	.alphaTarget(1)
+    	.alphaTarget(0.3)
     	.restart();
 	}
 	
