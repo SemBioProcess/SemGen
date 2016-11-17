@@ -5,6 +5,7 @@ import java.net.URI;
 import org.semanticweb.owlapi.model.IRI;
 
 public enum SemSimTypes {
+	SEMSIM_COMPONENT("SemSim Component", RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component", "", ""),
 	MODEL("SemSim Model", RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_Model", "", "SemSim:SemSim_Model"),
 	SUBMODEL("Submodel", RDFNamespace.SEMSIM.getNamespaceasString() + "Submodel", "", "SemSim:Submodel"),
 	PHYSICAL_MODEL_COMPONENT("Physical Model Component", RDFNamespace.SEMSIM.getNamespaceasString() + "Physical_model_component", "", ""),

@@ -269,6 +269,7 @@ public class SBMLwriter extends ModelWriter {
 	 *  Collect compartments for SBML model
 	 */
 	private void addCompartments(){
+		
 		for(DataStructure ds : candidateDSsForCompartments){
 			
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
@@ -343,7 +344,6 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addSpecies(){
 		
-		int c = 0; // index number for any compartments that we add anew
 		for(DataStructure ds : candidateDSsForSpecies){
 						
 			Computation dscomputation = ds.getComputation();
@@ -382,8 +382,15 @@ public class SBMLwriter extends ModelWriter {
 				
 				// .. if we don't have a compartment for the species, create a new one and add to entity-compartment map
 				if(cptmt == null){
-					c = c + 1;
-					cptmt = sbmlmodel.createCompartment("compartment_" + c);
+					int c = 0;
+					String newcidstart = "compartment_";
+					
+					// Make a unique id for compartment
+					while(sbmlmodel.containsCompartment(newcidstart + c)){
+						c = c + 1;
+					}
+										
+					cptmt = sbmlmodel.createCompartment(newcidstart + c);
 					cptmt.setConstant(true); // Assume compartment is constant since we don't have any other info about it in the model
 					cptmt.setSpatialDimensions(3); // Assuming a 3-D compartment
 					cptmt.setSize(1.0); // Assuming size = 1

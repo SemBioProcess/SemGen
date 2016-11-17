@@ -42,7 +42,6 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	
 	private void initialize(){
 		setPreferredSize(filechooserdims);
-
 		addChoosableFileFilter(fileextensions);
 		setFileFilter(fileextensions);
 

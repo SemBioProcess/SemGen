@@ -429,17 +429,17 @@ public class SBMLreader extends ModelReader{
 			
 			// Add physical property here
 			if(sbmlc.getSpatialDimensions()==3.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00154"));
+				prop = new PhysicalPropertyinComposite("Fluid volume", SemSimLibrary.OPB_FLUID_VOLUME_URI);
 				reservedunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==2.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00295"));
+				prop = new PhysicalPropertyinComposite("Area of spatial entity", SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI);
 				reservedunits = "area";
 				modelobjectspecifieddefaultunits = sbmlmodel.getAreaUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==1.0){
-				prop = new PhysicalPropertyinComposite("", URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01064"));
+				prop = new PhysicalPropertyinComposite("Span of spatial entity", SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI);
 				reservedunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();
 			}
@@ -484,7 +484,7 @@ public class SBMLreader extends ModelReader{
 					compuom = semsimmodel.getUnit(reservedunits);
 			}
 			
-			// If we've got the unit
+			// If we've got the unit, associate it with the data structure and make sure it's added to the model
 			if(compuom != null){
 				ds.setUnit(compuom);
 				
