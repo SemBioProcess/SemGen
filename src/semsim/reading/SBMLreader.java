@@ -427,8 +427,8 @@ public class SBMLreader extends ModelReader{
 			PhysicalPropertyinComposite prop = null;
 			String modelobjectspecifieddefaultunits = "";
 			
-			// Add physical property here
-			if(sbmlc.getSpatialDimensions()==3.0){
+			// Add physical property
+			if(sbmlc.getSpatialDimensions()==3.0 || ! sbmlc.isSetSpatialDimensions()){  // For compartments where the spatial dimension isn't specified, we assume 3
 				prop = new PhysicalPropertyinComposite("Fluid volume", SemSimLibrary.OPB_FLUID_VOLUME_URI);
 				reservedunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
@@ -471,7 +471,7 @@ public class SBMLreader extends ModelReader{
 			// unit in the SemSim model and assign it to the compartment
 			else if(sbmlmodel.getLevel() == 3){
 								
-				String unitname = (! modelobjectspecifieddefaultunits.isEmpty()) ? modelobjectspecifieddefaultunits : reservedunits;
+				String unitname = ( ! modelobjectspecifieddefaultunits.isEmpty()) ? modelobjectspecifieddefaultunits : reservedunits;
 
 				if(semsimmodel.containsUnit(unitname)) compuom = semsimmodel.getUnit(unitname);
 				else{
@@ -491,6 +491,9 @@ public class SBMLreader extends ModelReader{
 				if( ! semsimmodel.containsUnit(compuom.getName())) 
 					semsimmodel.addUnit(compuom);
 			}
+			
+			else if(sbmlc.getUnits().equals("dimensionless")){} // Don't assign units. Don't issue warning.
+			
 			// Otherwise the unit for the compartment is undefined
 			else System.err.println("WARNING: Units for compartment " + sbmlc.getId() + " were undefined");
 			
