@@ -919,11 +919,13 @@ public class SBMLreader extends ModelReader{
 				
 		// Iterate through reactions
 		for(int r=0; r<sbmlmodel.getListOfReactions().size(); r++){
+			
 			Reaction reaction = sbmlmodel.getReaction(r);
 			String reactionID = reaction.getId();
 			
-			DataStructure rateds = semsimmodel.addDataStructure(new Decimal(reactionID));
-			
+			DataStructure rateds = semsimmodel.addDataStructure(new Decimal(reactionID)); 
+			rateds.setAssociatedPhysicalProperty(prop);
+
 			rateds.setDeclared(true);
 			String thereactionprefix = reactionprefix + reactionID;
 			
@@ -959,11 +961,9 @@ public class SBMLreader extends ModelReader{
 					}
 				} catch (SBMLException | XMLStreamException e) {
 					e.printStackTrace();
-				}
-				
-				rateds.setAssociatedPhysicalProperty(prop);
+				}				
 			}
-			
+						
 			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
 						
 			// Set sources (reactants)
