@@ -21,15 +21,16 @@ function Graph() {
 	var vis = svg.append('g').attr("class", "canvas");
 	
 	this.force = d3.forceSimulation()
-	// .velocityDecay(0.5)
+	.velocityDecay(0.5)
 	.force("charge", d3.forceManyBody()
 			.strength(function(d) {return d.charge;})
-			.distanceMax(400))
+			.distanceMax(400)
+			.theta(0.6))
 	.force("link", d3.forceLink()
 		.id(function(d) { return d.id; })
 		.distance(function (d) 
 				{ return d.length; })
-	// .strength(0.5)
+				.strength(0.1)
 	);
 		
 	var links = this.force.force("link").links(); 
@@ -179,6 +180,9 @@ function Graph() {
 						links.push(l);
 					});
 				}
+				else {
+					d.charge = d.defaultcharge/3;
+				}
 				return false;
 			});
 		}
@@ -301,6 +305,7 @@ function Graph() {
 		for (n in nodes) {
 			nodes[n].applytoChildren(function(d) {
 				d.charge = charge;
+				d.defaultcharge = charge;
 			});
 		};
 		

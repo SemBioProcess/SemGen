@@ -32,11 +32,11 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 		openpanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		
 		JButton[] buttons = {
+			stagebutton,
 			annotatebutton,
 			openmenuextractbutton,
-			openmenumergebutton,
-			encodebutton,
-			stagebutton
+			encodebutton
+			
 		};
 		for (JButton button : buttons) {
 			button.setEnabled(true);
@@ -45,7 +45,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 			button.setAlignmentX(JButton.CENTER_ALIGNMENT);
 			openpanel.add(button);
 		}
-		openpanel.setPreferredSize(new Dimension(250,165));
+		openpanel.setPreferredSize(new Dimension(250,145));
 		openpanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 		
 		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);

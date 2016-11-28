@@ -15,7 +15,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	private JMenuItem toolsitemannotate;
-	private JMenuItem toolsitemmerge;
 	private JMenuItem toolsitemcode;
 	private JMenuItem toolsitemextract;
 	private JMenuItem toolsitemstage;
@@ -37,10 +36,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		toolsitemextract.setToolTipText("Open a new Extractor tool");
 		add(toolsitemextract);
 		
-		toolsitemmerge = formatMenuItem(toolsitemmerge,"New Merger",KeyEvent.VK_M,true,true);
-		toolsitemmerge.setToolTipText("Open a new Merger tool");
-		add(toolsitemmerge);
-		
 		toolsitemcode = formatMenuItem(toolsitemcode, "New Code Generator", KeyEvent.VK_G,true,true);
 		toolsitemcode.setToolTipText("Open a new code generator tool");
 		add(toolsitemcode);
@@ -51,10 +46,6 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		
 		if (o == toolsitemstage){
 			globalactions.NewStageTab();
-		}
-		
-		if (o == toolsitemmerge){
-			globalactions.NewMergerTab();
 		}
 	
 		if (o == toolsitemcode) {

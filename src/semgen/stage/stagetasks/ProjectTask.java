@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.SemGen;
+import semgen.encoding.Encoder;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
@@ -106,7 +107,18 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				case "extract":
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
 					break;
-				case "merge":
+				case "encode":
+					String filenamesuggestion = null;
+					ModelAccessor accessor = modelInfo.accessor;
+					
+					if(accessor.getFileThatContainsModel() != null){
+							if( !accessor.modelIsPartOfArchive()){
+								String filename = accessor.getFileThatContainsModel().getName();
+								filenamesuggestion = filename.substring(0, filename.lastIndexOf("."));
+							}
+					}
+					
+					new Encoder(modelInfo.Model, filenamesuggestion);
 					break;
 				case "close":
 					removeModel(modelindex.intValue());

@@ -17,6 +17,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.textSize = textSize;
 	this.nodeType = NodeTypeArray[srcobj.typeIndex];
 	this.charge = charge;
+	this.defaultcharge = charge;
 	this.className = "node";
 	this.element;
 	this.parent = parent;
@@ -168,7 +169,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent && this.graph.active) {
-			var k = .0005;
+			var k = .005;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 
