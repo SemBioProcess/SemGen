@@ -8,17 +8,21 @@ import javax.swing.JOptionPane;
 
 import com.teamdev.jxbrowser.chromium.JSObject;
 
+import org.apache.commons.io.FilenameUtils;
+
 import semgen.SemGen;
-import semgen.encoding.Encoder;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
+import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
@@ -108,17 +112,23 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
 					break;
 				case "encode":
-					String filenamesuggestion = null;
-					ModelAccessor accessor = modelInfo.accessor;
 					
-					if(accessor.getFileThatContainsModel() != null){
-							if( !accessor.modelIsPartOfArchive()){
-								String filename = accessor.getFileThatContainsModel().getName();
-								filenamesuggestion = filename.substring(0, filename.lastIndexOf("."));
-							}
-					}
+					String selectedtype = "owl";  // Default extension type
+					ModelType modtype = modelInfo.Model.getSourceModelType();
 					
-					new Encoder(modelInfo.Model, filenamesuggestion);
+					if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
+					else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
+					else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
+					
+					String suggestedparentfilename = FilenameUtils.removeExtension(modelInfo.accessor.getFileThatContainsModel().getName());
+					String modelnameinarchive = modelInfo.accessor.getModelName();
+					
+					SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, modelnameinarchive, suggestedparentfilename);
+					ModelAccessor ma = filec.SaveAsAction(modelInfo.Model);
+					
+					if (ma != null)				
+						SaveSemSimModel.writeToFile(modelInfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());					
+					
 					break;
 				case "close":
 					removeModel(modelindex.intValue());

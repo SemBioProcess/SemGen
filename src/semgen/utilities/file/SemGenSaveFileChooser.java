@@ -55,6 +55,17 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		modelInArchiveName = modelinarchivename;
 	}
 	
+	public SemGenSaveFileChooser(String[] exts, String selectedtype, String modelinarchivename, String suggestedfilename) {
+		super("Choose save location");
+		setAcceptAllFileFilterUsed(false);
+		addFilters(getFilter(exts));
+		setFileFilter(getFilter(selectedtype));
+		setPreferredSize(filechooserdims);
+		initializeWarningMsg();
+		modelInArchiveName = modelinarchivename;
+		setSelectedFile(new File(suggestedfilename));
+	}
+	
 	public void setFileExtension() {
 		String type = null;
 		File file = getSelectedFile();
