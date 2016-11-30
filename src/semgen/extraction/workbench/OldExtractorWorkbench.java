@@ -13,12 +13,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 
 
-public class ExtractorWorkbench extends Workbench {
+public class OldExtractorWorkbench extends Workbench {
 	ModelAccessor modelaccessor;
 	SemSimModel semsimmodel;
 	Extraction extraction;
 
-	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
+	public OldExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		modelaccessor = accessor;
 		semsimmodel = model;
 		extraction = new Extraction(semsimmodel);
