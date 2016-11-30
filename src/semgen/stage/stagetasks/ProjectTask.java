@@ -105,9 +105,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
 					break;
 				case "extract":
-					SemGen.gacts.NewExtractorTab(modelInfo.accessor);
+					onExtract(modelindex);
 					break;
-				case "encode":
+				case "export":
 					String filenamesuggestion = null;
 					ModelAccessor accessor = modelInfo.accessor;
 					
@@ -141,6 +141,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		public void onMerge(Double model1, Double model2) {
 			createMerger(model1.intValue(), model2.intValue());
+		}
+		
+		public void onExtract(Double model) {
+			createExtractor(model.intValue());
 		}
 		
 		public void onQueryModel(Integer modelindex, String query) {
