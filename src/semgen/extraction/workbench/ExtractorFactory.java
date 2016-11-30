@@ -6,7 +6,7 @@ import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
 
-public class ExtractorFactory extends WorkbenchFactory<OldExtractorWorkbench> {
+public class ExtractorFactory extends WorkbenchFactory<ExtractorWorkbench> {
 	
 	public ExtractorFactory() {
 		super("Loading File");
@@ -38,6 +38,6 @@ public class ExtractorFactory extends WorkbenchFactory<OldExtractorWorkbench> {
 			return;
 		}
 
-		workbenches.add(new OldExtractorWorkbench(modelaccessor, semsimmodel));
+		workbenches.add(new ExtractorWorkbench(modelaccessor, semsimmodel));
 	}	
 }

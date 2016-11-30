@@ -18,6 +18,11 @@ function ExtractorTask(graph, stagestate) {
 	document.querySelector('#leftSidebar').appendChild(clone);
 
 	$("#addModelButton, .stageSearch").hide();
+	
+//	var t = document.querySelector('#mergerContent');
+//
+//	var clone = document.importNode(t.content, true);
+//	document.querySelector('#modalContent').appendChild(clone);
 
 	$("#stageModel").click(function() {
 		sender.sendModeltoStage();

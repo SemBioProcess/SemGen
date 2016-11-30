@@ -10,13 +10,12 @@ import semgen.stage.stagetasks.StageTask;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
-	private ExtractorWorkbench workbench;
+	//private ExtractorWorkbench workbench = new ExtractorWorkbench();
 	
 	public ExtractorTask(ModelInfo taskmodel, int index) {
 		super(index);
 		_models.add(taskmodel);
 		_commandReceiver = new ExtractorCommandReceiver();
-		workbench = new ExtractorWorkbench(taskmodel.accessor, taskmodel.Model);
 		
 		state = new StageState(Task.EXTRACTOR, _models, index);
 	}
