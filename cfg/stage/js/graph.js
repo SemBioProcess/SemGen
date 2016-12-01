@@ -139,10 +139,9 @@ function Graph() {
 	    	.restart();
 
 	    $(this).triggerHandler("postupdate");
-	    
-	    if (this.fixedMode) {
+	    if (graph.fixedMode) {
 	    	setTimeout(function() {
-	    		this.pause();
+	    		graph.pause();
 	    	}, 7000);
 	    }
 	};
