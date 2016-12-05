@@ -69,5 +69,4 @@ function NodeDrag(_node) {
 		_node.rootElement.call(nodeDrag);
 	});
 
-	
 };

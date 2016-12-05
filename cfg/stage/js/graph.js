@@ -103,6 +103,7 @@ function Graph() {
 		this.update();
 	}
 
+
 	/**
 	 * Updates the graph
 	 */
@@ -367,6 +368,15 @@ function Graph() {
     	.alphaTarget(1)
     	.restart();
 	}
+	
+	$(document).keyup(function(event){
+		if(event.which=="32") {
+			graph.fixedMode = graph.active;
+			if (graph.active)
+				graph.pause();
+			else graph.resume();
+		}
+	});
 	
 	this.updateHeightAndWidth();
 	// Run it

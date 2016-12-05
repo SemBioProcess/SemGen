@@ -93,6 +93,9 @@ $(window).bind("cwb-initialized", function(e) {
 	initialized = true;
 });
 
+
+var cntrlIsPressed = false;
+
 $(window).load(function() {
 	// sendNSCommand is defined when the stage is loaded in SemGen
 	if(window.location.search.indexOf("testMode=false") != -1)
@@ -113,8 +116,22 @@ $(window).load(function() {
 	
 	if (document.createEvent) {
 		window.dispatchEvent(event);
+		
+		//Bind keyboard events
+		$(document).keydown(function(event){
+		    if(event.which=="17")
+		    	cntrlIsPressed = true;
+		});
+			
+		$(document).keyup(function(){
+			if(event.which=="17")
+				cntrlIsPressed = false;
+		});
 	}
 	else {
 		window.fireEvent("on" + event.eventType, event);
 	}
 });
+
+
+

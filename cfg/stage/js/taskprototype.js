@@ -77,24 +77,29 @@ function Task(graph, stagestate) {
 	};
 	
 	this.selectNode = function(node) {
+		
 		if (node.nodeType==NodeType.MODEL) {
-			this.selectedModels.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
+			if (!cntrlIsPressed) {
+				this.selectedModels.forEach(function(selnode) {
+					//if (selnode == node) { return; }
+					selnode.removeHighlight();
+					
+				});
 				
-			});
-			
-			this.selectedModels = [];
+				this.selectedModels = [];
+			}
 			this.selectedModels.push(node);
 			
 			this.onModelSelection(node);
 		}
 		else {
-			this.selectedNodes.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
-			});
-			this.selectedNodes = [];
+			if (!cntrlIsPressed) {
+				this.selectedNodes.forEach(function(selnode) {
+					//if (selnode == node) { return; }
+					selnode.removeHighlight();
+				});
+				this.selectedNodes = [];
+			}
 			this.selectedNodes.push(node);
 		}
 		
