@@ -83,7 +83,7 @@ function Task(graph, stagestate) {
 				this.selectedModels.forEach(function(selnode) {
 					//if (selnode == node) { return; }
 					selnode.removeHighlight();
-					
+					selnode.selected = false;
 				});
 				
 				this.selectedModels = [];
@@ -97,12 +97,13 @@ function Task(graph, stagestate) {
 				this.selectedNodes.forEach(function(selnode) {
 					//if (selnode == node) { return; }
 					selnode.removeHighlight();
+					selnode.selected = false;
 				});
 				this.selectedNodes = [];
 			}
 			this.selectedNodes.push(node);
 		}
-		
+		node.selected = true;
 		node.highlight();
 	};
 

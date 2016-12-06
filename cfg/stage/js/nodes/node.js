@@ -25,7 +25,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.canlink = true;
 	this.textlocx = 0;
 	this.locked = false; //Make node immutable on stage (allow dragging and selection)
-
+	this.selected = false;
+	
 	this.wasfixed = false;
 	this.defaultopacity = 1.0;
 	

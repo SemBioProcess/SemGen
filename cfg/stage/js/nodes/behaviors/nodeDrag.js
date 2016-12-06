@@ -14,8 +14,14 @@ function NodeDrag(_node) {
 			.subject(_node)
 			.on("start", function (d, i) {
 				_node.graph.pause();
+				//Ensure the node has been added to selections
+				var selections = _node.multiDrag();
 				
-				_node.multiDrag().forEach(function(n) {
+				if (!_node.selected) {
+					selections = [_node];
+				}
+				
+				selections.forEach(function(n) {
 					n.rootElement.selectAll("circle").attr("r", _node.r*2);
 					n.fx = _node.xpos();
 					n.fy = _node.ypos();	
@@ -30,8 +36,13 @@ function NodeDrag(_node) {
 		    .on("drag", function (d, i) {
 		    	var dx = d3.event.x - _node.xpos(),
 		    		dy = d3.event.y - _node.ypos();
-		    	
-		    	_node.multiDrag().forEach(function(n) {
+				var selections = _node.multiDrag();
+				
+				if (!_node.selected) {
+					selections = [_node];
+				}
+				
+				selections.forEach(function(n) {
 		    		var posx = n.xpos()+dx,
 		    		    posy = n.ypos()+dy;
 
@@ -57,7 +68,13 @@ function NodeDrag(_node) {
 		    	
 		    })
 		    .on("end", function (d, i) {
-		    	_node.multiDrag().forEach(function(n) {
+				var selections = _node.multiDrag();
+				
+				if (!_node.selected) {
+					selections = [_node];
+				}
+				
+		    	selections.forEach(function(n) {
 			    	n.rootElement.selectAll("circle").attr("r", n.r);
 			    	n.setLocation(n.fx, n.fy);
 		    	});
