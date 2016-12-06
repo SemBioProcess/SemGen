@@ -256,6 +256,11 @@ Node.prototype.globalApplyUntilTrue = function (funct) {
 
 Node.prototype.applytoChildren = function(funct) {}
 
+
+Node.prototype.multiDrag = function() {
+	return main.task.selectedNodes;
+}
+
 function validateNode(nodeData) {
 	if(!nodeData)
 		throw "Invalid node data";
@@ -276,3 +281,5 @@ function validateNode(nodeData) {
 		throw "Node tickHandler is not defined";
 
 };
+
+

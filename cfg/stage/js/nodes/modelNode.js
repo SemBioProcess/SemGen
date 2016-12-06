@@ -66,3 +66,7 @@ ModelNode.prototype.showChildren = function() {
 	this.showchildren = true;
 	$(this).triggerHandler('childrenSet', [this.children]);
 }
+
+ModelNode.prototype.multiDrag = function() {
+	return main.task.selectedModels;
+}

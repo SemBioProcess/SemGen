@@ -79,7 +79,7 @@ function Task(graph, stagestate) {
 	this.selectNode = function(node) {
 		
 		if (node.nodeType==NodeType.MODEL) {
-			if (!cntrlIsPressed) {
+			if (!this.graph.cntrlIsPressed) {
 				this.selectedModels.forEach(function(selnode) {
 					//if (selnode == node) { return; }
 					selnode.removeHighlight();
@@ -93,7 +93,7 @@ function Task(graph, stagestate) {
 			this.onModelSelection(node);
 		}
 		else {
-			if (!cntrlIsPressed) {
+			if (!this.graph.cntrlIsPressed) {
 				this.selectedNodes.forEach(function(selnode) {
 					//if (selnode == node) { return; }
 					selnode.removeHighlight();
