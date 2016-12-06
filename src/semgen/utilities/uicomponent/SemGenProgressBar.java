@@ -84,7 +84,7 @@ public class SemGenProgressBar extends SemGenDialog implements ActionListener, W
 		add(progpanel);
 		
 		this.setModalityType(ModalityType.MODELESS);
-		setAlwaysOnTop(true);
+		//setAlwaysOnTop(true);
 		
 		showDialog();
 		toFront();
