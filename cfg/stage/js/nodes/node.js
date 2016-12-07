@@ -169,7 +169,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent && this.graph.active) {
-			var k = .005;
+			var k = .0001;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 

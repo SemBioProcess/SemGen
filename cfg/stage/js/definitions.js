@@ -45,9 +45,9 @@ var NodeTypeArray = [
 		];
 
 
-var defaultcharge = -75;
-var defaultlinklength = 300;
-var defaultchargedistance = 400;
+var defaultcharge = -100;
+var defaultlinklength = 100;
+var defaultchargedistance = 300;
 
 var DisplayModes = {
 	SHOWSUBMODELS: { id: 0, keys: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},

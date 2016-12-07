@@ -19,19 +19,20 @@ function Graph() {
 	    .attr("perserveAspectRatio", "xMinYMid");
 
 	var vis = svg.append('g').attr("class", "canvas");
-	
-	this.force = d3.forceSimulation()
-	.velocityDecay(0.5)
-	.force("charge", d3.forceManyBody()
-			.strength(function(d) {return d.charge;})
-			.distanceMax(400)
-			.theta(0.6))
-	.force("link", d3.forceLink()
-		.id(function(d) { return d.id; })
-		.distance(function (d) 
-				{ return d.length; })
-				.strength(0.1)
-	);
+
+    this.force = d3.forceSimulation()
+        .alphaMin(0.07)
+        .velocityDecay(0.2)
+        .force("charge", d3.forceManyBody()
+            .strength(function(d) {return d.charge;})
+            .distanceMax(400)
+            .theta(0.6))
+        .force("link", d3.forceLink()
+            .id(function(d) { return d.id; })
+            .distance(function (d)
+            { return d.length; })
+            .strength(0.1)
+        );
 		
 	var links = this.force.force("link").links(); 
 
@@ -135,7 +136,7 @@ function Graph() {
 	    this.force
 	    	.nodes(visibleNodes)
 	    	.on("tick", this.tick)
-	    	.alphaTarget(1)
+	    	.alpha(1)
 	    	.restart();
 
 	    $(this).triggerHandler("postupdate");
@@ -365,7 +366,7 @@ function Graph() {
 	this.resume = function() {
 		this.active = true;
 		this.force
-    	.alphaTarget(1)
+    	.alpha(1)
     	.restart();
 	}
 	

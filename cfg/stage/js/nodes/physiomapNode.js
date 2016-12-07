@@ -48,7 +48,7 @@ PhysioMapNode.prototype.getLinks = function () {
 
 		if (!inputNode || inputNode==outputNode) return;
 		
-		var length = outputNode.graph.linklength/3;
+		var length = outputNode.graph.linklength/5;
 
 		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length));
 	});
