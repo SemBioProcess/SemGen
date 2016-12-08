@@ -110,6 +110,7 @@ public class Node<T extends SemSimObject> {
 	static Number PROCESS = 6;
 	static Number MEDIATOR = 7;
 	static Number NULL = 8;
+	static Number EXTRACTION = 9;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;

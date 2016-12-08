@@ -29,11 +29,7 @@ public class Encoder {
 			startEncoding(inputfile, filenamesuggestion);
 		}
 	}
-	
-	public Encoder(File afile, String filenamesuggestion) {
-		startEncoding(afile, filenamesuggestion);
-	}
-	
+
 	public Encoder(SemSimModel model, String filenamesuggestion) {
 		startEncoding(model, filenamesuggestion);
 	}

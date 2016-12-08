@@ -35,7 +35,8 @@ public class SaveSemSimModel {
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
 
 		} 
-		catch (Exception e) {e.printStackTrace();
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 	}

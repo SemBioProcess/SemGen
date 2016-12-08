@@ -217,11 +217,6 @@ public class Extraction {
 	public SemSimModel extractToNewModel() throws CloneNotSupportedException {
 		SemSimModel extractedmodel = new SemSimModel();
 		
-		// Copy over all the model-level information
-//		for(Annotation modann : getSourceModel().getAnnotations()){
-//			extractedmodel.addAnnotation(new Annotation(modann));
-//		}
-		
 		// Copy in units
 		for(UnitOfMeasurement uom : getSourceModel().getUnits()){
 			extractedmodel.addUnit(new UnitOfMeasurement(uom));

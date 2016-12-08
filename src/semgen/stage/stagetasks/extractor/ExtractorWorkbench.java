@@ -7,21 +7,18 @@ import java.util.Observable;
 import java.util.Set;
 
 import semgen.utilities.Workbench;
-import semsim.extraction.Extraction;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 
 
 public class ExtractorWorkbench extends Workbench {
-	ModelAccessor modelaccessor;
-	SemSimModel semsimmodel;
-	Extraction extraction;
+	private ModelAccessor modelaccessor;
+	private SemSimModel sourcemodel;
 
 	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		modelaccessor = accessor;
-		semsimmodel = model;
-		extraction = new Extraction(semsimmodel);
+		sourcemodel = model;
 	}
 	
 	@Override
@@ -32,18 +29,14 @@ public class ExtractorWorkbench extends Workbench {
 
 	@Override
 	public String getCurrentModelName() {
-		return semsimmodel.getName();
+		return sourcemodel.getName();
 	}
 
 	@Override
 	public ModelAccessor getModelSourceLocation() {
-		return semsimmodel.getLegacyCodeLocation();
+		return sourcemodel.getLegacyCodeLocation();
 	}
 	
-	public Extraction getExtraction(){
-		return extraction;
-	}
-
 	@Override
 	public ModelAccessor saveModel() {
 		return null;
@@ -59,7 +52,7 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	public SemSimModel getSourceModel() {
-		return semsimmodel;
+		return sourcemodel;
 	}
 	
 	

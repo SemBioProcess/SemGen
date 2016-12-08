@@ -26,7 +26,7 @@ import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.extraction.RadialGraph.Clusterer;
 import semgen.extraction.RadialGraph.SemGenRadialGraphView;
-import semgen.extraction.workbench.ExtractorWorkbench;
+import semgen.extraction.workbench.OldExtractorWorkbench;
 import semgen.utilities.ComparatorByName;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
@@ -118,9 +118,9 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 	private Clusterer cd;
 	public PrintWriter clusterwriter;
 	private ExtractorToolbar toolbar;
-	private ExtractorWorkbench workbench;
+	private OldExtractorWorkbench workbench;
 	
-	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, ExtractorWorkbench bench) {
+	public ExtractorTab(SemGenSettings sets, GlobalActions gacts, OldExtractorWorkbench bench) {
 		super(bench.getCurrentModelName(), SemGenIcon.extractoricon, "Extracting from " + bench.getCurrentModelName(), sets, gacts);
 		settings = sets;
 		workbench = bench;

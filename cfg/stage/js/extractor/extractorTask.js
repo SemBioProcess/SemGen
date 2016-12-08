@@ -73,7 +73,7 @@ ExtractorTask.prototype.onMinimize = function() {
 	sender.minimizeTask(this.task);
 }
 
-ExtractorTask.prototype.onModelSelection = function(node) {
+ExtractorTask.prototype.onModelSelection = function(srcmodel, node) {
 	
 }
 

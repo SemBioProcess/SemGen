@@ -10,13 +10,15 @@ import semgen.stage.stagetasks.StageTask;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
-	//private ExtractorWorkbench workbench = new ExtractorWorkbench();
+	private ExtractorWorkbench workbench;
+	
 	
 	public ExtractorTask(ModelInfo taskmodel, int index) {
 		super(index);
 		_models.add(taskmodel);
 		_commandReceiver = new ExtractorCommandReceiver();
-		
+		workbench = new ExtractorWorkbench(taskmodel.accessor, taskmodel.Model);
+	
 		state = new StageState(Task.EXTRACTOR, _models, index);
 	}
 
@@ -38,7 +40,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	protected class ExtractorCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
-			//jstask.setProperty("conflictsj", new MergerBridge());
+			//jstask.setProperty("conflictsj", new ExtractorBridge());
 		}
 		public void onClose() {
 			closeTask();
