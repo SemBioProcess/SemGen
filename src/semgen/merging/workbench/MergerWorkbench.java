@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.encoding.Encoder;
 import semgen.merging.workbench.Merger.ResolutionChoice;
 import semgen.merging.workbench.ModelOverlapMap.maptype;
 import semgen.utilities.SemGenError;
@@ -389,10 +388,6 @@ public class MergerWorkbench extends Workbench {
 	
 	public String getMergedModelName() {
 		return mergedmodel.getName();
-	}
-	
-	public void encodeMergedModel(String filepath) {
-		new Encoder(mergedmodel, filepath.substring(0, filepath.lastIndexOf(".")));
 	}
 	
 	public String getModelName(int index) {

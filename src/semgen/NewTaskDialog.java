@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import semgen.encoding.Encoder;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenDialog;
@@ -20,7 +19,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 	public JButton annotatebutton = new JButton("Annotate a model",SemGenIcon.annotatoricon);
 	public JButton openmenuextractbutton = new JButton("Extract a model", SemGenIcon.extractoricon);
 	public JButton openmenumergebutton = new JButton("Merge models", SemGenIcon.mergeicon);
-	public JButton encodebutton = new JButton("Encode a model",SemGenIcon.codericon);
+	//public JButton encodebutton = new JButton("Encode a model",SemGenIcon.codericon);
 	public JButton stagebutton = new JButton("Open the stage", SemGenIcon.stageicon);
 	private GlobalActions globalactions;
 	
@@ -35,7 +34,6 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 			stagebutton,
 			annotatebutton,
 			openmenuextractbutton,
-			encodebutton
 			
 		};
 		for (JButton button : buttons) {
@@ -66,9 +64,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 		else if (o == openmenumergebutton){
 			globalactions.NewMergerTab();
 		}
-		else if (o == encodebutton) {
-			new Encoder();
-		}
+
 		else if (o == stagebutton) {
 			globalactions.NewStageTab();
 		}
