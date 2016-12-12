@@ -3,7 +3,6 @@ package semgen.merging;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.semanticweb.owlapi.model.OWLException;
-
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.merging.dialog.ConversionFactorDialog;
@@ -344,16 +341,6 @@ public class MergerTab extends SemGenTab implements ActionListener, Observer {
 			}
 		}
 		return newdsname;
-	}
-	
-	public void optionToEncode(String filepath) throws IOException, OWLException {
-		int x = JOptionPane.showConfirmDialog(this, "Finished merging "
-				+ workbench.getMergedModelName()
-				+ "\nGenerate simulation code from merged model?", "",
-				JOptionPane.YES_NO_OPTION);
-		if (x == JOptionPane.YES_OPTION) {
-			workbench.encodeMergedModel(filepath);
-		}
 	}
 
 	@Override

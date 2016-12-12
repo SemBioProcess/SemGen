@@ -12,7 +12,6 @@ import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
-import semgen.encoding.Encoder;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.DropDownCheckList;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
@@ -32,7 +31,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.librarymodifyicon);
 	private SemGenToolbarButton annotateitemtreeview;
 	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
-	private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
+	//private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
 	
 	private DropDownCheckList sortselector = new DropDownCheckList(" Sort Options");
 	private String sortbytype = new String("By Type");
@@ -82,8 +81,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		extractorbutton.setToolTipText("Open this model in Extractor");
 		extractorbutton.addActionListener(this);
 
-		coderbutton.setToolTipText("Encode this model for simulation");
-		coderbutton.addActionListener(this);
+//		coderbutton.setToolTipText("Encode this model for simulation");
+//		coderbutton.addActionListener(this);
 		
 		add(annotateitemtreeview);
 		add(annotateitemshowmarkers);
@@ -103,7 +102,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		addSeparator();
 		
 		add(extractorbutton);
-		add(coderbutton);
 
 		sortselector.addItemListener(new SortSelectionListener(settings));
 	}
@@ -184,21 +182,6 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		if (o == opentermlibrary) {
 			workbench.sendTermLibraryEvent(LibraryRequest.REQUEST_LIBRARY);
 		} 
-		
-		if (o == coderbutton) {
-			String filenamesuggestion = null;
-			
-			if(workbench.getModelSourceLocation() != null){	
-					if( ! workbench.getModelAccessor().modelIsPartOfArchive()){
-						String filename = workbench.getModelAccessor().getFileThatContainsModel().getName();
-						filenamesuggestion = filename.substring(0, filename.lastIndexOf("."));
-					}
-			}
-			
-			if(workbench.unsavedChanges()){
-				new Encoder(workbench.getSemSimModel(), filenamesuggestion);
-			} 
-		}
 	}
 
 	class SortSelectionListener implements ItemListener {
