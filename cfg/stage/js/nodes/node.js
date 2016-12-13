@@ -145,7 +145,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.append("circle")
 			.attr("class", "highlight")
 			.attr("r", this.r + 4)
-			.attr("stroke", "yellow")
+			.attr("stroke", "#fdc751")
 			.attr("stroke-width", "4");
 	
 		// Create the text elements
