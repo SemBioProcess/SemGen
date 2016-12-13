@@ -18,7 +18,7 @@ function ExtractorTask(graph, stagestate) {
 	document.querySelector('#leftSidebar').appendChild(clone);
 
 	$("#addModelButton, .stageSearch").hide();
-	
+	$("#trash").show();
 //	var t = document.querySelector('#mergerContent');
 //
 //	var clone = document.importNode(t.content, true);
@@ -49,8 +49,6 @@ function ExtractorTask(graph, stagestate) {
 			sender.close();
 		}
 	});
-
-
 }
 
 ExtractorTask.prototype.setSavedState = function (issaved) {

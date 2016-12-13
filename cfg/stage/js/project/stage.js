@@ -8,9 +8,8 @@ function Stage(graph, stagestate) {
 	var nodes = this.nodes;
 	this.taskindex = 0;
 	
-	$("#addModelButton").show();
-	$(".stageSearch").show();
-	
+	$("#addModelButton, .stageSearch").show();
+	$("#trash").hide();
 	
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);

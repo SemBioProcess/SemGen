@@ -23,7 +23,7 @@ function MergerTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
-	$("#addModelButton, .stageSearch").hide();
+	$("#addModelButton, .stageSearch, #trash").hide();
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
 	//Create the resolution pane
 	
