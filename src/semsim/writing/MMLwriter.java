@@ -328,17 +328,25 @@ public class MMLwriter extends ModelWriter{
 				// retrieve the new equation
 				if(dataStructureAndEquationMap.containsKey(ds)) code = dataStructureAndEquationMap.get(ds);
 				
-				// If the data structure is solved with an ODE but the computational code
+				// If the data structure is solved with an ODE and is not discrete, and its computational code
 				// isn't formatted for MML, format the LHS of the equation				
 				if( ds.hasStartValue()){
 					
-					String soldomname = semsimmodel.getSolutionDomainNames().toArray(new String[]{})[0];
-					String LHS = getJSimFormattedName(ds) + ":" + soldomname;
-					
-					if( ! code.startsWith(LHS)){
-						String rightfrag = code.substring(code.indexOf("="));
-						code = LHS + " " + rightfrag;
+					if ( ! ds.isDiscrete()){
+						
+						String soldomname = semsimmodel.getSolutionDomainNames().toArray(new String[]{})[0];
+						String LHS = getJSimFormattedName(ds) + ":" + soldomname;
+						
+						if( ! code.startsWith(LHS)){
+							String rightfrag = code.substring(code.indexOf("="));
+							code = LHS + " " + rightfrag;
+						}
 					}
+					
+					else{} // TODO: For now, realState variables that update discretely have all the necessary 
+					// parts of their conditional statements in ds.getComputation().getComputationalCode(). When we have a
+					// MathML to MML converter, we can build the conditional statements from the MathML bits within the Event
+					// and EventAssignment instances associated with the realState's Computation.
 				}
 			
 				output = output.concat("\t" + code + getLineEnd(code) + "\n");
