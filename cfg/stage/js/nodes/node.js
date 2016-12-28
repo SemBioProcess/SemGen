@@ -142,7 +142,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 		});
 
 		//Pauses graph when hovering over a node
-		$(".node:not(.modelNode)").hover( function() {graph.pause();}, function() {graph.resume();});
+		$(".node > *:not(.hull)").hover( function() {graph.pause();}, function() {graph.resume();});
 	
 		//Append highlight circle
 		this.rootElement.append("circle")
