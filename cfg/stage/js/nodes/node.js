@@ -140,6 +140,9 @@ Node.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.on("click", function (node) {
 			node.onClick();
 		});
+
+		//Pauses graph when hovering over a node
+		$(".node:not(.modelNode)").hover( function() {graph.pause();}, function() {graph.resume();});
 	
 		//Append highlight circle
 		this.rootElement.append("circle")
@@ -148,7 +151,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 			.attr("stroke", "#fdc751")
 			.attr("stroke-width", "4");
 	
-		// Create the text elements
+		//Create the text elements
 		this.createTextElement("shadow");
 		this.createTextElement("real");
 		
@@ -228,7 +231,7 @@ Node.prototype.onClick = function () {
         	this.onDoubleClick();
         }
     }
-      d3.event.stopPropagation();
+    d3.event.stopPropagation();
 
 }
 
