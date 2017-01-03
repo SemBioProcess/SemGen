@@ -41,6 +41,6 @@
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-mac-6.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-6.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/licence.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.7.0_80"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_80"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

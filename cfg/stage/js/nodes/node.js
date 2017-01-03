@@ -203,11 +203,13 @@ Node.prototype.createTextElement = function (className) {
 
 
 Node.prototype.highlight = function () {
+	if (this.rootElement) 
 		this.rootElement.classed("selected", this.rootElement.select("circle").style("display")!="none");
 }
 
 Node.prototype.removeHighlight = function () {
-	this.rootElement.classed("selected", false);
+	if (this.rootElement) 
+		this.rootElement.classed("selected", false);
 }
 
 Node.prototype.onClick = function () {

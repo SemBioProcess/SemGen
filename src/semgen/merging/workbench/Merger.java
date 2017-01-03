@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -252,6 +253,10 @@ public class Merger {
 			}
 		}
 		
+		// Copy in all the events and event assignments
+		for(Event event : ssm2clone.getEvents()){
+			mergedmodel.addEvent(event);
+		}	
 
 		// Copy in the submodels
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){

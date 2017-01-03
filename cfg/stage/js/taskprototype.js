@@ -24,6 +24,7 @@ function Task(graph, stagestate) {
 		
 		task.nodes[model.id] = modelNode;
 		task.graph.update();
+		task.selectNode(modelNode);
 
 	};
 	
