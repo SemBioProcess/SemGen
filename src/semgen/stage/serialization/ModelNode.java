@@ -17,7 +17,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 	//null model
 	public ModelNode(String modname) {
 		super(modname, MODEL);
-		
+		modelindex = -1;
 	}
 	
 	public ModelNode(SemSimModel sourcemod, Integer modindex) {

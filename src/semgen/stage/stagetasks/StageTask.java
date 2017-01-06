@@ -7,6 +7,7 @@ import java.util.Observer;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.stage.serialization.ModelNode;
+import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
@@ -118,7 +119,6 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	public abstract Class<TSender> getSenderInterface();
 	
 	public void closeTask() {
-		
 		setChanged();
 		this.notifyObservers(StageTaskEvent.CLOSETASK);
 		
@@ -138,5 +138,21 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	public void setTaskIndex(int newindex) {
 		taskindex = newindex;
+	}
+	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getNodebyHash(int nodehash, String nodeid) {
+		for (ModelInfo mni : _models) {
+			Node<?> returnnode = mni.modelnode.getNodebyHash(nodehash, nodeid);
+			if (returnnode!=null) return returnnode; 
+		}
+		return null;
+	}
+	
+	public class NodeTreeBridge {
+		void setNodeLocation(Object jsobject, Integer xloc, Integer yloc) {
+			Node<?> node = (Node<?>)jsobject;
+			node.xpos = xloc;
+		}
 	}
 }

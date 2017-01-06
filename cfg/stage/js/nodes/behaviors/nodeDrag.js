@@ -7,7 +7,6 @@ function NodeDrag(_node) {
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
 	// is released on a dropzone the merger will open with those models
-
 	
 	$(_node).on('createVisualization', function (e, root) {
 		var nodeDrag = d3.drag()
@@ -20,12 +19,17 @@ function NodeDrag(_node) {
 				if (!_node.selected) {
 					selections = [_node];
 				}
+				if (_node.graph.shiftIsPressed) {
+					
+				}
+				else {
+					selections.forEach(function(n) {
+						n.rootElement.selectAll("circle").attr("r", _node.r*2);
+						n.fx = _node.xpos();
+						n.fy = _node.ypos();	
+					});
 				
-				selections.forEach(function(n) {
-					n.rootElement.selectAll("circle").attr("r", _node.r*2);
-					n.fx = _node.xpos();
-					n.fy = _node.ypos();	
-				});
+				}
 				//Execute any drag behaviors unique to the node type
 				_node.dragstart.forEach(function(behavior) {
 					behavior(_node);

@@ -1,9 +1,13 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
+import semgen.stage.serialization.ExtractionNode;
+import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
@@ -11,7 +15,7 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	private ExtractorWorkbench workbench;
-	
+	private ArrayList<ExtractionNode> taskextractions;
 	
 	public ExtractorTask(ModelInfo taskmodel, int index) {
 		super(index);
@@ -40,12 +44,13 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	protected class ExtractorCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
-			//jstask.setProperty("conflictsj", new ExtractorBridge());
+			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
+			jstask.setProperty("extractionsjs", new ExtractorBridge());
 		}
 		public void onClose() {
 			closeTask();
 		}
-		
+
 		public void onChangeTask(Double index) {
 			switchTask(index.intValue());
 		}
@@ -60,6 +65,28 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
+		}
+	}
+	
+	public class ExtractorBridge {
+		public void createExtraction(String extractname, JSArray nodes) {
+			
+		}
+		
+		public void createExtractionExclude(String extractname, JSObject model, JSArray nodes) {
+			
+		}
+		
+		public void removeExtraction() {
+			
+		}
+		
+		public void removeNodesFromExtraction() {
+			
+		}
+		
+		public void addNodestoExtraction() {
+			
 		}
 	}
 	

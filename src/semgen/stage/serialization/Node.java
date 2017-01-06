@@ -20,6 +20,8 @@ public class Node<T extends SemSimObject> {
 	@Expose public int ypos = -1;
 	@Expose public Boolean hidden = false;
 	@Expose public Number typeIndex;
+	//Record Java hashcode for rapid lookup
+	@Expose public int hash = this.hashCode();
 
 	protected T sourceobj;
 	protected Node<?> parent = null;
@@ -139,5 +141,15 @@ public class Node<T extends SemSimObject> {
 	}
 	public void setID(String newid) {
 		id = newid;
+	}
+	
+	public boolean isJavaScriptNode(int nodehash, String nodeid) {
+		if (nodehash == hash) {
+			//Additional check to prevent hash collision
+			if (id == nodeid) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

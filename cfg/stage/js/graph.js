@@ -370,11 +370,14 @@ function Graph() {
 	}
 	
 	this.cntrlIsPressed = false;
+	this.shiftIsPressed = false;
 	
 	//Bind keyboard events
 	$(document).keyup(function(event){
 		if(event.which=="17")
 			graph.cntrlIsPressed = false;
+		if(event.which=="")
+			graph.shiftIsPressed = false;
 		if(event.which=="32") {
 			graph.fixedMode = graph.active;
 			if (graph.active)
@@ -387,6 +390,8 @@ function Graph() {
 	$(document).keydown(function(event){
 	    if(event.which=="17")
 	    	graph.cntrlIsPressed = true;
+		if(event.which=="16")
+			graph.shiftIsPressed = true;
 	});
 		
 	this.updateHeightAndWidth();

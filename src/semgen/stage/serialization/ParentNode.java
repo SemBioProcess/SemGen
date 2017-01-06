@@ -92,6 +92,22 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		
 	}
 	
+	public Node<?> getNodebyHash(int nodehash, String nodeid) {
+		if (this.isJavaScriptNode(nodehash, nodeid)) return this;
+		
+		
+		for (DependencyNode dep : dependencies) {
+			if (dep.isJavaScriptNode(nodehash, nodeid)) return dep;
+		}
+		Node<? extends SemSimObject> returnnode = null;	
+		for (SubModelNode child : childsubmodels) {
+			returnnode = child.getNodebyHash(nodehash, nodeid);
+			if (returnnode != null) break;
+		}
+		return returnnode;
+		
+	}
+	
 	public DependencyNode getDependencyNode(DataStructure sourceds) {
 			for (DependencyNode dn : dependencies) {
 				if (dn.sourceobj == sourceds) {

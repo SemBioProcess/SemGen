@@ -9,6 +9,7 @@ ExtractorTask.prototype.constructor = ExtractorTask;
 function ExtractorTask(graph, stagestate) {
 	Task.prototype.constructor.call(this, graph, stagestate);
 	var extractor = this;
+	this.extractionjs = null; //Handle for calling java functions
 	
 	this.taskindex = stagestate.taskindex;
 	
@@ -63,6 +64,7 @@ ExtractorTask.prototype.onInitialize = function() {
 	
 	extractor.state.models.forEach(function(model) {
 		extractor.addModelNode(model, []);
+		extractor.extractionsjs.test(model);
 	});
 }
 

@@ -6,9 +6,11 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import org.apache.commons.io.FilenameUtils;
+import org.openjena.atlas.json.JsonObject;
 
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
@@ -76,7 +78,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
 				addModeltoTask(info);
-				
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
 			}
