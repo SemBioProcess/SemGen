@@ -18,10 +18,7 @@ function ModelNode (graph, srcobj) {
 }
 
 ModelNode.prototype.createVisualElement = function (element, graph) {
-	
 	ParentNode.prototype.createVisualElement.call(this, element, graph);
-
-	
 }
 
 ModelNode.prototype.createVisualization = function (modeid, expand) {
@@ -31,13 +28,15 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 	if (modeid == 0) {
 		this.createChildren();
 	}
+	//Show physiomap
 	else if (modeid == 2) {
 		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
 		physionodes.forEach(function (d) {
-			node.createChild(d);
+			modelnode.createChild(d);
 		}, this);
 		console.log("Showing PhysioMap for model " + this.name);
 	}
+	//Show all dependencies
 	else if (modeid == 1) {
 		this.createChildren();
 		var dependencies = {};

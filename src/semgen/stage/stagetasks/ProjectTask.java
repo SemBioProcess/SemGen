@@ -33,12 +33,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		_commandReceiver = new ProjectCommandReceiver();
 		state = new StageState(Task.PROJECT, taskindex);
 	}
-	
-	
-	protected void removeModel(Integer index) {
-		_models.set(index, null);
-		state.updateModelNodes(_models);
-	}
+
 	/**
 	 * Receives commands from javascript
 	 * @author Ryan
@@ -113,9 +108,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					onExtract(modelindex);
 					break;
 				case "export":
-					String filenamesuggestion = null;
-					ModelAccessor accessor = modelInfo.accessor;
-					
 					String selectedtype = "owl";  // Default extension type
 					ModelType modtype = modelInfo.Model.getSourceModelType();
 					

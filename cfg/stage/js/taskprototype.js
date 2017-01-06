@@ -41,7 +41,7 @@ function Task(graph, stagestate) {
 	this.getModelNodebyIndex = function(modelindex) {
 		var modelNode;
 		for (x in this.nodes) {
-			if (this.nodes[x].index == modelindex) {
+			if (this.nodes[x].modelindex == modelindex) {
 				modelNode = this.nodes[x];
 				break;
 			}
@@ -62,7 +62,7 @@ function Task(graph, stagestate) {
 	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
-		sender.taskClicked(parseInt(this.getFirstSelectedModel().index), taskid);
+		sender.taskClicked(parseInt(this.getFirstSelectedModel().modelindex), taskid);
 	};
 	
 	task.doModelAction = function(action) {
