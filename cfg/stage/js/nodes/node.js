@@ -285,4 +285,6 @@ function validateNode(nodeData) {
 
 };
 
-
+Node.prototype.createGhost = function() {
+	return new GhostNode(this);
+}

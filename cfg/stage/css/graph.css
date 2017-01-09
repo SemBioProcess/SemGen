@@ -27,6 +27,10 @@ path.link {
   stroke-opacity: .8;
 }
 
+.ghost {
+	opacity: 0.5
+}
+
 .dim {
 	opacity: 0.2;
 }
