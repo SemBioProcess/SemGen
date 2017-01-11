@@ -3,6 +3,12 @@ path.link {
   stroke: #A8A8A8;
   stroke-width: 1.5px;
 }
+
+path.intra {
+	fill: #333333;
+	stroke: #333333;
+}
+
 .node {
 	cursor: move;
 	stroke: none;
