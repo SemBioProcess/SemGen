@@ -24,6 +24,7 @@ function Task(graph, stagestate) {
 		
 		task.nodes[model.id] = modelNode;
 		task.graph.update();
+		task.selectNode(modelNode);
 
 	};
 	
@@ -40,7 +41,7 @@ function Task(graph, stagestate) {
 	this.getModelNodebyIndex = function(modelindex) {
 		var modelNode;
 		for (x in this.nodes) {
-			if (this.nodes[x].index == modelindex) {
+			if (this.nodes[x].modelindex == modelindex) {
 				modelNode = this.nodes[x];
 				break;
 			}
@@ -61,7 +62,7 @@ function Task(graph, stagestate) {
 	
 	this.taskClicked = function(element) {
 		var taskid = element.innerHTML.toLowerCase();
-		sender.taskClicked(parseInt(this.getFirstSelectedModel().index), taskid);
+		sender.taskClicked(parseInt(this.getFirstSelectedModel().modelindex), taskid);
 	};
 	
 	task.doModelAction = function(action) {
@@ -77,27 +78,33 @@ function Task(graph, stagestate) {
 	};
 	
 	this.selectNode = function(node) {
+		
 		if (node.nodeType==NodeType.MODEL) {
-			this.selectedModels.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
+			if (!this.graph.cntrlIsPressed) {
+				this.selectedModels.forEach(function(selnode) {
+					//if (selnode == node) { return; }
+					selnode.removeHighlight();
+					selnode.selected = false;
+				});
 				
-			});
-			
-			this.selectedModels = [];
+				this.selectedModels = [];
+			}
 			this.selectedModels.push(node);
 			
 			this.onModelSelection(node);
 		}
 		else {
-			this.selectedNodes.forEach(function(selnode) {
-				//if (selnode == node) { return; }
-				selnode.removeHighlight();
-			});
-			this.selectedNodes = [];
+			if (!this.graph.cntrlIsPressed) {
+				this.selectedNodes.forEach(function(selnode) {
+					//if (selnode == node) { return; }
+					selnode.removeHighlight();
+					selnode.selected = false;
+				});
+				this.selectedNodes = [];
+			}
 			this.selectedNodes.push(node);
 		}
-		
+		node.selected = true;
 		node.highlight();
 	};
 

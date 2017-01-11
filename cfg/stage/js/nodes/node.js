@@ -25,7 +25,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.canlink = true;
 	this.textlocx = 0;
 	this.locked = false; //Make node immutable on stage (allow dragging and selection)
-
+	this.selected = false;
+	
 	this.wasfixed = false;
 	this.defaultopacity = 1.0;
 	
@@ -205,11 +206,13 @@ Node.prototype.createTextElement = function (className) {
 
 
 Node.prototype.highlight = function () {
+	if (this.rootElement) 
 		this.rootElement.classed("selected", this.rootElement.select("circle").style("display")!="none");
 }
 
 Node.prototype.removeHighlight = function () {
-	this.rootElement.classed("selected", false);
+	if (this.rootElement) 
+		this.rootElement.classed("selected", false);
 }
 
 Node.prototype.onClick = function () {
@@ -259,6 +262,11 @@ Node.prototype.globalApplyUntilTrue = function (funct) {
 
 Node.prototype.applytoChildren = function(funct) {}
 
+
+Node.prototype.multiDrag = function() {
+	return main.task.selectedNodes;
+}
+
 function validateNode(nodeData) {
 	if(!nodeData)
 		throw "Invalid node data";
@@ -279,3 +287,5 @@ function validateNode(nodeData) {
 		throw "Node tickHandler is not defined";
 
 };
+
+

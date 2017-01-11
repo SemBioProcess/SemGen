@@ -126,6 +126,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		setNamespace(namespace);
 	}
 	
+	/**
+	 * Constructor for copying
+	 * @param ssmtocopy The SemSimModel to copy
+	 */
 	private SemSimModel(SemSimModel ssmtocopy) {
 		super(ssmtocopy);
 		namespace = new String(ssmtocopy.namespace);
@@ -371,9 +375,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Specify the set of {@link Events} in the model
 	 * @param theevents The set of {@link Events} that will be assigned to the model
 	 */
-	public void setEvents(Set<Event> theevents){
-		this.events.clear();
-		this.events.addAll(theevents);
+	public void setEvents(ArrayList<Event> theevents){
+		events.clear();
+		events.addAll(theevents);
 	}
 	
 	
@@ -382,7 +386,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param theevent The {@link Event} to add
 	 */
 	public void addEvent(Event theevent){
-		this.events.add(theevent);
+		events.add(theevent);
 	}
 	
 	/**

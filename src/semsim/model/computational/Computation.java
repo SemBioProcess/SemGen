@@ -119,7 +119,7 @@ public class Computation extends ComputationalModelComponent{
 	 * @param inputs The required inputs for the computation
 	 */
 	public void setInputs(Set<DataStructure> inputs){
-		this.inputs = new HashSet<DataStructure>();
+		this.inputs.clear();
 		this.inputs.addAll(inputs);
 	}
 	
@@ -137,7 +137,8 @@ public class Computation extends ComputationalModelComponent{
 	 * @param outputs The solved outputs
 	 */
 	public void setOutputs(Set<DataStructure> outputs) {
-		this.outputs = outputs;
+		this.outputs.clear();
+		this.outputs.addAll(outputs);
 	}
 	
 	/**
@@ -175,7 +176,8 @@ public class Computation extends ComputationalModelComponent{
 	 * @param events The events associated with this computation
 	 */
 	public void setEvents(Set<Event> events) {
-		this.events = events;
+		this.events.clear();
+		this.events.addAll(events);
 	}
 	
 	/**

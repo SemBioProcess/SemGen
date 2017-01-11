@@ -12,6 +12,8 @@ import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
+import semsim.model.computational.Event;
+import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -35,6 +37,7 @@ public class SemSimCopy {
 	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	LinkedHashMap<DataStructure, DataStructure> dsmap = new LinkedHashMap<DataStructure, DataStructure>();
 	HashMap<Computation, Computation> compmap = new HashMap<Computation, Computation>();
+	HashMap<Event, Event> eventmap = new HashMap<Event, Event>();
 	LinkedHashMap<Submodel, Submodel> smmap = new LinkedHashMap<Submodel, Submodel>();
 	
 	SemSimModel modeltocopy;
@@ -67,6 +70,9 @@ public class SemSimCopy {
 		copySubModels();
 		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.values()));
 		remapSubmodels();
+		
+		copyEvents();
+		destmodel.setEvents(new ArrayList<Event>(eventmap.values()));
 		
 		copyComputations();
 	}
@@ -122,13 +128,16 @@ public class SemSimCopy {
 	
 	private void copyUnits() {		
 		HashMap<UnitFactor, UnitFactor> ufactormap = new HashMap<UnitFactor, UnitFactor>();
+		
 		for (UnitOfMeasurement old : modeltocopy.getUnits()) {
 			UnitOfMeasurement newunit = new UnitOfMeasurement(old);
 			unitmap.put(old, newunit);
 			
 			HashSet<UnitFactor> ufset = new HashSet<UnitFactor>();
+			
 			for (UnitFactor uf : newunit.getUnitFactors()) {
 				UnitFactor newuf;
+				
 				if (ufactormap.containsKey(uf)) {
 					newuf = ufactormap.get(uf);
 				}
@@ -285,6 +294,36 @@ public class SemSimCopy {
 				}
 				fsm.setRelationshipSubmodelMap(relsmmap);
 			}
+		}
+	}
+	
+	private void copyEvents(){
+		
+		for(Event oldev : modeltocopy.getEvents()){
+			Event newev = new Event(oldev);
+			eventmap.put(oldev, newev);
+			
+			if(oldev.getTimeUnit() != null)
+				newev.setTimeUnit(unitmap.get(oldev.getTimeUnit()));
+			
+			// Reassign the new data structure output instances to the event assignments
+			for(EventAssignment newea : newev.getEventAssignments()){
+				DataStructure oldds = newea.getOutput();
+				newea.setOutput(dsmap.get(oldds));
+			}
+		}
+		
+		// Replace the old events with the new ones in all Computations
+		for(DataStructure newds : destmodel.getAssociatedDataStructures()){
+			
+			Computation newcomp = newds.getComputation();
+			Set<Event> neweventset = new HashSet<Event>();
+			
+			// The new Computation instances refer to the old Events here. Replace with new Events.
+			for(Event oldevent : newcomp.getEvents())
+				neweventset.add(eventmap.get(oldevent));
+			
+			newcomp.setEvents(neweventset);
 		}
 	}
 }

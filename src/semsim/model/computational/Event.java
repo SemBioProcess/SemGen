@@ -10,7 +10,7 @@ import semsim.model.computational.units.UnitOfMeasurement;
 public class Event extends ComputationalModelComponent{
 
 	private String eventTriggerMathML;
-	private Set<EventAssignment> eventAssignments;
+	private Set<EventAssignment> eventAssignments = new HashSet<EventAssignment>();
 	private String delayMathML;
 	private String priorityMathML; // only for SBML Level 3 models
 	private UnitOfMeasurement timeUnit;  // only for SBML Level 2 versions 1 and 2
@@ -18,8 +18,26 @@ public class Event extends ComputationalModelComponent{
 	// Constructor
 	public Event(){
 		super(SemSimTypes.EVENT);
-		eventAssignments = new HashSet<EventAssignment>();
-	} 
+	}
+	
+	// Constructor for copying
+	public Event(Event eventtocopy) {
+		super(eventtocopy);
+				
+		if (eventtocopy.eventTriggerMathML != null)
+			eventTriggerMathML = new String(eventtocopy.eventTriggerMathML);
+		
+		if (eventtocopy.eventAssignments != null)
+			eventAssignments.addAll(eventtocopy.eventAssignments);
+
+		if (eventtocopy.delayMathML != null)
+			delayMathML = eventtocopy.delayMathML;
+		
+		if (eventtocopy.priorityMathML != null)
+			priorityMathML = eventtocopy.priorityMathML;
+		
+		timeUnit = eventtocopy.timeUnit;
+	}
 	
 	
 	
@@ -27,13 +45,9 @@ public class Event extends ComputationalModelComponent{
 		return eventTriggerMathML;
 	}
 
-	
-	
 	public void setTriggerMathML(String trigger) {
 		this.eventTriggerMathML = trigger;
 	}
-
-
 
 	public Set<EventAssignment> getEventAssignments() {
 		return eventAssignments;
@@ -48,21 +62,18 @@ public class Event extends ComputationalModelComponent{
 	}
 
 	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
-		this.eventAssignments = eventAssignments;
+		this.eventAssignments.clear();
+		this.eventAssignments.addAll(eventAssignments);
 	}
-
-
 
 	public void addEventAssignment(EventAssignment ea){
 		this.getEventAssignments().add(ea);
 	}
 	
 	
-	
 	public void removeEventAssignment(EventAssignment ea){
 		this.getEventAssignments().remove(ea);
 	}
-	
 	
 	public EventAssignment getEventAssignmentForOutput(DataStructure outputds){
 		
@@ -120,6 +131,16 @@ public class Event extends ComputationalModelComponent{
 		public EventAssignment(){
 			super(SemSimTypes.EVENT_ASSIGNMENT);
 		}
+		
+		// Constructor for copying
+		public EventAssignment(EventAssignment eatocopy){
+			super(eatocopy);
+			
+			if (eatocopy.mathML != null)
+				mathML = new String(eatocopy.mathML);
+			
+			output = eatocopy.output;
+		}
 
 		public String getMathML() {
 			return mathML;
@@ -136,7 +157,6 @@ public class Event extends ComputationalModelComponent{
 		public void setOutput(DataStructure output) {
 			this.output = output;
 		}
-
 	}
 
 }

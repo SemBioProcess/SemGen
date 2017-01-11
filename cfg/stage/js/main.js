@@ -92,3 +92,34 @@ $(window).bind("cwb-initialized", function(e) {
 	}
 	initialized = true;
 });
+
+
+$(window).load(function() {
+	// sendNSCommand is defined when the stage is loaded in SemGen
+	if(window.location.search.indexOf("testMode=false") != -1)
+		return;
+
+	var event; // The custom event that will be created
+
+	if (document.createEvent) {
+		event = document.createEvent("HTMLEvents");
+		event.initEvent("cwb-initialized", true, true);
+	}
+	else {
+		event = document.createEventObject();
+		event.eventType = "cwb-initialized";
+	}
+
+	event.eventName = "cwb-initialized";
+	
+	if (document.createEvent) {
+		window.dispatchEvent(event);
+	
+	}
+	else {
+		window.fireEvent("on" + event.eventType, event);
+	}
+});
+
+
+

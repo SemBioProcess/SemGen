@@ -291,8 +291,14 @@ public class SemSimOWLwriter extends ModelWriter {
 				SemSimOWLFactory.setIndObjectProperty(ont, dsuri, namespace + SemSimOWLFactory.URIencoding(ds.getSolutionDomain().getName()),
 						SemSimRelation.HAS_SOLUTION_DOMAIN, null, manager);
 			
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_SOLUTION_DOMAIN, ds.isSolutionDomain(), manager);
-			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_DECLARED, ds.isDeclared(), manager);
+			// If the data structure is a solution domain, explicitly state so
+			if(ds.isSolutionDomain())
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_SOLUTION_DOMAIN, (Boolean)true, manager);
+			
+			// If the data structure is NOT declared, explicitly state so
+			if( ! ds.isDeclared())
+				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.IS_DECLARED, (Boolean)false, manager);
+			
 			SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.METADATA_ID, ds.getMetadataID(), manager);
 			
 			// Assert CellML-type mappings between data structures

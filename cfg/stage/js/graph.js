@@ -104,6 +104,7 @@ function Graph() {
 		this.update();
 	}
 
+
 	/**
 	 * Updates the graph
 	 */
@@ -140,10 +141,9 @@ function Graph() {
 	    	.restart();
 
 	    $(this).triggerHandler("postupdate");
-	    
-	    if (this.fixedMode) {
+	    if (graph.fixedMode) {
 	    	setTimeout(function() {
-	    		this.pause();
+	    		graph.pause();
 	    	}, 7000);
 	    }
 	};
@@ -370,6 +370,26 @@ function Graph() {
     	.restart();
 	}
 	
+	this.cntrlIsPressed = false;
+	
+	//Bind keyboard events
+	$(document).keyup(function(event){
+		if(event.which=="17")
+			graph.cntrlIsPressed = false;
+		if(event.which=="32") {
+			graph.fixedMode = graph.active;
+			if (graph.active)
+				graph.pause();
+			else graph.resume();
+		}
+	});
+	
+	
+	$(document).keydown(function(event){
+	    if(event.which=="17")
+	    	graph.cntrlIsPressed = true;
+	});
+		
 	this.updateHeightAndWidth();
 	// Run it
 	this.update();

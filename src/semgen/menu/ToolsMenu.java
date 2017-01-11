@@ -8,14 +8,12 @@ import javax.swing.JMenuItem;
 
 import semgen.GlobalActions;
 import semgen.SemGenSettings;
-import semgen.encoding.Encoder;
 import semgen.utilities.uicomponent.SemGenMenu;
 
 public class ToolsMenu extends SemGenMenu implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	private JMenuItem toolsitemannotate;
-	private JMenuItem toolsitemcode;
 	private JMenuItem toolsitemextract;
 	private JMenuItem toolsitemstage;
 	
@@ -36,9 +34,9 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		toolsitemextract.setToolTipText("Open a new Extractor tool");
 		add(toolsitemextract);
 		
-		toolsitemcode = formatMenuItem(toolsitemcode, "New Code Generator", KeyEvent.VK_G,true,true);
-		toolsitemcode.setToolTipText("Open a new code generator tool");
-		add(toolsitemcode);
+//		toolsitemcode = formatMenuItem(toolsitemcode, "New Code Generator", KeyEvent.VK_G,true,true);
+//		toolsitemcode.setToolTipText("Open a new code generator tool");
+//		add(toolsitemcode);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -47,11 +45,7 @@ public class ToolsMenu extends SemGenMenu implements ActionListener{
 		if (o == toolsitemstage){
 			globalactions.NewStageTab();
 		}
-	
-		if (o == toolsitemcode) {
-			new Encoder();
-		}
-		
+
 		if (o == toolsitemannotate) {
 			globalactions.NewAnnotatorTab();
 		}

@@ -77,6 +77,11 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		state.updateModelNodes(_models);
 	}
 	
+	protected void removeModel(Integer index) {
+		_models.set(index, null);
+		state.updateModelNodes(_models);
+	}
+	
 	public ArrayList<ModelNode> getModelNodes() {
 		ArrayList<ModelNode> modelnodes = new ArrayList<ModelNode>();
 		

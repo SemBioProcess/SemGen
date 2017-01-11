@@ -37,7 +37,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	private SemSimTermLibrary termlib;
 	private CodewordToolDrawer cwdrawer;
 	private SubModelToolDrawer smdrawer;
-	private boolean modelsaved = true;
 	private ModelType lastsavedas = ModelType.UNKNOWN;
 	public static enum WBEvent {FREETEXT_REQUEST, IMPORT_FREETEXT, SMSELECTION, CWSELECTION}
 	public static enum LibraryRequest {REQUEST_IMPORT, REQUEST_LIBRARY, REQUEST_CREATOR, CLOSE_LIBRARY }

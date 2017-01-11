@@ -27,12 +27,12 @@ function Link(graph, srclink, output, input, length) {
 		return this.source==innode && this.target == outnode;
 	}
 	
-	this.draw = function (source, target) {
+	this.drawArrow = function(dx, dy, source, target) {
+		if (this.arrowHeadWidth == 0)
+			return "";
+		
 		var arrowHeadWidth = this.arrowHeadWidth;
-		var dx = target.xpos() - source.xpos(),
-	    dy = target.ypos() - source.ypos(),
-	    dr = 0;
-	    theta = Math.atan2(dy, dx) + Math.PI * 2,
+		var theta = Math.atan2(dy, dx) + Math.PI * 2,
 	    d90 = Math.PI / 2,
 	    dtxs = target.xpos() - target.r * Math.cos(theta),
 	    dtys = target.ypos() - target.r * Math.sin(theta),
@@ -40,25 +40,27 @@ function Link(graph, srclink, output, input, length) {
 	    sth = 10*Math.sin(theta),
 	    c90th = Math.cos(d90 - theta),
 	    s90th = Math.sin(d90 - theta);
-	       
+		
+		return 	"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * c90th - cth) + "," + (-arrowHeadWidth * s90th - sth) +
+				"L" + (dtxs - arrowHeadWidth * c90th - cth) + "," + (dtys + arrowHeadWidth * s90th - sth);
+	}
+	
+	this.draw = function (source, target) {
+		var dx = target.xpos() - source.xpos(),
+	    dy = target.ypos() - source.ypos(),
+	    dr = 0,
+	    arrow = this.drawArrow(dx, dy, source, target),
+	    biarrow = this.bidirectional ? 
+	    		this.drawArrow(source.xpos() - target.xpos(), source.ypos() - target.ypos(), target, source) : "";
+
 		return "M" + source.xpos() + "," + source.ypos() +
 				"A" + dr + "," + dr + " 0 0 1," + target.xpos() + "," + target.ypos() +
 				"A" + dr + "," + dr + " 0 0 0," + source.xpos() + "," + source.ypos() +
-				"M" + dtxs + "," + dtys + "l" + (arrowHeadWidth * c90th - cth) + "," + (-arrowHeadWidth * s90th - sth) +
-				"L" + (dtxs - arrowHeadWidth * c90th - cth) + "," + (dtys + arrowHeadWidth * s90th - sth) +
+				arrow + biarrow +
 				"z";
 	}
 
 }
-
-//  Link.prototype.addBehavior = function (behavior) {
-// 	// Behaviors are just functions that take in a link as an argument
-// 	// To add a behavior all we need to do is call the function
-// 	//
-// 	// Note: I added this function to make adding a behavior easier to read
-// 	// (e.g. this.addBehavior(SomeBehavior); )
-// 	behavior(this);
-// }
 
 Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement = d3.select(element);
@@ -104,23 +106,8 @@ Link.prototype.createVisualElement = function (element, graph) {
 Link.prototype.tickHandler = function (element, graph) {
 	var link = this;
 	// Display and update links
-	//var root = d3.select(element);
-	
 
 	this.rootElement.select("path").attr("d", link.draw(this.source, this.target));
-	
-//	if (link.bidirectional) {
-//
-//		
-//	}.attr("x1", function(d) { return d.source.x; })
-//	    .attr("y1", function(d) { return d.source.y; })
-//	    .attr("x2", function(d) { return d.target.x; })
-//	    .attr("y2", function(d) { return d.target.y; })
-	// Display and update the link labels
-	//var text = root.selectAll("text");
-	//text.attr("x", function(d) { return source.xpos() + (d.target.xpos() - d.source.xpos())/2; });
-	//text.attr("y", function(d) { return source.ypos() + (d.target.ypos() - d.source.ypos())/2; });
-
 }
 
 Link.prototype.getKeyInfo = function () {
