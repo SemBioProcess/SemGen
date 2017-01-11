@@ -138,12 +138,13 @@ li.searchResultSet li:hover {
 }
 
 .panel-heading{
-	font-size: 18px;
+	font-size: 14px;
 	font-weight: bold;
 }
 
 .panel .subpanel ul{
-	list-style-type:none;
+	list-style-type: none;
+	font-size: 12px;
 }
 
 .panel .subpanel {
@@ -152,7 +153,7 @@ li.searchResultSet li:hover {
 }
 
 .subheading {
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: bold;
 }
 
@@ -165,7 +166,7 @@ li.searchResultSet li:hover {
 	width: 100%;
     background-color: #ffffff;
     border: none;
-    font-size: 14px;
+    font-size: 12px;
     color: #000000;
     padding: 2px;
     text-align: center;
