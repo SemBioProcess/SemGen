@@ -61,16 +61,7 @@ function CreateCustomOverlap(_node) {
 		        // Check whether the node we're dragging is overlapping
 		        // any of the other nodes. If it is update the UI.
 		    	validDepNodes.forEach(function (node) {
-
-					var leftBound = node.xpos() - node.r - DropZoneSideLength/2;
-					var rightBound = node.xpos() + node.r + DropZoneSideLength/2;
-					var upperBound = node.ypos() + DropZoneSideLength;
-					var lowerBound = node.ypos() - node.r*2;
-					if(_node.xpos() >= leftBound &&
-						_node.xpos() <= rightBound &&
-						_node.ypos() >= lowerBound &&
-						_node.ypos() <= upperBound)
-					{
+		    		if (node.isOverlappedBy(_node, 5)) {
 						mergeNode = node;
 						node.rootElement.selectAll("circle").attr("r", node.r*2);
 					}

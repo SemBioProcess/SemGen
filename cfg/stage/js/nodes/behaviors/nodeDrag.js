@@ -17,12 +17,12 @@ function NodeDrag(_node) {
 				
 				//Ensure the node has been added to selections
 				var selections = _node.multiDrag();
+				if (!_node.selected) {
+					selections = [_node];
+				}
 				if (_node.graph.shiftIsPressed) {
 					virtualnodes = _node.graph.createGhostNodes(selections);
 					selections = virtualnodes;
-				}
-				else if (!_node.selected) {
-					selections = [_node];
 				}
 				selections.forEach(function(n) {
 						n.rootElement.selectAll("circle").attr("r", _node.r*2);
@@ -103,12 +103,17 @@ function NodeDrag(_node) {
 			    		behavior(_node);
 					});
 			    	
-			    	_node.multiDrag().forEach(function(n) {
+			    	selections.forEach(function(n) {
 				    	if (!n.fixed) {
 				    		n.fx = null;
 							n.fy = null;	
 				    	}
 			    	});
+				}
+				else {
+					virtualnodes[0].dragEnd.forEach(function(behavior){
+						behavior(selections[0], selections);
+					});
 				}
 				_node.graph.clearTemporaryObjects();
 				virtualnodes = null;

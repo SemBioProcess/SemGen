@@ -7,7 +7,6 @@ import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import semgen.stage.serialization.ExtractionNode;
-import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;

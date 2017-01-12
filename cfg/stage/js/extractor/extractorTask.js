@@ -9,9 +9,14 @@ ExtractorTask.prototype.constructor = ExtractorTask;
 function ExtractorTask(graph, stagestate) {
 	Task.prototype.constructor.call(this, graph, stagestate);
 	var extractor = this;
-	this.extractionjs = null; //Handle for calling java functions
 	
-	this.taskindex = stagestate.taskindex;
+	extractor.graph.depBehaviors = [];
+	extractor.graph.ghostBehaviors = [];
+	extractor.extractions = [];
+	
+	extractor.extractionjs = null; //Handle for calling java functions
+	extractor.taskindex = stagestate.taskindex;
+	extractor.sourcemodel = null;
 	
 	var t = document.querySelector('#leftExtractorMenus');
 	var clone = document.importNode(t.content, true);
@@ -20,11 +25,36 @@ function ExtractorTask(graph, stagestate) {
 
 	$("#addModelButton, .stageSearch").hide();
 	$("#trash").show();
-//	var t = document.querySelector('#mergerContent');
-//
-//	var clone = document.importNode(t.content, true);
-//	document.querySelector('#modalContent').appendChild(clone);
 
+	var onExtractionAction = function(node, selections) {
+		//Don't add any extraction actions to the source model node.
+		if (extractor.sourcemodel == node.srcnode) return;
+		node.drag.push(function() {
+			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
+				
+			}
+		});
+		
+		node.dragEnd.push(function() {
+			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
+				return;
+			}
+			//trashcan behavior here
+			//Check to see if node is inside an extraction
+			for (e in extractor.extractions) {
+				if (extractor.extractions[e].hullContainsPoint([node.xpos(), node.ypos()])) {
+					
+					return;
+				}
+			}
+			//If it's dropped in empty space, create a new extraction
+			extractionjs.createExtraction();
+			
+		});
+	}
+
+	this.graph.ghostBehaviors.push(onExtractionAction);
+	
 	$("#stageModel").click(function() {
 		sender.sendModeltoStage();
 	});
@@ -39,7 +69,7 @@ function ExtractorTask(graph, stagestate) {
 	
 	// Quit merger
 	$("#quitExtractorBtn").click(function(e) {
-		if (!merger.isSaved()) {
+		if (!extractor.isSaved()) {
 			e.preventDefault();
             var r = confirm("Close without saving?");
             if (r) {
@@ -62,9 +92,8 @@ ExtractorTask.prototype.setSavedState = function (issaved) {
 ExtractorTask.prototype.onInitialize = function() {
 	var extractor = this;
 	
-	extractor.state.models.forEach(function(model) {
-		extractor.addModelNode(model, []);
-		extractor.extractionsjs.test(model);
+	extractor.state.models.forEach(function(model) {	
+		extractor.sourcemodel = extractor.addModelNode(model, []);
 	});
 }
 

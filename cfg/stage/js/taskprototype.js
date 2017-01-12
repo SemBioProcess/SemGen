@@ -5,6 +5,7 @@
 function Task(graph, stagestate) {
 	
 	this.graph = graph;
+
 	this.state = stagestate;
 	
 	this.nodes = {};
@@ -25,7 +26,7 @@ function Task(graph, stagestate) {
 		task.nodes[model.id] = modelNode;
 		task.graph.update();
 		task.selectNode(modelNode);
-
+        return modelNode;
 	};
 	
 	//Get a model node

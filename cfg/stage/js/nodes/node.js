@@ -36,6 +36,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.dragstart = [];
 	this.drag = [];
 	this.dragend = [];
+	this.ghostdragend = [];
 	this.addBehavior(NodeDrag);
 	
 	this.x = srcobj.xpos;
@@ -48,6 +49,12 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.ypos = function () {
 		return this.y;
 	}
+	
+	this.isOverlappedBy = function(overlapnode, proximityfactor) {
+		return (Math.sqrt(Math.pow(overlapnode.xpos()-this.xpos(), 2) + Math.pow(overlapnode.ypos()-this.ypos(), 2))+overlapnode.r*2 <= this.r*proximityfactor);
+
+	}
+	
 	
 	this.isHidden = function() {
 		return this.srcobj.hidden;

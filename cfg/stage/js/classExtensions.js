@@ -18,3 +18,11 @@ convertArraytoString = function (array) {
 	//return string with last comma removed
 	return string.slice(0, -1);
 }
+
+collectionContains = function (collection, object) {
+	for (x in collection) {
+		if (collection[x] == object) return true;
+	}
+		
+	return false;
+}

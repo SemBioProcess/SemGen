@@ -45,6 +45,7 @@ function Graph() {
 	this.showorphans = false;
 	
 	this.depBehaviors = [];
+	this.ghostBehaviors = [];
 	
 	this.active = true;
 	var nodes;

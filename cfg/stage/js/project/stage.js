@@ -8,6 +8,9 @@ function Stage(graph, stagestate) {
 	var nodes = this.nodes;
 	this.taskindex = 0;
 	
+	stage.graph.depBehaviors = [];
+	stage.graph.ghostBehaviors = [];
+	
 	$("#addModelButton, .stageSearch").show();
 	$("#trash").hide();
 	
@@ -87,7 +90,7 @@ function Stage(graph, stagestate) {
 
 Stage.prototype.onInitialize = function() {
 	var stage = this;
-
+	
 	if (stage.state.models.length > 0) {
 		stage.state.models.forEach(function(model) {
 			stage.addModelNode(model, [DragToMerge]);
