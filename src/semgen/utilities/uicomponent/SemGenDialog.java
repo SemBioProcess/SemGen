@@ -36,7 +36,6 @@ public abstract class SemGenDialog extends JDialog{
 	 */
 	protected void showDialog() {
 		pack();
-
 		setLocationRelativeTo(location);
 		setVisible(true);
 	}

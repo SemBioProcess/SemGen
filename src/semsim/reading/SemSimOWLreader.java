@@ -359,7 +359,7 @@ public class SemSimOWLreader extends ModelReader {
 			
 			if( ! description.equals("")) ds.setDescription(description);
 			
-			// Set the data property values: startValue, isDeclared, isDiscrete, isSolutionDomain
+			// Set the data property values: startValue, isDeclared, isSolutionDomain
 			String startval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.HAS_START_VALUE.getURIasString());
 			if( ! startval.equals("")) ds.setStartValue(startval);
 			
