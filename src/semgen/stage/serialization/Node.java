@@ -99,6 +99,7 @@ public class Node<T extends SemSimObject> {
 		dtarray.add("Process");
 		dtarray.add("Mediator");
 		dtarray.add("Null");
+		dtarray.add("Extraction");
 
 		nodetypes = dtarray;
 	}

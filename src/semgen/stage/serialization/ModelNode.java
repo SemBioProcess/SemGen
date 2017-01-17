@@ -27,7 +27,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		typeIndex = MODEL;
 		modelindex = modindex;
 	}
-	
+
 	private void serializeModel() {
 		ArrayList<Submodel> topsubmodels = sourceobj.getTopSubmodels();
 		HashMap<DataStructure, DependencyNode> depnodemap = new HashMap<DataStructure, DependencyNode>();

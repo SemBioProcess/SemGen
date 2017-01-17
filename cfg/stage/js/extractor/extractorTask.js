@@ -14,7 +14,7 @@ function ExtractorTask(graph, stagestate) {
 	extractor.graph.ghostBehaviors = [];
 	extractor.extractions = [];
 	
-	extractor.extractionjs = null; //Handle for calling java functions
+	this.extractionjs = null; //Handle for calling java functions
 	extractor.taskindex = stagestate.taskindex;
 	extractor.sourcemodel = null;
 	
@@ -25,35 +25,55 @@ function ExtractorTask(graph, stagestate) {
 
 	$("#addModelButton, .stageSearch").hide();
 	$("#trash").show();
-
-	var onExtractionAction = function(node, selections) {
+	var droploc;
+	
+	var onExtractionAction = function(node) {
 		//Don't add any extraction actions to the source model node.
+		
 		if (extractor.sourcemodel == node.srcnode) return;
-		node.drag.push(function() {
+		node.drag.push(function(selections) {
 			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
 				
 			}
 		});
 		
-		node.dragEnd.push(function() {
-			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
+		node.dragEnd.push(function(selections) {
+			extractor.graph.shiftIsPressed = false;
+			droploc = [node.xpos(), node.ypos()];
+			if (extractor.sourcemodel.hullContainsPoint(droploc)) {
 				return;
 			}
 			//trashcan behavior here
 			//Check to see if node is inside an extraction
 			for (e in extractor.extractions) {
-				if (extractor.extractions[e].hullContainsPoint([node.xpos(), node.ypos()])) {
+				if (extractor.extractions[e].hullContainsPoint(droploc)) {
 					
 					return;
 				}
 			}
 			//If it's dropped in empty space, create a new extraction
-			extractionjs.createExtraction();
+			var name = prompt("Enter name for extraction.", ""),
+				extractarray = [];
+			for (x in selections) {
+				extractarray.push(selections[x].srcnode);
+			}
+
+			extractor.extractionjs.createExtraction(extractarray, name);
 			
 		});
 	}
 
 	this.graph.ghostBehaviors.push(onExtractionAction);
+	
+	receiver.onNewExtraction(function(newextraction) {
+		var extractionnode = new ExtractedModel(extractor.graph, newextraction);
+		extractor.extractions.push(extractionnode);
+		extractor.nodes[newextraction.id] = extractionnode;
+		extractionnode.setLocation(droploc[0], droploc[1]);
+		extractor.graph.update();
+		extractor.selectNode(extractionnode);
+		
+	});
 	
 	$("#stageModel").click(function() {
 		sender.sendModeltoStage();

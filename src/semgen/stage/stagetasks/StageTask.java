@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
-
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
@@ -152,6 +152,16 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 			if (returnnode!=null) return returnnode; 
 		}
 		return null;
+	}
+	
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStageNodestoJava(JSArray nodearray) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue()));
+		}
+		return javanodes;
 	}
 	
 	public class NodeTreeBridge {

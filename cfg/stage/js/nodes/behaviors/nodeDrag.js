@@ -112,7 +112,7 @@ function NodeDrag(_node) {
 				}
 				else {
 					virtualnodes[0].dragEnd.forEach(function(behavior){
-						behavior(selections[0], selections);
+						behavior(virtualnodes);
 					});
 				}
 				_node.graph.clearTemporaryObjects();

@@ -5,8 +5,8 @@ import java.util.Observable;
 
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
-
 import semgen.stage.serialization.ExtractionNode;
+import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
@@ -14,7 +14,7 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	private ExtractorWorkbench workbench;
-	private ArrayList<ExtractionNode> taskextractions;
+	private ArrayList<ExtractionNode> taskextractions = new ArrayList<ExtractionNode>();
 	
 	public ExtractorTask(ModelInfo taskmodel, int index) {
 		super(index);
@@ -25,6 +25,12 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		state = new StageState(Task.EXTRACTOR, _models, index);
 	}
 
+	public void createNewExtraction(ArrayList<Node<?>> nodestoextract, String extractname) {
+		ExtractionNode extraction = new ExtractionNode(extractname);
+		taskextractions.add(extraction);
+		_commandSender.newExtraction(extraction);
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		
@@ -44,7 +50,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
 			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
-			jstask.setProperty("extractionsjs", new ExtractorBridge());
+			jstask.setProperty("extractionjs", new ExtractorBridge());
 		}
 		public void onClose() {
 			closeTask();
@@ -68,12 +74,14 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	}
 	
 	public class ExtractorBridge {
-		public void createExtraction(String extractname, JSArray nodes) {
+		public void createExtraction(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtraction(jnodes, extractname);
 			
 		}
 		
 		public void createExtractionExclude(String extractname, JSObject model, JSArray nodes) {
-			
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 		}
 		
 		public void removeExtraction() {
