@@ -11,7 +11,7 @@
 }
 
 #rightSidebar.in {
-	width: 250px;
+	width: 200px;
 }
 
 #rightSidebar>.panel-heading {
@@ -71,4 +71,8 @@
 	list-style: none;
 	padding: 0;
 	margin: 0 0 0 5px;
+}
+
+#nodemenu {
+	font-size: 12px;
 }

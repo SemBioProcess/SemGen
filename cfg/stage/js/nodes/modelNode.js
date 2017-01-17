@@ -6,7 +6,7 @@ ModelNode.prototype = new ParentNode();
 ModelNode.prototype.constructor = ModelNode;
 
 function ModelNode (graph, srcobj) {
-	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
+	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 16, 0);
 	this.fixed = true;
 	this.modelindex = srcobj.modelindex;
 	this.addClassName("modelNode");

@@ -76,7 +76,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	if (this.srclink.linklevel != 0) {
 		if(this.source.nodeType.id == 1 || this.target.nodeType.id == 1) {
 			this.rootElement.select("path")
-				.attr("stroke-dasharray", 3, 6);
+				.attr("class", "link intra");
 		}
 	}
 	//Intermodel link

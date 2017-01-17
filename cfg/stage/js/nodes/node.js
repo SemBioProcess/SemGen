@@ -149,15 +149,18 @@ Node.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.on("click", function (node) {
 			node.onClick();
 		});
+
+		//Pauses graph when hovering over a node
+		$(".node > *:not(.hull)").hover( function() {graph.pause();}, function() {graph.resume();});
 	
 		//Append highlight circle
 		this.rootElement.append("circle")
 			.attr("class", "highlight")
 			.attr("r", this.r + 4)
-			.attr("stroke", "yellow")
+			.attr("stroke", "#fdc751")
 			.attr("stroke-width", "4");
 	
-		// Create the text elements
+		//Create the text elements
 		this.createTextElement("shadow");
 		this.createTextElement("real");
 		
@@ -178,7 +181,7 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcex = 0;
 
 	if (this.parent && this.graph.active) {
-			var k = .005;
+			var k = .0001;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 
@@ -239,7 +242,7 @@ Node.prototype.onClick = function () {
         	this.onDoubleClick();
         }
     }
-      d3.event.stopPropagation();
+    d3.event.stopPropagation();
 
 }
 

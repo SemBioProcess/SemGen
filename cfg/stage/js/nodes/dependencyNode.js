@@ -60,7 +60,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		}
 		inputNode = inputNode.getFirstLinkableAncestor();
 		if (!inputNode || inputNode==outputNode) return;
-		//Check for dupliate links
+		//Check for duplicate links
 			for (l in linklist) {
 				var exisstinglink = linklist[l];
 				if (exisstinglink.linksNodes(inputNode, outputNode)) {
