@@ -1,7 +1,6 @@
 /**
  * 
  */
-//TODO: Save the current stage graph, clear it, and load relevant nodes of merge resolution.
 
 MergerTask.prototype = new Task();
 MergerTask.prototype.constructor = MergerTask;
