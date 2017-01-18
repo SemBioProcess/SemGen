@@ -97,8 +97,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	
 	if (this.linkType == NodeType.MEDIATOR) {
 		this.rootElement.select("path")
-			.attr("stroke-dasharray", 3, 6)
-			.attr("stroke-width", 2);
+			.attr("class", "mediator");
 	}
 
 }

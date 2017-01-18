@@ -1,12 +1,19 @@
 path.link {
-  fill: #A8A8A8;
-  stroke: #A8A8A8;
+  fill: #555555;
+  stroke: #555555;
   stroke-width: 1.5px;
 }
 
 path.intra {
-	fill: #333333;
-	stroke: #333333;
+	fill: #CA9485;
+	stroke: #CA9485;
+	stroke-width: 0.25px;
+}
+
+path.mediator {
+	fill: #A8A8A8;
+	stroke: #A8A8A8;
+	stroke-width: 0.25px;
 }
 
 .node {
