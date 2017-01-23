@@ -2,6 +2,8 @@ package semsim.model.computational.datastructures;
 
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -415,6 +417,35 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			usedToCompute.remove(replacee);
 			usedToCompute.add(replacer);
 		}
+	}
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
+		for (DataStructure output : computation.getOutputs()) {
+			DataStructure replacer = dsmap.get(output);
+			if (replacer != null) {
+				newoutputs.add(replacer);
+			}
+		}
+		computation.setOutputs(newoutputs);
+		
+		Set<DataStructure> newinputs = new HashSet<DataStructure>();
+		for (DataStructure input : computation.getInputs()) {
+			DataStructure replacer = dsmap.get(input);
+			if (replacer != null) {
+				newinputs.add(replacer);
+			}
+		}
+		computation.setInputs(newinputs);
+		
+		Set<DataStructure> newused = new HashSet<DataStructure>();
+		for (DataStructure used : this.getUsedToCompute()) {
+			DataStructure replacer = dsmap.get(used);
+			if (replacer != null) {
+				newused.add(replacer);
+			}
+		}
+		setUsedToCompute(newused);
 	}
 	
 	@Override

@@ -346,7 +346,7 @@ public class Extraction {
 	 * @param extractedmodel
 	 * @throws CloneNotSupportedException
 	 */
-	private void extractSubModels(SemSimModel extractedmodel) throws CloneNotSupportedException {
+	private void extractSubModels(SemSimModel extractedmodel) {
 		
 		for(Submodel sub : getSubmodelsToExtract().keySet()){
 						

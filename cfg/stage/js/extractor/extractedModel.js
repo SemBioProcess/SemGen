@@ -8,6 +8,10 @@ ExtractedModel.prototype.constructor = ExtractedModel;
 function ExtractedModel(graph, srcobj) {
 	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
 	this.addClassName("ExtractedModel");
+	this.modelindex = srcobj.modelindex;
+	this.addClassName("modelNode");
+	this.canlink = false;
+	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
 	
 	this.addBehavior(Hull);	
 	this.addBehavior(parentDrag);	

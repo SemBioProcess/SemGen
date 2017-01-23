@@ -1,6 +1,7 @@
 package semgen.annotation.workbench.drawers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		return smdslist;
 	}
 	
-	public void setDataStructures(ArrayList<DataStructure> dslist) {
+	public void setDataStructures(Collection<DataStructure> dslist) {
 		componentlist.get(currentfocus).setAssociatedDataStructures(dslist);
 	}
 	

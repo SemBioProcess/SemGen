@@ -1,6 +1,8 @@
 package semsim.model.collection;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +72,11 @@ public abstract class SemSimCollection extends SemSimObject{
 		return submodel;
 	}
 	
-	public void setSubmodels(ArrayList<Submodel> submodels) {
+	public void addSubmodels(Collection<Submodel> submodel){
+		submodels.addAll(submodel);
+	}
+	
+	public void setSubmodels(Collection<Submodel> submodels) {
 		this.submodels.clear();
 		this.submodels.addAll(submodels);
 	}
@@ -144,7 +150,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return null;
 	}
 	
-	public void setAssociatedDataStructures(ArrayList<DataStructure> dsset) {
+	public void setAssociatedDataStructures(Collection<DataStructure> dsset) {
 		dataStructures.clear();
 		dataStructures.addAll(dsset);
 	}
@@ -190,8 +196,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	 */
 	public ArrayList<DataStructure> getUngroupedDataStructures(){
 		ArrayList<DataStructure> returnset = new ArrayList<DataStructure>();
-		ArrayList<DataStructure> allds = getAssociatedDataStructures();
-		returnset.addAll(allds);
+		ArrayList<DataStructure> allds = getAssociatedDataStructures();		returnset.addAll(allds);
 		
 		for(Submodel sub : getSubmodels()){
 			
@@ -253,8 +258,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	 * @return All Decimals, Integers and MMLchoiceVariables in the model.
 	 */
 	public Set<DataStructure> getReals(){
-		Set<DataStructure> reals = new HashSet<DataStructure>();
-		reals.addAll(getDecimals());
+		Set<DataStructure> reals = new HashSet<DataStructure>();		reals.addAll(getDecimals());
 		reals.addAll(getIntegers());
 		reals.addAll(getMMLchoiceVars());
 		return reals;
@@ -316,4 +320,27 @@ public abstract class SemSimCollection extends SemSimObject{
 		}
 		return sdset;
 	}
+	
+	public void replaceSubmodels(HashMap<Submodel, Submodel> smmap) {
+		ArrayList<Submodel> replacements = new ArrayList<Submodel>();
+		for (Submodel original : submodels) {
+			Submodel replacer = smmap.get(original);
+			if (replacer!=null) {
+				replacements.add(replacer);
+			}
+		}
+		submodels = replacements;
+	}
+	
+	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		ArrayList<DataStructure> replacements = new ArrayList<DataStructure>();
+		for (DataStructure original : dataStructures) {
+			DataStructure replacer = dsmap.get(original);
+			if (replacer!=null) {
+				replacements.add(replacer);
+			}
+		}
+		dataStructures = replacements;
+	}
+
 }

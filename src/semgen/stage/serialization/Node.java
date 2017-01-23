@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.SemSimObject;
 
 /**
@@ -12,7 +13,7 @@ import semsim.SemSimObject;
  * @author Ryan
  *
  */
-public class Node<T extends SemSimObject> {
+public abstract class Node<T extends SemSimObject> {
 	@Expose public String id;
 	@Expose public String name;
 	@Expose public String parentModelId = "";
@@ -147,10 +148,12 @@ public class Node<T extends SemSimObject> {
 	public boolean isJavaScriptNode(int nodehash, String nodeid) {
 		if (nodehash == hash) {
 			//Additional check to prevent hash collision
-			if (id == nodeid) {
+			if (id.matches(nodeid)) {
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	public abstract void collectforExtraction(Extractor extractor);
 }

@@ -1,5 +1,6 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +16,7 @@ import semsim.reading.ModelAccessor;
 public class ExtractorWorkbench extends Workbench {
 	private ModelAccessor modelaccessor;
 	private SemSimModel sourcemodel;
+	private ArrayList<SemSimModel> extractions= new ArrayList<SemSimModel>();
 
 	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		modelaccessor = accessor;
@@ -23,6 +25,14 @@ public class ExtractorWorkbench extends Workbench {
 	
 	@Override
 	public void initialize() {}
+	
+	public Extractor makeNewExtraction(String name) {
+		SemSimModel extraction = new SemSimModel();
+		extraction.setName(name);
+		extractions.add(extraction);
+		return new ExtractNew(sourcemodel, extraction);
+		
+	}
 
 	@Override
 	public void setModelSaved(boolean val) {}

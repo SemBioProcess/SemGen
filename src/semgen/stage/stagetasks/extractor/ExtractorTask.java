@@ -11,6 +11,7 @@ import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
+import semsim.model.collection.SemSimModel;
 
 public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	private ExtractorWorkbench workbench;
@@ -26,9 +27,22 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	}
 
 	public void createNewExtraction(ArrayList<Node<?>> nodestoextract, String extractname) {
-		ExtractionNode extraction = new ExtractionNode(extractname);
+		Extractor extractor = workbench.makeNewExtraction(extractname);
+		
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoextract);
+		//Add one to the index to account for the source model
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size()+1);
+		
 		taskextractions.add(extraction);
 		_commandSender.newExtraction(extraction);
+	}
+	
+	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {
+		for (Node<?> node : nodestoextract) {
+			node.collectforExtraction(extractor);
+		}
+		SemSimModel result = extractor.run();
+		return result;
 	}
 	
 	@Override
@@ -52,6 +66,12 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
 			jstask.setProperty("extractionjs", new ExtractorBridge());
 		}
+		
+		public void onNewExtraction(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtraction(jnodes, extractname);
+		}
+		
 		public void onClose() {
 			closeTask();
 		}
@@ -81,7 +101,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		}
 		
 		public void createExtractionExclude(String extractname, JSObject model, JSArray nodes) {
-			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			//ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 		}
 		
 		public void removeExtraction() {

@@ -54,11 +54,13 @@ function ExtractorTask(graph, stagestate) {
 			//If it's dropped in empty space, create a new extraction
 			var name = prompt("Enter name for extraction.", ""),
 				extractarray = [];
+			//Don't create extraction if user cancels
+			if (name==null) return;
 			for (x in selections) {
 				extractarray.push(selections[x].srcnode);
 			}
 
-			extractor.extractionjs.createExtraction(extractarray, name);
+			sender.newExtraction(extractarray, name);
 			
 		});
 	}
@@ -70,6 +72,7 @@ function ExtractorTask(graph, stagestate) {
 		extractor.extractions.push(extractionnode);
 		extractor.nodes[newextraction.id] = extractionnode;
 		extractionnode.setLocation(droploc[0], droploc[1]);
+		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		extractor.graph.update();
 		extractor.selectNode(extractionnode);
 		

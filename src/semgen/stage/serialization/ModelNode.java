@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.google.gson.annotations.Expose;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -57,4 +58,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		physionetwork = new PhysioMap(this);
 	}
 
+	@Override
+	public void collectforExtraction(Extractor extractor) {}
+	
 }
