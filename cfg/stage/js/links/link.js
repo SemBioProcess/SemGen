@@ -1,7 +1,7 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, srclink, output, input, length) {
+function Link(graph, srclink, output, input, length, fade) {
 	if(!graph)
 		return;
 
@@ -16,6 +16,7 @@ function Link(graph, srclink, output, input, length) {
 	this.hidden = false;
 	this.userCanHide = false;
 	this.linkType = NodeTypeArray[srclink.linkType];
+	this.fade = fade;
 
 	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 3;
 	
@@ -99,7 +100,9 @@ Link.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.select("path")
 			.attr("class", "mediator");
 	}
-
+	if (this.fade) {
+		this.rootElement.attr("opacity", "0.5");
+	}
 }
 
 Link.prototype.tickHandler = function (element, graph) {
