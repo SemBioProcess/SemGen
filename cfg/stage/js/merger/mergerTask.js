@@ -55,6 +55,10 @@ function MergerTask(graph, stagestate) {
 		return false;
 	}
 
+	this.syntacicResolvedBySemantic = function(name) {
+		return merger.semrespane.semanticOverlapReolvesSyntactic(name);
+	}
+	
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
 		if (!merger.semrespane.readyformerge) {
@@ -143,6 +147,7 @@ MergerTask.prototype.onInitialize = function() {
 	
 
 	$("#nextBtn").click(function() {
+		merger.confrespane.refreshConflicts();
 		$("#mergeStep1").hide();
 		$("#mergeStep2").slideDown();
 	});
