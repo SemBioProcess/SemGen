@@ -337,10 +337,10 @@ public class Merger {
 	
 	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
-		
+				
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
 		
-		// if the two terms have different names, or a conversion factor is required
+		// if the two terms have different names, or a conversion factor is required, perform string replacements
 		if( ! discardedds.getName().equals(keptds.getName()) || conversionfactor.getLeft()!=1.0){
 			String replacementtext = keptds.getName();
 			
@@ -350,14 +350,13 @@ public class Merger {
 			 SemSimUtil.replaceCodewordInAllEquations(discardedds, keptds, modelfordiscardedds, 
 					discardedds.getName(), replacementtext, conversionfactor);
 		}
-		// What to do about sol doms that have different units?
 		
+		// TODO: What to do about sol doms that have different units?
 		if(discardedds.isSolutionDomain()){
 		  
 			// Re-set the solution domain designations for all DataStructures in model 2
 			for(DataStructure nsdds : ssm2clone.getAssociatedDataStructures()){
-				if(nsdds.hasSolutionDomain())
-					nsdds.setSolutionDomain(soldom1);
+				if(nsdds.hasSolutionDomain()) nsdds.setSolutionDomain(soldom1);
 			}
 		}
 		

@@ -163,8 +163,7 @@ public class MMLwriter extends ModelWriter{
 			String soldomunitname = formatUnitForMML(soldomunit, soldomunit.getComputationalCode());
 			output = output.concat("\trealDomain " + name + " " + soldomunitname + ";");
 			
-			// if the solution domain parameters aren't included in the
-			// ontology, include them in the code output
+			// if the solution domain parameters aren't included in the ontology, include them in the code output
 			String[] vals = new String[]{"0","100","0.1"};
 			String[] suffixes = new String[]{".min",".max",".delta"};
 			
@@ -188,15 +187,13 @@ public class MMLwriter extends ModelWriter{
 		for (String onedecimalstr : decnames) {
 			Decimal onedecimal = (Decimal) semsimmodel.getAssociatedDataStructure(onedecimalstr);
 			
-			// If the codeword is declared
-			if (onedecimal.isDeclared() && !onedecimal.isSolutionDomain()
-					// If the codeword is part of a solution domain declaration, don't declare it.
-					&& !domainnames.contains(onedecimal.getName().replace(".delta", ""))
-					&& !domainnames.contains(onedecimal.getName().replace(".min", ""))
-					&& !domainnames.contains(onedecimal.getName().replace(".max",""))) {
+			// If the codeword is declared, is not a solution domain, and is not a run-time solution domain parameter
+			if (isDeclaredDependentVariable(onedecimal)){
+					
 				String unitcode = "";
 				
-				if(onedecimal.getUnit() != null) unitcode = getUnitCodeForVariable(onedecimal);
+				if(onedecimal.getUnit() != null) 
+					unitcode = getUnitCodeForVariable(onedecimal);
 				
 				String declaration = "real";
 				
@@ -208,7 +205,8 @@ public class MMLwriter extends ModelWriter{
 				
 				if(comp != null){
 					
-					if(comp.getComputationalCode()==null) declaration = "extern real";
+					if(comp.getComputationalCode()==null) 
+						declaration = "extern real";
 					
 				}
 				else if(onedecimal instanceof MappableVariable) declaration = "real";
@@ -233,10 +231,7 @@ public class MMLwriter extends ModelWriter{
 		for (String oneintstr : intnames) {
 			SemSimInteger oneint = (SemSimInteger) semsimmodel.getAssociatedDataStructure(oneintstr);
 			
-			if (oneint.isDeclared() && !oneint.isSolutionDomain()
-					&& !domainnames.contains(oneint.getName().replace(".delta", ""))
-					&& !domainnames.contains(oneint.getName().replace(".min", ""))
-					&& !domainnames.contains(oneint.getName().replace(".max",""))) {
+			if (isDeclaredDependentVariable(oneint)) {
 				String unitcode = "";
 				
 				if(oneint.getUnit() != null) unitcode = getUnitCodeForVariable(oneint);
@@ -246,12 +241,9 @@ public class MMLwriter extends ModelWriter{
 				if (oneint.isDiscrete()) declaration = "intState";
 				
 				if (oneint.getComputation().getComputationalCode().equals("")) {
-					if (domainnames.contains(oneint.getName().replace(".delta", ""))
-							|| domainnames.contains(oneint.getName().replace(".min",""))
-							|| domainnames.contains(oneint.getName().replace(".max",""))) {
-						
+					
+					if (semsimmodel.getSolutionDomainBoundaries().contains(oneint))	
 						declaration = "extern";
-					} 
 					else declaration = "extern int";
 					
 				}
@@ -291,9 +283,9 @@ public class MMLwriter extends ModelWriter{
 		// they must be renamed to include the prefix.
 		for(String dsname : alldsarray){
 			
-			if(dsname.contains(".")){
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);			
+			if(dsname.contains(".") && ! semsimmodel.getSolutionDomainBoundaries().contains(ds)){
 
-				DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
 				String fullname = ds.getName();
 				String localname = fullname.substring(fullname.indexOf(".") + 1, fullname.length());
 				
@@ -316,10 +308,7 @@ public class MMLwriter extends ModelWriter{
 		for (String onedsstr : alldsarray) {
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(onedsstr);
 			
-			if (ds.isDeclared() && ! ds.isSolutionDomain() 
-					&& !domainnames.contains(ds.getName().replace(".delta", ""))
-					&& !domainnames.contains(ds.getName().replace(".min", ""))
-					&& !domainnames.contains(ds.getName().replace(".max",""))
+			if (isDeclaredDependentVariable(ds)
 					&& ds.getComputation().getComputationalCode() != null){
 				
 				String code = ds.getComputation().getComputationalCode();
@@ -405,6 +394,10 @@ public class MMLwriter extends ModelWriter{
 		String newname = unitname.replace(" ", "_");
 		String formatted = stringtoformat;
 		return formatted.replace(unitname, newname);
+	}
+	
+	private boolean isDeclaredDependentVariable(DataStructure ds){
+		return ds.isDeclared() && ! ds.isSolutionDomain() && ! semsimmodel.getSolutionDomainBoundaries().contains(ds);
 	}
 	
 	public void writeToFile(File destination){
