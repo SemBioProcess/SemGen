@@ -68,7 +68,10 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			fade = true;
 		}
 		inputNode = inputNode.getFirstLinkableAncestor();
-		if (inputNode.parent == outputNode) {
+		if (inputNode==null) {
+			return links;
+		}
+		else if (inputNode.parent == outputNode) {
 			return links;
 		}
 		if (!inputNode || inputNode==outputNode) return;
