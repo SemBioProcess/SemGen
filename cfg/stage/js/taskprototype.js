@@ -80,7 +80,7 @@ function Task(graph, stagestate) {
 	
 	this.selectNode = function(node) {
 		
-		if (node.nodeType==NodeType.MODEL) {
+		if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
 			if (!this.graph.cntrlIsPressed) {
 				this.selectedModels.forEach(function(selnode) {
 					//if (selnode == node) { return; }

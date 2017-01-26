@@ -22,7 +22,8 @@ ExtractedModel.prototype.createVisualElement = function (element, graph) {
 }
 
 ExtractedModel.prototype.createVisualization = function (modeid, expand) {
-	modelnode = this;
+	var modelnode = this;
+	
 	this.children = {};
 	
 	if (modeid == 0) {

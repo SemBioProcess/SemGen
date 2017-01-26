@@ -129,4 +129,13 @@ public class MappableVariable extends Decimal {
 	public DataStructure copy() {
 		return new MappableVariable(this);
 	}
+
+	public void replaceDataStructureReference(DataStructure replacer, DataStructure replacee) {
+		super.replaceDataStructureReference(replacer, replacee);
+		
+		if (this.mappedFrom.contains(replacee)) {
+			mappedFrom.remove(replacee);
+			mappedTo.add((MappableVariable) replacer);
+		}
+	}
 }

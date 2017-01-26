@@ -138,8 +138,7 @@ public class Merger {
 						dsdonotprune.add(discardedds);
 				}
 				// else we assume that we're dealing with two flattened models
-				else if ( ! replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i))
-				  	return null;
+				else replaceCodeWords(keptds, discardedds, modelfordiscardedds, soldom1, i);
 			}
 			i++;
 		}
@@ -335,7 +334,7 @@ public class Merger {
 	}
 	
 	
-	private boolean replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
+	private void replaceCodeWords(DataStructure keptds, DataStructure discardedds, 
 			SemSimModel modelfordiscardedds, DataStructure soldom1, int index) {
 				
 		Pair<Double, String> conversionfactor = conversionfactors.get(index);
@@ -364,7 +363,6 @@ public class Merger {
 		if(!choicelist.get(index).equals(ResolutionChoice.ignore))
 			overlapmap.getIdenticalNames().remove(discardedds.getName());
 		
-		return true;
 	}
 	
 	// Collects ungrouped data structures from one of the models used in the merge, along with all
