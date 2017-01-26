@@ -33,9 +33,9 @@ public class ModelAccessor {
 	// This constructor parses a string input and assigns values to the object's fields
 	public ModelAccessor(String location){
 				
-		if(location.startsWith("http://") || location.startsWith("file:")) modelURI = URI.create(location);
+		if(location.startsWith("http") || location.startsWith("file")) modelURI = URI.create(location);
 				
-		else if(location.contains(separator)){
+		else if(location.contains(separator)){ // Account for locations formatted like C:\whatever\junk.owl#model1
 			String path = location.substring(0, location.indexOf(separator));
 			String frag = location.substring(location.indexOf(separator) + 1, location.length());
 
@@ -76,7 +76,7 @@ public class ModelAccessor {
 	}
 	
 	public boolean modelIsOnline(){
-		return getFileThatContainsModelAsURI().toString().startsWith("http://");
+		return ! getFileThatContainsModelAsURI().toString().startsWith("file");
 	}
 	
 	// Retrieve model text as a string (only for locally-stored models)
