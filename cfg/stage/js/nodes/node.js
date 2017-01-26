@@ -52,6 +52,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.isHidden = function() {
 		return this.srcobj.hidden;
 	}
+
 	
 }
 
@@ -119,8 +120,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.attr("class", this.className)
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
-    	
-	
+
 	if(this.nodeType != NodeType.NULLNODE) {
 	
 		var circleSelection = this.rootElement.append("circle")
@@ -133,18 +133,15 @@ Node.prototype.createVisualElement = function (element, graph) {
 											.on("mouseout", function () {
 												graph.highlightMode(null);
 											});
-	
-		
-			circleSelection.attr("stroke", "black")
-				.attr("stroke-width", 0.5);
-			
+
+
+        circleSelection.attr("stroke", "black")
+            .attr("stroke-width", 0.5);
+
 		this.rootElement.on("click", function (node) {
 			node.onClick();
 		});
 
-		//Pauses graph when hovering over a node
-		$(".node > *:not(.hull)").hover( function() {graph.pause();}, function() {graph.resume();});
-	
 		//Append highlight circle
 		this.rootElement.append("circle")
 			.attr("class", "highlight")
@@ -157,6 +154,7 @@ Node.prototype.createVisualElement = function (element, graph) {
 		this.createTextElement("real");
 		
 	}
+
 	this.rootElement.attr("transform", "translate(" + node.xpos() + "," + node.ypos() + ")");
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
