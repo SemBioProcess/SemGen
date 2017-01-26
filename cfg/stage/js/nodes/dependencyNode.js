@@ -88,9 +88,6 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			}
 		
 		var length = outputNode.graph.linklength;
-		if (!link.external) {
-			length = Math.round(length/5);
-		}
 		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade));
 	});
 
