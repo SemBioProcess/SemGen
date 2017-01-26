@@ -79,8 +79,13 @@ function DragToMerge(_node) {
 		    	}
 		    	// If the node was dropped on another node then merge the two
 		        if(mergeNode) {
+
+		    		var sortedModels = [_node, mergeNode];
+		    		sortedModels.sort(function (a, b) {
+		    			return a.displayName.localeCompare(b.displayName, 'en', {'sensitivity': 'base'});
+					});
 		        	
-		        	sender.merge(_node.modelindex, mergeNode.modelindex);
+		        	sender.merge(sortedModels[0].modelindex, sortedModels[1].modelindex);
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location
