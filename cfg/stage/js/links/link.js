@@ -1,7 +1,7 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, srclink, output, input, length, fade) {
+function Link(graph, srclink, output, input, length, fade, intraSubmodelLink) {
 	if(!graph)
 		return;
 
@@ -17,6 +17,7 @@ function Link(graph, srclink, output, input, length, fade) {
 	this.userCanHide = false;
 	this.linkType = NodeTypeArray[srclink.linkType];
 	this.fade = fade;
+	this.intra = intraSubmodelLink;
 
 	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 3;
 	
@@ -79,6 +80,10 @@ Link.prototype.createVisualElement = function (element, graph) {
 			this.rootElement.select("path")
 				.attr("class", "link intra");
 		}
+	}
+	if (this.intra) {
+        this.rootElement.select("path")
+            .attr("class", "link intra");
 	}
 	//Intermodel link
 	if (this.srclink.linklevel == 2) {

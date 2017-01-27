@@ -51,6 +51,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		return links;
 	}
 	var fade = false;
+	var intraSubmodelLink = false;
 	if (!this.graph.nodesVisible[this.nodeType.id] ) {
 		//return links;
 		fade = true;
@@ -67,6 +68,10 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			}
 			fade = true;
 		}
+		// Compare submodel names and check if they are from different submodels
+		if (inputNode.name.split(".")[0] != outputNode.name.split(".")[0]) {
+            intraSubmodelLink = true;
+        }
 		inputNode = inputNode.getFirstLinkableAncestor();
 		if (inputNode==null) {
 			return links;
@@ -88,7 +93,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			}
 		
 		var length = outputNode.graph.linklength;
-		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade));
+		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade, intraSubmodelLink));
 	});
 
 	return links;
