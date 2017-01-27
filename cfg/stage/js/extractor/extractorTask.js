@@ -47,7 +47,7 @@ function ExtractorTask(graph, stagestate) {
 			//Check to see if node is inside an extraction
 			for (e in extractor.extractions) {
 				if (extractor.extractions[e].hullContainsPoint(droploc)) {
-					
+					sender.addNodestoExtraction(extractions[e], extractarray);
 					return;
 				}
 			}

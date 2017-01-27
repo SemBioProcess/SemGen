@@ -4,6 +4,8 @@ import java.net.URI;
 
 import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimCollection;
+import semsim.model.collection.SemSimModel;
 
 /**
  * A SemSimComponent is a representation of a mathematical or physical element
@@ -29,4 +31,5 @@ public abstract class SemSimComponent extends SemSimObject {
 		return false;
 	}
 	
+	public abstract void addToModel(SemSimModel model);
 }

@@ -192,7 +192,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void addUnit(UnitOfMeasurement unit){
 		
 		if( ! containsUnit(unit.getName())) units.add(unit);
-		else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
+		//else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 	}
 	
 	public void setUnits(HashSet<UnitOfMeasurement> units) {

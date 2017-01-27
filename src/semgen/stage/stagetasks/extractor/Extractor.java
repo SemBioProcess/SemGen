@@ -51,22 +51,8 @@ public abstract class Extractor {
 	}
 	
 	protected void buildExtraction() {
-//		Set<DataStructure> orphands = new HashSet<DataStructure>(datastructures.values());
-//		for (DataStructure ds : datastructures.values()) {
-//			for (Submodel sm : submodels.values()) {
-//				if (sm.getAssociatedDataStructures().contains(ds)) {
-//					orphands.remove(ds);
-//					break;
-//				}
-//			}
-//		}
 		for (DataStructure dstoadd : datastructures.values()) {
-			extraction.addUnit(dstoadd.getUnit());
-			if (dstoadd.getPhysicalProperty()!=null) {
-				extraction.addAssociatePhysicalProperty(dstoadd.getPhysicalProperty());
-			}
-			
-			this.extraction.addDataStructure(dstoadd);
+			dstoadd.addToModel(extraction);
 		}
 		extraction.addSubmodels(submodels.values());
 	}
@@ -77,7 +63,6 @@ public abstract class Extractor {
 			this.addSubModel(submodel);
 		}
 		for (DataStructure ds : sourceobj.getAssociatedDataStructures()) {
-			
 			addDependency(ds);
 		}
 	}

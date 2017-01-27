@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 
 public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();

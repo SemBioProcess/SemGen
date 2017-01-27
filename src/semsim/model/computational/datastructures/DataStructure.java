@@ -2,7 +2,6 @@ package semsim.model.computational.datastructures;
 
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +13,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.PropertyType;
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -466,4 +466,18 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public abstract DataStructure copy();
+	
+	public void addToModel(SemSimModel model) {
+		model.addDataStructure(this);
+		if (this.hasPhysicalDefinitionAnnotation()) {
+			model.addPhysicalProperty(singularterm);
+		}
+		else if (hasPhysicalProperty()) {
+			model.addAssociatePhysicalProperty(physicalProperty);
+		}
+		unit.addToModel(model);
+		if (hasAssociatedPhysicalComponent()) {
+			physicalcomponent.addToModel(model);
+		}
+	}
 }

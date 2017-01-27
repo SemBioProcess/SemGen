@@ -72,6 +72,22 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			createNewExtraction(jnodes, extractname);
 		}
 		
+		public void onCreateExtractionExclude(String extractname, JSObject model, JSArray nodes) {
+			//ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+		}
+		
+		public void onRemoveExtraction() {
+			
+		}
+		
+		public void onRemoveNodesFromExtraction() {
+			
+		}
+		
+		public void onAddNodestoExtraction(JSObject extraction, JSArray nodes) {
+			
+		}
+		
 		public void onClose() {
 			closeTask();
 		}
@@ -94,27 +110,11 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	}
 	
 	public class ExtractorBridge {
-		public void createExtraction(JSArray nodes, String extractname) {
-			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
-			createNewExtraction(jnodes, extractname);
-			
-		}
+
 		
-		public void createExtractionExclude(String extractname, JSObject model, JSArray nodes) {
-			//ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
-		}
+
 		
-		public void removeExtraction() {
-			
-		}
-		
-		public void removeNodesFromExtraction() {
-			
-		}
-		
-		public void addNodestoExtraction() {
-			
-		}
+
 	}
 	
 }
