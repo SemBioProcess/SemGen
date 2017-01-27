@@ -37,7 +37,8 @@ function SemanticResolutionPane(merger) {
 		
 		clone.id = 'res' + resolutions.length;
 		clone.index = resolutions.length;
-
+		clone.name = overlap.dsleft;
+		
 		clone.choice = -1;
 		clone.radiobtns = [];
 		
@@ -194,6 +195,18 @@ function SemanticResolutionPane(merger) {
 		return choices;
 	}
 
+	this.semanticOverlapReolvesSyntactic = function(name) {
+		for (i in resolutions) {
+			if (resolutions[i].name.name == name) {
+				if (resolutions[i].choice == 1 || resolutions[i].choice == 0) {
+					return true;
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	$("#fixedNodesA").bind('change', function(){
 		pane.leftgraph.toggleFixedMode(this.checked);
 	});

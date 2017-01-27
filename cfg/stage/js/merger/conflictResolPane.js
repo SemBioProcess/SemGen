@@ -74,11 +74,16 @@ function ConflictResolutionPane(merger) {
 			}
 			
 			checkAllResolved();
-		//	clone.querySelector('.glyphicon').style.visibility = "hidden";
 		} 
 		
 		
 		cwconflicts.push(clone);
+		
+		if (task.syntacicResolvedBySemantic(cwconf.duplicate)) {
+			javaaccessor.setCodewordName(clone.index, true, cwconf.duplicate);
+			clone.resolved = true;
+			return;
+		}
 		document.querySelector('#modalContent #DupCodewords').appendChild(clone);
 
 	}

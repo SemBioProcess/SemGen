@@ -213,7 +213,8 @@ function Graph() {
 
 
 	this.tick = function () {
-		// Execute the tick handler for each link
+        graph.hoverPause();
+        // Execute the tick handler for each link
 		path.enter().each(function (d) {
 			d.tickHandler(this, graph);
 		})
@@ -222,11 +223,12 @@ function Graph() {
     	node.enter().each(function (d) {
     		d.tickHandler(this, graph);
     	});
-		
+
     	ghost.enter().each(function (d) {
     		d.tickHandler(this, graph);
     	});
 	};
+
 
 	this.clearTemporaryObjects = function() {
 		vis.selectAll(".ghost").remove();
@@ -388,6 +390,19 @@ function Graph() {
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
+
+    this.hoverPause = function() {
+        // Pauses graph when hovering over a node
+        if(!graph.fixedMode) {
+            $(".node > *:not(.hull)").hover(function () {
+                graph.pause();
+            }, function () {
+                graph.force.restart();
+            });
+		} else {
+            $(".node > *:not(.hull)").unbind('mouseenter mouseleave');
+		}
+    }
 
 	this.pause = function() {
 		this.active = false;

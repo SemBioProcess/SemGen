@@ -47,18 +47,33 @@ DependencyNode.prototype.getLinks = function (linklist) {
 	
 	// Build an array of links from our list of inputs
 	var links = [];
-	if (!this.graph.nodesVisible[this.nodeType.id] || this.nodeType.id == NodeType.ENTITY.id) {
+	if (this.nodeType.id == NodeType.ENTITY.id) {
 		return links;
+	}
+	var fade = false;
+	if (!this.graph.nodesVisible[this.nodeType.id] ) {
+		//return links;
+		fade = true;
 	}
 	var outputNode = this.getFirstLinkableAncestor();
 	if (!outputNode) return links; 
 	
 	this.srcobj.inputs.forEach(function (link) {
 		var inputNode = outputNode.graph.findNode(link.input.id);
+		
 		if (!inputNode.graph.nodesVisible[inputNode.nodeType.id]) {
-			return;
+			if (inputNode.parent == this.parent) {
+				return links;
+			}
+			fade = true;
 		}
 		inputNode = inputNode.getFirstLinkableAncestor();
+		if (inputNode==null) {
+			return links;
+		}
+		else if (inputNode.parent == outputNode) {
+			return links;
+		}
 		if (!inputNode || inputNode==outputNode) return;
 		//Check for duplicate links
 			for (l in linklist) {
@@ -73,10 +88,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			}
 		
 		var length = outputNode.graph.linklength;
-		if (!link.external) {
-			length = Math.round(length/5);
-		}
-		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length));
+		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade));
 	});
 
 	return links;
