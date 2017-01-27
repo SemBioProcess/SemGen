@@ -19,8 +19,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.ReferencePhysicalProcess;
+import semsim.model.physical.PhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import JSim.util.Xcept;
 
@@ -153,13 +152,13 @@ public class Merger {
 			
 			for(DataStructure dstoprune : runningsettoprune){
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
-				parentmodel.removeDataStructure(dstoprune.getName());  // Pruning
+				parentmodel.removeDataStructure(dstoprune);  // Pruning
 				
 				// If we are removing a state variable, remove its derivative, if present
 				if(dstoprune.hasSolutionDomain()){
 					
 					if(parentmodel.containsDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName())){
-						parentmodel.removeDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName());
+						parentmodel.removeDataStructurebyName(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName());
 					}
 				}
 			}
@@ -179,11 +178,9 @@ public class Merger {
 		createSubmodelForMergeComponent(mergedmodel, ssm2clone);
 		
 		//Add processes to the merged model
-		for (CustomPhysicalProcess pp : ssm2clone.getCustomPhysicalProcesses())
-			mergedmodel.addCustomPhysicalProcess(pp);
 		
-		for (ReferencePhysicalProcess pp : ssm2clone.getReferencePhysicalProcesses())
-			mergedmodel.addReferencePhysicalProcess(pp);
+		for (PhysicalProcess pp : ssm2clone.getPhysicalProcesses())
+			pp.addToModel(mergedmodel);
 		
 		//Create map with units from the cloned model
 		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();

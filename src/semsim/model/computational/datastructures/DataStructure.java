@@ -419,7 +419,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 	
-	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
 		for (DataStructure output : computation.getOutputs()) {
 			DataStructure replacer = dsmap.get(output);
@@ -428,7 +428,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 		}
 		computation.setOutputs(newoutputs);
-		
+	}
+	
+	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newinputs = new HashSet<DataStructure>();
 		for (DataStructure input : computation.getInputs()) {
 			DataStructure replacer = dsmap.get(input);
@@ -437,7 +439,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 		}
 		computation.setInputs(newinputs);
-		
+	}
+	
+	public void replaceUsedtoCompute(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newused = new HashSet<DataStructure>();
 		for (DataStructure used : this.getUsedToCompute()) {
 			DataStructure replacer = dsmap.get(used);
@@ -446,6 +450,17 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 		}
 		setUsedToCompute(newused);
+	}
+	
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		replaceOutputs(dsmap);
+		replaceInputs(dsmap);
+		replaceUsedtoCompute(dsmap);
+		
+
+		
+
 	}
 	
 	@Override
@@ -479,5 +494,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		if (hasAssociatedPhysicalComponent()) {
 			physicalcomponent.addToModel(model);
 		}
+	}
+	
+	public DataStructure removeFromModel(SemSimModel model) {
+		model.removeDataStructure(this);
+		return this;
 	}
 }

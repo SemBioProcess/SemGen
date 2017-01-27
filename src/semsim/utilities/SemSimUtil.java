@@ -138,7 +138,7 @@ public class SemSimUtil {
 		}
 			
 		// Remove those data structures that were flagged for removal
-		for(DataStructure ds : dsListToRemove) model.removeDataStructure(ds.getName());
+		for(DataStructure ds : dsListToRemove) model.removeDataStructure(ds);
 		
 		// Second pass through new data structures to remove the prefixes on their names and clear mapping info
 		for(DataStructure ds : model.getAssociatedDataStructures()){
