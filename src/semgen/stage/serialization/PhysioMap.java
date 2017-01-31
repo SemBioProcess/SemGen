@@ -49,8 +49,13 @@ public class PhysioMap {
 		}
 		
 		private PhysioMapNode makePhysioMapNode(PhysicalProcess proc){
+			boolean hasSource = !proc.getSourcePhysicalEntities().isEmpty();
+			boolean hasSink = !proc.getSinkPhysicalEntities().isEmpty();
+//			Don't add processes that doesn't have associated physical property
+//			boolean hasPhysicalProperty = proc.?();
+
 			PhysioMapNode pmnode = new PhysioMapNode(proc, model);
-			if(proc.getSourcePhysicalEntities().isEmpty()) {
+			if(!hasSource && hasSink) {
 				pmnode.addSourceLink(getNullNode(proc, "source"));
 			} else {
 				for (PhysicalEntity part : proc.getSourcePhysicalEntities()) {
@@ -58,7 +63,7 @@ public class PhysioMap {
 				}
 			}
 
-			if(proc.getSinkPhysicalEntities().isEmpty()) {
+			if(!hasSink && hasSource) {
 				pmnode.addSinkLink(getNullNode(proc, "sink"));
 			} else {
 				for (PhysicalEntity part : proc.getSinkPhysicalEntities()) {
