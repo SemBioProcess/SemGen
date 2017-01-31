@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalProcess extends PhysicalProcess{
@@ -21,4 +22,9 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 		super(cuproc);
 	}
 	
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addCustomPhysicalProcess(this);
+		
+	}
 }

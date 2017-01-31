@@ -68,7 +68,7 @@ function Hull(node) {
 				});
 			};
 			analyzeChildren(getSymbolArray(node.children));
-			
+
 			//If there are zero children make a hull centered on the parent node (used for merge previews)
 			if (vertexes.length ==0) {
 				
@@ -111,9 +111,10 @@ function Hull(node) {
 			if (node.nodeType==NodeType.NULLNODE) return; 
 			// Center the node at the top of the hull
 			// Draw hull
-				hull.datum(d3.polygonHull(vertexes)).attr("d", function(d) { 
+			node.vertices = vertexes;
+			hull.datum(d3.polygonHull(vertexes)).attr("d", function(d) { 
 						return  "M" + d.join("L") + "Z";})
 						.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
-		}
+			}
 	});
 }

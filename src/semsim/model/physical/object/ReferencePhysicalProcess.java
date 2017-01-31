@@ -8,6 +8,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 
@@ -57,5 +58,11 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	@Override
 	public String getTermID() {
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
+	}
+	
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addReferencePhysicalProcess(this);
+		
 	}
 }

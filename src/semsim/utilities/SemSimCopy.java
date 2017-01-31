@@ -1,6 +1,7 @@
 package semsim.utilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -77,7 +78,7 @@ public class SemSimCopy {
 		copyComputations();
 	}
 
-	public static Set<Annotation> copyAnnotations(Set<Annotation> annstocopy) {
+	public static Set<Annotation> copyAnnotations(Collection<Annotation> annstocopy) {
 		Set<Annotation> annset = new HashSet<Annotation>();
 		for (Annotation ann : annstocopy) {
 			annset.add(new Annotation(ann));

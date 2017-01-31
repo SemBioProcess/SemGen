@@ -97,7 +97,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public void setModelSaved(boolean val){
-		modelsaved = val;
 		setChanged();
 		notifyObservers(GlobalActions.appactions.SAVED);
 	}

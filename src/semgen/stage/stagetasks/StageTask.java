@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
-
 import semgen.stage.serialization.ModelNode;
+import semgen.stage.serialization.Node;
 import semgen.stage.serialization.StageState;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
@@ -123,7 +124,6 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	public abstract Class<TSender> getSenderInterface();
 	
 	public void closeTask() {
-		
 		setChanged();
 		this.notifyObservers(StageTaskEvent.CLOSETASK);
 		
@@ -143,5 +143,31 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	public void setTaskIndex(int newindex) {
 		taskindex = newindex;
+	}
+	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getNodebyHash(int nodehash, String nodeid) {
+		for (ModelInfo mni : _models) {
+			Node<?> returnnode = mni.modelnode.getNodebyHash(nodehash, nodeid);
+			if (returnnode!=null) return returnnode; 
+		}
+		return null;
+	}
+	
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStageNodestoJava(JSArray nodearray) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue()));
+		}
+		return javanodes;
+	}
+	
+	public class NodeTreeBridge {
+		void setNodeLocation(Object jsobject, Integer xloc, Integer yloc) {
+			Node<?> node = (Node<?>)jsobject;
+			node.xpos = xloc;
+		}
 	}
 }

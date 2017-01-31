@@ -7,29 +7,35 @@ function NodeDrag(_node) {
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
 	// is released on a dropzone the merger will open with those models
-
 	
 	$(_node).on('createVisualization', function (e, root) {
+		var virtualnodes = null;
 		var nodeDrag = d3.drag()
 			.subject(_node)
 			.on("start", function (d, i) {
 				_node.graph.pause();
+				
 				//Ensure the node has been added to selections
 				var selections = _node.multiDrag();
-				
 				if (!_node.selected) {
 					selections = [_node];
 				}
-				
+				if (_node.graph.shiftIsPressed) {
+					virtualnodes = _node.graph.createGhostNodes(selections);
+					selections = virtualnodes;
+				}
 				selections.forEach(function(n) {
-					n.rootElement.selectAll("circle").attr("r", _node.r*2);
-					n.fx = _node.xpos();
-					n.fy = _node.ypos();	
+						n.rootElement.selectAll("circle").attr("r", _node.r*2);
+						n.fx = _node.xpos();
+						n.fy = _node.ypos();	
 				});
-				//Execute any drag behaviors unique to the node type
-				_node.dragstart.forEach(function(behavior) {
-					behavior(_node);
-				});
+				
+				if (!_node.graph.shiftIsPressed) {
+					//Execute any drag behaviors unique to the node type
+					_node.dragstart.forEach(function(behavior) {
+						behavior(_node);
+					});
+				}
 				
 				_node.graph.tick();
 			})
@@ -38,8 +44,19 @@ function NodeDrag(_node) {
 		    		dy = d3.event.y - _node.ypos();
 				var selections = _node.multiDrag();
 				
-				if (!_node.selected) {
+				if (_node.graph.shiftIsPressed) {
+					selections = virtualnodes;
+					dx = d3.event.x - selections[0].xpos(),
+		    		dy = d3.event.y - selections[0].ypos();
+				}
+				else if (!_node.selected) {
 					selections = [_node];
+				}
+				
+				if (!_node.graph.shiftIsPressed && virtualnodes) {
+					_node.graph.clearTemporaryObjects();
+					virtualnodes = null;
+					return;
 				}
 				
 				selections.forEach(function(n) {
@@ -60,36 +77,46 @@ function NodeDrag(_node) {
 		    		}
 		    		n.setLocation(posx, posy);
 		    	});
-		    	//Execute any drag behaviors unique to the node type
-		    	_node.drag.forEach(function(behavior) {
-		    		behavior(_node);
-				});
+				if (!_node.graph.shiftIsPressed) {
+			    	//Execute any drag behaviors unique to the node type
+			    	_node.drag.forEach(function(behavior) {
+			    		behavior(_node);
+					});
+				}
 				_node.graph.tick();
 		    	
 		    })
 		    .on("end", function (d, i) {
 				var selections = _node.multiDrag();
 				
-				if (!_node.selected) {
-					selections = [_node];
+				if (!_node.graph.shiftIsPressed) {
+					if (!_node.selected) {
+						selections = [_node];
+					}
+					
+			    	selections.forEach(function(n) {
+				    	n.rootElement.selectAll("circle").attr("r", n.r);
+				    	n.setLocation(n.fx, n.fy);
+			    	});
+			    	//Execute any drag behaviors unique to the node type	
+			    	_node.dragend.forEach(function(behavior) {
+			    		behavior(_node);
+					});
+			    	
+			    	selections.forEach(function(n) {
+				    	if (!n.fixed) {
+				    		n.fx = null;
+							n.fy = null;	
+				    	}
+			    	});
 				}
-				
-		    	selections.forEach(function(n) {
-			    	n.rootElement.selectAll("circle").attr("r", n.r);
-			    	n.setLocation(n.fx, n.fy);
-		    	});
-		    	//Execute any drag behaviors unique to the node type	
-		    	_node.dragend.forEach(function(behavior) {
-		    		behavior(_node);
-				});
-		    	
-		    	_node.multiDrag().forEach(function(n) {
-			    	if (!n.fixed) {
-			    		n.fx = null;
-						n.fy = null;	
-			    	}
-		    	});
-
+				else {
+					virtualnodes[0].dragEnd.forEach(function(behavior){
+						behavior(virtualnodes);
+					});
+				}
+				_node.graph.clearTemporaryObjects();
+				virtualnodes = null;
 		    	if (!_node.graph.fixedMode) {
 		    		_node.graph.resume();
 		    	}

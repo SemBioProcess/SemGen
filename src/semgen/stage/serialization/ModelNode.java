@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.google.gson.annotations.Expose;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -17,7 +18,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 	//null model
 	public ModelNode(String modname) {
 		super(modname, MODEL);
-		
+		modelindex = -1;
 	}
 	
 	public ModelNode(SemSimModel sourcemod, Integer modindex) {
@@ -27,7 +28,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		typeIndex = MODEL;
 		modelindex = modindex;
 	}
-	
+
 	private void serializeModel() {
 		ArrayList<Submodel> topsubmodels = sourceobj.getTopSubmodels();
 		HashMap<DataStructure, DependencyNode> depnodemap = new HashMap<DataStructure, DependencyNode>();
@@ -57,4 +58,7 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		physionetwork = new PhysioMap(this);
 	}
 
+	@Override
+	public void collectforExtraction(Extractor extractor) {}
+	
 }

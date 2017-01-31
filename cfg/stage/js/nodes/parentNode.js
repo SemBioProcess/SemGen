@@ -21,6 +21,11 @@ function ParentNode(graph, srcobj, parent, r, group, textSize, nodeType, charge)
 			return node.name == name;
 		});
 	}
+	
+	this.hullContainsPoint = function(point) {
+		if (!this.showchildren) return false;
+		return d3.polygonContains(this.vertices, point);
+	}
 }
 
 ParentNode.prototype.createChildren = function() {

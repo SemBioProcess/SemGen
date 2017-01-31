@@ -180,7 +180,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			generateOverlapDescriptors();
 			getOverlappingNodes();
 			_commandSender.showOverlaps(updateOverlaps().toArray(new Overlap[]{}));
-			}
+		}
 	}
 	
 	protected ArrayList<Overlap> updateOverlaps() {

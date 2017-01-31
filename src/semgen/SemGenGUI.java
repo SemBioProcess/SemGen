@@ -11,8 +11,6 @@ import semgen.annotation.workbench.AnnotatorFactory;
 import semgen.extraction.ExtractorTabFactory;
 import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
-import semgen.merging.MergerTabFactory;
-import semgen.merging.workbench.MergerWorkbenchFactory;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.utilities.SemGenTask;
@@ -103,17 +101,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		addTab(factory, tabfactory, true);
 	}
 	
-	public void startNewMergerTask(){
-		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
-		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions);
-		addTab(factory, tabfactory, true);
-	}
+	public void startNewMergerTask(){}
 	
-	public void startNewMergerTask(Set<ModelAccessor> existingobjs){
-		MergerWorkbenchFactory factory = new MergerWorkbenchFactory();
-		MergerTabFactory tabfactory = new MergerTabFactory(settings, globalactions, existingobjs);
-		addTab(factory, tabfactory, true);
-	}
+	public void startNewMergerTask(Set<ModelAccessor> existingobjs){}
 	
 	public void startNewStageTask(){
 		StageWorkbenchFactory factory = new StageWorkbenchFactory();

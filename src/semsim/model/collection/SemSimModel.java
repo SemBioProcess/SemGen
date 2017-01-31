@@ -192,7 +192,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void addUnit(UnitOfMeasurement unit){
 		
 		if( ! containsUnit(unit.getName())) units.add(unit);
-		else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
+		//else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 	}
 	
 	public void setUnits(HashSet<UnitOfMeasurement> units) {
@@ -229,13 +229,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		// If there are physical entities that are part of the composite but not yet added to the model, add them
 		// This comes into play when importing annotations from other models
 		for(PhysicalEntity ent : newcpe.getArrayListOfEntities()){
-			
-			if(!getPhysicalEntities().contains(ent)){
-				
-				if(ent.hasPhysicalDefinitionAnnotation())
-					addReferencePhysicalEntity((ReferencePhysicalEntity)ent);
-				else addCustomPhysicalEntity((CustomPhysicalEntity)ent);
-			}
+			ent.addToModel(this);
 		}
 		return newcpe;
 	}
@@ -879,43 +873,41 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void printErrors(){
 		for(String err : getErrors()) System.err.println("***************\n" + err + "\n");
 	}
+
+	public void removeDataStructurebyName(String dsname) {
+		getAssociatedDataStructure(dsname).removeFromModel(this);
+	}
 	
 	/**
 	 * Delete a {@link DataStructure} from the model.
-	 * @param name The name of the DataStructure to delete.
+	 * @param ds The DataStructure to delete.
 	 */
-	public void removeDataStructure(String name) {
-		if(getAssociatedDataStructure(name)!=null){
-			DataStructure ds = getAssociatedDataStructure(name);
-			
+	public void removeDataStructure(DataStructure ds) {
 			for(DataStructure otherds : ds.getUsedToCompute()){
 				otherds.getComputation().getInputs().remove(ds);
-			}
-			
-			// If a MappableVariable, remove mappings and remove equation from parent 
-			// FunctionalSubmodel
-			if(ds instanceof MappableVariable){
-				MappableVariable mapv = (MappableVariable)ds;
-				
-				// Remove mappings to the data structure
-				for(MappableVariable fromv: mapv.getMappedFrom()){
-					fromv.getMappedTo().remove(mapv);
-				}
-				
-				// Remove mappings from the data structure
-				for(MappableVariable tov : mapv.getMappedTo()){
-					tov.getMappedFrom().remove(mapv);
-				}
-				
-				FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);
-				if(fs != null) fs.removeVariableEquationFromMathML(mapv);
 			}
 			
 			for(Submodel sub : getSubmodels()){
 				if(sub.getAssociatedDataStructures().contains(ds)) sub.getAssociatedDataStructures().remove(ds);
 			}
 			dataStructures.remove(ds);
+	}
+	
+	public void removeMappableVariable(MappableVariable mapv) {
+		// Remove mappings to the data structure
+		for(MappableVariable fromv: mapv.getMappedFrom()){
+			fromv.getMappedTo().remove(mapv);
 		}
+		
+		// Remove mappings from the data structure
+		for(MappableVariable tov : mapv.getMappedTo()){
+			tov.getMappedFrom().remove(mapv);
+		}
+		
+		FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);
+		if(fs != null) fs.removeVariableEquationFromMathML(mapv);
+		
+		removeDataStructure(mapv);
 	}
 	
 	/**

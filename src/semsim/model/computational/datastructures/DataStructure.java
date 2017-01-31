@@ -2,6 +2,7 @@ package semsim.model.computational.datastructures;
 
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.PropertyType;
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -417,6 +419,50 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 	
+	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
+		for (DataStructure output : computation.getOutputs()) {
+			DataStructure replacer = dsmap.get(output);
+			if (replacer != null) {
+				newoutputs.add(replacer);
+			}
+		}
+		computation.setOutputs(newoutputs);
+	}
+	
+	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newinputs = new HashSet<DataStructure>();
+		for (DataStructure input : computation.getInputs()) {
+			DataStructure replacer = dsmap.get(input);
+			if (replacer != null) {
+				newinputs.add(replacer);
+			}
+		}
+		computation.setInputs(newinputs);
+	}
+	
+	public void replaceUsedtoCompute(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newused = new HashSet<DataStructure>();
+		for (DataStructure used : this.getUsedToCompute()) {
+			DataStructure replacer = dsmap.get(used);
+			if (replacer != null) {
+				newused.add(replacer);
+			}
+		}
+		setUsedToCompute(newused);
+	}
+	
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		replaceOutputs(dsmap);
+		replaceInputs(dsmap);
+		replaceUsedtoCompute(dsmap);
+		
+
+		
+
+	}
+	
 	@Override
 	public Boolean hasPhysicalDefinitionAnnotation() {
 		return singularterm!=null;
@@ -435,4 +481,23 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public abstract DataStructure copy();
+	
+	public void addToModel(SemSimModel model) {
+		model.addDataStructure(this);
+		if (this.hasPhysicalDefinitionAnnotation()) {
+			model.addPhysicalProperty(singularterm);
+		}
+		else if (hasPhysicalProperty()) {
+			model.addAssociatePhysicalProperty(physicalProperty);
+		}
+		unit.addToModel(model);
+		if (hasAssociatedPhysicalComponent()) {
+			physicalcomponent.addToModel(model);
+		}
+	}
+	
+	public DataStructure removeFromModel(SemSimModel model) {
+		model.removeDataStructure(this);
+		return this;
+	}
 }

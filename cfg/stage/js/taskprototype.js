@@ -5,6 +5,7 @@
 function Task(graph, stagestate) {
 	
 	this.graph = graph;
+
 	this.state = stagestate;
 	
 	this.nodes = {};
@@ -25,7 +26,7 @@ function Task(graph, stagestate) {
 		task.nodes[model.id] = modelNode;
 		task.graph.update();
 		task.selectNode(modelNode);
-
+        return modelNode;
 	};
 	
 	//Get a model node
@@ -79,7 +80,7 @@ function Task(graph, stagestate) {
 	
 	this.selectNode = function(node) {
 		
-		if (node.nodeType==NodeType.MODEL) {
+		if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
 			if (!this.graph.cntrlIsPressed) {
 				this.selectedModels.forEach(function(selnode) {
 					//if (selnode == node) { return; }

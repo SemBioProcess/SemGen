@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 
@@ -149,6 +150,10 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return compareTo((CompositePhysicalEntity)obj)==0;
+	}
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addCompositePhysicalEntity(this);
 	}
 
 }

@@ -1,6 +1,7 @@
 package semsim.model.physical.object;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 
 
@@ -23,5 +24,11 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	@Override
 	protected boolean isEquivalent(Object obj) {
 		return ((CustomPhysicalEntity)obj).getName().equals(getName());
+	}
+
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addCustomPhysicalEntity(this);
+		
 	}
 }

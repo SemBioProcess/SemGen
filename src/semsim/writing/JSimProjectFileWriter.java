@@ -220,9 +220,9 @@ public class JSimProjectFileWriter extends ModelWriter{
 				// If flattened name not found or if we've already found a
 				// codeword with the flattened name, remove from semsim model
 				if( ! m2.find() || foundnamesinMML.contains(flattenedname))
-					semsimmodel.removeDataStructure(name);
+					semsimmodel.removeDataStructure(ds);
 				else{
-					semsimmodel.getAssociatedDataStructure(name).setName(flattenedname);
+					ds.setName(flattenedname);
 					foundnamesinMML.add(flattenedname);
 				}
 			}

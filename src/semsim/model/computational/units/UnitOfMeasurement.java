@@ -12,6 +12,8 @@ import semsim.annotation.Relation;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
+import semsim.model.collection.SemSimCollection;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.ComputationalModelComponent;
 
 
@@ -223,5 +225,10 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 
 	public URI getPhysicalDefinitionURI() {
 		return referenceuri;
+	}
+
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addUnit(this);
 	}
 }

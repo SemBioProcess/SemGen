@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.google.gson.annotations.Expose;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.SemSimComponent;
 
 public class LinkableNode<O extends SemSimComponent> extends Node<O> {
@@ -51,6 +52,10 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 			if (input.replaceInput(dsnodemap)) linklist.add(input);			
 		}
 		inputs = linklist;
+	}
+
+	@Override
+	public void collectforExtraction(Extractor extractor) {		
 	}
 
 }

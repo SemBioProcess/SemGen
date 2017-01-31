@@ -63,8 +63,7 @@ var limitWords = function (text, wordLimit) {
 	var text3 = text2.split(' ');
 	var numberOfWords = text3.length;
 	var i=0;
-	if(numberOfWords > wordLimit)
-	{
+	if(numberOfWords > wordLimit) {
 		for(i=0; i< wordLimit; i++)
 			finalText = finalText+" "+ text3[i]+" ";
 

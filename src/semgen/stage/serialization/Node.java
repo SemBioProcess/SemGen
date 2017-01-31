@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.annotations.Expose;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.SemSimObject;
 
 /**
@@ -12,7 +13,7 @@ import semsim.SemSimObject;
  * @author Ryan
  *
  */
-public class Node<T extends SemSimObject> {
+public abstract class Node<T extends SemSimObject> {
 	@Expose public String id;
 	@Expose public String name;
 	@Expose public String parentModelId = "";
@@ -20,6 +21,8 @@ public class Node<T extends SemSimObject> {
 	@Expose public int ypos = -1;
 	@Expose public Boolean hidden = false;
 	@Expose public Number typeIndex;
+	//Record Java hashcode for rapid lookup
+	@Expose public int hash = this.hashCode();
 
 	protected T sourceobj;
 	protected Node<?> parent = null;
@@ -97,6 +100,7 @@ public class Node<T extends SemSimObject> {
 		dtarray.add("Process");
 		dtarray.add("Mediator");
 		dtarray.add("Null");
+		dtarray.add("Extraction");
 
 		nodetypes = dtarray;
 	}
@@ -110,6 +114,7 @@ public class Node<T extends SemSimObject> {
 	static Number PROCESS = 6;
 	static Number MEDIATOR = 7;
 	static Number NULL = 8;
+	static Number EXTRACTION = 9;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;
@@ -139,4 +144,16 @@ public class Node<T extends SemSimObject> {
 	public void setID(String newid) {
 		id = newid;
 	}
+	
+	public boolean isJavaScriptNode(int nodehash, String nodeid) {
+		if (nodehash == hash) {
+			//Additional check to prevent hash collision
+			if (id.matches(nodeid)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public abstract void collectforExtraction(Extractor extractor);
 }

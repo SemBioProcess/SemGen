@@ -3,6 +3,7 @@ package semsim.model.computational.datastructures;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 
 /**
@@ -128,5 +129,19 @@ public class MappableVariable extends Decimal {
 	@Override
 	public DataStructure copy() {
 		return new MappableVariable(this);
+	}
+
+	public void replaceDataStructureReference(DataStructure replacer, DataStructure replacee) {
+		super.replaceDataStructureReference(replacer, replacee);
+		
+		if (this.mappedFrom.contains(replacee)) {
+			mappedFrom.remove(replacee);
+			mappedTo.add((MappableVariable) replacer);
+		}
+	}
+	
+	public DataStructure removeFromModel(SemSimModel model) {
+		model.removeMappableVariable(this);
+		return this;
 	}
 }

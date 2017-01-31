@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 
 /** A class to represent relational statements in simulation models that express non-equivalencies.
@@ -74,6 +75,11 @@ public class RelationalConstraint extends ComputationalModelComponent{
 	 * (method provided in adherence to SBML best practices). */
 	public void setErrorMessage(String msg){
 		errorMsg = msg;
+	}
+
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addRelationalConstraint(this);
 	}
 }
 

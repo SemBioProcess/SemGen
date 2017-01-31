@@ -8,6 +8,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 
@@ -56,5 +57,10 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 	@Override
 	public String getTermID() {
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
+	}
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addReferencePhysicalEntity(this);
+		
 	}
 }

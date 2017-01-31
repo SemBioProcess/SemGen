@@ -1,5 +1,6 @@
 package semgen.stage.serialization;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.Submodel;
 
@@ -21,6 +22,12 @@ public class SubModelNode extends ParentNode<Submodel> {
 	
 	public SubModelNode(String name) {
 		super(name, SUBMODEL);
+	}
+
+
+	@Override
+	public void collectforExtraction(Extractor extractor) {
+		extractor.addSubModel(sourceobj);
 	}
 
 }

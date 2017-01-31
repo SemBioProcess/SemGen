@@ -1,5 +1,6 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,43 +8,45 @@ import java.util.Observable;
 import java.util.Set;
 
 import semgen.utilities.Workbench;
-import semsim.extraction.Extraction;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 
 
 public class ExtractorWorkbench extends Workbench {
-	ModelAccessor modelaccessor;
-	SemSimModel semsimmodel;
-	Extraction extraction;
+	private ModelAccessor modelaccessor;
+	private SemSimModel sourcemodel;
+	private ArrayList<SemSimModel> extractions= new ArrayList<SemSimModel>();
 
 	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		modelaccessor = accessor;
-		semsimmodel = model;
-		extraction = new Extraction(semsimmodel);
+		sourcemodel = model;
 	}
 	
 	@Override
 	public void initialize() {}
+	
+	public Extractor makeNewExtraction(String name) {
+		SemSimModel extraction = new SemSimModel();
+		extraction.setName(name);
+		extractions.add(extraction);
+		return new ExtractNew(sourcemodel, extraction);
+		
+	}
 
 	@Override
 	public void setModelSaved(boolean val) {}
 
 	@Override
 	public String getCurrentModelName() {
-		return semsimmodel.getName();
+		return sourcemodel.getName();
 	}
 
 	@Override
 	public ModelAccessor getModelSourceLocation() {
-		return semsimmodel.getLegacyCodeLocation();
+		return sourcemodel.getLegacyCodeLocation();
 	}
 	
-	public Extraction getExtraction(){
-		return extraction;
-	}
-
 	@Override
 	public ModelAccessor saveModel() {
 		return null;
@@ -59,7 +62,7 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	public SemSimModel getSourceModel() {
-		return semsimmodel;
+		return sourcemodel;
 	}
 	
 	

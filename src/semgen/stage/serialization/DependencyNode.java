@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.google.gson.annotations.Expose;
 
 import semgen.SemGen;
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.computational.datastructures.DataStructure;
 
@@ -50,5 +51,10 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void collectforExtraction(Extractor extractor) {
+		extractor.addDependency(sourceobj);
 	}
 }

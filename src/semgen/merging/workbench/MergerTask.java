@@ -107,9 +107,9 @@ public class MergerTask extends SemGenTask {
     
 	private void removeDomainBounds(String name) {
 		// Remove .min, .max, .delta solution domain DataStructures
-		ssm2clone.removeDataStructure(name + ".min");
-		ssm2clone.removeDataStructure(name + ".max");
-		ssm2clone.removeDataStructure(name + ".delta");
+		ssm2clone.removeDataStructurebyName(name + ".min");
+		ssm2clone.removeDataStructurebyName(name + ".max");
+		ssm2clone.removeDataStructurebyName(name + ".delta");
 	}
 
     public SemSimModel getMergedModel() {

@@ -12,7 +12,7 @@ import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
-public class ParentNode<T extends SemSimCollection> extends Node<T> {
+public abstract class ParentNode<T extends SemSimCollection> extends Node<T> {
 	@Expose public ArrayList<SubModelNode> childsubmodels = new ArrayList<SubModelNode>();
 	@Expose public ArrayList<DependencyNode> dependencies = new ArrayList<DependencyNode>();
 	@Expose public int[] deptypecounts = {0, 0 ,0};
@@ -86,6 +86,22 @@ public class ParentNode<T extends SemSimCollection> extends Node<T> {
 		Node<? extends SemSimObject> returnnode = null;	
 		for (SubModelNode child : childsubmodels) {
 			returnnode = child.getNodebyId(id);
+			if (returnnode != null) break;
+		}
+		return returnnode;
+		
+	}
+	
+	public Node<?> getNodebyHash(int nodehash, String nodeid) {
+		if (this.isJavaScriptNode(nodehash, nodeid)) return this;
+		
+		
+		for (DependencyNode dep : dependencies) {
+			if (dep.isJavaScriptNode(nodehash, nodeid)) return dep;
+		}
+		Node<? extends SemSimObject> returnnode = null;	
+		for (SubModelNode child : childsubmodels) {
+			returnnode = child.getNodebyHash(nodehash, nodeid);
 			if (returnnode != null) break;
 		}
 		return returnnode;

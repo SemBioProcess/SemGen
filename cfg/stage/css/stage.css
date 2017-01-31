@@ -52,6 +52,22 @@ body {
 	opacity: .8;
 }
 
+#trash {
+	position: absolute;
+	margin: 5px;
+	width:50px;
+	height:50px;
+	bottom: 30px;
+	left: 45px;
+	padding-left: 1px;
+	padding-top: 2px;
+	line-height:25px;
+	font-size: 30px;
+	border: hidden;
+	text-align:center;
+	opacity: .8;
+}
+
 #saveButton:hover:enabled {
 	opacity: 1;
 	cursor: pointer;

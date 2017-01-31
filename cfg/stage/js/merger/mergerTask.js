@@ -7,8 +7,13 @@ MergerTask.prototype.constructor = MergerTask;
 
 function MergerTask(graph, stagestate) {
 	Task.prototype.constructor.call(this, graph, stagestate);
-	graph.depBehaviors.push(CreateCustomOverlap);
 	var merger = this;
+	
+	merger.graph.depBehaviors = [];
+	merger.graph.ghostBehaviors = [];
+	
+	graph.depBehaviors.push(CreateCustomOverlap);
+	
 	this.conflictsj = null; //Handle for calling java functions
 	merger.mergecomplete = false;
 	
@@ -22,7 +27,7 @@ function MergerTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
-	$("#addModelButton, .stageSearch").hide();
+	$("#addModelButton, .stageSearch, #trash").hide();
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
 	//Create the resolution pane
 	

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalDependency;
 
@@ -210,4 +211,7 @@ public class Computation extends ComputationalModelComponent{
 	public boolean hasPhysicalDependency(){
 		return dependency != null;
 	}
+
+	@Override
+	public void addToModel(SemSimModel model) {}
 }

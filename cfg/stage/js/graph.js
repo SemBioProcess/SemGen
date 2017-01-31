@@ -10,7 +10,7 @@ function Graph() {
 	this.w = $(window).width();
 	this.h = $(window).height();
 	
-		var visibleNodes = [];
+	var visibleNodes = [];
 
 	var svg = d3.select("#stage")
 	    .append("svg")	    
@@ -42,10 +42,11 @@ function Graph() {
 
 	this.fixedMode = false;
 		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null
-	this.nodesVisible = [true, true, true, true, false, true, true, true, true];
+	this.nodesVisible = [true, true, true, true, false, true, true, true, true, true];
 	this.showorphans = false;
 	
 	this.depBehaviors = [];
+	this.ghostBehaviors = [];
 	
 	this.active = true;
 	var nodes;
@@ -103,8 +104,23 @@ function Graph() {
 		this.nodesVisible[NodeTypeMap[type].id] = false;
 		this.update();
 	}
+	
+	var ghost;
+	this.createGhostNodes = function(nodes) {
+		var ghosts = [];
+		for (n in nodes) {
+			ghosts.push(nodes[n].createGhost());
+		}
+		// Build the ghost nodes
+	    ghost = vis.selectAll(".ghost")
+	        .data(ghosts, function(d) { return d.id; });
 
-
+	    ghost.enter().append("g")
+	        .each(function (d) { d.createVisualElement(this, graph); });
+	    
+		return ghosts;
+	}
+	
 	/**
 	 * Updates the graph
 	 */
@@ -115,6 +131,10 @@ function Graph() {
 
 		bruteForceRefresh.call(this);
 
+		// Build the ghost nodes
+	    ghost = vis.selectAll(".ghost")
+	        .data([], function(d) { return d.id; });
+	    
 		// Add the links
 		path = vis.selectAll(".link")
 			.data(links, function(d) { return d.id; });
@@ -203,8 +223,19 @@ function Graph() {
     	node.enter().each(function (d) {
     		d.tickHandler(this, graph);
     	});
-    };
 
+    	ghost.enter().each(function (d) {
+    		d.tickHandler(this, graph);
+    	});
+	};
+
+
+	this.clearTemporaryObjects = function() {
+		vis.selectAll(".ghost").remove();
+	    ghost = vis.selectAll(".ghost")
+	    	.data([], function(d) { return d.id; });
+	}
+	
 	// Find a node by its id
 	this.findNode = function(id) {
 		var nodewithid = null;
@@ -385,11 +416,14 @@ function Graph() {
 	}
 	
 	this.cntrlIsPressed = false;
+	this.shiftIsPressed = false;
 	
 	//Bind keyboard events
 	$(document).keyup(function(event){
 		if(event.which=="17")
 			graph.cntrlIsPressed = false;
+		if(event.which=="16")
+			graph.shiftIsPressed = false;
 		if(event.which=="32") {
 			graph.fixedMode = graph.active;
 			if (graph.active)
@@ -402,6 +436,8 @@ function Graph() {
 	$(document).keydown(function(event){
 	    if(event.which=="17")
 	    	graph.cntrlIsPressed = true;
+		if(event.which=="16")
+			graph.shiftIsPressed = true;
 	});
 		
 	this.updateHeightAndWidth();

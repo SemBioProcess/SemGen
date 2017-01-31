@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
+import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 
@@ -157,6 +158,16 @@ public class Event extends ComputationalModelComponent{
 		public void setOutput(DataStructure output) {
 			this.output = output;
 		}
+		@Override
+		public void addToModel(SemSimModel model) {
+			return;
+		}
+	}
+
+
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addEvent(this);
 	}
 
 }

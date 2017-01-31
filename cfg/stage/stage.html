@@ -22,6 +22,7 @@
 		<script src="js/nodes/behaviors/dragToMerge.js"></script>
 		<script src="js/nodes/behaviors/hull.js"></script>
 		<script src="js/nodes/behaviors/hiddenLabelNodeGenerator.js"></script>
+		<script src="js/nodes/ghostNode.js"></script>
 
 		<script src="js/links/link.js"></script>
 
@@ -31,10 +32,11 @@
 		<script src="js/graph.js"></script>
 		<script src="js/taskprototype.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
+		<script src="js/extractor/extractedModel.js"></script>
+		<script src="js/extractor/extractorTask.js"></script>
 		<script src="js/merger/mergePreview.js"></script>
 		<script src="js/merger/conflictResolPane.js"></script>
 		<script src="js/merger/semanticResolPane.js"></script>
-		<script src="js/extractor/extractorTask.js"></script>
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/project/stage.js"></script>
 		<script src="js/main.js"></script>
@@ -52,6 +54,10 @@
 		
 		<div id="saveButton" class = "btn-default">
 			<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+		</div>
+		
+		<div id="trash" class = "btn-default">
+			<span class="glyphicon glyphicon-trash"></span>
 		</div>
 		
 		<div class="stageSearch">
@@ -316,10 +322,10 @@
 			<div id="leftmenu" class="panel-default">
 				<div class="panel subpanel">
 					<ul class='menulist'>
-						<li><button id="saveModel" class="panelbutton" type="button">Save Merged Model</button></li>
-						<li><button id="stageModel" class="panelbutton" type="button">Add Model to Stage</button></li>
+						<li><button id="saveModel" class="panelbutton" type="button">Save Extraction</button></li>
+						<li><button id="stageModel" class="panelbutton" type="button">Add Extraction to Stage</button></li>
 						<li><button id="minimize" type="button" class="panelbutton">Return to Project</button></li>
-						<li><button id="quitExtractorBtn" type="button" class="panelbutton">Close Merge</button></li>
+						<li><button id="quitExtractorBtn" type="button" class="panelbutton">Close Extractor</button></li>
 					</ul>
 				</div>
 			</div>

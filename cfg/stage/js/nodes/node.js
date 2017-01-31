@@ -11,6 +11,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.srcobj = srcobj;
 	this.name = srcobj.name;
 	this.id = srcobj.id;
+	this.hash = srcobj.hash;
 	this.displayName = this.name;
 	this.r = r;
 	this.showchildren = false;
@@ -36,6 +37,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.dragstart = [];
 	this.drag = [];
 	this.dragend = [];
+	this.ghostdragend = [];
 	this.addBehavior(NodeDrag);
 	
 	this.x = srcobj.xpos;
@@ -48,6 +50,12 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.ypos = function () {
 		return this.y;
 	}
+	
+	this.isOverlappedBy = function(overlapnode, proximityfactor) {
+		return (Math.sqrt(Math.pow(overlapnode.xpos()-this.xpos(), 2) + Math.pow(overlapnode.ypos()-this.ypos(), 2))+overlapnode.r*2 <= this.r*proximityfactor);
+
+	}
+	
 	
 	this.isHidden = function() {
 		return this.srcobj.hidden;
@@ -286,4 +294,6 @@ function validateNode(nodeData) {
 
 };
 
-
+Node.prototype.createGhost = function() {
+	return new GhostNode(this);
+}

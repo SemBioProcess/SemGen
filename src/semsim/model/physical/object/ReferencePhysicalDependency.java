@@ -8,6 +8,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalDependency;
 import semsim.owl.SemSimOWLFactory;
 
@@ -56,4 +57,9 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 		
 		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
 				&& physdefID.equals(thisID));	}
+
+	@Override
+	public void addToModel(SemSimModel model) {
+		model.addReferencePhysicalDependency(this);
+	}
 }
