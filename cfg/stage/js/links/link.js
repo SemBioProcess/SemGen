@@ -103,7 +103,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	
 	if (this.linkType == NodeType.MEDIATOR) {
 		this.rootElement.select("path")
-			.attr("class", "mediator");
+			.attr("class", "link mediator");
 	}
 	if (this.fade) {
 		this.rootElement.attr("opacity", "0.5");
