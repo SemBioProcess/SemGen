@@ -69,9 +69,10 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			fade = true;
 		}
 		// Compare submodel names and check if they are from different submodels
-		if (inputNode.name.split(".")[0] != outputNode.name.split(".")[0]) {
+		if (outputNode.submodelinput) {
             intraSubmodelLink = true;
         }
+
 		inputNode = inputNode.getFirstLinkableAncestor();
 		if (inputNode==null) {
 			return links;
