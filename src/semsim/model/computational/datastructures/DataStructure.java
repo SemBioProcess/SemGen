@@ -500,4 +500,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		model.removeDataStructure(this);
 		return this;
 	}
+	
+	public void clearInputs() {
+		this.computation.getInputs().clear();
+		this.computation.setComputationalCode("");
+		this.computation.setMathML("");
+		this.setStartValue("");
+	}
 }

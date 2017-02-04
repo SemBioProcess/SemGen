@@ -12,6 +12,7 @@ function ExtractedModel(graph, srcobj) {
 	this.addClassName("modelNode");
 	this.canlink = false;
 	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
+	this.saved = false;
 	
 	this.addBehavior(Hull);	
 	this.addBehavior(parentDrag);	

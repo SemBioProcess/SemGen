@@ -67,7 +67,7 @@ function ExtractorTask(graph, stagestate) {
 
 	this.graph.ghostBehaviors.push(onExtractionAction);
 	
-	receiver.onNewExtraction(function(newextraction) {
+	this.addExtractionNode = function(newextraction) {
 		var extractionnode = new ExtractedModel(extractor.graph, newextraction);
 		extractor.extractions.push(extractionnode);
 		extractor.nodes[newextraction.id] = extractionnode;
@@ -75,7 +75,16 @@ function ExtractorTask(graph, stagestate) {
 		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		extractor.graph.update();
 		extractor.selectNode(extractionnode);
-		
+	}
+	
+	receiver.onLoadExtractions(function(extractions) {
+		for (x in extractor.extractions) {
+			extractor.addExtractionNode(extractor.extractions[x]);
+		}
+	});
+	
+	receiver.onNewExtraction(function(newextraction) {
+		extractor.addExtractionNode(newextraction);
 	});
 	
 	$("#stageModel").click(function() {
@@ -87,7 +96,12 @@ function ExtractorTask(graph, stagestate) {
 	});
 	
 	$("#saveModel").click(function() {
-		sender.save();
+		var extractstosave = [];
+		for (i in extractor.extractions) {
+			if (!extractor.extractions[i].saved && extractor.extractions[i].selected)
+				extractstosave.push(extractor.extractions[i].modelindex);
+		}
+		sender.save(extractstosave);
 	});
 	
 	// Quit merger

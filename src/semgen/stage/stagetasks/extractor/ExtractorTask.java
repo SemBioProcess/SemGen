@@ -2,7 +2,6 @@ package semgen.stage.stagetasks.extractor;
 
 import java.util.ArrayList;
 import java.util.Observable;
-
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import semgen.stage.serialization.ExtractionNode;
@@ -30,8 +29,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		Extractor extractor = workbench.makeNewExtraction(extractname);
 		
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoextract);
-		//Add one to the index to account for the source model
-		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size()+1);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
 		
 		taskextractions.add(extraction);
 		_commandSender.newExtraction(extraction);
@@ -44,6 +42,18 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		SemSimModel result = extractor.run();
 		return result;
 	}
+	
+	private ArrayList<ExtractionNode> getExtractionsbyIndex(JSArray indicies) {
+		ArrayList<ExtractionNode> nodes = new ArrayList<ExtractionNode>();
+		for (int i = 0; i < indicies.length(); i++) {
+			int index = (int)indicies.get(i).getNumberValue();
+			nodes.add(taskextractions.get(index));
+		}
+		
+		return nodes;
+	}
+	
+
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -65,6 +75,9 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			jstask = jstaskobj;
 			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
 			jstask.setProperty("extractionjs", new ExtractorBridge());
+			if (!taskextractions.isEmpty()) {
+				_commandSender.loadExtractions(taskextractions);
+			}
 		}
 		
 		public void onNewExtraction(JSArray nodes, String extractname) {
@@ -91,6 +104,15 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		public void onClose() {
 			closeTask();
 		}
+		
+		public void onSave(JSArray indicies) {
+			ArrayList<Integer> extractstosave = new ArrayList<Integer>();
+			if (indicies.length()==0) return;
+			for (int i = 0; i < indicies.length(); i++) {
+				extractstosave.add((int)(indicies.get(i)).getNumberValue());
+			}
+			workbench.saveExtractions(extractstosave);
+		}
 
 		public void onChangeTask(Double index) {
 			switchTask(index.intValue());
@@ -111,10 +133,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	
 	public class ExtractorBridge {
 
-		
-
-		
-
 	}
+	
 	
 }

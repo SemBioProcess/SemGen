@@ -144,4 +144,11 @@ public class MappableVariable extends Decimal {
 		model.removeMappableVariable(this);
 		return this;
 	}
+	
+	public void clearInputs() {
+		super.clearInputs();
+		mappedFrom.clear();
+		setPrivateInterfaceValue("");
+		setPublicInterfaceValue("");
+	}
 }

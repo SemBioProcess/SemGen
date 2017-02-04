@@ -241,6 +241,13 @@ public abstract class SemSimCollection extends SemSimObject{
 		return fxnalsubs;
 	}
 	
+	public boolean containsFunctionalSubmodels() {
+		for (Submodel sub : submodels) {
+			if (sub.isFunctional()) return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * @return All {@link SemSimInteger}s in the model.
 	 */

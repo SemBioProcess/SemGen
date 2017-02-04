@@ -23,10 +23,13 @@ public abstract class Extractor {
 	
 	protected void collectDataStructureInputs() {
 		Set<DataStructure> smdatastructures = new HashSet<DataStructure>(this.datastructures.keySet());
+		smdatastructures.addAll(sourcemodel.getSolutionDomains());
 		for (DataStructure smds : smdatastructures) {
 			for (DataStructure input : smds.getComputationInputs()) {
 				if (!smdatastructures.contains(input)) {
-					datastructures.put(input, input.copy());
+					DataStructure newinput = input.copy();
+					newinput.clearInputs();
+					datastructures.put(input, newinput);
 				}
 			}	
 		}
@@ -55,6 +58,7 @@ public abstract class Extractor {
 			dstoadd.addToModel(extraction);
 		}
 		extraction.addSubmodels(submodels.values());
+		
 	}
 	
 	public void addSubModel(Submodel sourceobj) {
