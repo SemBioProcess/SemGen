@@ -71,15 +71,17 @@ function ExtractorTask(graph, stagestate) {
 		var extractionnode = new ExtractedModel(extractor.graph, newextraction);
 		extractor.extractions.push(extractionnode);
 		extractor.nodes[newextraction.id] = extractionnode;
-		extractionnode.setLocation(droploc[0], droploc[1]);
+		if (droploc!=null) {
+			extractionnode.setLocation(droploc[0], droploc[1]);
+		}
 		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
 		extractor.graph.update();
 		extractor.selectNode(extractionnode);
 	}
 	
 	receiver.onLoadExtractions(function(extractions) {
-		for (x in extractor.extractions) {
-			extractor.addExtractionNode(extractor.extractions[x]);
+		for (x in extractions) {
+			extractor.addExtractionNode(extractions[x]);
 		}
 	});
 	
@@ -132,6 +134,7 @@ ExtractorTask.prototype.onInitialize = function() {
 	extractor.state.models.forEach(function(model) {	
 		extractor.sourcemodel = extractor.addModelNode(model, []);
 	});
+	sender.requestExtractions();
 }
 
 ExtractorTask.prototype.onMinimize = function() {

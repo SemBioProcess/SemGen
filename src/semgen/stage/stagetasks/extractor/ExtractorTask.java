@@ -75,9 +75,11 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			jstask = jstaskobj;
 			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
 			jstask.setProperty("extractionjs", new ExtractorBridge());
-			if (!taskextractions.isEmpty()) {
+			
+		}
+		
+		public void onRequestExtractions() {
 				_commandSender.loadExtractions(taskextractions);
-			}
 		}
 		
 		public void onNewExtraction(JSArray nodes, String extractname) {
