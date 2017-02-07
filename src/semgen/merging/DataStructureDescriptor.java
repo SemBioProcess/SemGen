@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import org.apache.axis.utils.StringUtils;
 import semgen.SemGen;

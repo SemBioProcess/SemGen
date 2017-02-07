@@ -55,7 +55,7 @@ public abstract class Extractor {
 	
 	protected void buildExtraction() {
 		for (DataStructure dstoadd : datastructures.values()) {
-			dstoadd.addToModel(extraction);
+			dstoadd.addToModel(extraction);			
 		}
 		extraction.addSubmodels(submodels.values());
 		

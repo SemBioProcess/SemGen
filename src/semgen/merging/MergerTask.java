@@ -1,11 +1,11 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.merging.workbench.Merger.ResolutionChoice;
+import semgen.merging.Merger.ResolutionChoice;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;

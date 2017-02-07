@@ -457,9 +457,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		replaceOutputs(dsmap);
 		replaceInputs(dsmap);
 		replaceUsedtoCompute(dsmap);
-		
-
-		
 
 	}
 	

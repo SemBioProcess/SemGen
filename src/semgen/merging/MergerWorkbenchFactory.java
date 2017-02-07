@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import semgen.utilities.WorkbenchFactory;
 import semsim.reading.ModelAccessor;

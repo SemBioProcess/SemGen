@@ -5,6 +5,7 @@ import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
+import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 public class CustomPhysicalProcess extends PhysicalProcess{
@@ -24,6 +25,9 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 	
 	@Override
 	public void addToModel(SemSimModel model) {
+		for (PhysicalEntity entity : this.getParticipants()) {
+			entity.addToModel(model);
+		}
 		model.addCustomPhysicalProcess(this);
 		
 	}

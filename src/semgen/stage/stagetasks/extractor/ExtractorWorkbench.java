@@ -24,7 +24,6 @@ public class ExtractorWorkbench extends Workbench {
 	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		modelaccessorlist.add(accessor);
 		sourcemodel = model;
-		
 	}
 	
 	@Override
@@ -131,6 +130,15 @@ public class ExtractorWorkbench extends Workbench {
 	public void update(Observable arg0, Object arg1) {
 		
 	}
+	
+	public SemSimModel getExtractedModelbyIndex(Integer index) {
+		return this.extractions.get(index);
+	}
+	
+	public ModelAccessor getAccessorbyIndex(Integer index) {
+		return this.modelaccessorlist.get(index);
+	}
+	
 	
 	private class BatchSave {
 		ArrayList<SemSimModel> tobesaved = new ArrayList<SemSimModel>();

@@ -205,7 +205,16 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param cpe The CompositePhysicalEntity to be added.
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
-		return addCompositePhysicalEntity(cpe.getArrayListOfEntities(), cpe.getArrayListOfStructuralRelations());
+		for(CompositePhysicalEntity existingcpe : getCompositePhysicalEntities()){
+			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
+			
+			if(cpe.equals(existingcpe)) return existingcpe;
+		}
+		for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
+			ent.addToModel(this);
+		}
+		this.physicalentities.add(cpe);
+		return cpe;
 	}
 	
 	/**

@@ -90,7 +90,13 @@ function ExtractorTask(graph, stagestate) {
 	});
 	
 	$("#stageModel").click(function() {
-		sender.sendModeltoStage();
+		var extractstostage = [];
+		for (i in extractor.extractions) {
+			if (extractor.extractions[i].selected) {
+				extractstostage.push(extractor.extractions[i].modelindex);
+				}
+			}
+		sender.sendModeltoStage(extractstostage);
 	});
 	
 	$("#minimize").click(function() {

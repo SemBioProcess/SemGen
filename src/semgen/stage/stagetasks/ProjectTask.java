@@ -6,12 +6,9 @@ import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.openjena.atlas.json.JsonObject;
-
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.SearchResultSet;

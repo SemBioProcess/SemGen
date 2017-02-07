@@ -43,15 +43,15 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		return result;
 	}
 	
-	private ArrayList<ExtractionNode> getExtractionsbyIndex(JSArray indicies) {
-		ArrayList<ExtractionNode> nodes = new ArrayList<ExtractionNode>();
-		for (int i = 0; i < indicies.length(); i++) {
-			int index = (int)indicies.get(i).getNumberValue();
-			nodes.add(taskextractions.get(index));
-		}
-		
-		return nodes;
-	}
+//	private ArrayList<ExtractionNode> getExtractionsbyIndex(JSArray indicies) {
+//		ArrayList<ExtractionNode> nodes = new ArrayList<ExtractionNode>();
+//		for (int i = 0; i < indicies.length(); i++) {
+//			int index = (int)indicies.get(i).getNumberValue();
+//			nodes.add(taskextractions.get(index));
+//		}
+//		
+//		return nodes;
+//	}
 	
 
 	
@@ -87,20 +87,28 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			createNewExtraction(jnodes, extractname);
 		}
 		
-		public void onCreateExtractionExclude(String extractname, JSObject model, JSArray nodes) {
+		public void onCreateExtractionExclude(String extractname, JSArray nodes) {
 			//ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 		}
 		
-		public void onRemoveExtraction() {
+		public void onRemoveExtraction(Double extraction) {
 			
 		}
 		
-		public void onRemoveNodesFromExtraction() {
+		public void onRemoveNodesFromExtraction(Double extraction, JSArray nodes) {
 			
 		}
 		
-		public void onAddNodestoExtraction(JSObject extraction, JSArray nodes) {
+		public void onAddNodestoExtraction(Double extraction, JSArray nodes) {
 			
+		}
+		
+		public void onSendModeltoStage(JSArray indicies) {
+			for (int i = 0; i < indicies.length(); i++) {
+				int modelindex = (int)indicies.get(i).getNumberValue();
+				SemSimModel newmodel = workbench.getExtractedModelbyIndex(modelindex).clone();
+				queueModel(new ModelInfo(newmodel, workbench.getAccessorbyIndex(modelindex), modelindex+1));
+			}
 		}
 		
 		public void onClose() {

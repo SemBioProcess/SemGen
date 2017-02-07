@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import java.io.IOException;
 import java.util.ArrayList;
