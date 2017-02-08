@@ -47,6 +47,7 @@ path.mediator {
 
 .dim {
 	opacity: 0.2;
+	transition-delay: 1s;
 }
 
 
