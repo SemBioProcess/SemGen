@@ -18,8 +18,10 @@ body {
 	height:25px;
 	top: 10px;
 	left: 10px;
+	padding-left: 1px;
+	padding-top: 2px;
 	line-height:25px;
-	font-size: 25px;
+	font-size: 15px;
 	border: hidden;
 	border-radius:250px;
 	color:#ffffff;
