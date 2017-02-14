@@ -185,6 +185,7 @@ li.searchResultSet li:hover {
 .panelbutton {
 	width: 100%;
     background-color: #f9f9f9;
+	font-weight: bold;
 }
 
 .panelbutton:disabled {
