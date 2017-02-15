@@ -350,4 +350,16 @@ public abstract class SemSimCollection extends SemSimObject{
 		dataStructures = replacements;
 	}
 
+	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
+		if (dataStructures.contains(replacee)) {
+			dataStructures.set(dataStructures.indexOf(replacer), replacee);
+		}
+		for (DataStructure original : dataStructures) {
+			original.replaceDataStructureReference(replacer, replacee);
+		}
+		for (Submodel sm : submodels) {
+			sm.replaceDataStructure(replacee, replacer);
+		}
+		
+	}
 }

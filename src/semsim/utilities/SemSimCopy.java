@@ -243,7 +243,7 @@ public class SemSimCopy {
 		for (Submodel sm : modeltocopy.getSubmodels()) {
 			Submodel newsm;
 			if (sm.isFunctional()) {
-				FunctionalSubmodel fsm = new FunctionalSubmodel((FunctionalSubmodel)sm);
+				FunctionalSubmodel fsm = new FunctionalSubmodel(sm);
 				if (!compmap.containsKey(fsm.getComputation())) {
 					Computation newcomp = new Computation(fsm.getComputation());
 					compmap.put(fsm.getComputation(), newcomp);

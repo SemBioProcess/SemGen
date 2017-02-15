@@ -26,6 +26,7 @@ function main() {
 	//If a change task request is received from Java
 	this.changeTask = function changeTask(stagestate) {
 		graph.depBehaviors = [];
+		graph.doodads = [];
 		
 		$('#modalContent').empty();
 		
@@ -41,7 +42,7 @@ function main() {
 		}
 		sender.initialized(main.task);
 		this.task.onInitialize();
-		this.graph.setTaskNodes(this.task.nodes);
+		graph.setTaskNodes(this.task.nodes);
 		
 		this.graph.update();
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress

@@ -204,6 +204,9 @@ public class Computation extends ComputationalModelComponent{
 		this.getEvents().remove(event);
 	}
 	
+	public void removeOutput(DataStructure dstoremove) {
+		outputs.remove(dstoremove);
+	}
 	
 	/**
 	 * @return Whether there is a {@link PhysicalDependency} associated with the computation 

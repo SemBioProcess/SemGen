@@ -504,4 +504,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		this.computation.setMathML("");
 		this.setStartValue("");
 	}
+	
+	public void removeOutput(DataStructure dstoremove) {
+		this.computation.removeOutput(dstoremove);
+	}
 }

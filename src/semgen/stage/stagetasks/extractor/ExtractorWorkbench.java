@@ -38,6 +38,15 @@ public class ExtractorWorkbench extends Workbench {
 		
 	}
 
+	public Extractor makeNewExtractionExclude(String name) {
+		SemSimModel extraction = new SemSimModel();
+		extraction.setName(name);
+		extractions.add(extraction);
+		modelaccessorlist.add(null);
+		return new ExtractRemove(sourcemodel, extraction);
+		
+	}
+	
 	public void saveExtractions(ArrayList<Integer> indicies) {
 		saver = new BatchSave(indicies);
 		boolean hasnext = false;

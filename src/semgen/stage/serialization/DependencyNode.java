@@ -55,6 +55,6 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 
 	@Override
 	public void collectforExtraction(Extractor extractor) {
-		extractor.addDependency(sourceobj);
+		extractor.addDataStructure(sourceobj);
 	}
 }

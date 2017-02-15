@@ -53,17 +53,13 @@ body {
 }
 
 #trash {
-	position: absolute;
 	margin: 5px;
-	width:50px;
-	height:50px;
-	bottom: 30px;
-	left: 45px;
 	padding-left: 1px;
-	padding-top: 2px;
+	padding-top: 15px;
 	line-height:25px;
 	font-size: 30px;
-	border: hidden;
+	border: 2px solid;
+	border-radius: 5px;
 	text-align:center;
 	opacity: .8;
 }

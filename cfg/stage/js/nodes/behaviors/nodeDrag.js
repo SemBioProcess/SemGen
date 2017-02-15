@@ -83,6 +83,11 @@ function NodeDrag(_node) {
 			    		behavior(_node);
 					});
 				}
+				else {
+					virtualnodes[0].drag.forEach(function(behavior){
+						behavior(virtualnodes);
+					});
+				}
 				_node.graph.tick();
 		    	
 		    })

@@ -11,7 +11,8 @@ function Graph() {
 	this.h = $(window).height();
 	
 	var visibleNodes = [];
-
+	this.doodads = [];
+	
 	var svg = d3.select("#stage")
 	    .append("svg")	    
 	    .attr("id", "svg")
@@ -131,6 +132,9 @@ function Graph() {
 
 		bruteForceRefresh.call(this);
 
+		for (x in this.doodads) {
+			this.doodads[x].createVisualElement();
+		}
 		// Build the ghost nodes
 	    ghost = vis.selectAll(".ghost")
 	        .data([], function(d) { return d.id; });
@@ -179,6 +183,7 @@ function Graph() {
 		if(refreshing)
 			return;
 
+		$('#doodads').empty();
 		refreshing = true;
 		//Remove all graph objects
 		vis.selectAll("*").remove();

@@ -1,6 +1,8 @@
 package semgen.stage.stagetasks.extractor;
 
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class ExtractNew extends Extractor {
 
@@ -17,6 +19,16 @@ public class ExtractNew extends Extractor {
 		replaceSubmodels();
 		buildExtraction();
 		return extraction;
+	}
+
+	@Override
+	public void addSubmodel(Submodel sourceobj) {
+		addSubmodel(sourceobj);
+	}
+
+	@Override
+	public void addDataStructure(DataStructure sourceobj) {
+		includeDependency(sourceobj);
 	}
 
 }

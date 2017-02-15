@@ -19,6 +19,13 @@ public abstract class Extractor {
 		extraction = extractionmodel;
 	}
 	
+	public Extractor(SemSimModel source) {
+		sourcemodel = source;
+		extraction = new SemSimModel();
+		
+		extraction.setName(sourcemodel.getName());
+	}
+	
 	public abstract SemSimModel run();
 	
 	protected void collectDataStructureInputs() {
@@ -61,17 +68,20 @@ public abstract class Extractor {
 		
 	}
 	
-	public void addSubModel(Submodel sourceobj) {
+	protected void includeSubModel(Submodel sourceobj) {
 		submodels.put(sourceobj, new Submodel(sourceobj));
 		for (Submodel submodel : sourceobj.getSubmodels()) {
-			this.addSubModel(submodel);
+			this.includeSubModel(submodel);
 		}
 		for (DataStructure ds : sourceobj.getAssociatedDataStructures()) {
-			addDependency(ds);
+			includeDependency(ds);
 		}
 	}
 
-	public void addDependency(DataStructure sourceobj) {
+	public abstract void addSubmodel(Submodel sourceobj);
+	public abstract void addDataStructure(DataStructure sourceobj);
+	
+	protected void includeDependency(DataStructure sourceobj) {
 		datastructures.put(sourceobj, sourceobj.copy());
 	}
 }

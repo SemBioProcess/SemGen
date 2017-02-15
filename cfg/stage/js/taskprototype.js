@@ -5,7 +5,6 @@
 function Task(graph, stagestate) {
 	
 	this.graph = graph;
-
 	this.state = stagestate;
 	
 	this.nodes = {};
@@ -13,7 +12,7 @@ function Task(graph, stagestate) {
 	this.selectedNodes = [];
 
 	var task = this;
-	$("#leftSidebar").empty();
+	$('#leftSidebar').empty();
 	
 	this.addModelNode = function(model, optbehaviors) {
 		

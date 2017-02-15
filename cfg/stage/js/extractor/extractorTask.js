@@ -23,8 +23,11 @@ function ExtractorTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
+	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-trash");
+	this.graph.doodads.push(trash);
+	
 	$("#addModelButton, .stageSearch").hide();
-	$("#trash").show();
+	
 	var droploc;
 	
 	var onExtractionAction = function(node) {
@@ -32,6 +35,13 @@ function ExtractorTask(graph, stagestate) {
 		
 		if (extractor.sourcemodel == node.srcnode) return;
 		node.drag.push(function(selections) {
+			if (trash.isOverlappedBy(node, 2.0)) {
+				$("#trash").attr("background", "red");
+			}
+			else {
+				$("#trash").attr("background", "transparent");
+			}
+			
 			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
 				
 			}
@@ -43,7 +53,7 @@ function ExtractorTask(graph, stagestate) {
 			if (extractor.sourcemodel.hullContainsPoint(droploc)) {
 				return;
 			}
-			//trashcan behavior here
+
 			//Check to see if node is inside an extraction
 			for (e in extractor.extractions) {
 				if (extractor.extractions[e].hullContainsPoint(droploc)) {
@@ -59,7 +69,13 @@ function ExtractorTask(graph, stagestate) {
 			for (x in selections) {
 				extractarray.push(selections[x].srcnode);
 			}
-
+			
+			//If the node is dragged to the trash
+			if (trash.isOverlappedBy(node, 2.0)) {
+				sender.createExtractionExclude(extractarray, name);
+				return;
+			}
+			
 			sender.newExtraction(extractarray, name);
 			
 		});
