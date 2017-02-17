@@ -1,8 +1,12 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.HashSet;
+
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 
 public class ExtractNew extends Extractor {
 
@@ -23,12 +27,30 @@ public class ExtractNew extends Extractor {
 
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		addSubmodel(sourceobj);
+		includeSubModel(sourceobj);
 	}
 
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
 		includeDependency(sourceobj);
+	}
+
+	@Override
+	public void addEntity(PhysicalEntity pe) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
+			includeDependency(dstoadd);
+		}
+	}
+
+	@Override
+	public void addProcess(PhysicalProcess proc) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
+			includeDependency(dstoadd);
+		}
+
+		for (PhysicalEntity participant : proc.getParticipants()) {
+			addEntity(participant);
+		}
 	}
 
 }

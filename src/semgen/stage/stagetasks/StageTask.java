@@ -165,12 +165,31 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		return null;
 	}
 	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid) {
+		for (ModelInfo mni : _models) {
+			Node<?> returnnode = mni.modelnode.getPhysioMapNodebyHash(nodehash, nodeid);
+			if (returnnode!=null) return returnnode; 
+		}
+		return null;
+	}
+	
 	//Convert Javascript Node objects to Java Node objects
 	public ArrayList<Node<?>> convertJSStageNodestoJava(JSArray nodearray) {
 		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
 		for (int i = 0; i < nodearray.length(); i++) {
 			JSObject val = nodearray.get(i).asObject();
 			javanodes.add(getNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue()));
+		}
+		return javanodes;
+	}
+	
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStagePhysioNodestoJava(JSArray nodearray) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getPhysioMapNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue()));
 		}
 		return javanodes;
 	}

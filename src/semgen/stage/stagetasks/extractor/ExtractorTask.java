@@ -33,7 +33,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		
 		taskextractions.add(extraction);
 		_commandSender.newExtraction(extraction);
-	}
+	}	
 	
 	public void createNewExtractionExcluding(ArrayList<Node<?>> nodestoexclude, String extractname) {
 		Extractor extractor = workbench.makeNewExtractionExclude(extractname);
@@ -52,18 +52,6 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		SemSimModel result = extractor.run();
 		return result;
 	}
-	
-//	private ArrayList<ExtractionNode> getExtractionsbyIndex(JSArray indicies) {
-//		ArrayList<ExtractionNode> nodes = new ArrayList<ExtractionNode>();
-//		for (int i = 0; i < indicies.length(); i++) {
-//			int index = (int)indicies.get(i).getNumberValue();
-//			nodes.add(taskextractions.get(index));
-//		}
-//		
-//		return nodes;
-//	}
-	
-
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -97,7 +85,17 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			createNewExtraction(jnodes, extractname);
 		}
 		
+		public void onNewPhysioExtraction(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
+			createNewExtraction(jnodes, extractname);
+		}
+		
 		public void onCreateExtractionExclude(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtractionExcluding(jnodes, extractname);
+		}
+		
+		public void onCreatePhysioExtractionExclude(JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 			createNewExtractionExcluding(jnodes, extractname);
 		}

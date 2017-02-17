@@ -6,6 +6,8 @@ import java.util.Set;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 
 public class ExtractAdd extends Extractor {
 	protected Set<DataStructure> dsstoadd = new HashSet<DataStructure>();
@@ -36,6 +38,24 @@ public class ExtractAdd extends Extractor {
 		}
 		for (Submodel sm : sourcemodel.getSubmodels()) {
 			this.includeSubModel(sm);
+		}
+	}
+	
+	@Override
+	public void addEntity(PhysicalEntity pe) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
+			includeDependency(dstoadd);
+		}
+	}
+
+	@Override
+	public void addProcess(PhysicalProcess proc) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
+			includeDependency(dstoadd);
+		}
+
+		for (PhysicalEntity participant : proc.getParticipants()) {
+			addEntity(participant);
 		}
 	}
 	

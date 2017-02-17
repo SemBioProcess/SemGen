@@ -94,6 +94,9 @@ public class Submodel extends SemSimCollection implements Importable {
 		return singularterm.getPhysicalDefinitionURI();
 	}
 	
+	public Submodel clone() {
+		return new Submodel(this);
+	}
 	
 	public ReferenceTerm getReferenceTerm() {
 		return singularterm;

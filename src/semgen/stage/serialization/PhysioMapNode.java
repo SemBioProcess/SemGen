@@ -1,8 +1,8 @@
 package semgen.stage.serialization;
 
+import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.PhysicalEntity;
 
 public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 
@@ -11,18 +11,21 @@ public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 		typeIndex = PROCESS;
 	}
 	
-	public void addSourceLink(LinkableNode<PhysicalEntity> source) {
+	public void addSourceLink(PhysioMapEntityNode source) {
 		inputs.add(new Link(this, source));
 	}
 	
-	public void addSinkLink(LinkableNode<PhysicalEntity> sink) {
+	public void addSinkLink(PhysioMapEntityNode sink) {
 		inputs.add(new Link(sink, this));
 	}
 
-	public void addMediatorLink(LinkableNode<PhysicalEntity> mediator) {
+	public void addMediatorLink(PhysioMapEntityNode mediator) {
 		inputs.add(new Link(this, mediator, Node.MEDIATOR));
 	}
 	
-
+	@Override
+	public void collectforExtraction(Extractor extractor) {
+		extractor.addProcess(sourceobj);
+	}
 	
 }

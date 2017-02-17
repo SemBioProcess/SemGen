@@ -117,6 +117,10 @@ public class FunctionalSubmodel extends Submodel {
 		}
 	}
 	
+	public FunctionalSubmodel clone() {
+		return new FunctionalSubmodel(this);
+	}
+	
 	@Override
 	public boolean isFunctional(){
 		return true;

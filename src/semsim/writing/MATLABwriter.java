@@ -131,8 +131,8 @@ public class MATLABwriter extends ModelWriter{
 				
 				// Otherwise, if the data structure's value comes from a component-to-component mapping ala CellML models,
 				// make the RHS just the name of the source data structure
-				else if(mv.getMappedFrom().size()>0)
-					formula = mv.getMappedFrom().toArray(new MappableVariable[]{})[0].getName();
+				else if(mv.getMappedFrom()!=null)
+					formula = mv.getMappedFrom().getName();
 			}
 			
 			// If we've got a formula, store it in lookup table, otherwise we assume 

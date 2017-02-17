@@ -362,4 +362,6 @@ public abstract class SemSimCollection extends SemSimObject{
 		}
 		
 	}
+	
+	public abstract SemSimCollection clone();
 }

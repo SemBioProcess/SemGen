@@ -11,15 +11,25 @@ import com.google.gson.annotations.Expose;
 
 public class PhysioMap {
 	@Expose public ArrayList<PhysioMapNode> processes = new ArrayList<PhysioMapNode>();
-	@Expose public ArrayList<LinkableNode<PhysicalEntity>> entities = new ArrayList<LinkableNode<PhysicalEntity>>();
+	@Expose public ArrayList<PhysioMapEntityNode> entities = new ArrayList<PhysioMapEntityNode>();
 	
 	
 	public PhysioMap(ModelNode model) {
 		new PhysiomapFactory(model);
 	}
 	
+	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid) {
+		for (PhysioMapNode proc : processes) {
+			if (proc.isJavaScriptNode(nodehash, nodeid)) return proc;
+		}
+		for (LinkableNode<PhysicalEntity> entity : entities) {
+			if (entity.isJavaScriptNode(nodehash, nodeid)) return entity;
+		}
+		return null;
+	}
+	
 	private class PhysiomapFactory {
-		private HashMap<PhysicalEntity, LinkableNode<PhysicalEntity>> nodeMap = new HashMap<PhysicalEntity, LinkableNode<PhysicalEntity>>();
+		private HashMap<PhysicalEntity, PhysioMapEntityNode> nodeMap = new HashMap<PhysicalEntity, PhysioMapEntityNode>();
 		private ModelNode model;
 		
 		public PhysiomapFactory(ModelNode mod) {
@@ -63,10 +73,10 @@ public class PhysioMap {
 		}
 		
 		
-		private LinkableNode<PhysicalEntity> getParticipantNode(PhysicalEntity cpe) {
-			LinkableNode<PhysicalEntity> cpenode = nodeMap.get(cpe);
+		private PhysioMapEntityNode getParticipantNode(PhysicalEntity cpe) {
+			PhysioMapEntityNode cpenode = nodeMap.get(cpe);
 			if (cpenode==null) {
-				cpenode = new LinkableNode<PhysicalEntity>(cpe, model, Node.ENTITY);
+				cpenode = new PhysioMapEntityNode(cpe, model);
 				nodeMap.put(cpe, cpenode);
 			}
 			return cpenode;

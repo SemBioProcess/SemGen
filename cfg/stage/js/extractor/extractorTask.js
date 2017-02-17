@@ -72,12 +72,20 @@ function ExtractorTask(graph, stagestate) {
 			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
-				sender.createExtractionExclude(extractarray, name);
+				if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+					sender.createPhysioExtractionExclude(extractarray, name);
+				}
+				else {
+					sender.createExtractionExclude(extractarray, name);
+				}
 				return;
 			}
-			
-			sender.newExtraction(extractarray, name);
-			
+			if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+				sender.newPhysioExtraction(extractarray, name);
+			}
+			else {
+				sender.newExtraction(extractarray, name);
+			}
 		});
 	}
 

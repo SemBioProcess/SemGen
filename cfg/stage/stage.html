@@ -328,6 +328,16 @@
 						<li><button id="quitExtractorBtn" type="button" class="panelbutton">Close Extractor</button></li>
 					</ul>
 				</div>
+				<div class="panel subpanel" id="modeloptions">
+						<ul class='menulist'> 
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(0, true);});'>
+								Submodels</button></li>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(1, true);});'>
+								Dependencies</button></li>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(2, true);});'>
+								PhysioMap</button></li> 
+						</ul>
+				</div>
 			</div>
 		</template> 
 

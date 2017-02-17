@@ -884,7 +884,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 
 	public void removeDataStructurebyName(String dsname) {
-		getAssociatedDataStructure(dsname).removeFromModel(this);
+		if (this.containsDataStructure(dsname)) {
+			getAssociatedDataStructure(dsname).removeFromModel(this);
+		}
 	}
 	
 	/**
@@ -904,13 +906,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	public void removeMappableVariable(MappableVariable mapv) {
 		// Remove mappings to the data structure
-		for(MappableVariable fromv: mapv.getMappedFrom()){
-			fromv.getMappedTo().remove(mapv);
-		}
-		
+		mapv.getMappedFrom().setMappedTo(null);
+
 		// Remove mappings from the data structure
 		for(MappableVariable tov : mapv.getMappedTo()){
-			tov.getMappedFrom().remove(mapv);
+			tov.setMappedFrom(null);
 		}
 		
 		FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);

@@ -94,12 +94,13 @@ public class SemSimUtil {
 					while( ! sourcefound){		
 						
 						tempmv = sourcemv;
-						sourcemv = tempmv.getMappedFrom().toArray(new MappableVariable[]{})[0]; //TODO: should getMappedFrom() just return a single DS (or null if not mapped from)?
-						
-						//Remove the computational dependency between source and input var
-						sourcemv.getUsedToCompute().remove(tempmv); // remove mapping link because we are flattening
-						
-						if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
+						sourcemv = tempmv.getMappedFrom();
+						if (sourcemv!=null) {
+							//Remove the computational dependency between source and input var
+							sourcemv.getUsedToCompute().remove(tempmv); // remove mapping link because we are flattening
+							
+							if( ! sourcemv.isFunctionalSubmodelInput()) sourcefound = true;
+						}
 					}
 					
 					String sourcevarglobalname = sourcemv.getName();
@@ -161,7 +162,7 @@ public class SemSimUtil {
 				mv.setPrivateInterfaceValue("");
 					
 					// Clear mappings
-				mv.getMappedFrom().clear();
+				mv.setMappedFrom(null);
 				mv.getMappedTo().clear();
 			}
 		}
@@ -415,7 +416,9 @@ public class SemSimUtil {
 		// If the DataStructure is a mapped variable, include the mappings
 		if(outputds instanceof MappableVariable){
 			MappableVariable mv = (MappableVariable)outputds;
-			allinputs.addAll(mv.getMappedFrom());
+			if (mv.getMappedFrom()!=null) {
+				allinputs.add(mv.getMappedFrom());
+			}
 		}
 		
 		// Assert all the inputs

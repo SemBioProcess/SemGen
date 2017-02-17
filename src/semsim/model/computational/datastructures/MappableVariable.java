@@ -20,7 +20,7 @@ public class MappableVariable extends Decimal {
 	private String privateInterfaceValue = new String("");
 	private String CellMLinitialValue = new String("");
 	private Set<MappableVariable> mappedTo = new HashSet<MappableVariable>();
-	private Set<MappableVariable> mappedFrom = new HashSet<MappableVariable>();
+	private MappableVariable mappedFrom = null;
 	
 	public MappableVariable(String name) {
 		super(name);
@@ -32,15 +32,20 @@ public class MappableVariable extends Decimal {
 		privateInterfaceValue = new String(mvtocopy.privateInterfaceValue);
 		CellMLinitialValue = new String(mvtocopy.CellMLinitialValue);
 		mappedTo.addAll(mvtocopy.mappedTo);
-		mappedFrom.addAll(mvtocopy.mappedFrom);
+		mappedFrom = mvtocopy.mappedFrom;
+	}
+	
+	public MappableVariable(Decimal dstoconvert) {
+		super(dstoconvert);
+
 	}
 	
 	/** Adds a mapping between this variable and another
 	 * @param var The MappableVariable to which this one is mapped */
 	public void addVariableMappingTo(MappableVariable var){
 		getMappedTo().add(var);
-		if(!var.getMappedFrom().contains(this))
-			var.getMappedFrom().add(this);
+		if(var.getMappedFrom()!=this)
+			var.setMappedFrom(this);
 	}
 
 	/**
@@ -105,19 +110,19 @@ public class MappableVariable extends Decimal {
 
 	/** @return The set of MappableVariables from which this variable is mapped.
 	 * In other words, the set of variables that determine this variable's value.*/
-	public Set<MappableVariable> getMappedFrom() {
+	public MappableVariable getMappedFrom() {
 		return mappedFrom;
 	}
 	
 	public void setMappedTo(Set<MappableVariable> to) {
 		mappedTo = to;
 	}
-	public void setMappedFrom(Set<MappableVariable> from) {
+	public void setMappedFrom(MappableVariable from) {
 		mappedFrom = from;
 	}
 	
 	public boolean isMapped() {
-		return !getMappedTo().isEmpty() || !getMappedFrom().isEmpty(); 
+		return !getMappedTo().isEmpty() || getMappedFrom()!=null; 
 	}
 	
 	@Override
@@ -131,12 +136,15 @@ public class MappableVariable extends Decimal {
 		return new MappableVariable(this);
 	}
 
-	public void replaceDataStructureReference(DataStructure replacer, DataStructure replacee) {
+	public void replaceDataStructureReference(MappableVariable replacer, MappableVariable replacee) {
 		super.replaceDataStructureReference(replacer, replacee);
 		
-		if (this.mappedFrom.contains(replacee)) {
-			mappedFrom.remove(replacee);
-			mappedTo.add((MappableVariable) replacer);
+		if (this.mappedFrom == replacee) {
+			mappedFrom = replacer;
+		}
+		
+		if (this.mappedTo.remove(replacee)) {
+			mappedTo.add(replacer);
 		}
 	}
 	
@@ -147,7 +155,7 @@ public class MappableVariable extends Decimal {
 	
 	public void clearInputs() {
 		super.clearInputs();
-		mappedFrom.clear();
+		mappedFrom = null;
 		setPrivateInterfaceValue("");
 		setPublicInterfaceValue("");
 	}

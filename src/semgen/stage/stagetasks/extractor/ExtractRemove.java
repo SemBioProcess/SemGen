@@ -6,6 +6,8 @@ import java.util.Set;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 
 public class ExtractRemove extends Extractor {
 	protected Set<DataStructure> dsstoremove = new HashSet<DataStructure>();
@@ -37,7 +39,6 @@ public class ExtractRemove extends Extractor {
 			smstokeep.remove(smtoremove);
 			for (DataStructure smds : smtoremove.getAssociatedDataStructures()) {
 				dsstoremove.add(smds);
-				
 			}
 		}
 		
@@ -45,8 +46,7 @@ public class ExtractRemove extends Extractor {
 			this.includeSubModel(smtokeep);
 		}
 		
-		Set<DataStructure> dsstokeep = new HashSet<DataStructure>(sourcemodel.getAssociatedDataStructures());
-		
+		Set<DataStructure> dsstokeep = new HashSet<DataStructure>(sourcemodel.getAssociatedDataStructures());	
 		for (DataStructure dstoremove : dsstoremove) {
 			dsstokeep.remove(dstoremove);
 		
@@ -82,4 +82,21 @@ public class ExtractRemove extends Extractor {
 		dsstoremove.add(sourceobj);
 	}
 
+	@Override
+	public void addEntity(PhysicalEntity pe) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
+			addDataStructure(dstoadd);
+		}
+	}
+
+	@Override
+	public void addProcess(PhysicalProcess proc) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
+			addDataStructure(dstoadd);
+		}
+
+		for (PhysicalEntity participant : proc.getParticipants()) {
+			addEntity(participant);
+		}
+	}
 }

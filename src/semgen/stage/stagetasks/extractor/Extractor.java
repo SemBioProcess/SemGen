@@ -7,6 +7,9 @@ import java.util.Set;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 
 public abstract class Extractor {
 	protected SemSimModel sourcemodel;
@@ -65,11 +68,10 @@ public abstract class Extractor {
 			dstoadd.addToModel(extraction);			
 		}
 		extraction.addSubmodels(submodels.values());
-		
 	}
 	
 	protected void includeSubModel(Submodel sourceobj) {
-		submodels.put(sourceobj, new Submodel(sourceobj));
+		submodels.put(sourceobj, sourceobj.clone());
 		for (Submodel submodel : sourceobj.getSubmodels()) {
 			this.includeSubModel(submodel);
 		}
@@ -77,7 +79,24 @@ public abstract class Extractor {
 			includeDependency(ds);
 		}
 	}
+	
+	protected HashSet<DataStructure> gatherDatastructureswithPhysicalComponent(PhysicalModelComponent pmc) {
+		HashSet<DataStructure> dsswithpmc = new HashSet<DataStructure>();
+		
+		for (DataStructure ds : sourcemodel.getAssociatedDataStructures()) {
+			if (ds.getAssociatedPhysicalModelComponent()==null) continue;
+			if (ds.getAssociatedPhysicalModelComponent().equals(pmc)) {
+				dsswithpmc.add(ds);
+			}
+		}
+		
+		return dsswithpmc;
+	}
+	
+	public abstract void addEntity(PhysicalEntity pe);
 
+	public abstract void addProcess(PhysicalProcess proc);
+	
 	public abstract void addSubmodel(Submodel sourceobj);
 	public abstract void addDataStructure(DataStructure sourceobj);
 	
