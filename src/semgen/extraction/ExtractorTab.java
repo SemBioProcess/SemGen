@@ -487,8 +487,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 			if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(ds)) 
 				workbench.getExtraction().addDataStructureToExtraction(ds, false);
 		}
-		// Make sure all the state variable derivative terms are included, include their inputs
-		processStateVariables();
 		
 		return workbench.getExtraction();
 	}
@@ -516,36 +514,6 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 				}
 			}
 		}
-	}
-	
-	
-
-	public void processStateVariables() {
-		Map<DataStructure, Boolean> tempmap = new HashMap<DataStructure, Boolean>();
-		for(DataStructure ds : workbench.getExtraction().getDataStructuresToExtract().keySet()){
-			
-			if(ds.hasSolutionDomain()){
-				
-				if(ds.hasStartValue() && workbench.getExtraction().getDataStructuresToExtract().get(ds)
-						&& semsimmodel.getAssociatedDataStructure(ds.getName() + ":" + ds.getSolutionDomain().getName())!=null){
-					
-					tempmap.put(ds, true);
-					
-					// Assumes that all inputs to the state variable are derivatives with respect to some solution domain
-					// This is the way the SemSim model is structured, but is different from what is in the XMML
-					for(DataStructure inds : ds.getComputationInputs()){
-						tempmap.put(inds, true);
-						
-						// Preserve the inputs to the derivative term. If not already preserved, make them static inputs
-						for(DataStructure ininds : inds.getComputationInputs())
-							
-							if (! workbench.getExtraction().getDataStructuresToExtract().containsKey(ininds))
-								tempmap.put(ininds, false);
-					}
-				}
-			}
-		}
-		workbench.getExtraction().getDataStructuresToExtract().putAll(tempmap);
 	}
 	
 	
