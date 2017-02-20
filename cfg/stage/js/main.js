@@ -29,6 +29,8 @@ function main() {
 		graph.doodads = [];
 		
 		$('#modalContent').empty();
+		$("#addModel").off("click");
+		$("#addModelButton").off("click");
 		
 		var taskname = stagestate.tasktype;
 		if (taskname=="proj") {

@@ -7,6 +7,7 @@ function Stage(graph, stagestate) {
 	var stage = this;
 	var nodes = this.nodes;
 	this.taskindex = 0;
+	this.ranid = Math.random();
 	
 	stage.graph.depBehaviors = [];
 	stage.graph.ghostBehaviors = [];
@@ -59,11 +60,13 @@ function Stage(graph, stagestate) {
 	});
 
 	$("#addModelButton").click(function() {
-		sender.addModel();
+		event.stopPropagation();
+		sender.addModel(stage.ranid);
 	});
 
 	$("#addModel").click(function() {
-		sender.addModel();
+		event.stopPropagation();
+		sender.addModel(stage.ranid);
 	});
 
 	// When you mouseover the search element show the search box and results
