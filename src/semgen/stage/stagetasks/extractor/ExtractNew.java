@@ -1,7 +1,5 @@
 package semgen.stage.stagetasks.extractor;
 
-import java.util.HashSet;
-
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;

@@ -23,12 +23,36 @@ function ExtractorTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
-	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-trash");
+	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
 	this.graph.doodads.push(trash);
 	
 	$("#addModelButton, .stageSearch").hide();
 	
 	var droploc;
+	
+	var isExtractionNode = function(node) {
+		for (x in extractor.extractions) {
+			if (extractor.extractions[x] == node) return true;
+		}
+		return false;
+	}
+	
+	var isPartofExtraction = function(node) {
+		for (x in extractor.extractions) {
+			if (extractor.extractions[x] == node.getRootParent()) return true;
+		}
+		return false;
+	}
+	
+	var promptForExtractionName = function() {
+		var name = prompt("Enter name for extraction.", "");
+		if (extractor.sourcemodel.name==name) name = promptForExtractionName();
+		for (x in extractor.extractions) {
+			if (extractor.extractions[x].name==name) return promptForExtractionName();
+		}
+		
+		return name;
+	}
 	
 	var onExtractionAction = function(node) {
 		//Don't add any extraction actions to the source model node.
@@ -36,33 +60,55 @@ function ExtractorTask(graph, stagestate) {
 		if (extractor.sourcemodel == node.srcnode) return;
 		node.drag.push(function(selections) {
 			if (trash.isOverlappedBy(node, 2.0)) {
-				$("#trash").attr("background", "red");
+				$("#trash").attr("color", "red");
 			}
 			else {
-				$("#trash").attr("background", "transparent");
+				$("#trash").attr("color", "transparent");
 			}
 			
 			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
-				
+				extractor.sourcemodel.rootElement.select(".hull").style("stroke","red");
+			}
+			else {
+				extractor.sourcemodel.rootElement.select(".hull").style("stroke", extractor.sourcemodel.nodeType.color);
+			}
+			
+			for (x in extractor.extractions) {
+				var extraction = extractor.extractions[x];
+				if (extraction.hullContainsPoint([node.xpos(), node.ypos()])) {
+					extraction.rootElement.select(".hull").style("stroke","goldenrod");
+					break;
+				}
+				else {
+					extraction.rootElement.select(".hull").style("stroke", extraction.nodeType.color);
+				}
 			}
 		});
 		
 		node.dragEnd.push(function(selections) {
 			extractor.graph.shiftIsPressed = false;
 			droploc = [node.xpos(), node.ypos()];
+			
+			//Reset hull colors
+			for (x in extractor.extractions) {
+				extractor.extractions[x].rootElement.select(".hull").style("fill", extractor.extractions[x].nodeType.color);
+			}
+			extractor.sourcemodel.rootElement.select(".hull").style("fill", extractor.sourcemodel.nodeType.color);
+			
 			if (extractor.sourcemodel.hullContainsPoint(droploc)) {
 				return;
 			}
 
-			//Check to see if node is inside an extraction
+			//Check to see if node is inside an extraction hull
 			for (e in extractor.extractions) {
 				if (extractor.extractions[e].hullContainsPoint(droploc)) {
-					sender.addNodestoExtraction(extractions[e], extractarray);
+					sender.addNodestoExtraction(extractor.extractions[e], extractarray);
 					return;
 				}
 			}
+			
 			//If it's dropped in empty space, create a new extraction
-			var name = prompt("Enter name for extraction.", ""),
+			var name = promptForExtractionName(),
 				extractarray = [];
 			//Don't create extraction if user cancels
 			if (name==null) return;
@@ -72,14 +118,16 @@ function ExtractorTask(graph, stagestate) {
 			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
-				if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-					sender.createPhysioExtractionExclude(extractarray, name);
-				}
-				else {
-					sender.createExtractionExclude(extractarray, name);
-				}
-				return;
+				
+					if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+						sender.createPhysioExtractionExclude(extractarray, name);
+					}
+					else {
+						sender.createExtractionExclude(extractarray, name);
+					}
+					return;
 			}
+			//If dragged to empty space, create a new extraction with the selected nodes
 			if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
 				sender.newPhysioExtraction(extractarray, name);
 			}
@@ -118,8 +166,8 @@ function ExtractorTask(graph, stagestate) {
 		for (i in extractor.extractions) {
 			if (extractor.extractions[i].selected) {
 				extractstostage.push(extractor.extractions[i].modelindex);
-				}
 			}
+		}
 		sender.sendModeltoStage(extractstostage);
 	});
 	
