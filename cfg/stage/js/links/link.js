@@ -1,7 +1,7 @@
 /**
  * Represents a link in the d3 graph
  */
-function Link(graph, srclink, output, input, length, fade) {
+function Link(graph, srclink, output, input, length, fade, interSubmodelLink) {
 	if(!graph)
 		return;
 
@@ -17,6 +17,7 @@ function Link(graph, srclink, output, input, length, fade) {
 	this.userCanHide = false;
 	this.linkType = NodeTypeArray[srclink.linkType];
 	this.fade = fade;
+	this.inter = interSubmodelLink;
 
 	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 3;
 	
@@ -73,13 +74,18 @@ Link.prototype.createVisualElement = function (element, graph) {
 	this.rootElement.append("svg:path")
 			.attr("class", "link");
 	
-	//Check if link is intra-submodel
+	//Check if link is inter-submodel
 	if (this.srclink.linklevel != 0) {
 		if(this.source.nodeType.id == 1 || this.target.nodeType.id == 1) {
 			this.rootElement.select("path")
-				.attr("class", "link intra");
+				.attr("class", "link interSub");
 		}
 	}
+	if (this.inter) {
+        this.rootElement.select("path")
+            .attr("class", "link interSub");
+	}
+
 	//Intermodel link
 	if (this.srclink.linklevel == 2) {
 		this.rootElement.select("path")
@@ -98,7 +104,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 	
 	if (this.linkType == NodeType.MEDIATOR) {
 		this.rootElement.select("path")
-			.attr("class", "mediator");
+			.attr("class", "link mediator");
 	}
 	if (this.fade) {
 		this.rootElement.attr("opacity", "0.5");

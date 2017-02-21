@@ -129,39 +129,45 @@ Node.prototype.createVisualElement = function (element, graph) {
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
 
-	if(this.nodeType != NodeType.NULLNODE) {
-	
-		var circleSelection = this.rootElement.append("circle")
-											.attr("r", this.r)
-	
-											.attr("class","nodeStrokeClass")
-											.on("mouseover", function (d) {
-												graph.highlightMode(d);
-											})
-											.on("mouseout", function () {
-												graph.highlightMode(null);
-											});
+    var circleSelection = this.rootElement.append("circle")
+        .attr("r", this.r)
+
+        .attr("class","nodeStrokeClass")
+        .on("mouseover", function (d) {
+            graph.highlightMode(d);
+        })
+        .on("mouseout", function () {
+            graph.highlightMode(null);
+        });
 
 
-        circleSelection.attr("stroke", "black")
-            .attr("stroke-width", 0.5);
+    circleSelection.attr("stroke", "black")
+        .attr("stroke-width", 0.5);
 
-		this.rootElement.on("click", function (node) {
-			node.onClick();
-		});
+    this.rootElement.on("click", function (node) {
+        node.onClick();
+    });
 
-		//Append highlight circle
-		this.rootElement.append("circle")
-			.attr("class", "highlight")
-			.attr("r", this.r + 4)
-			.attr("stroke", "#fdc751")
-			.attr("stroke-width", "4");
-	
-		//Create the text elements
-		this.createTextElement("shadow");
-		this.createTextElement("real");
-		
-	}
+    //Append highlight circle
+    this.rootElement.append("circle")
+        .attr("class", "highlight")
+        .attr("r", this.r + 4)
+        .attr("stroke", "#fdc751")
+        .attr("stroke-width", "4");
+
+    if(this.nodeType == NodeType.NULLNODE) {
+        this.rootElement.append("svg:line")
+            .attr("x1", this.r)
+            .attr("x2", -this.r)
+            .attr("y1", -this.r)
+            .attr("y2", this.r)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1);
+    } else {
+        //Create the text elements, but not for Null Nodes
+        this.createTextElement("shadow");
+        this.createTextElement("real");
+    }
 
 	this.rootElement.attr("transform", "translate(" + node.xpos() + "," + node.ypos() + ")");
 	$(this).triggerHandler('createVisualization', [this.rootElement]);

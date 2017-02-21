@@ -73,6 +73,17 @@
 	margin: 0 0 0 5px;
 }
 
+#d3opts li {
+	margin: 0 0 10px 0;
+}
+
+#d3opts input[type="number"] {
+	width: 50px;
+	height: 20px;
+	position: absolute;
+	right: 10px;
+}
+
 #nodemenu {
 	font-size: 12px;
 }

@@ -8,6 +8,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 import com.google.gson.annotations.Expose;
+import semsim.model.physical.object.CustomPhysicalEntity;
 
 public class PhysioMap {
 	@Expose public ArrayList<PhysioMapNode> processes = new ArrayList<PhysioMapNode>();
@@ -48,17 +49,32 @@ public class PhysioMap {
 		}
 		
 		private PhysioMapNode makePhysioMapNode(PhysicalProcess proc){
+			boolean hasSource = !proc.getSourcePhysicalEntities().isEmpty();
+			boolean hasSink = !proc.getSinkPhysicalEntities().isEmpty();
+//			Don't add processes that doesn't have associated physical property
+//			boolean hasPhysicalProperty = proc.?();
+
 			PhysioMapNode pmnode = new PhysioMapNode(proc, model);
-			for (PhysicalEntity part : proc.getSourcePhysicalEntities()) {
-				pmnode.addSourceLink(getParticipantNode(part));
+			if(!hasSource && hasSink) {
+				pmnode.addSourceLink(getNullNode(proc, "source"));
+			} else {
+				for (PhysicalEntity part : proc.getSourcePhysicalEntities()) {
+					pmnode.addSourceLink(getParticipantNode(part));
+				}
 			}
-			for (PhysicalEntity part : proc.getSinkPhysicalEntities()) {
-				pmnode.addSinkLink(getParticipantNode(part));
+
+			if(!hasSink && hasSource) {
+				pmnode.addSinkLink(getNullNode(proc, "sink"));
+			} else {
+				for (PhysicalEntity part : proc.getSinkPhysicalEntities()) {
+					pmnode.addSinkLink(getParticipantNode(part));
+				}
 			}
+
 			for (PhysicalEntity part : proc.getMediatorPhysicalEntities()) {
 				pmnode.addMediatorLink(getParticipantNode(part));
 			}
-			
+
 			return pmnode;
 		}
 		
@@ -70,6 +86,13 @@ public class PhysioMap {
 				nodeMap.put(cpe, cpenode);
 			}
 			return cpenode;
+		}
+
+		private LinkableNode<PhysicalEntity> getNullNode(PhysicalProcess proc, String sinkOrSource) {
+			PhysicalEntity cpe = new CustomPhysicalEntity("Null " + proc.getName() + sinkOrSource, "Null PhysioMap node");
+			LinkableNode<PhysicalEntity> nullNode = new LinkableNode<PhysicalEntity>(cpe, model, Node.NULL);
+			nodeMap.put(cpe, nullNode);
+			return nullNode;
 		}
 
 	}
