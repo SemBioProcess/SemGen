@@ -81,7 +81,9 @@ public class AnnotationCopier {
 	public static Set<MappableVariable> getAllMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
 		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();
 		allmappedvars.addAll(ds.getMappedTo());
-		allmappedvars.addAll(ds.getMappedFrom());
+		if (ds.getMappedFrom()!=null) {
+			allmappedvars.add(ds.getMappedFrom());
+		}
 		
 		Set<MappableVariable> returnset = runningset;
 		
@@ -100,7 +102,9 @@ public class AnnotationCopier {
 	public static Set<MappableVariable> getAllLocallyMappedVariables(MappableVariable rootds, MappableVariable ds, Set<MappableVariable> runningset){		
 		Set<MappableVariable> allmappedvars  = new HashSet<MappableVariable>();
 		allmappedvars.addAll(ds.getMappedTo());
-		allmappedvars.addAll(ds.getMappedFrom());
+		if (ds.getMappedFrom()!=null) {
+			allmappedvars.add(ds.getMappedFrom());
+		}
 		
 		Set<MappableVariable> returnset = runningset;
 

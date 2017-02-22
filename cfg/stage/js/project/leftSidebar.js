@@ -66,7 +66,7 @@ function LeftSidebar(graph) {
 				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
 					"{ model.createVisualization(0, true);});'>Submodels</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(1, true);});'>Dependencies</buttona></li>" +
+					"{ model.createVisualization(1, true);});'>Dependencies</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
 					"{ model.createVisualization(2, true);});'>PhysioMap</button></li>" +
 			"</ul>"

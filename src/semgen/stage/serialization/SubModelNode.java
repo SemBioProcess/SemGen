@@ -27,7 +27,7 @@ public class SubModelNode extends ParentNode<Submodel> {
 
 	@Override
 	public void collectforExtraction(Extractor extractor) {
-		extractor.addSubModel(sourceobj);
+		extractor.addSubmodel(sourceobj);
 	}
 
 }

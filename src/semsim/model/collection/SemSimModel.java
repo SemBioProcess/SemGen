@@ -205,7 +205,16 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param cpe The CompositePhysicalEntity to be added.
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
-		return addCompositePhysicalEntity(cpe.getArrayListOfEntities(), cpe.getArrayListOfStructuralRelations());
+		for(CompositePhysicalEntity existingcpe : getCompositePhysicalEntities()){
+			// If there's already an equivalent CompositePhysicalEntity in the model, return it and don't do anything else.
+			
+			if(cpe.equals(existingcpe)) return existingcpe;
+		}
+		for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
+			ent.addToModel(this);
+		}
+		this.physicalentities.add(cpe);
+		return cpe;
 	}
 	
 	/**
@@ -875,7 +884,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 
 	public void removeDataStructurebyName(String dsname) {
-		getAssociatedDataStructure(dsname).removeFromModel(this);
+		if (this.containsDataStructure(dsname)) {
+			getAssociatedDataStructure(dsname).removeFromModel(this);
+		}
 	}
 	
 	/**
@@ -895,13 +906,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	public void removeMappableVariable(MappableVariable mapv) {
 		// Remove mappings to the data structure
-		for(MappableVariable fromv: mapv.getMappedFrom()){
-			fromv.getMappedTo().remove(mapv);
-		}
-		
+		mapv.getMappedFrom().setMappedTo(null);
+
 		// Remove mappings from the data structure
 		for(MappableVariable tov : mapv.getMappedTo()){
-			tov.getMappedFrom().remove(mapv);
+			tov.setMappedFrom(null);
 		}
 		
 		FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);

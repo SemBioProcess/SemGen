@@ -271,6 +271,11 @@ Node.prototype.globalApplyUntilTrue = function (funct) {
 	return funct(this);
 }
 
+//Get this node's root parent or return this node if this is the root.
+Node.prototype.getRootParent = function() {
+	if (this.parent==null) return this;
+	return this.parent.getRootParent();
+}
 
 Node.prototype.applytoChildren = function(funct) {}
 

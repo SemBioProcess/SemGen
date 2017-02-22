@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,8 +62,8 @@ public class Merger {
 		
 		// If one of the models contains functional submodels and the other doesn't,
 		 // flatten the one 
-		 boolean fxnalsubsinmodel1 = ssm1clone.getFunctionalSubmodels().size() > 0;
-		 boolean fxnalsubsinmodel2 = ssm2clone.getFunctionalSubmodels().size() > 0;
+		 boolean fxnalsubsinmodel1 = ssm1clone.containsFunctionalSubmodels();
+		 boolean fxnalsubsinmodel2 = ssm2clone.containsFunctionalSubmodels();
 		 Map<String,String> mod1renamemap = new HashMap<String,String>();
 		 Map<String,String> mod2renamemap = new HashMap<String,String>();
 		 

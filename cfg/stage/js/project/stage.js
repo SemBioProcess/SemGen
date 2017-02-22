@@ -59,10 +59,12 @@ function Stage(graph, stagestate) {
 	});
 
 	$("#addModelButton").click(function() {
+		event.stopPropagation();
 		sender.addModel();
 	});
 
 	$("#addModel").click(function() {
+		event.stopPropagation();
 		sender.addModel();
 	});
 

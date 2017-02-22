@@ -8,10 +8,12 @@ public class ModelInfo {
 	public SemSimModel Model;
 	public ModelAccessor accessor;
 	public ModelNode modelnode;
+	public Integer modelindex;
 	
 	public ModelInfo(SemSimModel model, ModelAccessor path, Integer modindex) {
 		Model = model;
 		accessor = path;
+		modelindex = modindex;
 		modelnode = new ModelNode(model, modindex);
 	}
 	

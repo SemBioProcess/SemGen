@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import java.util.ArrayList;
 import java.util.HashMap;

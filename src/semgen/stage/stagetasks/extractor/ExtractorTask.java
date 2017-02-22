@@ -2,7 +2,6 @@ package semgen.stage.stagetasks.extractor;
 
 import java.util.ArrayList;
 import java.util.Observable;
-
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import semgen.stage.serialization.ExtractionNode;
@@ -30,8 +29,17 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		Extractor extractor = workbench.makeNewExtraction(extractname);
 		
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoextract);
-		//Add one to the index to account for the source model
-		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size()+1);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
+		
+		taskextractions.add(extraction);
+		_commandSender.newExtraction(extraction);
+	}	
+	
+	public void createNewExtractionExcluding(ArrayList<Node<?>> nodestoexclude, String extractname) {
+		Extractor extractor = workbench.makeNewExtractionExclude(extractname);
+		
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoexclude);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
 		
 		taskextractions.add(extraction);
 		_commandSender.newExtraction(extraction);
@@ -65,6 +73,11 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			jstask = jstaskobj;
 			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
 			jstask.setProperty("extractionjs", new ExtractorBridge());
+			
+		}
+		
+		public void onRequestExtractions() {
+				_commandSender.loadExtractions(taskextractions);
 		}
 		
 		public void onNewExtraction(JSArray nodes, String extractname) {
@@ -72,24 +85,52 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			createNewExtraction(jnodes, extractname);
 		}
 		
-		public void onCreateExtractionExclude(String extractname, JSObject model, JSArray nodes) {
-			//ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+		public void onNewPhysioExtraction(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
+			createNewExtraction(jnodes, extractname);
 		}
 		
-		public void onRemoveExtraction() {
+		public void onCreateExtractionExclude(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtractionExcluding(jnodes, extractname);
+		}
+		
+		public void onCreatePhysioExtractionExclude(JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtractionExcluding(jnodes, extractname);
+		}
+		
+		public void onRemoveExtraction(Double extraction) {
 			
 		}
 		
-		public void onRemoveNodesFromExtraction() {
+		public void onRemoveNodesFromExtraction(Double extraction, JSArray nodes) {
 			
 		}
 		
-		public void onAddNodestoExtraction(JSObject extraction, JSArray nodes) {
+		public void onAddNodestoExtraction(Double extraction, JSArray nodes) {
 			
+		}
+		
+		public void onSendModeltoStage(JSArray indicies) {
+			for (int i = 0; i < indicies.length(); i++) {
+				int modelindex = (int)indicies.get(i).getNumberValue();
+				SemSimModel newmodel = workbench.getExtractedModelbyIndex(modelindex).clone();
+				queueModel(new ModelInfo(newmodel, workbench.getAccessorbyIndex(modelindex), modelindex+1));
+			}
 		}
 		
 		public void onClose() {
 			closeTask();
+		}
+		
+		public void onSave(JSArray indicies) {
+			ArrayList<Integer> extractstosave = new ArrayList<Integer>();
+			if (indicies.length()==0) return;
+			for (int i = 0; i < indicies.length(); i++) {
+				extractstosave.add((int)(indicies.get(i)).getNumberValue());
+			}
+			workbench.saveExtractions(extractstosave);
 		}
 
 		public void onChangeTask(Double index) {
@@ -111,10 +152,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 	
 	public class ExtractorBridge {
 
-		
-
-		
-
 	}
+	
 	
 }

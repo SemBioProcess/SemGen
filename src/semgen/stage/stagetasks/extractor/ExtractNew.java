@@ -1,6 +1,11 @@
 package semgen.stage.stagetasks.extractor;
 
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
+import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalProcess;
 
 public class ExtractNew extends Extractor {
 
@@ -19,4 +24,37 @@ public class ExtractNew extends Extractor {
 		return extraction;
 	}
 
+	@Override
+	public void addSubmodel(Submodel sourceobj) {
+		includeSubModel(sourceobj);
+	}
+
+	@Override
+	public void addDataStructure(DataStructure sourceobj) {
+		if (sourceobj instanceof MappableVariable) {
+			if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
+				sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
+			}
+		}
+		
+		includeDependency(sourceobj);
+	}
+
+	@Override
+	public void addEntity(PhysicalEntity pe) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
+			includeDependency(dstoadd);
+		}
+	}
+
+	@Override
+	public void addProcess(PhysicalProcess proc) {
+		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
+			includeDependency(dstoadd);
+		}
+
+		for (PhysicalEntity participant : proc.getParticipants()) {
+			addEntity(participant);
+		}
+	}
 }

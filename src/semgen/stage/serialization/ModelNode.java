@@ -54,8 +54,16 @@ public class ModelNode extends ParentNode<SemSimModel>{
 		}
 	}
 
+	
+	
 	private void generatePhysioMapNetwork() {
 		physionetwork = new PhysioMap(this);
+	}
+	
+	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid) {
+		if (this.isJavaScriptNode(nodehash, nodeid)) return this;
+		
+		return physionetwork.getPhysioMapNodebyHash(nodehash, nodeid);
 	}
 
 	@Override

@@ -13,15 +13,15 @@ function NodeDrag(_node) {
 		var nodeDrag = d3.drag()
 			.subject(_node)
 			.on("start", function (d, i) {
-                main.task.selectNode(_node);
-
+				
+				if (!_node.selected) {
+					main.task.selectNode(_node);
+				}
                 _node.graph.pause();
 				
 				//Ensure the node has been added to selections
 				var selections = _node.multiDrag();
-				if (!_node.selected) {
-					selections = [_node];
-				}
+				
 				if (_node.graph.shiftIsPressed) {
 					virtualnodes = _node.graph.createGhostNodes(selections);
 					selections = virtualnodes;
@@ -83,6 +83,11 @@ function NodeDrag(_node) {
 			    	//Execute any drag behaviors unique to the node type
 			    	_node.drag.forEach(function(behavior) {
 			    		behavior(_node);
+					});
+				}
+				else {
+					virtualnodes[0].drag.forEach(function(behavior){
+						behavior(virtualnodes);
 					});
 				}
 				_node.graph.tick();

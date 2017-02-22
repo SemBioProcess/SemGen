@@ -1,8 +1,10 @@
 
 function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLinkKeys) {
+	var addedKeys = [];
 	
 	this.initialize = function (graph) {
 		$(graph).on("postupdate", function () {
+			addedKeys = [];
 			visibleNodeKeys.empty();
 			hiddenNodeKeys.empty();
 			
@@ -32,8 +34,10 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 	};
 	
 	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
+			if (legendContainsKey(keyInfo)) return; 
 			var keyElement = document.createElement("li");
 			$(keyElement).text(keyInfo.nodeType);
+			addedKeys.push(keyInfo.nodeType);
 			keyElement.style.color = keyInfo.color;
 			// Put border around "Mediator" text for consistency with node border
 			if(keyInfo.nodeType == "Mediator") {
@@ -51,6 +55,13 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			parentElement.append(keyElement);
 	}
 
+	var legendContainsKey = function(key) {
+		for (x in addedKeys) {
+			if (addedKeys[x] == key.nodeType) return true;
+		}
+		return false;
+	}
+	
 	// Adds link keys to the parent element based on the link in the nodes array
 	var addLinkKeysToParent = function (graph, parentElement, links, func) {
 		// Clear all keys

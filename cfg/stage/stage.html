@@ -9,6 +9,7 @@
 		<script src="js/classExtensions.js"></script>
 
 		<script src="js/keyElement.js"></script>
+		<script src="js/doodads/StageDoodad.js"></script>
 		<script src="js/nodes/hiddenLabelNode.js"></script>
 		<script src="js/nodes/node.js"></script>
 		<script src="js/nodes/dependencyNode.js"></script>
@@ -41,6 +42,7 @@
 		<script src="js/project/stage.js"></script>
 		<script src="js/main.js"></script>
 
+
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 		<link type="text/css" rel="stylesheet" href="css/stage.css" />
 		<link type="text/css" rel="stylesheet" href="css/graph.css" />
@@ -50,6 +52,8 @@
 
 	</head>
 	<body>
+	    <div id="doodads"> </div>
+
 		<div id="addModelButton" class="btn-default">
 			<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
 		</div>
@@ -59,7 +63,7 @@
 		</div>
 		
 		<div id="trash" class = "btn-default">
-			<span class="glyphicon glyphicon-trash"></span>
+			<span class="glyphicon glyphicon-scissors"></span>
 		</div>
 		
 		<div class="stageSearch">
@@ -321,6 +325,16 @@
 						<li><button id="minimize" type="button" class="panelbutton">Return to Project</button></li>
 						<li><button id="quitExtractorBtn" type="button" class="panelbutton">Close Extractor</button></li>
 					</ul>
+				</div>
+				<div class="panel subpanel" id="modeloptions">
+						<ul class='menulist'> 
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(0, true);});'>
+								Submodels</button></li>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(1, true);});'>
+								Dependencies</button></li>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(2, true);});'>
+								PhysioMap</button></li> 
+						</ul>
 				</div>
 			</div>
 		</template> 

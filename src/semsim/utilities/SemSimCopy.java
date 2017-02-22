@@ -173,16 +173,12 @@ public class SemSimCopy {
 		}
 		
 		for (MappableVariable old : mvset.keySet()) {
-			Set<MappableVariable> fromset = new HashSet<MappableVariable>();
-			for (MappableVariable mv : old.getMappedFrom()) {
-				fromset.add(mvset.get(mv));
-			}
 			Set<MappableVariable> toset = new HashSet<MappableVariable>();
 			for (MappableVariable mv : old.getMappedTo()) {
 				toset.add(mvset.get(mv));
 			}
 			MappableVariable newmv = mvset.get(old);
-			newmv.setMappedFrom(fromset);
+			newmv.setMappedFrom(old.getMappedFrom());
 			newmv.setMappedTo(toset);
 		}
 		
@@ -243,7 +239,7 @@ public class SemSimCopy {
 		for (Submodel sm : modeltocopy.getSubmodels()) {
 			Submodel newsm;
 			if (sm.isFunctional()) {
-				FunctionalSubmodel fsm = new FunctionalSubmodel((FunctionalSubmodel)sm);
+				FunctionalSubmodel fsm = new FunctionalSubmodel(sm);
 				if (!compmap.containsKey(fsm.getComputation())) {
 					Computation newcomp = new Computation(fsm.getComputation());
 					compmap.put(fsm.getComputation(), newcomp);

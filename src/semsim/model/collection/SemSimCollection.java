@@ -241,6 +241,13 @@ public abstract class SemSimCollection extends SemSimObject{
 		return fxnalsubs;
 	}
 	
+	public boolean containsFunctionalSubmodels() {
+		for (Submodel sub : submodels) {
+			if (sub.isFunctional()) return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * @return All {@link SemSimInteger}s in the model.
 	 */
@@ -343,4 +350,18 @@ public abstract class SemSimCollection extends SemSimObject{
 		dataStructures = replacements;
 	}
 
+	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
+		if (dataStructures.contains(replacee)) {
+			dataStructures.set(dataStructures.indexOf(replacer), replacee);
+		}
+		for (DataStructure original : dataStructures) {
+			original.replaceDataStructureReference(replacer, replacee);
+		}
+		for (Submodel sm : submodels) {
+			sm.replaceDataStructure(replacee, replacer);
+		}
+		
+	}
+	
+	public abstract SemSimCollection clone();
 }

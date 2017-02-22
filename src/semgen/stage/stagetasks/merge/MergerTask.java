@@ -13,12 +13,12 @@ import com.google.gson.annotations.Expose;
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
-import semgen.merging.workbench.DataStructureDescriptor;
-import semgen.merging.workbench.DataStructureDescriptor.Descriptor;
-import semgen.merging.workbench.Merger.ResolutionChoice;
-import semgen.merging.workbench.MergerWorkbench;
-import semgen.merging.workbench.MergerWorkbench.MergeEvent;
-import semgen.merging.workbench.ModelOverlapMap.maptype;
+import semgen.merging.DataStructureDescriptor;
+import semgen.merging.MergerWorkbench;
+import semgen.merging.DataStructureDescriptor.Descriptor;
+import semgen.merging.Merger.ResolutionChoice;
+import semgen.merging.MergerWorkbench.MergeEvent;
+import semgen.merging.ModelOverlapMap.maptype;
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
@@ -300,7 +300,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 
 		public void onSendModeltoStage() {
-			stagemodelqueue.add(_models.get(2));
+			queueModel(_models.get(2));
 		}
 		
 		public void onSave() {

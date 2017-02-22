@@ -240,7 +240,7 @@ public class Extraction {
 				
 				if(newds instanceof MappableVariable){
 					MappableVariable mvnewds = ((MappableVariable)newds);
-					mvnewds.getMappedFrom().clear();
+					mvnewds.setMappedFrom(null);
 					mvnewds.setPrivateInterfaceValue("");
 					mvnewds.setPublicInterfaceValue("");
 				}
@@ -292,15 +292,14 @@ public class Extraction {
 			
 			if(ds.isMapped()){
 				MappableVariable mv = ((MappableVariable)ds);
-				Set<MappableVariable> newmappedfromset = new HashSet<MappableVariable>();
 				Set<MappableVariable> newmappedtoset = new HashSet<MappableVariable>();
 				
-				for(MappableVariable mappedfrommv : mv.getMappedFrom()){
-					String mappedfromname = mappedfrommv.getName();
+				if (mv.getMappedFrom()!=null){
+					String mappedfromname = mv.getMappedFrom().getName();
 					
 					// Only add if the mapped variable is also in the extracted model
 					if(extractedmodel.containsDataStructure(mappedfromname))
-						newmappedfromset.add((MappableVariable) extractedmodel.getAssociatedDataStructure(mappedfromname));
+						mv.setMappedFrom(mv.getMappedFrom());
 				}
 				
 				for(MappableVariable mappedtomv : mv.getMappedTo()){
@@ -311,7 +310,7 @@ public class Extraction {
 						newmappedtoset.add((MappableVariable) extractedmodel.getAssociatedDataStructure(mappedtoname));
 				}
 				
-				mv.setMappedFrom(newmappedfromset);
+				
 				mv.setMappedTo(newmappedtoset);	
 			}
 		}

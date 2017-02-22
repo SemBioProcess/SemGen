@@ -183,8 +183,8 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public String getEquationasString() {
 		if (this.isMapped()) {
 			MappableVariable var = (MappableVariable)getFocus();
-			if (var.getMappedFrom().size()>0) {
-				return "(value mapped from " + var.getMappedFrom().toArray(new MappableVariable[]{})[0].getName() + ")";
+			if (var.getMappedFrom()!=null) {
+				return "(value mapped from " + var.getMappedFrom().getName() + ")";
 			}
 		}
 		if(getFocus().getComputation()!=null){

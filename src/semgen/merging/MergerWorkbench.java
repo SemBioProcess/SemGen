@@ -1,4 +1,4 @@
-package semgen.merging.workbench;
+package semgen.merging;
 
 import java.io.File;
 import java.net.URI;
@@ -11,8 +11,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import semgen.merging.workbench.Merger.ResolutionChoice;
-import semgen.merging.workbench.ModelOverlapMap.maptype;
+import semgen.merging.Merger.ResolutionChoice;
+import semgen.merging.ModelOverlapMap.maptype;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;

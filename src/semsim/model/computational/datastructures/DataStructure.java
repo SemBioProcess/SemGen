@@ -457,9 +457,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		replaceOutputs(dsmap);
 		replaceInputs(dsmap);
 		replaceUsedtoCompute(dsmap);
-		
-
-		
 
 	}
 	
@@ -499,5 +496,16 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public DataStructure removeFromModel(SemSimModel model) {
 		model.removeDataStructure(this);
 		return this;
+	}
+	
+	public void clearInputs() {
+		this.computation.getInputs().clear();
+		this.computation.setComputationalCode("");
+		this.computation.setMathML("");
+		this.setStartValue("");
+	}
+	
+	public void removeOutput(DataStructure dstoremove) {
+		this.computation.removeOutput(dstoremove);
 	}
 }
