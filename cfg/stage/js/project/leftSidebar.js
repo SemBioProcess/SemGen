@@ -57,7 +57,7 @@ function LeftSidebar(graph) {
 			"<span class='subheading'>" + model.id + "</span>" +
 			"<ul class='menulist'>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
-				//"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Export</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Close</button></li>" +
 			"</ul>" +
