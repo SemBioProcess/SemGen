@@ -13,15 +13,15 @@ function NodeDrag(_node) {
 		var nodeDrag = d3.drag()
 			.subject(_node)
 			.on("start", function (d, i) {
-                main.task.selectNode(_node);
-
+				
+				if (!_node.selected) {
+					main.task.selectNode(_node);
+				}
                 _node.graph.pause();
 				
 				//Ensure the node has been added to selections
 				var selections = _node.multiDrag();
-				if (!_node.selected) {
-					selections = [_node];
-				}
+				
 				if (_node.graph.shiftIsPressed) {
 					virtualnodes = _node.graph.createGhostNodes(selections);
 					selections = virtualnodes;
