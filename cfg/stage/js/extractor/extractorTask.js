@@ -118,7 +118,7 @@ function ExtractorTask(graph, stagestate) {
 			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
-				
+					droploc= extractor.graph.getCenter();
 					if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
 						sender.createPhysioExtractionExclude(extractarray, name);
 					}

@@ -395,6 +395,11 @@ function Graph() {
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
+	
+	//Get the coordinates for the center of the graph
+	this.getCenter = function() {
+		return [this.w/2, this.h/2];
+	}
 
     this.hoverPause = function() {
         // Pauses graph when hovering over a node
