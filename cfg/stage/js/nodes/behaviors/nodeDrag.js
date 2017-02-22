@@ -13,7 +13,9 @@ function NodeDrag(_node) {
 		var nodeDrag = d3.drag()
 			.subject(_node)
 			.on("start", function (d, i) {
-				_node.graph.pause();
+                main.task.selectNode(_node);
+
+                _node.graph.pause();
 				
 				//Ensure the node has been added to selections
 				var selections = _node.multiDrag();

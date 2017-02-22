@@ -53,11 +53,17 @@
 	</head>
 	<body>
 	    <div id="doodads"> </div>
-	    
-		<div id="addModelButton" class="btn-default">+</div>
+
+		<div id="addModelButton" class="btn-default">
+			<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+		</div>
 		
 		<div id="saveButton" class = "btn-default">
-			<span class="glyphicon glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+		</div>
+		
+		<div id="trash" class = "btn-default">
+			<span class="glyphicon glyphicon-scissors"></span>
 		</div>
 		
 		<div class="stageSearch">
@@ -87,10 +93,10 @@
 		<!-- Sidebars -->
 		<!-- Left Sidebar -->
 		<button id="leftSidebarButton" class="sidebarButton" type="button" data-toggle="toggle" data-target="#leftSidebar" >
-			»
+			«
 		</button>
 
-		<div id="leftSidebar" class="panel panel-default sidebar" >
+		<div id="leftSidebar" class="panel panel-default sidebar in" >
 		</div>
 
 		<!-- Right Sidebar -->
@@ -116,20 +122,12 @@
 					<div id="d3opts">
 						<span class="subheading">Graph Settings:</span>
 						<ul>
-							<li >Fix Nodes: <input type="checkbox" id="fixedNodes"></li>
-							<li>
-								Node charge:<br><input type="number" id="nodecharge" value="-100">
-							</li>
-							<li>
-								Link length:<br><input type="number" id="linklength" value="100">
-							</li>
-							<li>
-								Charge distance:<br><input type="number" id="chargedist" value="300">
-							</li>
-							<li>
-								Friction: <input type="number" id="friction" value="0.7" max="1.0" min="0.1" step="0.1">
-								Center Graph: <input type="checkbox" id="gravity" value="">
-							</li>
+							<li>Fix Nodes: <input type="checkbox" id="fixedNodes"></li>
+							<li>Node charge: <input type="number" id="nodecharge" value="-100"></li>
+							<li>Link length: <input type="number" id="linklength" value="100"></li>
+							<li>Charge distance: <input type="number" id="chargedist" value="300"></li>
+							<li>Friction: <input type="number" id="friction" value="0.7" max="1.0" min="0.1" step="0.1"></li>
+							<li>Center Graph: <input type="checkbox" id="gravity" value=""></li>
 						</ul>
 					</div>
 				</div>
@@ -282,7 +280,7 @@
 				</div>
 				<div id="projmenu" class="panel-collapse subpanel">
 					<ul class='menulist'>
-						<li><button type="button" class="panelbutton" id="addModel" >Import Models</button></li>
+						<li><button type="button" class="panelbutton" id="addModel" >Open Models</button></li>
 					</ul>
 					<span class="subheading">Project Models</span>
 					<div id = 'projmodeldiv'> 

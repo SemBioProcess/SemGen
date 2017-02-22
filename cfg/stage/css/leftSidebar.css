@@ -8,6 +8,7 @@
 	transition: width 1s ease;
 	overflow: hidden;
 	overflow-x: hidden;
+	word-wrap: break-word;
 }
 
 #leftSidebar.in {

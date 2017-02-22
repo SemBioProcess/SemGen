@@ -18,8 +18,10 @@ body {
 	height:25px;
 	top: 10px;
 	left: 10px;
+	padding-left: 1px;
+	padding-top: 2px;
 	line-height:25px;
-	font-size: 25px;
+	font-size: 15px;
 	border: hidden;
 	border-radius:250px;
 	color:#ffffff;
@@ -138,7 +140,6 @@ li.searchResultSet li:hover {
 	position: absolute;
 	max-width: 250px;
 	opacity: 1;
-	background: #eeeeee;
 	padding-left: 2px;
 	padding-right: 2px;
 	padding-bottom: 2px;
@@ -173,20 +174,14 @@ li.searchResultSet li:hover {
 	padding: 0;
 }
 
+#modelmenu li {
+	margin: 0 0 3px 0;
+}
+
 .panelbutton {
-	position: relative;
 	width: 100%;
-    background-color: #ffffff;
-    border: none;
-    font-size: 12px;
-    color: #000000;
-    padding: 2px;
-    text-align: center;
-    transition-duration: 0.4s;
-    text-decoration: none;
-    cursor: pointer;
-    border-style: ridge none ridge none;
-    border-size: 2px 0px 2px 0px;
+    background-color: #f9f9f9;
+	font-weight: bold;
 }
 
 .panelbutton:disabled {

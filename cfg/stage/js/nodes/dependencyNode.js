@@ -30,7 +30,7 @@ DependencyNode.prototype.createVisualElement = function (element, graph) {
 	if (this.submodelinput) {
 		this.defaultopacity = 0.6;
 		this.rootElement.selectAll("circle").attr("opacity", this.defaultopacity);
-	}	
+	}
 
 }
 
@@ -51,6 +51,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		return links;
 	}
 	var fade = false;
+	var interSubmodelLink = false;
 	if (!this.graph.nodesVisible[this.nodeType.id] ) {
 		//return links;
 		fade = true;
@@ -65,8 +66,13 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			if (inputNode.parent == this.parent) {
 				return links;
 			}
-			fade = true;
+			// fade = true;
 		}
+
+		if (outputNode.submodelinput) {
+            interSubmodelLink = true;
+        }
+
 		inputNode = inputNode.getFirstLinkableAncestor();
 		if (inputNode==null) {
 			return links;
@@ -88,7 +94,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 			}
 		
 		var length = outputNode.graph.linklength;
-		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade));
+		links.push(new Link(outputNode.graph, link, outputNode, inputNode, length, fade, interSubmodelLink));
 	});
 
 	return links;
