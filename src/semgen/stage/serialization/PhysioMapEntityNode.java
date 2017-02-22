@@ -11,6 +11,12 @@ public class PhysioMapEntityNode extends LinkableNode<PhysicalEntity> {
 		typeIndex = ENTITY;
 	}
 
+	public PhysioMapEntityNode(PhysicalEntity entity, Node<? extends SemSimCollection> parent, Number nodetype) {
+		super(entity, parent);
+		typeIndex = nodetype;
+	}
+
+	
 	@Override
 	public void collectforExtraction(Extractor extractor) {
 		extractor.addEntity(sourceobj);

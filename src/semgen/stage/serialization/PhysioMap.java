@@ -98,9 +98,9 @@ public class PhysioMap {
 			return cpenode;
 		}
 
-		private LinkableNode<PhysicalEntity> getNullNode(PhysicalProcess proc, String sinkOrSource) {
+		private PhysioMapEntityNode getNullNode(PhysicalProcess proc, String sinkOrSource) {
 			PhysicalEntity cpe = new CustomPhysicalEntity("Null " + proc.getName() + sinkOrSource, "Null PhysioMap node");
-			LinkableNode<PhysicalEntity> nullNode = new LinkableNode<PhysicalEntity>(cpe, model, Node.NULL);
+			PhysioMapEntityNode nullNode = new PhysioMapEntityNode(cpe, model, Node.NULL);
 			nodeMap.put(cpe, nullNode);
 			return nullNode;
 		}
