@@ -78,36 +78,72 @@ function Task(graph, stagestate) {
 	};
 	
 	this.selectNode = function(node) {
-		
-		if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
-			if (!this.graph.cntrlIsPressed) {
-				this.selectedModels.forEach(function(selnode) {
-					//if (selnode == node) { return; }
-					selnode.removeHighlight();
-					selnode.selected = false;
-				});
+		if (!node.graph.shiftIsPressed) {
+			if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
+				if (!this.graph.cntrlIsPressed) {
+					this.selectedModels.forEach(function(selnode) {
+							selnode.deselect();
+					});
+					this.selectedModels = [];
+					
+				}
+				else if (node.selected) {
+					for (var i = 0; i<this.selectedModels.length; i++) {
+						if (this.selectedModels[i]==node) {
+							this.selectedModels[i].deselect();
+							this.selectedModels.splice(i, 1);
+							return;
+						}
+					}
+				}
+				this.selectedModels.push(node);
 				
-				this.selectedModels = [];
 			}
-			this.selectedModels.push(node);
-			
-			this.onModelSelection(node);
+			else {
+				if (!this.graph.cntrlIsPressed) {
+					this.selectedNodes.forEach(function(selnode) {
+						selnode.deselect();
+					});
+					this.selectedNodes = [];
+				}
+				else {
+					for (var i = 0; i<this.selectedNodes.length; i++) {
+						if (this.selectedNodes[i]==node) {
+							this.selectedNodes[i].deselect();
+							this.selectedNodes.splice(i, 1);
+							return;
+						}
+					}
+				}
+				
+				this.selectedNodes.push(node);
+			}
+			node.selected = true;
+			node.highlight();
 		}
-		else {
-			if (!this.graph.cntrlIsPressed) {
+	};
+	
+	this.selectNodeOnDrag = function(node) {
+		if (!node.graph.shiftIsPressed && !node.selected) {
+			if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
+				this.selectedModels.forEach(function(selnode) {
+						selnode.deselect();
+				});
+				this.selectedModels = [];
+				this.selectedModels.push(node);
+			}
+			else {
 				this.selectedNodes.forEach(function(selnode) {
-					//if (selnode == node) { return; }
-					selnode.removeHighlight();
-					selnode.selected = false;
+					selnode.deselect();
 				});
 				this.selectedNodes = [];
+				this.selectedNodes.push(node);
 			}
-			this.selectedNodes.push(node);
+			node.selected = true;
+			node.highlight();
 		}
-		node.selected = true;
-		node.highlight();
-	};
-
+		
+	}
 }
 
 Task.prototype.setSavedState = function(issaved) {

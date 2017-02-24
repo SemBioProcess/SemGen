@@ -20,7 +20,9 @@ function Graph() {
 	    .attr("perserveAspectRatio", "xMinYMid");
 
 	var vis = svg.append('g').attr("class", "canvas");
-
+	
+	this.drag = NodeDrag();
+	
     this.force = d3.forceSimulation()
         .alphaMin(0.07)
         .velocityDecay(0.2)

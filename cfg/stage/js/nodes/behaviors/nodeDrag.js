@@ -2,21 +2,18 @@
  * 
  */
 
-function NodeDrag(_node) {
+function NodeDrag() {
 	// When the node visualization is created add a dropzone element
 	// and listen for dragging.
 	// When a model is dragging all other models will display dropzones. If the model
 	// is released on a dropzone the merger will open with those models
 	
-	$(_node).on('createVisualization', function (e, root) {
 		var virtualnodes = null;
 		var nodeDrag = d3.drag()
-			.subject(_node)
-			.on("start", function (d, i) {
+			.on("start", function (_node) {
+				if (_node.graph.cntrlIsPressed) return;
 				
-				if (!_node.selected) {
-					main.task.selectNode(_node);
-				}
+				main.task.selectNodeOnDrag(_node);
                 _node.graph.pause();
 				
 				//Ensure the node has been added to selections
@@ -41,7 +38,8 @@ function NodeDrag(_node) {
 				
 				_node.graph.tick();
 			})
-		    .on("drag", function (d, i) {
+		    .on("drag", function (_node) {
+		    	if (_node.graph.cntrlIsPressed) return;
 		    	var dx = d3.event.x - _node.xpos(),
 		    		dy = d3.event.y - _node.ypos();
 				var selections = _node.multiDrag();
@@ -93,7 +91,8 @@ function NodeDrag(_node) {
 				_node.graph.tick();
 		    	
 		    })
-		    .on("end", function (d, i) {
+		    .on("end", function (_node) {
+		    	if (_node.graph.cntrlIsPressed) return;
 				var selections = _node.multiDrag();
 				
 				if (!_node.graph.shiftIsPressed) {
@@ -130,7 +129,5 @@ function NodeDrag(_node) {
 		    });
 		
 		// Add the dragging functionality to the node
-		_node.rootElement.call(nodeDrag);
-	});
-
+		return nodeDrag;
 };

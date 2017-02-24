@@ -45,6 +45,15 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		_commandSender.newExtraction(extraction);
 	}
 	
+	public void addNodestoExtraction(Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
+		Extractor extractor = workbench.makeAddExtractor(extractionindex);
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoadd);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
+		
+		taskextractions.add(extraction);
+		_commandSender.modifyExtraction(extractionindex, extraction);
+	}
+	
 	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {
 		for (Node<?> node : nodestoextract) {
 			node.collectforExtraction(extractor);
@@ -96,7 +105,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		}
 		
 		public void onCreatePhysioExtractionExclude(JSArray nodes, String extractname) {
-			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			createNewExtractionExcluding(jnodes, extractname);
 		}
 		
@@ -109,6 +118,8 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		}
 		
 		public void onAddNodestoExtraction(Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			addNodestoExtraction(extraction.intValue(), jnodes);
 			
 		}
 		

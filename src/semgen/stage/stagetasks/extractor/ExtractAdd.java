@@ -36,7 +36,7 @@ public class ExtractAdd extends Extractor {
 
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		addSubmodel(sourceobj);
+		includeSubModel(sourceobj);
 	}
 	
 	private void collectStructures() {
@@ -77,7 +77,7 @@ public class ExtractAdd extends Extractor {
 		replaceSubmodels();
 		buildExtraction();
 		
-		return null;
+		return extraction;
 	}
 
 

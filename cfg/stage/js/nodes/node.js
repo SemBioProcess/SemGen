@@ -38,7 +38,6 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.drag = [];
 	this.dragend = [];
 	this.ghostdragend = [];
-	this.addBehavior(NodeDrag);
 	
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
@@ -56,6 +55,10 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 
 	}
 	
+	this.deselect = function() {
+		this.removeHighlight();
+		this.selected = false;
+	}
 	
 	this.isHidden = function() {
 		return this.srcobj.hidden;
@@ -145,8 +148,9 @@ Node.prototype.createVisualElement = function (element, graph) {
         .attr("stroke-width", 0.5);
 
     this.rootElement.on("click", function (node) {
+    	if (d3.event.defaultPrevented) return;
         node.onClick();
-    });
+    }).call(node.graph.drag);
 
     //Append highlight circle
     this.rootElement.append("circle")
@@ -228,6 +232,7 @@ Node.prototype.removeHighlight = function () {
 }
 
 Node.prototype.onClick = function () {
+	 if (d3.event.defaultPrevented) return; 
 	this.clicks++;
 
 	if(this.clicks == 1) {
@@ -246,8 +251,6 @@ Node.prototype.onClick = function () {
         	this.onDoubleClick();
         }
     }
-    d3.event.stopPropagation();
-
 }
 
 Node.prototype.isVisible = function () {

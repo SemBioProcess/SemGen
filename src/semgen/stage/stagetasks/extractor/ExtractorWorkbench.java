@@ -1,17 +1,11 @@
 package semgen.stage.stagetasks.extractor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Observable;
-import java.util.Set;
-
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.model.collection.SemSimModel;
-import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 
 
@@ -45,6 +39,14 @@ public class ExtractorWorkbench extends Workbench {
 		modelaccessorlist.add(null);
 		return new ExtractRemove(sourcemodel, extraction);
 		
+	}
+	
+	public Extractor makeAddExtractor(int extractionindex) {
+		return new ExtractAdd(extractions.get(extractionindex));
+	}
+	
+	public Extractor makeRemoveExtractor(int extractionindex) {
+		return new ExtractRemove(extractions.get(extractionindex));
 	}
 	
 	public void saveExtractions(ArrayList<Integer> indicies) {

@@ -13,4 +13,6 @@ public interface ExtractorWebBrowserCommandSender extends SemGenWebBrowserComman
 	public void removeExtraction();
 	
 	public void loadExtractions(Collection<ExtractionNode> nodes);
+
+	public void modifyExtraction(Integer extractionindex, ExtractionNode extraction);
 }
