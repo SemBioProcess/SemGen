@@ -153,6 +153,7 @@ li.searchResultSet li:hover {
 .panel-heading{
 	font-size: 14px;
 	font-weight: bold;
+	padding-left: 1px;
 }
 
 .panel .subpanel ul{
@@ -162,7 +163,6 @@ li.searchResultSet li:hover {
 
 .panel .subpanel {
 	background-color: white;
-	border-style: groove;
 }
 
 .subheading {
@@ -180,7 +180,9 @@ li.searchResultSet li:hover {
 
 .panelbutton {
 	width: 100%;
-    background-color: #f9f9f9;
+	border-radius: 10px;
+	border-style: solid;
+    background-color: white;
 	font-weight: bold;
 }
 
@@ -190,13 +192,12 @@ li.searchResultSet li:hover {
 	}
 	
 .panelbutton:hover {
-	background-color: #cccccc;
-	
+	background-color: #3b5998;
+	color: white;
 } 
 
 .panelbutton:active {
 	background-color: #aaaaaa;
-	border-style: inset;
 } 
 
 #activeTaskPanel, #activeTaskTray {
