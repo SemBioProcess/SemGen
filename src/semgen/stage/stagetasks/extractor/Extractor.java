@@ -38,7 +38,10 @@ public abstract class Extractor {
 			for (DataStructure input : smds.getComputationInputs()) {
 				if (!smdatastructures.contains(input)) {
 					DataStructure newinput = input.copy();
-					newinput.clearInputs();
+					//Retain inputs which are constants
+					if (!newinput.getComputationInputs().isEmpty()) {
+						newinput.clearInputs();
+					}
 					datastructures.put(input, newinput);
 				}
 			}	
