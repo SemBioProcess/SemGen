@@ -16,6 +16,7 @@ function PreviewGraph(id) {
 	this.depBehaviors = [];
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
 	this.active = true;
+	this.drag = NodeDrag();
 	
     var color = d3.scaleOrdinal(d3.schemeCategory10);
     var svg = d3.select(selector)
