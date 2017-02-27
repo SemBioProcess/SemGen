@@ -7,12 +7,12 @@ public class StageWorkbenchFactory extends WorkbenchFactory<StageWorkbench> {
 
 	
 	public StageWorkbenchFactory() {
-		super("Loading Stage");
+		super("Loading interface...");
 	}
 	
 	@Override
 	protected boolean makeWorkbenches() {
-		setStatus("Loading Stage");
+		setStatus("Loading interface...");
 		makeWorkbench(null);
 		return true;
 	}
