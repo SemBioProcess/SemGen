@@ -54,6 +54,11 @@ body {
 	opacity: .8;
 }
 
+#saveButton:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
 #trash {
 	margin: 5px;
 	padding-left: 1px;
@@ -187,8 +192,9 @@ li.searchResultSet li:hover {
 }
 
 .panelbutton:disabled {
-		background-color: #cccccc;
-		color: #111111;
+		background-color: #3b5998;
+		color: white;
+		opacity: 0.15;
 	}
 	
 .panelbutton:hover {
