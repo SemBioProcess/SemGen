@@ -97,7 +97,7 @@ function Task(graph, stagestate) {
 					}
 				}
 				this.selectedModels.push(node);
-				
+				this.onModelSelection(node);
 			}
 			else {
 				if (!this.graph.cntrlIsPressed) {
