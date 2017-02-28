@@ -145,9 +145,9 @@
 }
 
 .leftCollapsePanel {
-    width: 350px;
+    width:40vw;
     float: left;
-    text-align: left;
+    text-align: right;
     display: inline-block;
     font-size: 11px;
 }
@@ -158,9 +158,9 @@
 }
 
 .rightCollapsePanel {
-    width: 350px;
+    width:40vw;
     float: right;
-    text-align: right;
+    text-align: left;
     display: inline-block;
     font-size: 11px;
 }

@@ -37,7 +37,7 @@ public class NewTaskDialog extends SemGenDialog implements ActionListener {
 			openpanel.add(button);
 		}
 		
-		setPreferredSize(new Dimension(500,110));
+		setPreferredSize(new Dimension(550,110));
 		
 		JOptionPane selectopentype = new JOptionPane(openpanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null);
 		selectopentype.setOptions(new Object[]{});
