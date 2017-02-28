@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
-import semsim.model.collection.SemSimModel;
 
 public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();
@@ -110,6 +109,10 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		allpents.addAll(getSinkPhysicalEntities());
 		allpents.addAll(getMediatorPhysicalEntities());
 		return allpents;
+	}
+	
+	public boolean hasParticipants(){
+		return ! getParticipants().isEmpty();
 	}
 	
 	public void removeParticipant(PhysicalEntity pe) {
