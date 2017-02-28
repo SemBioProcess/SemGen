@@ -161,13 +161,17 @@ li.searchResultSet li:hover {
 	padding-left: 1px;
 }
 
+.panel .subpanel {
+	background-color: white;
+}
+
 .panel .subpanel ul{
 	list-style-type: none;
 	font-size: 12px;
 }
 
-.panel .subpanel {
-	background-color: white;
+.panel .subpanel li{
+	margin: 0 0 3px 0;
 }
 
 .subheading {
@@ -176,7 +180,7 @@ li.searchResultSet li:hover {
 }
 
 .menulist {
-	padding: 0;
+	padding: 6px;
 }
 
 #modelmenu li {
