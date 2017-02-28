@@ -117,7 +117,6 @@ $(window).load(function() {
 	
 	if (document.createEvent) {
 		window.dispatchEvent(event);
-	
 	}
 	else {
 		window.fireEvent("on" + event.eventType, event);

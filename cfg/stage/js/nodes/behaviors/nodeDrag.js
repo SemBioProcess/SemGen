@@ -11,7 +11,10 @@ function NodeDrag() {
 		var virtualnodes = null;
 		var nodeDrag = d3.drag()
 			.on("start", function (_node) {
-				if (_node.graph.cntrlIsPressed) return;
+				if (_node.graph.cntrlIsPressed) {
+					main.task.selectNode(_node);
+					return;
+				}
 				
 				main.task.selectNodeOnDrag(_node);
                 _node.graph.pause();

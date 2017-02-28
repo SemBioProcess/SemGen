@@ -157,7 +157,7 @@ function ExtractorTask(graph, stagestate) {
 	this.setExtractionNode = function(index, extraction) {
 		var extractionnode = new ExtractedModel(extractor.graph, extraction);
 		droploc = [extractor.extractions[index].xpos(), extractor.extractions[index].ypos()];
-		extractor.extractions[index] = extraction;
+		extractor.extractions[index] = extractionnode;
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
