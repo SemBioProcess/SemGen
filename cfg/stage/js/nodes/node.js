@@ -63,8 +63,6 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.isHidden = function() {
 		return this.srcobj.hidden;
 	}
-
-	
 }
 
 //Get this node's top level parent
@@ -98,8 +96,8 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
-	x = Math.max(this.r, Math.min(this.graph.w - this.r*2, x));
-	y = Math.max(this.r, Math.min(this.graph.h - this.r + this.spaceBetweenTextAndNode(), y));
+	x = Math.max(this.r*2, Math.min(this.graph.w - this.r*2, x));
+	y = Math.max(this.r*2, Math.min(this.graph.h - 4 * this.r + this.spaceBetweenTextAndNode(), y));
 
 	this.x = x; this.y = y;
 	
@@ -148,7 +146,7 @@ Node.prototype.createVisualElement = function (element, graph) {
         .attr("stroke-width", 0.5);
 
     this.rootElement.on("click", function (node) {
-    	if (d3.event.defaultPrevented) return;
+    	if (d3.event.defaultPrevented || node.graph.cntrlIsPressed) return;
         node.onClick();
     }).call(node.graph.drag);
 
@@ -232,7 +230,6 @@ Node.prototype.removeHighlight = function () {
 }
 
 Node.prototype.onClick = function () {
-	 if (d3.event.defaultPrevented) return; 
 	this.clicks++;
 
 	if(this.clicks == 1) {

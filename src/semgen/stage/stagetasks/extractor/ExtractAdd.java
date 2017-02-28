@@ -41,7 +41,7 @@ public class ExtractAdd extends Extractor {
 	
 	private void collectStructures() {
 		for (DataStructure ds : sourcemodel.getAssociatedDataStructures()) {
-			this.includeDependency(ds);
+			this.addDataStructure(ds);
 		}
 		for (Submodel sm : sourcemodel.getSubmodels()) {
 			this.includeSubModel(sm);
@@ -51,7 +51,7 @@ public class ExtractAdd extends Extractor {
 	@Override
 	public void addEntity(PhysicalEntity pe) {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
-			includeDependency(dstoadd);
+			addDataStructure(dstoadd);
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class ExtractAdd extends Extractor {
 	@Override
 	public void addProcess(PhysicalProcess proc) {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
-			includeDependency(dstoadd);
+			addDataStructure(dstoadd);
 		}
 
 		for (PhysicalEntity participant : proc.getParticipants()) {
