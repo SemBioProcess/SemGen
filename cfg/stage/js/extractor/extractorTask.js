@@ -158,10 +158,11 @@ function ExtractorTask(graph, stagestate) {
 		var extractionnode = new ExtractedModel(extractor.graph, extraction);
 		droploc = [extractor.extractions[index].xpos(), extractor.extractions[index].ypos()];
 		extractor.extractions[index] = extractionnode;
+		extractor.nodes[extractionnode.id] = extractionnode;
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
-		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
+		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
 		extractor.graph.update();
 		extractor.selectNode(extractionnode);
 	}
