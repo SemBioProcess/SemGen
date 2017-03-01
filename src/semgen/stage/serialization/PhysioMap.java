@@ -2,12 +2,15 @@ package semgen.stage.serialization;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
+import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 import com.google.gson.annotations.Expose;
+
 import semsim.model.physical.object.CustomPhysicalEntity;
 
 public class PhysioMap {
@@ -48,10 +51,28 @@ public class PhysioMap {
 		 */
 		public void generatePhysioMapNetwork() {
 
-			Set<PhysicalProcess> processSet = model.sourceobj.getPhysicalProcesses();
-
-			for(PhysicalProcess proc : processSet) {
-				processes.add(makePhysioMapNode(proc));
+			Set<PhysicalProcess> allProcesses = model.sourceobj.getPhysicalProcesses();
+			Set<PhysicalProcess> processesWithProperties = new HashSet<PhysicalProcess>();
+			
+			// Processes that aren't physical components of data structures and that don't 
+			// have any specified participants are excluded from PhysioMap. These include processes
+			// that are just used for classifying other processes in the model. For example, 
+			// a reference process from GO used in an isVersionOf statement on a custom process would
+			// be excluded.
+			
+			// Here we identify those processes that have associated data structures (i.e. those
+			// whose properties are computed by the model)
+			for(DataStructure ds : model.sourceobj.getDataStructureswithPhysicalProcesses()){
+				processesWithProperties.add((PhysicalProcess)ds.getAssociatedPhysicalModelComponent());
+			}
+			
+			// Here we add the process nodes to the graph, excluding those that have no participants
+			// and no data structures that compute their physical property
+			for(PhysicalProcess proc : allProcesses) {
+				
+				if(proc.hasParticipants() || processesWithProperties.contains(proc)){
+					processes.add(makePhysioMapNode(proc));
+				}
 			}
 
 			entities.addAll(nodeMap.values());
@@ -59,28 +80,32 @@ public class PhysioMap {
 		}
 		
 		private PhysioMapNode makePhysioMapNode(PhysicalProcess proc){
-			boolean hasSource = !proc.getSourcePhysicalEntities().isEmpty();
-			boolean hasSink = !proc.getSinkPhysicalEntities().isEmpty();
-//			Don't add processes that doesn't have associated physical property
-//			boolean hasPhysicalProperty = proc.?();
 
 			PhysioMapNode pmnode = new PhysioMapNode(proc, model);
-			if(!hasSource && hasSink) {
+			
+			// Add source nodes
+			if(proc.getSourcePhysicalEntities().isEmpty()) {
 				pmnode.addSourceLink(getNullNode(proc, "source"));
-			} else {
+			} 
+			else {
+				
 				for (PhysicalEntity part : proc.getSourcePhysicalEntities()) {
 					pmnode.addSourceLink(getParticipantNode(part));
 				}
 			}
 
-			if(!hasSink && hasSource) {
+			// Add sink nodes
+			if(proc.getSinkPhysicalEntities().isEmpty()) {
 				pmnode.addSinkLink(getNullNode(proc, "sink"));
-			} else {
+			} 
+			else {
+				
 				for (PhysicalEntity part : proc.getSinkPhysicalEntities()) {
 					pmnode.addSinkLink(getParticipantNode(part));
 				}
 			}
 
+			// Add mediator nodes
 			for (PhysicalEntity part : proc.getMediatorPhysicalEntities()) {
 				pmnode.addMediatorLink(getParticipantNode(part));
 			}
