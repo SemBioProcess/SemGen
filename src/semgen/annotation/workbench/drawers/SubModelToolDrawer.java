@@ -141,12 +141,12 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 			}
 			if (ds.hasComputation()) {
 				Computation comp = ds.getComputation();
-				if (comp.getComputationalCode()!=null) {
+				if (!comp.getComputationalCode().isEmpty()) {
 					String eq = comp.getComputationalCode().replaceAll(oldname, newname);
 					
 					comp.setComputationalCode(eq);
 				}
-				if (comp.getMathML()!=null) {
+				if (comp.hasMathML()) {
 					String eq = comp.getMathML().replaceAll(oldname, newname);
 					comp.setMathML(eq);
 				}

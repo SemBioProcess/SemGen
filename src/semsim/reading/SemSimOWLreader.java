@@ -742,8 +742,7 @@ public class SemSimOWLreader extends ModelReader {
 									theds.getComputation().setMathML(varmathml);
 																		
 									// Assign human-readable computational code, if not already present
-									if(theds.getComputation().getComputationalCode()==null ||
-											theds.getComputation().getComputationalCode().equals("")){
+									if(theds.getComputation().getComputationalCode().isEmpty()){
 										
 										String RHS = CellMLreader.getRHSofDataStructureEquation(varmathml, localvarname);
 										

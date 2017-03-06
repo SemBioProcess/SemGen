@@ -25,8 +25,6 @@ public abstract class Extractor {
 	public Extractor(SemSimModel source) {
 		sourcemodel = source;
 		extraction = new SemSimModel();
-		
-		extraction.setName(sourcemodel.getName());
 	}
 	
 	public abstract SemSimModel run();
@@ -41,6 +39,7 @@ public abstract class Extractor {
 					//Retain inputs which are constants
 					if (!newinput.getComputationInputs().isEmpty()) {
 						newinput.clearInputs();
+						newinput.setExternal(true);
 					}
 					datastructures.put(input, newinput);
 				}
@@ -79,7 +78,10 @@ public abstract class Extractor {
 			this.includeSubModel(submodel);
 		}
 		for (DataStructure ds : sourceobj.getAssociatedDataStructures()) {
-			includeDependency(ds);
+			if (!ds.isExternal()) {
+				includeDependency(ds);
+			}
+			
 		}
 	}
 	
@@ -95,6 +97,7 @@ public abstract class Extractor {
 		
 		return dsswithpmc;
 	}
+
 	
 	public abstract void addEntity(PhysicalEntity pe);
 
@@ -104,6 +107,8 @@ public abstract class Extractor {
 	public abstract void addDataStructure(DataStructure sourceobj);
 		
 	protected void includeDependency(DataStructure sourceobj) {
-		datastructures.put(sourceobj, sourceobj.copy());
+		if (!this.datastructures.containsKey(sourceobj)) {
+			datastructures.put(sourceobj, sourceobj.copy());
+		}
 	}
 }

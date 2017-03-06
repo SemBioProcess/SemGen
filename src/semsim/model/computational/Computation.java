@@ -14,7 +14,7 @@ public class Computation extends ComputationalModelComponent{
 	
 	private Set<DataStructure> outputs = new HashSet<DataStructure>();
 	private Set<DataStructure> inputs = new HashSet<DataStructure>();
-	private String computationalCode = null;
+	private String computationalCode = new String("");
 	private String mathML = new String("");
 	private Set<Event> events = new HashSet<Event>();
 	private PhysicalDependency dependency = null;
@@ -50,9 +50,7 @@ public class Computation extends ComputationalModelComponent{
 		
 		outputs.addAll(comptocopy.outputs);
 		inputs.addAll(comptocopy.inputs);
-		if (comptocopy.computationalCode !=null) {
-			computationalCode = new String(comptocopy.computationalCode);
-		}
+		computationalCode = new String(comptocopy.computationalCode);
 		mathML = new String(comptocopy.mathML);
 		events.addAll(comptocopy.events);
 	}
@@ -112,6 +110,7 @@ public class Computation extends ComputationalModelComponent{
 	 * @param code
 	 */
 	public void setComputationalCode(String code){
+		if (code == null) code = new String("");
 		computationalCode = code;
 	}
 	
@@ -164,6 +163,16 @@ public class Computation extends ComputationalModelComponent{
 	public Set<DataStructure> getOutputs() {
 		return outputs;
 	}
+	
+	/**
+	 * @return The all DataStructures involved in the computation
+	 */
+	public Set<DataStructure> getOutputsandInputs() {
+		Set<DataStructure> alllinks = new HashSet<DataStructure>(outputs);
+		alllinks.addAll(inputs);
+		return alllinks;
+	}
+	
 	
 	/**	
 	 * @return The set of discrete events that are part of this computation

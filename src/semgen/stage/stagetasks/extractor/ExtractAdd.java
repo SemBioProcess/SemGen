@@ -1,8 +1,5 @@
 package semgen.stage.stagetasks.extractor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -11,11 +8,12 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 public class ExtractAdd extends Extractor {
-	protected Set<DataStructure> dsstoadd = new HashSet<DataStructure>();
-	protected Set<Submodel> smstoadd = new HashSet<Submodel>();
+	private SemSimModel receivermodel;
 	
-	public ExtractAdd(SemSimModel source) {
-		super(source.clone());
+	public ExtractAdd(SemSimModel source, SemSimModel target) {
+		super(source);
+		receivermodel = target.clone();
+		extraction.setName(receivermodel.getName());
 	}
 
 	public void addDataStructure(DataStructure dstoimport) {
@@ -24,27 +22,23 @@ public class ExtractAdd extends Extractor {
 				dstoimport = ((MappableVariable)dstoimport).getMappedFrom();
 			}
 		}
-		dsstoadd.add(dstoimport);
-		for (DataStructure dstocheck : sourcemodel.getAssociatedDataStructures()) {
-			if (dstocheck.equals(dstoimport)) {	
-				sourcemodel.replaceDataStructure(dstocheck, dstoimport);
-				break;
-			}
-		}
+		includeDependency(dstoimport);
 	}
 	
-
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
 		includeSubModel(sourceobj);
 	}
 	
 	private void collectStructures() {
-		for (DataStructure ds : sourcemodel.getAssociatedDataStructures()) {
-			this.addDataStructure(ds);
+		for (Submodel sm : receivermodel.getSubmodels()) {
+			this.includeSubModel(sourcemodel.getSubmodel(sm.getName()));
 		}
-		for (Submodel sm : sourcemodel.getSubmodels()) {
-			this.includeSubModel(sm);
+		for (DataStructure ds : receivermodel.getAssociatedDataStructures()) {
+			if (!ds.isExternal()) {
+				DataStructure existingds = sourcemodel.getAssociatedDataStructure(ds.getName());
+				this.includeDependency(existingds);
+			}
 		}
 	}
 	
@@ -55,8 +49,6 @@ public class ExtractAdd extends Extractor {
 		}
 	}
 	
-	
-
 	@Override
 	public void addProcess(PhysicalProcess proc) {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {

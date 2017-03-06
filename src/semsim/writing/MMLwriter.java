@@ -146,7 +146,7 @@ public class MMLwriter extends ModelWriter{
 			
 			// Replace occurrences of "pi", which is a SBML reserved codeword, with "PI"
 			// as long as there isn't a variable named pi in the model
-			if( ! alldsarray.contains("pi") && origcode != null){
+			if( ! alldsarray.contains("pi") && !origcode.isEmpty()){
 				String code = dataStructureAndEquationMap.containsKey(ds) ? dataStructureAndEquationMap.get(ds) : origcode;				
 				String repicode = SemSimUtil.replaceCodewordsInString(code, "PI", "pi", SemSimUtil.regexQualifier.RELUCTANT);
 				dataStructureAndEquationMap.put(ds, repicode);
@@ -205,7 +205,7 @@ public class MMLwriter extends ModelWriter{
 				
 				if(comp != null){
 					
-					if(comp.getComputationalCode()==null) 
+					if(comp.getComputationalCode().isEmpty()) 
 						declaration = "extern real";
 					
 				}
@@ -309,7 +309,7 @@ public class MMLwriter extends ModelWriter{
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(onedsstr);
 			
 			if (isDeclaredDependentVariable(ds)
-					&& ds.getComputation().getComputationalCode() != null){
+					&& !ds.getComputation().getComputationalCode().isEmpty()){
 				
 				String code = ds.getComputation().getComputationalCode();
 				

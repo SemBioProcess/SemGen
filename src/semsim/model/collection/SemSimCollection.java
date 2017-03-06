@@ -352,7 +352,7 @@ public abstract class SemSimCollection extends SemSimObject{
 
 	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
 		if (dataStructures.contains(replacee)) {
-			dataStructures.set(dataStructures.indexOf(replacer), replacee);
+			dataStructures.set(dataStructures.indexOf(replacee), replacer);
 		}
 		for (DataStructure original : dataStructures) {
 			original.replaceDataStructureReference(replacer, replacee);

@@ -40,6 +40,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	protected boolean mappable = false;
 	private String startValue;
 	private UnitOfMeasurement unit;
+	private boolean external = false;
 	
 	public DataStructure(SemSimTypes type) {
 		super(type);
@@ -62,6 +63,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			startValue = new String(dstocopy.startValue);
 		}
 		unit = dstocopy.unit;
+		external = dstocopy.external;
 	}
 	
 	
@@ -507,5 +509,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public void removeOutput(DataStructure dstoremove) {
 		this.computation.removeOutput(dstoremove);
+	}
+
+	public boolean isExternal() {
+		return external;
+	}
+
+	public void setExternal(boolean external) {
+		this.external = external;
 	}
 }

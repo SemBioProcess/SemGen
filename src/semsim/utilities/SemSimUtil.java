@@ -126,7 +126,7 @@ public class SemSimUtil {
 							String newmathml = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getMathML(), sourcelocalname, mvlocalname);
 							dependentmv.getComputation().setMathML(newmathml);
 							
-							if(dependentmv.getComputation().getComputationalCode()!=null){
+							if(!dependentmv.getComputation().getComputationalCode().isEmpty()){
 								String newcompcode = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getComputationalCode(), sourcelocalname, mvlocalname);
 								dependentmv.getComputation().setComputationalCode(newcompcode);
 							}
@@ -203,7 +203,7 @@ public class SemSimUtil {
 				
 				String neweq = dscheck.getComputation().getComputationalCode();
 				
-				if(dscheck.getComputation().getComputationalCode()!=null){
+				if(!dscheck.getComputation().getComputationalCode().isEmpty()){
 					neweq = replaceCodewordsInString(dscheck.getComputation().getComputationalCode(), replacementtext, oldtext);
 					//DataStructure ds = modelfordiscardedds.getAssociatedDataStructure(dscheck.getName());					
 					dscheck.getComputation().setComputationalCode(neweq);

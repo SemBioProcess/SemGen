@@ -33,7 +33,7 @@ public class CSVExporter {;
 				String valueifstatic = "";
 				if(ds.getComputation().getInputs().isEmpty()){
 					String compcode = ds.getComputation().getComputationalCode();
-					if(compcode!=null)
+					if(!compcode.isEmpty())
 						valueifstatic = compcode.substring(compcode.indexOf("=")+1,compcode.length()).trim();
 				}
 				String desc = "";

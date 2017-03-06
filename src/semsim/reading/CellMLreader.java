@@ -306,7 +306,7 @@ public class CellMLreader extends ModelReader {
 					}
 				}
 				
-				if(cvar.getComputation().getComputationalCode()==null && initval!=null)
+				if(cvar.getComputation().getComputationalCode().isEmpty() && initval!=null)
 					cvar.getComputation().setComputationalCode(varname + " = " + initval);
 			}
 			

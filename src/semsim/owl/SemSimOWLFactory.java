@@ -255,7 +255,7 @@ public class SemSimOWLFactory {
 	}
 
 	public static void setIndDatatypeProperty(OWLOntology ont, String induri, Relation rel, Object val, OWLOntologyManager manager) throws OWLException {
-		if(val!=null && !val.equals("")){
+		if(!val.equals("")){
 			OWLAxiom axiom = createIndDatatypePropertyAxiom(ont, induri, rel, val, null, manager);
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
 			manager.applyChange(addAxiom);
