@@ -5,8 +5,8 @@ import org.apache.commons.lang3.builder.*;
 
 /**
  * A SemSim annotation provides additional information about
- * a SemSim model or one of its components. Annotations can be used
- * to define the physical meaning of a SemSim model or model component, 
+ * a SemSim model or one of its elements. Annotations can be used
+ * to define the physical meaning of a SemSim model or model element, 
  * identify model authors, link a model to its PubMed ID, etc.
  */
 public class Annotation {
@@ -40,7 +40,7 @@ public class Annotation {
 		setValueDescription(valueDescription);
 	}
 	/**
-	 * Copy Constructor
+	 * Constructor for copying an Annotation
 	 */
 	public Annotation(Annotation tocopy) {
 		if (tocopy.valueDescription!=null) {
@@ -82,7 +82,7 @@ public class Annotation {
 	
 	/**
 	 * Set the annotation value
-	 * @param value An Object that is the annotation value
+	 * @param value The annotation value
 	 */
 	public void setValue(Object value) {
 		this.value = value;
