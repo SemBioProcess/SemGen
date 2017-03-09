@@ -14,6 +14,11 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 import semsim.definitions.RDFNamespace;
 
+/**
+ * Constants and methods for working with annotations at the level of 
+ * the whole model. These types of annotations include model name, description
+ * keywords, annotator name, etc. 
+ */
 public class CurationalMetadata {
 	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceasString();
 	
@@ -47,6 +52,9 @@ public class CurationalMetadata {
 		}
 	}
 	
+	/**
+	 * Copy curational metadata from one {@link CurationalMetadata} object to another
+	 */
 	public void importMetadata(CurationalMetadata toimport, boolean overwrite) {
 		for (Metadata m : Metadata.values()) {
 			if (curationmap.get(m)=="" || overwrite) {
@@ -55,6 +63,10 @@ public class CurationalMetadata {
 		}
 	}
 	
+	/**
+	 * Enum of the different relations available for curational metadata annotations
+	 *
+	 */
 	public enum Metadata implements Relation {
 		fullname("Full Name", "a human-readable name for the model", MODEL_NAME_URI, "dc:title"),
 		description("Description", "a free-text description of the model", MODEL_DESCRIPTION_URI, "dc:description"),
@@ -122,27 +134,53 @@ public class CurationalMetadata {
 		}
 	}
 	
+	/**
+	 * @param item A curational metadata object
+	 * @return A textual description of the Metadata relation
+	 */
 	public String getAnnotationName(Metadata item) {
 		return item.toString();
 	}
 	
+	/**
+	 * @param item A curational metadata object
+	 * @return The annotation value for the metadata object
+	 */
 	public String getAnnotationValue(Metadata item) {
 		return curationmap.get(item);
 	}
 	
+	/**
+	 * @param item A curational metadata object
+	 * @param value The annotation value for the curational metadata
+	 * object
+	 */
 	public void setAnnotationValue(Metadata item, String value) {
 		curationmap.put(item, value);
 	}
 	
+	/**
+	 * @param item A curational metadata object
+	 * @return Whether the metadata object has an associated value
+	 */
 	public boolean hasAnnotationValue(Metadata item) {
 		return !curationmap.get(item).isEmpty();
 	}
 	
-	
+	/**
+	 * @param item A curational metadata item with an annotation value
+	 * @param value The annotation value for testing equivalency
+	 * @return Whether the metadata object's annotation value is equivalent
+	 * to the specified annotation value 
+	 */
 	public boolean isItemValueEqualto(Metadata item, String value) {
 		return curationmap.get(item).equals(value);
 	}
 
+	/**
+	 * @param list A set of OWLAnnotation objects
+	 * @param removelist
+	 */
 	public void setCurationalMetadata(Set<OWLAnnotation> list, Set<OWLAnnotation> removelist) {
 		for (Metadata m : Metadata.values()) {
 			for (OWLAnnotation a : list) {
@@ -154,10 +192,18 @@ public class CurationalMetadata {
 		}
 	}
 	
-	 public Annotation getAsAnnotation(Metadata item) {
-		 return new Annotation(item, curationmap.get(item));
-	 }
+	/**
+	 * @param item A curational metadata item
+	 * @return The curational metadata item as an {@link Annotation} object
+	 */
+	public Annotation getAsAnnotation(Metadata item) {
+		return new Annotation(item, curationmap.get(item));
+	}
 	
+	/**
+	 * @return The set of available curational metadata items
+	 *  cast as a set of {@link Annotation} objects.
+	 */
 	public ArrayList<Annotation> getAnnotationList() {
 		ArrayList<Annotation> list = new  ArrayList<Annotation>();
 		for (Metadata m : Metadata.values()) {
@@ -166,5 +212,5 @@ public class CurationalMetadata {
 			}
 		}
 		return list;
-	}
+	 }
 }

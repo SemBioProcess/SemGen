@@ -670,6 +670,7 @@ public class SBMLwriter extends ModelWriter {
 				String formula = getFormulaFromRHSofMathML(mathml, ds.getName());
 				
 				if(formula != null){
+
 					try {
 			            Double d = Double.parseDouble(formula);
 						par.setValue(d);
@@ -680,8 +681,12 @@ public class SBMLwriter extends ModelWriter {
 				}
 			}
 			else if(ds instanceof MappableVariable){
+
 				Double doubleval = getConstantValueForPropertyOfEntity(ds);
-				par.setValue(doubleval);
+				
+				if(doubleval != null) 
+					par.setValue(doubleval);
+				
 				par.setConstant(true);
 			}
 			else par.setConstant(true);
@@ -888,9 +893,13 @@ public class SBMLwriter extends ModelWriter {
 		// any MathML associated with it in the computation, so we look up the CellMLintialValue
 		else if(ds instanceof MappableVariable){
 			MappableVariable mv = (MappableVariable)ds;
-			formulaAsDouble = Double.parseDouble(mv.getCellMLinitialValue());
-		}
+			
+			if(mv.hasCellMLinitialValue())	
+				formulaAsDouble = Double.parseDouble(mv.getCellMLinitialValue());
+			else
+				System.err.println(mv.getName() + " will need to be set at runtime "); }
 		
+
 		return formulaAsDouble;
 	}
 	
