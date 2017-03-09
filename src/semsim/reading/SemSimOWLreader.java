@@ -353,32 +353,32 @@ public class SemSimOWLreader extends ModelReader {
 			
 			semsimmodel.addDataStructure(ds);
 			
-			if( ! compcode.equals("")) ds.getComputation().setComputationalCode(compcode);
+			if( ! compcode.isEmpty()) ds.getComputation().setComputationalCode(compcode);
 			
-			if( ! mathml.equals("")) ds.getComputation().setMathML(mathml);
+			if( ! mathml.isEmpty()) ds.getComputation().setMathML(mathml);
 			
-			if( ! description.equals("")) ds.setDescription(description);
+			if( ! description.isEmpty()) ds.setDescription(description);
 			
 			// Set the data property values: startValue, isDeclared, isSolutionDomain
 			String startval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.HAS_START_VALUE.getURIasString());
-			if( ! startval.equals("")) ds.setStartValue(startval);
+			if( ! startval.isEmpty()) ds.setStartValue(startval);
 			
 			String isdeclared = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.IS_DECLARED.getURIasString());
-			if( ! isdeclared.equals("")) ds.setDeclared(Boolean.parseBoolean(isdeclared));
+			if( ! isdeclared.isEmpty()) ds.setDeclared(Boolean.parseBoolean(isdeclared));
 			else ds.setDeclared(true); // default value is TRUE if nothing explicitly stated in OWL file
 
 			String issoldom = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.IS_SOLUTION_DOMAIN.getURIasString());
-			if( ! issoldom.equals("")) ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
+			if( ! issoldom.isEmpty()) ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
 			else ds.setIsSolutionDomain(false); // default value is FALSE if nothing explicitly stated in OWL file
 			
 			String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.METADATA_ID.getURIasString());
-			if( ! metadataid.equals("")) ds.setMetadataID(metadataid);
+			if( ! metadataid.isEmpty()) ds.setMetadataID(metadataid);
 			
 			// Collect singular physical definition annotation, if present
 			String physdefvalds = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, physicaldefinitionURI.toString());
 			
 			// If the data structure is annotated, store annotation
-			if( ! physdefvalds.equals("")){	
+			if( ! physdefvalds.isEmpty()){	
 				String reflabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(dsind)))[0];
 				ds.setSingularAnnotation((PhysicalProperty)getReferenceProperty(physdefvalds, reflabel));
 			}
@@ -388,13 +388,13 @@ public class SemSimOWLreader extends ModelReader {
 				String pubint = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.CELLML_COMPONENT_PUBLIC_INTERFACE.getURIasString());
 				String privint = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.CELLML_COMPONENT_PRIVATE_INTERFACE.getURIasString());
 				
-				if(! pubint.equals("")) ((MappableVariable)ds).setPublicInterfaceValue(pubint);
+				if(! pubint.isEmpty()) ((MappableVariable)ds).setPublicInterfaceValue(pubint);
 				
-				if(! privint.equals("")) ((MappableVariable)ds).setPrivateInterfaceValue(privint);
+				if(! privint.isEmpty()) ((MappableVariable)ds).setPrivateInterfaceValue(privint);
 				
 				String initval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.CELLML_INITIAL_VALUE.getURIasString());
 				
-				if(initval != null && ! initval.equals("")) ((MappableVariable)ds).setCellMLinitialValue(initval);
+				if(initval != null && ! initval.isEmpty()) ((MappableVariable)ds).setCellMLinitialValue(initval);
 			}
 			
 			// Set object properties: hasUnit and isComputationalComponentFor
@@ -403,7 +403,7 @@ public class SemSimOWLreader extends ModelReader {
 			String units = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimRelation.HAS_UNIT.getURIasString());
 			String propind = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, dsind, SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getURIasString());
 			
-			if( ! units.equals("") || ! propind.equals("")){
+			if( ! units.isEmpty() || ! propind.isEmpty()){
 				String physdefval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, propind, physicaldefinitionURI.toString());	
 				
 				if (!physdefval.isEmpty())	ds.setAssociatedPhysicalProperty(idpropertymap.get(physdefval));
@@ -420,7 +420,7 @@ public class SemSimOWLreader extends ModelReader {
 				}
 			}
 			
-			if( ! depind.equals("")){
+			if( ! depind.isEmpty()){
 				// We assume that if there is an explicit dependency associated with the computation, 
 				// then it's annotated against a reference dependency from the OPB.
 				String reflabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(depind)))[0];
@@ -445,7 +445,7 @@ public class SemSimOWLreader extends ModelReader {
 					if(mappedvar != null && (mappedvar instanceof MappableVariable)){
 						((MappableVariable)ds).addVariableMappingTo((MappableVariable)mappedvar);
 						// Use mapping info in input/output network
-						((MappableVariable)mappedvar).getComputation().addInput((MappableVariable)ds);
+						mappedvar.getComputation().addInput(ds);
 					}
 				}
 			}
@@ -463,7 +463,7 @@ public class SemSimOWLreader extends ModelReader {
 				String importedfromval = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, unitind, SemSimRelation.IMPORTED_FROM.getURIasString());
 				
 				// If the unit is imported, collect import info
-				if(importedfromval.equals("") || importedfromval == null){
+				if(importedfromval.isEmpty() || importedfromval == null){
 					uom = new UnitOfMeasurement(unitcode);
 					semsimmodel.addUnit(uom);
 				}
@@ -501,7 +501,7 @@ public class SemSimOWLreader extends ModelReader {
 					String baseunitind = baseunitOWLind.asOWLNamedIndividual().getIRI().toString();
 					String factorunitcode = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, baseunitind, SemSimRelation.HAS_COMPUTATIONAL_CODE.getURIasString());
 					
-					if(!factorunitcode.equals("") && factorunitcode!=null){
+					if(!factorunitcode.isEmpty() && factorunitcode!=null){
 						UnitOfMeasurement baseunit = semsimmodel.getUnit(factorunitcode);
 						
 						if(baseunit==null){
@@ -579,13 +579,13 @@ public class SemSimOWLreader extends ModelReader {
 			String timeunituri = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, eventind, SemSimRelation.HAS_TIME_UNIT.getURIasString());
 
 			// Set priority
-			if(! prioritymathml.equals("") && prioritymathml!=null) ssevent.setPriorityMathML(prioritymathml);
+			if(! prioritymathml.isEmpty() && prioritymathml!=null) ssevent.setPriorityMathML(prioritymathml);
 			
 			// Set delay
-			if(! delaymathml.equals("") && delaymathml!=null) ssevent.setDelayMathML(delaymathml);
+			if(! delaymathml.isEmpty() && delaymathml!=null) ssevent.setDelayMathML(delaymathml);
 			
 			// Set time units
-			if(! timeunituri.equals("") && timeunituri!=null){
+			if(! timeunituri.isEmpty() && timeunituri!=null){
 				String unitname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, 
 						timeunituri, SemSimRelation.HAS_COMPUTATIONAL_CODE.getURIasString());
 				UnitOfMeasurement timeunit = semsimmodel.getUnit(unitname);
@@ -696,7 +696,7 @@ public class SemSimOWLreader extends ModelReader {
 			Submodel sssubmodel = null;
 			
 			// If submodel IS NOT imported
-			if(importval.equals("") || importval==null){
+			if(importval.isEmpty() || importval==null){
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
 				String componentmathml = null;
 				String componentmathmlwithroot = null;
@@ -706,9 +706,9 @@ public class SemSimOWLreader extends ModelReader {
 				// If computation associated with submodel, store mathml
 				if(sssubmodel.isFunctional()){
 					String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, sub, SemSimRelation.HAS_COMPUTATIONAL_COMPONENT.getURIasString());
-					if(comp!=null && !comp.equals("")){
+					if(comp!=null && !comp.isEmpty()){
 						componentmathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, comp, SemSimRelation.HAS_MATHML.getURIasString());
-						if(componentmathml!=null && !componentmathml.equals("")){
+						if(componentmathml!=null && !componentmathml.isEmpty()){
 							((FunctionalSubmodel)sssubmodel).getComputation().setMathML(componentmathml);
 							componentmathmlwithroot = "<temp>\n" + componentmathml + "\n</temp>";
 						}
@@ -722,7 +722,7 @@ public class SemSimOWLreader extends ModelReader {
 					sssubmodel.addDataStructure(theds);
 					
 					// white box the equations
-					if(componentmathml!=null && !componentmathml.equals("")){
+					if(componentmathml!=null && !componentmathml.isEmpty()){
 						SAXBuilder builder = new SAXBuilder();
 						
 						try {
@@ -772,9 +772,8 @@ public class SemSimOWLreader extends ModelReader {
 						MappableVariable mv = (MappableVariable)theds;
 						
 						// Have to check for empty string b/c that's what getCellMLinitialValue is initialized to.
-						if((mv.getComputation().getComputationalCode()==null ||
-								mv.getComputation().getComputationalCode().equals("")) &&
-								(mv.getCellMLinitialValue()!=null && !mv.getCellMLinitialValue().equals(""))){ 
+						if((mv.getComputation().getComputationalCode().isEmpty()) &&
+								(mv.getCellMLinitialValue()!=null && !mv.getCellMLinitialValue().isEmpty())){ 
 							
 							theds.getComputation().setComputationalCode(localvarname + " = " + mv.getCellMLinitialValue());
 						}

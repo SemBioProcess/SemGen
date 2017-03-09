@@ -7,13 +7,11 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
-public class ExtractAdd extends Extractor {
-	private SemSimModel receivermodel;
-	
+public class ExtractAdd extends Extractor {	
 	public ExtractAdd(SemSimModel source, SemSimModel target) {
 		super(source);
-		receivermodel = target.clone();
-		extraction.setName(receivermodel.getName());
+		extraction.setName(target.getName());
+		collectStructures(target);
 	}
 
 	public void addDataStructure(DataStructure dstoimport) {
@@ -22,15 +20,15 @@ public class ExtractAdd extends Extractor {
 				dstoimport = ((MappableVariable)dstoimport).getMappedFrom();
 			}
 		}
-		includeDependency(dstoimport);
+		includeDependency(sourcemodel.getAssociatedDataStructure(dstoimport.getName()));
 	}
 	
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		includeSubModel(sourceobj);
+		includeSubModel(sourcemodel.getSubmodel(sourceobj.getName()));
 	}
 	
-	private void collectStructures() {
+	private void collectStructures(SemSimModel receivermodel) {
 		for (Submodel sm : receivermodel.getSubmodels()) {
 			this.includeSubModel(sourcemodel.getSubmodel(sm.getName()));
 		}
@@ -60,9 +58,13 @@ public class ExtractAdd extends Extractor {
 		}
 	}
 	
+	public SemSimModel getNewExtractionModel() {
+		return extraction;
+	}
+	
 	@Override
 	public SemSimModel run() {
-		collectStructures();
+		
 		collectDataStructureInputs();
 		replaceComputations();
 		replaceSubmodelDataStructures();
@@ -71,6 +73,5 @@ public class ExtractAdd extends Extractor {
 		
 		return extraction;
 	}
-
 
 }

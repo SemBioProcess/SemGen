@@ -21,6 +21,7 @@ public class ExtractNew extends Extractor {
 		replaceSubmodelDataStructures();
 		replaceSubmodels();
 		buildExtraction();
+
 		return extraction;
 	}
 

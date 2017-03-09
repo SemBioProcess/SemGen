@@ -16,7 +16,6 @@ import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
@@ -76,6 +75,7 @@ public class SemSimCopy {
 		destmodel.setEvents(new ArrayList<Event>(eventmap.values()));
 		
 		copyComputations();
+		
 	}
 
 	public static Set<Annotation> copyAnnotations(Collection<Annotation> annstocopy) {
@@ -160,26 +160,8 @@ public class SemSimCopy {
 	}
 	
 	private void copyDataStructures(SemSimModel modeltocopy) {
-		
-		HashMap<MappableVariable, MappableVariable> mvset = new HashMap<MappableVariable, MappableVariable>();
-
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
-			
-			DataStructure copy = ds.copy();
-			dsmap.put(ds, copy);
-			if (ds instanceof MappableVariable) {
-				mvset.put((MappableVariable)ds, (MappableVariable) copy);				
-			}
-		}
-		
-		for (MappableVariable old : mvset.keySet()) {
-			Set<MappableVariable> toset = new HashSet<MappableVariable>();
-			for (MappableVariable mv : old.getMappedTo()) {
-				toset.add(mvset.get(mv));
-			}
-			MappableVariable newmv = mvset.get(old);
-			newmv.setMappedFrom(old.getMappedFrom());
-			newmv.setMappedTo(toset);
+			dsmap.put(ds, ds.copy());
 		}
 		
 		remapDataStructures();
@@ -224,6 +206,15 @@ public class SemSimCopy {
 		for (Computation comp : compmap.values()) {
 			HashSet<DataStructure> inputs = new HashSet<DataStructure>();
 			for (DataStructure in : comp.getInputs()) {
+				if (dsmap.get(in) == null) {
+					for (DataStructure key : dsmap.keySet()) {
+						if (key.getName().equals(in.getName())) {
+							in = key;
+							break;
+						}
+					}
+					
+				}
 				inputs.add(dsmap.get(in));
 			}
 			HashSet<DataStructure> outputs = new HashSet<DataStructure>();

@@ -78,7 +78,7 @@ public class SemSimOWLFactory {
 
 		OWLOntology returnont = null;
 		for (OWLOntology ont : manager.getOntologies()) {
-			if (ont.getOntologyID().toString().equals(newont.getOntologyID().toString())) {
+			if (ont.getOntologyID().toString().contentEquals(newont.getOntologyID().toString())) {
 				returnont = ont;
 				tempmanager.removeOntology(newont);
 			}
@@ -127,7 +127,7 @@ public class SemSimOWLFactory {
 			for (OWLClassExpression desc : descs) {
 				if (desc instanceof OWLDataHasValue) {
 					OWLDataHasValue allrest = (OWLDataHasValue) desc;
-					if (allrest.getProperty().asOWLDataProperty().getIRI().toString().equals(prop.asOWLDataProperty().getIRI().toString())) {
+					if (allrest.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(prop.asOWLDataProperty().getIRI().toString())) {
 						OWLSubClassOfAxiom axiom = factory.getOWLSubClassOfAxiom(cls, desc);
 						RemoveAxiom removeax = new RemoveAxiom(ont, axiom);
 						manager.applyChange(removeax);
@@ -333,7 +333,7 @@ public class SemSimOWLFactory {
 		for(OWLAxiom refax : refaxs){
 			if(refax instanceof OWLDataPropertyAssertionAxiom){
 				OWLDataPropertyAssertionAxiom axiom = (OWLDataPropertyAssertionAxiom)refax;
-				if(axiom.getProperty().asOWLDataProperty().getIRI().toString().equals(propname)){
+				if(axiom.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(propname)){
 					manager.applyChange(new RemoveAxiom(ont, axiom));
 				}
 			}
@@ -366,7 +366,7 @@ public class SemSimOWLFactory {
 		OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
 		Set<OWLIndividual> inds = parentclass.getIndividuals(ontology);
 		for (OWLIndividual ind : inds) {
-			if (ind.asOWLNamedIndividual().getIRI().toString().equals(indtocheck)) {
+			if (ind.asOWLNamedIndividual().getIRI().toString().contentEquals(indtocheck)) {
 				return true;
 			}
 		}
@@ -380,7 +380,7 @@ public class SemSimOWLFactory {
 			OWLClass oneowlclass = factory.getOWLClass(IRI.create(oneclass));
 			Set<OWLIndividual> inds = oneowlclass.getIndividuals(ontology);
 			for (OWLIndividual ind : inds) {
-				if (ind.asOWLNamedIndividual().getIRI().toString().equals(indtocheck)) {
+				if (ind.asOWLNamedIndividual().getIRI().toString().contentEquals(indtocheck)) {
 					return true;
 				}
 			}
@@ -406,7 +406,7 @@ public class SemSimOWLFactory {
 	}
 
 	public static void setRDFLabel(OWLOntology ontology, OWLNamedIndividual annind, String value, OWLOntologyManager manager) {
-		if(value!=null && !value.equals("")){
+		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
 			Set<OWLAnnotation> anns = annind.getAnnotations(ontology, label);
 			for (OWLAnnotation ann : anns) {
@@ -424,7 +424,7 @@ public class SemSimOWLFactory {
 
 	public static void setRDFLabel(OWLOntology ontology, OWLClass ent,
 			String value, OWLOntologyManager manager) {
-		if(value!=null && !value.equals("")){
+		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
 			Set<OWLAnnotation> anns = ent.getAnnotations(ontology, label);
 			for (OWLAnnotation ann : anns) {
@@ -441,7 +441,7 @@ public class SemSimOWLFactory {
 	
 	// This removes all existing RDF comments and creates a new comment using "value"
 	public static void setRDFComment(OWLOntology ontology, OWLEntity ent, String value, OWLOntologyManager manager) {
-		if(value!=null && !value.equals("")){
+		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
 			Set<OWLAnnotation> anns = ent.getAnnotations(ontology, label);
 			for (OWLAnnotation ann : anns) {
@@ -467,7 +467,7 @@ public class SemSimOWLFactory {
 			for (OWLAnnotation ann : _real.getAnnotations(ontology,comment)) {
 				if (ann.getValue() instanceof OWLLiteral) {
 					OWLLiteral val = (OWLLiteral) ann.getValue();
-					if (val.getLiteral().equals(oldannotation)) {
+					if (val.getLiteral().contentEquals(oldannotation)) {
 						targetann = ann;
 					}
 				}
@@ -480,7 +480,7 @@ public class SemSimOWLFactory {
 				manager.applyChange(new RemoveAxiom(ontology,removeax));
 			}
 			// Add the new annotation
-			if (!newannotation.equals("")) {
+			if (!newannotation.contentEquals("")) {
 				OWLAnnotation commentAnno = factory.getOWLAnnotation(
 						factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI()),
 						factory.getOWLLiteral(newannotation, "en"));
@@ -554,7 +554,7 @@ public class SemSimOWLFactory {
 
 	public static String getIRIfragment(String uri) {
 		String result = uri;
-		if (!uri.equals("")) {
+		if (!uri.contentEquals("")) {
 			if (uri.contains("#")) 
 				result = uri.substring(uri.lastIndexOf("#") + 1, uri.length());
 			else if (uri.contains("/"))

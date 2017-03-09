@@ -117,6 +117,19 @@ public class FunctionalSubmodel extends Submodel {
 		}
 	}
 	
+	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
+		super.replaceDataStructure(replacee, replacer);
+		
+		if (computation.getOutputs().contains(replacee)) {
+			computation.getOutputs().remove(replacee);
+			computation.addOutput(replacer);
+		}
+		if (computation.getInputs().contains(replacee)) {
+			computation.getInputs().remove(replacee);
+			computation.addInput(replacer);
+		}
+	}
+	
 	public FunctionalSubmodel clone() {
 		return new FunctionalSubmodel(this);
 	}

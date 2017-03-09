@@ -20,21 +20,39 @@ public abstract class Extractor {
 	public Extractor(SemSimModel source, SemSimModel extractionmodel) {
 		sourcemodel = source;
 		extraction = extractionmodel;
+		includeSolutionDomains();
 	}
 	
 	public Extractor(SemSimModel source) {
-		sourcemodel = source;
+		sourcemodel = source.clone();
 		extraction = new SemSimModel();
+		includeSolutionDomains();
+	}
+	
+	private void includeSolutionDomains() {
+		for (DataStructure sdom : sourcemodel.getSolutionDomains()) {
+			this.includeDependency(sdom);
+		}
 	}
 	
 	public abstract SemSimModel run();
 	
 	protected void collectDataStructureInputs() {
 		Set<DataStructure> smdatastructures = new HashSet<DataStructure>(this.datastructures.keySet());
-		smdatastructures.addAll(sourcemodel.getSolutionDomains());
 		for (DataStructure smds : smdatastructures) {
 			for (DataStructure input : smds.getComputationInputs()) {
-				if (!smdatastructures.contains(input)) {
+				if (!datastructures.keySet().contains(input)) {	
+//					DataStructure existing = null;
+//					for (DataStructure key : datastructures.keySet()) {
+//						if (key.getName().equalsIgnoreCase(input.getName())) {
+//							existing = datastructures.get(key);
+//							break;
+//						}
+//					}
+//					if (existing != null) {
+//						datastructures.put(input, existing);
+//						return;
+//					}
 					DataStructure newinput = input.copy();
 					//Retain inputs which are constants
 					if (!newinput.getComputationInputs().isEmpty()) {
@@ -69,7 +87,7 @@ public abstract class Extractor {
 		for (DataStructure dstoadd : datastructures.values()) {
 			dstoadd.addToModel(extraction);			
 		}
-		extraction.addSubmodels(submodels.values());
+		extraction.setSubmodels(submodels.values());
 	}
 	
 	protected void includeSubModel(Submodel sourceobj) {
@@ -97,7 +115,23 @@ public abstract class Extractor {
 		
 		return dsswithpmc;
 	}
-
+	
+	protected void includeDependency(DataStructure sourceobj) {
+		if (!this.datastructures.containsKey(sourceobj)) {
+//			DataStructure existing = null;
+//			for (DataStructure key : datastructures.keySet()) {
+//				if (key.getName().equalsIgnoreCase(sourceobj.getName())) {
+//					existing = datastructures.get(key);
+//					break;
+//				}
+//			}
+//			if (existing != null) {
+//				datastructures.put(sourceobj, existing);
+//				return;
+//			}
+			datastructures.put(sourceobj, sourceobj.copy());
+		}
+	}
 	
 	public abstract void addEntity(PhysicalEntity pe);
 
@@ -106,9 +140,5 @@ public abstract class Extractor {
 	public abstract void addSubmodel(Submodel sourceobj);
 	public abstract void addDataStructure(DataStructure sourceobj);
 		
-	protected void includeDependency(DataStructure sourceobj) {
-		if (!this.datastructures.containsKey(sourceobj)) {
-			datastructures.put(sourceobj, sourceobj.copy());
-		}
-	}
+
 }

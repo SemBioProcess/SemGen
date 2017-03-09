@@ -495,7 +495,7 @@ public class SemSimUtil {
 	 *  @param outputfile The file to which the string will be written
 	 */
 	public static void writeStringToFile(String content, File outputfile){
-		if(content!=null && !content.equals("") && outputfile!=null){
+		if(content!=null && !content.isEmpty() && outputfile!=null){
 			try {
 				PrintWriter pwriter = new PrintWriter(new FileWriter(outputfile));
 				pwriter.print(content);

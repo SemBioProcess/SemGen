@@ -419,6 +419,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			usedToCompute.remove(replacee);
 			usedToCompute.add(replacer);
 		}
+		if (this.solutionDomain == replacee) {
+			solutionDomain = replacer;
+		}
 	}
 	
 	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {

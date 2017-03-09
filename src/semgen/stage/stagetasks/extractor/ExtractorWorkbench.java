@@ -42,7 +42,9 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	public Extractor makeAddExtractor(int extractionindex) {
-		return new ExtractAdd(sourcemodel, extractions.get(extractionindex));
+		ExtractAdd adder = new ExtractAdd(sourcemodel, extractions.get(extractionindex));
+		extractions.set(extractionindex, adder.getNewExtractionModel());
+		return adder;
 	}
 	
 	public Extractor makeRemoveExtractor(int extractionindex) {

@@ -62,7 +62,9 @@ public abstract class SemSimCollection extends SemSimObject{
 		if(!containsDataStructure(ds.getName())){
 			dataStructures.add(ds);
 		}
-		else System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
+		else {
+			System.err.println("Model already has data structure named " + ds.getName() + ". Using existing data structure.");
+		}
 		
 		return ds;
 	}
@@ -145,7 +147,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		
 		for(DataStructure ds : getAssociatedDataStructures()){
 			
-			if(ds.getName().equals(name)) return ds;
+			if(ds.getName().contentEquals(name)) return ds;
 		}
 		return null;
 	}
