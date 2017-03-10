@@ -42,17 +42,6 @@ public abstract class Extractor {
 		for (DataStructure smds : smdatastructures) {
 			for (DataStructure input : smds.getComputationInputs()) {
 				if (!datastructures.keySet().contains(input)) {	
-//					DataStructure existing = null;
-//					for (DataStructure key : datastructures.keySet()) {
-//						if (key.getName().equalsIgnoreCase(input.getName())) {
-//							existing = datastructures.get(key);
-//							break;
-//						}
-//					}
-//					if (existing != null) {
-//						datastructures.put(input, existing);
-//						return;
-//					}
 					DataStructure newinput = input.copy();
 					//Retain inputs which are constants
 					if (!newinput.getComputationInputs().isEmpty()) {
@@ -118,17 +107,6 @@ public abstract class Extractor {
 	
 	protected void includeDependency(DataStructure sourceobj) {
 		if (!this.datastructures.containsKey(sourceobj)) {
-//			DataStructure existing = null;
-//			for (DataStructure key : datastructures.keySet()) {
-//				if (key.getName().equalsIgnoreCase(sourceobj.getName())) {
-//					existing = datastructures.get(key);
-//					break;
-//				}
-//			}
-//			if (existing != null) {
-//				datastructures.put(sourceobj, existing);
-//				return;
-//			}
 			datastructures.put(sourceobj, sourceobj.copy());
 		}
 	}

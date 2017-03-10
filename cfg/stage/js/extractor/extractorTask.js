@@ -112,25 +112,51 @@ function ExtractorTask(graph, stagestate) {
 				}
 			}
 			
-			//If it's dropped in empty space, create a new extraction
-			var name = promptForExtractionName();
-				
-			//Don't create extraction if user cancels
-			if (name==null) return;
+
 			
 			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
 					droploc= extractor.graph.getCenter();
-					if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-						sender.createPhysioExtractionExclude(extractarray, name);
+					var root = node.srcnode.getRootParent();
+					if (root==extractor.sourcemodel) {
+						//If it's dropped in empty space, create a new extraction
+						var name = promptForExtractionName();
+							
+						//Don't create extraction if user cancels
+						if (name==null) return;
+						
+						if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+							sender.createPhysioExtractionExclude(extractarray, name);
+						}
+						else {
+							sender.createExtractionExclude(extractarray, name);
+						}
 					}
 					else {
-						sender.createExtractionExclude(extractarray, name);
+						
+						var	extractionindex;
+						for (var i = 0; i < extractor.extractions.length; i++) {
+							if (root == extractor.extractions[i]) {
+								extractionindex = i;
+								break;
+							}
+						}
+						if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+							sender.removePhysioNodesFromExtraction(extractionindex, extractarray);
+						}
+						else {
+							sender.removeNodesFromExtraction(extractionindex, extractarray);
+						}
 					}
 					return;
 			}
-			//If dragged to empty space, create a new extraction with the selected nodes
+			//If it's dropped in empty space, create a new extraction
+			var name = promptForExtractionName();
+				
+			//Don't create extraction if user cancels
+			if (name==null) return;
+
 			if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
 				sender.newPhysioExtraction(extractarray, name);
 			}

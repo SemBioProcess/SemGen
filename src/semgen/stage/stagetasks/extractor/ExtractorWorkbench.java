@@ -37,7 +37,7 @@ public class ExtractorWorkbench extends Workbench {
 		extraction.setName(name);
 		extractions.add(extraction);
 		modelaccessorlist.add(null);
-		return new ExtractRemove(sourcemodel, extraction);
+		return new ExtractExclude(sourcemodel, extraction);
 		
 	}
 	
@@ -48,7 +48,7 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	public Extractor makeRemoveExtractor(int extractionindex) {
-		return new ExtractRemove(extractions.get(extractionindex));
+		return new ExtractRemove(sourcemodel, extractions.get(extractionindex));
 	}
 	
 	public void saveExtractions(ArrayList<Integer> indicies) {

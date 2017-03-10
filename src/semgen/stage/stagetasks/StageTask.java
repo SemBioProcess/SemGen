@@ -183,7 +183,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		}
 		return javanodes;
 	}
-	
+
 	//Convert Javascript Node objects to Java Node objects
 	public ArrayList<Node<?>> convertJSStagePhysioNodestoJava(JSArray nodearray) {
 		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();

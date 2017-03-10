@@ -10,26 +10,52 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
-public class ExtractRemove extends Extractor {
+public class ExtractExclude extends Extractor {
 	protected Set<DataStructure> dsstoremove = new HashSet<DataStructure>();
-	protected Set<Submodel> smstoremove = new HashSet<Submodel>();	
-	
-	public ExtractRemove(SemSimModel source, SemSimModel target) {
-		super(source);
-		
-		extraction.setName(target.getName());
-		
-		collectStructures(target);
-	}
+	protected Set<Submodel> smstoremove = new HashSet<Submodel>();
 
-	private void collectElementstoKeep() {
-		for (DataStructure dstoremove : dsstoremove) {
-			datastructures.remove(dstoremove);
+	public ExtractExclude(SemSimModel source, SemSimModel extractionmodel) {
+		super(source, extractionmodel);
+	}
+	
+
+	public void addDataStructuretoRemove(DataStructure dstoremove) {
+		dsstoremove.add(dstoremove);
+	}
+	
+	public void addSubmodeltoRemove(Submodel smtoremove) {
+		smstoremove.add(smtoremove);
+		for (DataStructure smds : smtoremove.getAssociatedDataStructures()) {
+			dsstoremove.add(smds);
 		}
+	}
+	
+	private void collectElementstoKeep() {
+		Set<Submodel> smstokeep = new HashSet<Submodel>(sourcemodel.getSubmodels());
 		
 		for (Submodel smtoremove : smstoremove) {
-			submodels.remove(smtoremove);
+			smstokeep.remove(smtoremove);
+			for (DataStructure smds : smtoremove.getAssociatedDataStructures()) {
+				dsstoremove.add(smds);
+			}
 		}
+		
+		for (Submodel smtokeep : smstokeep) {
+			this.includeSubModel(smtokeep);
+		}
+		
+		Set<DataStructure> dsstokeep = new HashSet<DataStructure>(sourcemodel.getAssociatedDataStructures());	
+		for (DataStructure dstoremove : dsstoremove) {
+			dsstokeep.remove(dstoremove);
+		
+			for (DataStructure dstokeep : dsstokeep) {
+				dstokeep.removeOutput(dstoremove);
+			}
+		}
+		
+		for (DataStructure dstokeep : dsstokeep) {
+			includeDependency(dstokeep);
+		}		
 	}
 	
 	@Override
@@ -44,30 +70,13 @@ public class ExtractRemove extends Extractor {
 		return extraction;
 	}
 
-	private void collectStructures(SemSimModel receivermodel) {
-		for (Submodel sm : receivermodel.getSubmodels()) {
-			this.includeSubModel(sourcemodel.getSubmodel(sm.getName()));
-		}
-		for (DataStructure ds : receivermodel.getAssociatedDataStructures()) {
-			if (!ds.isExternal()) {
-				DataStructure existingds = sourcemodel.getAssociatedDataStructure(ds.getName());
-				this.includeDependency(existingds);
-			}
-		}
-	}
-	
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		sourceobj = sourcemodel.getSubmodel(sourceobj.getName());
 		smstoremove.add(sourceobj);
-		for (DataStructure dstoemove : sourceobj.getAssociatedDataStructures()) {
-			dsstoremove.add(dstoemove);
-		}
 	}
 
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
-		sourceobj = sourcemodel.getAssociatedDataStructure(sourceobj.getName());
 			if (sourceobj instanceof MappableVariable) {
 				if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
 					sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
@@ -79,7 +88,6 @@ public class ExtractRemove extends Extractor {
 	@Override
 	public void addEntity(PhysicalEntity pe) {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
-			dstoadd = sourcemodel.getAssociatedDataStructure(dstoadd.getName());
 			addDataStructure(dstoadd);
 		}
 	}
@@ -87,7 +95,6 @@ public class ExtractRemove extends Extractor {
 	@Override
 	public void addProcess(PhysicalProcess proc) {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(proc)) {
-			dstoadd = sourcemodel.getAssociatedDataStructure(dstoadd.getName());
 			addDataStructure(dstoadd);
 		}
 

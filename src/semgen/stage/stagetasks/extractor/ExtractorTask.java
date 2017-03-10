@@ -50,9 +50,19 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoadd);
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
 		
-		taskextractions.add(extraction);
+		taskextractions.set(extractionindex, extraction);
 		_commandSender.modifyExtraction(extractionindex, extraction);
 	}
+	
+	public void removeNodesfromExtraction(Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
+		Extractor extractor = workbench.makeRemoveExtractor(extractionindex);
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoremove);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
+		
+		taskextractions.set(extractionindex, extraction);
+		_commandSender.modifyExtraction(extractionindex, extraction);
+	}
+	
 	
 	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {
 		for (Node<?> node : nodestoextract) {
@@ -79,10 +89,7 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 
 	protected class ExtractorCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 		public void onInitialized(JSObject jstaskobj) {
-			jstask = jstaskobj;
-			//jstask.setProperty("nodetreejs", new NodeTreeBridge());
-			jstask.setProperty("extractionjs", new ExtractorBridge());
-			
+			jstask = jstaskobj;			
 		}
 		
 		public void onRequestExtractions() {
@@ -114,11 +121,23 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		}
 		
 		public void onRemoveNodesFromExtraction(Double extraction, JSArray nodes) {
-			
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes, extraction);
+			removeNodesfromExtraction(extraction.intValue(), jnodes);
+		}
+		
+		public void onRemovePhysioNodesFromExtraction(Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes, extraction);
+			removeNodesfromExtraction(extraction.intValue(), jnodes);
 		}
 		
 		public void onAddNodestoExtraction(Double extraction, JSArray nodes) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			addNodestoExtraction(extraction.intValue(), jnodes);
+			
+		}
+		
+		public void onAddPhysioNodestoExtraction(Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			addNodestoExtraction(extraction.intValue(), jnodes);
 			
 		}
@@ -161,9 +180,39 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		}
 	}
 	
-	public class ExtractorBridge {
-
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getNodebyHash(int nodehash, String nodeid, int extractionindex) {
+		Node<?> returnnode = taskextractions.get(extractionindex).getNodebyHash(nodehash, nodeid);
+		if (returnnode!=null) return returnnode; 
+		return null;
 	}
 	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid, int extractionindex) {
+		Node<?> returnnode = taskextractions.get(extractionindex).getPhysioMapNodebyHash(nodehash, nodeid);
+		if (returnnode!=null) return returnnode; 
+
+		return null;
+	}
+	
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStageNodestoJava(JSArray nodearray, Double extractionindex) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue(), extractionindex.intValue()));
+		}
+		return javanodes;
+	}
+
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStagePhysioNodestoJava(JSArray nodearray, Double extractionindex) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getPhysioMapNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue(), extractionindex.intValue()));
+		}
+		return javanodes;
+	}
 	
 }
