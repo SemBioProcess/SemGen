@@ -9,5 +9,5 @@ public class ExtractionNode extends ModelNode {
 		typeIndex = EXTRACTION;
 	}
 
-
+	
 }

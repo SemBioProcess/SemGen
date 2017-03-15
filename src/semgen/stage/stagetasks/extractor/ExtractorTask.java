@@ -72,6 +72,11 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 		return result;
 	}
 	
+	protected void removeExtraction(Double index) {
+		ExtractionNode nodetoremove = taskextractions.set(index.intValue(), null);
+		workbench.removeExtraction(nodetoremove.getSourceObject());
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		
@@ -116,8 +121,8 @@ public class ExtractorTask extends StageTask<ExtractorWebBrowserCommandSender> {
 			createNewExtractionExcluding(jnodes, extractname);
 		}
 		
-		public void onRemoveExtraction(Double extraction) {
-			
+		public void onRemoveExtraction(Double extractionindex) {
+			removeExtraction(extractionindex);
 		}
 		
 		public void onRemoveNodesFromExtraction(Double extraction, JSArray nodes) {
