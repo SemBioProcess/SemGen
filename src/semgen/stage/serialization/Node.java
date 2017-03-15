@@ -155,5 +155,9 @@ public abstract class Node<T extends SemSimObject> {
 		return false;
 	}
 	
+	public T getSourceObject() {
+		return sourceobj;
+	}
+	
 	public abstract void collectforExtraction(Extractor extractor);
 }

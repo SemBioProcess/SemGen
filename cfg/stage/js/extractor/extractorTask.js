@@ -54,6 +54,19 @@ function ExtractorTask(graph, stagestate) {
 		return name;
 	}
 	
+	//Remove the named model node
+	this.removeExtraction = function(extract) {
+		sender.consoleOut("Removing extraction " + extract.name);
+		var index;
+		for (index=0; index< extractor.extractions.length; index++) {
+			if (extractor.extractions[index]==extract) break;
+		}
+		
+		extractor.extractions.splice(index, 1);
+		delete extractor.nodes[extract.id];
+		graph.update();
+	};
+	
 	var onExtractionAction = function(node) {
 		//Don't add any extraction actions to the source model node.
 		
@@ -112,9 +125,6 @@ function ExtractorTask(graph, stagestate) {
 				}
 			}
 			
-
-			
-			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
 					droploc= extractor.graph.getCenter();
@@ -135,18 +145,18 @@ function ExtractorTask(graph, stagestate) {
 					}
 					else {
 						
-						var	extractionindex;
-						for (var i = 0; i < extractor.extractions.length; i++) {
-							if (root == extractor.extractions[i]) {
-								extractionindex = i;
-								break;
-							}
+						//If an extraction is dragged to the trash, delete it
+						if (root==node.srcnode) {
+							sender.removeExtraction(root.modelindex);
+							extractor.removeExtraction(root);
+							return;
 						}
+						
 						if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-							sender.removePhysioNodesFromExtraction(extractionindex, extractarray);
+							sender.removePhysioNodesFromExtraction(root.modelindex, extractarray);
 						}
 						else {
-							sender.removeNodesFromExtraction(extractionindex, extractarray);
+							sender.removeNodesFromExtraction(root.modelindex, extractarray);
 						}
 					}
 					return;
@@ -166,6 +176,7 @@ function ExtractorTask(graph, stagestate) {
 		});
 	}
 
+	
 	this.graph.ghostBehaviors.push(onExtractionAction);
 	
 	this.addExtractionNode = function(newextraction) {
@@ -192,7 +203,7 @@ function ExtractorTask(graph, stagestate) {
 		extractor.graph.update();
 		extractor.selectNode(extractionnode);
 	}
-	
+
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {
 			extractor.addExtractionNode(extractions[x]);
@@ -206,7 +217,7 @@ function ExtractorTask(graph, stagestate) {
 	receiver.onModifyExtraction(function(index, extraction) {
 		extractor.setExtractionNode(index, extraction);
 	});
-	
+
 	$("#stageModel").click(function() {
 		var extractstostage = [];
 		for (i in extractor.extractions) {

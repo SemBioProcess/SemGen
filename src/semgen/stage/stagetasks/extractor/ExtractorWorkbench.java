@@ -104,6 +104,10 @@ public class ExtractorWorkbench extends Workbench {
 	public SemSimModel getSourceModel() {
 		return sourcemodel;
 	}
+	
+	public void removeExtraction(SemSimModel model) {
+		extractions.remove(model);
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
