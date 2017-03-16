@@ -18,7 +18,7 @@ var NodeType = {
 		PROCESS: {id: 6, nodeType: "Process", color: "#2CA02C", canShowHide: true},
 		MEDIATOR: {id: 7, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
 		NULLNODE: {id: 8, nodeType: "Null", color: "#FFFFFF", canShowHide: true},
-		EXTRACTION: {id: 9, nodeType: "Extraction", color: "#222222", canShowHide: false}
+		EXTRACTION: {id: 9, nodeType: "Extraction", color: "#118888", canShowHide: false}
 };
 
 var NodeTypeMap = {
