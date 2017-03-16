@@ -42,7 +42,6 @@ public class SemGen extends JFrame implements Observer{
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
 	public static OntologyCache termcache;
 	public static boolean debug = false;
-	private static boolean openstage = true;
 	
 	//A class for application level events such as exiting and creating new tabs
 	public static GlobalActions gacts = new GlobalActions();
@@ -83,9 +82,6 @@ public class SemGen extends JFrame implements Observer{
 		for (String arg : args) {
 			if (arg.equals("-debug") || arg.equals("-Debug") || arg.equals("-d")) {
 				debug = true;
-			}
-			if (arg.equals("-stage")) {
-				openstage = true;
 			}
 		}
 		try {
@@ -180,9 +176,7 @@ public class SemGen extends JFrame implements Observer{
 		if(OSValidator.isMac())
 			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
 		
-		if (openstage) {
-				contentpane.startNewStageTask();
-		}
+		contentpane.startNewStageTask();
 	}
 	
 	//Check which OS SemGen is being run under

@@ -27,7 +27,7 @@ function RightSidebar(graph) {
 	});
 	$("#friction").change(function() {
 		var friction = $("#friction").val();
-		graph.setFriction(parseInt(friction));
+		graph.setFriction(parseFloat(friction));
 
 	});
 	$("#gravity").bind('change', function() {
