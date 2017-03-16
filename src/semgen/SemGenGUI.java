@@ -171,7 +171,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		
 		public void onError() {
-			new NewTaskDialog(globalactions);
 		}
 	}
 	
