@@ -111,7 +111,7 @@ Node.prototype.setLocation = function (x, y) {
 
 Node.prototype.createVisualElement = function (element, graph) {
 	//Randomly choose a location if one has not been set
-	if (this.srcobj.xpos<=10 || this.srcobj.ypos <= 10) {
+	if (this.srcobj.xpos<=20 || this.srcobj.ypos <= 20) {
 		if (this.parent) {
 			this.setLocation(this.parent.xpos() + Math.random()*200 - 100, this.parent.ypos() + Math.random()*200 - 100);
 			
@@ -171,7 +171,7 @@ Node.prototype.createVisualElement = function (element, graph) {
         this.createTextElement("real");
     }
 
-	this.rootElement.attr("transform", "translate(" + node.xpos() + "," + node.ypos() + ")");
+	this.rootElement.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 

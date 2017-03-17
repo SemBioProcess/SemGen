@@ -15,6 +15,11 @@ function Hull(node) {
 			.on("dblclick", function(d) {
 					node.showchildren = false;
 					node.rootElement.selectAll("text").attr("x", 0);
+					if (!node.fixed) {
+						node.fx = null;
+						node.fy = null;
+					}
+					node.setLocation((node.xmin+node.xmax)/2, (node.ymin+node.ymax)/2);
 					node.graph.update();
 			});
 	});

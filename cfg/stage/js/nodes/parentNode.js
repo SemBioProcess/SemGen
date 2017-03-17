@@ -97,6 +97,9 @@ ParentNode.prototype.showChildren = function () {
 	}
 	
 	this.showchildren = true;
+	node.fx = node.xpos();
+	node.fy = node.ypos();
+	
 	 $(this).triggerHandler('childrenSet', [this.children]);
 
 }

@@ -57,7 +57,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		fade = true;
 	}
 	var outputNode = this.getFirstLinkableAncestor();
-	if (!outputNode) return links; 
+	if (!outputNode || outputNode.showchildren) return links; 
 	
 	this.srcobj.inputs.forEach(function (link) {
 		var inputNode = outputNode.graph.findNode(link.input.id);
@@ -77,7 +77,7 @@ DependencyNode.prototype.getLinks = function (linklist) {
 		if (inputNode==null) {
 			return links;
 		}
-		else if (inputNode.parent == outputNode) {
+		else if ((inputNode.parent == outputNode) || inputNode.showchildren) {
 			return links;
 		}
 		if (!inputNode || inputNode==outputNode) return;

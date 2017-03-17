@@ -221,6 +221,7 @@ function Graph() {
 
 	this.tick = function () {
         graph.hoverPause();
+        
         // Execute the tick handler for each link
 		path.enter().each(function (d) {
 			d.tickHandler(this, graph);
@@ -380,8 +381,9 @@ function Graph() {
 		}
 		else {
 		    this.resume();
+		    this.tick();
 		}
-		this.tick();
+		
 	}
 
 	this.toggleGravity = function(enabled) {
