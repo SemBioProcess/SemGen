@@ -3,7 +3,6 @@ package semgen.stage.stagetasks;
 import java.util.ArrayList;
 
 import semgen.stage.stagetasks.StageTask.Task;
-import semgen.stage.stagetasks.extractor.ExtractorTask;
 import semgen.stage.stagetasks.merge.MergerTask;
 
 public class StageTaskConf {
@@ -19,8 +18,6 @@ public class StageTaskConf {
 		switch (tasktype) {
 		case MERGER: 
 			return new MergerTask(taskmodels, taskindex);
-		case EXTRACTOR:
-			return new ExtractorTask(taskmodels.get(0), taskindex);
 		case EDITOR:
 			return null;
 		default:

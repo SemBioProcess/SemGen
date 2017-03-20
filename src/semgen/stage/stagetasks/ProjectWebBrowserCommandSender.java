@@ -1,6 +1,9 @@
 package semgen.stage.stagetasks;
 
+import java.util.Collection;
+
 import semgen.stage.serialization.DependencyNode;
+import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
@@ -47,5 +50,13 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	 */
 	void showPhysioMapNetwork(String modelName, PhysioMapNode[] jsonPhysioMap);
 
+	public void newExtraction(ExtractionNode newextraction);
 	
+	public void updateExtraction();
+	
+	public void removeExtraction();
+	
+	public void loadExtractions(Collection<ExtractionNode> nodes);
+
+	public void modifyExtraction(Integer extractionindex, ExtractionNode extraction);
 }

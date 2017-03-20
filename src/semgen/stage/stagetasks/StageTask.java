@@ -27,7 +27,6 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	public enum Task {
 		PROJECT("proj"), 
 		MERGER("merge"), 
-		EXTRACTOR("extract"), 
 		EDITOR("edit");
 		
 		public String jsid;
@@ -116,13 +115,6 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		mods.add(_models.get(modind2));
 		
 		configureTask(Task.MERGER, mods);
-	}
-	
-	protected void createExtractor(Integer modindex) {
-		ArrayList<ModelInfo> mods = new ArrayList<ModelInfo>();
-		
-		mods.add(_models.get(modindex));
-		configureTask(Task.EXTRACTOR, mods);
 	}
 	
 	protected void switchTask(int task) {

@@ -2,17 +2,24 @@ package semgen.stage.stagetasks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 
 import javax.swing.JOptionPane;
 
+import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import org.apache.commons.io.FilenameUtils;
 import semgen.SemGen;
 import semgen.search.CompositeAnnotationSearch;
+import semgen.stage.serialization.ExtractionNode;
+import semgen.stage.serialization.Node;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
+import semgen.stage.stagetasks.extractor.Extractor;
+import semgen.stage.stagetasks.extractor.ExtractorWorkbench;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SaveSemSimModel;
@@ -24,6 +31,9 @@ import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
+	
+	private ArrayList<ExtractionNode> taskextractions = new ArrayList<ExtractionNode>();
+	private HashMap<ModelInfo, ExtractorWorkbench> extractnodeworkbenchmap = new HashMap<ModelInfo, ExtractorWorkbench>(); 
 	
 	public ProjectTask() {
 		super(0);
@@ -69,6 +79,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+				extractnodeworkbenchmap.put(info, new ExtractorWorkbench(info.accessor, info.Model));
 				addModeltoTask(info);
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
@@ -85,7 +96,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					return;
 				}
 				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				
+	
+				extractnodeworkbenchmap.put(info, new ExtractorWorkbench(info.accessor, info.Model));
 				addModeltoTask(info);
 				_commandSender.addModel(info.modelnode);
 			}
@@ -100,9 +112,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			switch(task) {
 				case "annotate":
 					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
-					break;
-				case "extract":
-					onExtract(modelindex);
 					break;
 				case "export":
 					String selectedtype = "owl";  // Default extension type
@@ -145,9 +154,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			createMerger(model1.intValue(), model2.intValue());
 		}
 		
-		public void onExtract(Double model) {
-			createExtractor(model.intValue());
-		}
 		
 		public void onQueryModel(Integer modelindex, String query) {
 			ModelInfo modelInfo = _models.get(modelindex);
@@ -161,6 +167,65 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				_commandSender.receiveReply(hasdependencies.toString());
 				break;
 			}
+		}
+		
+		public void onRequestExtractions() {
+				_commandSender.loadExtractions(taskextractions);
+		}
+		
+		public void onNewExtraction(Double sourceindex, JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtraction(sourceindex.intValue(), jnodes, extractname);
+		}
+		
+		public void onNewPhysioExtraction(Double sourceindex, JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
+			createNewExtraction(sourceindex.intValue(), jnodes, extractname);
+		}
+		
+		public void onCreateExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
+		}
+		
+		public void onCreatePhysioExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
+			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
+		}
+		
+		public void onRemoveExtraction(Double sourceindex, Double extractionindex) {
+			removeExtraction(sourceindex, extractionindex);
+		}
+		
+		public void onRemoveNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes, extraction);
+			removeNodesfromExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
+		}
+		
+		public void onRemovePhysioNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes, extraction);
+			removeNodesfromExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
+		}
+		
+		public void onAddNodestoExtraction(Double sourceindex, Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
+			addNodestoExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
+			
+		}
+		
+		public void onAddPhysioNodestoExtraction(Double sourceindex, Double extraction, JSArray nodes) {
+			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
+			addNodestoExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
+			
+		}
+		
+		public void onSave(JSArray indicies) {
+			ArrayList<Integer> extractstosave = new ArrayList<Integer>();
+			if (indicies.length()==0) return;
+			for (int i = 0; i < indicies.length(); i++) {
+				extractstosave.add((int)(indicies.get(i)).getNumberValue());
+			}
+			//workbench.saveExtractions(extractstosave);
 		}
 		
 		public void onChangeTask(Double index) {
@@ -199,6 +264,100 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	@Override
 	public void closeTask() {
 		
+	}
+	
+	
+	//EXTRACTION FUNCTIONS
+	public void createNewExtraction(Integer infoindex, ArrayList<Node<?>> nodestoextract, String extractname) {
+		ExtractorWorkbench workbench = this.extractnodeworkbenchmap.get(_models.get(infoindex));
+		Extractor extractor = workbench.makeNewExtraction(extractname);
+		
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoextract);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
+		
+		taskextractions.add(extraction);
+		_commandSender.newExtraction(extraction);
+	}	
+	
+	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
+		ExtractorWorkbench workbench = this.extractnodeworkbenchmap.get(_models.get(infoindex));
+		Extractor extractor = workbench.makeNewExtractionExclude(extractname);
+		
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoexclude);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
+		
+		taskextractions.add(extraction);
+		_commandSender.newExtraction(extraction);
+	}
+	
+	public void addNodestoExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
+		ExtractorWorkbench workbench = this.extractnodeworkbenchmap.get(_models.get(infoindex));
+		Extractor extractor = workbench.makeAddExtractor(extractionindex);
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoadd);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
+		
+		taskextractions.set(extractionindex, extraction);
+		_commandSender.modifyExtraction(extractionindex, extraction);
+	}
+	
+	public void removeNodesfromExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
+		ExtractorWorkbench workbench = this.extractnodeworkbenchmap.get(_models.get(infoindex));
+		Extractor extractor = workbench.makeRemoveExtractor(extractionindex);
+		SemSimModel extractedmodel = doExtraction(extractor, nodestoremove);
+		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
+		
+		taskextractions.set(extractionindex, extraction);
+		_commandSender.modifyExtraction(extractionindex, extraction);
+	}
+	
+	
+	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {
+		for (Node<?> node : nodestoextract) {
+			node.collectforExtraction(extractor);
+		}
+		SemSimModel result = extractor.run();
+		return result;
+	}
+	
+	protected void removeExtraction(Double sourceindex, Double index) {		
+		ExtractorWorkbench workbench = this.extractnodeworkbenchmap.get(_models.get(sourceindex.intValue()));
+		ExtractionNode nodetoremove = taskextractions.set(index.intValue(), null);
+		workbench.removeExtraction(nodetoremove.getSourceObject());
+	}
+	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getNodebyHash(int nodehash, String nodeid, int extractionindex) {
+		Node<?> returnnode = taskextractions.get(extractionindex).getNodebyHash(nodehash, nodeid);
+		if (returnnode!=null) return returnnode; 
+		return null;
+	}
+	
+	//Find node by saved hash and verify with id - should be faster than straight id
+	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid, int extractionindex) {
+		Node<?> returnnode = taskextractions.get(extractionindex).getPhysioMapNodebyHash(nodehash, nodeid);
+		if (returnnode!=null) return returnnode; 
+
+		return null;
+	}
+	
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStageNodestoJava(JSArray nodearray, Double extractionindex) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue(), extractionindex.intValue()));
+		}
+		return javanodes;
+	}
+
+	//Convert Javascript Node objects to Java Node objects
+	public ArrayList<Node<?>> convertJSStagePhysioNodestoJava(JSArray nodearray, Double extractionindex) {
+		ArrayList<Node<?>> javanodes = new ArrayList<Node<?>>();
+		for (int i = 0; i < nodearray.length(); i++) {
+			JSObject val = nodearray.get(i).asObject();
+			javanodes.add(getPhysioMapNodebyHash(val.getProperty("hash").asNumber().getInteger(), val.getProperty("id").getStringValue(), extractionindex.intValue()));
+		}
+		return javanodes;
 	}
 	
 }

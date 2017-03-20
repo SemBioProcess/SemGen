@@ -39,9 +39,6 @@ function main() {
 		if (taskname=="merge") {
 			this.task = new MergerTask(graph, stagestate);
 		}
-		if (taskname=="extract") {
-			this.task = new ExtractorTask(graph, stagestate);
-		}
 		sender.initialized(main.task);
 		this.task.onInitialize();
 		graph.setTaskNodes(this.task.nodes);
