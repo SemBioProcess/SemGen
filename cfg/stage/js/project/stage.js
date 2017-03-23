@@ -28,7 +28,8 @@ function Stage(graph, stagestate) {
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
-		stage.addModelNode(model, [DragToMerge]);
+		var modelnode = stage.addModelNode(model, [DragToMerge]);
+		stage.extractions[modelnode] = {modextractions: []};
 		stage.leftsidebar.addModeltoList(model);
 	});
 
@@ -38,6 +39,7 @@ function Stage(graph, stagestate) {
 		sender.consoleOut("Removing model " + model.name);
 		leftsidebar.removeModelfromList(model.id);
 		delete nodes[model.id];
+		delete stage.extractions[model];
 		leftsidebar.updateModelPanel(null);
 		graph.update();
 	});
@@ -94,25 +96,12 @@ function Stage(graph, stagestate) {
 		}
 	});
 	
-	var isExtractionNode = function(node) {
-		for (x in extractor.extractions) {
-			if (extractor.extractions[x] == node) return true;
-		}
-		return false;
-	}
-	
-	var isPartofExtraction = function(node) {
-		for (x in extractor.extractions) {
-			if (extractor.extractions[x] == node.getRootParent()) return true;
-		}
-		return false;
-	}
+	//******************EXTRACTION FUNCTIONS*************************//
 	
 	var promptForExtractionName = function() {
 		var name = prompt("Enter name for extraction.", "");
-		if (extractor.sourcemodel.name==name) name = promptForExtractionName();
-		for (x in extractor.extractions) {
-			if (extractor.extractions[x].name==name) return promptForExtractionName();
+		for (x in stage.nodes) {
+			if (x==name) return promptForExtractionName();
 		}
 		
 		return name;
@@ -122,19 +111,19 @@ function Stage(graph, stagestate) {
 	this.removeExtraction = function(extract) {
 		sender.consoleOut("Removing extraction " + extract.name);
 		var index;
-		for (index=0; index< extractor.extractions.length; index++) {
-			if (extractor.extractions[index]==extract) break;
+		for (index=0; index< stage.extractions.length; index++) {
+			if (stage.extractions[extract.sourcemodel].modextractions[index]==extract) break;
 		}
 		
-		extractor.extractions.splice(index, 1);
-		delete extractor.nodes[extract.id];
+		stage.extractions[extract.sourcemodel].modextractions.splice(index, 1);
+		delete stage.nodes[extract.id];
 		graph.update();
 	};
 	
 	var onExtractionAction = function(node) {
-		//Don't add any extraction actions to the source model node.
+		//Don't add any extraction actions to a model node.
 		
-		if (extractor.sourcemodel == node.srcnode) return;
+		if (node.nodeType == NodeType.MODEL) return;
 		node.drag.push(function(selections) {
 			if (trash.isOverlappedBy(node, 2.0)) {
 				$("#trash").attr("color", "red");
@@ -143,143 +132,174 @@ function Stage(graph, stagestate) {
 				$("#trash").attr("color", "transparent");
 			}
 			
-			if (extractor.sourcemodel.hullContainsPoint([node.xpos(), node.ypos()])) {
-				extractor.sourcemodel.rootElement.select(".hull").style("stroke","red");
-			}
-			else {
-				extractor.sourcemodel.rootElement.select(".hull").style("stroke", extractor.sourcemodel.nodeType.color);
-			}
-			
-			for (x in extractor.extractions) {
-				var extraction = extractor.extractions[x];
-				if (extraction.hullContainsPoint([node.xpos(), node.ypos()])) {
-					extraction.rootElement.select(".hull").style("stroke","goldenrod");
-					break;
+			for (i in stage.nodes) {
+				var ithnode = stage.nodes[i];
+				if (ithnode.hullContainsPoint([node.xpos(), node.ypos()])) {
+					if ( ithnode.nodeType==NodeType.MODEL ) {
+						ithnode.rootElement.select(".hull").style("stroke","red");
+					}
+					else {
+						ithnode.rootElement.select(".hull").style("stroke","goldenrod");
+					}
 				}
 				else {
-					extraction.rootElement.select(".hull").style("stroke", extraction.nodeType.color);
+					ithnode.rootElement.select(".hull").style("stroke", ithnode.nodeType.color);
 				}
 			}
+
 		});
 		
 		node.dragEnd.push(function(selections) {
-			extractor.graph.shiftIsPressed = false;
+			stage.graph.shiftIsPressed = false;
 			droploc = [node.xpos(), node.ypos()];
-			
+
 			//Reset hull colors
-			for (x in extractor.extractions) {
-				extractor.extractions[x].rootElement.select(".hull").style("fill", extractor.extractions[x].nodeType.color);
+			for (x in stage.nodes) {
+				stage.nodes[x].rootElement.select(".hull").style("fill", stage.nodes[x].nodeType.color);
 			}
-			extractor.sourcemodel.rootElement.select(".hull").style("fill", extractor.sourcemodel.nodeType.color);
+			var root = node.srcnode.getRootParent();
 			
+			// Ensure all selected nodes share the same parent as the first selected node
 			var extractarray = [];
 			for (x in selections) {
-				extractarray.push(selections[x].srcnode);
-			}
-			
-			if (extractor.sourcemodel.hullContainsPoint(droploc)) {
-				return;
-			}
-
-			//Check to see if node is inside an extraction hull
-			for (var i=0; i< extractor.extractions.length; i++) {
-				if (extractor.extractions[i].hullContainsPoint(droploc)) {
-					sender.addNodestoExtraction(i, extractarray);
-					return;
-				}
+				var selnode = selections[x].srcnode;
+				if (selnode.nodeType == NodeType.MODEL && root!=selnode.getRootParent()) continue;
+				extractarray.push(selnode);
 			}
 			
 			//If the node is dragged to the trash
 			if (trash.isOverlappedBy(node, 2.0)) {
-					droploc= extractor.graph.getCenter();
-					var root = node.srcnode.getRootParent();
-					if (root==extractor.sourcemodel) {
+					droploc= stage.graph.getCenter();
+					
+					if (root.nodeType==NodeType.MODEL) {
 						//If it's dropped in empty space, create a new extraction
 						var name = promptForExtractionName();
 							
 						//Don't create extraction if user cancels
 						if (name==null) return;
 						
-						if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-							sender.createPhysioExtractionExclude(extractarray, name);
+						if (stage.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+							sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
 						}
 						else {
-							sender.createExtractionExclude(extractarray, name);
+							sender.createExtractionExclude(root.modelindex, extractarray, name);
 						}
 					}
 					else {
-						
+						var srcmodindex = root.sourcenode.modelindex;
 						//If an extraction is dragged to the trash, delete it
-						if (root==node.srcnode) {
-							sender.removeExtraction(root.modelindex);
-							extractor.removeExtraction(root);
+						if (root == node) {
+							sender.removeExtraction(srcmodindex, root.modelindex);
+							stage.removeExtraction(srcmodindex, root);
 							return;
 						}
 						
-						if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-							sender.removePhysioNodesFromExtraction(root.modelindex, extractarray);
+						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+							sender.removePhysioNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
 						}
 						else {
-							sender.removeNodesFromExtraction(root.modelindex, extractarray);
+							sender.removeNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
 						}
 					}
 					return;
 			}
+			
+			var destinationnode = null;
+			for (i in stage.nodes) {
+				var ithnode = stage.nodes[i];
+				
+				if (ithnode.hullContainsPoint([node.xpos(), node.ypos()])) {
+					//if a model hull contains the dropped ghost node, do nothing.
+					if ( ithnode.nodeType==NodeType.MODEL ) {
+						return;
+					}
+					else {
+						destinationnode = ithnode;
+						break;
+					}
+				}
+			}
+			
+			//Check to see if node is inside an extraction hull
+			if (destinationnode!=null) {
+				sender.addNodestoExtraction(destinationnode.sourcenode.modelindex, destinationnode.modelindex, extractarray);
+				return;
+			}
+
 			//If it's dropped in empty space, create a new extraction
 			var name = promptForExtractionName();
 				
 			//Don't create extraction if user cancels
 			if (name==null) return;
-
-			if (extractor.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-				sender.newPhysioExtraction(extractarray, name);
+			
+			var baserootindex = root.modelindex;
+			if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+				sender.newPhysioExtraction(baserootindex, extractarray, name);
 			}
 			else {
-				sender.newExtraction(extractarray, name);
+				sender.newExtraction(baserootindex, extractarray, name);
 			}
 		});
 	}
 
+	this.applytoExtractions = function(dothis) {
+		for (x in stage.extractions) {
+			for (y in stage.extractions[x].modextractions) {
+				dothis(stage.extractions[x].modextractions[y]);
+			}
+		}
+	}
+	
+	//Apply to children until the function returns true
+	this.applytoExtractionsUntilTrue = function(funct) {
+		for (x in stage.extractions) {
+			for (y in stage.extractions[x].modextractions) {
+				if (dothis(stage.extractions[x].modextractions[y])) return true;
+			}
+		}
+		return false;
+	}
 	
 	this.graph.ghostBehaviors.push(onExtractionAction);
 	
-	this.addExtractionNode = function(newextraction) {
-		var extractionnode = new ExtractedModel(extractor.graph, newextraction);
-		extractor.extractions.push(extractionnode);
-		extractor.nodes[newextraction.id] = extractionnode;
+	this.addExtractionNode = function(basenodeindex, newextraction) {
+		var basenode = stage.getModelNodebyIndex(basenodeindex);
+		var extractionnode = new ExtractedModel(stage.graph, newextraction, basenode);
+		stage.extractions[basenode].modextractions.push(extractionnode);
+		stage.nodes[newextraction.id] = extractionnode;
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
 		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
-		extractor.graph.update();
-		extractor.selectNode(extractionnode);
+		stage.graph.update();
+		stage.selectNode(extractionnode);
 	}
 	
-	this.setExtractionNode = function(index, extraction) {
-		var extractionnode = new ExtractedModel(extractor.graph, extraction);
-		droploc = [extractor.extractions[index].xpos(), extractor.extractions[index].ypos()];
-		extractor.extractions[index] = extractionnode;
-		extractor.nodes[extractionnode.id] = extractionnode;
+	this.setExtractionNode = function(basemodelindex, index, extraction) {
+		var extractionnode = new ExtractedModel(stage.graph, extraction);
+		droploc = [stage.extractions[basemodelindex].modextractions[index].xpos(), stage.extractions[basemodelindex].modextractions[index].ypos()];
+		stage.extractions[basemodelindex].modextractions[index] = extractionnode;
+		stage.nodes[extractionnode.id] = extractionnode;
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
 		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
-		extractor.graph.update();
-		extractor.selectNode(extractionnode);
+		stage.graph.update();
+		stage.selectNode(extractionnode);
 	}
 
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {
-			extractor.addExtractionNode(extractions[x]);
+			stage.addExtractionNode(extractions[x]);
 		}
 	});
 	
-	receiver.onNewExtraction(function(newextraction) {
-		extractor.addExtractionNode(newextraction);
+	receiver.onNewExtraction(function(sourceindex, newextraction) {
+		stage.addExtractionNode(sourceindex, newextraction);
 	});
 	
 	receiver.onModifyExtraction(function(index, extraction) {
-		extractor.setExtractionNode(index, extraction);
+		stage.setExtractionNode(sourceindex, index, extraction);
 	});
 }
 

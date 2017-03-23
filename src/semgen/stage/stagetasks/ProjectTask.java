@@ -276,7 +276,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
 		
 		taskextractions.add(extraction);
-		_commandSender.newExtraction(extraction);
+		_commandSender.newExtraction(infoindex, extraction);
 	}	
 	
 	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
@@ -287,7 +287,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, taskextractions.size());
 		
 		taskextractions.add(extraction);
-		_commandSender.newExtraction(extraction);
+		_commandSender.newExtraction(infoindex, extraction);
 	}
 	
 	public void addNodestoExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
@@ -297,7 +297,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
 		
 		taskextractions.set(extractionindex, extraction);
-		_commandSender.modifyExtraction(extractionindex, extraction);
+		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
 	}
 	
 	public void removeNodesfromExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
@@ -307,7 +307,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
 		
 		taskextractions.set(extractionindex, extraction);
-		_commandSender.modifyExtraction(extractionindex, extraction);
+		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
 	}
 	
 	

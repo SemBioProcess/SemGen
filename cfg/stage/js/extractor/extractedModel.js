@@ -5,10 +5,11 @@
 ExtractedModel.prototype = new ParentNode();
 ExtractedModel.prototype.constructor = ExtractedModel;
 
-function ExtractedModel(graph, srcobj) {
+function ExtractedModel(graph, srcobj, basenode) {
 	ParentNode.prototype.constructor.call(this, graph, srcobj, null, 16, 20, 0);
 	this.addClassName("ExtractedModel");
 	this.modelindex = srcobj.modelindex;
+	this.sourcenode = basenode;
 	this.addClassName("modelNode");
 	this.canlink = false;
 	this.displaymode = DisplayModes.SHOWSUBMODELS.id;

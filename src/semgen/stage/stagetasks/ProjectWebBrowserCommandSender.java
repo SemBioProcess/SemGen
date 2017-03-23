@@ -50,13 +50,9 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	 */
 	void showPhysioMapNetwork(String modelName, PhysioMapNode[] jsonPhysioMap);
 
-	public void newExtraction(ExtractionNode newextraction);
-	
-	public void updateExtraction();
-	
-	public void removeExtraction();
-	
+	public void newExtraction(Integer sourceindex, ExtractionNode newextraction);
+			
 	public void loadExtractions(Collection<ExtractionNode> nodes);
 
-	public void modifyExtraction(Integer extractionindex, ExtractionNode extraction);
+	public void modifyExtraction(Integer infoindex, Integer extractionindex, ExtractionNode extraction);
 }

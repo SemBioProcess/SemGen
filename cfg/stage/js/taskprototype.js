@@ -41,7 +41,7 @@ function Task(graph, stagestate) {
 	this.getModelNodebyIndex = function(modelindex) {
 		var modelNode;
 		for (x in this.nodes) {
-			if (this.nodes[x].modelindex == modelindex) {
+			if (this.nodes[x].nodeType==NodeType.MODEL && this.nodes[x].modelindex == modelindex) {
 				modelNode = this.nodes[x];
 				break;
 			}
