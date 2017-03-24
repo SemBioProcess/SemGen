@@ -1,13 +1,13 @@
 package semgen.stage.stagetasks;
 
-import java.util.Collection;
-
+import java.util.ArrayList;
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SubModelNode;
+import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 
 public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandSender{
 	
@@ -52,7 +52,7 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 
 	public void newExtraction(Integer sourceindex, ExtractionNode newextraction);
 			
-	public void loadExtractions(Collection<ExtractionNode> nodes);
+	public void loadExtractions(ArrayList<ModelExtractionGroup> extractnodeworkbenchmap);
 
 	public void modifyExtraction(Integer infoindex, Integer extractionindex, ExtractionNode extraction);
 }
