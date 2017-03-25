@@ -9,28 +9,12 @@ ExtractorTask.prototype.constructor = ExtractorTask;
 function ExtractorTask(graph, stagestate) {
 	Task.prototype.constructor.call(this, graph, stagestate);
 	var extractor = this;
-	
-	extractor.graph.depBehaviors = [];
-	extractor.graph.ghostBehaviors = [];
-	extractor.extractions = [];
-	
-	this.extractionjs = null; //Handle for calling java functions
-	extractor.taskindex = stagestate.taskindex;
-	extractor.sourcemodel = null;
-	
-	var t = document.querySelector('#leftExtractorMenus');
-	var clone = document.importNode(t.content, true);
-	
-	document.querySelector('#leftSidebar').appendChild(clone);
 
-	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
-	this.graph.doodads.push(trash);
+	this.extractionjs = null; //Handle for calling java functions
+
 	
 	$("#addModelButton, .stageSearch").hide();
 	
-	var droploc;
-	
-
 
 	$("#stageModel").click(function() {
 		var extractstostage = [];

@@ -29,7 +29,7 @@ function Stage(graph, stagestate) {
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
 		var modelnode = stage.addModelNode(model, [DragToMerge]);
-		stage.extractions[modelnode] = {modextractions: []};
+		stage.extractions[modelnode.modelindex] = {modextractions: []};
 		stage.leftsidebar.addModeltoList(model);
 	});
 
@@ -112,7 +112,7 @@ function Stage(graph, stagestate) {
 		sender.consoleOut("Removing extraction " + extract.name);
 		var index;
 		for (index=0; index< stage.extractions.length; index++) {
-			if (stage.extractions[extract.sourcemodel].modextractions[index]==extract) break;
+			if (stage.extractions[extract.sourcemodel.modelindex].modextractions[index]==extract) break;
 		}
 		
 		stage.extractions[extract.sourcemodel].modextractions.splice(index, 1);
@@ -265,7 +265,7 @@ function Stage(graph, stagestate) {
 	this.addExtractionNode = function(basenodeindex, newextraction) {
 		var basenode = stage.getModelNodebyIndex(basenodeindex);
 		var extractionnode = new ExtractedModel(stage.graph, newextraction, basenode);
-		stage.extractions[basenode].modextractions.push(extractionnode);
+		stage.extractions[basenodeindex].modextractions.push(extractionnode);
 		stage.nodes[newextraction.id] = extractionnode;
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
@@ -298,7 +298,7 @@ function Stage(graph, stagestate) {
 		stage.addExtractionNode(sourceindex, newextraction);
 	});
 	
-	receiver.onModifyExtraction(function(index, extraction) {
+	receiver.onModifyExtraction(function(sourceindex, index, extraction) {
 		stage.setExtractionNode(sourceindex, index, extraction);
 	});
 }
