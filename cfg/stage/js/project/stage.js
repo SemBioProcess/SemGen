@@ -135,7 +135,7 @@ function Stage(graph, stagestate) {
 			for (i in stage.nodes) {
 				var ithnode = stage.nodes[i];
 				if (ithnode.hullContainsPoint([node.xpos(), node.ypos()])) {
-					if ( ithnode.nodeType==NodeType.MODEL ) {
+					if ( ithnode.nodeType==NodeType.MODEL || ithnode != node.srcnode.getRootParent() ) {
 						ithnode.rootElement.select(".hull").style("stroke","red");
 					}
 					else {
@@ -219,7 +219,9 @@ function Stage(graph, stagestate) {
 					}
 				}
 			}
-			
+			if (destinationnode!=root && destinationnode!=null) {
+				return;
+			}
 			//Check to see if node is inside an extraction hull
 			if (destinationnode!=null) {
 				sender.addNodestoExtraction(destinationnode.sourcenode.modelindex, destinationnode.modelindex, extractarray);
