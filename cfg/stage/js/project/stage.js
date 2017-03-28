@@ -108,14 +108,14 @@ function Stage(graph, stagestate) {
 	}
 	
 	//Remove the named model node
-	this.removeExtraction = function(extract) {
+	this.removeExtraction = function(modelindex, extract) {
 		sender.consoleOut("Removing extraction " + extract.name);
 		var index;
 		for (index=0; index< stage.extractions.length; index++) {
-			if (stage.extractions[extract.sourcemodel.modelindex].modextractions[index]==extract) break;
+			if (stage.extractions[modelindex].modextractions[index]==extract) break;
 		}
 		
-		stage.extractions[extract.sourcemodel].modextractions.splice(index, 1);
+		stage.extractions[modelindex].modextractions.splice(index, 1);
 		delete stage.nodes[extract.id];
 		graph.update();
 	};
@@ -178,7 +178,7 @@ function Stage(graph, stagestate) {
 						//Don't create extraction if user cancels
 						if (name==null) return;
 						
-						if (stage.sourcemodel.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
 							sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
 						}
 						else {
@@ -188,7 +188,7 @@ function Stage(graph, stagestate) {
 					else {
 						var srcmodindex = root.sourcenode.modelindex;
 						//If an extraction is dragged to the trash, delete it
-						if (root == node) {
+						if (root == node.srcnode) {
 							sender.removeExtraction(srcmodindex, root.modelindex);
 							stage.removeExtraction(srcmodindex, root);
 							return;
@@ -292,7 +292,9 @@ function Stage(graph, stagestate) {
 
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {
-			stage.addExtractionNode(extractions[x]);
+			for (y in extractions[x].extractionnodes) {
+				stage.addExtractionNode(extractions[x].sourcemodelindex, extractions[x].extractionnodes[y]);
+			}
 		}
 	});
 	
@@ -305,17 +307,17 @@ function Stage(graph, stagestate) {
 	});
 }
 
+//For objects that must be loaded after the rest of the stage is loaded
 Stage.prototype.onInitialize = function() {
 	var stage = this;
-	
 	if (stage.state.models.length > 0) {
 		stage.state.models.forEach(function(model) {
 			stage.addModelNode(model, [DragToMerge]);
+			stage.extractions[model.modelindex] = {modextractions: []};
 		});		
 
-		sender.requestExtractions();
 	}
-	
+	sender.requestExtractions();
 	$('#taskModal').hide();
 	this.setSavedState(true);
 }

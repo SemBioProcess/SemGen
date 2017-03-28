@@ -88,7 +88,6 @@ public abstract class Extractor {
 			if (!ds.isExternal()) {
 				includeDependency(ds);
 			}
-			
 		}
 	}
 	
