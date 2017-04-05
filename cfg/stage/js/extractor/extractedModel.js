@@ -72,3 +72,7 @@ ExtractedModel.prototype.showChildren = function() {
 ExtractedModel.prototype.multiDrag = function() {
 	return main.task.selectedModels;
 }
+
+ExtractedModel.prototype.getIndexAddress = function() {
+	return [this.sourcenode.modelindex, this.modelindex];
+}

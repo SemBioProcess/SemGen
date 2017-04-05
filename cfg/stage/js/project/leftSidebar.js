@@ -53,10 +53,12 @@ function LeftSidebar(graph) {
 			return;
 		}
 
+		
 		pane.append(
 			"<span class='subheading'>" + model.id + "</span>" +
 			"<ul class='menulist'>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
+				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Save</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Export</button></li>" +
 				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Close</button></li>" +
 			"</ul>" +

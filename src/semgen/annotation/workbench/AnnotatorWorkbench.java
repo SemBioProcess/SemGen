@@ -120,7 +120,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 
 	@Override
-	public ModelAccessor saveModel() {
+	public ModelAccessor saveModel(Integer index) {
 		
 		URI fileuri = modelaccessor.getFileThatContainsModelAsURI();
 		
@@ -131,11 +131,11 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			setModelSaved(true);
 			return modelaccessor;
 		}
-		return saveModelAs();			
+		return saveModelAs(index);			
 	}
 
 	@Override
-	public ModelAccessor saveModelAs() {
+	public ModelAccessor saveModelAs(Integer index) {
 		
 		String selectedtype = "owl";  // Default extension type
 		ModelType modtype = semsimmodel.getSourceModelType();
@@ -163,7 +163,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			else if(filec.getFileFilter() == SemGenFileChooser.mmlfilter)
 				lastsavedas = ModelType.MML_MODEL;
 				
-			saveModel();
+			saveModel(0);
 
 			semsimmodel.setName(modelaccessor.getModelName());
 			
@@ -204,7 +204,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			
 			if (returnval == JOptionPane.YES_OPTION) {
 				
-				if(saveModel()==null)
+				if(saveModel(0)==null)
 					return false;
 				
 			}

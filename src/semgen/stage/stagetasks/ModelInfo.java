@@ -4,22 +4,17 @@ import semgen.stage.serialization.ModelNode;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelAccessor;
 
-public class ModelInfo {
-	public SemSimModel Model;
-	public ModelAccessor accessor;
-	public ModelNode modelnode;
-	public Integer modelindex;
+public class ModelInfo extends StageRootInfo<ModelNode> {
+
 	
 	public ModelInfo(SemSimModel model, ModelAccessor path, Integer modindex) {
-		Model = model;
-		accessor = path;
-		modelindex = modindex;
+		super(model, path, modindex);
 		modelnode = new ModelNode(model, modindex);
 	}
 	
 	public ModelInfo(ModelInfo info, Integer modindex) {
-		Model = info.Model.clone();
-		accessor = info.accessor;
+		super(info, modindex);
+
 		modelnode = new ModelNode(Model, modindex);
 	}
 	

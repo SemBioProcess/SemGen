@@ -12,11 +12,9 @@ import semsim.reading.ModelAccessor;
 public class ExtractorWorkbench extends Workbench {
 	private SemSimModel sourcemodel;
 	private ArrayList<SemSimModel> extractions= new ArrayList<SemSimModel>();
-	private BatchSave saver;
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 
-	public ExtractorWorkbench(ModelAccessor accessor, SemSimModel model) {
-		modelaccessorlist.add(accessor);
+	public ExtractorWorkbench(SemSimModel model) {
 		sourcemodel = model;
 	}
 	
@@ -51,16 +49,6 @@ public class ExtractorWorkbench extends Workbench {
 		return new ExtractRemove(sourcemodel, extractions.get(extractionindex));
 	}
 	
-	public void saveExtractions(ArrayList<Integer> indicies) {
-		saver = new BatchSave(indicies);
-		boolean hasnext = false;
-		while (!hasnext) {
-			saveModel();
-			hasnext = saver.next();
-		}
-		saver = null;
-	}
-	
 	@Override
 	public void setModelSaved(boolean val) {}
 
@@ -75,18 +63,18 @@ public class ExtractorWorkbench extends Workbench {
 	}
 	
 	@Override
-	public ModelAccessor saveModel() {
-		ModelAccessor ma = saver.getModelAccessor();
-		if (ma == null) ma = saveModelAs();
+	public ModelAccessor saveModel(Integer index) {
+		ModelAccessor ma = modelaccessorlist.get(index);
+		if (ma == null) ma = saveModelAs(index);
 		else {
-			SaveSemSimModel.writeToFile(saver.getModelOnDeck(), ma, ma.getFileThatContainsModel(), saver.getModelOnDeck().getSourceModelType());
+			SaveSemSimModel.writeToFile(extractions.get(index), ma, ma.getFileThatContainsModel(), extractions.get(index).getSourceModelType());
 		}
 		return ma;
 	}
 
 	@Override
-	public ModelAccessor saveModelAs() {
-		SemSimModel model = saver.getModelOnDeck();
+	public ModelAccessor saveModelAs(Integer index) {
+		SemSimModel model = extractions.get(index);
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(model);
 		
@@ -95,7 +83,7 @@ public class ExtractorWorkbench extends Workbench {
 			
 			SaveSemSimModel.writeToFile(model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
 
-			saver.setModelAccessor(ma);
+			model.setSourceFileLocation(ma);
 		}
 
 		return ma;
@@ -122,32 +110,11 @@ public class ExtractorWorkbench extends Workbench {
 		return this.modelaccessorlist.get(index);
 	}
 	
-	
-	private class BatchSave {
-		ArrayList<SemSimModel> tobesaved = new ArrayList<SemSimModel>();
-		int ondeck = 0;
-		
-		public BatchSave(ArrayList<Integer> indicies) {
-			for (Integer index : indicies) {
-				tobesaved.add(extractions.get(index));
-			}
+	//Get the extraction accessor, if there isn't one, make one.
+	public ModelAccessor getAccessorbyIndexAlways(Integer index) {
+		if (this.modelaccessorlist.get(index)==null) {
+			return saveModelAs(index);
 		}
-		
-		public SemSimModel getModelOnDeck() {
-			return tobesaved.get(ondeck);
-		}
-		
-		public ModelAccessor getModelAccessor() {
-			return modelaccessorlist.get(ondeck+1);
-		}
-		
-		public void setModelAccessor(ModelAccessor newaccessor) {
-			modelaccessorlist.set(ondeck, newaccessor);
-		}
-		
-		public boolean next() {
-			ondeck++;
-			return ondeck == tobesaved.size();
-		}
+		return this.modelaccessorlist.get(index);
 	}
 }

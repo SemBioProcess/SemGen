@@ -38,7 +38,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private boolean isSolutionDomain, isDiscrete, isDeclared, isImported;
 	protected boolean mappable = false;
-	private String startValue;
+	private String startValue = "";
 	private UnitOfMeasurement unit;
 	private boolean external = false;
 	

@@ -45,12 +45,12 @@ public class OldExtractorWorkbench extends Workbench {
 	}
 
 	@Override
-	public ModelAccessor saveModel() {
+	public ModelAccessor saveModel(Integer index) {
 		return null;
 	}
 
 	@Override
-	public ModelAccessor saveModelAs() {
+	public ModelAccessor saveModelAs(Integer index) {
 		return null;
 	}
 

@@ -69,3 +69,7 @@ ModelNode.prototype.showChildren = function() {
 ModelNode.prototype.multiDrag = function() {
 	return main.task.selectedModels;
 }
+
+ModelNode.prototype.getIndexAddress = function() {
+	return [-1, this.modelindex];
+}

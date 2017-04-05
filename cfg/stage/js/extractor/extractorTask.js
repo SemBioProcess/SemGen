@@ -16,28 +16,6 @@ function ExtractorTask(graph, stagestate) {
 	$("#addModelButton, .stageSearch").hide();
 	
 
-	$("#stageModel").click(function() {
-		var extractstostage = [];
-		for (i in extractor.extractions) {
-			if (extractor.extractions[i].selected) {
-				extractstostage.push(extractor.extractions[i].modelindex);
-			}
-		}
-		sender.sendModeltoStage(extractstostage);
-	});
-	
-	$("#minimize").click(function() {
-		sender.changeTask(0);
-	});
-	
-	$("#saveModel").click(function() {
-		var extractstosave = [];
-		for (i in extractor.extractions) {
-			if (!extractor.extractions[i].saved && extractor.extractions[i].selected)
-				extractstosave.push(extractor.extractions[i].modelindex);
-		}
-		sender.save(extractstosave);
-	});
 	
 	// Quit merger
 	$("#quitExtractorBtn").click(function(e) {
@@ -54,11 +32,6 @@ function ExtractorTask(graph, stagestate) {
 	});
 }
 
-ExtractorTask.prototype.setSavedState = function (issaved) {
-	Task.prototype.setSavedState.call(issaved);
-	this.setSaved(this.isSaved());
-	$('#saveModel').prop('disabled', issaved);
-}
 
 //Everything that needs to be called after the stage and graph are set up.
 ExtractorTask.prototype.onInitialize = function() {

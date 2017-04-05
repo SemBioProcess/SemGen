@@ -11,19 +11,18 @@ function Stage(graph, stagestate) {
 	stage.graph.depBehaviors = [];
 	stage.graph.ghostBehaviors = [];
 	stage.extractions = {};
-	
+
 	$("#addModelButton, .stageSearch").show();
-	$("#trash").hide();
 	
 	this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
 
 	var leftsidebar = this.leftsidebar;
 
+	var droploc;
+	
 	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
 	this.graph.doodads.push(trash);
-	
-	var droploc;
 	
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (model) {
@@ -94,6 +93,25 @@ function Stage(graph, stagestate) {
 		else {
 			$(".stageSearch .searchValueContainer .searchResults").hide()
 		}
+	});
+	
+	$("#saveModel").click(function() {
+		var extractstosave = [], count = 0;
+		for (i in stage.extractions) {
+			var group = [i];
+			for (j in stage.extractions[i].modextractions) {
+				var extract = stage.extractions[i].modextractions[j];
+			
+				if (!extract.saved && extract.selected) {
+					group.push(extract.modelindex);
+					count++;
+				}
+			}
+			if (group.length==1) continue;
+			extractstosave[i].push(group);
+		}
+		if (count==0) return;
+		sender.save(extractstosave);
 	});
 	
 	//******************EXTRACTION FUNCTIONS*************************//
@@ -310,6 +328,7 @@ function Stage(graph, stagestate) {
 //For objects that must be loaded after the rest of the stage is loaded
 Stage.prototype.onInitialize = function() {
 	var stage = this;
+
 	if (stage.state.models.length > 0) {
 		stage.state.models.forEach(function(model) {
 			stage.addModelNode(model, [DragToMerge]);
@@ -324,6 +343,13 @@ Stage.prototype.onInitialize = function() {
 
 Stage.prototype.onModelSelection = function(node) {
 	this.leftsidebar.updateModelPanel(node);
+}
+
+
+Stage.prototype.setSavedState = function (issaved) {
+	Task.prototype.setSavedState.call(issaved);
+	this.setSaved(this.isSaved());
+	$('#saveModel').prop('disabled', issaved);
 }
 
 

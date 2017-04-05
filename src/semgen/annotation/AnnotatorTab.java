@@ -216,13 +216,13 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 
 	@Override
 	public void requestSave() {
-		workbench.saveModel();
+		workbench.saveModel(0);
 	}
 	
 	@Override
 	public void requestSaveAs() {
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-		if (workbench.saveModelAs()!=null) {
+		if (workbench.saveModelAs(0)!=null) {
 			setTabName(workbench.getCurrentModelName());
 			setToolTipText("Annotating " + workbench.getCurrentModelName());
 		}

@@ -100,42 +100,28 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onTaskClicked(Double modelindex, String task) {
-			
-			// Get the model
-			ModelInfo modelInfo = _models.get(modelindex.intValue());
-			
+		public void onTaskClicked(JSArray modelindex, String task) {
 			// Execute the proper task
 			switch(task) {
 				case "annotate":
-					SemGen.gacts.NewAnnotatorTab(modelInfo.accessor);
+					annotateModels(modelindex);
+
+					break;
+				case "save":
+					saveModels(modelindex);
 					break;
 				case "export":
-					String selectedtype = "owl";  // Default extension type
-					ModelType modtype = modelInfo.Model.getSourceModelType();
-					
-					if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
-					else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
-					else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
-					
-					String suggestedparentfilename = FilenameUtils.removeExtension(modelInfo.accessor.getFileThatContainsModel().getName());
-					String modelnameinarchive = modelInfo.accessor.getModelName();
-					
-					SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, modelnameinarchive, suggestedparentfilename);
-					ModelAccessor ma = filec.SaveAsAction(modelInfo.Model);
-					
-					if (ma != null)				
-						SaveSemSimModel.writeToFile(modelInfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());					
-					
+					exportModels(modelindex);				
 					break;
 				case "close":
-					removeModel(modelindex.intValue());
-					_commandSender.removeModel(modelindex.intValue());
+					closeModels(modelindex);					
+					
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
 					break;
 			}
+
 		}
 
 		public void onSearch(String searchString) throws FileNotFoundException {
@@ -217,12 +203,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		}
 		
 		public void onSave(JSArray indicies) {
-			ArrayList<Integer> extractstosave = new ArrayList<Integer>();
-			if (indicies.length()==0) return;
-			for (int i = 0; i < indicies.length(); i++) {
-				extractstosave.add((int)(indicies.get(i)).getNumberValue());
-			}
-			//workbench.saveExtractions(extractstosave);
+			saveModels(indicies);
 		}
 		
 		public void onChangeTask(Double index) {
@@ -239,6 +220,88 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
+		}
+	}
+	
+	protected void annotateModels(JSArray indicies) {
+		for (int i=0; i < indicies.length(); i++) {
+			JSArray address = indicies.get(i).asArray();
+			int indexedtomodel = address.get(0).asNumber().getInteger();
+			int modelindex = address.get(1).asNumber().getInteger();
+			
+			
+			ModelAccessor accessor = null;	
+			if (indexedtomodel==-1) {
+				accessor = _models.get(modelindex).accessor;
+			}
+			else {
+				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
+				accessor = meg.getAccessorbyIndexAlways(modelindex);
+			}
+			if (accessor == null) continue;
+			SemGen.gacts.NewAnnotatorTab(accessor);
+		}
+	}
+	
+	protected void exportModels(JSArray indicies) {
+		
+		for (int i=0; i < indicies.length(); i++) {
+			StageRootInfo<?> modelinfo = null;
+			JSArray address = indicies.get(i).asArray();
+			int indexedtomodel = address.get(0).asNumber().getInteger();
+			int modelindex = address.get(1).asNumber().getInteger();
+			
+			if (indexedtomodel==-1) {
+				modelinfo = this.getModel(modelindex);
+			}
+			else {
+				modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
+			}
+			String selectedtype = "owl";  // Default extension type
+			ModelType modtype = modelinfo.Model.getSourceModelType();
+			
+			if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
+			else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
+			else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
+			
+			String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
+			String modelnameinarchive = modelinfo.accessor.getModelName();
+			
+			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, modelnameinarchive, suggestedparentfilename);
+			ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
+			
+			if (ma != null)				
+				SaveSemSimModel.writeToFile(modelinfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());	
+		}			
+	}
+	
+	protected void saveModels(JSArray indicies) {
+		for (int i = 0; i < indicies.length(); i++) {
+			JSArray saveset = indicies.get(i).asArray();
+			Integer targetindex = saveset.get(1).asNumber().getInteger();
+			if (saveset.get(0).asNumber().getInteger()==-1) {
+				
+			}
+			else {
+				extractnodeworkbenchmap.get(i).saveExtraction(targetindex);
+			}
+		}
+	}
+	
+	protected void closeModels(JSArray indicies) {
+		for (int i=0; i < indicies.length(); i++) {
+			JSArray address = indicies.get(i).asArray();
+			int indexedtomodel = address.get(0).asNumber().getInteger();
+			int modelindex = address.get(1).asNumber().getInteger();
+			
+			if (indexedtomodel==-1) {
+				removeModel(modelindex);
+				_commandSender.removeModel(modelindex);
+			}
+			else {
+				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
+				meg.removeExtraction(modelindex);
+			}
 		}
 	}
 

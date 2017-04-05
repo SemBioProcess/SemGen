@@ -22,9 +22,9 @@ public abstract class Workbench extends Observable implements Observer, Property
 		return modelsaved;
 	}
 	
-	public abstract ModelAccessor saveModel();
+	public abstract ModelAccessor saveModel(Integer index);
 	
-	public abstract ModelAccessor saveModelAs();
+	public abstract ModelAccessor saveModelAs(Integer index);
 	
 	public abstract void setModelSaved(boolean val);	
 	

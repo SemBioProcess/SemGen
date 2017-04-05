@@ -10,7 +10,7 @@ function Task(graph, stagestate) {
 	this.nodes = {};
 	this.selectedModels = [];
 	this.selectedNodes = [];
-
+	
 	var task = this;
 	$('#leftSidebar').empty();
 	
@@ -61,12 +61,18 @@ function Task(graph, stagestate) {
 	}
 	
 	this.taskClicked = function(element) {
-		var taskid = element.innerHTML.toLowerCase();
-		sender.taskClicked(parseInt(this.getFirstSelectedModel().modelindex), taskid);
+		var taskid = element.innerHTML.toLowerCase(),
+			selections = [];
+		task.selectedModels.forEach(function(model) {
+			selections.push(model.getIndexAddress());
+		});
+		sender.taskClicked(selections, taskid);
 	};
 	
 	task.doModelAction = function(action) {
-		action(this.getFirstSelectedModel());
+		task.selectedModels.forEach(function(model) {
+			action(model);	
+		});
 		task.graph.update();
 	}
 	

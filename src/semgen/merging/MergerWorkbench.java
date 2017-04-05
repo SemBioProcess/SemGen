@@ -348,7 +348,7 @@ public class MergerWorkbench extends Workbench {
 	}
 
 	@Override
-	public ModelAccessor saveModel() {
+	public ModelAccessor saveModel(Integer index) {
 		if (modelaccessorlist.size() >= 3) {
 			URI fileuri = modelaccessorlist.get(2).getFileThatContainsModelAsURI();
 			
@@ -359,11 +359,11 @@ public class MergerWorkbench extends Workbench {
 				return  modelaccessorlist.get(2);
 			}
 		}
-		return saveModelAs();		
+		return saveModelAs(index);		
 	}
 
 	@Override
-	public ModelAccessor saveModelAs() {
+	public ModelAccessor saveModelAs(Integer index) {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		

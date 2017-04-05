@@ -157,7 +157,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	public ModelAccessor saveMerge() {
-		return workbench.saveModelAs();
+		return workbench.saveModelAs(0);
 	}
 	
 	@Override
@@ -304,11 +304,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onSave() {
-			if (workbench.saveModel() != null) _commandSender.saved(true);
+			if (workbench.saveModel(0) != null) _commandSender.saved(true);
 		}
 		
 		public void onSaveandClose() {
-			if (workbench.saveModel() != null) {
+			if (workbench.saveModel(0) != null) {
 				closeTask();
 			}
 		}
