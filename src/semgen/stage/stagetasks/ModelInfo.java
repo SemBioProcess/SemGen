@@ -12,7 +12,7 @@ public class ModelInfo extends StageRootInfo<ModelNode> {
 		modelnode = new ModelNode(model, modindex);
 	}
 	
-	public ModelInfo(ModelInfo info, Integer modindex) {
+	public ModelInfo(StageRootInfo<?> info, Integer modindex) {
 		super(info, modindex);
 
 		modelnode = new ModelNode(Model, modindex);

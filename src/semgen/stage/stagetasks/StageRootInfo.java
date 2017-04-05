@@ -16,7 +16,7 @@ public abstract class StageRootInfo<N extends ModelNode> {
 		modelindex = modindex;
 	}
 	
-	public StageRootInfo(StageRootInfo<N> info, Integer modindex) {
+	public StageRootInfo(StageRootInfo<?> info, Integer modindex) {
 		accessor = info.accessor;
 		this.modelindex = modindex;
 		Model = info.Model.clone();

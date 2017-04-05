@@ -6,10 +6,10 @@ import semgen.stage.stagetasks.StageTask.Task;
 import semgen.stage.stagetasks.merge.MergerTask;
 
 public class StageTaskConf {
-	private ArrayList<ModelInfo> taskmodels;
+	private ArrayList<StageRootInfo<?>> taskmodels;
 	private Task tasktype;
 
-	public StageTaskConf(Task type, ArrayList<ModelInfo> models) {
+	public StageTaskConf(Task type, ArrayList<StageRootInfo<?>> models) {
 		tasktype = type;
 		taskmodels = models;
 	}

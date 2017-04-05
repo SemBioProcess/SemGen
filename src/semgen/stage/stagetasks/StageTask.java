@@ -102,17 +102,17 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		return modelnodes;
 	}
 	
-	protected void configureTask(Task task, ArrayList<ModelInfo> info) {
+	protected void configureTask(Task task, ArrayList<StageRootInfo<?>> info) {
 		newtaskconf = new StageTaskConf(task, info);
 		this.setChanged();
 		this.notifyObservers(StageTaskEvent.NEWTASK);
 	}
 
-	protected void createMerger(Integer modind1, Integer modind2) {
-		ArrayList<ModelInfo> mods = new ArrayList<ModelInfo>();
-		
-		mods.add(_models.get(modind1));
-		mods.add(_models.get(modind2));
+	protected void createMerger(JSArray modind1, JSArray modind2) {
+		ArrayList<StageRootInfo<?>> mods = new ArrayList<StageRootInfo<?>>();
+
+		mods.add(getInfobyAddress(modind1));
+		mods.add(getInfobyAddress(modind2));
 		
 		configureTask(Task.MERGER, mods);
 	}
@@ -191,5 +191,9 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 			Node<?> node = (Node<?>)jsobject;
 			node.xpos = xloc;
 		}
+	}
+	
+	protected StageRootInfo<?> getInfobyAddress(JSArray address) {
+			return _models.get(address.get(1).asNumber().getInteger());
 	}
 }

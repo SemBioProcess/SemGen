@@ -41,8 +41,13 @@ function DragToMerge(_node) {
 				
 				// Show drop zones on all other model nodes
 				models.forEach(function (node) {
-					if(node != _node)
+					if(node != _node) {
+						if (_node.nodeType == NodeType.EXTRACTION) {
+							if (node==_node.sourcenode) return;
+						}
 						node.rootElement.classed("dropZone", true);
+					}
+						
 				});
 			});
 		    _node.drag.push(function (d) {
@@ -53,6 +58,10 @@ function DragToMerge(_node) {
 		        models.forEach(function (node) {
 					if(node == _node)
 						return;
+					
+					if (_node.nodeType == NodeType.EXTRACTION) {
+						if (node==_node.sourcenode) return;
+					}
 					
 					var leftBound = node.x - node.r - DropZoneSideLength/2;
 					var rightBound = node.x + node.r + DropZoneSideLength/2;
@@ -85,7 +94,7 @@ function DragToMerge(_node) {
 		    			return a.displayName.localeCompare(b.displayName, 'en', {'sensitivity': 'base'});
 					});
 		        	
-		        	sender.merge(sortedModels[0].modelindex, sortedModels[1].modelindex);
+		        	sender.merge(sortedModels[0].getIndexAddress(), sortedModels[1].getIndexAddress());
 		        	mergeNode = null;
 		        	
 		        	// Move the node back to its original location

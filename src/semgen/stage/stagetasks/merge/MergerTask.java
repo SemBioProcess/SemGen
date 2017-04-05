@@ -22,6 +22,7 @@ import semgen.merging.ModelOverlapMap.maptype;
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
+import semgen.stage.stagetasks.StageRootInfo;
 import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
@@ -38,14 +39,14 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	protected MergeConflicts conflicts = new MergeConflicts();
 	protected ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	
-	public MergerTask(ArrayList<ModelInfo> modelinfo, int index) {
+	public MergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
 		super(index);
 		workbench.addObserver(this);
 		_commandReceiver = new MergerCommandReceiver();
 		ArrayList<ModelAccessor> files = new ArrayList<ModelAccessor>();
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
 		
-		for (ModelInfo model : modelinfo) {
+		for (StageRootInfo<?> model : modelinfo) {
 			ModelInfo info = new ModelInfo(model, _models.size());
 			_models.add(info);
 			files.add(info.accessor);

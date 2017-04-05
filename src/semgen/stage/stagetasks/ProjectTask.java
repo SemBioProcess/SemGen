@@ -133,8 +133,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 		
-		public void onMerge(Double model1, Double model2) {
-			createMerger(model1.intValue(), model2.intValue());
+		public void onMerge(JSArray model1, JSArray model2) {
+			createMerger(model1, model2);
 		}
 		
 		
@@ -380,4 +380,13 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		return javanodes;
 	}
 
+	
+	protected StageRootInfo<?> getInfobyAddress(JSArray address) {
+		if (address.get(0).asNumber().getInteger()==-1) {
+			return _models.get(address.get(1).asNumber().getInteger());
+		}
+		else {
+			return this.extractnodeworkbenchmap.get(address.get(1).asNumber().getInteger()).getExtractionInfo(address.get(1).asNumber().getInteger());
+		}
+	}
 }

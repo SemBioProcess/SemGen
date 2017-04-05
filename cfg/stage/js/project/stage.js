@@ -285,6 +285,7 @@ function Stage(graph, stagestate) {
 	this.addExtractionNode = function(basenodeindex, newextraction) {
 		var basenode = stage.getModelNodebyIndex(basenodeindex);
 		var extractionnode = new ExtractedModel(stage.graph, newextraction, basenode);
+		extractionnode.addBehavior(DragToMerge);
 		stage.extractions[basenodeindex].modextractions.push(extractionnode);
 		stage.nodes[newextraction.id] = extractionnode;
 		if (droploc!=null) {
