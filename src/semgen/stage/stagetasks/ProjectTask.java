@@ -283,12 +283,13 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	protected void saveModels(JSArray indicies) {
 		for (int i = 0; i < indicies.length(); i++) {
 			JSArray saveset = indicies.get(i).asArray();
+			Integer basemodelindex = saveset.get(0).asNumber().getInteger();
 			Integer targetindex = saveset.get(1).asNumber().getInteger();
-			if (saveset.get(0).asNumber().getInteger()==-1) {
+			if (basemodelindex==-1) {
 				
 			}
 			else {
-				extractnodeworkbenchmap.get(i).saveExtraction(targetindex);
+				extractnodeworkbenchmap.get(basemodelindex).saveExtraction(targetindex);
 			}
 		}
 	}

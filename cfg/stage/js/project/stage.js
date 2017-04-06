@@ -96,19 +96,14 @@ function Stage(graph, stagestate) {
 	});
 	
 	$("#saveModel").click(function() {
-		var extractstosave = [], count = 0;
-		for (i in stage.extractions) {
-			var group = [i];
-			for (j in stage.extractions[i].modextractions) {
-				var extract = stage.extractions[i].modextractions[j];
+		var modelstosave = [], count = 0;
+		for (i in stage.selectedModels) {
+				var model = stage.selectedModels[i];
 			
-				if (!extract.saved && extract.selected) {
-					group.push(extract.modelindex);
+				if (!model.saved && model.selected) {
+					modelstosave.push(model.getIndexAddress());
 					count++;
 				}
-			}
-			if (group.length==1) continue;
-			extractstosave[i].push(group);
 		}
 		if (count==0) return;
 		sender.save(extractstosave);
