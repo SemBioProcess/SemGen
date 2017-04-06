@@ -83,8 +83,8 @@ public class ModelExtractionGroup {
 		return workbench.getAccessorbyIndexAlways(tosave);	
 	}
 	
-	public void saveExtraction(Integer tosave) {
-			workbench.saveModel(tosave);	
+	public ModelAccessor saveExtraction(Integer tosave) {
+			return workbench.saveModel(tosave);	
 	}
 	
 	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {

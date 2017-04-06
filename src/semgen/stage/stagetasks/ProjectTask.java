@@ -256,7 +256,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 			else {
 				modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
+				if (modelinfo.accessor==null) {
+					modelinfo.accessor = this.extractnodeworkbenchmap.get(indexedtomodel).saveExtraction(modelindex);
+					if (modelinfo.accessor==null) continue;
+				}
 			}
+			
 			String selectedtype = "owl";  // Default extension type
 			ModelType modtype = modelinfo.Model.getSourceModelType();
 			

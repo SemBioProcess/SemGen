@@ -151,6 +151,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	//Find node by saved hash and verify with id - should be faster than straight id
 	public Node<?> getNodebyHash(int nodehash, String nodeid) {
 		for (ModelInfo mni : _models) {
+			if (mni==null) continue;
 			Node<?> returnnode = mni.modelnode.getNodebyHash(nodehash, nodeid);
 			if (returnnode!=null) return returnnode; 
 		}
@@ -160,6 +161,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	//Find node by saved hash and verify with id - should be faster than straight id
 	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid) {
 		for (ModelInfo mni : _models) {
+			if (mni==null) continue;
 			Node<?> returnnode = mni.modelnode.getPhysioMapNodebyHash(nodehash, nodeid);
 			if (returnnode!=null) return returnnode; 
 		}
