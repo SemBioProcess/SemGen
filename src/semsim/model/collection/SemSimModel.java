@@ -467,6 +467,26 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		return null;
 	}
+	
+	/**
+	 * Method for ensuring that duplicate metadata ID's don't appear
+	 * in the same model. Called when reading in models.
+	 * @param ID A proposed metadata ID to assign to a SemSimObject in the model
+	 * @param theobject The SemSimObject that the ID is assigned to
+	 */
+	public void assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
+		Map<String, SemSimObject> momap = getMetadataIDcomponentMap();
+		
+		int num = 0;
+		
+		 // If the metadata ID is already used or is null, create a new, unique ID
+		while(momap.containsKey(ID) || ID==null || ID.isEmpty()){
+			ID = "metaid" + num;
+			num = num++;
+		}
+		
+		theobject.setMetadataID(ID);
+	}
 
 	/**
 	 * Specify the set of {@link RelationalConstraint}s used in the model.

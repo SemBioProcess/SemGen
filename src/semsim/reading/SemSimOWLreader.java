@@ -124,7 +124,7 @@ public class SemSimOWLreader extends ModelReader {
 	private boolean verifyModel() throws OWLException {
 		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
 		
-		if(!ont.getClassesInSignature().contains(topclass))
+		if( ! ont.getClassesInSignature().contains(topclass))
 			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
 		
 		
@@ -372,7 +372,8 @@ public class SemSimOWLreader extends ModelReader {
 			else ds.setIsSolutionDomain(false); // default value is FALSE if nothing explicitly stated in OWL file
 			
 			String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.METADATA_ID.getURIasString());
-			if( ! metadataid.isEmpty()) ds.setMetadataID(metadataid);
+			
+			semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, ds);
 			
 			// Collect singular physical definition annotation, if present
 			String physdefvalds = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, physicaldefinitionURI.toString());
@@ -684,7 +685,9 @@ public class SemSimOWLreader extends ModelReader {
 		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.SUBMODEL.getURIasString());
 		
 		for(String sub : subset){
+			
 			String subname = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimRelation.HAS_NAME.getURIasString());
+			String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, sub, SemSimRelation.METADATA_ID.getURIasString());
 			
 			boolean hascomputation = ! SemSimOWLFactory.getIndObjectProperty(ont, sub, SemSimRelation.HAS_COMPUTATIONAL_COMPONENT.getURIasString()).isEmpty();
 			
@@ -697,17 +700,21 @@ public class SemSimOWLreader extends ModelReader {
 			
 			// If submodel IS NOT imported
 			if(importval.isEmpty() || importval==null){
+				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, sssubmodel);
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
 				String componentmathml = null;
 				String componentmathmlwithroot = null;
 				String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(sub)));
+				
 				if (!description.isEmpty()) sssubmodel.setDescription(description);
 				
 				// If computation associated with submodel, store mathml
 				if(sssubmodel.isFunctional()){
 					String comp = SemSimOWLFactory.getFunctionalIndObjectProperty(ont, sub, SemSimRelation.HAS_COMPUTATIONAL_COMPONENT.getURIasString());
+					
 					if(comp!=null && !comp.isEmpty()){
 						componentmathml = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, comp, SemSimRelation.HAS_MATHML.getURIasString());
+						
 						if(componentmathml!=null && !componentmathml.isEmpty()){
 							((FunctionalSubmodel)sssubmodel).getComputation().setMathML(componentmathml);
 							componentmathmlwithroot = "<temp>\n" + componentmathml + "\n</temp>";
@@ -780,7 +787,6 @@ public class SemSimOWLreader extends ModelReader {
 					}
 				}
 				
-				// Set the description of the submodel
 				semsimmodel.addSubmodel(sssubmodel);
 			}
 			// If submodel IS imported

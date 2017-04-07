@@ -1229,8 +1229,7 @@ public class SBMLreader extends ModelReader{
 	 * @param semsimobject
 	 */
 	private void addMetadataID(SBase sbmlobject, SemSimObject semsimobject){
-		if(sbmlobject.getMetaId()!=null && ! sbmlobject.getMetaId().equals(""))
-			semsimobject.setMetadataID(sbmlobject.getMetaId());
+		semsimmodel.assignValidMetadataIDtoSemSimObject(sbmlobject.getMetaId(),semsimobject);
 	}
 	
 	

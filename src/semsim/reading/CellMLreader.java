@@ -122,7 +122,7 @@ public class CellMLreader extends ModelReader {
 								semsimmodel, localcompname, origcompname, hrefValue, sslib);
 				
 				String metadataid = importedcompel.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
-				instantiatedsubmodel.setMetadataID(metadataid);
+				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, instantiatedsubmodel);
 
 				//collectSingularBiologicalAnnotationForSubmodel(instantiatedsubmodel);
 			}
@@ -260,7 +260,7 @@ public class CellMLreader extends ModelReader {
 				cvar.setDeclared(true);
 				String varmetaID = var.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 				
-				if(varmetaID!=null) cvar.setMetadataID(varmetaID);
+				semsimmodel.assignValidMetadataIDtoSemSimObject(varmetaID, cvar);
 
 				// Collect the singular biological annotation, if present
 				if(cvar.getMetadataID() != null) rdfblock.getDataStructureAnnotations(cvar);
@@ -322,7 +322,8 @@ public class CellMLreader extends ModelReader {
 			// keep it with component but get individual variable math as needed?)
 			if(mathmltext!=null) submodel.getComputation().setMathML(mathmltext);
 
-			if(metadataid!=null) submodel.setMetadataID(metadataid);
+			semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, submodel);
+
 			
 			// Collect the biological annotation, if present
 			//collectSingularBiologicalAnnotationForSubmodel(submodel);
