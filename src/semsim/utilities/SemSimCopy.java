@@ -15,6 +15,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
 import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -75,6 +76,8 @@ public class SemSimCopy {
 		destmodel.setEvents(new ArrayList<Event>(eventmap.values()));
 		
 		copyComputations();
+		
+		copyRelationalConstraints();
 		
 	}
 
@@ -314,4 +317,16 @@ public class SemSimCopy {
 			newcomp.setEvents(neweventset);
 		}
 	}
+	
+
+	private void copyRelationalConstraints() {
+		HashMap<RelationalConstraint, RelationalConstraint> relconmap = new HashMap<RelationalConstraint, RelationalConstraint>();
+		for (RelationalConstraint recon : modeltocopy.getRelationalConstraints()) {
+			RelationalConstraint newrecon = new RelationalConstraint(recon);
+			newrecon.replaceAllDataStructures(dsmap);
+			relconmap.put(recon, newrecon);
+		}
+		destmodel.setRelationalConstraints(relconmap.values());
+	}
+
 }

@@ -3,6 +3,7 @@ package semsim.model.collection;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -472,8 +473,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Specify the set of {@link RelationalConstraint}s used in the model.
 	 * @param relationalConstraints The set of constraints.
 	 */
-	public void setRelationalConstraints(Set<RelationalConstraint> relationalConstraints) {
-		this.relationalConstraints = relationalConstraints;
+	public void setRelationalConstraints(Collection<RelationalConstraint> relationalConstraints) {
+		this.relationalConstraints = new HashSet<RelationalConstraint>(relationalConstraints);
 	}
 	
 	/**

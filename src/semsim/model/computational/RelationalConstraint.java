@@ -1,5 +1,6 @@
 package semsim.model.computational;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +33,14 @@ public class RelationalConstraint extends ComputationalModelComponent{
 		this.setComputationalCode(compcode);
 		this.setMathML(mathml);
 		this.setErrorMessage(errorMsg);
+	}
+	
+	public RelationalConstraint(RelationalConstraint rctocopy) {
+		super(rctocopy);
+		computationalCode = new String(rctocopy.computationalCode);
+		mathML = new String(rctocopy.mathML);
+		errorMsg = new String(rctocopy.errorMsg);
+		inputs.addAll(rctocopy.inputs);
 	}
 	
 	/** @return A human-readable string representation of the relation. */
@@ -75,6 +84,13 @@ public class RelationalConstraint extends ComputationalModelComponent{
 	 * (method provided in adherence to SBML best practices). */
 	public void setErrorMessage(String msg){
 		errorMsg = msg;
+	}
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newinputs = new HashSet<DataStructure>();
+		for (DataStructure dstoreplace : inputs) {
+			newinputs.add(dsmap.get(dstoreplace));
+		}
 	}
 
 	@Override

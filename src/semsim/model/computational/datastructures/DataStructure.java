@@ -462,7 +462,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		replaceOutputs(dsmap);
 		replaceInputs(dsmap);
 		replaceUsedtoCompute(dsmap);
-
+		if (this.solutionDomain!=null) {
+			solutionDomain = dsmap.get(solutionDomain);
+		}
 	}
 	
 	@Override
