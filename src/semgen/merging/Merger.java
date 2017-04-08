@@ -179,7 +179,8 @@ public class Merger {
 		
 		for(String ssm2metaid : intersection){
 			SemSimObject ssm2object = ssm2clone.getMetadataIDcomponentMap().get(ssm2metaid);
-			ssm1clone.assignValidMetadataIDtoSemSimObject(ssm2metaid, ssm2object);
+			String newID = ssm1clone.assignValidMetadataIDtoSemSimObject(ssm2metaid, ssm2object);
+			System.err.println("Renamed metadata ID for " + ssm2object.getSemSimType().getName() + " " + ssm2object.getName() + " in model " + ssm2clone.getName() + " to " + newID);
 		}
 		
 		

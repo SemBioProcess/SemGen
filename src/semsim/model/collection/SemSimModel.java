@@ -468,7 +468,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param ID A proposed metadata ID to assign to a SemSimObject in the model
 	 * @param theobject The SemSimObject that the ID is assigned to
 	 */
-	public void assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
+	public String assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
 		
 		int num = 0;
 		
@@ -480,6 +480,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		
 		theobject.setMetadataID(ID);
 		metadataIDcomponentMap.put(ID, theobject);
+		
+		return ID;
 	}
 
 	/**
