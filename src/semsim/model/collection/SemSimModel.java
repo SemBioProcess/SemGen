@@ -109,6 +109,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
+	
+	private Map<String,SemSimObject> metadataIDcomponentMap = new HashMap<String,SemSimObject>();
 
 	/**
 	 * Constructor without namespace
@@ -448,11 +450,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return A Map that links MatadataIDs with their associated model component.
 	 */
 	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
-		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
-		for(SemSimObject ssc : getAllModelComponentsandCollections()){
-			if(ssc.getMetadataID()!=null) map.put(ssc.getMetadataID(), ssc);
-		}
-		return map;
+		return metadataIDcomponentMap;
 	}
 	
 	/**
@@ -461,11 +459,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * model component
 	 */
 	public SemSimObject getModelComponentByMetadataID(String ID){
-		for(SemSimObject ssc : getAllModelComponentsandCollections()){
-			if(ssc.getMetadataID().equals(ID))
-				return ssc;
-		}
-		return null;
+		return metadataIDcomponentMap.get(ID);
 	}
 	
 	/**
@@ -475,17 +469,17 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param theobject The SemSimObject that the ID is assigned to
 	 */
 	public void assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
-		Map<String, SemSimObject> momap = getMetadataIDcomponentMap();
 		
 		int num = 0;
 		
 		 // If the metadata ID is already used or is null, create a new, unique ID
-		while(momap.containsKey(ID) || ID==null || ID.isEmpty()){
+		while(metadataIDcomponentMap.containsKey(ID) || ID==null || ID.isEmpty()){
 			ID = "metaid" + num;
-			num = num++;
+			num = num + 1;
 		}
 		
 		theobject.setMetadataID(ID);
+		metadataIDcomponentMap.put(ID, theobject);
 	}
 
 	/**

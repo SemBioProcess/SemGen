@@ -700,8 +700,9 @@ public class SemSimOWLreader extends ModelReader {
 			
 			// If submodel IS NOT imported
 			if(importval.isEmpty() || importval==null){
-				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, sssubmodel);
 				sssubmodel = (hascomputation) ? new FunctionalSubmodel(subname, subname, null, null) : new Submodel(subname);
+				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, sssubmodel);
+
 				String componentmathml = null;
 				String componentmathmlwithroot = null;
 				String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(sub)));
