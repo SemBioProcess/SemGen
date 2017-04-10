@@ -451,7 +451,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  		
  		for(SemSimObject ssc : getAllModelComponentsandCollections()){
  			
- 			if(ssc.getMetadataID()!=null) map.put(ssc.getMetadataID(), ssc);
+ 			String metaID = ssc.getMetadataID();
+ 			if(! metaID.equals("")) map.put(ssc.getMetadataID(), ssc);
  		}
  		return map;
  	}
@@ -479,7 +480,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  	 */
  	public String assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
 		
- 		if(ID==null || ID.isEmpty()) return null;
+ 		if(ID==null || ID.isEmpty() || ID.equals("") || theobject==null ) return ID;
  		
  		Map<String, SemSimObject> momap = getMetadataIDcomponentMap();
 		int num = 0;
@@ -492,8 +493,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 				
 		if( ! newID.equals(ID))
-			System.err.println("MetaID " + " on " + theobject.getSemSimType() + " " + theobject.getName()
-				+ " changed to " + newID + " because the model already contains a component with metaID " + ID + ".");
+			System.err.println("MetaID on " + theobject.getSemSimType() + " " + theobject.getName()
+				+ " changed to " + newID + " because the model already contains a SemSim component with metaID " + ID + ".");
 		
 		theobject.setMetadataID(newID);
 		return newID;

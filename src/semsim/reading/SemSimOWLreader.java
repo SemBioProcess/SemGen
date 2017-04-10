@@ -372,7 +372,6 @@ public class SemSimOWLreader extends ModelReader {
 			else ds.setIsSolutionDomain(false); // default value is FALSE if nothing explicitly stated in OWL file
 			
 			String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.METADATA_ID.getURIasString());
-			
 			semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, ds);
 			
 			// Collect singular physical definition annotation, if present
