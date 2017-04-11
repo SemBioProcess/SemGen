@@ -324,7 +324,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			}
 			
 			// If not a CellML-type variable, store startValue info
-			else 
+			else if(ds.hasStartValue())
 				SemSimOWLFactory.setIndDatatypeProperty(ont, dsuri, SemSimRelation.HAS_START_VALUE, ds.getStartValue(), manager);
 			
 			// Get the units info
@@ -483,6 +483,9 @@ public class SemSimOWLwriter extends ModelWriter {
 						SemSimOWLFactory.setIndObjectProperty(ont, indstr, namespace + SemSimOWLFactory.URIencoding(subsub.getName()), 
 								SemSimRelation.INCLUDES_SUBMODEL, null, manager);
 					}
+					
+					if(sub.hasMetadataID())
+						SemSimOWLFactory.setIndDatatypeProperty(ont, indstr, SemSimRelation.METADATA_ID, sub.getMetadataID(), manager);
 				}
 				// Otherwise add the assertion that the submodel is imported, but leave out the rest of the info
 				else{
@@ -491,7 +494,11 @@ public class SemSimOWLwriter extends ModelWriter {
 							makeAnnotationsForImport(((FunctionalSubmodel)sub)), manager);
 				}
 			}
+			
 		}
+		
+		
+
 		// Assert the annotations needed for CellML component groupings
 		for(Subsumption subsump : cellmlsubsumptions){
 			String indstr = namespace + SemSimOWLFactory.URIencoding(subsump.parent.getName());

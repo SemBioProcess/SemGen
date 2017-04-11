@@ -2,6 +2,10 @@ package semsim.definitions;
 
 import org.jdom.Namespace;
 
+/**
+ * Enumeration of various RDF namespaces used in biosimulation modeling formats.
+ *
+ */
 public enum RDFNamespace  {
 	PKB("http://www.virtualrat.edu/physkb/", "physkb"),
 	SEMSIM("http://www.bhi.washington.edu/SemSim#", "semsim"),
@@ -29,14 +33,23 @@ public enum RDFNamespace  {
 		owlid = id;
 	}
 	
+	/**
+	 * @return The RDF namespace as a string (e.g. http://www.w3.org/1998/Math/MathML)
+	 */
 	public String getNamespaceasString() {
 		return namespace;
 	}
 	
+	/**
+	 * @return A prefix for the namespace
+	 */
 	public String getOWLid() {
 		return owlid;
 	}
 	
+	/**
+	 * @return The namespace as a JDom Namespace object
+	 */
 	public Namespace createJdomNamespace() {
 		return Namespace.getNamespace(getOWLid(), getNamespaceasString());
 	}

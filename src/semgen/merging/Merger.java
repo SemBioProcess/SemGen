@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
+import semsim.SemSimObject;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -169,8 +170,23 @@ public class Merger {
 			onediscardedds.getComputationInputs().clear();
 		}
 	
-		// What if both models have a custom phys component with the same name?
+		// What if both models have a custom physical component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
+		
+		// Find any metadata ID's that are identical and create unique ones
+		Set<String> intersection = new HashSet<String>(ssm1clone.getMetadataIDcomponentMap().keySet()); // use the copy constructor
+		intersection.retainAll(ssm2clone.getMetadataIDcomponentMap().keySet());
+		
+		for(String ssm2metaid : intersection){
+			
+			SemSimObject ssm2object = ssm2clone.getModelComponentByMetadataID(ssm2metaid);
+
+			System.err.println("Duplicate metadata ID " + ssm2metaid + ": The ID for " + ssm2object.getSemSimType().getName() + 
+					" " + ssm2object.getName() + " in model " + ssm2clone.getName() + " will be renamed for merging.");
+			ssm1clone.assignValidMetadataIDtoSemSimObject(ssm2metaid, ssm2object);
+		}
+		
+		
 		
 		// Create two submodels within the merged model where one consists of all data structures
 		// from the first model used in the merge, and the second consists of all those from the second.
@@ -178,7 +194,6 @@ public class Merger {
 		createSubmodelForMergeComponent(mergedmodel, ssm2clone);
 		
 		//Add processes to the merged model
-		
 		for (PhysicalProcess pp : ssm2clone.getPhysicalProcesses())
 			pp.addToModel(mergedmodel);
 		

@@ -59,11 +59,11 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	// Constructor with existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String baseNamespace){	
+	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String xmlNamespace){	
 		super(null);
 		
 		initialize(semsimmodel);
-		intializeExistingRDF(rdfasstring, baseNamespace);
+		intializeExistingRDF(rdfasstring, xmlNamespace);
 	}
 	
 	
@@ -79,19 +79,19 @@ public class SemSimRDFwriter extends ModelWriter{
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("model", semsimmodel.getNamespace());
+		rdf.setNsPrefix("model", semsimmodel.getNamespace()); //TODO: cut this
 	}
 	
 	
-	private void intializeExistingRDF(String rdfasstring, String baseNamespace){
+	private void intializeExistingRDF(String rdfasstring, String xmlNamespace){
 		
 		// If rdfasstring is not null, add it as rdf model
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-					rdf.read(stream, baseNamespace, null);
+					rdf.read(stream, xmlNamespace, null);
 					
-					if(rdf.getNsPrefixURI("model") != null)
+					if(rdf.getNsPrefixURI("model") != null) // TODO: change this so that it only uses xmlns:model for namespace if xmlns present
 						semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
 					
 			} 

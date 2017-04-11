@@ -110,7 +110,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
-
+	
 	/**
 	 * Constructor without namespace
 	 */
@@ -444,30 +444,62 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		return null;
 	}
-	
 	/**
-	 * @return A Map that links MatadataIDs with their associated model component.
-	 */
-	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
-		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
-		for(SemSimObject ssc : getAllModelComponentsandCollections()){
-			if(ssc.getMetadataID()!=null) map.put(ssc.getMetadataID(), ssc);
+ 	 * @return A Map that links MatadataIDs with their associated model component.
+ 	 */
+ 	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
+ 		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
+ 		
+ 		for(SemSimObject ssc : getAllModelComponentsandCollections()){
+ 			
+ 			String metaID = ssc.getMetadataID();
+ 			if(! metaID.equals("")) map.put(ssc.getMetadataID(), ssc);
+ 		}
+ 		return map;
+ 	}
+ 	
+ 	/**
+ 	 * @param ID A metadata ID used to look up a model component.
+ 	 * @return The model component assigned the given ID, or null if the ID is not associated with any
+ 	 * model component
+ 	 */
+ 	public SemSimObject getModelComponentByMetadataID(String ID){
+ 		
+ 		for(SemSimObject ssc : getAllModelComponentsandCollections()){
+ 			
+ 			if(ssc.getMetadataID().equals(ID))
+ 				return ssc;
+  		}
+  		return null;
+  	}
+ 	
+ 	/**
+	 * Method for ensuring that duplicate metadata ID's don't appear
+ 	 * in the same model. Called when reading in models.
+ 	 * @param ID A proposed metadata ID to assign to a SemSimObject in the model
+ 	 * @param theobject The SemSimObject that the ID is assigned to
+ 	 */
+ 	public String assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
+		
+ 		if(ID==null || ID.isEmpty() || ID.equals("") || theobject==null ) return ID;
+ 		
+ 		Map<String, SemSimObject> momap = getMetadataIDcomponentMap();
+		int num = 0;
+		String newID = ID;
+		
+		// If the metadata ID is already used, create a new, unique ID
+		while(momap.containsKey(newID)){
+			newID = "metaid" + num;
+			num = num + 1;
 		}
-		return map;
-	}
-	
-	/**
-	 * @param ID A metadata ID used to look up a model component.
-	 * @return The model component assigned the given ID, or null if the ID is not associated with any
-	 * model component
-	 */
-	public SemSimObject getModelComponentByMetadataID(String ID){
-		for(SemSimObject ssc : getAllModelComponentsandCollections()){
-			if(ssc.getMetadataID().equals(ID))
-				return ssc;
-		}
-		return null;
-	}
+				
+		if( ! newID.equals(ID))
+			System.err.println("MetaID on " + theobject.getSemSimType() + " " + theobject.getName()
+				+ " changed to " + newID + " because the model already contains a SemSim component with metaID " + ID + ".");
+		
+		theobject.setMetadataID(newID);
+		return newID;
+ 	}
 
 	/**
 	 * Specify the set of {@link RelationalConstraint}s used in the model.

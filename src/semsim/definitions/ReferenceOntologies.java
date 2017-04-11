@@ -6,7 +6,18 @@ import java.util.ArrayList;
 import semsim.annotation.Ontology;
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class that provides methods for working with the preferred ontologies used to annotate
+ * SemSim models.
+ * @author max_neal
+ *
+ */
 public class ReferenceOntologies {
+	
+	/**
+	 * @return A list of theh reference ontologies commonly used in SemSim 
+	 * model annotation.
+	 */
 	public static ArrayList<ReferenceOntology> getAllOntologies() {
 		ArrayList<ReferenceOntology> allont = new ArrayList<ReferenceOntology>();
 		for (ReferenceOntology ont : ReferenceOntology.values()) {
@@ -15,6 +26,12 @@ public class ReferenceOntologies {
 		return allont;
 	}
 	
+	/**
+	 * @param name The full name of one of the enumerated ReferenceOntologies (e.g. Chemical Entities of Biological Interest)
+	 * @return A ReferenceOntology object corresponding to the name parameter. Returns
+	 * ReferenceOntology.UNKONWN if the name is not associated with one of the enumerated
+	 *  ReferenceOntologies.
+	 */
 	public static ReferenceOntology getReferenceOntologybyFullName(String name) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.getFullName().equals(name)) return ro; 
@@ -22,6 +39,12 @@ public class ReferenceOntologies {
 		return ReferenceOntology.UNKNOWN;
 	}
 	
+	/**
+	 * @param namespace A namespace associated with one of the enumerated ReferenceOntologies.
+	 * @return A ReferenceOntology object corresponding to the namespace parameter.
+	 * Returns ReferenceOntology.UNKNOWN if the namespace is not associated with one
+	 * of the enumerated ReferenceOntologies.
+	 */
 	public static ReferenceOntology getReferenceOntologyByNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro;
@@ -29,6 +52,12 @@ public class ReferenceOntologies {
 		return ReferenceOntology.UNKNOWN;
 	}
 	
+	/**
+	 * @param namespace A namespace associated with one of the enumerated ReferenceOntologies.
+	 * @return An {@link Ontology} object corresponding to the namespace parameter.
+	 * Returns ReferenceOntology.UNKNOWN if the namespace is not associated with one
+	 * of the enumerated ReferenceOntologies.
+	 */
 	public static Ontology getOntologyByNamespace(String namespace) {
 		for (ReferenceOntology ro : ReferenceOntology.values()) {
 			if (ro.hasNamespace(namespace)) return ro.getAsOntology();
@@ -36,11 +65,22 @@ public class ReferenceOntologies {
 		return ReferenceOntology.UNKNOWN.getAsOntology();
 	}
 	
+	/**
+	 * @param namespace The URI of a class from one of the enumerated ReferenceOntologies.
+	 * @return A ReferenceOntology object representing the ontology asociated with the namespace of the URI.
+	 * Returns ReferenceOntology.UNKNOWN if the URI's namespace is not associated with one
+	 * of the enumerated ReferenceOntologies.
+	 */
 	public static ReferenceOntology getReferenceOntologyByURI(URI uri){
 		String ns = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 		return getReferenceOntologyByNamespace(ns);
 	}
 	
+	/**
+	 * @param uri1 Class URI from one ReferenceOntology.
+	 * @param uri2 Class URI from another ReferenceOntology.
+	 * @return Whether the URIs represent classes from same ontology.
+	 */
 	public static boolean URIsAreFromSameReferenceOntology(URI uri1, URI uri2){
 		ReferenceOntology ont1 = ReferenceOntologies.getReferenceOntologyByURI(uri1);
 		ReferenceOntology ont2 = ReferenceOntologies.getReferenceOntologyByURI(uri2);
@@ -48,6 +88,11 @@ public class ReferenceOntologies {
 		return ((ont1==ont2) && (ont1 != ReferenceOntology.UNKNOWN));
 	}
 	
+	/**
+	 * Enumeration that delineates which ontologies should be used for the components
+	 * of SemSim model annotations.
+	 * 
+	 */
 	public enum OntologyDomain {
 		AssociatePhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB}),
 		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.PATO, 
@@ -63,10 +108,16 @@ public class ReferenceOntologies {
 			}
 		}
 		
+		/**
+		 * @return The list of all ontologies recommended for the types of annotations in the OntologyDomain.
+		 */
 		public ArrayList<ReferenceOntology> getDomainOntologies() {
 			return domainontologies;
 		}
 		
+		/**
+		 * @return The full names of all ontologies recommended for the types of annotations in the OntologyDomain.
+		 */
 		public String[] getArrayofOntologyNames() {
 			String[] names = new String[domainontologies.size()];
 			for (int i = 0; i<domainontologies.size(); i++) {
@@ -75,20 +126,37 @@ public class ReferenceOntologies {
 			return names;
 		}
 		
+		/**
+		 * @param index An integer corresponding to one of the recommended ReferenceOntologies in the OntologyDomain.
+		 * @return The ReferenceOntology object in the list of recommended ReferenceOntologies
+		 * at the specified index. 
+		 */
 		public ReferenceOntology getDomainOntologyatIndex(int index) {
 			return domainontologies.get(index);
 		}
 		
+		/**
+		 * @param ont The ReferenceOntology object that we want the index of
+		 * @return The index of the ReferenceOntology in the list of recommended ReferenceOntologies.
+		 */
 		public int getOrdinalofOntology(ReferenceOntology ont) {
 			return domainontologies.indexOf(ont);
 		}
 
+		/**
+		 * @param ont A ReferenceOntology that will be checked to see if it is appropriate for
+		 * use within the OntologyDomain.
+		 * @return Whether the ReferenceOntology is recommended for use within the OntologyDomain.
+		 */
 		public boolean domainHasReferenceOntology(ReferenceOntology ont) {
 			if (ont==null) return false;
 			return domainontologies.contains(ont);
 		}
 	};
 	
+	/**
+	 * Enumeration of the various ReferenceOntologies used in SemSim model annotation.
+	 */
 	public enum ReferenceOntology {
 		CHEBI("Chemical Entities of Biological Interest", "CHEBI", "http://purl.obolibrary.org/obo/CHEBI",
 				new String[]{"http://purl.org/obo/owl/CHEBI#","http://identifiers.org/chebi/",
@@ -155,6 +223,10 @@ public class ReferenceOntologies {
 			ontology = new Ontology(this);
 		}
 		
+		/**
+		 * @param nspace A namespace that may or may not correspond to a ReferenceOntology
+		 * @return Whether the namespace corresponds with the ReferenceOntology
+		 */
 		public boolean hasNamespace(String nspace) {
 			for (String ns : namespaces) {
 				if (nspace.startsWith(ns)) return true; 
@@ -162,18 +234,30 @@ public class ReferenceOntologies {
 			return false;
 		}
 		
+		/**
+		 * @return Full name of ReferenceOntology
+		 */
 		public String getFullName() {
 			return new String(fullname);
 		}
 		
+		/**
+		 * @return Nickname of ReferenceOntology
+		 */
 		public String getNickName() {
 			return new String(nickname);
 		}
 				
+		/**
+		 * @return Free-text description indicating scope of ReferenceOntology
+		 */
 		public String getDescription() {
 			return description;
 		}
 		
+		/**
+		 * @return The BioPortal namespace of the ReferenceOntology
+		 */
 		public String getBioPortalNamespace(){
 			return bioportalnamespace;
 		}
