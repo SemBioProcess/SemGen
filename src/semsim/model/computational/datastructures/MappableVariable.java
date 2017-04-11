@@ -1,5 +1,6 @@
 package semsim.model.computational.datastructures;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -134,6 +135,16 @@ public class MappableVariable extends Decimal {
 	@Override
 	public DataStructure copy() {
 		return new MappableVariable(this);
+	}
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		super.replaceAllDataStructures(dsmap);
+		this.mappedFrom = (MappableVariable) dsmap.get(this.mappedFrom);
+		Set<MappableVariable> newmappedto = new HashSet<MappableVariable>();
+		for (MappableVariable tomv : this.mappedTo) {
+			newmappedto.add((MappableVariable) dsmap.get(tomv));
+		}
+		this.mappedTo = newmappedto;
 	}
 
 	public void replaceDataStructureReference(MappableVariable replacer, MappableVariable replacee) {

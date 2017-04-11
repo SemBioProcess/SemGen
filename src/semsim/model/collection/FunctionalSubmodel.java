@@ -1,6 +1,7 @@
 package semsim.model.collection;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class FunctionalSubmodel extends Submodel {
 		super(fsmtocopy);
 		relationshipSubmodelMap.putAll(fsmtocopy.relationshipSubmodelMap);
 		functional = true;
-		computation = fsmtocopy.getComputation();
+		computation = new Computation(fsmtocopy.getComputation());
 	}
 	
 	public FunctionalSubmodel(Submodel smtocopy) {
@@ -115,6 +116,26 @@ public class FunctionalSubmodel extends Submodel {
 				getComputation().setMathML(new XMLOutputter().outputString(componentMathML));
 			}
 		}
+	}
+	
+	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		super.replaceDataStructures(dsmap);
+		
+		computation.replaceAllDataStructures(dsmap);
+	}
+	
+	public void replaceSubmodels(HashMap<Submodel, Submodel> smmap) {
+		super.replaceSubmodels(smmap);
+		
+		Map<String, Set<FunctionalSubmodel>> relsmmap = new HashMap<String, Set<FunctionalSubmodel>>();
+		for (String rel : relationshipSubmodelMap.keySet()) {
+			Set<FunctionalSubmodel> rsmset = new HashSet<FunctionalSubmodel>();
+			for (FunctionalSubmodel rfsm : relationshipSubmodelMap.get(rel)) {
+				rsmset.add((FunctionalSubmodel) smmap.get(rfsm));
+			}
+			relsmmap.put(new String(rel), rsmset);
+		}
+		setRelationshipSubmodelMap(relsmmap);
 	}
 	
 	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {

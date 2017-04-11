@@ -37,7 +37,6 @@ public class SemSimCopy {
 	HashMap<PhysicalProcess, PhysicalProcess> procs = new HashMap<PhysicalProcess, PhysicalProcess>();
 	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	LinkedHashMap<DataStructure, DataStructure> dsmap = new LinkedHashMap<DataStructure, DataStructure>();
-	HashMap<Computation, Computation> compmap = new HashMap<Computation, Computation>();
 	HashMap<Event, Event> eventmap = new HashMap<Event, Event>();
 	LinkedHashMap<Submodel, Submodel> smmap = new LinkedHashMap<Submodel, Submodel>();
 	
@@ -70,13 +69,11 @@ public class SemSimCopy {
 		
 		copySubModels();
 		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.values()));
-		remapSubmodels();
+		remap();
 		
 		copyEvents();
 		destmodel.setEvents(new ArrayList<Event>(eventmap.values()));
-		
-		copyComputations();
-		
+				
 		copyRelationalConstraints();
 		
 	}
@@ -165,6 +162,7 @@ public class SemSimCopy {
 	private void copyDataStructures(SemSimModel modeltocopy) {
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
 			dsmap.put(ds, ds.copy());
+			
 		}
 		
 		remapDataStructures();
@@ -172,17 +170,6 @@ public class SemSimCopy {
 	
 	private void remapDataStructures() {
 		for (DataStructure ds : dsmap.values()) {
-			Computation comp = ds.getComputation();
-			if (comp!=null) {
-				if (compmap.containsKey(comp)) {
-					ds.setComputation(compmap.get(comp));
-				} 
-				else {
-					Computation newcomp = new Computation(comp);
-					ds.setComputation(newcomp);
-					compmap.put(comp, newcomp);
-				}
-			}
 			if (ds.hasAssociatedPhysicalComponent()) {
 				if (entities.containsKey(ds.getAssociatedPhysicalModelComponent())) {
 					ds.setAssociatedPhysicalModelComponent(entities.get(ds.getAssociatedPhysicalModelComponent()));
@@ -197,35 +184,6 @@ public class SemSimCopy {
 			if (ds.hasUnits()) {
 				ds.setUnit(unitmap.get(ds.getUnit()));
 			}
-			HashSet<DataStructure> used = new HashSet<DataStructure>();
-			for (DataStructure utc : ds.getUsedToCompute()) {
-				used.add(dsmap.get(utc));
-			}
-			ds.setUsedToCompute(used);
-		}
-	}
-	
-	private void copyComputations() {
-		for (Computation comp : compmap.values()) {
-			HashSet<DataStructure> inputs = new HashSet<DataStructure>();
-			for (DataStructure in : comp.getInputs()) {
-				if (dsmap.get(in) == null) {
-					for (DataStructure key : dsmap.keySet()) {
-						if (key.getName().equals(in.getName())) {
-							in = key;
-							break;
-						}
-					}
-					
-				}
-				inputs.add(dsmap.get(in));
-			}
-			HashSet<DataStructure> outputs = new HashSet<DataStructure>();
-			for (DataStructure out : comp.getOutputs()) {
-				outputs.add(dsmap.get(out));
-			}
-			comp.setInputs(inputs);
-			comp.setOutputs(outputs);
 		}
 	}
 	
@@ -234,14 +192,7 @@ public class SemSimCopy {
 			Submodel newsm;
 			if (sm.isFunctional()) {
 				FunctionalSubmodel fsm = new FunctionalSubmodel(sm);
-				if (!compmap.containsKey(fsm.getComputation())) {
-					Computation newcomp = new Computation(fsm.getComputation());
-					compmap.put(fsm.getComputation(), newcomp);
-					fsm.setComputation(newcomp);
-				}
-				else {
-					fsm.setComputation(compmap.get(fsm.getComputation()));
-				}
+
 				newsm = fsm;
 			}
 			else {
@@ -251,25 +202,12 @@ public class SemSimCopy {
 		}
 	}
 	
-	private void remapSubmodels() {
+	private void remap() {
+		destmodel.replaceSubmodels(smmap);
+		destmodel.replaceDataStructures(dsmap);
 		
-		// For each submodel copy, associate it with data structure copies
 		for (Submodel newsm : smmap.values()) {
-			ArrayList<DataStructure> dsset = new ArrayList<DataStructure>();
-			
-			for (DataStructure ds : newsm.getAssociatedDataStructures()) {
-				dsset.add(dsmap.get(ds));
-			}
-			
-			// Associate it with the submodel copies
-			ArrayList<Submodel> smset = new ArrayList<Submodel>();
-			
-			for (Submodel assocsm : newsm.getSubmodels()) {
-				smset.add(smmap.get(assocsm));
-			}
-			newsm.setAssociatedDataStructures(dsset);
-			newsm.setSubmodels(smset);
-			
+
 			// If functional, establish its model subsumption map using the 
 			// submodel copies
 			if (newsm.isFunctional()) {

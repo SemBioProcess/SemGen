@@ -1,5 +1,6 @@
 package semsim.model.computational;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,8 +42,7 @@ public class Computation extends ComputationalModelComponent{
 	 */
 	public Computation(Set<DataStructure> outputs){
 		super(SemSimTypes.COMPUTATION);
-		outputs = new HashSet<DataStructure>();
-		outputs.addAll(outputs);
+		outputs = new HashSet<DataStructure>(outputs);
 	}
 	
 	public Computation(Computation comptocopy) {
@@ -223,6 +223,34 @@ public class Computation extends ComputationalModelComponent{
 	public boolean hasPhysicalDependency(){
 		return dependency != null;
 	}
+	
+	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		replaceOutputs(dsmap);
+		replaceInputs(dsmap);
+	}
+	
+	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
+		for (DataStructure output : getOutputs()) {
+			DataStructure replacer = dsmap.get(output);
+			if (replacer != null) {
+				newoutputs.add(replacer);
+			}
+		}
+		setOutputs(newoutputs);
+	}
+	
+	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
+		Set<DataStructure> newinputs = new HashSet<DataStructure>();
+		for (DataStructure input : getInputs()) {
+			DataStructure replacer = dsmap.get(input);
+			if (replacer != null) {
+				newinputs.add(replacer);
+			}
+		}
+		setInputs(newinputs);
+	}
+	
 
 	@Override
 	public void addToModel(SemSimModel model) {}

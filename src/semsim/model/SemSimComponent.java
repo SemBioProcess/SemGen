@@ -4,7 +4,6 @@ import java.net.URI;
 
 import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
-import semsim.model.collection.SemSimCollection;
 import semsim.model.collection.SemSimModel;
 
 /**

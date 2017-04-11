@@ -18,13 +18,13 @@ public abstract class Extractor {
 	protected HashMap<DataStructure,DataStructure> datastructures = new HashMap<DataStructure,DataStructure>();
 
 	public Extractor(SemSimModel source, SemSimModel extractionmodel) {
-		sourcemodel = source;
+		sourcemodel = source.clone();
 		extraction = extractionmodel;
 		includeSolutionDomains();
 	}
 	
 	public Extractor(SemSimModel source) {
-		sourcemodel = source.clone();
+		sourcemodel = source;
 		extraction = new SemSimModel();
 		includeSolutionDomains();
 	}

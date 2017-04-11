@@ -48,7 +48,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	public DataStructure(DataStructure dstocopy) {
 		super(dstocopy);
-		computation = dstocopy.computation;
+		if (dstocopy.computation != null) {
+			computation = new Computation(dstocopy.computation);
+		}
 		physicalProperty = dstocopy.physicalProperty;
 		physicalcomponent = dstocopy.physicalcomponent;
 		singularterm = dstocopy.singularterm;
@@ -423,29 +425,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			solutionDomain = replacer;
 		}
 	}
-	
-	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
-		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
-		for (DataStructure output : computation.getOutputs()) {
-			DataStructure replacer = dsmap.get(output);
-			if (replacer != null) {
-				newoutputs.add(replacer);
-			}
-		}
-		computation.setOutputs(newoutputs);
-	}
-	
-	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
-		Set<DataStructure> newinputs = new HashSet<DataStructure>();
-		for (DataStructure input : computation.getInputs()) {
-			DataStructure replacer = dsmap.get(input);
-			if (replacer != null) {
-				newinputs.add(replacer);
-			}
-		}
-		computation.setInputs(newinputs);
-	}
-	
+
 	public void replaceUsedtoCompute(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newused = new HashSet<DataStructure>();
 		for (DataStructure used : this.getUsedToCompute()) {
@@ -459,12 +439,19 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
-		replaceOutputs(dsmap);
-		replaceInputs(dsmap);
+		computation.replaceAllDataStructures(dsmap);
 		replaceUsedtoCompute(dsmap);
 		if (this.solutionDomain!=null) {
 			solutionDomain = dsmap.get(solutionDomain);
 		}
+	}
+	
+	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
+		computation.replaceOutputs(dsmap);
+	}
+	
+	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
+		computation.replaceInputs(dsmap);
 	}
 	
 	@Override
@@ -506,10 +493,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	public void clearInputs() {
-		this.computation.getInputs().clear();
-		this.computation.setComputationalCode("");
-		this.computation.setMathML("");
-		this.setStartValue("");
+		this.computation = new Computation(computation);
+		this.computation.setInputs(new HashSet<DataStructure>());
+		this.computation.setComputationalCode(new String());
+		this.computation.setMathML(new String());
+		this.setStartValue(new String());
 	}
 	
 	public void removeOutput(DataStructure dstoremove) {
