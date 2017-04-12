@@ -392,7 +392,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			return _models.get(address.get(1).asNumber().getInteger());
 		}
 		else {
-			return this.extractnodeworkbenchmap.get(address.get(1).asNumber().getInteger()).getExtractionInfo(address.get(1).asNumber().getInteger());
+			return this.extractnodeworkbenchmap.get(address.get(0).asNumber().getInteger()).getExtractionInfo(address.get(1).asNumber().getInteger());
 		}
 	}
 }

@@ -64,11 +64,12 @@ public class SemSimCopy {
 		copyUnits();
 		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitmap.values()));
 		
+		
 		copyDataStructures(modeltocopy);
-		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.values()));
+		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.keySet()));
 		
 		copySubModels();
-		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.values()));
+		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.keySet()));
 		remap();
 		
 		copyEvents();
@@ -162,7 +163,6 @@ public class SemSimCopy {
 	private void copyDataStructures(SemSimModel modeltocopy) {
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
 			dsmap.put(ds, ds.copy());
-			
 		}
 		
 		remapDataStructures();
@@ -205,25 +205,6 @@ public class SemSimCopy {
 	private void remap() {
 		destmodel.replaceSubmodels(smmap);
 		destmodel.replaceDataStructures(dsmap);
-		
-		for (Submodel newsm : smmap.values()) {
-
-			// If functional, establish its model subsumption map using the 
-			// submodel copies
-			if (newsm.isFunctional()) {
-				FunctionalSubmodel fsm = (FunctionalSubmodel)newsm;
-				Map<String, Set<FunctionalSubmodel>> oldrelsmmap = fsm.getRelationshipSubmodelMap();
-				Map<String, Set<FunctionalSubmodel>> relsmmap = new HashMap<String, Set<FunctionalSubmodel>>();
-				for (String rel : oldrelsmmap.keySet()) {
-					Set<FunctionalSubmodel> rsmset = new HashSet<FunctionalSubmodel>();
-					for (FunctionalSubmodel rfsm : oldrelsmmap.get(rel)) {
-						rsmset.add((FunctionalSubmodel) smmap.get(rfsm));
-					}
-					relsmmap.put(new String(rel), rsmset);
-				}
-				fsm.setRelationshipSubmodelMap(relsmmap);
-			}
-		}
 	}
 	
 	private void copyEvents(){

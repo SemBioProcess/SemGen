@@ -434,6 +434,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 				newused.add(replacer);
 			}
 		}
+		solutionDomain = dsmap.get(solutionDomain);
 		setUsedToCompute(newused);
 	}
 	

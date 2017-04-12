@@ -347,6 +347,10 @@ public abstract class SemSimCollection extends SemSimObject{
 			}
 		}
 		dataStructures = replacements;
+		
+		for (Submodel sm : submodels) {
+			sm.replaceDataStructures(dsmap);
+		}
 	}
 
 	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
