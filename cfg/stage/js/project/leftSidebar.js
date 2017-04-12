@@ -56,18 +56,18 @@ function LeftSidebar(graph) {
 		pane.append(
 			"<span class='subheading'>" + model.id + "</span>" +
 			"<ul class='menulist'>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Export</button></li>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.taskClicked(this);'>Close</button></li>" +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Annotate model' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Extract parts of the model' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Export model to a different format' onclick='main.task.taskClicked(this);'>Export</button></li>" +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Close current model' onclick='main.task.taskClicked(this);'>Close</button></li>" +
 			"</ul>" +
 			"<span class='subheading'>Visualize</span>" + 
 			"<ul class='menulist'>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize submodel network' onclick='main.task.doModelAction(function(model) " +
 					"{ model.createVisualization(0, true);});'>Submodels</button></li>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize mathematical dependencies' onclick='main.task.doModelAction(function(model) " +
 					"{ model.createVisualization(1, true);});'>Dependencies</button></li>" +
-				"<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) " +
+				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize PhysioMap network' onclick='main.task.doModelAction(function(model) " +
 					"{ model.createVisualization(2, true);});'>PhysioMap</button></li>" +
 			"</ul>"
 
