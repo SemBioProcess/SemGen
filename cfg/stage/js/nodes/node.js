@@ -155,7 +155,13 @@ Node.prototype.createVisualElement = function (element, graph) {
         .attr("class", "highlight")
         .attr("r", this.r + 4)
         .attr("stroke", "#fdc751")
-        .attr("stroke-width", "4");
+        .attr("stroke-width", "4")
+        .on("mouseover", function (d) {
+            graph.highlightMode(d);
+        })
+        .on("mouseout", function () {
+            graph.highlightMode(null);
+        });
 
     if(this.nodeType == NodeType.NULLNODE) {
         this.rootElement.append("svg:line")
