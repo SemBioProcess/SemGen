@@ -19,6 +19,7 @@ public abstract class Extractor {
 
 	public Extractor(SemSimModel source, SemSimModel extractionmodel) {
 		sourcemodel = source.clone();
+
 		extraction = extractionmodel;
 		includeSolutionDomains();
 	}
@@ -74,7 +75,7 @@ public abstract class Extractor {
 	
 	protected void buildExtraction() {
 		for (DataStructure dstoadd : datastructures.values()) {
-			dstoadd.addToModel(extraction);			
+			dstoadd.addToModel(extraction);
 		}
 		extraction.setSubmodels(submodels.values());
 	}

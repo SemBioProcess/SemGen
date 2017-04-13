@@ -30,6 +30,7 @@ public class ExtractNew extends Extractor {
 		includeSubModel(sourceobj);
 	}
 
+	//Stage a datastructure for inclusion. If an CellML input node is passed get it's output node instead.
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
 		if (sourceobj instanceof MappableVariable) {

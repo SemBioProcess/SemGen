@@ -77,8 +77,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	}
 	
 	public void setSubmodels(Collection<Submodel> submodels) {
-		this.submodels.clear();
-		this.submodels.addAll(submodels);
+		this.submodels = new ArrayList<Submodel>(submodels);
 	}
 	
 	public void removeSubmodel(Submodel sub){
@@ -348,9 +347,9 @@ public abstract class SemSimCollection extends SemSimObject{
 		}
 		dataStructures = replacements;
 		
-		for (Submodel sm : submodels) {
-			sm.replaceDataStructures(dsmap);
-		}
+//		for (Submodel sm : submodels) {
+//			sm.replaceDataStructures(dsmap);
+//		}
 	}
 
 	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {

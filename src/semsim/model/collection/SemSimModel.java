@@ -1136,6 +1136,15 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			}
 		}
 	}
+	
+	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
+		for (Submodel sm : submodels) {
+			sm.replaceDataStructures(dsmap);
+		}
+		for (DataStructure ds : dataStructures) {
+			ds.replaceAllDataStructures(dsmap);
+		}
+	}
 
 	//Required by Annotatable
 	@Override

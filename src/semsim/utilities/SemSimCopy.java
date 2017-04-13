@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 import semsim.annotation.Annotation;
@@ -64,12 +63,11 @@ public class SemSimCopy {
 		copyUnits();
 		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitmap.values()));
 		
-		
 		copyDataStructures(modeltocopy);
-		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.keySet()));
+		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.values()));
 		
 		copySubModels();
-		destmodel.setSubmodels(new ArrayList<Submodel>(smmap.keySet()));
+		destmodel.setSubmodels(smmap.values());
 		remap();
 		
 		copyEvents();
@@ -184,6 +182,7 @@ public class SemSimCopy {
 			if (ds.hasUnits()) {
 				ds.setUnit(unitmap.get(ds.getUnit()));
 			}
+			
 		}
 	}
 	
@@ -200,11 +199,16 @@ public class SemSimCopy {
 			}
 			smmap.put(sm, newsm);
 		}
+		for (Submodel sm : smmap.values()) {
+			sm.replaceSubmodels(smmap);
+		}
 	}
 	
 	private void remap() {
-		destmodel.replaceSubmodels(smmap);
-		destmodel.replaceDataStructures(dsmap);
+		//destmodel.replaceSubmodels(smmap);
+		
+		this.destmodel.replaceDataStructures(dsmap);
+		
 	}
 	
 	private void copyEvents(){
