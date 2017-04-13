@@ -52,7 +52,7 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 
 	public void newExtraction(Integer sourceindex, ExtractionNode newextraction);
 			
-	public void loadExtractions(ArrayList<ModelExtractionGroup> extractnodeworkbenchmap);
+	public void loadExtractions(ArrayList<ArrayList<ExtractionNode>> extractions);
 
 	public void modifyExtraction(Integer infoindex, Integer extractionindex, ExtractionNode extraction);
 }

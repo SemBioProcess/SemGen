@@ -153,7 +153,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		}
 		
 		public void onRequestExtractions() {
-				_commandSender.loadExtractions(extractnodeworkbenchmap);
+			ArrayList<ArrayList<ExtractionNode>> extractions = new ArrayList<ArrayList<ExtractionNode>>();
+			for (ModelExtractionGroup meg : extractnodeworkbenchmap) {
+				extractions.add(meg.getExtractionArray());
+			}
+				_commandSender.loadExtractions(extractions);
 		}
 		
 		public void onNewExtraction(Double sourceindex, JSArray nodes, String extractname) {

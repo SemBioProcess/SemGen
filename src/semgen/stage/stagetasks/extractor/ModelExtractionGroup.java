@@ -103,4 +103,11 @@ public class ModelExtractionGroup {
 		return this.extractionnodes.get(index).modelnode;
 	}
 	
+	public ArrayList<ExtractionNode> getExtractionArray() {
+		ArrayList<ExtractionNode> ens = new ArrayList<ExtractionNode>();
+		for (ExtractionInfo ei : this.extractionnodes) {
+			ens.add(ei.modelnode);
+		}
+		return ens;
+	}
 }

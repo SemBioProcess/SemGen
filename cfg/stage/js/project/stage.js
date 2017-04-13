@@ -259,8 +259,8 @@ function Stage(graph, stagestate) {
 
 	this.applytoExtractions = function(dothis) {
 		for (x in stage.extractions) {
-			for (y in stage.extractions[x].modextractions) {
-				dothis(stage.extractions[x].modextractions[y]);
+			for (y in stage.extractions[x]) {
+				dothis(stage.extractions[x][y]);
 			}
 		}
 	}
@@ -268,8 +268,8 @@ function Stage(graph, stagestate) {
 	//Apply to children until the function returns true
 	this.applytoExtractionsUntilTrue = function(funct) {
 		for (x in stage.extractions) {
-			for (y in stage.extractions[x].modextractions) {
-				if (dothis(stage.extractions[x].modextractions[y])) return true;
+			for (y in stage.extractions[x]) {
+				if (dothis(stage.extractions[x][y])) return true;
 			}
 		}
 		return false;
@@ -306,8 +306,8 @@ function Stage(graph, stagestate) {
 
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {
-			for (y in extractions[x].extractionnodes) {
-				stage.addExtractionNode(extractions[x].sourcemodelindex, extractions[x].extractionnodes[y]);
+			for (y in extractions[x]) {
+				stage.addExtractionNode(x, extractions[x][y]);
 			}
 		}
 	});
