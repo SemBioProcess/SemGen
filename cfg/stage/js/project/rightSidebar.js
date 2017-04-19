@@ -20,6 +20,14 @@ function RightSidebar(graph) {
 
 	});
 
+    $("#friction").change(function() {
+        var friction = $("#friction").val();
+        graph.setFriction(parseFloat(friction));
+
+    });
+
+	// Advanced d3 parameters disabled for users
+
 	// $("#linklength").change(function() {
 	// 	var length = $("#linklength").val();
 	// 	graph.setLinkLength(parseInt(length));
@@ -28,11 +36,6 @@ function RightSidebar(graph) {
 	// $("#chargedist").change(function() {
 	// 	var length = $("#chargedist").val();
 	// 	graph.setChargeDistance(parseInt(length));
-    //
-	// });
-	// $("#friction").change(function() {
-	// 	var friction = $("#friction").val();
-	// 	graph.setFriction(parseFloat(friction));
     //
 	// });
 	// $("#gravity").bind('change', function() {
