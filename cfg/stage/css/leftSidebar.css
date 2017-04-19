@@ -38,6 +38,11 @@
 	cursor: pointer;
 }
 
+#projectmodels {
+	padding-left: 15px;
+	list-style-type: circle;
+}
+
 ul.modelPopover li {				
 	list-style: none;
 	padding: 5px 10px;

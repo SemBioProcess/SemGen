@@ -96,9 +96,6 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
-	x = Math.max(this.r*2, Math.min(this.graph.w - this.r*2, x));
-	y = Math.max(this.r*2, Math.min(this.graph.h - 4 * this.r + this.spaceBetweenTextAndNode(), y));
-
 	this.x = x; this.y = y;
 	
 	this.srcobj.xpos = x;
@@ -155,7 +152,13 @@ Node.prototype.createVisualElement = function (element, graph) {
         .attr("class", "highlight")
         .attr("r", this.r + 4)
         .attr("stroke", "#fdc751")
-        .attr("stroke-width", "4");
+        .attr("stroke-width", "4")
+        .on("mouseover", function (d) {
+            graph.highlightMode(d);
+        })
+        .on("mouseout", function () {
+            graph.highlightMode(null);
+        });
 
     if(this.nodeType == NodeType.NULLNODE) {
         this.rootElement.append("svg:line")

@@ -54,13 +54,13 @@
 	<body>
 	    <div id="doodads"> </div>
 
-		<div id="addModelButton" class="btn-default">
-			<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-		</div>
-		
-		<div id="saveButton" class = "btn-default">
-			<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-		</div>
+		<!--<div id="addModelButton" class="btn-default" data-toggle="tooltip" data-placement="bottom" title="Add model">-->
+			<!--<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>-->
+		<!--</div>-->
+		<!---->
+		<!--<div id="saveButton" class = "btn-default" data-toggle="tooltip" data-placement="bottom" title="Save stage">-->
+			<!--<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>-->
+		<!--</div>-->
 		
 		<div id="trash" class = "btn-default">
 			<span class="glyphicon glyphicon-scissors"></span>
@@ -123,9 +123,9 @@
 						<span class="subheading">Graph Settings:</span>
 						<ul>
 							<li>Fix Nodes: <input type="checkbox" id="fixedNodes"></li>
-							<li>Node charge: <input type="number" id="nodecharge" value="-100"></li>
-							<li>Link length: <input type="number" id="linklength" value="100"></li>
-							<li>Charge distance: <input type="number" id="chargedist" value="300"></li>
+							<li>Repulsion: <input type="number" id="repulsion" value="100" step="10"></li>
+							<!--<li>Link length: <input type="number" id="linklength" value="100"></li>-->
+							<!--<li>Charge distance: <input type="number" id="chargedist" value="300"></li>-->
 							<li>Friction: <input type="number" id="friction" value="0.7" max="1.0" min="0.1" step="0.1"></li>
 							<li>Center Graph: <input type="checkbox" id="gravity" value=""></li>
 						</ul>
