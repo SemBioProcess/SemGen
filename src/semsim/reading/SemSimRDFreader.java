@@ -52,6 +52,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class SemSimRDFreader extends ModelReader{
 
@@ -61,36 +62,26 @@ public class SemSimRDFreader extends ModelReader{
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
 	public static String TEMP_NAMESPACE = "http://tempns.net/temp";
+	private ModelType modeltype;
 
-	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, String baseNamespace) {
+	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, ModelType modeltype) {
 		super(accessor);
 		
 		this.semsimmodel = semsimmodel;
+		this.modeltype = modeltype;
 		
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 				RDFReader reader = rdf.getReader();
 				reader.setProperty("relativeURIs","same-document,relative");
-				
-				String xmlbase = TEMP_NAMESPACE;
+				reader.read(rdf, stream, TEMP_NAMESPACE);
 				
 				//If an explicit namespace is specified with the "model" prefix, use it
-				String modelnamespace = rdf.getNsPrefixURI("model");
-				
-				if(modelnamespace != null){
-					xmlbase = modelnamespace;
-				}
-				else modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
-				
+				String modelnamespace = getModelNamespaceFromRDF();
 				semsimmodel.setNamespace(modelnamespace);
 
-				reader.read(rdf, stream, xmlbase);
-				createSubmodelURIandObjectMap();
-				
-				System.out.println(xmlbase);
-				StmtIterator stit = rdf.listStatements();
-				while(stit.hasNext()) System.out.println(stit.next());
+				createSubmodelURIandObjectMap();	
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -175,8 +166,15 @@ public class SemSimRDFreader extends ModelReader{
 	}
 	
 	public void getDataStructureAnnotations(DataStructure ds){
-		Resource resource = rdf.getResource(TEMP_NAMESPACE + "#" + ds.getMetadataID());
 		
+		// If we're reading a CellML model use a temp namespace
+		// otherwise use the namespace that was specified and assigned to the SemSim model
+		Resource resource = modeltype.equals(ModelType.CELLML_MODEL) ? 
+				rdf.getResource(TEMP_NAMESPACE + "#" + ds.getMetadataID()) : 
+					rdf.getResource(semsimmodel.getNamespace() + ds.getName());
+		
+				System.out.println(resource);
+				
 		collectFreeTextAnnotation(ds, resource);
 		collectSingularBiologicalAnnotation(ds, resource);
 		collectCompositeAnnotation(ds, resource);
@@ -527,7 +525,7 @@ public class SemSimRDFreader extends ModelReader{
 	public static String getRDFmodelAsString(Model rdf){
 		
 		RDFWriter writer = rdf.getWriter();
-		writer.setProperty("relativeURIs","same-document,relative");
+		writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
 		StringWriter out = new StringWriter();
 		writer.write(rdf, out, TEMP_NAMESPACE);
 		return out.toString();

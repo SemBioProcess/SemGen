@@ -52,7 +52,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	private ModelType modeltype;
-	private String xmlbase; // how to set this?
+	private String xmlbase;
 	
 	// Constructor without existing RDF block
 	public SemSimRDFwriter(SemSimModel semsimmodel, ModelType modeltype){

@@ -76,6 +76,7 @@ import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SBMLwriter;
 
@@ -1181,7 +1182,7 @@ public class SBMLreader extends ModelReader{
 			}
 		}
 		
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, null);
+		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespace = rdfreader.getModelNamespaceFromRDF();		

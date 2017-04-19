@@ -45,11 +45,6 @@ public class ModelClassifier {
 				else if(isValidSBML(file)){
 					type =  ModelType.SBML_MODEL;
 				}
-				else if(file.toString().toLowerCase().endsWith(".xml")){
-					if(isValidSBML(file)) type =  ModelType.SBML_MODEL;
-					else
-						if(isCellMLmodel(file)) type =  ModelType.CELLML_MODEL;
-				}
 			}
 		}
 		catch(JDOMException | IOException e) {

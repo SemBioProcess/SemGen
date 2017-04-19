@@ -14,6 +14,7 @@ import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class JSimProjectFileReader {
 	
@@ -37,7 +38,7 @@ public class JSimProjectFileReader {
 				
 				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
-				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), null);
+				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), ModelType.MML_MODEL_IN_PROJ);
 				
 				rdfreader.getModelLevelAnnotations();
 				rdfreader.getAllDataStructureAnnotations();

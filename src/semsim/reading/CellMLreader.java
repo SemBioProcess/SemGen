@@ -35,6 +35,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLreader extends ModelReader {
@@ -84,7 +85,7 @@ public class CellMLreader extends ModelReader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		}
 		
-		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 			
 		// Get the semsim namespace of the model, if present, according to the rdf block
 		String modelnamespace = rdfblock.getModelNamespaceFromRDF();
