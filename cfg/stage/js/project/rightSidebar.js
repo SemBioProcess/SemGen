@@ -10,29 +10,34 @@ function RightSidebar(graph) {
 		graph.toggleFixedMode(this.checked);
 	});
 
-	$("#nodecharge").change(function() {
-		var charge = -1 * $("#nodecharge").val();
+	$("#repulsion").change(function() {
+		var charge = -1 * $("#repulsion").val();
 		graph.setNodeCharge(parseInt(charge));
 
-	});
-	$("#linklength").change(function() {
-		var length = $("#linklength").val();
-		graph.setLinkLength(parseInt(length));
+		// Increase link length as repulsion increases
+        var length = 0.5 * $("#repulsion").val();
+        graph.setLinkLength(parseInt(length));
 
 	});
-	$("#chargedist").change(function() {
-		var length = $("#chargedist").val();
-		graph.setChargeDistance(parseInt(length));
 
-	});
-	$("#friction").change(function() {
-		var friction = $("#friction").val();
-		graph.setFriction(parseFloat(friction));
-
-	});
-	$("#gravity").bind('change', function() {
-		var gravity = this.checked;
-		graph.toggleGravity(gravity);
-
-	});
+	// $("#linklength").change(function() {
+	// 	var length = $("#linklength").val();
+	// 	graph.setLinkLength(parseInt(length));
+    //
+	// });
+	// $("#chargedist").change(function() {
+	// 	var length = $("#chargedist").val();
+	// 	graph.setChargeDistance(parseInt(length));
+    //
+	// });
+	// $("#friction").change(function() {
+	// 	var friction = $("#friction").val();
+	// 	graph.setFriction(parseFloat(friction));
+    //
+	// });
+	// $("#gravity").bind('change', function() {
+	// 	var gravity = this.checked;
+	// 	graph.toggleGravity(gravity);
+    //
+	// });
 }
