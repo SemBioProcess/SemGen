@@ -11,7 +11,7 @@ function RightSidebar(graph) {
 	});
 
 	$("#nodecharge").change(function() {
-		var charge = $("#nodecharge").val();
+		var charge = -1 * $("#nodecharge").val();
 		graph.setNodeCharge(parseInt(charge));
 
 	});
