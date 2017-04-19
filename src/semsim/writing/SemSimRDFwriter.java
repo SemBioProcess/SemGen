@@ -36,6 +36,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SemSimRDFwriter extends ModelWriter{
@@ -50,18 +51,22 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
+	private ModelType modeltype;
+	private String xmlbase; // how to set this?
 	
 	// Constructor without existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel){
+	public SemSimRDFwriter(SemSimModel semsimmodel, ModelType modeltype){
 		super(null);
 		
+		this.modeltype = modeltype;
 		initialize(semsimmodel);
 	}
 	
 	// Constructor with existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String xmlNamespace){	
+	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String xmlNamespace, ModelType modeltype){	
 		super(null);
 		
+		this.modeltype = modeltype;
 		initialize(semsimmodel);
 		intializeExistingRDF(rdfasstring, xmlNamespace);
 	}
@@ -79,7 +84,13 @@ public class SemSimRDFwriter extends ModelWriter{
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("model", semsimmodel.getNamespace()); //TODO: cut this
+		
+		// Don't set model prefix for cellml models. They use relative IDs and ad-hoc namespaces.
+		if( ! modeltype.equals(ModelType.CELLML_MODEL)){
+			rdf.setNsPrefix("model", semsimmodel.getNamespace());
+			xmlbase = semsimmodel.getNamespace();
+		}
+		else xmlbase = "#";
 	}
 	
 	
@@ -89,11 +100,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-					rdf.read(stream, xmlNamespace, null);
-					
-					if(rdf.getNsPrefixURI("model") != null) // TODO: change this so that it only uses xmlns:model for namespace if xmlns present
-						semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
-					
+					rdf.read(stream, xmlNamespace, null);					
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -119,7 +126,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	// Add model-level annotations 
 	protected void setRDFforModelLevelAnnotations(){
 		
-		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
+		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.getName();
+		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
 		
 		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
 						
@@ -142,7 +150,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 
-		String resuri = semsimmodel.getNamespace() + ds.getName();
+		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+		String resuri = xmlbase + metaid;
 		Resource ares = rdf.createResource(resuri);
 		
 		// Set free-text annotation
@@ -496,7 +505,9 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	// Generate an RDF resource for a physical component
 	private Resource createNewResourceForSemSimObject(String typeprefix){
-		String resname = semsimmodel.getNamespace();	
+		
+		//Use relative URIs
+		String resname = xmlbase;	
 		int idnum = 0;
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
 			idnum++;

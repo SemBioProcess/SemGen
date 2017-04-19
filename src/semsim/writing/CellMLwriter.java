@@ -31,6 +31,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
@@ -102,7 +103,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, SemSimRDFreader.TEMP_NAMESPACE, ModelType.CELLML_MODEL);
 	}
 	
 	private void createRootElement() {		

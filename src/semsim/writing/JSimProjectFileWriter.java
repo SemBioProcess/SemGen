@@ -114,7 +114,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 			flattenModelForMML(srccodeel.getText());
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel);
+		rdfblock = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
 		
 		// Write out model-level annotations
 		rdfblock.setRDFforModelLevelAnnotations();
@@ -184,6 +184,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
 			modelText = sourceCodeLocation.getLocalModelTextAsString();
+		
 		// TODO: if MML source code is online, retrieve it
 
 		else modelText = new MMLwriter(semsimmodel).writeToString();

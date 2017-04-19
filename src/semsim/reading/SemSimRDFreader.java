@@ -21,6 +21,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFReader;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -58,6 +60,7 @@ public class SemSimRDFreader extends ModelReader{
 	private String unnamedstring = "[unnamed!]";
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
+	public static String TEMP_NAMESPACE = "http://tempns.net/temp";
 
 	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, String baseNamespace) {
 		super(accessor);
@@ -67,9 +70,27 @@ public class SemSimRDFreader extends ModelReader{
 		if(rdfasstring != null){
 			try {
 				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-					rdf.read(stream, baseNamespace, null);
-					semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
-					createSubmodelURIandObjectMap();
+				RDFReader reader = rdf.getReader();
+				reader.setProperty("relativeURIs","same-document,relative");
+				
+				String xmlbase = TEMP_NAMESPACE;
+				
+				//If an explicit namespace is specified with the "model" prefix, use it
+				String modelnamespace = rdf.getNsPrefixURI("model");
+				
+				if(modelnamespace != null){
+					xmlbase = modelnamespace;
+				}
+				else modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
+				
+				semsimmodel.setNamespace(modelnamespace);
+
+				reader.read(rdf, stream, xmlbase);
+				createSubmodelURIandObjectMap();
+				
+				System.out.println(xmlbase);
+				StmtIterator stit = rdf.listStatements();
+				while(stit.hasNext()) System.out.println(stit.next());
 			} 
 			catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -106,12 +127,15 @@ public class SemSimRDFreader extends ModelReader{
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, CloneNotSupportedException, XMLStreamException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public String getModelRDFnamespace(){
-		return rdf.getNsPrefixURI("model");
+	public String getModelNamespaceFromRDF(){
+		String ns = rdf.getNsPrefixURI("model");
+		
+		if(ns == null ) ns = semsimmodel.generateNamespaceFromDateAndTime();
+
+		return ns;
 	}
 	
 	// Get model-level annotations
@@ -151,7 +175,7 @@ public class SemSimRDFreader extends ModelReader{
 	}
 	
 	public void getDataStructureAnnotations(DataStructure ds){
-		Resource resource = rdf.getResource(semsimmodel.getNamespace() + ds.getName());
+		Resource resource = rdf.getResource(TEMP_NAMESPACE + "#" + ds.getMetadataID());
 		
 		collectFreeTextAnnotation(ds, resource);
 		collectSingularBiologicalAnnotation(ds, resource);
@@ -191,8 +215,9 @@ public class SemSimRDFreader extends ModelReader{
 		
 		Resource physpropres = null;
 		
-		if(resource != null)
+		if(resource != null){
 			physpropres = resource.getPropertyResourceValue(SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty());
+		}
 		
 		// If a physical property is specified for the data structure
 		if(physpropres != null){
@@ -500,9 +525,11 @@ public class SemSimRDFreader extends ModelReader{
 	
 	
 	public static String getRDFmodelAsString(Model rdf){
-		String syntax = "RDF/XML-ABBREV"; 
+		
+		RDFWriter writer = rdf.getWriter();
+		writer.setProperty("relativeURIs","same-document,relative");
 		StringWriter out = new StringWriter();
-		rdf.write(out, syntax);
+		writer.write(rdf, out, TEMP_NAMESPACE);
 		return out.toString();
 	}
 

@@ -25,7 +25,6 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
-
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -86,10 +85,9 @@ public class CellMLreader extends ModelReader {
 		}
 		
 		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, mainNS.getURI().toString());
-		
+			
 		// Get the semsim namespace of the model, if present, according to the rdf block
-		String modelnamespace = rdfblock.getModelRDFnamespace();
-		if(modelnamespace == null ) modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
+		String modelnamespace = rdfblock.getModelNamespaceFromRDF();
 		semsimmodel.setNamespace(modelnamespace);
 		
 		// Get imported components
@@ -262,7 +260,7 @@ public class CellMLreader extends ModelReader {
 				
 				semsimmodel.assignValidMetadataIDtoSemSimObject(varmetaID, cvar);
 
-				// Collect the singular biological annotation, if present
+				// Collect the biological annotations, if present
 				if(cvar.getMetadataID() != null) rdfblock.getDataStructureAnnotations(cvar);
 
 				semsimmodel.addDataStructure(cvar);
@@ -435,7 +433,6 @@ public class CellMLreader extends ModelReader {
 			}
 		}
 		
-		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
 		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf)));
@@ -489,7 +486,12 @@ public class CellMLreader extends ModelReader {
 				semsimmodel.setModelAnnotation(Metadata.fullname, name);
 				semsimmodel.setName(name);
 			}
-			if(id!=null && !id.equals("")) semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
+			if(id!=null && !id.equals("")){
+				
+				//TODO: this is duplicating information, maybe cut one?
+				semsimmodel.setMetadataID(id);
+				semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
+			}
 			
 			// Try to get pubmed ID from RDF tags
 			if(doc.getRootElement().getChild("RDF", RDFNamespace.RDF.createJdomNamespace())!=null){

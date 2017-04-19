@@ -71,6 +71,7 @@ import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SBMLwriter extends ModelWriter {
@@ -345,7 +346,7 @@ public class SBMLwriter extends ModelWriter {
 	private void addSpecies(){
 		
 		for(DataStructure ds : candidateDSsForSpecies){
-						
+			
 			Computation dscomputation = ds.getComputation();
 			
 			// Assume that the first index in the physical entity associated with the data structure
@@ -715,7 +716,7 @@ public class SBMLwriter extends ModelWriter {
 	 */ 
 	private Document addSemSimRDF(){
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel);
+		rdfblock = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
 		rdfblock.setRDFforModelLevelAnnotations();
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){

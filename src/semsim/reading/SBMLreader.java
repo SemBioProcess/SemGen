@@ -1184,11 +1184,7 @@ public class SBMLreader extends ModelReader{
 		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, null);
 		
 		// Get the semsim namespace of the model, if present, according to the rdf block
-		String modelnamespace = rdfreader.getModelRDFnamespace();
-		
-		if(modelnamespace == null )
-			modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
-		
+		String modelnamespace = rdfreader.getModelNamespaceFromRDF();		
 		semsimmodel.setNamespace(modelnamespace);
 	}
 	
