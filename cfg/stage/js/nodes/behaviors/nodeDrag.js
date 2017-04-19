@@ -65,19 +65,7 @@ function NodeDrag() {
 				selections.forEach(function(n) {
 		    		var posx = n.xpos()+dx,
 		    		    posy = n.ypos()+dy;
-
-		    		if (posx > n.graph.w-15 ) {
-		    			posx = n.graph.w-15;
-		    		}
-		    		else if (posx < 15 ) {
-		    			posx = 15;
-		    		}
-		    		if (posy > n.graph.h-30 ) {
-		    			posy = n.graph.h-30;
-		    		}
-		    		else if (posy < 15 ) {
-		    			posy = 15;
-		    		}
+					
 		    		n.setLocation(posx, posy);
 		    	});
 				if (!_node.graph.shiftIsPressed) {

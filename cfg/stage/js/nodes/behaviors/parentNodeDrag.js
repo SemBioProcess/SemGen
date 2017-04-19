@@ -13,28 +13,20 @@ function parentDrag(parent) {
 		}
 	});
 	parent.drag.push(function (d) {
-		   // Drag functionality
-			var dx = dy = 0;
-			if (
-				(d3.event.dx + d.xmin) > 10
-				&& (d3.event.dx + d.xmax) < d.graph.w-10) {
-					dx = d3.event.dx;
-			}
-			
-			if (
-				(d3.event.dy + d.ymin) > 10
-				&& (d3.event.dy + d.ymax) < d.graph.h-10) {
-					dy = d3.event.dy;
-			}
-			d.applytoChildren(function(n) {
-				n.setLocation(n.xpos() + dx, n.ypos() + dy);
-				
-			});
+        // Drag functionality
+        var dx = dy = 0;
+        dx = d3.event.dx;
+        dy = d3.event.dy;
+
+        d.applytoChildren(function(n) {
+            n.setLocation(n.xpos() + dx, n.ypos() + dy);
+
+        });
 
 	});
 
 	parent.dragend.push(function (d) {
-			// Children no longer fixed
+		// Children no longer fixed
 		if(!d.graph.fixedMode) {
 			d.applytoChildren(function (node) {
 				node.setLocation(node.x, node.y);

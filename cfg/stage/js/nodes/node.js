@@ -96,9 +96,6 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
-	x = Math.max(this.r*2, Math.min(this.graph.w - this.r*2, x));
-	y = Math.max(this.r*2, Math.min(this.graph.h - 4 * this.r + this.spaceBetweenTextAndNode(), y));
-
 	this.x = x; this.y = y;
 	
 	this.srcobj.xpos = x;
