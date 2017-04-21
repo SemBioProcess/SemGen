@@ -25,7 +25,7 @@ function Stage(graph, stagestate) {
 
 	var droploc;
 	
-	var trash = new StageDoodad(this.graph, "trash", 0.1, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
+	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
 	this.graph.doodads.push(trash);
 	
 	// Adds a model node to the d3 graph
