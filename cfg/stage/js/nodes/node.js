@@ -150,6 +150,12 @@ Node.prototype.createVisualElement = function (element, graph) {
         node.onClick();
     }).call(node.graph.drag);
 
+    this.rootElement.on("contextmenu", function(d, i) {
+    	//d3.event.preventDefault();
+    	d.graph.contextMenu.showMenu(d);
+    });
+
+    
     //Append highlight circle
     this.rootElement.append("circle")
         .attr("class", "highlight")
@@ -304,6 +310,11 @@ function validateNode(nodeData) {
 		throw "Node tickHandler is not defined";
 
 };
+
+Node.prototype.getContextMenu = function() {
+	return [{text : "item1"}, {text : "item2"}];
+	
+}
 
 Node.prototype.createGhost = function() {
 	return new GhostNode(this);

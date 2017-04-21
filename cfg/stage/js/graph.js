@@ -53,12 +53,17 @@ function Graph() {
 	
 	this.active = true;
 	var nodes;
-
+	this.contextMenu = new ContextMenu(this);
+	
 	this.setTaskNodes = function(tasknodes) {
 		nodes = tasknodes;
 		graph.update();
 	};
 
+	$('#stage').click(function() {
+		graph.contextMenu.hideMenu();
+	});
+	
 	this.getVisibleNodes = function() {
 		return visibleNodes;
 	}

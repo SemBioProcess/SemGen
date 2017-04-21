@@ -248,3 +248,26 @@ li.searchResultSet li:hover {
 @keyframes blinker {
 	50% { opacity: 0.0; }
 }
+
+.context-menu {
+  display: block;
+  position: absolute;
+  z-index: 101;
+  background-color: #fff;
+  padding: 12px 0;
+  border: solid 1px #dfdfdf;
+  box-shadow: 1px 1px 2px #cfcfcf;
+}
+
+.context-menu_item {
+  display: block;
+  margin-bottom: 4px;
+	
+}
+
+.context-menu_link {
+  display: block;
+  padding: 4px 12px;
+  color: #0066aa;
+  text-decoration: none;
+}

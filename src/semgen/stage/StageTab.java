@@ -73,6 +73,7 @@ public class StageTab extends SemGenTab implements Observer {
 			        JOptionPane.showMessageDialog(browserView, message, title,
 			                JOptionPane.PLAIN_MESSAGE);
 			    }
+			    
 			});
 
 			// Disable Backspace and Shift+Backspace navigation
