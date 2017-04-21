@@ -13,8 +13,12 @@ function Stage(graph, stagestate) {
 	stage.extractions = {};
 
 	$("#addModelButton, .stageSearch").show();
-	
-	this.leftsidebar = new LeftSidebar(graph);
+
+	//$("#trash").hide();
+
+    $('[data-toggle="tooltip"]').tooltip({delay: {show: 1000, hide: 50}});
+
+    this.leftsidebar = new LeftSidebar(graph);
 	this.rightsidebar = new RightSidebar(graph);
 
 	var leftsidebar = this.leftsidebar;

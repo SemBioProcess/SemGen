@@ -9,18 +9,24 @@ function Graph() {
 	var graph = this;
 	this.w = $(window).width();
 	this.h = $(window).height();
-	
+
 	var visibleNodes = [];
 	this.doodads = [];
-	
+
 	var svg = d3.select("#stage")
 	    .append("svg")	    
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
 
+	svg.call(d3.zoom()
+        .scaleExtent([0.1, 10])
+		.on("zoom", function zoomed() {
+			vis.attr("transform", d3.event.transform);
+        }));
+
 	var vis = svg.append('g').attr("class", "canvas");
-	
+
 	this.drag = NodeDrag();
 	
     this.force = d3.forceSimulation()

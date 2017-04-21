@@ -1,8 +1,7 @@
 package semgen.stage;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
+import com.teamdev.jxbrowser.chromium.BrowserCore;
+import com.teamdev.jxbrowser.chromium.internal.Environment;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
@@ -13,6 +12,9 @@ import semgen.utilities.Workbench;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.WebBrowserCommandSenderGenerator;
 import semsim.reading.ModelAccessor;
+
+import java.util.ArrayList;
+import java.util.Observable;
 
 public class StageWorkbench extends Workbench {
 	public enum StageEvent {CHANGETASK}
@@ -28,6 +30,10 @@ public class StageWorkbench extends Workbench {
 		projtask.addObserver(this);
 		tasks.add(projtask);
 		setActiveTask(0);
+
+		if (Environment.isMac()) {
+			BrowserCore.initialize();     // On Mac OS X Chromium engine must be initialized in non-UI thread.
+		}
 	}
 
 	/**
