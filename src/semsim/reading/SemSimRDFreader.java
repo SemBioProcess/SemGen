@@ -524,7 +524,8 @@ public class SemSimRDFreader extends ModelReader{
 	
 	public static String getRDFmodelAsString(Model rdf){
 		
-		RDFWriter writer = rdf.getWriter();
+		RDFWriter writer = rdf.getWriter("RDF/XML-ABBREV");
+
 		writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
 		StringWriter out = new StringWriter();
 		writer.write(rdf, out, TEMP_NAMESPACE);
