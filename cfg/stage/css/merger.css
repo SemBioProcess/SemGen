@@ -85,19 +85,18 @@
 
 .leftRes {
     float: left;
-    width: 250px;
-    text-align: left;
+    width: 35vw;
+    text-align: right;
     margin-top: 0px;
 }
 
 .rightRes {
     float: right;
-    width: 250px;
-    text-align: right;
+    width: 35vw;
+    text-align: left;
 }
 
 .ignoreRes {
-    width: 250px;
     display: inline-block;
     margin-left: 65px;
 }
@@ -128,14 +127,12 @@
 }
 
 .leftRes .mergeResRadio {
-    position: absolute;
-    left: 320px;
+    left: 41vw;
     top: 0px;
 }
 
 .rightRes .mergeResRadio {
-    position: absolute;
-    right: 300px;
+    right: 39vw;
     top: 0px;
 }
 
