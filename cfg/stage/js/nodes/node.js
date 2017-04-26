@@ -63,6 +63,10 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.isHidden = function() {
 		return this.srcobj.hidden;
 	}
+	
+	this.performExtraction = function() {
+		
+	}
 }
 
 //Get this node's top level parent
@@ -315,7 +319,7 @@ function validateNode(nodeData) {
 };
 
 Node.prototype.getContextMenu = function() {
-	return [{text : "item1"}, {text : "item2"}];
+	return [];
 	
 }
 

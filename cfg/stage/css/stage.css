@@ -259,6 +259,12 @@ li.searchResultSet li:hover {
   box-shadow: 1px 1px 2px #cfcfcf;
 }
 
+.context-menu_items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .context-menu_item {
   display: block;
   margin-bottom: 4px;
@@ -270,4 +276,8 @@ li.searchResultSet li:hover {
   padding: 4px 12px;
   color: #0066aa;
   text-decoration: none;
+}
+
+.context-menu_item:last-child {
+  margin-bottom: 0;
 }

@@ -128,3 +128,8 @@ DependencyNode.prototype.isVisible = function () {
 	if (this.srcobj.isorphaned && !this.graph.showorphans) return false;  
 	return Node.prototype.isVisible.call(this);
 }
+
+DependencyNode.prototype.getContextMenu = function() {
+	return [{text : "Extract", action : "extract"}];
+	
+}

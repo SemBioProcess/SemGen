@@ -28,6 +28,12 @@ function Stage(graph, stagestate) {
 	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
 	this.graph.doodads.push(trash);
 	
+	//On an extraction event from the context menu, make a new extraction
+	$('#stage').on('Extract', function(e, caller) {
+		var root = caller.getRootParent();
+		stage.createExtraction(stage.selectedNodes,root);
+	});
+	
 	// Adds a model node to the d3 graph
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
@@ -244,21 +250,25 @@ function Stage(graph, stagestate) {
 				sender.addNodestoExtraction(destinationnode.sourcenode.modelindex, destinationnode.modelindex, extractarray);
 				return;
 			}
+			stage.createExtraction(extractarray,root);
 
-			//If it's dropped in empty space, create a new extraction
-			var name = promptForExtractionName();
-				
-			//Don't create extraction if user cancels
-			if (name==null) return;
-			
-			var baserootindex = root.modelindex;
-			if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-				sender.newPhysioExtraction(baserootindex, extractarray, name);
-			}
-			else {
-				sender.newExtraction(baserootindex, extractarray, name);
-			}
 		});
+	}
+	
+	this.createExtraction = function(extractarray, root) {
+		//If it's dropped in empty space, create a new extraction
+		var name = promptForExtractionName();
+			
+		//Don't create extraction if user cancels
+		if (name==null) return;
+		
+		var baserootindex = root.modelindex;
+		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+			sender.newPhysioExtraction(baserootindex, extractarray, name);
+		}
+		else {
+			sender.newExtraction(baserootindex, extractarray, name);
+		}
 	}
 
 	this.applytoExtractions = function(dothis) {

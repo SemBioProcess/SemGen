@@ -16,3 +16,8 @@ function SubmodelNode (graph, data, parent) {
 	this.addBehavior(parentDrag);
 	this.addBehavior(HiddenLabelNodeGenerator);
 }
+
+SubmodelNode.prototype.getContextMenu = function() {
+	return [{text : "Extract"}];
+	
+}

@@ -9,13 +9,20 @@ function ContextMenu(parent) {
 	var menu = null,
 	    activecaller = null;
 	$('#contextmenu').hide();
-	
-	function addItem(item) {
-		return '<li class="context-menu_item">' + 
-				'<a href="#" class="context-menu_link">' + 
-					item.text +
-				'</a>' +
-			'</li>';
+
+	function addItem(item, caller) {
+		var menuitem = document.createElement("li"); 
+		var button = document.createElement("button");  
+		var t = document.createTextNode(item.text);       // Button Text
+		button.appendChild(t); 
+		button.type = "button";
+		button.onclick = function() {
+			$('#stage').triggerHandler(item.text, [caller]);		
+		};
+		menuitem.appendChild(button);
+		
+		return menuitem;
+
 	}
 	
 	this.showMenu = function(caller) {
@@ -24,16 +31,14 @@ function ContextMenu(parent) {
 		}
 		activecaller = caller;
 		menu = document.querySelector('#contextmenu');
-		var items = caller.getContextMenu(),
-			itemlist = "";
+		$('.context-menu_items').empty();
 		
-
+		var items = caller.getContextMenu();
+		
 		for (x in items) {
-			itemlist += addItem(items[x]);
+			menu.querySelector('.context-menu_items').appendChild(addItem(items[x], caller));
 		}
 		
-		menu.querySelector('.context-menu_items').innerHTML = itemlist;
-
 		menu.querySelector('.context-menu').style.left = caller.x  + "px";
 		menu.querySelector('.context-menu').style.top = caller.y + "px";
 		$('#contextmenu').show();
