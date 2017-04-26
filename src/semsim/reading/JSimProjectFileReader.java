@@ -42,7 +42,7 @@ public class JSimProjectFileReader {
 				
 				rdfreader.getModelLevelAnnotations();
 				rdfreader.getAllDataStructureAnnotations();
-				rdfreader.getAllSubmodelAnnotations();
+				rdfreader.getAllSemSimSubmodelAnnotations();
 				
 				return true;
 			}

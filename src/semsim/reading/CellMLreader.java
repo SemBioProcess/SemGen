@@ -318,7 +318,7 @@ public class CellMLreader extends ModelReader {
 
 			semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, submodel);
 			
-			// Collect the free text annotation
+			// Collect the free text annotation for the component
 			rdfblock.collectFreeTextAnnotation(submodel, 
 					rdfblock.rdf.getResource(SemSimRDFreader.TEMP_NAMESPACE + "#" + submodel.getMetadataID()));		
 			semsimmodel.addSubmodel(submodel);
@@ -437,6 +437,9 @@ public class CellMLreader extends ModelReader {
 				if(dstruct != soldomds) dstruct.setSolutionDomain(soldomds);
 			}
 		}
+		
+		// Collect info about SemSim style submodels
+		rdfblock.getAllSemSimSubmodelAnnotations();
 		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
@@ -579,6 +582,8 @@ public class CellMLreader extends ModelReader {
 	// TODO: edit this to accommodate relative URIs
 	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
 		
+		// list statements with semsim predicates
+		
 		Iterator<Statement> stit = rdf.listStatements();
 		List<Statement> listofremovedstatements = new ArrayList<Statement>();
 		String modelns = semsimmodel.getNamespace();
@@ -609,6 +614,10 @@ public class CellMLreader extends ModelReader {
 		}
 		rdf.remove(listofremovedstatements);
 	}
+	
+//	public Set<Statement> getStatementsWithSemSimPredicates(){
+//		rdfblock.rdf.
+//	}
 		
 	
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element

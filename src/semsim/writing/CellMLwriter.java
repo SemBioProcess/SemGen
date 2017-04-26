@@ -75,6 +75,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 			
 			declareUnits();
+			declareSemSimSubmodels(); // this needs to go before we add variables to output b/c we may need to assign new metadata ID's to variables and components
 			declareComponentsandVariables();
 			declareGroupings();
 			declareConnections();
@@ -168,7 +169,7 @@ public class CellMLwriter extends ModelWriter {
 				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
 				
 				//TODO: might need to rethink the data that gets written out for submodels
-				else if(ssc instanceof Submodel) rdfblock.setRDFforSemSimSubmodelAnnotations((Submodel)ssc);
+				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -345,6 +346,16 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	private void declareSemSimSubmodels(){
+		
+		for(Submodel submodel : semsimmodel.getSubmodels()){
+			
+			if( ! submodel.isFunctional()){
+				rdfblock.setRDFforSubmodelAnnotations(submodel);
+			}
+		}
+	}
+	
 	//*************END WRITE PROCEDURE********************************************//
 	
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
@@ -352,7 +363,7 @@ public class CellMLwriter extends ModelWriter {
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any annotations on the submodel
-			rdfblock.setRDFforSemSimSubmodelAnnotations(submodel);
+			rdfblock.setRDFforSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			

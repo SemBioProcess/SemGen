@@ -47,7 +47,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>();
+	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>(); // includes CellML and SemSim-style submodels
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
 	private ModelType modeltype;
@@ -108,7 +108,12 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	private void createSubmodelURIandNameMap(){
 		for(Submodel sub : semsimmodel.getSubmodels()){
-			Resource subres = createNewResourceForSemSimObject("submodel");
+			
+			Resource subres = null;
+			
+			if(sub.hasMetadataID()) subres = rdf.createResource("#" + sub.getMetadataID());
+			else subres = createNewResourceForSemSimObject("submodel");
+			
 			submodelNameAndURImap.put(sub.getName(), subres.getURI());
 		}
 	}
@@ -159,11 +164,11 @@ public class SemSimRDFwriter extends ModelWriter{
 	protected void setRDFforSemSimSubmodelAnnotations(){
 		
 		for(Submodel sub : semsimmodel.getSubmodels()){
-			setRDFforSemSimSubmodelAnnotations(sub);
+			setRDFforSubmodelAnnotations(sub);
 		}
 	}
 	
-	protected void setRDFforSemSimSubmodelAnnotations(Submodel sub){
+	protected void setRDFforSubmodelAnnotations(Submodel sub){
 
 		String subname = sub.getName();
 		Resource subres = rdf.getResource(submodelNameAndURImap.get(subname));
@@ -175,10 +180,13 @@ public class SemSimRDFwriter extends ModelWriter{
 		// Write out name
 		Statement st = rdf.createStatement(subres, SemSimRelation.HAS_NAME.getRDFproperty(), subname);
 		addStatement(st);
-				
+						
 		// Write out which data structures are associated with the submodel 
 		for(DataStructure dsinsub : sub.getAssociatedDataStructures()){
-			Resource dsres = rdf.getResource(semsimmodel.getNamespace() + dsinsub.getName());
+			
+			// Assign metaid to data structure if there isn't one already
+			String dsmetaid = dsinsub.hasMetadataID() ? dsinsub.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(dsinsub.getName(), dsinsub);
+			Resource dsres = rdf.getResource("#" + dsmetaid);
 			Statement stds = rdf.createStatement(subres, 
 					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
 					dsres);
@@ -190,7 +198,13 @@ public class SemSimRDFwriter extends ModelWriter{
 		// Write out which submodels are associated with the submodel
 		for(Submodel subsub : sub.getSubmodels()){
 			String subsubname = subsub.getName();
-			Resource subsubres = rdf.getResource(submodelNameAndURImap.get(subsubname));
+			Resource subsubres = rdf.getResource(submodelNameAndURImap.get(subsubname)); // map includes CellML and SemSim-style submodels
+			String subsuburi = subsubres.getURI();
+			String candidatemetaid = subsuburi.substring(subsuburi.indexOf("#")+1);
+			
+			// Make sure the subsub model has a metaid that we can use for reference in the output model
+			if( ! subsub.hasMetadataID()) semsimmodel.assignValidMetadataIDtoSemSimObject(candidatemetaid, subsub);
+
 			Statement stsub = rdf.createStatement(
 					subres, 
 					SemSimRelation.INCLUDES_SUBMODEL.getRDFproperty(), 

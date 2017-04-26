@@ -36,6 +36,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -99,7 +100,7 @@ public class SemSimRDFreader extends ModelReader{
 					
 					Submodel newsub = new Submodel(name);
 					submodelURIandObjectMap.put(submodelres.getURI(), newsub);
-					semsimmodel.addSubmodel(newsub);
+					semsimmodel.addSubmodel(newsub);					
 				}
 			}
 		}
@@ -192,7 +193,7 @@ public class SemSimRDFreader extends ModelReader{
 	}
 	
 	// Get the annotations on a submodel
-	protected void getAllSubmodelAnnotations(){
+	protected void getAllSemSimSubmodelAnnotations(){
 		
 		for(String suburi : submodelURIandObjectMap.keySet()){
 			
@@ -200,7 +201,7 @@ public class SemSimRDFreader extends ModelReader{
 			
 			Submodel sub = submodelURIandObjectMap.get(suburi);
 			collectFreeTextAnnotation(sub, subres); // collect description
-			
+						
 			// Collect associated data structures
 			StmtIterator dsstit = subres.listProperties(SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty());
 			while(dsstit.hasNext()){
@@ -214,7 +215,17 @@ public class SemSimRDFreader extends ModelReader{
 			while(substit.hasNext()){
 				Statement subst = substit.next();
 				Resource subsubres = subst.getResource();
-				sub.addSubmodel(submodelURIandObjectMap.get(subsubres.getURI()));
+				
+				String subsuburi = subsubres.getURI();
+				
+				if(submodelURIandObjectMap.containsKey(subsuburi))
+					sub.addSubmodel(submodelURIandObjectMap.get(subsuburi));
+				else{
+					String metaid = subsuburi.substring(subsuburi.indexOf("#") + 1);
+					SemSimObject ssc = semsimmodel.getModelComponentByMetadataID(metaid);
+					
+					if(ssc instanceof FunctionalSubmodel) sub.addSubmodel((FunctionalSubmodel)ssc);
+				}
 			}			
 		}		
 	}
