@@ -87,3 +87,7 @@
 #nodemenu {
 	font-size: 12px;
 }
+
+#nodemenu > .panel-body {
+	text-align: left;
+}
