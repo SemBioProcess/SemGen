@@ -30,7 +30,6 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
@@ -81,8 +80,8 @@ public class CellMLwriter extends ModelWriter {
 			declareConnections();
 			
 			// Declare the RDF metadata
-			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);
+			if( ! rdfblock.rdf.isEmpty()){
+				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -103,7 +102,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, SemSimRDFreader.TEMP_NAMESPACE, ModelType.CELLML_MODEL);
+		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 	}
 	
 	private void createRootElement() {		
@@ -117,6 +116,7 @@ public class CellMLwriter extends ModelWriter {
 		root.addNamespaceDeclaration(RDFNamespace.VCARD.createJdomNamespace());
 		
 		String namestring = semsimmodel.getName();
+		
 		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
 			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
 		
@@ -168,7 +168,7 @@ public class CellMLwriter extends ModelWriter {
 				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
 				
 				//TODO: might need to rethink the data that gets written out for submodels
-				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
+				else if(ssc instanceof Submodel) rdfblock.setRDFforSemSimSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -351,12 +351,12 @@ public class CellMLwriter extends ModelWriter {
 		if( ! ((FunctionalSubmodel)submodel).isImported()){
 			Element comp = new Element("component", mainNS);
 			
-			// Add the RDF block for any singular annotation on the submodel
-			rdfblock.setRDFforSubmodelAnnotations(submodel);
+			// Add the RDF block for any annotations on the submodel
+			rdfblock.setRDFforSemSimSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
-			if( ! submodel.getMetadataID().equalsIgnoreCase("")) 
+			if(submodel.hasMetadataID()) 
 				comp.setAttribute("id", submodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());  // Add ID, if present
 			
 			// Add the variables

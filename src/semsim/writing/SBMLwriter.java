@@ -70,7 +70,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
-import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
@@ -741,7 +740,7 @@ public class SBMLwriter extends ModelWriter {
 			// Add the RDF metadata to the appropriate element in the SBML file
 			if( ! rdfblock.rdf.isEmpty()){
 				
-				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
+				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);			
 				Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 				
 				Element modelel = doc.getRootElement().getChild("model", sbmlNS);

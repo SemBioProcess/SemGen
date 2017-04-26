@@ -37,6 +37,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
+import semsim.writing.SemSimRDFwriter;
 
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
@@ -81,16 +82,11 @@ public class CellMLreader extends ModelReader {
 		
 		String rdfstring = null;
 		
-		if(rdfblockelement!=null){
+		if(rdfblockelement != null)
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
-		}
 		
 		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 			
-		// Get the semsim namespace of the model, if present, according to the rdf block
-		String modelnamespace = rdfblock.getModelNamespaceFromRDF();
-		semsimmodel.setNamespace(modelnamespace);
-		
 		// Get imported components
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
 		
@@ -123,7 +119,6 @@ public class CellMLreader extends ModelReader {
 				String metadataid = importedcompel.getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, instantiatedsubmodel);
 
-				//collectSingularBiologicalAnnotationForSubmodel(instantiatedsubmodel);
 			}
 		}
 		
@@ -322,20 +317,21 @@ public class CellMLreader extends ModelReader {
 			if(mathmltext!=null) submodel.getComputation().setMathML(mathmltext);
 
 			semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, submodel);
-
 			
-			// Collect the biological annotation, if present
-			//collectSingularBiologicalAnnotationForSubmodel(submodel);
-			
+			// Collect the free text annotation
+			rdfblock.collectFreeTextAnnotation(submodel, 
+					rdfblock.rdf.getResource(SemSimRDFreader.TEMP_NAMESPACE + "#" + submodel.getMetadataID()));		
 			semsimmodel.addSubmodel(submodel);
 		}
 		
 		// Process the CellML groupings
 		Iterator<?> groupit = doc.getRootElement().getChildren("group", mainNS).iterator();
+		
 		while(groupit.hasNext()){
 			Element group = (Element) groupit.next();
 			String rel = group.getChild("relationship_ref", mainNS).getAttributeValue("relationship");
 			Iterator<?> compit = group.getChildren("component_ref", mainNS).iterator();
+			
 			while(compit.hasNext()){
 				Element topcomp = (Element) compit.next();
 				processComponentRelationships(rel, topcomp);
@@ -344,6 +340,7 @@ public class CellMLreader extends ModelReader {
 		
 		// Process the CellML connections
 		Iterator<?> conit = doc.getRootElement().getChildren("connection", mainNS).iterator();
+		
 		while(conit.hasNext()){
 			Element con = (Element) conit.next();
 			Element compmap = con.getChild("map_components", mainNS);
@@ -351,6 +348,7 @@ public class CellMLreader extends ModelReader {
 			FunctionalSubmodel sub2 = (FunctionalSubmodel) semsimmodel.getSubmodel(compmap.getAttributeValue("component_2"));
 			
 			Iterator<?> varconit = con.getChildren("map_variables", mainNS).iterator();
+			
 			while(varconit.hasNext()){
 				
 				Element varcon = (Element) varconit.next();
@@ -366,7 +364,9 @@ public class CellMLreader extends ModelReader {
 				MappableVariable encapsulatingvariable = null;
 				
 				if(sub1.getRelationshipSubmodelMap().containsKey("encapsulation")){
+					
 					for(Submodel sub : sub1.getRelationshipSubmodelMap().get("encapsulation")){
+						
 						if(sub==sub2){
 							encapsulatedsubmodel = sub2;
 							encapsulatedvariable = var2;
@@ -375,7 +375,9 @@ public class CellMLreader extends ModelReader {
 					}
 				}
 				if(sub2.getRelationshipSubmodelMap().containsKey("encapsulation")){
+					
 					for(Submodel sub : sub2.getRelationshipSubmodelMap().get("encapsulation")){
+						
 						if(sub==sub1){
 							encapsulatedsubmodel = sub1;
 							encapsulatedvariable = var1;
@@ -388,10 +390,12 @@ public class CellMLreader extends ModelReader {
 				MappableVariable outputvar = null;
 				
 				if(var1.getPublicInterfaceValue()!=null && var2.getPublicInterfaceValue()!=null){
+					
 					if( ! var1.getPublicInterfaceValue().equals("in") && var2.getPublicInterfaceValue().equals("in")){
 						inputvar = var1;
 						outputvar = var2;
 					}
+					
 					else if(var1.getPublicInterfaceValue().equals("in") && ! var2.getPublicInterfaceValue().equals("in")){
 						inputvar = var2;
 						outputvar = var1;
@@ -436,8 +440,9 @@ public class CellMLreader extends ModelReader {
 		
 		// Strip the semsim-related content from the main RDF block
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
-		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf)));
-		
+		String remainingrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
+		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, remainingrdf));
+				
 		return semsimmodel;
 	}
 	
@@ -571,10 +576,13 @@ public class CellMLreader extends ModelReader {
 	
 	// Remove all semsim-related content from the main RDF block
 	// It gets replaced, if needed, on write out
+	// TODO: edit this to accommodate relative URIs
 	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
+		
 		Iterator<Statement> stit = rdf.listStatements();
 		List<Statement> listofremovedstatements = new ArrayList<Statement>();
 		String modelns = semsimmodel.getNamespace();
+		
 		while(stit.hasNext()){
 			Statement st = (Statement) stit.next();
 			RDFNode obnode = st.getObject();

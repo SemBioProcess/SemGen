@@ -23,7 +23,6 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
-import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
 public class JSimProjectFileWriter extends ModelWriter{
@@ -123,12 +122,12 @@ public class JSimProjectFileWriter extends ModelWriter{
 		rdfblock.setRDFforDataStructureAnnotations();
 		
 		// Write out annotations for submodels
-		rdfblock.setRDFforSubmodelAnnotations();
+		rdfblock.setRDFforSemSimSubmodelAnnotations();
 		
 		// Add the RDF metadata to the appropriate element in the JSim project file
 		if( ! rdfblock.rdf.isEmpty()){
 			
-			String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
+			String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 				
 			// Remove old RDF if present
