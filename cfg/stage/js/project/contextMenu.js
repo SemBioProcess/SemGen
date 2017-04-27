@@ -8,16 +8,17 @@ function ContextMenu(parent) {
 	//pointer to the HTML object
 	var menu = null,
 	    activecaller = null;
+	
 	$('#contextmenu').hide();
-
 	function addItem(item, caller) {
 		var menuitem = document.createElement("li"); 
-		var button = document.createElement("button");  
+		var button = document.createElement("div");
+		button.className  = "contextbtn";
 		var t = document.createTextNode(item.text);       // Button Text
 		button.appendChild(t); 
-		button.type = "button";
 		button.onclick = function() {
-			$('#stage').triggerHandler(item.text, [caller]);		
+			$('#contextmenu').hide();
+			$('#stage').triggerHandler(item.action, [caller]);
 		};
 		menuitem.appendChild(button);
 		
@@ -34,6 +35,7 @@ function ContextMenu(parent) {
 		$('.context-menu_items').empty();
 		
 		var items = caller.getContextMenu();
+		if (items.length == 0) return;
 		
 		for (x in items) {
 			menu.querySelector('.context-menu_items').appendChild(addItem(items[x], caller));

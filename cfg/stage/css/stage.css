@@ -254,7 +254,7 @@ li.searchResultSet li:hover {
   position: absolute;
   z-index: 101;
   background-color: #fff;
-  padding: 12px 0;
+  padding: 2px 4px;
   border: solid 1px #dfdfdf;
   box-shadow: 1px 1px 2px #cfcfcf;
 }
@@ -263,21 +263,18 @@ li.searchResultSet li:hover {
   list-style: none;
   margin: 0;
   padding: 0;
+  cursor: pointer;
 }
 
-.context-menu_item {
-  display: block;
-  margin-bottom: 4px;
-	
+.contextbtn {
+    background-color: white;
+    padding: 2px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
 }
 
-.context-menu_link {
-  display: block;
-  padding: 4px 12px;
-  color: #0066aa;
-  text-decoration: none;
-}
+.contextbtn:hover {
+	background-color: #ccc;
 
-.context-menu_item:last-child {
-  margin-bottom: 0;
-}
+	}

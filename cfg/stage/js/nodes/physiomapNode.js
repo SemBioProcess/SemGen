@@ -73,5 +73,5 @@ var limitWords = function (text, wordLimit) {
 }
 
 PhysioMapNode.prototype.getContextMenu = function() {
-	return [{text : "Extract"}];
+	return [{text : "Extract", action : 'extract'}, {text: 'Exclude and Extract', action : 'excludeextract'}];
 }

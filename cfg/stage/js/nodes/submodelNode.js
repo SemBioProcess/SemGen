@@ -18,6 +18,6 @@ function SubmodelNode (graph, data, parent) {
 }
 
 SubmodelNode.prototype.getContextMenu = function() {
-	return [{text : "Extract"}];
+	return [{text : "Extract", action : "extract"}, {text : "Extract and Exclude", action : "extractexclude"}];
 	
 }

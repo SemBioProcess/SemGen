@@ -28,10 +28,9 @@ function Stage(graph, stagestate) {
 	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
 	this.graph.doodads.push(trash);
 	
-	//On an extraction event from the context menu, make a new extraction
-	$('#stage').on('Extract', function(e, caller) {
-		var root = caller.getRootParent();
-		stage.createExtraction(stage.selectedNodes,root);
+
+	document.addEventListener("click", function(e) {
+		$('contextmenu').hide();
 	});
 	
 	// Adds a model node to the d3 graph
@@ -195,18 +194,7 @@ function Stage(graph, stagestate) {
 					droploc= stage.graph.getCenter();
 					
 					if (root.nodeType==NodeType.MODEL) {
-						//If it's dropped in empty space, create a new extraction
-						var name = promptForExtractionName();
-							
-						//Don't create extraction if user cancels
-						if (name==null) return;
 						
-						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
-							sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
-						}
-						else {
-							sender.createExtractionExclude(root.modelindex, extractarray, name);
-						}
 					}
 					else {
 						var srcmodindex = root.sourcenode.modelindex;
@@ -271,6 +259,21 @@ function Stage(graph, stagestate) {
 		}
 	}
 
+	this.createExtractionandExclude = function(extractarray, root) {
+		//If it's dropped in empty space, create a new extraction
+		var name = promptForExtractionName();
+			
+		//Don't create extraction if user cancels
+		if (name==null) return;
+		
+		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+			sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
+		}
+		else {
+			sender.createExtractionExclude(root.modelindex, extractarray, name);
+		}
+	}
+	
 	this.applytoExtractions = function(dothis) {
 		for (x in stage.extractions) {
 			for (y in stage.extractions[x]) {
@@ -290,6 +293,19 @@ function Stage(graph, stagestate) {
 	}
 	
 	this.graph.ghostBehaviors.push(onExtractionAction);
+	
+	//On an extraction event from the context menu, make a new extraction
+	$('#stage').on('extract', function(e, caller) {
+		if (!caller.selected) stage.selectNode(caller);
+		var root = caller.getRootParent();
+		stage.createExtraction(stage.selectedNodes,root);
+	});
+	
+	$('#stage').on('extractexclude', function(e, caller) {
+		if (!caller.selected) stage.selectNode(caller);
+		var root = caller.getRootParent();
+		stage.createExtractionandExclude(stage.selectedNodes,root);
+	});
 	
 	this.addExtractionNode = function(basenodeindex, newextraction) {
 		var basenode = stage.getModelNodebyIndex(basenodeindex);
