@@ -18,11 +18,10 @@ import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.JSBML;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
@@ -579,46 +578,48 @@ public class CellMLreader extends ModelReader {
 	
 	// Remove all semsim-related content from the main RDF block
 	// It gets replaced, if needed, on write out
-	// TODO: edit this to accommodate relative URIs
 	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
 		
-		// list statements with semsim predicates
+		// anything with semsim predicates
+		// descriptions on components, variables
+		// * part-of statements for physical entities (prbly need to assign metaids to physical entities)
+		// * isVersionOf statements on custom terms
+		// * has part statements on custom terms
+		// * part-of statements on custom terms
 		
 		Iterator<Statement> stit = rdf.listStatements();
 		List<Statement> listofremovedstatements = new ArrayList<Statement>();
-		String modelns = semsimmodel.getNamespace();
 		
+		// Go through all statements in RDF
 		while(stit.hasNext()){
 			Statement st = (Statement) stit.next();
-			RDFNode obnode = st.getObject();
-			if(obnode.isResource()){
-				Resource obres = (Resource)obnode;
-				if(obres.getNameSpace()!=null){
-					if(obres.getNameSpace().equals(modelns)){
+			String rdfprop = st.getPredicate().getURI();
+			
+			// Flag any statement that uses a predicate with a semsim namespace for removal
+			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())){
+				listofremovedstatements.add(st);
+				continue;
+			}
+			
+			Resource subject = st.getSubject();
+			
+			if(subject.getURI() != null){
+				
+				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
+					
+					String fragment = subject.getURI().replaceAll(SemSimRDFreader.TEMP_NAMESPACE + "#", ""); // Get the URI fragment (should be the metaid of the subject)
+					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(fragment);
+						
+					if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
 						listofremovedstatements.add(st);
-					}
 				}
 			}
-			Resource subres = st.getSubject();
-				if(subres.getNameSpace()!=null){
-					if(subres.getNameSpace().equals(modelns)){
-						listofremovedstatements.add(st);
-					}
-				}
-			Property pred = st.getPredicate();
-			if(pred.getNameSpace()!=null){
-				if(pred.getNameSpace().equals(RDFNamespace.SEMSIM.getNamespaceasString())){
-					listofremovedstatements.add(st);
-				}
-			}
+			
 		}
+		
 		rdf.remove(listofremovedstatements);
 	}
 	
-//	public Set<Statement> getStatementsWithSemSimPredicates(){
-//		rdfblock.rdf.
-//	}
-		
 	
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){

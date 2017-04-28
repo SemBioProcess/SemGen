@@ -103,8 +103,11 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.HAS_PART);
 		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.HAS_PART, haspartrels));
 		
-		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.PART_OF);
-		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.PART_OF, partofrels));
+		// Custom entities are currently not allowed to have part-of annotations on them because there isn't a 
+		// way to distinguish part-of statements that are used in a composite versus statements that
+		// are just annotations on the custom entity
+//		ArrayList<Integer> partofrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.PART_OF);
+//		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.PART_OF, partofrels));
 	}
 	
 	protected void finishPanel() {

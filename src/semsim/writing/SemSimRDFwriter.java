@@ -26,6 +26,7 @@ import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -552,25 +553,22 @@ public class SemSimRDFwriter extends ModelWriter{
 		// If it's a custom resource
 		else{
 
-			Property refprop = null;
-
 			for(Annotation ann : pmc.getAnnotations()){
 				// If the physical model component has either an "is" or "is version of" annotation, 
 				// add the annotation statement to the RDF block
-				
+								
 				if(ann instanceof ReferenceOntologyAnnotation){	
 					
 					ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
 					refres = findReferenceResourceFromURI(roa.getReferenceURI());
+					Relation relation = roa.getRelation();
 					
-					refprop = ResourceFactory.createProperty(roa.getRelation().getURI().toString());
-					
-					// Here we actually add the RDF statement on the resource
-					// but for now, we only do hasPhysicalDefinition or isVersionOf.
-					// When we figure out how to add part_of and has_part annotations, 
-					// edit the following "if" statement here.					
-					if(refprop.getURI().equals(SemSimRelation.BQB_IS_VERSION_OF.getURI())){
+					// Add the annotations on the custom term					
+					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)
+							|| relation.equals(StructuralRelation.HAS_PART)){
+//							|| relation.equals(StructuralRelation.PART_OF)){ // can't distinguish between part_of in composite statements and annotations on custom term
 
+						Property refprop = roa.getRelation().getRDFproperty();
 						Statement annagainstst = rdf.createStatement(res, refprop, refres);
 						
 						// If we have a reference resource and the annotation statement hasn't already 
@@ -584,19 +582,15 @@ public class SemSimRDFwriter extends ModelWriter{
 			if((pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_PROCESS)) || (pmc.isType(SemSimTypes.CUSTOM_PHYSICAL_ENTITY))){
 				
 				if(pmc.getName()!=null){
-					Statement namest = rdf.createStatement(
-							res, 
-							SemSimRelation.HAS_NAME.getRDFproperty(),
-							pmc.getName());
+					Statement namest = rdf.createStatement(res, 
+							SemSimRelation.HAS_NAME.getRDFproperty(), pmc.getName());
 					
 					if(!rdf.contains(namest)) rdf.add(namest);
 				}
 				
 				if(pmc.getDescription()!=null){
-					Statement descst = rdf.createStatement(
-							res, 
-							dcterms_description, 
-							pmc.getDescription());
+					Statement descst = rdf.createStatement(res, 
+							dcterms_description, pmc.getDescription());
 					
 					addStatement(descst);
 				}
