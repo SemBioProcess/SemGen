@@ -475,22 +475,25 @@ public class SemSimRDFreader extends ModelReader{
 	private CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
 		
 		StmtIterator isversionofann = res.listProperties(SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty());
-//		StmtIterator partofann = res.listProperties(BiologicalRDFblock.partof);
-//		StmtIterator haspartann = res.listProperties(BiologicalRDFblock.haspart);
+		//StmtIterator partofann = res.listProperties(StructuralRelation.PART_OF.getRDFproperty());
+		StmtIterator haspartann = res.listProperties(StructuralRelation.HAS_PART.getRDFproperty());
 		
 		// Collect all annotations on custom term
 		Set<Statement> allannstatements = new HashSet<Statement>();
 		allannstatements.addAll(isversionofann.toSet());
-//		allannstatements.addAll(partofann.toSet());
-//		allannstatements.addAll(haspartann.toSet());
+		//allannstatements.addAll(partofann.toSet());
+		allannstatements.addAll(haspartann.toSet());
 		
-		// Collect name		
-		String name = res.getProperty(SemSimRelation.HAS_NAME.getRDFproperty()).getString();
-		if(name==null) name = unnamedstring;
+		// Collect name
+		String name = unnamedstring;
+		
+		if(res.hasProperty(SemSimRelation.HAS_NAME.getRDFproperty()))
+			name = res.getProperty(SemSimRelation.HAS_NAME.getRDFproperty()).getObject().toString();
 		
 		// Collect description
 		String description = null;
-		if(res.getProperty(dcterms_description)!=null)
+		
+		if(res.hasProperty(dcterms_description))
 			description = res.getProperty(dcterms_description).getString();
 		
 		// Add custom entity to SemSim model
