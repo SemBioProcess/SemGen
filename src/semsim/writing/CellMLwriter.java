@@ -30,7 +30,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
@@ -75,13 +75,14 @@ public class CellMLwriter extends ModelWriter {
 			}
 			
 			declareUnits();
+			declareSemSimSubmodels(); // this needs to go before we add variables to output b/c we may need to assign new metadata ID's to variables and components
 			declareComponentsandVariables();
 			declareGroupings();
 			declareConnections();
 			
 			// Declare the RDF metadata
-			if(!rdfblock.rdf.isEmpty()){
-				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);
+			if( ! rdfblock.rdf.isEmpty()){
+				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -102,7 +103,7 @@ public class CellMLwriter extends ModelWriter {
 			}
 		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, mainNS.getURI().toString());
+		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 	}
 	
 	private void createRootElement() {		
@@ -116,6 +117,7 @@ public class CellMLwriter extends ModelWriter {
 		root.addNamespaceDeclaration(RDFNamespace.VCARD.createJdomNamespace());
 		
 		String namestring = semsimmodel.getName();
+		
 		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
 			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
 		
@@ -344,18 +346,28 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	private void declareSemSimSubmodels(){
+		
+		for(Submodel submodel : semsimmodel.getSubmodels()){
+			
+			if( ! submodel.isFunctional()){
+				rdfblock.setRDFforSubmodelAnnotations(submodel);
+			}
+		}
+	}
+	
 	//*************END WRITE PROCEDURE********************************************//
 	
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
 		if( ! ((FunctionalSubmodel)submodel).isImported()){
 			Element comp = new Element("component", mainNS);
 			
-			// Add the RDF block for any singular annotation on the submodel
+			// Add the RDF block for any annotations on the submodel
 			rdfblock.setRDFforSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
-			if( ! submodel.getMetadataID().equalsIgnoreCase("")) 
+			if(submodel.hasMetadataID()) 
 				comp.setAttribute("id", submodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());  // Add ID, if present
 			
 			// Add the variables

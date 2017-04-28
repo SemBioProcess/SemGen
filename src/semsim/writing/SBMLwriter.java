@@ -70,7 +70,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
-import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SBMLwriter extends ModelWriter {
@@ -345,7 +345,7 @@ public class SBMLwriter extends ModelWriter {
 	private void addSpecies(){
 		
 		for(DataStructure ds : candidateDSsForSpecies){
-						
+			
 			Computation dscomputation = ds.getComputation();
 			
 			// Assume that the first index in the physical entity associated with the data structure
@@ -715,7 +715,7 @@ public class SBMLwriter extends ModelWriter {
 	 */ 
 	private Document addSemSimRDF(){
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel);
+		rdfblock = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
 		rdfblock.setRDFforModelLevelAnnotations();
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
@@ -740,7 +740,7 @@ public class SBMLwriter extends ModelWriter {
 			// Add the RDF metadata to the appropriate element in the SBML file
 			if( ! rdfblock.rdf.isEmpty()){
 				
-				String rawrdf = SemSimRDFreader.getRDFmodelAsString(rdfblock.rdf);			
+				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);			
 				Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 				
 				Element modelel = doc.getRootElement().getChild("model", sbmlNS);

@@ -68,9 +68,9 @@ public class LoadSemSimModel extends SemGenJob {
 				CellMLreader reader = new CellMLreader(modelaccessor);
 				semsimmodel = reader.read();
 				
-				boolean previouslyannotated = false;
-				String namespace = reader.rdfblock.rdf.getNsPrefixURI("model");
-				if(namespace != null) previouslyannotated = namespace.startsWith("http://www.bhi.washington.edu/SemSim/");
+				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
+				// and we don't perform automatic OPB annotation based on units
+				boolean previouslyannotated = (reader.rdfblock.rdf.getNsPrefixURI("semsim") != null);
 				
 				// If the model wasn't previously annotated in SemGen and autoannotate is turned on,
 				// perform auto-annotation

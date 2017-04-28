@@ -76,6 +76,7 @@ import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SBMLwriter;
 
@@ -1180,16 +1181,8 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-		
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, null);
-		
-		// Get the semsim namespace of the model, if present, according to the rdf block
-		String modelnamespace = rdfreader.getModelRDFnamespace();
-		
-		if(modelnamespace == null )
-			modelnamespace = semsimmodel.generateNamespaceFromDateAndTime();
-		
-		semsimmodel.setNamespace(modelnamespace);
+		System.out.println(rdfstring);
+		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);		
 	}
 	
 	
@@ -1419,11 +1412,11 @@ public class SBMLreader extends ModelReader{
 				+ ID + "</ci>\n  <cn>" + qwu.getValue() + "</cn>\n </apply>\n" + mathMLelementEnd;
 		ds.getComputation().setMathML(mathmlstring);
 
-		// Collect annotations
+		collectSBaseData(qwu, ds);
+		
+		// Collect annotations		
 		if(rdfreader.hasPropertyAnnotationForDataStructure(ds))
 			rdfreader.getDataStructureAnnotations(ds);
-		
-		collectSBaseData(qwu, ds);
 		
 		return ds;
 	}

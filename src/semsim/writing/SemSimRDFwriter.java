@@ -1,9 +1,7 @@
 package semsim.writing;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +12,7 @@ import java.util.Set;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -28,6 +27,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.RDFNamespace;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -36,6 +36,8 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.SemSimRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
 public class SemSimRDFwriter extends ModelWriter{
@@ -45,31 +47,46 @@ public class SemSimRDFwriter extends ModelWriter{
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Set<String> localids = new HashSet<String>();
-	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>();
-
-	
+	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>(); // includes CellML and SemSim-style submodels
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
 	public Model rdf = ModelFactory.createDefaultModel();
+	private ModelType modeltype;
+	private String xmlbase;
 	
 	// Constructor without existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel){
+	public SemSimRDFwriter(SemSimModel semsimmodel, ModelType modeltype){
 		super(null);
 		
+		this.modeltype = modeltype;
 		initialize(semsimmodel);
 	}
 	
 	// Constructor with existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, String xmlNamespace){	
+	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, ModelType modeltype){	
 		super(null);
 		
+		this.modeltype = modeltype;
 		initialize(semsimmodel);
-		intializeExistingRDF(rdfasstring, xmlNamespace);
+		
+		if(rdfasstring!=null){
+			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring);
+			
+			if(modeltype.equals(ModelType.CELLML_MODEL))
+				rdf.removeNsPrefix("model"); // In case old RDF with a declared namespace is present (older CellML models)
+		}
 	}
 	
 	
 	private void initialize(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
 		
+		// Don't set model prefix for cellml models. They use relative IDs and ad-hoc namespaces.
+		if( ! modeltype.equals(ModelType.CELLML_MODEL)){
+			rdf.setNsPrefix("model", semsimmodel.getNamespace());
+			xmlbase = semsimmodel.getNamespace();
+		}
+		else xmlbase = "#";
+				
 		createSubmodelURIandNameMap();
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
@@ -79,26 +96,6 @@ public class SemSimRDFwriter extends ModelWriter{
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("model", semsimmodel.getNamespace()); //TODO: cut this
-	}
-	
-	
-	private void intializeExistingRDF(String rdfasstring, String xmlNamespace){
-		
-		// If rdfasstring is not null, add it as rdf model
-		if(rdfasstring != null){
-			try {
-				InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-					rdf.read(stream, xmlNamespace, null);
-					
-					if(rdf.getNsPrefixURI("model") != null) // TODO: change this so that it only uses xmlns:model for namespace if xmlns present
-						semsimmodel.setNamespace(rdf.getNsPrefixURI("model"));
-					
-			} 
-			catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	// Empty functions so that we can pass in sslib
@@ -111,7 +108,12 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	private void createSubmodelURIandNameMap(){
 		for(Submodel sub : semsimmodel.getSubmodels()){
-			Resource subres = createNewResourceForSemSimObject("submodel");
+			
+			Resource subres = null;
+			
+			if(sub.hasMetadataID()) subres = rdf.createResource("#" + sub.getMetadataID());
+			else subres = createNewResourceForSemSimObject("submodel");
+			
 			submodelNameAndURImap.put(sub.getName(), subres.getURI());
 		}
 	}
@@ -119,7 +121,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	// Add model-level annotations 
 	protected void setRDFforModelLevelAnnotations(){
 		
-		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
+		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.getName();
+		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
 		
 		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
 						
@@ -142,7 +145,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 
-		String resuri = semsimmodel.getNamespace() + ds.getName();
+		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+		String resuri = xmlbase + metaid;
 		Resource ares = rdf.createResource(resuri);
 		
 		// Set free-text annotation
@@ -157,11 +161,11 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	
 	// Add annotation for submodel
-	protected void setRDFforSubmodelAnnotations(){
+	protected void setRDFforSemSimSubmodelAnnotations(){
 		
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			setRDFforSubmodelAnnotations(sub);
-		}		
+		}
 	}
 	
 	protected void setRDFforSubmodelAnnotations(Submodel sub){
@@ -176,12 +180,14 @@ public class SemSimRDFwriter extends ModelWriter{
 		// Write out name
 		Statement st = rdf.createStatement(subres, SemSimRelation.HAS_NAME.getRDFproperty(), subname);
 		addStatement(st);
-				
+						
 		// Write out which data structures are associated with the submodel 
 		for(DataStructure dsinsub : sub.getAssociatedDataStructures()){
-			Resource dsres = rdf.getResource(semsimmodel.getNamespace() + dsinsub.getName());
-			Statement stds = rdf.createStatement(
-					subres, 
+			
+			// Assign metaid to data structure if there isn't one already
+			String dsmetaid = dsinsub.hasMetadataID() ? dsinsub.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(dsinsub.getName(), dsinsub);
+			Resource dsres = rdf.getResource("#" + dsmetaid);
+			Statement stds = rdf.createStatement(subres, 
 					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
 					dsres);
 			
@@ -189,10 +195,16 @@ public class SemSimRDFwriter extends ModelWriter{
 
 		}
 		
-		// Write out which submodels are associated with the model
+		// Write out which submodels are associated with the submodel
 		for(Submodel subsub : sub.getSubmodels()){
 			String subsubname = subsub.getName();
-			Resource subsubres = rdf.getResource(submodelNameAndURImap.get(subsubname));
+			Resource subsubres = rdf.getResource(submodelNameAndURImap.get(subsubname)); // map includes CellML and SemSim-style submodels
+			String subsuburi = subsubres.getURI();
+			String candidatemetaid = subsuburi.substring(subsuburi.indexOf("#")+1);
+			
+			// Make sure the subsub model has a metaid that we can use for reference in the output model
+			if( ! subsub.hasMetadataID()) semsimmodel.assignValidMetadataIDtoSemSimObject(candidatemetaid, subsub);
+
 			Statement stsub = rdf.createStatement(
 					subres, 
 					SemSimRelation.INCLUDES_SUBMODEL.getRDFproperty(), 
@@ -207,10 +219,14 @@ public class SemSimRDFwriter extends ModelWriter{
 	public void setFreeTextAnnotationForObject(SemSimObject sso, Resource ares){
 
 		// Set the free-text annotation
-		if( ! sso.getDescription().equals("")){
+		if( sso.hasDescription()){
 			Statement st = rdf.createStatement(ares, dcterms_description, sso.getDescription());
-			
 			addStatement(st);
+			
+			// If we're assigning free text to a FunctionalSubmodel that doesn't have a metadata ID,
+			// make sure we add the metadata ID when we write out
+			if( ! sso.hasMetadataID() && (sso instanceof FunctionalSubmodel)) 
+				sso.setMetadataID(ares.getURI().replace("#", ""));
 		}
 	}
 	
@@ -496,8 +512,11 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	// Generate an RDF resource for a physical component
 	private Resource createNewResourceForSemSimObject(String typeprefix){
-		String resname = semsimmodel.getNamespace();	
+		
+		//Use relative URIs
+		String resname = xmlbase;	
 		int idnum = 0;
+		
 		while(localids.contains(resname + typeprefix + "_" + idnum)){
 			idnum++;
 		}
@@ -650,5 +669,18 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	private void addStatement(Statement st){
 		if( ! rdf.contains(st)) rdf.add(st);
+	}
+	
+	public static String getRDFmodelAsString(Model rdf){
+		
+		// TODO: if just use RDF/XML then get node refs and not pretty
+		// If use -ABBREV, get rdf:IDs
+		RDFWriter writer = rdf.getWriter("RDF/XML-ABBREV");
+		writer.setProperty("blockRules", "idAttr");
+		writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
+		StringWriter out = new StringWriter();
+		writer.write(rdf, out, SemSimRDFreader.TEMP_NAMESPACE);
+		
+		return out.toString();
 	}
 }
