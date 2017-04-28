@@ -126,6 +126,10 @@ function Task(graph, stagestate) {
 			}
 			node.selected = true;
 			node.highlight();
+
+			//Node info box
+			$("#nodemenuName").text(node.displayName);
+			$("#nodemenuType").text(node.nodeType.nodeType);
 		}
 	};
 	
