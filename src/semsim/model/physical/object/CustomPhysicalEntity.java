@@ -27,8 +27,8 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	}
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addCustomPhysicalEntity(this);
+	public CustomPhysicalEntity addToModel(SemSimModel model) {
+		return model.addCustomPhysicalEntity(this);
 		
 	}
 }

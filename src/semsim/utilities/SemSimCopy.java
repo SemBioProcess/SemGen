@@ -119,7 +119,12 @@ public class SemSimCopy {
 		for (CustomPhysicalProcess cpp : modeltocopy.getCustomPhysicalProcesses()) {
 			CustomPhysicalProcess newcpp = new CustomPhysicalProcess(cpp);
 			for (PhysicalEntity part : cpp.getParticipants()) {
-				newcpp.replaceParticipant(part, entities.get(part));
+				PhysicalEntity newpart = entities.get(part);
+				if (newpart==null) {
+					
+				}
+				
+				newcpp.replaceParticipant(part, newpart);
 			}
 			procs.put(cpp, newcpp);
 		}

@@ -61,8 +61,8 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 	
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addReferencePhysicalProcess(this);
-		
+	public ReferencePhysicalProcess addToModel(SemSimModel model) {
+		return model.addReferencePhysicalProcess(this);
+
 	}
 }

@@ -18,7 +18,6 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
-import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalProcess;
 import semsim.utilities.SemSimUtil;
@@ -232,42 +231,20 @@ public class Merger {
 			fswithcon.getComputation().setMathML(newmathml);
 		}
 		
-
-		// Copy in all data structures
-		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
-			mergedmodel.addDataStructure(dsfrom2);
-			
-			// Deal with unit equivalencies
-			UnitOfMeasurement dsfrom2unit = dsfrom2.getUnit();
-			if(mirrorunitsmap.containsKey(dsfrom2unit))
-				dsfrom2.setUnit(mirrorunitsmap.get(dsfrom2unit));
-			
-		}		
-		
 		// Copy in the units, deal with equivalencies along the way
 		for(UnitOfMeasurement model2unit : ssm2clone.getUnits()){
-					
-			// If an equivalent unit was not found for the model 2 unit, add it and
-			// deal with equivalent units in its unit factor set
-			if( ! mirrorunitsmap.containsKey(model2unit)){
-				mergedmodel.addUnit(model2unit);
-				
-				for(UnitFactor uf : model2unit.getUnitFactors()){
-					
-					// If the unit factor uses a unit with an equivalent unit in model1, replace it
-					UnitOfMeasurement baseunit = uf.getBaseUnit();
-					
-					if(mirrorunitsmap.containsKey(baseunit)){
-						uf.setBaseUnit(mirrorunitsmap.get(baseunit));
-					}
-				}
-			}
+				model2unit.addToModel(mergedmodel);
 		}
 		
 		// Copy in all the events and event assignments
 		for(Event event : ssm2clone.getEvents()){
 			mergedmodel.addEvent(event);
 		}	
+		
+		// Copy in all data structures
+		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
+			dsfrom2.addToModel(mergedmodel);
+		}		
 
 		// Copy in the submodels
 		for(Submodel subfrom2 : ssm2clone.getSubmodels()){

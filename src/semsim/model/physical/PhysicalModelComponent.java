@@ -11,6 +11,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.SemSimTypes;
 import semsim.model.SemSimComponent;
+import semsim.model.collection.SemSimModel;
 import semsim.utilities.SemSimCopy;
 
 public abstract class PhysicalModelComponent extends SemSimComponent implements Annotatable {
@@ -74,10 +75,6 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 			annotations.remove(ref);
 		}
 	}
-	
-	public PhysicalModelComponent clone() throws CloneNotSupportedException {
-        return (PhysicalModelComponent) super.clone();
-	}
 
 	public abstract String getComponentTypeasString();
 	
@@ -94,4 +91,6 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	public Boolean isPhysicalComponent() {
 		return true;
 	}
+	
+	public abstract PhysicalModelComponent addToModel(SemSimModel model);
 }

@@ -66,8 +66,8 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	}
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addPhysicalProperty(this);
+	public PhysicalProperty addToModel(SemSimModel model) {
+		return model.addPhysicalProperty(this);
 		
 	}
 }

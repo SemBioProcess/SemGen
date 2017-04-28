@@ -94,8 +94,8 @@ public class RelationalConstraint extends ComputationalModelComponent{
 	}
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addRelationalConstraint(this);
+	public RelationalConstraint addToModel(SemSimModel model) {
+		return model.addRelationalConstraint(this);
 	}
 }
 

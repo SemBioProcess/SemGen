@@ -67,7 +67,7 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addAssociatePhysicalProperty(this);
+	public PhysicalPropertyinComposite addToModel(SemSimModel model) {
+		return model.addAssociatePhysicalProperty(this);
 	}
 }

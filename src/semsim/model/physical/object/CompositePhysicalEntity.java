@@ -152,8 +152,8 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		return compareTo((CompositePhysicalEntity)obj)==0;
 	}
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addCompositePhysicalEntity(this);
+	public CompositePhysicalEntity addToModel(SemSimModel model) {
+		return model.addCompositePhysicalEntity(this);
 	}
 
 }

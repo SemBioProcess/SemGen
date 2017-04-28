@@ -190,9 +190,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * 
 	 * @param unit The UnitOfMeasurement to be added.
 	 */
-	public void addUnit(UnitOfMeasurement unit){
+	public UnitOfMeasurement addUnit(UnitOfMeasurement unit){
 		
-		if( ! containsUnit(unit.getName())) units.add(unit);
+		if( ! containsUnit(unit.getName())) {
+			units.add(unit);
+			return unit;
+		}
+		return getUnit(unit.getName());
 		//else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 	}
 	
@@ -389,8 +393,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Add an {@link Event} to the model
 	 * @param theevent The {@link Event} to add
 	 */
-	public void addEvent(Event theevent){
+	public Event addEvent(Event theevent){
 		events.add(theevent);
+		return theevent;
 	}
 	
 	/**
@@ -518,9 +523,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a {@link RelationalConstraint} to the model.
+	 * @return 
 	 */
-	public void addRelationalConstraint(RelationalConstraint rel){
+	public RelationalConstraint addRelationalConstraint(RelationalConstraint rel){
 		this.relationalConstraints.add(rel);
+		return rel;
 	}
 	
 	/**

@@ -227,10 +227,11 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addUnit(this);
+	public UnitOfMeasurement addToModel(SemSimModel model) {
+		
 		for (UnitFactor factor : unitFactors) {
-			model.addUnit(factor.getBaseUnit());
+			factor.setBaseUnit(factor.getBaseUnit().addToModel(model));
 		}
+		return model.addUnit(this);
 	}
 }

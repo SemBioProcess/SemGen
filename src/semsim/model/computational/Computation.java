@@ -253,5 +253,7 @@ public class Computation extends ComputationalModelComponent{
 	
 
 	@Override
-	public void addToModel(SemSimModel model) {}
+	public Computation addToModel(SemSimModel model) {
+		return this;
+	}
 }

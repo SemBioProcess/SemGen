@@ -59,7 +59,7 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 				&& physdefID.equals(thisID));	}
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addReferencePhysicalDependency(this);
+	public ReferencePhysicalDependency addToModel(SemSimModel model) {
+		return model.addReferencePhysicalDependency(this);
 	}
 }

@@ -30,5 +30,5 @@ public abstract class SemSimComponent extends SemSimObject {
 		return false;
 	}
 	
-	public abstract void addToModel(SemSimModel model);
+	public abstract SemSimComponent addToModel(SemSimModel model);
 }

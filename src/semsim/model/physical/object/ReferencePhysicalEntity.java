@@ -59,8 +59,8 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addReferencePhysicalEntity(this);
+	public ReferencePhysicalEntity addToModel(SemSimModel model) {
+		return model.addReferencePhysicalEntity(this);
 		
 	}
 }

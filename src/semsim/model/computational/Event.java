@@ -159,15 +159,15 @@ public class Event extends ComputationalModelComponent{
 			this.output = output;
 		}
 		@Override
-		public void addToModel(SemSimModel model) {
-			return;
+		public EventAssignment addToModel(SemSimModel model) {
+			return this;
 		}
 	}
 
 
 	@Override
-	public void addToModel(SemSimModel model) {
-		model.addEvent(this);
+	public Event addToModel(SemSimModel model) {
+		return model.addEvent(this);
 	}
 
 }
