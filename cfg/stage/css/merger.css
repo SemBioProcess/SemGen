@@ -105,7 +105,11 @@
 .ignoreRes {
     position: absolute;
     left: 50%;
-    margin--left: -27px;
+    margin-left: -27px;
+}
+
+.freetextDef {
+    padding-top: 3px;
 }
 
 .ignoreLabel {
