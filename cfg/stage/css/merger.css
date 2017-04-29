@@ -43,6 +43,10 @@
     left: 3px;
 }
 
+.mergePreview .modelNode {
+    display: none;
+}
+
 .modal-body {
     height: calc(75vh - 150px);
     overflow: scroll;
