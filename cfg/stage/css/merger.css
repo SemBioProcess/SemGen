@@ -47,6 +47,11 @@
     display: none;
 }
 
+.mergePreview [id*="_left"] .hull {
+    stroke: rgb(96, 96, 191);
+    fill: rgb(96, 96, 191);
+}
+
 .modal-body {
     height: calc(75vh - 150px);
     overflow: scroll;
