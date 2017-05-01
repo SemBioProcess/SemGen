@@ -164,6 +164,7 @@ public class SemSimCopy {
 	}
 	
 	private void copyDataStructures(SemSimModel modeltocopy) {
+		
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
 			dsmap.put(ds, ds.copy());
 		}
@@ -181,9 +182,9 @@ public class SemSimCopy {
 					ds.setAssociatedPhysicalModelComponent(procs.get(ds.getAssociatedPhysicalModelComponent()));
 				}
 			}
-			if (ds.hasSolutionDomain()) {
-				ds.setSolutionDomain(dsmap.get(ds.getSolutionDomain()));
-			}
+//			if (ds.hasSolutionDomain()) {
+//				ds.setSolutionDomain(dsmap.get(ds.getSolutionDomain()));
+//			}
 			if (ds.hasUnits()) {
 				ds.setUnit(unitmap.get(ds.getUnit()));
 			}

@@ -23,6 +23,19 @@ function DependencyNode (graph, data, parentNode) {
 	this.isOrphaned = function() {
 		return data.isorphaned;
 	}
+	
+	this.getInputs = function() {
+		var inputs = [];
+		this.srcobj.inputs.forEach(function (link) {
+			var inputnode = _node.graph.findNode(link.input.id);
+			//Return only node types that are visible
+			if (inputNode.graph.nodesVisible[inputNode.nodeType.id]) {
+				inputs.push(inputnode);
+			}
+			
+		});
+		return inputs;
+	}
 }
 
 DependencyNode.prototype.createVisualElement = function (element, graph) {
@@ -130,6 +143,6 @@ DependencyNode.prototype.isVisible = function () {
 }
 
 DependencyNode.prototype.getContextMenu = function() {
-	return [{text : "Extract", action : "extract"}, {text : "Extract and Exclude", action : "extractexclude"}];
+	return [{text: 'Select Inputs', action : 'selectinputs'}, {text : "Extract", action : "extract"}, {text : "Extract and Exclude", action : "extractexclude"}];
 	
 }

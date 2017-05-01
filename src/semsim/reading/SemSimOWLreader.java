@@ -368,7 +368,9 @@ public class SemSimOWLreader extends ModelReader {
 			else ds.setDeclared(true); // default value is TRUE if nothing explicitly stated in OWL file
 
 			String issoldom = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.IS_SOLUTION_DOMAIN.getURIasString());
-			if( ! issoldom.isEmpty()) ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
+			if( ! issoldom.isEmpty()) {
+				ds.setIsSolutionDomain(Boolean.parseBoolean(issoldom));
+			}
 			else ds.setIsSolutionDomain(false); // default value is FALSE if nothing explicitly stated in OWL file
 			
 			String metadataid = SemSimOWLFactory.getFunctionalIndDatatypeProperty(ont, dsind, SemSimRelation.METADATA_ID.getURIasString());

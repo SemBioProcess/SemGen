@@ -185,8 +185,6 @@ public class Merger {
 			ssm1clone.assignValidMetadataIDtoSemSimObject(ssm2metaid, ssm2object);
 		}
 		
-		
-		
 		// Create two submodels within the merged model where one consists of all data structures
 		// from the first model used in the merge, and the second consists of all those from the second.
 		createSubmodelForMergeComponent(mergedmodel, ssm1clone);
