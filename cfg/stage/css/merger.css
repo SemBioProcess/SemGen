@@ -43,6 +43,15 @@
     left: 3px;
 }
 
+.mergePreview .modelNode {
+    display: none;
+}
+
+.mergePreview [id*="_left"] .hull {
+    stroke: rgb(96, 96, 191);
+    fill: rgb(96, 96, 191);
+}
+
 .modal-body {
     height: calc(75vh - 150px);
     overflow: scroll;
@@ -84,22 +93,28 @@
 }
 
 .leftRes {
-    float: left;
-    width: 250px;
-    text-align: left;
+    position: absolute;
+    right: 50%;
+    text-align: right;
+    margin-right: 200px;
     margin-top: 0px;
 }
 
 .rightRes {
-    float: right;
-    width: 250px;
-    text-align: right;
+    position: absolute;
+    left: 50%;
+    text-align: left;
+    margin-left: 200px;
 }
 
 .ignoreRes {
-    width: 250px;
-    display: inline-block;
-    margin-left: 65px;
+    position: absolute;
+    left: 50%;
+    margin-left: -27px;
+}
+
+.freetextDef {
+    padding-top: 3px;
 }
 
 .ignoreLabel {
@@ -127,21 +142,12 @@
     padding-left: 0px;
 }
 
-.leftRes .mergeResRadio {
-    position: absolute;
-    left: 320px;
+.mergeResRadio {
     top: 0px;
 }
 
-.rightRes .mergeResRadio {
-    position: absolute;
-    right: 300px;
-    top: 0px;
-}
-
-.ignoreRes .mergeResRadio {
-    top: 0px;
-    margin-left: 0px;
+.leftRes input[type="radio"] {
+    margin-left: 10px;
 }
 
 .leftCollapsePanel {

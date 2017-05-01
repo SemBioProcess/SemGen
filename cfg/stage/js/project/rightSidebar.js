@@ -17,12 +17,16 @@ function RightSidebar(graph) {
 		// Increase link length as repulsion increases
         var length = 0.5 * $("#repulsion").val();
         graph.setLinkLength(parseInt(length));
-
 	});
 
     $("#friction").change(function() {
         var friction = $("#friction").val();
         graph.setFriction(parseFloat(friction));
+    });
+
+    $("#gravity").bind('change', function() {
+        var gravity = this.checked;
+        graph.toggleGravity(gravity);
 
     });
 
@@ -38,9 +42,5 @@ function RightSidebar(graph) {
 	// 	graph.setChargeDistance(parseInt(length));
     //
 	// });
-	// $("#gravity").bind('change', function() {
-	// 	var gravity = this.checked;
-	// 	graph.toggleGravity(gravity);
-    //
-	// });
+
 }

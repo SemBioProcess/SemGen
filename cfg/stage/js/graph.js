@@ -23,7 +23,8 @@ function Graph() {
         .scaleExtent([0.1, 10])
 		.on("zoom", function zoomed() {
 			vis.attr("transform", d3.event.transform);
-        }));
+        }))
+        .on("dblclick.zoom", null);
 
 	var vis = svg.append('g').attr("class", "canvas");
 
