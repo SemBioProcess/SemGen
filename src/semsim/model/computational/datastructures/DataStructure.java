@@ -155,7 +155,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/** @return Whether the DataStructure has been assigned a start value */
 	public Boolean hasStartValue(){
-		return (startValue != null);
+		return (startValue != null && ! startValue.equals(""));
 	}
 	
 	/** @return Whether the DataStructure has been assigned a solution domaint */
