@@ -155,11 +155,15 @@ function SemanticResolutionPane(merger) {
 		$("#fixedNodesA").removeAttr("checked");
 		$("#fixedNodesB").removeAttr("checked");
 
-		pane.leftgraph.setPreviewData(data.choices[0]);
+		//Add indicators to left/right model choices
+        data.choices[0].childsubmodels[1].id += "_left";
+        data.choices[0].childsubmodels[1].id += "_right";
+        data.choices[1].childsubmodels[0].id += "_left";
+        data.choices[0].childsubmodels[1].id += "_right";
+
+        pane.leftgraph.setPreviewData(data.choices[0]);
 		pane.rightgraph.setPreviewData(data.choices[1]);
 
-		// Different hull colors for different models
-		$("[id*=" + leftModelName +"] > .hull").attr("stroke", "rgb(96, 96, 191)").attr("fill", "rgb(96, 96, 191)");
 	});
 
 	// Prevent clicking on radio button from toggling collapse panel
