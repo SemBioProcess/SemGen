@@ -82,6 +82,15 @@ public class Merger {
 		for (Pair<DataStructure, DataStructure> dsp : overlapmap.getDataStructurePairs()) {
 			
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
+				//Flip the conversion operator
+				Pair<Double, String> factor = conversionfactors.get(i);
+				if (factor.getRight()=="*") {
+					conversionfactors.set(i, Pair.of(factor.getLeft(), "/"));
+				}
+				else {
+					conversionfactors.set(i, Pair.of(factor.getLeft(), "*"));
+				}
+				
 				String keptname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				
 				if (keptname==null) keptname=dsp.getLeft().getName();
@@ -97,14 +106,6 @@ public class Merger {
 				discardedds = modelfordiscardedds.getAssociatedDataStructure(discardedname);
 			}
 			else if(choicelist.get(i).equals(ResolutionChoice.second)){
-				//Flip the conversion operator
-				Pair<Double, String> factor = conversionfactors.get(i);
-				if (factor.getRight()=="*") {
-					conversionfactors.set(i, Pair.of(factor.getLeft(), "/"));
-				}
-				else {
-					conversionfactors.set(i, Pair.of(factor.getLeft(), "*"));
-				}
 				
 				String keptname = dsp.getRight().getName();
 				
