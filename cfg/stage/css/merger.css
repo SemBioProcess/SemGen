@@ -113,12 +113,15 @@
     margin-left: -27px;
 }
 
+.ignoreRes label .mergeResRadio {
+    margin-left: 25px;
+}
+
 .freetextDef {
     padding-top: 3px;
 }
 
 .ignoreLabel {
-    padding-right: 90px;
     padding-top: 3px;
 }
 
