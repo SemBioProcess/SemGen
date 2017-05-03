@@ -182,9 +182,6 @@ public class SemSimCopy {
 					ds.setAssociatedPhysicalModelComponent(procs.get(ds.getAssociatedPhysicalModelComponent()));
 				}
 			}
-//			if (ds.hasSolutionDomain()) {
-//				ds.setSolutionDomain(dsmap.get(ds.getSolutionDomain()));
-//			}
 			if (ds.hasUnits()) {
 				ds.setUnit(unitmap.get(ds.getUnit()));
 			}

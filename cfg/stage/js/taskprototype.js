@@ -154,6 +154,18 @@ function Task(graph, stagestate) {
 		}
 		
 	}
+	
+	//On an extraction event from the context menu, make a new extraction
+	$('#stage').off('selectinputs').on('selectinputs', function(e, caller) {
+		if (!caller.selected) task.selectNode(caller);
+		var inputs = caller.getInputs(),
+		cnrlstate = task.graph.cntrlIsPressed;
+		task.graph.cntrlIsPressed = true;
+		for (x in inputs) {
+			if (!inputs[x].selected) task.selectNode(inputs[x]);
+		}
+		graph.cntrlIsPressed = cnrlstate;
+	});
 }
 
 Task.prototype.setSavedState = function(issaved) {

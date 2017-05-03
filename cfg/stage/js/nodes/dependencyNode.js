@@ -29,7 +29,7 @@ function DependencyNode (graph, data, parentNode) {
 		this.srcobj.inputs.forEach(function (link) {
 			var inputnode = _node.graph.findNode(link.input.id);
 			//Return only node types that are visible
-			if (inputNode.graph.nodesVisible[inputNode.nodeType.id]) {
+			if (inputnode.graph.nodesVisible[inputnode.nodeType.id]) {
 				inputs.push(inputnode);
 			}
 			

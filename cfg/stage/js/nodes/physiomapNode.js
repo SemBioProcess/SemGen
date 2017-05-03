@@ -17,6 +17,19 @@ function PhysioMapNode (graph, data, parentNode) {
 	this.addClassName("physiomapNode");
 	this.addBehavior(HiddenLabelNodeGenerator);
 
+	this.getInputs = function() {
+		var inputs = [];
+		this.srcobj.inputs.forEach(function (link) {
+			var inputnode = _node.graph.findNode(link.input.id);
+			//Return only node types that are visible
+			if (inputnode.graph.nodesVisible[inputnode.nodeType.id]) {
+				inputs.push(inputnode);
+			}
+			
+		});
+		return inputs;
+	}
+	
 }
 
 PhysioMapNode.prototype.getFirstLinkableAncestor = function() {
