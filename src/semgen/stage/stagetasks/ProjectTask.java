@@ -1,6 +1,5 @@
 package semgen.stage.stagetasks;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -55,11 +54,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		 */
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
-			for (File file : sgc.getSelectedFiles()) {
+
+			for (ModelAccessor accessor : sgc.getSelectedFilesAsModelAccessors()) {
 				boolean alreadyopen = false;
-				
-				ModelAccessor accessor = new ModelAccessor(file);
-				
+								
 				for (ModelInfo info : _models) {
 					if (info != null) {
 						alreadyopen = info.accessor.equals(accessor);
