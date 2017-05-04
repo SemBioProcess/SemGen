@@ -249,8 +249,13 @@ li.searchResultSet li:hover {
 	50% { opacity: 0.0; }
 }
 
+#contextmenu {
+	  display: inline;
+	  height: 1px;
+}
+
 .context-menu {
-  display: block;
+  display: inline;
   position: absolute;
   z-index: 101;
   background-color: #fff;

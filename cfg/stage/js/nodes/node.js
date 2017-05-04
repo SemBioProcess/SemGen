@@ -152,7 +152,6 @@ Node.prototype.createVisualElement = function (element, graph) {
     }).call(node.graph.drag);
 
     this.rootElement.on("contextmenu", function(d, i) {
-    	//d3.event.preventDefault();
     	d.graph.contextMenu.showMenu(d);
     });
 

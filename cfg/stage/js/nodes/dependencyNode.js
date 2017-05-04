@@ -143,6 +143,6 @@ DependencyNode.prototype.isVisible = function () {
 }
 
 DependencyNode.prototype.getContextMenu = function() {
-	return [{text: 'Select Inputs', action : 'selectinputs'}, {text : "Extract", action : "extract"}, {text : "Extract and Exclude", action : "extractexclude"}];
+	return [{text: 'Select Node Inputs', action : 'selectinputs'}, {text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];
 	
 }

@@ -41,8 +41,8 @@ function ContextMenu(parent) {
 			menu.querySelector('.context-menu_items').appendChild(addItem(items[x], caller));
 		}
 		
-		menu.querySelector('.context-menu').style.left = caller.x  + "px";
-		menu.querySelector('.context-menu').style.top = caller.y + "px";
+		menu.querySelector('.context-menu').style.left = d3.event.x  + "px";
+		menu.querySelector('.context-menu').style.top = d3.event.y + "px";
 		$('#contextmenu').show();
 	}
 	
