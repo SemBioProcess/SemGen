@@ -230,6 +230,13 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	}
 	
 	@Override
+	public void requestExport(){
+		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		workbench.exportModel(0);
+		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+	
+	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg0==workbench) {
 			if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {

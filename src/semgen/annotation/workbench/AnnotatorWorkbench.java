@@ -8,6 +8,8 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FilenameUtils;
+
 import semgen.GlobalActions;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
@@ -144,7 +146,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
 		else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "cellml", "sbml","proj"}, selectedtype, semsimmodel.getName());
 		
 		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
 
@@ -164,7 +166,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				lastsavedas = ModelType.MML_MODEL;
 				
 			saveModel(0);
-
 			semsimmodel.setName(modelaccessor.getModelName());
 			
 			return modelaccessor;
@@ -172,6 +173,20 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		
 		return null;
 	}
+	
+	public void exportModel(Integer index){
+		
+		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFileThatContainsModel().getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("owl", semsimmodel.getName(),suggestedfilename);
+		
+		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
+
+		if (ma != null) {
+			validateModelComposites();
+			SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());			
+		}
+	}
+	
 
 	public void exportCSV() {
 		try {

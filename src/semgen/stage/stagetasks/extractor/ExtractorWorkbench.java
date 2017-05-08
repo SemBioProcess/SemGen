@@ -88,6 +88,9 @@ public class ExtractorWorkbench extends Workbench {
 
 		return ma;
 	}
+	
+	@Override
+	public void exportModel(Integer index){}
 
 	public SemSimModel getSourceModel() {
 		return sourcemodel;

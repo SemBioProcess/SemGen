@@ -21,10 +21,10 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 
 	private JMenuItem fileitemnewstage;
 	private JMenuItem fileitemnewannotator;
-	private JMenuItem fileitemnewextractor;
 	private JMenuItem fileitemclose;
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
+	private JMenuItem fileitemexport;
 	private JMenuItem fileitemproperties;
 	private JMenuItem fileitemexit;
 	
@@ -42,10 +42,6 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		fileitemnewannotator.setToolTipText("Open a new Annotator Tab");
 		add(fileitemnewannotator);
 		
-		fileitemnewextractor = formatMenuItem(fileitemnewextractor,"New Extractor Tab",KeyEvent.VK_E,true,true);
-		fileitemnewextractor.setToolTipText("Open a new Extractor Tab");
-		add(fileitemnewextractor);
-		
 		fileitemclose = formatMenuItem(fileitemclose,"Close Tab",KeyEvent.VK_W,true,true);
 		add(fileitemclose);
 		
@@ -54,9 +50,13 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		fileitemsave = formatMenuItem(fileitemsave,"Save",KeyEvent.VK_S,false,true);
 		add(fileitemsave);
 		
-		fileitemsaveas = formatMenuItem(fileitemsaveas,"Save As",null,true,true);
+		fileitemsaveas = formatMenuItem(fileitemsaveas,"Save As...",null,true,true);
 		fileitemsaveas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.SHIFT_MASK + maskkey));
 		add(fileitemsaveas);
+		
+		fileitemexport = formatMenuItem(fileitemexport,"Export...",KeyEvent.VK_E,true,true);
+		fileitemexport.setToolTipText("Write out model in a specified format");
+		add(fileitemexport);
 		
 		add(new JSeparator());
 		
@@ -84,16 +84,16 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			globalactions.NewAnnotatorTab();
 		}
 		
-		if (o == fileitemnewextractor) {
-			globalactions.NewExtractorTab();
-		}
-
 		if (o == fileitemsave) {
 			globalactions.getCurrentTab().requestSave();
 		}
 
 		if (o == fileitemsaveas) {
 			globalactions.requestSaveAs();
+		}
+		
+		if (o == fileitemexport) {
+			globalactions.requestExport();
 		}
 		
 		if( o == fileitemclose){

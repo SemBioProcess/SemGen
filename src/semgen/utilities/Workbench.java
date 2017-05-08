@@ -26,6 +26,8 @@ public abstract class Workbench extends Observable implements Observer, Property
 	
 	public abstract ModelAccessor saveModelAs(Integer index);
 	
+	public abstract void exportModel(Integer index);
+	
 	public abstract void setModelSaved(boolean val);	
 	
 	public abstract String getCurrentModelName();

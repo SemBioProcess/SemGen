@@ -922,4 +922,7 @@ public class ExtractorTab extends SemGenTab implements ActionListener, ItemListe
 
 	@Override
 	public void requestSaveAs() {}
+	
+	@Override
+	public void requestExport() {}
 }
