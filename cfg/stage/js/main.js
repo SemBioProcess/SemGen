@@ -72,6 +72,8 @@ function main() {
 			$(selector).contents().hide();
 		}
 	});
+	
+
 }
 
 //The window is receiving two seperate initialization messages which is resulting in 

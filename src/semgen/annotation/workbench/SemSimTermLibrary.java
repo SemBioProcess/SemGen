@@ -382,8 +382,6 @@ public class SemSimTermLibrary extends Observable {
 			return sortComponentIndiciesbyName(refprocs);
 		}	
 		
-		
-			
 		public ArrayList<Integer> getAllReferenceTerms() {
 			ArrayList<Integer> refterms = new ArrayList<Integer>();
 			for (IndexCard<?> card : masterlist) {
