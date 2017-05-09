@@ -1,6 +1,5 @@
 package semgen.stage.stagetasks;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -55,11 +54,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		 */
 		public void onAddModel() {
 			SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select models to load", true);
-			for (File file : sgc.getSelectedFiles()) {
+
+			for (ModelAccessor accessor : sgc.getSelectedFilesAsModelAccessors()) {
 				boolean alreadyopen = false;
-				
-				ModelAccessor accessor = new ModelAccessor(file);
-				
+								
 				for (ModelInfo info : _models) {
 					if (info != null) {
 						alreadyopen = info.accessor.equals(accessor);
@@ -276,7 +274,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
 			String modelnameinarchive = modelinfo.accessor.getModelName();
 			
-			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, selectedtype, modelnameinarchive, suggestedparentfilename);
+			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(selectedtype, modelnameinarchive, suggestedparentfilename);
 			ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
 			if (ma != null)				

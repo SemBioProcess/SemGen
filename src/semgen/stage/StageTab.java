@@ -104,6 +104,11 @@ public class StageTab extends SemGenTab implements Observer {
 	public void requestSaveAs() {
 		_workbench.saveModelAs(0);
 	}
+	
+	@Override
+	public void requestExport() {
+		_workbench.exportModel(0);
+	}
 
 	public boolean closeTab() {
 		browser.dispose();

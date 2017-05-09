@@ -53,6 +53,9 @@ public class OldExtractorWorkbench extends Workbench {
 	public ModelAccessor saveModelAs(Integer index) {
 		return null;
 	}
+	
+	@Override
+	public void exportModel(Integer index){}
 
 	public ModelAccessor getModelAccessor() {
 		return modelaccessor;

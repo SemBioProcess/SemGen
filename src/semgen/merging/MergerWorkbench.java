@@ -380,6 +380,9 @@ public class MergerWorkbench extends Workbench {
 		return ma;
 	}
 	
+	@Override
+	public void exportModel(Integer index){}
+	
 	private void notifyModelListUpdated() {
 		modelselection = -1;
 		setChanged();

@@ -72,6 +72,8 @@ public abstract class SemGenTab extends JPanel {
 	
 	abstract public void requestSaveAs();
 	
+	abstract public void requestExport();
+	
 	public boolean fileURIMatches(URI uri) {
 		return false;
 	}

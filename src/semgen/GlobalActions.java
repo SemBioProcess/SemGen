@@ -118,6 +118,11 @@ public class GlobalActions extends Observable {
 		notifyObservers(appactions.SAVED);
 	}
 	
+	public void requestExport() {
+		getCurrentTab().requestExport();
+		setChanged();
+	}
+	
 	public void incTabCount() {
 		tabsopen++;
 		setChanged();

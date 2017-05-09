@@ -93,6 +93,10 @@ public class StageWorkbench extends Workbench {
 	public ModelAccessor saveModelAs(Integer index) {
 		return null;
 	}
+	
+	@Override
+	public void exportModel(Integer index) {
+	}
 
 	@Override
 	public void setModelSaved(boolean val) {
