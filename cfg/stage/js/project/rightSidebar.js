@@ -32,15 +32,23 @@ function RightSidebar(graph) {
 
 	// Advanced d3 parameters disabled for users
 
-	// $("#linklength").change(function() {
-	// 	var length = $("#linklength").val();
-	// 	graph.setLinkLength(parseInt(length));
-    //
-	// });
-	// $("#chargedist").change(function() {
-	// 	var length = $("#chargedist").val();
-	// 	graph.setChargeDistance(parseInt(length));
-    //
-	// });
+    $("#advancedVizParams").click(function() {
+        $("#linklengthli").toggle(300);
+        $("#chargedistli").toggle(300);
+        $(this).text(function(i, text){
+            return text === "More parameters" ? "Fewer parameters" : "More parameters";
+        })
+    });
+
+	$("#linklength").change(function() {
+		var length = $("#linklength").val();
+		graph.setLinkLength(parseInt(length));
+
+	});
+	$("#chargedist").change(function() {
+		var length = $("#chargedist").val();
+		graph.setChargeDistance(parseInt(length));
+
+	});
 
 }

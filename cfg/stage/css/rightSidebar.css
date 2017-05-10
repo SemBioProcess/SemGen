@@ -84,6 +84,22 @@
 	right: 10px;
 }
 
+#linklengthli {
+	display: none;
+}
+
+#chargedistli {
+	display: none;
+}
+
+#advancedVizParamsli {
+	text-align: right;
+}
+
+#advancedVizParams {
+	font-size: 10px;
+}
+
 #nodemenu {
 	font-size: 12px;
 }
