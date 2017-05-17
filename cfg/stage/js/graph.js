@@ -400,7 +400,8 @@ function Graph() {
 
 	this.toggleGravity = function(enabled) {
 		if (enabled) {
-			this.force.force("center", d3.forceCenter(this.w/2, this.h/2));		}
+			this.force.force("center", d3.forceCenter(this.w/2, this.h/2));
+		}
 		else {
 			this.force.force("center", null);
 		}

@@ -128,8 +128,20 @@ function Task(graph, stagestate) {
 			node.highlight();
 
 			//Node info box
-			$("#nodemenuName").text(node.displayName);
-			$("#nodemenuType").text(node.nodeType.nodeType);
+			$("#nodemenuName").text("Name: " + node.displayName);
+			$("#nodemenuType").text("Type: " + node.nodeType.nodeType);
+			if (node.nodeType.nodeType == "Model") {
+				$("#nodemenuModelMetadata").text("Metadata: ");
+				$("#nodemenuFileLocation").text("File: ");
+			}
+			$("#nodemenuFreeText").text("Description: ");
+			$("#nodemenuAnnotation").text("Annotation: ");
+			$("#nodemenuUnit").text("Unit: ");
+			$("#nodemenuEquation").text("Equation: ");
+			$("#nodemenuParticipants").text("Paticipants: ");
+			$("#nodemenuStoichiometry").text("Stoichiometry: ");
+			$("#nodemenuMetaID").text("Meta ID: ");
+			$("#nodemenuRefTermURI").text("URI: ");
 		}
 	};
 	
