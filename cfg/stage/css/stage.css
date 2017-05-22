@@ -283,3 +283,7 @@ li.searchResultSet li:hover {
 	background-color: #ccc;
 
 	}
+	
+#boundrect {
+	background-color: transparent;
+}
