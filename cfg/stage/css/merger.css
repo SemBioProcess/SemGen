@@ -216,6 +216,30 @@ textarea[name=newSubmodelName] {
     resize: none;
 }
 
+.manualMapping {
+    margin: 10px;
+}
+
+.manualMapping > .panel-heading {
+    text-align: center;
+}
+
+.manualMapLeftModel {
+    width: 50%;
+    float: left;
+    font-size: 12px;
+}
+
+.manualMapRightModel {
+    width: 50%;
+    float: right;
+    font-size: 12px;
+}
+
+.centerBtnWrapper {
+    text-align: center;
+}
+
 #quitMergerBtn {
     float: left;
 }

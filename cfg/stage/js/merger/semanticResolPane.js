@@ -217,5 +217,24 @@ function SemanticResolutionPane(merger) {
 	$("#fixedNodesB").bind('change', function(){
 		pane.rightgraph.toggleFixedMode(this.checked);
 	});
+
+	// Manual mapping
+    $(".manualMapLeftModel a").click(function(e) {
+        e.preventDefault()
+
+        $that = $(this);
+
+        $that.parent().find('a').removeClass('active');
+        $that.addClass('active');
+    });
+
+    $(".manualMapRightModel a").click(function(e) {
+        e.preventDefault()
+
+        $that = $(this);
+
+        $that.parent().find('a').removeClass('active');
+        $that.addClass('active');
+    });
 }
 
