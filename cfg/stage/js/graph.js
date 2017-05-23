@@ -20,7 +20,7 @@ function Graph() {
 	    .attr("perserveAspectRatio", "xMinYMid");
 
 	svg.call(d3.zoom()
-        .scaleExtent([0.1, 10])
+        .scaleExtent([0.2, 3])
 		.on("zoom", function zoomed() {
 			vis.attr("transform", d3.event.transform);
         }))
@@ -400,7 +400,20 @@ function Graph() {
 
 	this.toggleGravity = function(enabled) {
 		if (enabled) {
-			this.force.force("center", d3.forceCenter(this.w/2, this.h/2));
+			// Find the new center of graph based on zoom/pan transform
+            var string = $(".canvas").attr("transform");
+            if(string === undefined) {
+            	// Use default center if zoom/pan is not applied
+                this.force.force("center", d3.forceCenter(this.w/2, this.h/2));
+            }
+            else {
+                var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(",");
+                var scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")"));
+                var dx = Number(translate[0]), dy = Number(translate[1]), scale = 1/Number(scaleStr);
+                var newCenterX = (this.w/2 - dx)*scale;
+                var newCenterY = (this.h/2 - dy)*scale;
+                this.force.force("center", d3.forceCenter(newCenterX, newCenterY));
+            }
 		}
 		else {
 			this.force.force("center", null);
