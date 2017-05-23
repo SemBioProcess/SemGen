@@ -489,6 +489,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  		if(ID==null || ID.isEmpty() || ID.equals("") || theobject==null ) return ID;
  		
  		Map<String, SemSimObject> momap = getMetadataIDcomponentMap();
+ 		momap.put(getMetadataID(), this); // add the metaid for the model itself so it remains unique
 		int num = 0;
 		String newID = ID;
 		
