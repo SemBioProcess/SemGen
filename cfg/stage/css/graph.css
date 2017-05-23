@@ -102,7 +102,6 @@ path.mediator {
 #toggleSelectButton {
 	position: relative;
 	margin: 5px;
-
 }
 
 .btn-toggle {
@@ -125,8 +124,4 @@ path.mediator {
 .btn-toggle:hover {
 	opacity: 1;
 	cursor: pointer;
-}
-
-#stage.navMode {
-	cursor: move;
 }

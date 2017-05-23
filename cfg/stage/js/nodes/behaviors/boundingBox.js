@@ -3,6 +3,7 @@
  */
 
 function BoundingBox() {
+	
 	var stage = d3.select("#svg"),
 	clickloc = {x: 0, y: 0},
 	box = null;
@@ -19,8 +20,18 @@ function BoundingBox() {
 				.attr("height", 1);
 		})
 		.on("drag", function() {
-			box.attr("width", d3.event.x)
-				.attr("height", d3.event.y);
+
+			if (d3.event.x < clickloc.x) {
+				box.attr('x', d3.event.x)
+			}
+			if (d3.event.y < clickloc.y) {
+				box.attr('y', d3.event.y)
+			}
+
+
+			box.attr("width", Math.abs(d3.event.x-clickloc.x))
+			.attr("height", Math.abs(d3.event.y-clickloc.y));
+			
 		})
 		.on("end", function() {
 			stage.select("#boundrect").remove();
