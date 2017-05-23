@@ -616,11 +616,15 @@ public class CellMLreader extends ModelReader {
 				
 				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
 					
-					String fragment = subject.getURI().replaceAll(SemSimRDFreader.TEMP_NAMESPACE + "#", ""); // Get the URI fragment (should be the metaid of the subject)
-					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(fragment);
+					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
+					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(subject.getLocalName());
+					
+					if (sso!=null){
 						
-					if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
-						listofremovedstatements.add(st);
+						// Remove dc:description statements (do not need to preserve these)
+						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
+							listofremovedstatements.add(st);
+					}
 				}
 			}
 			

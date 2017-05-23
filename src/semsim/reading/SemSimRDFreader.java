@@ -94,11 +94,13 @@ public class SemSimRDFreader extends ModelReader{
 						
 			if(submodelres.getURI() != null){
 				
-				if(submodelres.getURI().contains("#submodel_")){
+				String metaid = submodelres.getLocalName();
+				if(metaid.contains("submodel_")){
 					Statement subnamest = submodelres.getProperty(SemSimRelation.HAS_NAME.getRDFproperty());
 					String name = subnamest.getLiteral().toString();
 					
 					Submodel newsub = new Submodel(name);
+					newsub.setMetadataID(metaid);
 					submodelURIandObjectMap.put(submodelres.getURI(), newsub);
 					semsimmodel.addSubmodel(newsub);					
 				}
