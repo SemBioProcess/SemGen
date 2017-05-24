@@ -4,7 +4,7 @@
 }
 
 .modal-open .modal {
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .modal-title {
@@ -217,23 +217,32 @@ textarea[name=newSubmodelName] {
 }
 
 .manualMapping {
-    margin: 10px;
+    max-height: 300px;
 }
 
 .manualMapping > .panel-heading {
     text-align: center;
+    padding: 5px;
 }
 
 .manualMapLeftModel {
     width: 50%;
     float: left;
     font-size: 12px;
+    height: 250px;
+    overflow: scroll;
 }
 
 .manualMapRightModel {
     width: 50%;
     float: right;
     font-size: 12px;
+    height: 250px;
+    overflow: scroll;
+}
+
+.manualMapping .list-group-item {
+    padding: 5px;
 }
 
 .centerBtnWrapper {

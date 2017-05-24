@@ -218,14 +218,20 @@ function SemanticResolutionPane(merger) {
 		pane.rightgraph.toggleFixedMode(this.checked);
 	});
 
-	// Manual mapping
+	// Select codewords for manual mapping
     $(".manualMapLeftModel a").click(function(e) {
         e.preventDefault()
 
         $that = $(this);
 
-        $that.parent().find('a').removeClass('active');
-        $that.addClass('active');
+        if($that.hasClass('active')) {
+        	$that.removeClass('active');
+		}
+		else
+        {
+            $that.parent().find('a').removeClass('active');
+            $that.addClass('active');
+        }
     });
 
     $(".manualMapRightModel a").click(function(e) {
@@ -233,8 +239,14 @@ function SemanticResolutionPane(merger) {
 
         $that = $(this);
 
-        $that.parent().find('a').removeClass('active');
-        $that.addClass('active');
+        if($that.hasClass('active')) {
+            $that.removeClass('active');
+        }
+        else
+        {
+            $that.parent().find('a').removeClass('active');
+            $that.addClass('active');
+        }
     });
 }
 
