@@ -418,8 +418,6 @@ function Graph() {
 		else {
 			this.force.force("center", null);
 		}
-		this.update();
-
 	}
 	
 	this.setFriction = function(friction) {
