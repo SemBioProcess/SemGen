@@ -166,6 +166,16 @@ function Task(graph, stagestate) {
 		}
 		graph.cntrlIsPressed = cnrlstate;
 	});
+	
+	this.selectNodes = function(selections) {
+		var cntrlstate = task.graph.cntrlIsPressed;
+		for (i=0; i <  selections.length; i++) {
+			//Make sure all bracketed nodes are selected
+			if (i > 0)  task.graph.cntrlIsPressed = true;
+			if (!selections[i].selected) task.selectNode(selections[i]);
+		}
+		task.graph.cntrlIsPressed = cntrlstate;
+	} 
 }
 
 Task.prototype.setSavedState = function(issaved) {

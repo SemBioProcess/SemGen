@@ -116,8 +116,6 @@ function Stage(graph, stagestate) {
 		sender.save(extractstosave);
 	});
 	
-	
-	
 	//******************EXTRACTION FUNCTIONS*************************//
 	
 	var promptForExtractionName = function() {

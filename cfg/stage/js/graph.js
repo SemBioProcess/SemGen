@@ -65,7 +65,7 @@ function Graph() {
 		graph.contextMenu.hideMenu();
 	});
 	
-	svg.call(BoundingBox());
+	svg.call(BoundingBox(visibleNodes));
 
 	$('#toggleSelectButton').addClass('on');
 	
