@@ -94,11 +94,13 @@ public class SemSimRDFreader extends ModelReader{
 						
 			if(submodelres.getURI() != null){
 				
-				if(submodelres.getURI().contains("#submodel_")){
+				String metaid = submodelres.getLocalName();
+				if(metaid.contains("submodel_")){
 					Statement subnamest = submodelres.getProperty(SemSimRelation.HAS_NAME.getRDFproperty());
 					String name = subnamest.getLiteral().toString();
 					
 					Submodel newsub = new Submodel(name);
+					newsub.setMetadataID(metaid);
 					submodelURIandObjectMap.put(submodelres.getURI(), newsub);
 					semsimmodel.addSubmodel(newsub);					
 				}
@@ -207,7 +209,11 @@ public class SemSimRDFreader extends ModelReader{
 			while(dsstit.hasNext()){
 				Statement dsst = dsstit.next();
 				Resource dsresinsub = dsst.getResource();
-				sub.addDataStructure(semsimmodel.getAssociatedDataStructure(dsresinsub.getLocalName()));
+				
+				SemSimObject sso = semsimmodel.getMetadataIDcomponentMap().get(dsresinsub.getLocalName());
+				
+				if(sso instanceof DataStructure)
+					sub.addDataStructure((DataStructure)sso);
 			}
 			
 			// Collect submodels of submodels

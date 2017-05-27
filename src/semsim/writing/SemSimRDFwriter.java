@@ -309,6 +309,18 @@ public class SemSimRDFwriter extends ModelWriter{
 						
 						addStatement(st);
 						
+						// If the participants for the process have already been set, do not duplicate
+						// statements (in CellML models mapped codewords may be annotated against the
+						// same process, and because each process participant is created anew here, duplicate
+						// participant statements would appear in CellML RDF block).
+						
+						if(rdf.contains(processres, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty())
+								|| rdf.contains(processres, SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty())
+								|| rdf.contains(processres, SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty()))
+							return;
+						
+						// If we're here, the process hasn't been assigned its participants yet
+						
 						// Set the sources
 						for(PhysicalEntity source : process.getSourcePhysicalEntities()){
 							setProcessParticipationRDFstatements(process, source, 
@@ -454,37 +466,14 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	
-//	private String createMetadataIDandSetNSPrefixes(SemSimObject annotated, String idprefix, Element el) {
-//		String metaid = annotated.getMetadataID();
-//		
-//		// Create metadata ID for the model element, cache locally
-//		if(metaid.isEmpty()){
-//			metaid = idprefix + 0;
-//			int n = 0;
-//			while(metadataids.contains(metaid)){
-//				n++;
-//				metaid = idprefix + n;
-//			}
-//			metadataids.add(metaid);
-//			el.setAttribute("id", metaid, CellMLconstants.cmetaNS);
-//		}
-//		
-//		rdf.setNsPrefix("semsim", SemSimConstants.SEMSIM_NAMESPACE);
-//		rdf.setNsPrefix("bqbiol", SemSimConstants.BQB_NAMESPACE);
-//		rdf.setNsPrefix("dcterms", CurationalMetadata.DCTERMS_NAMESPACE);
-//		return metaid;
-//	}
-	
-	
 	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
 		
 		String typeprefix = pmc.getComponentTypeasString();
 		boolean isphysproperty = typeprefix.matches("property");
 		
-		if(PMCandResourceURImap.containsKey(pmc) && ! isphysproperty){
+		if(PMCandResourceURImap.containsKey(pmc) && ! isphysproperty)
 			return rdf.getResource(PMCandResourceURImap.get(pmc).toString());
-		}
 		
 		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
 			typeprefix = "unknown";

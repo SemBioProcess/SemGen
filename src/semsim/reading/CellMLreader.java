@@ -27,6 +27,7 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -580,12 +581,15 @@ public class CellMLreader extends ModelReader {
 	// It gets replaced, if needed, on write out
 	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
 		
-		// anything with semsim predicates
-		// descriptions on components, variables
+		// Currently getting rid of anything with semsim predicates
+		// and descriptions on variables and components
+		// AND
 		// * part-of statements for physical entities (prbly need to assign metaids to physical entities)
 		// * isVersionOf statements on custom terms
-		// * has part statements on custom terms
-		// * part-of statements on custom terms
+		// * has-part statements on custom terms
+		// Test to make sure we're not preserving extraneous stuff in CellMLRDFmarkup block
+		// within SemSim models (test with all kinds of anns)
+		// MAYBE THE RIGHT WAY TO DO THIS IS TO USE THE METAIDS/??
 		
 		Iterator<Statement> stit = rdf.listStatements();
 		List<Statement> listofremovedstatements = new ArrayList<Statement>();
@@ -596,7 +600,12 @@ public class CellMLreader extends ModelReader {
 			String rdfprop = st.getPredicate().getURI();
 			
 			// Flag any statement that uses a predicate with a semsim namespace for removal
-			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())){
+			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())
+					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
+					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
+					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
+					|| rdfprop.equals(SemSimRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
+					|| rdfprop.equals(SemSimRelation.BQB_IS_PART_OF.getURIasString())){
 				listofremovedstatements.add(st);
 				continue;
 			}
@@ -607,11 +616,15 @@ public class CellMLreader extends ModelReader {
 				
 				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
 					
-					String fragment = subject.getURI().replaceAll(SemSimRDFreader.TEMP_NAMESPACE + "#", ""); // Get the URI fragment (should be the metaid of the subject)
-					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(fragment);
+					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
+					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(subject.getLocalName());
+					
+					if (sso!=null){
 						
-					if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
-						listofremovedstatements.add(st);
+						// Remove dc:description statements (do not need to preserve these)
+						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
+							listofremovedstatements.add(st);
+					}
 				}
 			}
 			
