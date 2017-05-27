@@ -84,3 +84,44 @@ path.mediator {
 .submodelNode > text {
 	font-weight: bold;
 }
+
+#stagemodes {
+	position: absolute;
+	margin: 5px;
+	top: 10px;
+	right: 90px;
+	height:40px;
+	width: 80px;
+	border: 2px solid;
+}
+
+#toggleMoveStageButton {
+	position: relative;
+}
+
+#toggleSelectButton {
+	position: relative;
+	margin: 5px;
+}
+
+.btn-toggle {
+	width:40px;
+	height:40px;
+	line-height:40px;
+	font-size: 30px;
+	border: hidden;
+	color:#ffffff;
+	text-align:center;
+	background:#dddddd;
+	opacity: .8;
+	padding-left: 1px;
+	padding-top: 2px;
+}
+
+.btn-toggle.on {
+	background:#3b5998;
+}
+.btn-toggle:hover {
+	opacity: 1;
+	cursor: pointer;
+}

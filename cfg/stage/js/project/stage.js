@@ -14,8 +14,6 @@ function Stage(graph, stagestate) {
 
 	$("#addModelButton, .stageSearch").show();
 
-	//$("#trash").hide();
-
     $('[data-toggle="tooltip"]').tooltip({delay: {show: 1000, hide: 50}});
 
     this.leftsidebar = new LeftSidebar(graph);
@@ -117,8 +115,6 @@ function Stage(graph, stagestate) {
 		if (count==0) return;
 		sender.save(extractstosave);
 	});
-	
-	
 	
 	//******************EXTRACTION FUNCTIONS*************************//
 	

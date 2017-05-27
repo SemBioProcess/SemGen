@@ -33,6 +33,7 @@
 		<script src="js/graph.js"></script>
 		<script src="js/taskprototype.js"></script>
 		<script src="js/nodes/behaviors/parentNodeDrag.js"></script>
+		
 		<script src="js/extractor/extractedModel.js"></script>
 		<script src="js/merger/mergePreview.js"></script>
 		<script src="js/merger/conflictResolPane.js"></script>
@@ -40,6 +41,7 @@
 		<script src="js/merger/mergerTask.js"></script>
 		<script src="js/project/stage.js"></script>
 		<script src="js/project/contextMenu.js"></script>
+		<script src="js/nodes/behaviors/boundingBox.js"></script>
 		<script src="js/main.js"></script>
 
 
@@ -58,13 +60,18 @@
 			<!--<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>-->
 		<!--</div>-->
 		<!---->
-		<!--<div id="saveButton" class = "btn-def	ult" datacontextmenuol
-			<nav class="context-menu">
-			  <ul class="context-menu_items">
-			  </ul>
-			</nav>
+		<!--<div id="saveButton" class = "btn-default" datacontextmenuol
 		-floppy-disk" aria-hidden="true"></span>-->
 		<!--</div>-->
+		
+	<div id="stagemodes"> 
+	<span id="toggleSelectButton" class="btn-toggle" data-toggle="tooltip" data-placement="bottom" title="Toggle Selection">
+			<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span>
+		</span>
+		<span id="toggleMoveStageButton" class="btn-toggle" data-toggle="tooltip" data-placement="bottom" title="Toggle Navigation">
+			<span class="glyphicon glyphicon-move" aria-hidden="true"></span>
+		</span>
+	</div>
 		
 		<div id="contextmenu">
 			<nav class="context-menu">
@@ -96,6 +103,9 @@
 				<ul class="searchResults"></ul>
 			</div>
 		</div>
+	
+
+
 
 		<!-- Sidebars -->
 		<!-- Left Sidebar -->

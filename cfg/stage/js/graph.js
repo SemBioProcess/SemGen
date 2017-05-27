@@ -12,22 +12,15 @@ function Graph() {
 
 	var visibleNodes = [];
 	this.doodads = [];
-
+	
 	var svg = d3.select("#stage")
 	    .append("svg")	    
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
 
-	svg.call(d3.zoom()
-        .scaleExtent([0.2, 3])
-		.on("zoom", function zoomed() {
-			vis.attr("transform", d3.event.transform);
-        }))
-        .on("dblclick.zoom", null);
-
 	var vis = svg.append('g').attr("class", "canvas");
-
+	
 	this.drag = NodeDrag();
 	
     this.force = d3.forceSimulation()
@@ -43,6 +36,7 @@ function Graph() {
             { return d.length; })
             .strength(0.1)
         );
+    
 		
 	var links = this.force.force("link").links(); 
 
@@ -69,6 +63,39 @@ function Graph() {
 
 	$('#stage').click(function() {
 		graph.contextMenu.hideMenu();
+	});
+	
+	svg.call(BoundingBox(visibleNodes));
+
+	$('#toggleSelectButton').addClass('on');
+	
+	$('#toggleMoveStageButton').click(function() {
+		$('#toggleMoveStageButton').addClass('on');
+		$('#toggleSelectButton').removeClass('on');
+		
+		$('#stage').css('cursor', 'move');
+		svg.on('mousedown.drag', null);
+		svg.call(d3.zoom()
+				.scaleExtent([0.1, 10])
+				.on("zoom", function zoomed() {
+						vis.attr("transform", d3.event.transform);
+		        }))
+		        .on("dblclick.zoom", null);
+	
+	});
+	
+	$('#toggleSelectButton').click(function() {
+		$('#toggleSelectButton').addClass('on');
+		$('#toggleMoveStageButton').removeClass('on');
+		
+		$('#stage').css('cursor', 'auto');
+		svg.call(BoundingBox());
+		svg.call(d3.zoom()
+				.scaleExtent([0.1, 10])
+				.on("zoom", null))
+		        .on("dblclick.zoom", null);
+		        
+		
 	});
 	
 	this.getVisibleNodes = function() {

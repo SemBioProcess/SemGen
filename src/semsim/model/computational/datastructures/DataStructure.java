@@ -476,16 +476,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	//Attempt to add annotations and use any preexisting ones
 	public DataStructure addToModel(SemSimModel model) {
 		
-		if (this.hasPhysicalDefinitionAnnotation()) {
-			singularterm = model.addPhysicalProperty(singularterm);
-		}
-		else if (hasPhysicalProperty()) {
-			physicalProperty = model.addAssociatePhysicalProperty(physicalProperty);
-		}
-		unit = unit.addToModel(model);
-		if (hasAssociatedPhysicalComponent()) {
-			physicalcomponent = physicalcomponent.addToModel(model);
-		}
+		if (this.hasPhysicalDefinitionAnnotation()) singularterm = model.addPhysicalProperty(singularterm);
+		else if (hasPhysicalProperty()) physicalProperty = model.addAssociatePhysicalProperty(physicalProperty);
+		
+		if (hasUnits()) unit = unit.addToModel(model);
+		
+		if (hasAssociatedPhysicalComponent()) physicalcomponent = physicalcomponent.addToModel(model);
+		
 		return model.addDataStructure(this);
 	}
 	
