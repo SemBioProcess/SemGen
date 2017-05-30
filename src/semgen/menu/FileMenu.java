@@ -25,7 +25,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
 	private JMenuItem fileitemexport;
-	private JMenuItem fileitemproperties;
+	private JMenuItem fileitempreferences;
 	private JMenuItem fileitemexit;
 	
 	public FileMenu(SemGenSettings sets, GlobalActions acts) {
@@ -60,8 +60,8 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		
 		add(new JSeparator());
 		
-		fileitemproperties = formatMenuItem(fileitemproperties,"Properties", KeyEvent.VK_P,true,true);
-		add(fileitemproperties);
+		fileitempreferences = formatMenuItem(fileitempreferences,"Preferences", KeyEvent.VK_P,true,true);
+		add(fileitempreferences);
 		
 		Integer quitaccelerator = OSValidator.isMac() ? null : KeyEvent.VK_Q;
 		fileitemexit = formatMenuItem(fileitemexit, "Quit SemGen", quitaccelerator, true, true);
@@ -100,7 +100,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			globalactions.closeTab();
 		}
 
-		if( o == fileitemproperties){
+		if( o == fileitempreferences){
 			new PreferenceDialog(settings);
 		}
 		

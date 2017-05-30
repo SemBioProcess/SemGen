@@ -90,11 +90,21 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return semsimmodel;
 	}
 	
-	public boolean sourceModelTypeCanStoreSemSimAnnotations() {
+	public boolean sourceModelTypeCanStoreSemSimAnnotations() { 
+		// This is distinct from lastSavedAsTypeCanStoreSemSimAnnotations. This refers to original source code read into SemGen.
 		return (semsimmodel.getSourceModelType()==ModelType.SEMSIM_MODEL || 
-				semsimmodel.getSourceModelType()==ModelType.SEMSIM_MODEL ||
+				semsimmodel.getSourceModelType()==ModelType.SBML_MODEL ||
 				semsimmodel.getSourceModelType()==ModelType.CELLML_MODEL ||
 				semsimmodel.getSourceModelType()==ModelType.MML_MODEL_IN_PROJ);
+	}
+	
+	public boolean lastSavedAsTypeCanStoreSemSimAnnotations() {
+		// This is distinct from sourceModelTypeCanStoreSemSimAnnotations. This refers to the type of code that the model
+		// was last saved out as.
+		return (getLastSavedAs()==ModelType.SEMSIM_MODEL || 
+				getLastSavedAs()==ModelType.SBML_MODEL ||
+				getLastSavedAs()==ModelType.CELLML_MODEL ||
+				getLastSavedAs()==ModelType.MML_MODEL_IN_PROJ);
 	}
 
 	@Override
@@ -127,7 +137,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		
 		URI fileuri = modelaccessor.getFileThatContainsModelAsURI();
 		
-		if(fileuri != null){
+		if(fileuri != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
 			File file = new File(fileuri);
 			validateModelComposites();
 			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor, file, lastsavedas);			
@@ -139,7 +149,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public ModelAccessor saveModelAs(Integer index) {
-		
+				
 		String selectedtype = "owl";  // Default extension type
 		ModelType modtype = semsimmodel.getSourceModelType();
 		
@@ -154,7 +164,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (newaccessor != null) {
 			
 			modelaccessor = newaccessor;
-			
+						
 			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
 				lastsavedas = ModelType.SEMSIM_MODEL;
 			else if(filec.getFileFilter() == SemGenFileChooser.sbmlfilter)
@@ -163,8 +173,6 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				lastsavedas = ModelType.MML_MODEL_IN_PROJ;
 			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)
 				lastsavedas = ModelType.CELLML_MODEL;
-			else if(filec.getFileFilter() == SemGenFileChooser.mmlfilter)
-				lastsavedas = ModelType.MML_MODEL;
 				
 			saveModel(0);
 			semsimmodel.setName(modelaccessor.getModelName());
@@ -178,7 +186,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void exportModel(Integer index){
 		
 		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFileThatContainsModel().getName());
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser("owl", semsimmodel.getName(),suggestedfilename);
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, "owl", semsimmodel.getName(), suggestedfilename);
 		
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
