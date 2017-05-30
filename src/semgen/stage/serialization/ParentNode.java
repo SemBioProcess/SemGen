@@ -167,7 +167,7 @@ public abstract class ParentNode<T extends SemSimCollection> extends Node<T> {
 	}
 	
 	protected void incrementType(Number type) {
-		deptypecounts[(int) type-2]++;
+		deptypecounts[type.intValue()-2]++;
 	}
 	
 	public void prefixChildrenwithID(String prefix) {

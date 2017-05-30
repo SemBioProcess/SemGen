@@ -1,7 +1,7 @@
-startDirectory; /Users/graham_kim/Desktop/SemGen Test Models
+startDirectory; C:\Users\thomp\OneDrive\Documents\SemGen Test
 maximize; true
-screensize; 1920x1053
-screenpos; 0x23
+screensize; 1920x1048
+screenpos; -9x-9
 autoAnnotate; true
 showImports; true
 displayMarkers; true

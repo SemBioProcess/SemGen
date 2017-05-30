@@ -2,9 +2,8 @@
  * 
  */
 
-function ContextMenu(parent) {
+function ContextMenu() {
 	
-	var owner = parent;
 	//pointer to the HTML object
 	var menu = null,
 	    activecaller = null;
