@@ -13,6 +13,7 @@ function Task(graph, stagestate) {
 	
 	var task = this;
 	$('#leftSidebar').empty();
+	this.rightsidebar = new RightSidebar(graph);
 	
 	this.addModelNode = function(model, optbehaviors) {
 		
@@ -127,21 +128,7 @@ function Task(graph, stagestate) {
 			node.selected = true;
 			node.highlight();
 
-			//Node info box
-			$("#nodemenuName").text("Name: " + node.displayName);
-			$("#nodemenuType").text("Type: " + node.nodeType.nodeType);
-			if (node.nodeType.nodeType == "Model") {
-				$("#nodemenuModelMetadata").text("Metadata: ");
-				$("#nodemenuFileLocation").text("File: ");
-			}
-			$("#nodemenuFreeText").text("Description: ");
-			$("#nodemenuAnnotation").text("Annotation: ");
-			$("#nodemenuUnit").text("Unit: ");
-			$("#nodemenuEquation").text("Equation: ");
-			$("#nodemenuParticipants").text("Paticipants: ");
-			$("#nodemenuStoichiometry").text("Stoichiometry: ");
-			$("#nodemenuMetaID").text("Meta ID: ");
-			$("#nodemenuRefTermURI").text("URI: ");
+			this.rightsidebar.updateNodeDisplay(node);
 		}
 	};
 	

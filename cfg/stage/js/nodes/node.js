@@ -325,3 +325,5 @@ Node.prototype.getContextMenu = function() {
 Node.prototype.createGhost = function() {
 	return new GhostNode(this);
 }
+
+Node.prototype.updateInfo = function() {}

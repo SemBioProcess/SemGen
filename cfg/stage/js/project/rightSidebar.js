@@ -51,4 +51,15 @@ function RightSidebar(graph) {
 
 	});
 
+	
+	this.updateNodeDisplay = function(node) {
+		//Node info box
+		$("#nodemenuName").text("Name: " + node.displayName);
+		$("#nodemenuType").text("Type: " + node.nodeType.nodeType);
+		$("#nodemenuMetaID").text("Meta ID: " + node.srcobj.metadataid);
+		$("#nodemenuFreeText").text("Description: " + node.srcobj.description);
+		node.updateInfo();
+		
+		$("#nodemenuRefTermURI").text("URI: ");
+	}
 }
