@@ -73,3 +73,10 @@ ModelNode.prototype.multiDrag = function() {
 ModelNode.prototype.getIndexAddress = function() {
 	return [-1, this.modelindex];
 }
+
+ModelNode.prototype.updateInfo = function() {
+	$("#nodemenuUnit").hide();
+	$("#nodemenuEquation").hide();
+}
+
+

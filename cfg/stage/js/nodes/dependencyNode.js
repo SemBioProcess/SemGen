@@ -146,3 +146,15 @@ DependencyNode.prototype.getContextMenu = function() {
 	return [{text: 'Select Node Inputs', action : 'selectinputs'}, {text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];
 	
 }
+
+Node.prototype.updateInfo = function() {
+	$("#nodemenuUnit").show();
+	$("#nodemenuEquation").show();
+	$("#nodemenuAnnotation").show();
+	$("#nodemenuStoichiometry").hide();
+	$("#nodemenuParticipants").hide();
+	
+	$("#nodemenuAnnotation").text("Annotation: " + this.srcobj.physannotation);
+	$("#nodemenuUnit").text("Unit: " + this.srcobj.unit);
+	$("#nodemenuEquation").text("Equation: " + this.srcobj.equation);
+}

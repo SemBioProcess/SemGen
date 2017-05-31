@@ -88,3 +88,14 @@ var limitWords = function (text, wordLimit) {
 PhysioMapNode.prototype.getContextMenu = function() {
 	return [{text: 'Select Node Inputs', action : 'selectinputs'}, {text : "Extract Selected", action : 'extract'}, {text: 'Extract Unselected', action : 'excludeextract'}];
 }
+
+PhysioMapNode.prototype.updateInfo = function() {
+	$("#nodemenuUnit").hide();
+	$("#nodemenuEquation").hide();
+	$("#nodemenuAnnotation").hide();
+	$("#nodemenuStoichiometry").show();
+	$("#nodemenuParticipants").show();
+	
+	$("#nodemenuParticipants").text("Paticipants: ");
+	$("#nodemenuStoichiometry").text("Stoichiometry: ");
+}

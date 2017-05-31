@@ -16,6 +16,8 @@ import semsim.SemSimObject;
 public abstract class Node<T extends SemSimObject> {
 	@Expose public String id;
 	@Expose public String name;
+	@Expose public String description = "";
+	@Expose public String metadataid = "";
 	@Expose public String parentModelId = "";
 	@Expose public int xpos = -1;
 	@Expose public int ypos = -1;
@@ -51,6 +53,8 @@ public abstract class Node<T extends SemSimObject> {
 	protected Node(T obj, Node<?> parent) {
 		this.sourceobj = obj;
 		this.name = obj.getName();
+		this.description = obj.getDescription();
+		this.metadataid = obj.getMetadataID();
 		this.parent = parent;
 		this.parentModelId = parent.parentModelId;
 		this.id =  parent.id + "." + getBaseName(this.name);
@@ -59,6 +63,8 @@ public abstract class Node<T extends SemSimObject> {
 	protected Node(T obj, Node<?> parent, Number typeindex) {
 		this.sourceobj = obj;
 		this.name = obj.getName();
+		this.description = obj.getDescription();
+		this.metadataid = obj.getMetadataID();
 		this.parent = parent;
 		this.parentModelId = parent.parentModelId;
 		this.id =  parent.id + "." + this.name;

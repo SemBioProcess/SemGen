@@ -20,11 +20,18 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 	
 	@Expose public String submodelId = "";
 	@Expose public boolean issubmodelinput;
+	@Expose public String unit = "";
+	@Expose public String equation = "";
+	@Expose public String physannotation = "";
 	
 	public DependencyNode(DataStructure dataStructure, Node<? extends SemSimCollection> parent) {
 		super(dataStructure, parent);
 		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		this.typeIndex = nodetypes.indexOf(nodeType);
+		this.unit = dataStructure.getUnit().getComputationalCode();
+		this.equation = dataStructure.getComputation().getComputationalCode();
+		this.physannotation = dataStructure.getCompositeAnnotationAsString(false);
+		
 		isorphaned = dataStructure.getComputationInputs().isEmpty() && dataStructure.getUsedToCompute().isEmpty();
 		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
 	}

@@ -21,3 +21,11 @@ SubmodelNode.prototype.getContextMenu = function() {
 	return [{text : "Extract", action : "extract"}, {text : "Extract and Exclude", action : "extractexclude"}];
 	
 }
+
+SubmodelNode.prototype.updateInfo = function() {
+	$("#nodemenuUnit").hide();
+	$("#nodemenuEquation").hide();
+	$("#nodemenuStoichiometry").hide();
+	$("#nodemenuParticipants").hide();
+	$("#nodemenuAnnotation").hide();
+}
