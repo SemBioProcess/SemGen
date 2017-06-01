@@ -93,9 +93,21 @@ PhysioMapNode.prototype.updateInfo = function() {
 	$("#nodemenuUnit").hide();
 	$("#nodemenuEquation").hide();
 	$("#nodemenuAnnotation").hide();
-	$("#nodemenuStoichiometry").show();
 	$("#nodemenuParticipants").show();
 	
-	$("#nodemenuParticipants").text("Paticipants: ");
-	$("#nodemenuStoichiometry").text("Stoichiometry: ");
+	var partstoich = "\n Sources: \n";
+	for (i=0; i < this.srcobj.sourcenames.length; i++) {
+		partstoich += this.srcobj.sourcenames[i] + "\n";
+	}
+	partstoich += "Sinks: \n";
+	for (i=0; i < this.srcobj.sourcenames.length; i++) {
+		partstoich += this.srcobj.sourcenames[i] + "\n";
+	}
+	partstoich += "Mediators: \n";
+	for (i=0; i < this.srcobj.sourcenames.length; i++) {
+		partstoich += this.srcobj.sourcenames[i] + "\n";
+	}
+	
+	$("#nodemenuParticipants").text("Paticipants: " + partstoich);
+
 }

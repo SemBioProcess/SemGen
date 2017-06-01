@@ -65,9 +65,15 @@ function Graph() {
 		graph.contextMenu.hideMenu();
 	});
 	
-	svg.call(BoundingBox(visibleNodes));
+	svg.call(d3.zoom()
+			.scaleExtent([0.1, 10])
+			.on("zoom", function zoomed() {
+					vis.attr("transform", d3.event.transform);
+	        }))
+	        .on("dblclick.zoom", null);
 
-	$('#toggleSelectButton').addClass('on');
+
+	$('#toggleMoveStageButton').addClass('on');
 	
 	$('#toggleMoveStageButton').click(function() {
 		$('#toggleMoveStageButton').addClass('on');
@@ -89,7 +95,7 @@ function Graph() {
 		$('#toggleMoveStageButton').removeClass('on');
 		
 		$('#stage').css('cursor', 'auto');
-		svg.call(BoundingBox());
+		svg.call(BoundingBox(visibleNodes));
 		svg.call(d3.zoom()
 				.scaleExtent([0.1, 10])
 				.on("zoom", null))

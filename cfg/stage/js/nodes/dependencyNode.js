@@ -151,7 +151,6 @@ Node.prototype.updateInfo = function() {
 	$("#nodemenuUnit").show();
 	$("#nodemenuEquation").show();
 	$("#nodemenuAnnotation").show();
-	$("#nodemenuStoichiometry").hide();
 	$("#nodemenuParticipants").hide();
 	
 	$("#nodemenuAnnotation").text("Annotation: " + this.srcobj.physannotation);

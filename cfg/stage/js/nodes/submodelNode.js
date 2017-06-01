@@ -25,7 +25,6 @@ SubmodelNode.prototype.getContextMenu = function() {
 SubmodelNode.prototype.updateInfo = function() {
 	$("#nodemenuUnit").hide();
 	$("#nodemenuEquation").hide();
-	$("#nodemenuStoichiometry").hide();
 	$("#nodemenuParticipants").hide();
 	$("#nodemenuAnnotation").hide();
 }
