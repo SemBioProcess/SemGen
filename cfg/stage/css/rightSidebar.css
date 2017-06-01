@@ -106,6 +106,13 @@
 
 #advancedVizParams {
 	font-size: 10px;
+	padding-right: 10px;
+	color: #337ab7;
+}
+
+#advancedVizParams:hover {
+	color: #23527c;
+	text-decoration: underline;
 }
 
 #nodemenu {
