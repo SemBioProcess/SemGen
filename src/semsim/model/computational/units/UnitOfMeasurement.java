@@ -18,17 +18,17 @@ import semsim.model.computational.ComputationalModelComponent;
 
 public class UnitOfMeasurement extends ComputationalModelComponent implements Annotatable, Importable{
 	private Set<Annotation> annotations = new HashSet<Annotation>();
-	private String computationalCode;
-	private String customDeclaration;
+	private String computationalCode = "";
+	private String customDeclaration = "";
 	private Set<UnitFactor> unitFactors = new HashSet<UnitFactor>();
 	
 	private boolean isFundamental = false;
 	private boolean isImported = false;
-	private String hrefValue;
-	private String referencedName;
-	private String localName;
+	private String hrefValue = "";
+	private String referencedName = "";
+	private String localName = "";
 	private Importable parentImport;
-	private String unitType;
+	private String unitType = "";
 	
 	public UnitOfMeasurement(String name){
 		super(SemSimTypes.UNIT_OF_MEASUREMENT);
