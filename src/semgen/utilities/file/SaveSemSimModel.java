@@ -10,6 +10,7 @@ import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.CellMLwriter;
 import semsim.writing.JSimProjectFileWriter;
+import semsim.writing.MMLwriter;
 import semsim.writing.SBMLwriter;
 import semsim.writing.SemSimOWLwriter;
 
@@ -30,6 +31,9 @@ public class SaveSemSimModel {
 			}
 			else if(modeltype==ModelType.MML_MODEL_IN_PROJ){
 				new JSimProjectFileWriter(modelaccessor, semsimmodel).writeToFile(outputfile);
+			}
+			else if(modeltype==ModelType.MML_MODEL){
+				new MMLwriter(semsimmodel).writeToFile(outputfile);
 			}
 			
 			SemGen.logfilewriter.println(modelaccessor.getShortLocation() + " was saved");
@@ -57,6 +61,9 @@ public class SaveSemSimModel {
 		}
 		else if(filter == SemGenFileChooser.sbmlfilter){
 			format = ModelType.SBML_MODEL;
+		}
+		else if(filter == SemGenFileChooser.mmlfilter){
+			format = ModelType.MML_MODEL;
 		}
 		
 		writeToFile(semsimmodel, modelaccessor, outputfile, format);

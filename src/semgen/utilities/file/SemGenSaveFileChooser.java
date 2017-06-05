@@ -19,7 +19,8 @@ import semsim.reading.ModelReader;
 public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 	private String modelInArchiveName;
-	private static String[] allSaveTypes = new String[]{"owl", "cellml", "sbml", "proj"};
+	private static String[] ALL_ANNOTATABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj"};
+	public static String[] ALL_WRITABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "mod"};
 	
 	public SemGenSaveFileChooser() {
 		super("Choose save location");
@@ -38,7 +39,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String selectedtype, String modelinarchivename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(allSaveTypes));
+		addFilters(getFilter(ALL_ANNOTATABLE_TYPES));
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -56,7 +57,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String selectedtype, String modelinarchivename, String suggestedfilename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(allSaveTypes));
+		addFilters(getFilter(ALL_ANNOTATABLE_TYPES));
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -116,6 +117,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		ModelAccessor ma = null;
 		
 		while(true) {
+
 			int returnVal = showSaveDialog(this);
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -150,7 +152,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 							new JSimModelSelectorDialogForWriting(existingmodelnames, modelInArchiveName);
 					
 					modelname = jms.getSelectedModelName();
-
+					
 					if(modelname == null) return null;
 
 					overwriting = existingmodelnames.contains(modelname);

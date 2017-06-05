@@ -8,8 +8,6 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotationTabFactory;
 import semgen.annotation.workbench.AnnotatorFactory;
-import semgen.extraction.ExtractorTabFactory;
-import semgen.extraction.workbench.ExtractorFactory;
 import semgen.menu.SemGenMenuBar;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
@@ -87,18 +85,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, true);
 
-	}
-	
-	public void startNewExtractorTask() {
-		ExtractorFactory factory = new ExtractorFactory();
-		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
-		addTab(factory, tabfactory, true);
-	}
-	
-	public void startNewExtractorTask(final ModelAccessor existingobj){
-		ExtractorFactory factory = new ExtractorFactory(existingobj);
-		ExtractorTabFactory tabfactory = new ExtractorTabFactory(settings, globalactions);
-		addTab(factory, tabfactory, true);
 	}
 	
 	public void startNewMergerTask(){}
@@ -241,12 +227,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		if (arg == GlobalActions.appactions.ANNOTATEEXISTING) {
 			this.startNewAnnotatorTask(globalactions.getSeed());
-		}
-		if (arg == GlobalActions.appactions.EXTRACT) {
-			this.startNewExtractorTask();
-		}
-		if (arg == GlobalActions.appactions.EXTRACTEXISTING) {
-			this.startNewExtractorTask(globalactions.getSeed());
 		}
 		if (arg == GlobalActions.appactions.MERGE) {
 			startNewMergerTask();

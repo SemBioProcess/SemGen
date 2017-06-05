@@ -274,7 +274,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
 			String modelnameinarchive = modelinfo.accessor.getModelName();
 			
-			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(selectedtype, modelnameinarchive, suggestedparentfilename);
+			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
 			ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
 			if (ma != null)				
