@@ -76,6 +76,7 @@ public class JSimProjectFileReader {
 		Element projelement = getProjectElement(projdoc);
 								
 		if(projelement != null){
+			@SuppressWarnings("unchecked")
 			List<Element> modellist = projelement.getChildren("model");
 			
 			for(Element modelel : modellist) 
@@ -95,6 +96,7 @@ public class JSimProjectFileReader {
 	
 	public static Element getModelSourceCodeElement(Document projdoc, String modelname){
 		Element modelel = getModelElement(projdoc, modelname);
+		@SuppressWarnings("unchecked")
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){
@@ -111,6 +113,7 @@ public class JSimProjectFileReader {
 
 	public static Element getModelElement(Document projdoc, String modelname){
 		Element projelement = getProjectElement(projdoc);
+		@SuppressWarnings("unchecked")
 		Iterator<Element> modelit = projelement.getChildren("model").iterator();
 		
 		while(modelit.hasNext()){
@@ -126,6 +129,7 @@ public class JSimProjectFileReader {
 	
 	public static Element getSemSimControlElementForModel(Document projdoc, String modelname){
 		Element modelel = getModelElement(projdoc, modelname);
+		@SuppressWarnings("unchecked")
 		Iterator<Element> controlit = modelel.getChildren("control").iterator();
 		
 		while(controlit.hasNext()){
