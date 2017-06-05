@@ -7,7 +7,6 @@ import semgen.stage.serialization.ModelNode;
 import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.SubModelNode;
-import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 
 public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandSender{
 	
