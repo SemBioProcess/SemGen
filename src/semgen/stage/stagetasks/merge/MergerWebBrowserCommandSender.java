@@ -1,7 +1,10 @@
 package semgen.stage.stagetasks.merge;
 
+import java.util.ArrayList;
+
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
+import semgen.stage.stagetasks.merge.MergerTask.MappingCandidate;
 import semgen.stage.stagetasks.merge.MergerTask.MergeConflicts;
 import semgen.stage.stagetasks.merge.MergerTask.Overlap;
 
@@ -18,4 +21,5 @@ public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSe
 	 */
 	public void mergeCompleted(ModelNode modelnode, Boolean wassaved);
 	public void clearLink(Overlap[] overlaps, String leftid, String rightid);
+	public void showMappingCandidates(ArrayList<MappingCandidate> mappingCandidates);
 }

@@ -17,15 +17,15 @@ public class ModelOverlapMap {
 	private ArrayList<Pair<DataStructure, DataStructure>> dsmap = new ArrayList<Pair<DataStructure, DataStructure>>();
 	private HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	
-	private ArrayList<maptype> maptypelist = new ArrayList<maptype>();	
+	private ArrayList<MapType> maptypelist = new ArrayList<MapType>();	
 	private int slndomcnt = 0;
 	
-	public static enum maptype {
+	public static enum MapType {
 		exactsemaoverlap("exact semantic match"), 
 		manualmapping("manual mapping"),
 		automapping("automated solution domain mapping");
 		private String label;
-		maptype(String lbl) {
+		MapType(String lbl) {
 			label = lbl;
 		}
 		public String getLabel() {
@@ -41,12 +41,12 @@ public class ModelOverlapMap {
 		if (comparator.hasSolutionMapping()) {
 			slndomcnt = 1;
 			dspair = equivlist.get(0);
-			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.automapping);
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.automapping);
 		}
 		
 		for (int i=slndomcnt; i<(equivlist.size()); i++ ) {
 			dspair = equivlist.get(i);
-			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), maptype.exactsemaoverlap);
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.exactsemaoverlap);
 		}
 		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();
@@ -54,11 +54,11 @@ public class ModelOverlapMap {
 	}
 	
 	
-	public String getMappingType(int index) {
-		return maptypelist.get(index).getLabel();
+	public MapType getMappingType(int index) {
+		return maptypelist.get(index);
 	}
 	
-	public void addDataStructureMapping(DataStructure ds1, DataStructure ds2, maptype type) {
+	public void addDataStructureMapping(DataStructure ds1, DataStructure ds2, MapType type) {
 		dsmap.add(Pair.of(ds1, ds2));
 		maptypelist.add(type);
 	}

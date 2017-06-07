@@ -12,7 +12,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 import semgen.merging.Merger.ResolutionChoice;
-import semgen.merging.ModelOverlapMap.maptype;
+import semgen.merging.ModelOverlapMap.MapType;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
@@ -204,7 +204,7 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.getDataStructurePairNames(index);
 	}
 	
-	public String getMapPairType(int index) {
+	public MapType getMapPairType(int index) {
 		return overlapmap.getMappingType(index);
 	}
 	
@@ -245,7 +245,7 @@ public class MergerWorkbench extends Workbench {
 		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
 				
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
-		addCodewordMapping(ds1, ds2, maptype.manualmapping);
+		addCodewordMapping(ds1, ds2, MapType.manualmapping);
 		setChanged();
 		notifyObservers(MergeEvent.mappingevent);
 		return null;
@@ -284,7 +284,7 @@ public class MergerWorkbench extends Workbench {
 		return (overlapmap.getMappingCount()>0);
 	}
 	
-	private void addCodewordMapping(DataStructure ds1, DataStructure ds2, maptype maptype) {
+	private void addCodewordMapping(DataStructure ds1, DataStructure ds2, MapType maptype) {
 		overlapmap.addDataStructureMapping(ds1, ds2, maptype);
 	}
 	

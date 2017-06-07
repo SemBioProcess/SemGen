@@ -64,13 +64,13 @@
 		-floppy-disk" aria-hidden="true"></span>-->
 		<!--</div>-->
 		
-	<div id="stagemodes"> 
-	<span id="toggleSelectButton" class="btn-toggle" data-toggle="tooltip" data-placement="bottom" title="Toggle Selection">
+	<div class="btn-group" role="group" id="stagemodes">
+		<button id="toggleSelectButton" class="btn btn-toggle" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Toggle Selection">
 			<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span>
-		</span>
-		<span id="toggleMoveStageButton" class="btn-toggle" data-toggle="tooltip" data-placement="bottom" title="Toggle Navigation">
+		</button>
+		<button id="toggleMoveStageButton" class="btn btn-toggle" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Toggle Navigation">
 			<span class="glyphicon glyphicon-move" aria-hidden="true"></span>
-		</span>
+		</button>
 	</div>
 		
 		<div id="contextmenu">
@@ -152,15 +152,42 @@
 					<div id="nodemenu" class="panel-default subpanel">
 						<div class="panel-heading">Node Info</div>
 						<div class="panel-body">
-							<div id="nodemenuName"></div>
-							<div id="nodemenuType"></div>
-							<div id="nodemenuMetaID"></div>
-							<div id="nodemenuFreeText"></div>
-							<div id="nodemenuAnnotation"></div>
-							<div id="nodemenuUnit"></div>
-							<div id="nodemenuEquation"></div>
-							<div id="nodemenuParticipants"></div>
-							<div id="nodemenuRefTermURI"></div>
+							<div class="nodemenuRow" id="nodemenuNameRow">
+								<span class="nodeInfoLabel">Name: </span>
+								<span class="nodeInfoContent" id="nodemenuName"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuTypeRow">
+								<span class="nodeInfoLabel">Type: </span>
+								<span class="nodeInfoContent" id="nodemenuType"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuIDRow">
+								<span class="nodeInfoLabel">Meta ID: </span>
+								<span class="nodeInfoContent" id="nodemenuMetaID"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuFreeTextRow">
+								<span class="nodeInfoLabel">Description: </span>
+								<span class="nodeInfoContent" id="nodemenuFreeText"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuAnnotationRow">
+								<span class="nodeInfoLabel">Annotation: </span>
+								<span class="nodeInfoContent" id="nodemenuAnnotation"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuUnitRow">
+								<span class="nodeInfoLabel">Unit: </span>
+								<span class="nodeInfoContent" id="nodemenuUnit"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuEquationRow">
+								<span class="nodeInfoLabel">Equation: </span>
+								<span class="nodeInfoContent" id="nodemenuEquation"></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuParticipantsRow">
+								<span class="nodeInfoLabel">Participants: </span>
+								<span class="nodeInfoContent" id="nodemenuParticipants"><pre></pre></span>
+							</div>
+							<div class="nodemenuRow" id="nodemenuRefTermURIRow">
+								<span class="nodeInfoLabel">URI: </span>
+								<span class="nodeInfoContent" id="nodemenuRefTermURI"></span>
+							</div>
 						</div>
 					</div>
 			</div>
@@ -209,22 +236,10 @@
 						<div class="panel-heading">
 							<button type="button" class="btn btn-warning addManualMap">Add manual mapping</button>
 						</div>
-						<div class="manualMapLeftModel">
-							<a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-							<a href="#" class="list-group-item">Morbi leo risus</a>
-							<a href="#" class="list-group-item">Porta ac consectetur ac</a>
-							<a href="#" class="list-group-item">Vestibulum at eros</a>
+						<div class = "manualMapModel" id="manualMapLeftModel">
 						</div>
-						<div class="manualMapRightModel">
-							<a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-							<a href="#" class="list-group-item">Morbi leo risus</a>
-							<a href="#" class="list-group-item">Porta ac consectetur ac</a>
-							<a href="#" class="list-group-item">Vestibulum at eros</a>
-							<a href="#" class="list-group-item">Cras justo odio</a>
-							<a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-							<a href="#" class="list-group-item">Morbi leo risus</a>
-							<a href="#" class="list-group-item">Porta ac consectetur ac</a>
-							<a href="#" class="list-group-item">Vestibulum at eros</a>
+						<div class = "manualMapModel" id="manualMapRightModel">
+
 						</div>
 					</div>
 				</div>

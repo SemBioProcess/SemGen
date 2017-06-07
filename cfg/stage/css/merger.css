@@ -225,20 +225,21 @@ textarea[name=newSubmodelName] {
     padding: 5px;
 }
 
-.manualMapLeftModel {
-    width: 50%;
-    float: left;
-    font-size: 12px;
+.manualMapModel {
+	width: 50%;
+	font-size: 12px;
     height: 250px;
     overflow: scroll;
 }
 
-.manualMapRightModel {
-    width: 50%;
+#manualMapLeftModel {
+   
+    float: left;
+
+}
+
+#manualMapRightModel {
     float: right;
-    font-size: 12px;
-    height: 250px;
-    overflow: scroll;
 }
 
 .manualMapping .list-group-item {
