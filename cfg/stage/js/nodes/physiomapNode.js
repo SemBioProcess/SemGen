@@ -90,24 +90,24 @@ PhysioMapNode.prototype.getContextMenu = function() {
 }
 
 PhysioMapNode.prototype.updateInfo = function() {
-	$("#nodemenuUnit").hide();
-	$("#nodemenuEquation").hide();
-	$("#nodemenuAnnotation").hide();
-	$("#nodemenuParticipants").show();
+	$("#nodemenuUnitRow").hide();
+	$("#nodemenuEquationRow").hide();
+	$("#nodemenuAnnotationRow").hide();
+	$("#nodemenuParticipantsRow").show();
 	
-	var partstoich = "\n Sources: \n";
+	var partstoich = "Sources: \n";
 	for (i=0; i < this.srcobj.sourcenames.length; i++) {
-		partstoich += this.srcobj.sourcenames[i] + "\n";
+		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
 	}
-	partstoich += "Sinks: \n";
+	partstoich += "\nSinks: \n";
 	for (i=0; i < this.srcobj.sourcenames.length; i++) {
-		partstoich += this.srcobj.sourcenames[i] + "\n";
+		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
 	}
-	partstoich += "Mediators: \n";
+	partstoich += "\nMediators: \n";
 	for (i=0; i < this.srcobj.sourcenames.length; i++) {
-		partstoich += this.srcobj.sourcenames[i] + "\n";
+		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
 	}
 	
-	$("#nodemenuParticipants").text("Paticipants: " + partstoich);
+	$("#nodemenuParticipants > pre").text(partstoich);
 
 }

@@ -23,8 +23,8 @@ SubmodelNode.prototype.getContextMenu = function() {
 }
 
 SubmodelNode.prototype.updateInfo = function() {
-	$("#nodemenuUnit").hide();
-	$("#nodemenuEquation").hide();
-	$("#nodemenuParticipants").hide();
-	$("#nodemenuAnnotation").hide();
+	$("#nodemenuUnitRow").hide();
+	$("#nodemenuEquationRow").hide();
+	$("#nodemenuParticipantsRow").hide();
+	$("#nodemenuAnnotationRow").hide();
 }

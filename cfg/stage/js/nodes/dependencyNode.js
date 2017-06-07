@@ -148,12 +148,12 @@ DependencyNode.prototype.getContextMenu = function() {
 }
 
 Node.prototype.updateInfo = function() {
-	$("#nodemenuUnit").show();
-	$("#nodemenuEquation").show();
-	$("#nodemenuAnnotation").show();
-	$("#nodemenuParticipants").hide();
+	$("#nodemenuUnitRow").show();
+	$("#nodemenuEquationRow").show();
+	$("#nodemenuAnnotationRow").show();
+	$("#nodemenuParticipantsRow").hide();
 	
-	$("#nodemenuAnnotation").text("Annotation: " + this.srcobj.physannotation);
-	$("#nodemenuUnit").text("Unit: " + this.srcobj.unit);
-	$("#nodemenuEquation").text("Equation: " + this.srcobj.equation);
+	$("#nodemenuAnnotation").text(this.srcobj.physannotation);
+	$("#nodemenuUnit").text(this.srcobj.unit);
+	$("#nodemenuEquation").text(this.srcobj.equation);
 }

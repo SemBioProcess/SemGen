@@ -54,12 +54,17 @@ function RightSidebar(graph) {
 	
 	this.updateNodeDisplay = function(node) {
 		//Node info box
-		$("#nodemenuName").text("Name: " + node.displayName);
-		$("#nodemenuType").text("Type: " + node.nodeType.nodeType);
-		$("#nodemenuMetaID").text("Meta ID: " + node.srcobj.metadataid);
-		$("#nodemenuFreeText").text("Description: " + node.srcobj.description);
+		$("#nodemenuName").text(node.name);
+		$("#nodemenuType").text(node.nodeType.nodeType);
+		$("#nodemenuMetaID").text(node.srcobj.metadataid);
+		$("#nodemenuFreeText").text(node.srcobj.description);
 		node.updateInfo();
 		
-		$("#nodemenuRefTermURI").text("URI: ");
+		$("#nodemenuRefTermURI").text("");
+
+		//Hide if the node info content is empty
+        $(".nodemenuRow").filter(function() {
+            return $.trim($(this).children(".nodeInfoContent").text()) === '';
+        }).hide();
 	}
 }
