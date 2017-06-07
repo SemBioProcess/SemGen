@@ -289,3 +289,22 @@ li.searchResultSet li:hover {
 	stroke-width: 1px;
 	stroke: black;
 }
+
+#stagemodes {
+	position: absolute;
+	top: 15px;
+	right: 90px;
+}
+
+.btn-toggle {
+	opacity: .8;
+}
+
+.btn-toggle.on {
+	background:#3b5998;
+	color: #ffffff;
+}
+
+.btn-goggle:hover {
+	opacity: 1;
+}

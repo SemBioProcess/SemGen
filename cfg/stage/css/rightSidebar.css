@@ -122,3 +122,11 @@
 #nodemenu > .panel-body {
 	text-align: left;
 }
+
+.nodeInfoLabel {
+	font-weight: bold;
+}
+
+.nodemenuRow pre {
+	font-size: 10px;
+}
