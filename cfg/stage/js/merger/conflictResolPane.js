@@ -190,8 +190,7 @@ function ConflictResolutionPane(merger) {
 	receiver.onShowConflicts(function(data) {
 		conflictobj = data;
 		pane.refreshConflicts();
+		sender.getManualMappingCandidates();
 	});
-	
 
-	
 }

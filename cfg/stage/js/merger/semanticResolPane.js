@@ -211,6 +211,28 @@ function SemanticResolutionPane(merger) {
 		return false;
 	}
 	
+	this.createManualLink = function(dependency) {
+		var link = document.createElement("a");
+			link.className = "list-group-item"; 
+			link.href = "#";
+			link.text = dependency.name;
+			link.click = function() {
+				
+			}
+			
+		return link;
+	}
+	
+	receiver.onShowMappingCandidates(function(deplist) {
+		var links = [];
+		for (i=0; i< deplist.length; i++) {
+			links.push(pane.createManualLink(deplist[i]));
+		}
+		for (i=0; i< links.length; i++) {
+			document.querySelector('#manualMapLeftModel').appendChild(links[i]);
+		}
+	});
+	
 	$("#fixedNodesA").bind('change', function(){
 		pane.leftgraph.toggleFixedMode(this.checked);
 	});
@@ -227,8 +249,7 @@ function SemanticResolutionPane(merger) {
         if($that.hasClass('active')) {
         	$that.removeClass('active');
 		}
-		else
-        {
+		else {
             $that.parent().find('a').removeClass('active');
             $that.addClass('active');
         }

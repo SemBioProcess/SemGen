@@ -1,6 +1,8 @@
 package semgen.stage.stagetasks.merge;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -18,7 +20,7 @@ import semgen.merging.MergerWorkbench;
 import semgen.merging.DataStructureDescriptor.Descriptor;
 import semgen.merging.Merger.ResolutionChoice;
 import semgen.merging.MergerWorkbench.MergeEvent;
-import semgen.merging.ModelOverlapMap.maptype;
+import semgen.merging.ModelOverlapMap.MapType;
 import semgen.stage.serialization.DependencyNode;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.ModelInfo;
@@ -36,8 +38,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
 	
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
-	protected MergeConflicts conflicts = new MergeConflicts();
-	protected ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
+	private MergeConflicts conflicts = new MergeConflicts();
+	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	
 	public MergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
 		super(index);
@@ -58,7 +60,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 	}
 
-	public void primeForMerging() {
+	private void primeForMerging() {
 		if (workbench.getNumberofStagedModels() == 0) return;
 		if(workbench.hasMultipleModels()) {
 
@@ -157,7 +159,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		unitpairs.add(conflict);
 	}
 	
-	public ModelAccessor saveMerge() {
+	private ModelAccessor saveMerge() {
 		return workbench.saveModelAs(0);
 	}
 	
@@ -184,20 +186,51 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 	}
 	
-	protected ArrayList<Overlap> updateOverlaps() {
+	private ArrayList<Overlap> updateOverlaps() {
 		ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 		int i = workbench.getSolutionDomainCount();
 		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
 			Overlap overlap = new Overlap(dsd);
-			overlap.custom = workbench.getMapPairType(i).equals(maptype.manualmapping.getLabel());
+			overlap.custom = workbench.getMapPairType(i).equals(MapType.manualmapping);
 			overlaps.add(overlap);
 			i++;
 		}
 		return overlaps;
 	}
+	
+	private ArrayList<MappingCandidate> getMappingCandidates() {
+		ArrayList<DependencyNode> depnodes = this._models.get(0).modelnode.requestAllChildDependencies();
+		
+		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
+		for (DependencyNode dnode : depnodes) {
+			boolean mapped = false;
+			int mappedhash = -1;
+			int i = 0;
+			for (Pair<DependencyNode, DependencyNode> overlap : this.overlaps) {
+				if (overlap.getKey()==dnode) {
+					if (workbench.getMapPairType(i) == MapType.manualmapping) {
+						mappedhash = overlap.getValue().hash;
+					}
+					else mapped = true;
+					i++;
+					break;
+				}
+			}
+			if (!mapped) {
+				MappingCandidate candidate = new MappingCandidate(dnode);
+				candidate.linkedhash = mappedhash;
+				candidates.add(candidate);
+			}
+			
+		}
+
+		Collections.sort(candidates, new MappingComparator());
+
+		return candidates;
+	}
 
 
-	protected class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+	public class MergerCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
@@ -284,6 +317,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			}
 
 		}
+		
+		public void onGetManualMappingCandidates() {
+			_commandSender.showMappingCandidates(getMappingCandidates());
+		}
 
 		public void onTaskClicked(String modelName, String task) {
 			onTaskClicked(modelName, task, null);
@@ -342,7 +379,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	//Classes for passing information to the stage
-	public class Overlap {
+	class Overlap {
 		@Expose public StageDSDescriptor dsleft;
 		@Expose public StageDSDescriptor dsright; 
 		@Expose public Boolean custom = false;
@@ -353,7 +390,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 	}
 	
-	public class StageDSDescriptor {
+	private class StageDSDescriptor {
 		@Expose public String name;
 		@Expose public String type;
 		@Expose public String description;
@@ -371,7 +408,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 	}
 	
-	public class MergeConflicts {
+	class MergeConflicts {
 		@Expose public ArrayList<SyntacticDuplicate> dupecodewords = new ArrayList<SyntacticDuplicate>();
 		@Expose public ArrayList<SyntacticDuplicate> dupesubmodels = new ArrayList<SyntacticDuplicate>();
 		@Expose public ArrayList<UnitConflict> unitconflicts = new ArrayList<UnitConflict>();
@@ -421,7 +458,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 	}
 	
-	public class SyntacticDuplicate {
+	private class SyntacticDuplicate {
 		@Expose public String duplicate;
 		@Expose public String replacement = "";
 		@Expose public boolean userightmodel = true;
@@ -436,7 +473,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 	}
 	
-	public class UnitConflict {
+	private class UnitConflict {
 		@Expose public String unitleft;
 		@Expose public String unitright;
 		@Expose public boolean multiply = true;
@@ -484,4 +521,22 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 	} 
+	
+	public class MappingCandidate {
+		@Expose String name;
+		@Expose int hash;
+		@Expose int linkedhash = -1;
+		
+		public MappingCandidate(DependencyNode depnode) {
+			this.name = depnode.name;
+			this.hash = depnode.hash;
+		}
+		
+	}
+	public class MappingComparator implements Comparator<MappingCandidate> {
+		public int compare(MappingCandidate A, MappingCandidate B) {
+		    return A.name.compareToIgnoreCase(B.name);
+		  }
+	}
+
 }
