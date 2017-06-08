@@ -77,6 +77,7 @@ ModelNode.prototype.getIndexAddress = function() {
 ModelNode.prototype.updateInfo = function() {
 	$("#nodemenuUnitRow").hide();
 	$("#nodemenuEquationRow").hide();
+    $("#nodemenuAnnotationRow").hide();
 }
 
 

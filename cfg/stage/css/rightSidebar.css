@@ -10,7 +10,7 @@
 }
 
 #rightSidebar.in {
-	width: 200px;
+	width: 250px;
 }
 
 #rightSidebar>.panel-heading {
@@ -73,7 +73,7 @@
 }
 
 #d3opts ul {
-	padding-left: 20px;
+	padding-left: 80px;
 }
 
 #d3opts li {
@@ -121,6 +121,7 @@
 
 #nodemenu > .panel-body {
 	text-align: left;
+	word-wrap: break-word;
 }
 
 .nodeInfoLabel {
