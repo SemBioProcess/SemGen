@@ -225,11 +225,19 @@ function SemanticResolutionPane(merger) {
 	
 	receiver.onShowMappingCandidates(function(deplist) {
 		var links = [];
-		for (i=0; i< deplist.length; i++) {
-			links.push(pane.createManualLink(deplist[i]));
+		for (i=0; i< deplist[0].length; i++) {
+			links.push(pane.createManualLink(deplist[0][i]));
 		}
 		for (i=0; i< links.length; i++) {
 			document.querySelector('#manualMapLeftModel').appendChild(links[i]);
+		}
+		
+		links = [];
+		for (i=0; i< deplist[1].length; i++) {
+			links.push(pane.createManualLink(deplist[1][i]));
+		}
+		for (i=0; i< links.length; i++) {
+			document.querySelector('#manualMapRightModel').appendChild(links[i]);
 		}
 	});
 	

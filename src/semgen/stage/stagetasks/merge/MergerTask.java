@@ -198,8 +198,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		return overlaps;
 	}
 	
-	private ArrayList<MappingCandidate> getMappingCandidates() {
-		ArrayList<DependencyNode> depnodes = this._models.get(0).modelnode.requestAllChildDependencies();
+	private ArrayList<MappingCandidate> getMappingCandidates(int modelindex) {
+		ArrayList<DependencyNode> depnodes = this._models.get(modelindex).modelnode.requestAllChildDependencies();
 		
 		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
 		for (DependencyNode dnode : depnodes) {
@@ -207,9 +207,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			int mappedhash = -1;
 			int i = 0;
 			for (Pair<DependencyNode, DependencyNode> overlap : this.overlaps) {
-				if (overlap.getKey()==dnode) {
+				DependencyNode mappeddepnode = modelindex == 0 ? overlap.getLeft() : overlap.getRight();
+				DependencyNode othermappeddepnode = modelindex == 0 ? overlap.getRight() : overlap.getLeft();
+				if (mappeddepnode==dnode) {
 					if (workbench.getMapPairType(i) == MapType.manualmapping) {
-						mappedhash = overlap.getValue().hash;
+						mappedhash = othermappeddepnode.hash;
 					}
 					else mapped = true;
 					i++;
@@ -319,7 +321,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		
 		public void onGetManualMappingCandidates() {
-			_commandSender.showMappingCandidates(getMappingCandidates());
+			ArrayList<ArrayList<MappingCandidate>> candidates = new ArrayList<ArrayList<MappingCandidate>>();
+			
+			candidates.add(getMappingCandidates(0));
+			candidates.add(getMappingCandidates(1));
+			_commandSender.showMappingCandidates(candidates);
 		}
 
 		public void onTaskClicked(String modelName, String task) {

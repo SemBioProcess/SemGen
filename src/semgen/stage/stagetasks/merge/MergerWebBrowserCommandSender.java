@@ -21,5 +21,5 @@ public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSe
 	 */
 	public void mergeCompleted(ModelNode modelnode, Boolean wassaved);
 	public void clearLink(Overlap[] overlaps, String leftid, String rightid);
-	public void showMappingCandidates(ArrayList<MappingCandidate> mappingCandidates);
+	public void showMappingCandidates(ArrayList<ArrayList<MappingCandidate>> candidates);
 }
