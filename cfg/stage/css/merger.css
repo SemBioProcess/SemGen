@@ -246,6 +246,10 @@ textarea[name=newSubmodelName] {
     padding: 5px;
 }
 
+.manualMapping .list-group-item.mapped{
+   color: cyan;
+}
+
 .centerBtnWrapper {
     text-align: center;
 }

@@ -300,6 +300,10 @@ li.searchResultSet li:hover {
 	opacity: .8;
 }
 
+.btn-toggle.mapped {
+	background:Lime;
+}
+
 .btn-toggle.on {
 	background:#3b5998;
 	color: #ffffff;

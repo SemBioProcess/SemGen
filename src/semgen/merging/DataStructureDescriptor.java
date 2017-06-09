@@ -33,7 +33,12 @@ public class DataStructureDescriptor {
 
 		if(ds.getCompositeAnnotationAsString(false) != "[unspecified]")
 			descriptormap.put(Descriptor.annotation, ds.getCompositeAnnotationAsString(false));
-		else descriptormap.put(Descriptor.annotation, ds.getSingularTerm().getName());
+		else if (ds.getSingularTerm()!=null) {
+			descriptormap.put(Descriptor.annotation, ds.getSingularTerm().getName());
+		}
+		else {
+			descriptormap.put(Descriptor.annotation, "");
+		}
 
 		makeStringListFromSet(Descriptor.inputs, ds.getComputationInputs(), true);
 		makeStringListFromSet(Descriptor.inputfor, ds.getUsedToCompute(), false);

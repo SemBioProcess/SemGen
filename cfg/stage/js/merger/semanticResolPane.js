@@ -216,6 +216,13 @@ function SemanticResolutionPane(merger) {
 			link.className = "list-group-item"; 
 			link.href = "#";
 			link.text = dependency.name;
+			link.hash = dependency.hash;
+			link.linkedhash = dependency.linkedhash;
+			
+			if (link.linkedhash != -1) {
+				link.className = "list-group-item mapped"; 
+			}
+			
 			link.click = function() {
 				
 			}
@@ -224,6 +231,8 @@ function SemanticResolutionPane(merger) {
 	}
 	
 	receiver.onShowMappingCandidates(function(deplist) {
+		$('#manualMapLeftModel').contents().remove();
+		$('#manualMapRightModel').contents().remove();
 		var links = [];
 		for (i=0; i< deplist[0].length; i++) {
 			links.push(pane.createManualLink(deplist[0][i]));
