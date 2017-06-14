@@ -155,7 +155,15 @@ public class Merger {
 				SemSimModel parentmodel = ssm1clone.getAssociatedDataStructures().contains(dstoprune) ? ssm1clone : ssm2clone;
 				parentmodel.removeDataStructure(dstoprune);  // Pruning
 				
-				// If we are removing a state variable, remove its derivative, if present
+				// If the data structure is a mappable variable from a CellML model,
+				// remove the equation for it in its parent CellML component (its parent FunctionalSubmodel)
+				if(dstoprune instanceof MappableVariable){
+					MappableVariable mvtoprune = (MappableVariable)dstoprune;
+					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable(mvtoprune);
+					fs.removeVariableEquationFromMathML(mvtoprune);					
+				}
+
+				// If we are removing a state variable, remove its JSim-style derivative, if present
 				if(dstoprune.hasSolutionDomain()){
 					
 					if(parentmodel.containsDataStructure(dstoprune.getName() + ":" + dstoprune.getSolutionDomain().getName())){
