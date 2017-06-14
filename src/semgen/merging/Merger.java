@@ -160,7 +160,9 @@ public class Merger {
 				if(dstoprune instanceof MappableVariable){
 					MappableVariable mvtoprune = (MappableVariable)dstoprune;
 					FunctionalSubmodel fs = parentmodel.getParentFunctionalSubmodelForMappableVariable(mvtoprune);
-					fs.removeVariableEquationFromMathML(mvtoprune);					
+					
+					if(fs!=null) // A MappableVariable may not have a parent FunctionalSubmodel if its parent model was flattened so check first
+						fs.removeVariableEquationFromMathML(mvtoprune); 			
 				}
 
 				// If we are removing a state variable, remove its JSim-style derivative, if present
