@@ -254,6 +254,44 @@ function SemanticResolutionPane(merger) {
 		for (i=0; i< links.length; i++) {
 			document.querySelector('#manualMapRightModel').appendChild(links[i]);
 		}
+
+        // Select codewords for manual mapping
+        $("#manualMapLeftModel a").click(function(e) {
+            e.preventDefault()
+
+            $that = $(this);
+
+            if($that.hasClass('active')) {
+                $that.removeClass('active');
+                $(".addManualMap").addClass('disabled');
+            }
+            else {
+                $that.parent().find('a').removeClass('active');
+                $that.addClass('active');
+				if($("#manualMapRightModel .active").length > 0) {
+					$(".addManualMap").removeClass('disabled');
+				}
+            }
+        });
+
+        $("#manualMapRightModel a").click(function(e) {
+            e.preventDefault()
+
+            $that = $(this);
+
+            if($that.hasClass('active')) {
+                $that.removeClass('active');
+                $(".addManualMap").addClass('disabled');
+            }
+            else
+            {
+                $that.parent().find('a').removeClass('active');
+                $that.addClass('active');
+                if($("#manualMapLeftModel .active").length > 0) {
+                    $(".addManualMap").removeClass('disabled');
+                }
+            }
+        });
 	});
 	
 	$("#fixedNodesA").bind('change', function(){
@@ -262,6 +300,7 @@ function SemanticResolutionPane(merger) {
 	$("#fixedNodesB").bind('change', function(){
 		pane.rightgraph.toggleFixedMode(this.checked);
 	});
+<<<<<<< HEAD
 
 	// Select codewords for manual mapping
     $(".manualMapLeftModel a").click(function(e) {
@@ -296,5 +335,7 @@ function SemanticResolutionPane(merger) {
             manualright = $that;
         }
     });
+=======
+>>>>>>> branch 'StageMerger' of https://github.com/thompsct/SemGen.git
 }
 
