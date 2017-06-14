@@ -192,19 +192,17 @@ public class SemSimCopy {
 	private void copySubModels() {
 		for (Submodel sm : modeltocopy.getSubmodels()) {
 			Submodel newsm;
+			
 			if (sm.isFunctional()) {
-				FunctionalSubmodel fsm = new FunctionalSubmodel(sm);
-
+				FunctionalSubmodel fsm = new FunctionalSubmodel((FunctionalSubmodel)sm);
 				newsm = fsm;
 			}
-			else {
-				newsm = new Submodel(sm);
-			}
+			else newsm = new Submodel(sm);
+			
 			smmap.put(sm, newsm);
 		}
-		for (Submodel sm : smmap.values()) {
-			sm.replaceSubmodels(smmap);
-		}
+		for (Submodel sm : smmap.values()) sm.replaceSubmodels(smmap);
+		
 	}
 	
 	private void remap() {
