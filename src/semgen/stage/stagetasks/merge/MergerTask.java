@@ -205,7 +205,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		for (DependencyNode dnode : depnodes) {
 			boolean mapped = false;
 			int mappedhash = -1;
-			int i = 0;
+			int i = workbench.getSolutionDomainCount();
 			for (Pair<DependencyNode, DependencyNode> overlap : this.overlaps) {
 				DependencyNode mappeddepnode = modelindex == 0 ? overlap.getLeft() : overlap.getRight();
 				DependencyNode othermappeddepnode = modelindex == 0 ? overlap.getRight() : overlap.getLeft();
@@ -214,9 +214,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 						mappedhash = othermappeddepnode.hash;
 					}
 					else mapped = true;
-					i++;
 					break;
 				}
+				i++;
 			}
 			if (!mapped) {
 				MappingCandidate candidate = new MappingCandidate(dnode);
@@ -273,7 +273,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		public void onRemoveCustomOverlap(Double customindex) {
 			int intval = customindex.intValue();
 			Pair<DependencyNode, DependencyNode> ol = overlaps.get(intval);
-			workbench.removeManualCodewordMapping(intval);
+			workbench.removeManualCodewordMapping(intval+workbench.getSolutionDomainCount());
 			generateOverlapDescriptors();
 			getOverlappingNodes();
 			conflicts.decrementUnitConflict(unitpairs.get(intval));

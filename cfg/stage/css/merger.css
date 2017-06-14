@@ -233,9 +233,7 @@ textarea[name=newSubmodelName] {
 }
 
 #manualMapLeftModel {
-   
     float: left;
-
 }
 
 #manualMapRightModel {
@@ -247,7 +245,7 @@ textarea[name=newSubmodelName] {
 }
 
 .manualMapping .list-group-item.mapped{
-   color: cyan;
+   background-color: lime;
 }
 
 .centerBtnWrapper {
