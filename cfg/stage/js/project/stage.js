@@ -41,13 +41,20 @@ function Stage(graph, stagestate) {
 
 	//Remove the named model node
 	receiver.onRemoveModel(function(modelindex) {
-		var model = stage.getModelNodebyIndex(modelindex);
-		sender.consoleOut("Removing model " + model.name);
-		leftsidebar.removeModelfromList(model.id);
-		delete nodes[model.id];
-		delete stage.extractions[model];
+		if (modelindex[0] == -1) {
+			var model = stage.getModelNodebyIndex(modelindex[1]);
+			sender.consoleOut("Removing model " + model.name);
+			leftsidebar.removeModelfromList(model.id);
+			delete nodes[model.id];
+			delete stage.extractions[model];
+			
+			graph.update();
+		}
+		else {
+			stage.removeExtraction(modelindex[0], modelindex[1]);
+		}
 		leftsidebar.updateModelPanel(null);
-		graph.update();
+		
 	});
 
 	// Show search results on stage
@@ -127,16 +134,13 @@ function Stage(graph, stagestate) {
 		return name;
 	}
 	
-	//Remove the named model node
+	//Remove the extraction node
 	this.removeExtraction = function(modelindex, extract) {
-		sender.consoleOut("Removing extraction " + extract.name);
-		var index;
-		for (index=0; index< stage.extractions.length; index++) {
-			if (stage.extractions[modelindex].modextractions[index]==extract) break;
-		}
+		var extraction = stage.extractions[modelindex].modextractions[extract];
+		sender.consoleOut("Removing extraction " + extraction.name);
 		
-		stage.extractions[modelindex].modextractions.splice(index, 1);
-		delete stage.nodes[extract.id];
+		stage.extractions[modelindex].modextractions.splice(extract, 1);
+		delete stage.nodes[extraction.id];
 		graph.update();
 	};
 	
@@ -195,8 +199,7 @@ function Stage(graph, stagestate) {
 						var srcmodindex = root.sourcenode.modelindex;
 						//If an extraction is dragged to the trash, delete it
 						if (root == node.srcnode) {
-							sender.removeExtraction(srcmodindex, root.modelindex);
-							stage.removeExtraction(srcmodindex, root);
+							sender.onCloseModels(root.getIndexAddress());
 							return;
 						}
 						

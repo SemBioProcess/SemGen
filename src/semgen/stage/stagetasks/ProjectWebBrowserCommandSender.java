@@ -18,7 +18,7 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	void addModel(ModelNode modelName);
 	
 	
-	void removeModel(Integer modelindex);
+	void removeModel(Integer[] modelindex);
 	/**
 	 * Tell the browser to render the dependencies
 	 * 

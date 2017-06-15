@@ -121,6 +121,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 
 		}
+		
+		public void onCloseModels(JSArray modelindex) {
+			closeModels(modelindex);
+		}
 
 		public void onSearch(String searchString) throws FileNotFoundException {
 			SearchResultSet[] resultSets = {
@@ -176,10 +180,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		public void onCreatePhysioExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
-		}
-		
-		public void onRemoveExtraction(Double sourceindex, Double extractionindex) {
-			removeExtraction(sourceindex, extractionindex);
 		}
 		
 		public void onRemoveNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
@@ -304,12 +304,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			
 			if (indexedtomodel==-1) {
 				removeModel(modelindex);
-				_commandSender.removeModel(modelindex);
 			}
 			else {
 				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
 				meg.removeExtraction(modelindex);
 			}
+			_commandSender.removeModel(new Integer[]{indexedtomodel, modelindex});
 		}
 	}
 
