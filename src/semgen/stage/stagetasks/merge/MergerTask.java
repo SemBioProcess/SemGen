@@ -532,10 +532,12 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		@Expose String name;
 		@Expose int hash;
 		@Expose int linkedhash = -1;
+		@Expose String id;
 		
 		public MappingCandidate(DependencyNode depnode) {
 			this.name = depnode.name;
 			this.hash = depnode.hash;
+			this.id = depnode.id;
 		}
 		
 	}

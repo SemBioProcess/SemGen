@@ -5,7 +5,7 @@
 function StageDoodad(graph, id, proportionalx, proportionaly, proportionalwidth, proportionalheight, graphic) {
 	this.graph = graph;
 	this.id = id;
-	
+	this.className = "doodad";
 	this.x;
 	this.y;
 	this.width = 30 * proportionalwidth;

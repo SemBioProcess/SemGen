@@ -146,10 +146,10 @@ function Stage(graph, stagestate) {
 		if (node.nodeType == NodeType.MODEL) return;
 		node.drag.push(function(selections) {
 			if (trash.isOverlappedBy(node, 2.0)) {
-				$("#trash").attr("color", "red");
+				$("#trash").prop("background-color", "red");
 			}
 			else {
-				$("#trash").attr("color", "transparent");
+				$("#trash").prop("background-color", "transparent");
 			}
 			
 			for (i in stage.nodes) {
@@ -191,10 +191,7 @@ function Stage(graph, stagestate) {
 			if (trash.isOverlappedBy(node, 2.0)) {
 					droploc= stage.graph.getCenter();
 					
-					if (root.nodeType==NodeType.MODEL) {
-						
-					}
-					else {
+					if (root.nodeType!=NodeType.MODEL) {
 						var srcmodindex = root.sourcenode.modelindex;
 						//If an extraction is dragged to the trash, delete it
 						if (root == node.srcnode) {

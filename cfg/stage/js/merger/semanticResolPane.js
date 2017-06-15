@@ -122,6 +122,7 @@ function SemanticResolutionPane(merger) {
 		rightModelName = nodearr[1].id;
 		$(".leftModelName").append(leftModelName);
 		$(".rightModelName").append(rightModelName);
+		$('.addManualMap').prop("disabled", true);
 		
 		sender.requestOverlaps();
 	};
@@ -227,11 +228,11 @@ function SemanticResolutionPane(merger) {
 		return link;
 	}
 	
-	var manualleft = null, manualrighthash = null;
-	$('#merge').click(function() {
+	var manualleft = null, manualright = null;
+	$('.addManualMap').click(function() {
 		if (manualleft!=null && manualright!=null) {
-        	var modelstomerge = manualleft.id + "," + manualright.id;
-        	$('.merge').prop('disabled', 'true');
+        	var modelstomerge = manualleft + "," + manualright;
+        	$('.merge').prop('disabled', true);
         	sender.createCustomOverlap(modelstomerge);
 		}
 	});
@@ -254,6 +255,47 @@ function SemanticResolutionPane(merger) {
 		for (i=0; i< links.length; i++) {
 			document.querySelector('#manualMapRightModel').appendChild(links[i]);
 		}
+		
+	    $("#manualMapLeftModel").find("a").click(function(e) {
+	        e.preventDefault();
+
+	        $that = $(this);
+
+	        if($that.hasClass('active')) {
+	        	$that.removeClass('active');
+	        	manualleft = null;
+	        	$('.addManualMap').prop("disabled", true);
+	        	
+			}
+			else {
+				$("#manualMapLeftModel").find('a').removeClass('active');
+	            $that.addClass('active');
+	            manualleft = $that.attr("id");
+	            if (manualright != null) {
+	            	$('.addManualMap').prop("disabled", false);
+	            }
+	        }
+	    });
+
+	    $("#manualMapRightModel").find("a").click(function(e) {
+	        e.preventDefault();
+
+	        $that = $(this);
+
+	        if($that.hasClass('active')) {
+	            $that.removeClass('active');
+	            manualright.selectionhash = null;
+	            $('.addManualMap').prop("disabled", true);
+	        }
+	        else {
+	        	$("#manualMapRightModel").find('a').removeClass('active');
+	            $that.addClass('active');
+	            manualright = $that.attr("id");
+	            if (manualleft != null) {
+	            	$('.addManualMap').prop("disabled", false);
+	            }
+	        }
+	    });
 	});
 	
 	$("#fixedNodesA").bind('change', function(){
@@ -264,37 +306,6 @@ function SemanticResolutionPane(merger) {
 	});
 
 	// Select codewords for manual mapping
-    $(".manualMapLeftModel a").click(function(e) {
-        e.preventDefault();
 
-        $that = $(this);
-
-        if($that.hasClass('active')) {
-        	$that.removeClass('active');
-        	manualleft = null;
-        	
-		}
-		else {
-            $that.parent().find('a').removeClass('active');
-            $that.addClass('active');
-            manualleft = $that;
-        }
-    });
-
-    $(".manualMapRightModel a").click(function(e) {
-        e.preventDefault();
-
-        $that = $(this);
-
-        if($that.hasClass('active')) {
-            $that.removeClass('active');
-            manualright.selectionhash = null;
-        }
-        else {
-            $that.parent().find('a').removeClass('active');
-            $that.addClass('active');
-            manualright = $that;
-        }
-    });
 }
 
