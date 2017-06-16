@@ -91,7 +91,7 @@ Link.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.select("path")
 			.attr("class", "intermodel")
 			.attr("stroke-width", "3")
-			.attr("stroke", "Cyan")
+			.attr("stroke", "#5bc0de")
 			.attr("stroke-opacity", .8);
 	}
 
