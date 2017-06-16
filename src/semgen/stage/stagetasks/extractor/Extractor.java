@@ -18,7 +18,7 @@ public abstract class Extractor {
 	protected HashMap<DataStructure,DataStructure> datastructures = new HashMap<DataStructure,DataStructure>();
 
 	public Extractor(SemSimModel source, SemSimModel extractionmodel) {
-		sourcemodel = source.clone();
+		sourcemodel = source;
 
 		extraction = extractionmodel;
 		includeSolutionDomains();
