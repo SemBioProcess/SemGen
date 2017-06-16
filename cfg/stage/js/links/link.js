@@ -91,7 +91,8 @@ Link.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.select("path")
 			.attr("class", "intermodel")
 			.attr("stroke-width", "3")
-			.attr("stroke", "Cyan");
+			.attr("stroke", "Cyan")
+			.attr("stroke-opacity", .8);
 	}
 
 	//Custom link
@@ -99,7 +100,8 @@ Link.prototype.createVisualElement = function (element, graph) {
 		this.rootElement.select("path")
 			.attr("class", "custom")
 			.attr("stroke-width", "3")
-			.attr("stroke", "Lime");
+            .attr("stroke", "#f0ad4e")
+            .attr("stroke-opacity", .8);
 	}
 	
 	if (this.linkType == NodeType.MEDIATOR) {
