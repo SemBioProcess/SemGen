@@ -9,6 +9,7 @@ function Graph() {
 	var graph = this;
 	this.w = $(window).width();
 	this.h = $(window).height();
+	this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
 
 	var visibleNodes = [];
 	this.doodads = [];
@@ -67,6 +68,7 @@ function Graph() {
 	
 	svg.call(d3.zoom()
 			.scaleExtent([0.1, 10])
+			.translateExtent(graph.worldsize)
 			.on("zoom", function zoomed() {
 					vis.attr("transform", d3.event.transform);
 	        }))
@@ -83,6 +85,7 @@ function Graph() {
 		svg.on('mousedown.drag', null);
 		svg.call(d3.zoom()
 				.scaleExtent([0.1, 10])
+				.translateExtent(graph.worldsize)
 				.on("zoom", function zoomed() {
 						vis.attr("transform", d3.event.transform);
 		        }))
@@ -97,7 +100,7 @@ function Graph() {
 		$('#stage').css('cursor', 'auto');
 		svg.call(BoundingBox(visibleNodes));
 		svg.call(d3.zoom()
-				.scaleExtent([0.1, 10])
+				.translateExtent(graph.worldsize)
 				.on("zoom", null))
 		        .on("dblclick.zoom", null);
 		        

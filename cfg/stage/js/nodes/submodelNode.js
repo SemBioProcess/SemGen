@@ -15,6 +15,15 @@ function SubmodelNode (graph, data, parent) {
 	this.addBehavior(Hull);
 	this.addBehavior(parentDrag);
 	this.addBehavior(HiddenLabelNodeGenerator);
+	
+	this.getInputs = function() {
+		var inputs = [];
+		for (x in this.children) {
+			inputs = inputs.concat(this.children[x].getInputs());
+		}
+
+		return inputs;
+	}
 }
 
 SubmodelNode.prototype.getContextMenu = function() {

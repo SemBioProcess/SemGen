@@ -139,7 +139,7 @@ function Stage(graph, stagestate) {
 		var extraction = stage.extractions[modelindex].modextractions[extract];
 		sender.consoleOut("Removing extraction " + extraction.name);
 		
-		stage.extractions[modelindex].modextractions.splice(extract, 1);
+		stage.extractions[modelindex].modextractions[extract] = null;
 		delete stage.nodes[extraction.id];
 		graph.update();
 	};
