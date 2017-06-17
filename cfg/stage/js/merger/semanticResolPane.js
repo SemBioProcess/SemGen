@@ -304,8 +304,5 @@ function SemanticResolutionPane(merger) {
 	$("#fixedNodesB").bind('change', function(){
 		pane.rightgraph.toggleFixedMode(this.checked);
 	});
-
-	// Select codewords for manual mapping
-
 }
 
