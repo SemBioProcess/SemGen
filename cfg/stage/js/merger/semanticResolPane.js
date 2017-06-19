@@ -234,6 +234,21 @@ function SemanticResolutionPane(merger) {
         	var modelstomerge = manualleft + "," + manualright;
         	$('.merge').prop('disabled', true);
         	sender.createCustomOverlap(modelstomerge);
+
+            // Add custom link visualization
+            var manualleftnode = merger.graph.findNode(manualleft);
+            var manualrightnode = merger.graph.findNode(manualright);
+			var customlink = {
+                id : manualleftnode.id + "-" + manualrightnode.id,
+                linklevel: 3,
+                linkType: manualleftnode.nodeType.id,
+                input: manualrightnode,
+                output: manualleftnode,
+                length: 100,
+                external: true
+            }
+            manualleftnode.srcobj.inputs.push(customlink);
+            manualleftnode.graph.update();
 		}
 	});
 	
