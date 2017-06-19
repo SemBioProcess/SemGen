@@ -68,6 +68,8 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 			smset.add(componentlist.get(i));
 		}
 		componentlist.get(currentfocus).setSubmodels(smset);
+		setChanged();
+		notifyObservers(ModelEdit.SM_SUBMODELS_CHANGED);
 	}
 	
 	public Submodel addSubmodel(String name) {
@@ -93,6 +95,8 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	
 	public void setDataStructures(Collection<DataStructure> dslist) {
 		componentlist.get(currentfocus).setAssociatedDataStructures(dslist);
+		setChanged();
+		notifyObservers(ModelEdit.SM_DATASTRUCTURES_CHANGED);
 	}
 	
 	public ArrayList<String> getAssociatedSubModelDataStructureNames() {
@@ -134,13 +138,16 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		for (DataStructure ds : sm.getAssociatedDataStructures()) {
 			String name = ds.getName();
 			int i = name.lastIndexOf(".");
+			
+			
 			if (i!=-1) {
 				name = newname + "." + name.substring(i+1);
 				ds.setName(name);
-
 			}
+			
 			if (ds.hasComputation()) {
 				Computation comp = ds.getComputation();
+				
 				if (!comp.getComputationalCode().isEmpty()) {
 					String eq = comp.getComputationalCode().replaceAll(oldname, newname);
 					
@@ -161,7 +168,9 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public ArrayList<String> getAssociatedSubmodelNames() {
 		ArrayList<String> associated = new ArrayList<String>();
 		for (Submodel sm : componentlist.get(currentfocus).getSubmodels()) {
+			
 			if (sm.getAssociatedDataStructures().isEmpty()) continue;
+			
 			associated.add(sm.getName());
 		}
 		

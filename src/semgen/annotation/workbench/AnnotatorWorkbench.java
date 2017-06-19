@@ -43,7 +43,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public static enum WBEvent {FREETEXT_REQUEST, IMPORT_FREETEXT, SMSELECTION, CWSELECTION}
 	public static enum LibraryRequest {REQUEST_IMPORT, REQUEST_LIBRARY, REQUEST_CREATOR, CLOSE_LIBRARY }
 	public static enum ModelEdit {PROPERTY_CHANGED, COMPOSITE_CHANGED, CODEWORD_CHANGED, SUBMODEL_CHANGED, MODEL_IMPORT, 
-		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED, CWLIST_CHANGED }
+		SMLISTCHANGED, FREE_TEXT_CHANGED, SMNAMECHANGED, SM_DATASTRUCTURES_CHANGED, SM_SUBMODELS_CHANGED, 
+		CWLIST_CHANGED }
 	
 	public AnnotatorWorkbench(ModelAccessor accessor, SemSimModel model) {
 		semsimmodel = model;
@@ -358,13 +359,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 		if (arg1.equals(ModelEdit.SMNAMECHANGED)) {
 			cwdrawer.reloadCodewords();
-
 		}
 		if (arg1==ModelEdit.FREE_TEXT_CHANGED || arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED
 				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
-				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) || arg1.equals(ModelChangeEnum.METADATAIMPORTED)
-				|| arg1.equals(ModelChangeEnum.SOURCECHANGED) || arg1.equals(ModelEdit.SMNAMECHANGED)) {
-			this.setModelSaved(false);
+				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) 
+				|| arg1.equals(ModelChangeEnum.METADATAIMPORTED) || arg1.equals(ModelChangeEnum.SOURCECHANGED)
+				|| arg1.equals(ModelEdit.SMNAMECHANGED) || arg1.equals(ModelEdit.SM_DATASTRUCTURES_CHANGED)
+				|| arg1.equals(ModelEdit.SM_SUBMODELS_CHANGED)) {
+			setModelSaved(false);
 		}
 	}
 }
