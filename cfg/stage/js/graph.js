@@ -19,8 +19,11 @@ function Graph() {
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
-
+	
 	var vis = svg.append('g').attr("class", "canvas");
+	
+	var centerx = new StageDoodad(this, "trash", 0.0, 0.0, 2.0, 2.0, "label", "X");
+	this.doodads.push(centerx);
 	
 	this.drag = NodeDrag();
 	
@@ -74,6 +77,8 @@ function Graph() {
 	        }))
 	        .on("dblclick.zoom", null);
 
+	
+	
 
 	$('#toggleMoveStageButton').addClass('on');
 	
@@ -103,9 +108,9 @@ function Graph() {
 				.translateExtent(graph.worldsize)
 				.on("zoom", null))
 		        .on("dblclick.zoom", null);
-		        
-		
 	});
+	
+
 	
 	this.getVisibleNodes = function() {
 		return visibleNodes;
@@ -262,6 +267,13 @@ function Graph() {
 				return false;
 			});
 		}
+		
+		svg.append('text')
+		   .attr("y", 0)
+		   .attr("x", 0)
+		   .attr('text-anchor', 'middle')
+		   .attr("class", "myLabel")
+		   .text("Hello");
 
 		refreshing = false;
 	}

@@ -100,6 +100,10 @@ Node.prototype.addBehavior = function (behavior) {
 }
 
 Node.prototype.setLocation = function (x, y) {
+	
+	x = Math.max(this.graph.worldsize[0][0] + this.r*3, Math.min(this.graph.worldsize[1][0] - this.r*3, x));
+	y = Math.max(this.graph.worldsize[0][1] + this.r*3, Math.min(this.graph.worldsize[1][1] - this.r*3, y));
+	
 	this.x = x; this.y = y;
 	
 	this.srcobj.xpos = x;
@@ -108,6 +112,18 @@ Node.prototype.setLocation = function (x, y) {
 		this.fx = x;
 		this.fy = y;
 	}
+}
+
+Node.prototype.getScreenCoordinates = function() {
+	var string = $(".canvas").attr("transform");
+    
+	if(string === undefined) return [this.xpos(), this.ypos()];	
+    
+    var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(","),
+    	scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")")),
+    	dx = Number(translate[0]), dy = Number(translate[1]), scale = Number(scaleStr);
+	
+    	return [(this.xpos() + dx), (this.ypos() + dy)];
 }
 
 Node.prototype.createVisualElement = function (element, graph) {

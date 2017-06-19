@@ -12,8 +12,9 @@ function BoundingBox(visnodes) {
 	box = null;
 	
 	var isOverlappedBy = function(overlapnode) {
-		var overlapx = (overlapnode.xpos() >= Math.min(origin.x, dim.x)) && (overlapnode.xpos() <= Math.max(origin.x, dim.x)),
-		overlapy = (overlapnode.ypos() >= Math.min(origin.y, dim.y)) && (overlapnode.ypos() <= Math.max(origin.y, dim.y));
+		var overlapscreen = overlapnode.getScreenCoordinates(),
+		 	overlapx = (overlapscreen[0] >= Math.min(origin.x, dim.x)) && (overlapscreen[0] <= Math.max(origin.x, dim.x)),
+		overlapy = (overlapscreen[1] >= Math.min(origin.y, dim.y)) && (overlapscreen[1] <= Math.max(origin.y, dim.y));
 		return overlapx && overlapy;
 	}
 	

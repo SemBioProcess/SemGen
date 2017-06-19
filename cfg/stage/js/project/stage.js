@@ -23,7 +23,7 @@ function Stage(graph, stagestate) {
 
 	var droploc;
 	
-	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors");
+	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors", "");
 	this.graph.doodads.push(trash);
 	
 
@@ -101,11 +101,11 @@ function Stage(graph, stagestate) {
 
 	$(".searchString").keyup(function() {
 		if( $(this).val() ) {
-			$(".stageSearch .searchValueContainer .searchResults").show()
+			$(".stageSearch .searchValueContainer .searchResults").show();
 			sender.search($( this ).val());
 		}
 		else {
-			$(".stageSearch .searchValueContainer .searchResults").hide()
+			$(".stageSearch .searchValueContainer .searchResults").hide();
 		}
 	});
 	
