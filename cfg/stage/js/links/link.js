@@ -19,7 +19,7 @@ function Link(graph, srclink, output, input, length, fade, interSubmodelLink) {
 	this.fade = fade;
 	this.inter = interSubmodelLink;
 
-	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR) ? 0 : 3;
+	this.arrowHeadWidth = (this.linkType == NodeType.MEDIATOR || this.srclink.linklevel == 2 || this.srclink.linklevel == 3) ? 0 : 3;
 	
 	this.getLinkLevel = function() {
 		return this.srclink.linklevel;
