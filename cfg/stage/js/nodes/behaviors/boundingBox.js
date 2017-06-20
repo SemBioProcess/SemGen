@@ -12,10 +12,23 @@ function BoundingBox(visnodes) {
 	box = null;
 	
 	var isOverlappedBy = function(overlapnode) {
-		var overlapscreen = overlapnode.getScreenCoordinates(),
-		 	overlapx = (overlapscreen[0] >= Math.min(origin.x, dim.x)) && (overlapscreen[0] <= Math.max(origin.x, dim.x)),
-		overlapy = (overlapscreen[1] >= Math.min(origin.y, dim.y)) && (overlapscreen[1] <= Math.max(origin.y, dim.y));
-		return overlapx && overlapy;
+		var newOriginX, newOriginY, newDimX, newDimY;
+
+		 var string = $(".canvas").attr("transform");
+	        if(string === undefined) {
+	        	newOriginX = origin.x, newOriginY = origin.y, newDimX = dim.x, newDimY = dim.y;
+	        }
+	        else {
+		        var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(","),
+		            scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")")),
+		            dx = Number(translate[0]), dy = Number(translate[1]), scale = 1/Number(scaleStr),
+		            newOriginX = (origin.x - dx)*scale, newOriginY = (origin.y - dy)*scale,
+		        	newDimX = (dim.x - dx)*scale, newDimY = (dim.y - dy)*scale;
+	        }
+	        overlapx = (overlapnode.xpos() >= Math.min(newOriginX, newDimX)) && (overlapnode.ypos() <= Math.max(newOriginX, newDimX)),
+			overlapy = (overlapnode.ypos() >= Math.min(newOriginY, newDimY)) && (overlapnode.ypos() <= Math.max(newOriginY, newDimY));
+				 	
+			return overlapx && overlapy;
 	}
 	
 	var stagedrag = d3.drag()

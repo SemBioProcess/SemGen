@@ -25,8 +25,7 @@ function StageDoodad(graph, id, proportionalx, proportionaly, proportionalwidth,
 		return this.y;
 	}
 	this.isOverlappedBy = function(overlapnode, proximityfactor) {
-		var nodecoord = overlapnode.getScreenCoordinates();
-		return (Math.sqrt(Math.pow(nodecoord[0]-this.xpos(), 2) + Math.pow(nodecoord[1]-this.ypos(), 2))+overlapnode.r*2 <= this.width*proximityfactor);
+		return (Math.sqrt(Math.pow(overlapnode.xpos()-this.xpos(), 2) + Math.pow(overlapnode.ypos()-this.ypos(), 2))+overlapnode.r*2 <= this.width*proximityfactor);
 	}
 	this.setLocation(proportionalx, proportionaly);
 

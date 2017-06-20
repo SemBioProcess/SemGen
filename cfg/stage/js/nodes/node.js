@@ -114,21 +114,9 @@ Node.prototype.setLocation = function (x, y) {
 	}
 }
 
-Node.prototype.getScreenCoordinates = function() {
-	var string = $(".canvas").attr("transform");
-    
-	if(string === undefined) return [this.xpos(), this.ypos()];	
-    
-    var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(","),
-    	scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")")),
-    	dx = Number(translate[0]), dy = Number(translate[1]), scale = Number(scaleStr);
-	
-    	return [(this.xpos() + dx), (this.ypos() + dy)];
-}
-
 Node.prototype.createVisualElement = function (element, graph) {
 	//Randomly choose a location if one has not been set
-	if (this.srcobj.xpos<=20 || this.srcobj.ypos <= 20) {
+	if (this.srcobj.xpos<=10 || this.srcobj.ypos <= 10) {
 		if (this.parent) {
 			this.setLocation(this.parent.xpos() + Math.random()*200 - 100, this.parent.ypos() + Math.random()*200 - 100);
 			

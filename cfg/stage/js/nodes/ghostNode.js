@@ -38,17 +38,6 @@ GhostNode.prototype.setLocation = function (x, y) {
 
 }
 
-GhostNode.prototype.getScreenCoordinates = function() {
-	var string = $(".canvas").attr("transform");
-    if(string === undefined) return [this.xpos(), this.ypos()];	
-	
-    var	translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(","),
-    	scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")")),
-    	dx = Number(translate[0]), dy = Number(translate[1]), scale = Number(scaleStr);
-	
-    	return [(this.xpos() + dx), (this.ypos() + dy)];
-}
-
 GhostNode.prototype.createVisualElement = function (element, graph) {
 	var node = this;
 

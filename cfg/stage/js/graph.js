@@ -468,6 +468,19 @@ function Graph() {
 		}
 	}
 	
+	this.convertScreentoWorld = function() {
+        var string = $(".canvas").attr("transform");
+        if(string === undefined) return []
+        else {
+	        var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(",");
+	        var scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")"));
+	        var dx = Number(translate[0]), dy = Number(translate[1]), scale = 1/Number(scaleStr);
+	        var newCenterX = (this.w/2 - dx)*scale;
+	        var newCenterY = (this.h/2 - dy)*scale;
+	        this.force.force("center", d3.forceCenter(newCenterX, newCenterY));
+        }
+	}
+	
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
@@ -527,6 +540,7 @@ function Graph() {
 	});
 		
 	this.updateHeightAndWidth();
+	this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
 	// Run it
 	this.update();
 }
