@@ -534,7 +534,6 @@ function Graph() {
         if(event.which=="17") {
             graph.cntrlIsPressed = false;
             graph.cntrlIsPressedOnMac = false;
-            console.log("control up");
 		}
 		if(event.which=="16")
 			graph.shiftIsPressed = false;
@@ -553,7 +552,6 @@ function Graph() {
                 graph.cntrlIsPressed = true;
             if(event.which=="17") {
                 graph.cntrlIsPressedOnMac = true;
-                console.log("control down on Mac");
             }
         }
         else {
