@@ -513,14 +513,23 @@ function Graph() {
     	.alpha(1)
     	.restart();
 	}
-	
+
+	this.isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 	this.cntrlIsPressed = false;
 	this.shiftIsPressed = false;
-	
+	this.cntrlIsPressedOnMac = false;
+
 	//Bind keyboard events
 	$(document).keyup(function(event){
-		if(event.which=="17")
-			graph.cntrlIsPressed = false;
+		if(graph.isMac) {
+            if(event.which=="91")
+                graph.cntrlIsPressed = false;
+		}
+        if(event.which=="17") {
+            graph.cntrlIsPressed = false;
+            graph.cntrlIsPressedOnMac = false;
+            console.log("control up");
+		}
 		if(event.which=="16")
 			graph.shiftIsPressed = false;
 		if(event.which=="32") {
@@ -533,8 +542,18 @@ function Graph() {
 	
 	
 	$(document).keydown(function(event){
-	    if(event.which=="17")
-	    	graph.cntrlIsPressed = true;
+        if(graph.isMac) {
+            if(event.metaKey)
+                graph.cntrlIsPressed = true;
+            if(event.which=="17") {
+                graph.cntrlIsPressedOnMac = true;
+                console.log("control down on Mac");
+            }
+        }
+        else {
+            if(event.which=="17")
+                graph.cntrlIsPressed = true;
+        }
 		if(event.which=="16")
 			graph.shiftIsPressed = true;
 	});
