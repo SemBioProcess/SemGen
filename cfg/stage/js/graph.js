@@ -9,7 +9,13 @@ function Graph() {
 	var graph = this;
 	this.w = $(window).width();
 	this.h = $(window).height();
-	this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
+	//Ensure the stage has a minimum size.
+	if ((this.w < 1280) || (this.h < 1024)) {
+		this.worldsize = [[-1280*5, -1024*5], [1280*5, 1024*5]];	
+	}
+	else {
+		this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
+	}
 
 	var visibleNodes = [];
 	this.doodads = [];
@@ -516,11 +522,19 @@ function Graph() {
 	
 	this.cntrlIsPressed = false;
 	this.shiftIsPressed = false;
-	
+	this.cntrlIsPressedOnMac = false;
+
 	//Bind keyboard events
 	$(document).keyup(function(event){
-		if(event.which=="17")
-			graph.cntrlIsPressed = false;
+		if(graph.isMac) {
+            if(event.which=="91")
+                graph.cntrlIsPressed = false;
+		}
+        if(event.which=="17") {
+            graph.cntrlIsPressed = false;
+            graph.cntrlIsPressedOnMac = false;
+            console.log("control up");
+		}
 		if(event.which=="16")
 			graph.shiftIsPressed = false;
 		if(event.which=="32") {
@@ -533,14 +547,24 @@ function Graph() {
 	
 	
 	$(document).keydown(function(event){
-	    if(event.which=="17")
-	    	graph.cntrlIsPressed = true;
-		if(event.which=="16")
+		
+        if(graph.isMac) {
+            if(event.metaKey)
+                graph.cntrlIsPressed = true;
+            if(event.which=="17") {
+                graph.cntrlIsPressedOnMac = true;
+                console.log("control down on Mac");
+            }
+        }
+        else {
+            if(event.which=="17")
+                graph.cntrlIsPressed = true;
+        }		
+        if(event.which=="16")
 			graph.shiftIsPressed = true;
 	});
 		
 	this.updateHeightAndWidth();
-	this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
 	// Run it
 	this.update();
 }

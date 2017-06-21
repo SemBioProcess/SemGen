@@ -199,7 +199,7 @@ function Stage(graph, stagestate) {
 						var srcmodindex = root.sourcenode.modelindex;
 						//If an extraction is dragged to the trash, delete it
 						if (root == node.srcnode) {
-							sender.onCloseModels(root.getIndexAddress());
+							sender.closeModels([root.getIndexAddress()]);
 							return;
 						}
 						

@@ -25,7 +25,20 @@ function StageDoodad(graph, id, proportionalx, proportionaly, proportionalwidth,
 		return this.y;
 	}
 	this.isOverlappedBy = function(overlapnode, proximityfactor) {
-		return (Math.sqrt(Math.pow(overlapnode.xpos()-this.xpos(), 2) + Math.pow(overlapnode.ypos()-this.ypos(), 2))+overlapnode.r*2 <= this.width*proximityfactor);
+		var scaledX, scaledY;
+
+		 var string = $(".canvas").attr("transform");
+	        if(string === undefined) {
+	        	scaledX = this.xpos(), scaledY = this.ypos();
+	        }
+	        else {
+		        var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(","),
+		            scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")")),
+		            dx = Number(translate[0]), dy = Number(translate[1]), scale = 1/Number(scaleStr),
+		            scaledX = (this.xpos() - dx)*scale, scaledY = (this.ypos() - dy)*scale;
+	        }
+	        
+		return (Math.sqrt(Math.pow(overlapnode.xpos()-scaledX, 2) + Math.pow(overlapnode.ypos()-scaledY, 2))+overlapnode.r*2 <= this.width*proximityfactor);
 	}
 	this.setLocation(proportionalx, proportionaly);
 
