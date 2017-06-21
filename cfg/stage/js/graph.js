@@ -548,8 +548,6 @@ function Graph() {
 	
 	
 	$(document).keydown(function(event){
-<<<<<<< HEAD
-		
         if(graph.isMac) {
             if(event.metaKey)
                 graph.cntrlIsPressed = true;
@@ -563,21 +561,6 @@ function Graph() {
                 graph.cntrlIsPressed = true;
         }		
         if(event.which=="16")
-=======
-        if(graph.isMac) {
-            if(event.metaKey)
-                graph.cntrlIsPressed = true;
-            if(event.which=="17") {
-                graph.cntrlIsPressedOnMac = true;
-                console.log("control down on Mac");
-            }
-        }
-        else {
-            if(event.which=="17")
-                graph.cntrlIsPressed = true;
-        }
-		if(event.which=="16")
->>>>>>> branch 'StageMerger' of https://github.com/thompsct/SemGen.git
 			graph.shiftIsPressed = true;
 	});
 		
