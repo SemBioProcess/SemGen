@@ -142,7 +142,11 @@ public class MappableVariable extends Decimal {
 		this.mappedFrom = (MappableVariable) dsmap.get(this.mappedFrom);
 		Set<MappableVariable> newmappedto = new HashSet<MappableVariable>();
 		for (MappableVariable tomv : this.mappedTo) {
-			newmappedto.add((MappableVariable) dsmap.get(tomv));
+			DataStructure dsreplacement = dsmap.get(tomv);
+			if (dsreplacement != null) {
+				newmappedto.add((MappableVariable) dsreplacement);
+			}
+			
 		}
 		this.mappedTo = newmappedto;
 	}
