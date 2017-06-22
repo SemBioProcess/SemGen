@@ -56,7 +56,7 @@ public class ExtractNew extends Extractor {
 		}
 
 		for (PhysicalEntity participant : proc.getParticipants()) {
-			addEntity(participant);
+			participant.addToModel(extraction);
 		}
 	}
 }

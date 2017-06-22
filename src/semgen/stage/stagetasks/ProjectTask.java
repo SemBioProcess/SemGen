@@ -255,6 +255,22 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			
 			if (indexedtomodel==-1) {
 				modelinfo = this.getModel(modelindex);
+				String selectedtype = "owl";  // Default extension type
+				ModelType modtype = modelinfo.Model.getSourceModelType();
+				
+				if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
+				else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
+				else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
+				
+				String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
+				String modelnameinarchive = modelinfo.accessor.getModelName();
+				
+				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
+				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
+			
+				if (ma != null)	{			
+					SaveSemSimModel.writeToFile(modelinfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());	
+				}
 			}
 			else {
 				modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
@@ -264,21 +280,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 			}
 			
-			String selectedtype = "owl";  // Default extension type
-			ModelType modtype = modelinfo.Model.getSourceModelType();
-			
-			if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
-			else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
-			else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
-			
-			String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
-			String modelnameinarchive = modelinfo.accessor.getModelName();
-			
-			SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
-			ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
-			
-			if (ma != null)				
-				SaveSemSimModel.writeToFile(modelinfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());	
+
 		}			
 	}
 	
