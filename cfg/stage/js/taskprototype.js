@@ -89,7 +89,7 @@ function Task(graph, stagestate) {
 			if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
 				if (!this.graph.cntrlIsPressed) {
 					this.selectedModels.forEach(function(selnode) {
-							selnode.deselect();
+						selnode.deselect();
 					});
 					this.selectedModels = [];
 					
@@ -115,7 +115,7 @@ function Task(graph, stagestate) {
 				}
 				else {
 					for (var i = 0; i<this.selectedNodes.length; i++) {
-						if (this.selectedNodes[i]==node) {
+						if (this.selectedNodes[i]==node && this.selectedNodes.length > 1) {
 							this.selectedNodes[i].deselect();
 							this.selectedNodes.splice(i, 1);
 							return;
