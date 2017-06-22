@@ -179,7 +179,7 @@ function Stage(graph, stagestate) {
 
 			//Reset hull colors
 			for (x in stage.nodes) {
-				stage.nodes[x].rootElement.select(".hull").style("fill", stage.nodes[x].nodeType.color);
+				stage.nodes[x].rootElement.select(".hull").style("stroke", stage.nodes[x].nodeType.color);
 			}
 			var root = node.srcnode.getRootParent();
 			
