@@ -9,9 +9,11 @@ function NodeDrag() {
 	// is released on a dropzone the merger will open with those models
 	
 		var virtualnodes = null;
+		var cntrlIsPressedBefore;
 		var nodeDrag = d3.drag()
 			.on("start", function (_node) {
-				if (_node.graph.cntrlIsPressed) {
+				cntrlIsPressedBefore = _node.graph.cntrlIsPressed;
+				if (cntrlIsPressedBefore) {
 					main.task.selectNode(_node);
 					return;
 				}
@@ -42,7 +44,7 @@ function NodeDrag() {
 				_node.graph.tick();
 			})
 		    .on("drag", function (_node) {
-		    	if (_node.graph.cntrlIsPressed) return;
+		    	if (cntrlIsPressedBefore) return;
 		    	var dx = d3.event.x - _node.xpos(),
 		    		dy = d3.event.y - _node.ypos();
 				var selections = _node.multiDrag();
@@ -83,7 +85,7 @@ function NodeDrag() {
 		    	
 		    })
 		    .on("end", function (_node) {
-		    	if (_node.graph.cntrlIsPressed) return;
+		    	if (cntrlIsPressedBefore) return;
 				var selections = _node.multiDrag();
 				
 				if (!_node.graph.shiftIsPressed) {
