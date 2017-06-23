@@ -85,7 +85,10 @@ function NodeDrag() {
 		    	
 		    })
 		    .on("end", function (_node) {
-		    	if (cntrlIsPressedBefore) return;
+		    	if (cntrlIsPressedBefore) {
+		    		_node.rootElement.selectAll("circle").attr("r", _node.r);
+		    		return;
+                }
 				var selections = _node.multiDrag();
 				
 				if (!_node.graph.shiftIsPressed) {
