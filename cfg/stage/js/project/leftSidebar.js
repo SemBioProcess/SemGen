@@ -58,7 +58,6 @@ function LeftSidebar(graph) {
 			"<span class='subheading'>" + model.id + "</span>" +
 			"<ul class='menulist'>" +
 				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Annotate model' onclick='main.task.taskClicked(this);'>Annotate</button></li>" +
-				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Extract parts of the model' onclick='main.task.taskClicked(this);'>Extract</button></li>" +
 				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Export model to a different format' onclick='main.task.taskClicked(this);'>Export</button></li>" +
 				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Close current model' onclick='main.task.taskClicked(this);'>Close</button></li>" +
 			"</ul>" +
