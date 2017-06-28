@@ -59,9 +59,10 @@ public class ModelExtractionGroup {
 		return extractionnodes.get(extractionindex).modelnode;
 	}
 	
-	public void removeExtraction(int indextoremove) {
-		ExtractionInfo nodetoremove = extractionnodes.set(indextoremove, null);
-		workbench.removeExtraction(nodetoremove.Model);
+	public boolean removeExtraction(int indextoremove) {
+		extractionnodes.set(indextoremove, null);
+		workbench.removeExtraction(indextoremove);
+		return isEmpty();
 	}
 	
 	//Find node by saved hash and verify with id - should be faster than straight id
@@ -109,5 +110,15 @@ public class ModelExtractionGroup {
 			ens.add(ei.modelnode);
 		}
 		return ens;
+	}
+	
+	public boolean isEmpty() {
+		if (extractionnodes.isEmpty()) {
+			return true;
+		}
+		for (ExtractionInfo einfo : extractionnodes) {
+			if (einfo != null) return false;
+		}
+		return true;
 	}
 }

@@ -96,8 +96,8 @@ public class ExtractorWorkbench extends Workbench {
 		return sourcemodel;
 	}
 	
-	public void removeExtraction(SemSimModel model) {
-		extractions.remove(model);
+	public void removeExtraction(Integer model) {
+		extractions.set(model, null);
 	}
 
 	@Override

@@ -306,10 +306,19 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			
 			if (indexedtomodel==-1) {
 				removeModel(modelindex);
+				//Only remove the extraction group if it doesn't contain any extractions
+				if (this.extractnodeworkbenchmap.get(modelindex).isEmpty()) {
+					this.extractnodeworkbenchmap.set(modelindex, null);
+				}
+
 			}
 			else {
-				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
-				meg.removeExtraction(modelindex);
+				boolean empty = this.extractnodeworkbenchmap.get(indexedtomodel).removeExtraction(modelindex);
+				//If the parent model has been removed and the extraction group is empty, remove the extraction group
+				if (empty && this._models==null) {
+					this.extractnodeworkbenchmap.set(modelindex, null);
+				}
+				
 			}
 			_commandSender.removeModel(new Integer[]{indexedtomodel, modelindex});
 		}
