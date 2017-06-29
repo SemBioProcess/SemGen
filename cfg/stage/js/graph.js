@@ -502,7 +502,9 @@ function Graph() {
             $(".node > *:not(.hull)").hover(function () {
                 graph.pause();
             }, function () {
-                graph.force.restart();
+                if (!graph.fixedMode) {
+                	graph.force.restart();
+                }
             });
 		} else {
             $(".node > *:not(.hull)").unbind('mouseenter mouseleave');
