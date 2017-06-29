@@ -21,6 +21,7 @@ function Hull(node) {
                 }
                 node.setLocation((node.xmin+node.xmax)/2, (node.ymin+node.ymax)/2);
                 node.graph.update();
+                main.task.selectNode(node);
             });
 	});
 	

@@ -63,16 +63,19 @@ function LeftSidebar(graph) {
 			"</ul>" +
 			"<span class='subheading'>Visualize</span>" + 
 			"<ul class='menulist'>" +
-				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize submodel network' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(0, true);});'>Submodels</button></li>" +
-				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize mathematical dependencies' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(1, true);});'>Dependencies</button></li>" +
-				"<li><button type='button' class='panelbutton' data-toggle='tooltip' title='Visualize PhysioMap network' onclick='main.task.doModelAction(function(model) " +
-					"{ model.createVisualization(2, true);});'>PhysioMap</button></li>" +
+				"<li><button type='button' class='panelbutton' id ='showSubmodels' data-toggle='tooltip' title='Visualize submodel network' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(DisplayModes.SHOWSUBMODELS, true);});'>Submodels</button></li>" +
+				"<li><button type='button' class='panelbutton' id ='showDependencies' data-toggle='tooltip' title='Visualize mathematical dependencies' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(DisplayModes.SHOWDEPENDENCIES, true);});'>Dependencies</button></li>" +
+				"<li><button type='button' class='panelbutton' id ='showPhysiomap' data-toggle='tooltip' title='Visualize PhysioMap network' onclick='main.task.doModelAction(function(model) " +
+					"{ model.createVisualization(DisplayModes.SHOWPHYSIOMAP, true);});'>PhysioMap</button></li>" +
 			"</ul>"
 
 		);
+		//show display mode of selected model or extraction
+		$('#' + model.displaymode.btnid).addClass("active");
+		refreshModelList();
 	}
-	refreshModelList();
+
 
 }

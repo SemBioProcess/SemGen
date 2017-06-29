@@ -18,7 +18,7 @@ function Task(graph, stagestate) {
 	this.addModelNode = function(model, optbehaviors) {
 		
 		var modelNode = new ModelNode(this.graph, model);
-		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
+		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS, false);
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
@@ -87,6 +87,7 @@ function Task(graph, stagestate) {
 	this.selectNode = function(node) {
 		if (!node.graph.shiftIsPressed) {
 			if (node.nodeType==NodeType.MODEL || node.nodeType==NodeType.EXTRACTION) {
+				
 				if (!this.graph.cntrlIsPressed) {
 					this.selectedModels.forEach(function(selnode) {
 						selnode.deselect();

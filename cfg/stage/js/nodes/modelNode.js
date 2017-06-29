@@ -23,13 +23,18 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 
 ModelNode.prototype.createVisualization = function (modeid, expand) {
 	modelnode = this;
+	if (modelnode.displaymode==modeid) return;
 	this.children = {};
+	for (x in DisplayModes) {
+		$('#' + DisplayModes[x].btnid).removeClass("active");
+	}
+	$('#' + modeid.btnid).addClass("active");
 	
-	if (modeid == 0) {
+	if (modeid == DisplayModes.SHOWSUBMODELS) {
 		this.createChildren();
 	}
 	//Show physiomap
-	else if (modeid == 2) {
+	else if (modeid == DisplayModes.SHOWPHYSIOMAP) {
 		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
 		physionodes.forEach(function (d) {
 			modelnode.createChild(d);
@@ -37,7 +42,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 		console.log("Showing PhysioMap for model " + this.name);
 	}
 	//Show all dependencies
-	else if (modeid == 1) {
+	else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
 		this.createChildren();
 		var dependencies = {};
 			
