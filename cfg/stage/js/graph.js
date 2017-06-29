@@ -62,7 +62,6 @@ function Graph() {
 	this.depBehaviors = [];
 	this.ghostBehaviors = [];
 	
-	this.active = true;
 	var nodes;
 	this.contextMenu = new ContextMenu(this);
 	
@@ -473,20 +472,7 @@ function Graph() {
 			this.force.force("center", null);
 		}
 	}
-	
-	this.convertScreentoWorld = function() {
-        var string = $(".canvas").attr("transform");
-        if(string === undefined) return []
-        else {
-	        var translate = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(",");
-	        var scaleStr = string.substring(string.lastIndexOf("(") + 1, string.lastIndexOf(")"));
-	        var dx = Number(translate[0]), dy = Number(translate[1]), scale = 1/Number(scaleStr);
-	        var newCenterX = (this.w/2 - dx)*scale;
-	        var newCenterY = (this.h/2 - dy)*scale;
-	        this.force.force("center", d3.forceCenter(newCenterX, newCenterY));
-        }
-	}
-	
+
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
@@ -512,11 +498,9 @@ function Graph() {
     }
 
 	this.pause = function() {
-		this.active = false;
 		this.force.stop();
 	}
 	this.resume = function() {
-		this.active = true;
 		this.force
     	.alpha(1)
     	.restart();
@@ -540,8 +524,9 @@ function Graph() {
 		if(event.which=="16")
 			graph.shiftIsPressed = false;
 		if(event.which=="32") {
-			graph.fixedMode = graph.active;
-			if (graph.active)
+			graph.fixedMode = !graph.fixedMode;
+			$("#fixedNodes").attr('checked',graph.fixedMode);
+			if (graph.fixedMode)
 				graph.pause();
 			else graph.resume();
 		}
