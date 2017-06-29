@@ -50,6 +50,7 @@ function PreviewGraph(id) {
 	   this.force
 		   .force("y", d3.forceY(graph.h/2).strength(0.5))
 		   .force("x", d3.forceX(graph.w/2));
+	   this.worldsize = [[0, 0], [graph.w, graph.h]];
     }
     
     this.setPreviewData = function(data) {

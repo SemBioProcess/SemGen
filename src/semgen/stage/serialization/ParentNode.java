@@ -31,10 +31,21 @@ public abstract class ParentNode<T extends SemSimCollection> extends Node<T> {
 		super(collection);
 	}
 	
-	public ArrayList<DependencyNode> requestAllChildDependencies() {
-		ArrayList<DependencyNode> alldeps = new ArrayList<DependencyNode>(dependencies);
+	public HashSet<DependencyNode> requestAllChildDependencies() {
+		HashSet<DependencyNode> alldeps = new HashSet<DependencyNode>(dependencies);
 		for (SubModelNode csm : childsubmodels) {
-			alldeps.addAll(csm.requestAllChildDependencies());
+			for (DependencyNode cdep : csm.requestAllChildDependencies()) {
+				boolean iscontained = false;
+				for (DependencyNode adep : alldeps) {
+					if (adep.name.contentEquals(cdep.name)) {
+						iscontained = true;
+						break;
+					}
+				}
+				if (!iscontained) {
+					alldeps.add(cdep);
+				}
+			}
 		}
 		return alldeps;
 	}

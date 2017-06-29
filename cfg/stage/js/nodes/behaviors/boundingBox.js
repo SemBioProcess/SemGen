@@ -25,7 +25,7 @@ function BoundingBox(visnodes) {
 		            newOriginX = (origin.x - dx)*scale, newOriginY = (origin.y - dy)*scale,
 		        	newDimX = (dim.x - dx)*scale, newDimY = (dim.y - dy)*scale;
 	        }
-	        overlapx = (overlapnode.xpos() >= Math.min(newOriginX, newDimX)) && (overlapnode.ypos() <= Math.max(newOriginX, newDimX)),
+	        overlapx = (overlapnode.xpos() >= Math.min(newOriginX, newDimX)) && (overlapnode.xpos() <= Math.max(newOriginX, newDimX)),
 			overlapy = (overlapnode.ypos() >= Math.min(newOriginY, newDimY)) && (overlapnode.ypos() <= Math.max(newOriginY, newDimY));
 				 	
 			return overlapx && overlapy;

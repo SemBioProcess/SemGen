@@ -172,7 +172,7 @@ function Task(graph, stagestate) {
 		for (i=0; i <  selections.length; i++) {
 			//Make sure all bracketed nodes are selected
 			if (i > 0)  task.graph.cntrlIsPressed = true;
-			if (!selections[i].selected) task.selectNode(selections[i]);
+			if (!selections[i].selected || i ==0) task.selectNode(selections[i]);
 		}
 		task.graph.cntrlIsPressed = cntrlstate;
 	} 

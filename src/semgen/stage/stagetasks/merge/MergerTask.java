@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -199,7 +200,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	private ArrayList<MappingCandidate> getMappingCandidates(int modelindex) {
-		ArrayList<DependencyNode> depnodes = this._models.get(modelindex).modelnode.requestAllChildDependencies();
+		HashSet<DependencyNode> depnodes = this._models.get(modelindex).modelnode.requestAllChildDependencies();
 		
 		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
 		for (DependencyNode dnode : depnodes) {

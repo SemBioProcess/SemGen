@@ -187,29 +187,6 @@ li.searchResultSet li:hover {
 	margin: 0 0 3px 0;
 }
 
-.panelbutton {
-	width: 100%;
-	border-radius: 10px;
-	border-style: solid;
-    background-color: white;
-	font-weight: bold;
-}
-
-.panelbutton:disabled {
-		background-color: #3b5998;
-		color: white;
-		opacity: 0.15;
-	}
-	
-.panelbutton:hover {
-	background-color: #3b5998;
-	color: white;
-} 
-
-.panelbutton:active {
-	background-color: #aaaaaa;
-} 
-
 #activeTaskPanel, #activeTaskTray {
 	position: fixed;
 	width: 100%;

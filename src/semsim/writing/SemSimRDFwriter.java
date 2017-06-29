@@ -616,8 +616,10 @@ public class SemSimRDFwriter extends ModelWriter{
 			
 			// Look up identifiers.org namespace
 			for(String ns : refont.getNamespaces()){
-				if(ns.startsWith("http://identifiers.org")
-						&& ! ns.startsWith("http://identifiers.org/obo.")) newnamespace = ns;
+				if(ns.startsWith("http://identifiers.org") && ! ns.startsWith("http://identifiers.org/obo.")){
+					newnamespace = ns;
+					break;
+				}
 			}
 
 			// Replacement rules for specific knowledge bases
@@ -640,7 +642,10 @@ public class SemSimRDFwriter extends ModelWriter{
 				newuri = URI.create(newnamespace + newfragment);
 			}
 			if(refont==ReferenceOntology.FMA){
-				// TODO: Need to figure out how to get FMAIDs!!!!
+				// assumes that FMA IDs are formatted
+				// like http://purl.org/sig/ont/fma/fma70586
+				String newfragment = fragment.replace("fma","FMA:");
+				newuri = URI.create(newnamespace + newfragment);
 			}
 			if(refont==ReferenceOntology.MA){
 				String newfragment = fragment.replace("_", ":");
