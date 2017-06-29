@@ -203,7 +203,7 @@ function Stage(graph, stagestate) {
 							return;
 						}
 						
-						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
 							sender.removePhysioNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
 						}
 						else {
@@ -249,7 +249,7 @@ function Stage(graph, stagestate) {
 		if (name==null) return;
 		
 		var baserootindex = root.modelindex;
-		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
 			sender.newPhysioExtraction(baserootindex, extractarray, name);
 		}
 		else {
@@ -264,7 +264,7 @@ function Stage(graph, stagestate) {
 		//Don't create extraction if user cancels
 		if (name==null) return;
 		
-		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP.id) {
+		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
 			sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
 		}
 		else {
