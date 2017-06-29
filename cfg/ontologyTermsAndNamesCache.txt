@@ -678,6 +678,7 @@ http://identifiers.org/go/GO:0042169; SH2 domain binding
 http://identifiers.org/chebi/CHEBI:48928; 6-phospho-D-gluconic acid
 http://identifiers.org/obo.chebi/CHEBI:28728; thromboxane B2
 http://identifiers.org/obo.chebi/CHEBI:30915; 2-oxoglutaric acid
+http://identifiers.org/chebi/CHEBI:20935; CHEBI_20935
 http://identifiers.org/obo.go/GO:0006085; acetyl-CoA biosynthetic process
 http://identifiers.org/obo.chebi/CHEBI:17148; putrescine
 http://identifiers.org/obo.chebi/CHEBI:29052; D-glyceraldehyde 3-phosphate

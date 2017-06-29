@@ -10,7 +10,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			
 			var activemodes = [false, false, false];
 			graph.getModels().forEach(function (model) {
-				activemodes[model.displaymode] = true;
+				activemodes[model.displaymode.id] = true;
 			});
 			
 			var i = 0;
