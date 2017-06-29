@@ -54,8 +54,8 @@ function Stage(graph, stagestate) {
 			stage.removeExtraction(modelindex[0], modelindex[1]);
 		}
 		leftsidebar.updateModelPanel(null);
-		
-	});
+        $("#rightSidebarModelName").text("");
+    });
 
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {

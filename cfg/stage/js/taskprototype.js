@@ -140,7 +140,8 @@ function Task(graph, stagestate) {
 				});
 				this.selectedModels = [];
 				this.selectedModels.push(node);
-			}
+                this.onModelSelection(node);
+            }
 			else {
 				this.selectedNodes.forEach(function(selnode) {
 					selnode.deselect();
