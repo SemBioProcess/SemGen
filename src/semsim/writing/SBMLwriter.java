@@ -456,7 +456,7 @@ public class SBMLwriter extends ModelWriter {
 						Double formulaAsDouble = getConstantValueForPropertyOfEntity(ds);		
 					
 						if(substanceonly) species.setInitialAmount(formulaAsDouble);
-						else species.setInitialConcentration(formulaAsDouble);
+						else if (formulaAsDouble!=null) species.setInitialConcentration(formulaAsDouble);
 					}
 					// ...or if the species amount is set with a rule
 					else addRuleToModel(ds, species);
@@ -469,7 +469,7 @@ public class SBMLwriter extends ModelWriter {
 					Double init = Double.parseDouble(ds.getStartValue());
 					
 					if(substanceonly) species.setInitialAmount(init);
-					else species.setInitialConcentration(init);
+					else if (init!=null) species.setInitialConcentration(init);
 				}
 				
 				entitySpeciesMap.put(fullcpe, species);
