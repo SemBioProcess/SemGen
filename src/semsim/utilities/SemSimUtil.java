@@ -486,7 +486,7 @@ public class SemSimUtil {
 		}
 
 		// If we're here we haven't found the RHS
-		return null;
+		return "";
 	}
 	
 	/**
