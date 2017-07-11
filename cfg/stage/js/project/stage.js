@@ -373,7 +373,7 @@ Stage.prototype.onModelSelection = function(node) {
 Stage.prototype.setSavedState = function (issaved) {
 	Task.prototype.setSavedState.call(issaved);
 	this.setSaved(this.isSaved());
-	$('#saveModel').prop('disabled', issaved);
+	//$('#saveModel').prop('disabled', issaved);
 }
 
 
