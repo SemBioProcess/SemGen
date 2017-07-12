@@ -23,7 +23,11 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 
 ModelNode.prototype.createVisualization = function (modeid, expand) {
 	modelnode = this;
-	if (modelnode.displaymode==modeid) return;
+	if (modelnode.displaymode==modeid) 
+		if (!modelnode.showchildren) {
+			modelnode.showChildren();
+		}
+		return;
 	this.children = {};
 	for (x in DisplayModes) {
 		$('#' + DisplayModes[x].btnid).removeClass("active");
