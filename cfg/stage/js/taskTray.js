@@ -14,14 +14,19 @@ function OpenTask(type, index) {
 			icon.type = "image";
 			icon.id = 'task' + taskindex;
 			icon.src = type.thumb;
+			icon.style.borderColor = "#FFFF00";
+			
+			if (this.currenttask) {
+				icon.style.borderStyle = "solid";
+			}
 			
 			icon.onclick = function() {
 				if (!taskicon.currenttask) {
-					currenttask = true;
 					sender.changeTask(taskindex);
-					
 				}
 			};
+			
+			
 			$("#activeTaskPanel").append(icon);
 		}
 		
@@ -48,9 +53,11 @@ function TaskTray() {
 		});
 	}
 	
-	this.addTask = function(type, index) {
+	this.addTask = function(type, index) {		
 		opentasks.push(new OpenTask(type, index));
+		this.setActiveTask(index);
 		this.refresh();
+		
 	}
 	
 	this.getIconwithIndex = function(index) {
@@ -73,10 +80,17 @@ function TaskTray() {
 					return true;
 				}
 			}
-				
-			
+
 		}
 		return false;
+	}
+	
+	this.setActiveTask = function(index) {
+		activetaskindex = index;
+		for (x in opentasks) {
+			opentasks[x].currenttask = false;
+		}
+		opentasks[index].currenttask = true;
 	}
 	
 }

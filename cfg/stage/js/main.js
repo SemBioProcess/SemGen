@@ -47,7 +47,8 @@ function main() {
 		// Make ActiveTaskTray blink, and add Merger icon when Merge is in progress
 		//$("#activeTaskText").addClass('blink');
 		if (this.tasktray.hasIndex(this.task.taskindex)) {
-			
+			this.tasktray.setActiveTask(this.task.taskindex);
+			this.tasktray.refresh();
 		}
 		else {
 			this.tasktray.addTask(this.task.getTaskType(), this.task.taskindex);
@@ -56,6 +57,10 @@ function main() {
 	
 	this.closeTask = function(taskindex) {
 		this.tasktray.removeTask(taskindex);
+		if (this.tasktray.activetaskindex == taskindex) {
+			this.tasktray.setActiveTask(0);
+		}
+		
 	}
 	$(".sidebar").contents().hide();
 	
