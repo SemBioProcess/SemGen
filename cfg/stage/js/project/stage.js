@@ -26,6 +26,7 @@ function Stage(graph, stagestate) {
 	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors", "");
 	this.graph.doodads.push(trash);
 	
+	$( "#stage" ).removeClass( "taskmode" );
 
 	document.addEventListener("click", function(e) {
 		$('contextmenu').hide();

@@ -84,9 +84,6 @@ function Graph() {
 	        }))
 	        .on("dblclick.zoom", null);
 
-	
-	
-
 	$('#toggleMoveStageButton').addClass('on');
 	
 	$('#toggleMoveStageButton').click(function() {
@@ -509,6 +506,8 @@ function Graph() {
     	.alpha(1)
     	.restart();
 	}
+	
+	
 
 	this.isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 	this.cntrlIsPressed = false;

@@ -53,6 +53,11 @@ path.mediator {
 
 #stage svg {
 	overflow: hidden;
+	
+}
+
+.taskmode svg {
+	background-image: radial-gradient(ellipse, #FFFFFF 0%, rgba(0, 0, 255, 0) 75%, #BBBBBB 95%);
 }
 
 .hull {
