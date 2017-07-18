@@ -6,8 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 
 import semgen.SemGen;
+import semgen.merging.ModelOverlapMap.MapType;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -15,6 +19,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.DuplicateChecker;
 import semsim.utilities.SemSimUtil;
 
@@ -60,12 +65,13 @@ public class SemanticComparator {
 		return matchedcdwds;
 	}
 	
-	public ArrayList<Pair<DataStructure, DataStructure>> identifyExactSemanticOverlap() {
-		ArrayList<Pair<DataStructure, DataStructure>> dsmatchlist = new ArrayList<Pair<DataStructure, DataStructure>>();
+	public ArrayList<SemanticOverlap> identifySemanticOverlap() {
+		
+		ArrayList<SemanticOverlap> dsmatchlist = new ArrayList<SemanticOverlap>();
 		
 		if(slndomain != null){
 			DataStructure soldom2 = model2.getSolutionDomains().toArray(new DataStructure[]{})[0];
-			dsmatchlist.add(Pair.of(slndomain, soldom2));
+			dsmatchlist.add(new SemanticOverlap(slndomain, soldom2, MapType.AUTO_MAPPING));
 		}
 		
 		Set<DataStructure> model1ds = getComparableDataStructures(model1);
@@ -74,41 +80,55 @@ public class SemanticComparator {
 		// For each comparable data structure in model 1...
 		for(DataStructure ds1 : model1ds){
 			
-			// Exclude solution domains
-			if (ds1 != slndomain) {
+			// Ignore solution domains
+			if (ds1 == slndomain) continue;
 				
-				// For each comparable data structure in model 2
-				for(DataStructure ds2 : model2ds){
-					Boolean match = false;
+			// For each comparable data structure in model 2
+			for(DataStructure ds2 : model2ds){
+				
+				// Test singular annotations
+				if(ds1.hasPhysicalDefinitionAnnotation() && ds2.hasPhysicalDefinitionAnnotation()){
 					
-					// Test singular annotations
-					if(ds1.hasPhysicalDefinitionAnnotation() && ds2.hasPhysicalDefinitionAnnotation())
-						match = ds1.getSingularTerm().equals(ds2.getSingularTerm());
-					
-					// If the physical properties are not null...
-					if(!match && ds1.hasPhysicalProperty() && ds2.hasPhysicalProperty()){
-						PhysicalPropertyinComposite prop1 = ds1.getPhysicalProperty();
-						PhysicalPropertyinComposite prop2 = ds2.getPhysicalProperty();
-							
-						// Test equivalency of physical properties
-						if(prop1.equals(prop2)) {
-							
-							if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){
-								PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
-								PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
-								
-								// And they are properties of a specified physical model component
-								// If the property annotations are the same, test the equivalency of what they are properties of
-							
-								match = ds1pmc.equals(ds2pmc);
-							}
-						}
+					if(ds1.getSingularTerm().equals(ds2.getSingularTerm())){
+						dsmatchlist.add(new SemanticOverlap(ds1,ds2,MapType.SEMANTICALLY_EXACT));
+						continue; // If the singular annotations match, don't bother with the composite annotation
 					}
-					
-					if(match) dsmatchlist.add(Pair.of(ds1, ds2));
-					
-				} // end of iteration through model2 data structures
-			}
+				}
+			
+				// If the physical properties in the composite annotation are not null...
+				if(ds1.hasPhysicalProperty() && ds2.hasPhysicalProperty()){
+					PhysicalPropertyinComposite prop1 = ds1.getPhysicalProperty();
+					PhysicalPropertyinComposite prop2 = ds2.getPhysicalProperty();
+						
+					// Test whether the associated physical components are equivalent
+					if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){
+						PhysicalModelComponent ds1pmc = ds1.getAssociatedPhysicalModelComponent();
+						PhysicalModelComponent ds2pmc = ds2.getAssociatedPhysicalModelComponent();
+						
+						// If the associated physical components are equivalent...
+						if(ds1pmc.equals(ds2pmc)){
+							
+							// If the properties are equivalent, add mapping...
+							if(prop1.equals(prop2))
+								dsmatchlist.add(new SemanticOverlap(ds1,ds2,MapType.SEMANTICALLY_EXACT));
+							
+							// Otherwise see if they are similar. For now just see if they are OPB siblings.
+							else{
+								OWLClass cls1 = SemSimOWLFactory.factory.getOWLClass(IRI.create(prop1.getPhysicalDefinitionURI()));
+								OWLClass cls2 = SemSimOWLFactory.factory.getOWLClass(IRI.create(prop2.getPhysicalDefinitionURI()));
+								Set<OWLClassExpression> super1 = cls1.getSuperClasses(SemGen.semsimlib.OPB);
+								Set<OWLClassExpression> super2 = cls2.getSuperClasses(SemGen.semsimlib.OPB);
+																	
+								super1.retainAll(super2);
+								
+								// If the properties are siblings, add mapping.
+								if(super1.size()>0)
+									dsmatchlist.add(new SemanticOverlap(ds1,ds2,MapType.SEMANTICALLY_SIMILAR));
+							}
+						}					
+					}
+				}					
+			} // end of iteration through model2 data structures
 		} // end of iteration through model1 data structures
 		return dsmatchlist;
 	}
@@ -228,5 +248,23 @@ public class SemanticComparator {
 	
 	public boolean hasSolutionMapping() {
 		return slndomain != null;
+	}
+	
+	public class SemanticOverlap {
+		Pair<DataStructure,DataStructure> pair;
+		MapType mappingtype;
+		
+		public SemanticOverlap(DataStructure left, DataStructure right, MapType mappingtype){
+			this.pair = Pair.of(left, right);
+			this.mappingtype = mappingtype;
+		}
+		
+		public MapType getMappingType(){
+			return mappingtype;
+		}
+		
+		public Pair<DataStructure,DataStructure> getMappedPair(){
+			return pair;
+		}
 	}
 }

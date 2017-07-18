@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import semgen.merging.SemanticComparator.SemanticOverlap;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
@@ -21,13 +22,16 @@ public class ModelOverlapMap {
 	private int slndomcnt = 0;
 	
 	public static enum MapType {
-		exactsemaoverlap("exact semantic match"), 
-		manualmapping("manual mapping"),
-		automapping("automated solution domain mapping");
+		SEMANTICALLY_EXACT("exact semantic match"),
+		SEMANTICALLY_SIMILAR("similar semantic match"),
+		MANUAL_MAPPING("manual mapping"),
+		AUTO_MAPPING("automated solution domain mapping");
+		
 		private String label;
 		MapType(String lbl) {
 			label = lbl;
 		}
+		
 		public String getLabel() {
 			return label;
 		}
@@ -35,18 +39,19 @@ public class ModelOverlapMap {
 
 	public ModelOverlapMap(int ind1, int ind2, SemanticComparator comparator) {
 		modelindicies = Pair.of(ind1, ind2);
-		ArrayList<Pair<DataStructure, DataStructure>> equivlist = comparator.identifyExactSemanticOverlap();		
+		ArrayList<SemanticOverlap> equivlist = comparator.identifySemanticOverlap();		
 		
 		Pair<DataStructure, DataStructure> dspair;
+		
 		if (comparator.hasSolutionMapping()) {
 			slndomcnt = 1;
-			dspair = equivlist.get(0);
-			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.automapping);
+			dspair = equivlist.get(0).getMappedPair();
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.AUTO_MAPPING);
 		}
 		
 		for (int i=slndomcnt; i<(equivlist.size()); i++ ) {
-			dspair = equivlist.get(i);
-			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.exactsemaoverlap);
+			dspair = equivlist.get(i).getMappedPair();
+			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.SEMANTICALLY_EXACT);
 		}
 		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();

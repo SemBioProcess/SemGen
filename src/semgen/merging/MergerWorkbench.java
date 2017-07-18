@@ -245,7 +245,7 @@ public class MergerWorkbench extends Workbench {
 		DataStructure ds2 = exposeddslist.get(minds.getRight()).get(cdwd2);
 				
 		if (codewordMappingExists(ds1, ds2)) return Pair.of(ds1.getName(),ds2.getName());
-		addCodewordMapping(ds1, ds2, MapType.manualmapping);
+		addCodewordMapping(ds1, ds2, MapType.MANUAL_MAPPING);
 		setChanged();
 		notifyObservers(MergeEvent.mappingevent);
 		return null;
