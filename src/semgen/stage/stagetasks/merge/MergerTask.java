@@ -192,7 +192,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		int i = workbench.getSolutionDomainCount();
 		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
 			Overlap overlap = new Overlap(dsd);
-			overlap.custom = workbench.getMapPairType(i).equals(MapType.manualmapping);
+			overlap.custom = workbench.getMapPairType(i).equals(MapType.MANUAL_MAPPING);
 			overlaps.add(overlap);
 			i++;
 		}
@@ -211,7 +211,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 				DependencyNode mappeddepnode = modelindex == 0 ? overlap.getLeft() : overlap.getRight();
 				DependencyNode othermappeddepnode = modelindex == 0 ? overlap.getRight() : overlap.getLeft();
 				if (mappeddepnode==dnode) {
-					if (workbench.getMapPairType(i) == MapType.manualmapping) {
+					if (workbench.getMapPairType(i) == MapType.MANUAL_MAPPING) {
 						mappedhash = othermappeddepnode.hash;
 					}
 					else mapped = true;
