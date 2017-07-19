@@ -59,7 +59,7 @@ function PreviewGraph(id) {
     	previewmodel.nodeType = NodeType.NULLNODE;
     	previewmodel.setLocation(graph.w/2, graph.h/2);
     	previewmodel.showchildren = true;
-    	previewmodel.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
+    	previewmodel.createVisualization(DisplayModes.SHOWSUBMODELS, true);
     	this.update();
     }
     var path;
