@@ -157,9 +157,13 @@ public class SemSimOWLreader extends ModelReader {
 			};
 			
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
-				ModelAccessor ma = new ModelAccessor(((OWLLiteral)named.getValue()).getLiteral());
-				semsimmodel.setSourceFileLocation(ma);
-				annstoremove.add(named);
+				String location = ((OWLLiteral)named.getValue()).getLiteral();
+				
+				if( ! location.isEmpty()){
+					ModelAccessor ma = new ModelAccessor(location);
+					semsimmodel.setSourceFileLocation(ma);
+					annstoremove.add(named);
+				}
 			};
 		}
 		semsimmodel.getCurationalMetadata().setCurationalMetadata(anns, annstoremove);
