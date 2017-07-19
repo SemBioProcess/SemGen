@@ -57,3 +57,9 @@ var DisplayModes = {
 	SHOWDEPENDENCIES: { id: 1, btnid: "showDependencies", keys: [NodeType.MODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
 	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS]}
 };
+
+var LinkLevels = {
+		INTRASUB: {text: "Intra-Submodel", color: "#555555"},
+		INTERSUB: {text: "Inter-Submodel", color: "#CA9485"},
+		CUSTOM: {text: "Custom", color: "f0ad4e"}
+}

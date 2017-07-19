@@ -68,22 +68,31 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 		parentElement.empty();
 
 		// Get unique keys
-		var keys = {};
+		var keys = [];
+		
+		var legendContainsLinkKey = function(key) {
+			for (x in LinkLevels) {
+				if (keys[x].linkType.nodeType == key.nodeType) return true;
+			}
+			return false;
+		}
+		
 		links.forEach(function (link) {
-			if(!link.getKeyInfo)
+			if(!link.getKeyInfo())
 				return;
 
 			var info = link.getKeyInfo();
-			keys[info.linkType] = info;
+			if (!legendContainsLinkKey(info.linkType)) {
+				keys.push(info);
+			}
+			
 		});
 
 		for(linkType in keys) {
-			var keyInfo = keys[linkType];
-
+			var keyInfo = keys[linkType],
+			keyElement = document.createElement("li");
+			$(keyElement).text(keyInfo.linkType.nodeType);
 			if(keyInfo.canShowHide) {
-				var keyElement = document.createElement("li");
-				$(keyElement).text(keyInfo.linkType);
-
 				$(keyElement).click(function (e) {
 					graph[func]($(e.target).text());
 				});
