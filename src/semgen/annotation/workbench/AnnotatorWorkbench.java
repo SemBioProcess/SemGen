@@ -28,6 +28,7 @@ import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
@@ -295,6 +296,12 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public void removeSubmodelfromModel() {
 		semsimmodel.removeSubmodel(smdrawer.removeSubmodel());
 		submodelListChanged();
+	}
+	
+	public void removePhysicalComponentfromModel(PhysicalModelComponent pmc) {
+		pmc.removeFromModel(semsimmodel);
+		setModelSaved(false);
+		compositeChanged();
 	}
 	
 	public Boolean submitSubmodelName(String newname) {

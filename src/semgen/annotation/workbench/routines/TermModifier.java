@@ -28,6 +28,8 @@ public class TermModifier {
 	}
 	
 	public void runRemove() {
+		workbench.removePhysicalComponentfromModel(library.getComponent(termindex));
+		
 		switch (library.getSemSimType(termindex)) {
 		case COMPOSITE_PHYSICAL_ENTITY:
 			removeCompositeEntity();
@@ -103,6 +105,8 @@ public class TermModifier {
 	//*****************************REPLACE METHODS********************************************//
 	
 	public void runReplace(int repindex, boolean remove) {
+		if (remove) workbench.removePhysicalComponentfromModel(library.getComponent(termindex));
+		
 		switch (library.getSemSimType(termindex)) {
 		case COMPOSITE_PHYSICAL_ENTITY:
 			replaceCompositeEntity(repindex, remove);
@@ -161,6 +165,9 @@ public class TermModifier {
 	
 	private void replaceProcess(int replacement, boolean remove) {
 		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), -1);
-		if (remove) library.removePhysicalProcesses(termindex);
+		if (remove) {
+			library.removePhysicalProcesses(termindex);
+		
+		}
 	}
 }

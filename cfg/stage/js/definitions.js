@@ -63,3 +63,9 @@ var LinkLevels = {
 		INTERSUB: {text: "Inter-Submodel", color: "#CA9485"},
 		CUSTOM: {text: "Custom", color: "f0ad4e"}
 }
+
+var LinkLevelsArray = [
+	LinkLevels.INTRASUB,
+	LinkLevels.INTERSUB,
+	LinkLevels.CUSTOM
+]

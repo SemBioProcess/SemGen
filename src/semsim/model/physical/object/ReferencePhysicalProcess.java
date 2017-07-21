@@ -65,4 +65,9 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 		return model.addReferencePhysicalProcess(this);
 
 	}
+	
+	@Override
+	public void removeFromModel(SemSimModel model) {
+		model.removePhysicalProcessFromCache(this);
+	}
 }

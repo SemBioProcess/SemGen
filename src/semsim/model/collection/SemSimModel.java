@@ -289,6 +289,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
+	public void removeAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
+		this.associatephysicalproperties.remove(pp);
+	}
+	
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
 		
 		if(getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
@@ -363,6 +367,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		else physicaldependencies.add(dep);
 		
 		return dep;
+	}
+	
+	public void removeReferencePhysicalDependency(ReferencePhysicalDependency dep) {
+		physicaldependencies.remove(dep);
 	}
 	
 	/**
@@ -1143,6 +1151,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 					ds.setAssociatedPhysicalProperty(toreplace);
 			}
 		}
+	}
+	
+	public void removePhysicalProperty(PhysicalProperty pp) {
+		this.physicalproperties.remove(pp);
 	}
 	
 	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {

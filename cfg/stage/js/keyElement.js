@@ -71,8 +71,8 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 		var keys = [];
 		
 		var legendContainsLinkKey = function(key) {
-			for (x in LinkLevels) {
-				if (keys[x].linkType.nodeType == key.nodeType) return true;
+			for (x in keys) {
+				if (keys[x].linkLevel == key.linkLevel) return true;
 			}
 			return false;
 		}
@@ -82,7 +82,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 				return;
 
 			var info = link.getKeyInfo();
-			if (!legendContainsLinkKey(info.linkType)) {
+			if (!legendContainsLinkKey(info)) {
 				keys.push(info);
 			}
 			
@@ -91,7 +91,8 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 		for(linkType in keys) {
 			var keyInfo = keys[linkType],
 			keyElement = document.createElement("li");
-			$(keyElement).text(keyInfo.linkType.nodeType);
+			$(keyElement).text(LinkLevelsArray[keyInfo.linkLevel].text);
+			keyElement.style.color = LinkLevelsArray[keyInfo.linkLevel].color;
 			if(keyInfo.canShowHide) {
 				$(keyElement).click(function (e) {
 					graph[func]($(e.target).text());

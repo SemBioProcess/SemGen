@@ -31,4 +31,9 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 		return model.addCustomPhysicalEntity(this);
 		
 	}
+	
+	@Override
+	public void removeFromModel(SemSimModel model) {
+		model.removePhysicalEntityFromCache(this);
+	}
 }

@@ -93,4 +93,6 @@ public abstract class PhysicalModelComponent extends SemSimComponent implements 
 	}
 	
 	public abstract PhysicalModelComponent addToModel(SemSimModel model);
+	
+	public abstract void removeFromModel(SemSimModel model);
 }

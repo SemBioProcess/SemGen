@@ -63,4 +63,9 @@ public class ReferencePhysicalEntity extends PhysicalEntity implements Reference
 		return model.addReferencePhysicalEntity(this);
 		
 	}
+	
+	@Override
+	public void removeFromModel(SemSimModel model) {
+		model.removePhysicalEntityFromCache(this);
+	}
 }
