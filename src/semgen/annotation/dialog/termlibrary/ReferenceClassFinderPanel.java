@@ -244,7 +244,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalNickName, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenError.showWebConnectionError("BioPortal web service");
+				SemGenError.showWebConnectionWarning("BioPortal web service");
 			} catch (JDOMException e) {
 				e.printStackTrace();
 			}
@@ -264,7 +264,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-				SemGenError.showWebConnectionError("UniProt web service");
+				SemGenError.showWebConnectionWarning("UniProt web service");
 			}
 		}
 

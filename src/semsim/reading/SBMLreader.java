@@ -135,7 +135,7 @@ public class SBMLreader extends ModelReader{
 		// Collect function definitions. Not used in SBML level 1.
 		// collectFunctionDefinitions();
 		if (sbmlmodel.getListOfFunctionDefinitions().size()>0)
-			addErrorToModel("SBML source model contains function definitions but these are not yet supported in SemSim.");
+			addErrorToModel(modelaccessor.getShortLocation() + " cannot be converted into a SemSim model because it contains function definitions.");
 
 		//collectCompartmentTypes();  // We ignore compartment types for now. This class is not available in JSBML.
 		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/CompartmentType.html
@@ -149,7 +149,8 @@ public class SBMLreader extends ModelReader{
 		
 		
 		if (sbmlmodel.getListOfInitialAssignments().size()>0)
-			addErrorToModel("SBML source model contains initial assignments but these are not yet supported in SemSim.");
+			addErrorToModel(modelaccessor.getShortLocation() + " cannot be converted into a SemSim model because it contains initial assignments.");
+
 		
 				
 		// if any errors at this point, return model
