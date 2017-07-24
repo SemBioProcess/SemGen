@@ -30,7 +30,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	private SemGenToolbarButton opentermcreator = new SemGenToolbarButton(SemGenIcon.libraryaddicon);
 	private SemGenToolbarButton opentermlibrary= new SemGenToolbarButton(SemGenIcon.librarymodifyicon);
 	private SemGenToolbarButton annotateitemtreeview;
-	private SemGenToolbarButton extractorbutton = new SemGenToolbarButton(SemGenIcon.extractoricon);
+	private SemGenToolbarButton stagebutton = new SemGenToolbarButton(SemGenIcon.stageicon);
 	//private SemGenToolbarButton coderbutton = new SemGenToolbarButton(SemGenIcon.codericon);
 	
 	private DropDownCheckList sortselector = new DropDownCheckList(" Sort Options");
@@ -78,8 +78,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		opentermlibrary.addActionListener(this);
 		opentermlibrary.setToolTipText("Manage all annotation terms for this model");
 
-		extractorbutton.setToolTipText("Open this model in Extractor");
-		extractorbutton.addActionListener(this);
+		stagebutton.setToolTipText("Open model in new Project tab");
+		stagebutton.addActionListener(this);
 
 //		coderbutton.setToolTipText("Encode this model for simulation");
 //		coderbutton.addActionListener(this);
@@ -101,7 +101,7 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		add(annotateitemcopy);
 		addSeparator();
 		
-		add(extractorbutton);
+		add(stagebutton);
 
 		sortselector.addItemListener(new SortSelectionListener(settings));
 	}
@@ -149,10 +149,10 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 			settings.toggleTreeView();
 			annotateitemtreeview.setIcon(displayTreeIconToUse());
 		}
-		if (o == extractorbutton) {
+		if (o == stagebutton) {
 			try {
 				if(workbench.unsavedChanges()){
-					globalactions.NewExtractorTab(workbench.getModelAccessor());
+					globalactions.NewStageTab(workbench.getModelAccessor());
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();}
