@@ -20,6 +20,10 @@ public class SemGenError {
 		parent = frame;
 	}
 	
+	public static void showWarning(String warntext, String warntitle){
+		JOptionPane.showMessageDialog(parent, warntext, warntitle, JOptionPane.WARNING_MESSAGE);
+	}
+	
 	public static void showError(String errtext, String errtitle) {
 		JOptionPane.showMessageDialog(parent, errtext, errtitle, JOptionPane.ERROR_MESSAGE);
 	}
@@ -28,10 +32,10 @@ public class SemGenError {
 		JOptionPane.showMessageDialog(target, errtext, errtitle, JOptionPane.ERROR_MESSAGE);
 	}
 	
-	public static void showWebConnectionError(String location){
+	public static void showWebConnectionWarning(String location){
 		JOptionPane.showMessageDialog(parent,
 				"Please make sure you are online, otherwise the website or service \n" + 
-				"may be experiencing difficulties.", "Error connecting to " + location, JOptionPane.ERROR_MESSAGE);
+				"may be experiencing difficulties.", "Error connecting to " + location, JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public static void showFunctionalSubmodelError(String file){
