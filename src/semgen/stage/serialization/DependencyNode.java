@@ -1,14 +1,13 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.gson.annotations.Expose;
-
 import semgen.SemGen;
 import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.computational.datastructures.DataStructure;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a dependency node in the d3 graph
@@ -31,10 +30,14 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 		if (dataStructure.getUnit()!=null) {
 			this.unit = dataStructure.getUnit().getComputationalCode();
 		}
-		
+
 		this.equation = dataStructure.getComputation().getComputationalCode();
-		this.physannotation = dataStructure.getCompositeAnnotationAsString(false);
-		
+		if(dataStructure.getCompositeAnnotationAsString(false) != "[unspecified]")
+			this.physannotation = dataStructure.getCompositeAnnotationAsString(false);
+		else if (dataStructure.getSingularTerm()!=null) {
+			this.physannotation = dataStructure.getSingularTerm().getName();
+		}
+
 		isorphaned = dataStructure.getComputationInputs().isEmpty() && dataStructure.getUsedToCompute().isEmpty();
 		issubmodelinput = dataStructure.isFunctionalSubmodelInput();
 	}
