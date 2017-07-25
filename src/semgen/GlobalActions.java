@@ -22,6 +22,7 @@ public class GlobalActions extends Observable {
 		QUIT,
 		SAVED,
 		STAGE,
+		STAGEEXISTING,
 		TABOPENED,
 		TABCHANGED,
 		TABCLOSEREQUEST,
@@ -89,6 +90,12 @@ public class GlobalActions extends Observable {
 	public void NewStageTab() {
 		setChanged();
 		notifyObservers(appactions.STAGE);
+	}
+	
+	public void NewStageTab(ModelAccessor obj) {
+		seed = obj;
+		setChanged();
+		notifyObservers(appactions.STAGEEXISTING);
 	}
 
 	/** 

@@ -88,7 +88,8 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					httpcon.getResponseCode();
 				} catch (Exception e) {
 					e.printStackTrace();
-					SemGenError.showError("Legacy code could not be found at http address", "404 Not Found");
+					SemGenError.showWarning("Legacy code for " + workbench.getModelAccessor().getShortLocation() + " could not be found at address\n" +
+							srccodema.getModelURI().toString(), "404 Not Found");
 					online = false;
 				}
 				if (online) {

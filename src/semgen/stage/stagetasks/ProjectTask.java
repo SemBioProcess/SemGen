@@ -42,7 +42,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 * @author Ryan
 	 *
 	 */
-	protected class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
+	public class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
 		
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
@@ -96,6 +96,22 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				addModeltoTask(info);
 				_commandSender.addModel(info.modelnode);
 			}
+		}
+		
+		public void onAddModelFromAnnotator(ModelAccessor accessor){
+
+			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
+			loader.run();
+			SemSimModel semsimmodel = loader.getLoadedModel();
+			if (SemGenError.showSemSimErrors()) {
+				return;
+			}
+
+			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+			extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
+			addModeltoTask(info);
+			// Tell the view to add a model
+			_commandSender.addModel(info.modelnode);
 		}
 		
 		public void onTaskClicked(JSArray modelindex, String task) {

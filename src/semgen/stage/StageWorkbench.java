@@ -20,13 +20,14 @@ public class StageWorkbench extends Workbench {
 	public enum StageEvent {CHANGETASK}
 	
 	private ArrayList<StageTask<? extends SemGenWebBrowserCommandSender>> tasks = new ArrayList<StageTask<? extends SemGenWebBrowserCommandSender>>();
-	private StageTask<? extends SemGenWebBrowserCommandSender> activetask;	
+	private StageTask<? extends SemGenWebBrowserCommandSender> activetask;
+	private ProjectTask projtask;
 	
 	public StageWorkbench() {}
 	
 	@Override
 	public void initialize() {
-		ProjectTask projtask = new ProjectTask();
+		this.projtask = new ProjectTask();
 		projtask.addObserver(this);
 		tasks.add(projtask);
 		setActiveTask(0);
@@ -36,6 +37,11 @@ public class StageWorkbench extends Workbench {
 		}
 	}
 
+	public ProjectTask getProjectTask(){
+		return projtask;
+	}
+	
+	
 	/**
 	 * Get an object that listens for javascript commands
 	 * @return
@@ -154,4 +160,5 @@ public class StageWorkbench extends Workbench {
 	public int getActiveTaskIndex() {
 		return activetask.getTaskIndex();
 	}
+	 
 }

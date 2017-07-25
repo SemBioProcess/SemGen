@@ -80,6 +80,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	
 	public void startNewAnnotatorTask(final ModelAccessor existingaccessor){
 		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate(), existingaccessor);
+		
 		if (isOntologyOpenForEditing(existingaccessor.getFileThatContainsModelAsURI())) return;
 		
 		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
@@ -88,11 +89,16 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	public void startNewMergerTask(){}
-	
 	public void startNewMergerTask(Set<ModelAccessor> existingobjs){}
 	
 	public void startNewStageTask(){
 		StageWorkbenchFactory factory = new StageWorkbenchFactory();
+		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
+		addTab(factory, tabfactory, false);
+	}
+	
+	public void startNewStageTask(final ModelAccessor existingaccessor){
+		StageWorkbenchFactory factory = new StageWorkbenchFactory(existingaccessor);
 		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, false);
 	}
@@ -226,7 +232,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			this.startNewAnnotatorTask();
 		}
 		if (arg == GlobalActions.appactions.ANNOTATEEXISTING) {
-			this.startNewAnnotatorTask(globalactions.getSeed());
+			startNewAnnotatorTask(globalactions.getSeed());
 		}
 		if (arg == GlobalActions.appactions.MERGE) {
 			startNewMergerTask();
@@ -236,6 +242,9 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		if (arg == GlobalActions.appactions.STAGE) {
 			startNewStageTask();
+		}
+		if (arg == GlobalActions.appactions.STAGEEXISTING) {
+			startNewStageTask(globalactions.getSeed());
 		}
 	}
 	
