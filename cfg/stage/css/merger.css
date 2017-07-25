@@ -162,8 +162,9 @@
 }
 .overlapButtons {
 	width: 68px;
-    float: center;
     display: inline-block;
+    position: relative;
+    top: 20px;
 }
 
 .rightCollapsePanel {
@@ -180,6 +181,11 @@
 
 .panel-heading {
     cursor: context-menu;
+}
+
+.mappingType {
+    font-size: 12px;
+    font-style: italic;
 }
 
 #mergeStep2 > .panel-group {
