@@ -29,7 +29,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			}
 
 			// Update keys for visible links
-			addLinkKeysToParent(graph, visibleLinkKeys, graph.force.force("link").links(), "hideLinks");
+			addLinkKeysToParent(graph, visibleLinkKeys, "hideLinks");
 		});
 	};
 	
@@ -63,36 +63,32 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 	}
 	
 	// Adds link keys to the parent element based on the link in the nodes array
-	var addLinkKeysToParent = function (graph, parentElement, links, func) {
+	var addLinkKeysToParent = function (graph, parentElement, func) {
 		// Clear all keys
 		parentElement.empty();
 
-		// Get unique keys
-		var keys = [];
-		
-		var legendContainsLinkKey = function(key) {
-			for (x in keys) {
-				if (keys[x].linkLevel == key.linkLevel) return true;
-			}
-			return false;
-		}
-		
-		links.forEach(function (link) {
-			if(!link.getKeyInfo())
-				return;
-
-			var info = link.getKeyInfo();
-			if (!legendContainsLinkKey(info)) {
-				keys.push(info);
+		//Add all links
+		for(linkType in LinkLevelsArray) {
+			var keyInfo = LinkLevelsArray[linkType],
+				keyElement = document.createElement('ln'), 
+				dasharray = "";
+			
+			if (keyInfo == LinkLevels.MEDIATOR ) {
+				
+				dasharray = 'stroke-dasharray: 3, 6;';
 			}
 			
-		});
+			keyElement.innerHTML = '<svg height="16" width="200">' +
+			  		'<line x1="0" y1="8" x2="50" y2="8" style="stroke:' + keyInfo.color + ';stroke-width:' + keyInfo.linewidth+ '; ' + dasharray+'" />' +
+			  		'<text x="54" y="14" fill="' + keyInfo.color + '">'+ keyInfo.text + '</text>' +
+				 '</svg>';
+			
+			
+			
+			parentElement.append(keyElement);			
 
-		for(linkType in keys) {
-			var keyInfo = keys[linkType],
-			keyElement = document.createElement("li");
-			$(keyElement).text(LinkLevelsArray[keyInfo.linkLevel].text);
-			keyElement.style.color = LinkLevelsArray[keyInfo.linkLevel].color;
+			//$(keyElement).text(keyInfo.text);
+			//keyElement.style.color = keyInfo.color;
 			if(keyInfo.canShowHide) {
 				$(keyElement).click(function (e) {
 					graph[func]($(e.target).text());
@@ -100,8 +96,6 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 
 				keyElement.className += " canClick";
 			}
-
-			parentElement.append(keyElement);
 		}
 	};
 }
