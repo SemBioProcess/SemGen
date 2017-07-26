@@ -93,8 +93,7 @@ PhysioMapNode.prototype.updateInfo = function() {
 	$("#nodemenuUnitRow").hide();
 	$("#nodemenuEquationRow").hide();
 	$("#nodemenuAnnotationRow").hide();
-	$("#nodemenuParticipantsRow").show();
-	
+
 	var partstoich = "Sources: \n";
 	for (i=0; i < this.srcobj.sourcenames.length; i++) {
 		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";

@@ -13,6 +13,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.id = srcobj.id;
 	this.hash = srcobj.hash;
 	this.displayName = this.name;
+	this.description = srcobj.description;
+	this.metadataid = srcobj.metadataid;
 	this.r = r;
 	this.showchildren = false;
 	this.textSize = textSize;
