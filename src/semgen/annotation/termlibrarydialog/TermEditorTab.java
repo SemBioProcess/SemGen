@@ -208,11 +208,20 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 	
 	private void removeComponent() {
 		int choice = JOptionPane.showConfirmDialog(this, 
-				"Remove selected term and all references from the model and library?",
+				"Remove selected term(s) and all references from the model and library?",
 				"Confirm",
 				JOptionPane.YES_NO_OPTION);
 		if(JOptionPane.YES_OPTION == choice){
-			new TermModifier(workbench, affected).runRemove();
+			ArrayList<Integer> termindicies = new ArrayList<Integer>();
+			for (int index : termlist.getSelectedIndices()) {
+				termindicies.add(terms.get(index));
+			}
+			
+			for (int index : termindicies) {
+				affected = workbench.collectAffiliatedTermsandCodewords(index);
+				new TermModifier(workbench, affected).runRemove();
+			}
+			
 			setTypeList();
 			updateList();
 		}
