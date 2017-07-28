@@ -90,10 +90,17 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 	
 	public void removePhysicalEntity(PhysicalEntity pe) {
 		arrayListOfPhysicalEntities.remove(pe);
+		if (this.arrayListOfStructuralRelations.size() > 0) {
+			this.arrayListOfStructuralRelations.remove(0);
+		}
+		
 	}
 	
 	public void removePhysicalEntity(int index) {
 		arrayListOfPhysicalEntities.remove(index);
+		if (this.arrayListOfStructuralRelations.size() > 0) {
+			this.arrayListOfStructuralRelations.remove(0);
+		}
 	}
 	
 	public void setArrayListOfStructuralRelations(ArrayList<StructuralRelation> arrayListOfStructuralRelations) {
