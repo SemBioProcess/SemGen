@@ -332,6 +332,7 @@ function Stage(graph, stagestate) {
 		stage.graph.update();
 		stage.selectNode(extractionnode);
 	}
+	
 
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {

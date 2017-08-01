@@ -3,9 +3,9 @@
  */
 
 var StageTasks = {
-		PROJECT: {thumb: '../../src/semgen/icons/stageicon2020.png'},
-		MERGER: {thumb: '../../src/semgen/icons/mergeicon2020.png'},
-		EXTRACTOR: {thumb: '../../src/semgen/icons/extractoricon2020.png'}
+		PROJECT: {type: "PROJECT", thumb: '../../src/semgen/icons/stageicon2020.png'},
+		MERGER: {type: "MERGER", thumb: '../../src/semgen/icons/mergeicon2020.png'},
+		EXTRACTOR: {type: "EXTRACTOR", thumb: '../../src/semgen/icons/extractoricon2020.png'}
 };
 
 var NodeType = {

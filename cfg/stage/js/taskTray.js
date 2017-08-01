@@ -3,31 +3,47 @@
  */
 
 	//Structure for open task icons
-function OpenTask(type, index) {
+function OpenTask(type, index, modelnodes) {
 		var taskicon = this;
-		var type;
+		var tasktype = type;
 		var taskindex = index;
 		this.currenttask = false;
-		
+
 		this.showTaskIcon = function() {
+			var tasktab = document.createElement("span");
+			tasktab.className = "taskchooser";
+			
+			
 			var icon = document.createElement("input");
 			icon.type = "image";
 			icon.id = 'task' + taskindex;
 			icon.src = type.thumb;
-			icon.style.borderColor = "#FFFF00";
 			
+
 			if (this.currenttask) {
-				icon.style.borderStyle = "solid";
+				tasktab.style.borderStyle = "solid";
 			}
 			
-			icon.onclick = function() {
+			tasktab.onclick = function() {
 				if (!taskicon.currenttask) {
 					sender.changeTask(taskindex);
 				}
 			};
 			
+			tasktab.appendChild(icon);
+			if (type.type== StageTasks.MERGER.type) {
+				var modelnames = [];
+				for (i in modelnodes) {
+					modelnames.push(modelnodes[i].name);
+				}
+
+				var namelabel = document.createElement("ul");
+				$(namelabel).append("<li>" + modelnames[0] + "</li> ");
+				$(namelabel).append("<li>" + modelnames[1] + "</li> ");
+				tasktab.appendChild(namelabel);
+			}
 			
-			$("#activeTaskPanel").append(icon);
+			$("#activeTaskPanel").append(tasktab);
 		}
 		
 		this.indexMatches = function(indextocheck) {
@@ -53,8 +69,8 @@ function TaskTray() {
 		});
 	}
 	
-	this.addTask = function(type, index) {		
-		opentasks.push(new OpenTask(type, index));
+	this.addTask = function(type, index, models) {		
+		opentasks.push(new OpenTask(type, index, models));
 		this.setActiveTask(index);
 		this.refresh();
 		

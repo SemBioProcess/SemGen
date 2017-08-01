@@ -64,6 +64,14 @@ function MergerTask(graph, stagestate) {
 		return merger.semrespane.semanticOverlapReolvesSyntactic(name);
 	}
 	
+	this.getModelNames = function() {
+		var modelnames = [];
+		for (i in this.nodes) {
+			modelnames.push(this.nodes[i].name);
+		}
+		return modelnames;
+	}
+	
 	$("#resolPanels").click(function() {
 		$('#taskModal').modal("show");
 		if (!merger.semrespane.readyformerge) {

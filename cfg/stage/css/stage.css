@@ -202,6 +202,20 @@ li.searchResultSet li:hover {
 	opacity: 0.8;
 }
 
+.taskchooser {
+	display: inline-block;
+	border-color: #FFFF00;
+}
+.taskchooser ul {
+	display: inherit;
+	font-size: 12px;
+	text-align: left;
+	font-weight: bold;
+	list-style-type: none;
+	margin-bottom: 0;
+	padding-left: 10;
+}
+
 #activeTaskTray:hover {
 	opacity: 1;
 	cursor: pointer;
@@ -209,7 +223,7 @@ li.searchResultSet li:hover {
 
 #activeTaskPanel {
 	bottom: 30px;
-	height: 30px;
+	height: 45px;
 	display: none;
 	background-color: #D3D3D3;
 }

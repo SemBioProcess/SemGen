@@ -51,7 +51,9 @@ function main() {
 			this.tasktray.refresh();
 		}
 		else {
-			this.tasktray.addTask(this.task.getTaskType(), this.task.taskindex);
+			var tasktype = this.task.getTaskType(), tasknodes = this.task.nodes;
+			
+			this.tasktray.addTask(tasktype, this.task.taskindex, tasknodes);
 		}
 	}
 	
