@@ -59,7 +59,7 @@ var DisplayModes = {
 };
 
 var LinkLevels = {
-		INTRASUB: {text: "Intra-Submodel", color: "#555555", linewidth: "1.5px"},
+		INTRASUB: {text: "Used to Compute", color: "#555555", linewidth: "1.5px"},
 		INTERSUB: {text: "Inter-Submodel", color: "#CA9485", linewidth: "0.25px"},
 		CUSTOM: {text: "Custom", color: "#f0ad4e", linewidth: "1.5px"},
 		MEDIATOR: {text: "Mediator", color: "#555555", linewidth: "1.5px"}
