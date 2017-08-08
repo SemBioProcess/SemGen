@@ -15,7 +15,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			
 			var i = 0;
 			for (x in DisplayModes) {
-				if (activemodes[i]) {
+				//if (activemodes[i]) {
 					DisplayModes[x].keys.forEach(function(type) {
 						if (graph.nodesVisible[type.id]) {
 							addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
@@ -24,7 +24,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 							addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
 						}
 					});
-				}
+				//}
 				i++;
 			}
 

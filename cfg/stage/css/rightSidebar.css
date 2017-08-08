@@ -26,12 +26,22 @@
 	opacity: 0.8;
 }
 
+#rightSidebar .vertical-menu {
+	height: 150px;
+	overflow-y: auto;
+	border-bottom-style: groove;
+}
+
 #rightSidebarButton:hover {
 	opacity: 1;
 	cursor: pointer;
 }
 
 #stagekey {
+	font-size: 12px;
+}
+
+#stagekey .subheading {
 	font-size: 14px;
 }
 
