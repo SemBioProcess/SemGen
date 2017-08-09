@@ -497,13 +497,17 @@ function Graph() {
 		}
     }
 
+    this.paused = false;
+
 	this.pause = function() {
 		this.force.stop();
+		graph.paused = true;
 	}
 	this.resume = function() {
 		this.force
     	.alpha(1)
     	.restart();
+		graph.paused = false;
 	}
 
 	this.isMac = navigator.userAgent.indexOf('Mac OS X') != -1;

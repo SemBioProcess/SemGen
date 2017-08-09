@@ -204,8 +204,8 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcey = 0;
 	var forcex = 0;
 
-	if (this.parent && this.graph.fixedMode) {
-			var k = .001;
+	if (this.parent && !this.graph.paused) {
+			var k = .003;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 
