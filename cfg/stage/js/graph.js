@@ -484,16 +484,16 @@ function Graph() {
 
     this.hoverPause = function() {
         // Pauses graph when hovering over a node
-        if(!graph.fixedMode) {
+            if(!graph.fixedMode) {
             $(".node > *:not(.hull)").hover(function () {
                 graph.pause();
             }, function () {
-                if (!graph.fixedMode) {
+                if (!graph.fixedMode && $(".node > *:not(.hull):hover").length == 0) {
                 	graph.force.restart();
                 }
             });
 		} else {
-            $(".node > *:not(.hull)").unbind('mouseenter mouseleave');
+            $(".node > *:not(.hull)").off('mouseenter mouseleave');
 		}
     }
 
