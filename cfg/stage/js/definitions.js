@@ -18,7 +18,8 @@ var NodeType = {
 		PROCESS: {id: 6, nodeType: "Process", color: "#2CA02C", canShowHide: true},
 		MEDIATOR: {id: 7, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
 		NULLNODE: {id: 8, nodeType: "Null", color: "#FFFFFF", canShowHide: true},
-		EXTRACTION: {id: 9, nodeType: "Extraction", color: "#118888", canShowHide: false}
+		EXTRACTION: {id: 9, nodeType: "Extraction", color: "#118888", canShowHide: false},
+		UNSPECIFIED: {id: 10, nodeType: "Unspecified", color: "#118888", canShowHide:true}
 };
 
 var NodeTypeMap = {
@@ -31,7 +32,8 @@ var NodeTypeMap = {
 		"Process": NodeType.PROCESS,
 		"Mediator": NodeType.MEDIATOR,
 		"Null": NodeType.NULLNODE,
-		"Extraction": NodeType.EXTRACTION
+		"Extraction": NodeType.EXTRACTION,
+		"Unspecified": NodeType.UNSPECIFIED
 		};
 
 var NodeTypeArray = [
@@ -55,7 +57,7 @@ var defaultchargedistance = 300;
 var DisplayModes = {
 	SHOWSUBMODELS: { id: 0, btnid: "showSubmodels", keys: [NodeType.MODEL, NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
 	SHOWDEPENDENCIES: { id: 1, btnid: "showDependencies", keys: [NodeType.MODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
-	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS]}
+	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS, NodeType.UNSPECIFIED]}
 };
 
 var LinkLevels = {

@@ -15,7 +15,6 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			
 			var i = 0;
 			for (x in DisplayModes) {
-				//if (activemodes[i]) {
 					DisplayModes[x].keys.forEach(function(type) {
 						if (graph.nodesVisible[type.id]) {
 							addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
@@ -24,7 +23,6 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 							addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
 						}
 					});
-				//}
 				i++;
 			}
 
@@ -35,14 +33,30 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 	
 	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
 			if (legendContainsKey(keyInfo)) return; 
-			var keyElement = document.createElement("li");
+		
+			var keyElement = document.createElement("li"),
+			slash = "";
 			$(keyElement).text(keyInfo.nodeType);
 			addedKeys.push(keyInfo.nodeType);
 			keyElement.style.color = keyInfo.color;
+			
+			if (keyInfo==NodeType.UNSPECIFIED) {
+				slash = '<line x1="18" y1="0" x2="2" y2="16" style="stroke:#000000; stroke-width:2"; />';
+			}
+			
+			
+			keyElement.innerHTML = '<svg height="16" width="200">' +
+		  		'<circle transform="translate(10,8)" r="8" style="fill:' + keyInfo.color + ';" />' + slash +
+		  		'<text x="54" y="14" stroke="' + keyInfo.nodeType + '">'+ keyInfo.nodeType + '</text>' +
+			 '</svg>';
+			
 			// Put border around "Mediator" text for consistency with node border
 			if(keyInfo.nodeType == "Mediator") {
 				keyElement.style.webkitTextStroke = ".7px black";
 			}
+			
+
+
 
 			if(keyInfo.canShowHide) {
 				$(keyElement).click(function (e) {
