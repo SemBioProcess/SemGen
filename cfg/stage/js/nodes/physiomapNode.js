@@ -14,6 +14,7 @@ function PhysioMapNode (graph, data, parentNode) {
 	}
 
 	this.displayName = limitWords(this.displayName, 3);
+	if (typeof this.description == "undefined") this.description = this.displayName;
 	this.addClassName("physiomapNode");
 	this.addBehavior(HiddenLabelNodeGenerator);
 

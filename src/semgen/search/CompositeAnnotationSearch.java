@@ -1,19 +1,15 @@
 package semgen.search;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-
 import semgen.SemGen;
 import semgen.stage.serialization.SearchResultSet;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
 
 public class CompositeAnnotationSearch {
-	public static final String SourceName = "Examples";
+	public static final String SourceName = "Example models";
 
 	// Given a keyword, do a string search on data structures from a set of annotated SemSim models.
 	// Return a list of SemSim model names containing the keyword.

@@ -67,7 +67,7 @@ function Stage(graph, stagestate) {
 		searchResultsList.empty();
 
 		// Create UI for the results
-		searchResults.forEach(function (searchResultSet ) {
+		searchResults.forEach(function (searchResultSet) {
 			searchResultSet.results.sort(function (a, b) {
 				return a.toLowerCase().localeCompare(b.toLowerCase());
 			});
@@ -104,11 +104,42 @@ function Stage(graph, stagestate) {
 		if( $(this).val() ) {
 			$(".stageSearch .searchValueContainer .searchResults").show();
 			sender.search($( this ).val());
-		}
+
+			// Search for nodes on Stage
+            stage.nodeSearch(graph.getVisibleNodes(), $(this).val());
+
+        }
 		else {
 			$(".stageSearch .searchValueContainer .searchResults").hide();
 		}
 	});
+
+	this.nodeSearch = function(visibleNodes, searchString) {
+        var nodeSearchResultSet = {};
+        var nodeSearchResults = [];
+        var searchResultsList = $(".searchResults");
+
+        for (i in visibleNodes) {
+            var node = visibleNodes[i];
+            var nodeLabel = node.displayName.toLowerCase();
+            var nodeDescription = node.description.toLowerCase();
+            if (nodeLabel.includes(searchString.toLowerCase())) {
+                nodeSearchResults.push(node.name);
+            }
+            else if (nodeDescription.includes(searchString.toLowerCase())) {
+                nodeSearchResults.push(node.name);
+            }
+        }
+
+        nodeSearchResultSet["source"] = "Nodes on Stage";
+        nodeSearchResultSet["results"] = nodeSearchResults;
+
+		nodeSearchResultSet.results.sort(function (a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+
+		searchResultsList.append(makeResultSet(nodeSearchResultSet));
+    };
 	
 	$("#saveModel").click(function() {
 		var modelstosave = [], count = 0;
