@@ -123,10 +123,15 @@ function Stage(graph, stagestate) {
             var node = visibleNodes[i];
             var nodeLabel = node.displayName.toLowerCase();
             var nodeDescription = node.description.toLowerCase();
-            if (nodeLabel.includes(searchString.toLowerCase())) {
-                nodeSearchResults.push(node.name);
-            }
-            else if (nodeDescription.includes(searchString.toLowerCase())) {
+            var querryArray = searchString.toLowerCase().split(" ");
+
+            if (querryArray.every(function(keyword) {var foundInName = false;
+                    var foundInDescription = false;
+                    if(nodeLabel.includes(keyword)) foundInName = true;
+                    if(nodeDescription.includes(keyword)) foundInDescription = true;
+
+                    return (foundInName || foundInDescription);
+                })) {
                 nodeSearchResults.push(node.name);
             }
         }
