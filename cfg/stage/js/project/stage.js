@@ -26,6 +26,7 @@ function Stage(graph, stagestate) {
 	var trash = new StageDoodad(this.graph, "trash", 0.05, 0.9, 2.0, 2.0, "glyphicon glyphicon-scissors", "");
 	this.graph.doodads.push(trash);
 	
+	$( "#stage" ).removeClass( "taskmode" );
 
 	document.addEventListener("click", function(e) {
 		$('contextmenu').hide();
@@ -331,6 +332,7 @@ function Stage(graph, stagestate) {
 		stage.graph.update();
 		stage.selectNode(extractionnode);
 	}
+	
 
 	receiver.onLoadExtractions(function(extractions) {
 		for (x in extractions) {
@@ -373,7 +375,7 @@ Stage.prototype.onModelSelection = function(node) {
 Stage.prototype.setSavedState = function (issaved) {
 	Task.prototype.setSavedState.call(issaved);
 	this.setSaved(this.isSaved());
-	$('#saveModel').prop('disabled', issaved);
+	//$('#saveModel').prop('disabled', issaved);
 }
 
 

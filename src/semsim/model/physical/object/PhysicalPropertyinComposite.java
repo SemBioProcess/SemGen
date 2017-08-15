@@ -70,4 +70,8 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 	public PhysicalPropertyinComposite addToModel(SemSimModel model) {
 		return model.addAssociatePhysicalProperty(this);
 	}
+	
+	public void removeFromModel(SemSimModel model) {
+		model.removeAssociatePhysicalProperty(this);
+	}
 }

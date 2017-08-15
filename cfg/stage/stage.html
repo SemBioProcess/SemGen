@@ -128,7 +128,7 @@
 					Stage Options
 				</div>
 				<div id="stagemenu" class="panel-default subpanel">
-					<div id="stagekey">
+					<div id="stagekey" class="vertical-menu">
 						<span class="subheading">Node key</span>
 						<ul class="visibleNodeKeys"></ul>
 						<ul class="hiddenNodeKeys"></ul>
@@ -369,38 +369,21 @@
 					<span class='subheading'>Merger Actions</span>
 					<ul class='menulist'>
 						<li><button id="resolPanels" type="button" class="panelbutton">Resolve Overlaps</button></li>
-						<li><button id="mergeModels" class="merge panelbutton" type="button">Execute Merge</button></li>
-						<li><button id="saveModel" class="panelbutton" type="button">Save Merged Model</button></li>
 						<li><button id="stageModel" class="panelbutton" type="button">Add Model to Project</button></li>
 						<li><button id="minimize" type="button" class="panelbutton">Return to Project</button></li>
 						<li><button id="quitMergerBtn" type="button" class="panelbutton">Close Merge</button></li>
 					</ul>
 				</div>
-			</div>
-		</template> 
-
-		<template id="leftExtractorMenus">
-			<div id="leftmenu" class="panel-default">
-				<div class="panel subpanel">
-					<span class='subheading'>Extractor Actions</span> 				
-					<ul class='menulist'>
-						<li><button id="stageModel" class="panelbutton" type="button">Add Extraction to Project</button></li>					
-						<li><button id="minimize" type="button" class="panelbutton">Return to Project</button></li>
-						<li><button id="saveModel" class="panelbutton" type="button">Export Extraction</button></li>
-						<li><button id="quitExtractorBtn" type="button" class="panelbutton">Close Extractor</button></li>
-					</ul>
-				</div>
 				<div class="panel subpanel" id="modeloptions">
 						<span class='subheading'>Visualize</span> 
 						<ul class='menulist'> 
-							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(0, true);});'>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(DisplayModes.SHOWSUBMODELS, true);});'>
 								Submodels</button></li>
-							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(1, true);});'>
+							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(DisplayModes.SHOWDEPENDENCIES, true);});'>
 								Dependencies</button></li>
-							<li><button type='button' class='panelbutton' onclick='main.task.doModelAction(function(model) { model.createVisualization(2, true);});'>
-								PhysioMap</button></li> 
 						</ul>
 				</div>
+				
 			</div>
 		</template> 
 

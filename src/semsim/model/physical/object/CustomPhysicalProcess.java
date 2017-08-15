@@ -50,4 +50,9 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 
 		return model.addCustomPhysicalProcess(this);
 	}
+	
+	@Override
+	public void removeFromModel(SemSimModel model) {
+		model.removePhysicalProcessFromCache(this);
+	}
 }

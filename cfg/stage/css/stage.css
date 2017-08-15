@@ -202,6 +202,35 @@ li.searchResultSet li:hover {
 	opacity: 0.8;
 }
 
+
+.taskchooser {
+	display: inline-block;
+	border-color: #c0c0c0;
+	border-style: solid;
+	height: 40px;
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+.taskchooser input {
+	width: 30px;
+	height: 30px;
+	padding-top: 5px;
+
+}
+
+
+.taskchooser ul {
+	display: inherit;
+	font-size: 10px;
+	text-align: left;
+	font-weight: bold;
+	list-style-type: none;
+	margin-bottom: 3px;
+	padding-left: 5px;
+	cursor: inherit;
+}
+
 #activeTaskTray:hover {
 	opacity: 1;
 	cursor: pointer;
@@ -209,7 +238,7 @@ li.searchResultSet li:hover {
 
 #activeTaskPanel {
 	bottom: 30px;
-	height: 30px;
+	height: 45px;
 	display: none;
 	background-color: #D3D3D3;
 }

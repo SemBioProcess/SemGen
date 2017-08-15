@@ -30,7 +30,7 @@ function MergerTask(graph, stagestate) {
 	$("#addModelButton, .stageSearch, #trash").hide();
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
 	//Create the resolution pane
-	
+
 	var t = document.querySelector('#mergerContent');
 
 	var clone = document.importNode(t.content, true);
@@ -62,6 +62,14 @@ function MergerTask(graph, stagestate) {
 
 	this.syntacicResolvedBySemantic = function(name) {
 		return merger.semrespane.semanticOverlapReolvesSyntactic(name);
+	}
+	
+	this.getModelNames = function() {
+		var modelnames = [];
+		for (i in this.nodes) {
+			modelnames.push(this.nodes[i].name);
+		}
+		return modelnames;
 	}
 	
 	$("#resolPanels").click(function() {
@@ -141,7 +149,7 @@ MergerTask.prototype.setSavedState = function (issaved) {
 //Everything that needs to be called after the stage and graph are set up.
 MergerTask.prototype.onInitialize = function() {
 	var merger = this;
-	
+	$('#stage').removeClass('taskmode').addClass('taskmode' );
 	merger.state.models.forEach(function(model) {
 		merger.addModelNode(model, []);
 	});

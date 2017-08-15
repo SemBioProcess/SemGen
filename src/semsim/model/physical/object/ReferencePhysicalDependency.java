@@ -62,4 +62,9 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 	public ReferencePhysicalDependency addToModel(SemSimModel model) {
 		return model.addReferencePhysicalDependency(this);
 	}
+	
+	@Override
+	public void removeFromModel(SemSimModel model) {
+		model.removeReferencePhysicalDependency(this);
+	}
 }

@@ -53,6 +53,8 @@ function Task(graph, stagestate) {
 		return modelNode;
 	};
 	
+
+	
 	task.isSaved =function() {
 		return this.saved;
 	}
@@ -153,7 +155,6 @@ function Task(graph, stagestate) {
 			node.selected = true;
 			node.highlight();
 		}
-		
 	}
 	
 	//On an extraction event from the context menu, make a new extraction

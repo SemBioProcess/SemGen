@@ -123,6 +123,7 @@ Link.prototype.tickHandler = function (element, graph) {
 Link.prototype.getKeyInfo = function () {
 	return {
 		linkType: this.linkType,
+		linkLevel: this.getLinkLevel(),
 		canShowHide: this.userCanHide,
 	};
 }

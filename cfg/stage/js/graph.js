@@ -19,6 +19,8 @@ function Graph() {
 
 	var visibleNodes = [];
 	this.doodads = [];
+	this.defaultcursor = 'move';
+	$('#stage').css('cursor', graph.defaultcursor);
 	
 	var svg = d3.select("#stage")
 	    .append("svg")	    
@@ -82,15 +84,13 @@ function Graph() {
 	        }))
 	        .on("dblclick.zoom", null);
 
-	
-	
-
 	$('#toggleMoveStageButton').addClass('on');
 	
 	$('#toggleMoveStageButton').click(function() {
 		$('#toggleMoveStageButton').addClass('on');
 		$('#toggleSelectButton').removeClass('on');
 		
+		graph.defaultcursor = 'move';
 		$('#stage').css('cursor', 'move');
 		svg.on('mousedown.drag', null);
 		svg.call(d3.zoom()
@@ -108,6 +108,7 @@ function Graph() {
 		$('#toggleMoveStageButton').removeClass('on');
 		
 		$('#stage').css('cursor', 'auto');
+		graph.defaultcursor = 'auto'; 
 		svg.call(BoundingBox(visibleNodes));
 		svg.call(d3.zoom()
 				.translateExtent(graph.worldsize)
@@ -509,6 +510,8 @@ function Graph() {
     	.restart();
 		graph.paused = false;
 	}
+	
+	
 
 	this.isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 	this.cntrlIsPressed = false;
@@ -525,8 +528,11 @@ function Graph() {
             graph.cntrlIsPressed = false;
             graph.cntrlIsPressedOnMac = false;
 		}
-		if(event.which=="16")
+		if(event.which=="16") {
 			graph.shiftIsPressed = false;
+			$('#stage').css('cursor', graph.defaultcursor);
+		}
+			
 		if(event.which=="32") {
 			graph.fixedMode = !graph.fixedMode;
 			$("#fixedNodes").attr('checked',graph.fixedMode);
@@ -549,8 +555,10 @@ function Graph() {
             if(event.which=="17")
                 graph.cntrlIsPressed = true;
         }		
-        if(event.which=="16")
+        if(event.which=="16") {
 			graph.shiftIsPressed = true;
+			$('#stage').css('cursor', 'crosshair');
+        }
 	});
 		
 	this.updateHeightAndWidth();

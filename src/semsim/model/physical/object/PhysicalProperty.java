@@ -70,4 +70,8 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		return model.addPhysicalProperty(this);
 		
 	}
+	
+	public void removeFromModel(SemSimModel model) {
+		model.removePhysicalProperty(this);
+	}
 }
