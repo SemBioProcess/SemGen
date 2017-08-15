@@ -143,7 +143,7 @@ function Stage(graph, stagestate) {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
 
-		searchResultsList.append(makeResultSet(nodeSearchResultSet));
+		searchResultsList.append(makeResultSet(nodeSearchResultSet, stage));
     };
 	
 	$("#saveModel").click(function() {
@@ -415,7 +415,7 @@ Stage.prototype.setSavedState = function (issaved) {
 }
 
 
-function makeResultSet(searchResultSet) {
+function makeResultSet(searchResultSet, stage) {
 	var resultSet = $(
 		"<li class='searchResultSet'>" +
 			"<label>" + searchResultSet.source + "</label>" +
@@ -428,11 +428,21 @@ function makeResultSet(searchResultSet) {
         item.className = "searchResultSetValue";
         item.appendChild(document.createTextNode(searchResultSet.results[i]));
         list.appendChild(item);
+
         $(item).data("source", searchResultSet.source);
         $(item).click(function() {
-			var modelName = $(this).text().trim();
+			var name = $(this).text().trim();
 			var source = $(this).data("source");
-			sender.addModelByName(source, modelName);
+			if (source == "Example models") {
+                sender.addModelByName(source, name);
+            }
+            else if (source == "Nodes on Stage") {
+                var visibleNodes = stage.graph.getVisibleNodes();
+                var node = visibleNodes.filter(function ( node ) {
+                    return node.name === name;
+                })[0];
+				node.onClick();
+			}
 
 			// Hide the search box
 			$(".stageSearch .searchValueContainer").hide();
