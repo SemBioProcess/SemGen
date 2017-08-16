@@ -95,6 +95,12 @@ function Stage(graph, stagestate) {
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
 	});
 
+    $(".dropdown-toggle").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).closest(".search-dropdown").toggleClass('open');
+    });
+
 	// When you mouseout of the search element hide the search box and results
 	$(".stageSearch").mouseout(function (){
 		$(".stageSearch .searchValueContainer").hide();

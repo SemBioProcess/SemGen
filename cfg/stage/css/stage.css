@@ -116,6 +116,27 @@ body {
 	padding: 0;
 }
 
+.searchFilterBtn {
+	position: relative;
+	top: 0;
+	display: inline-block;
+	float: left;
+	padding: 0 10px;
+	color: #fff;
+	border: 1px solid transparent;
+	background-color: #3b5998;
+	opacity: .8;
+	text-align: center;
+}
+
+.search-dropdown {
+	position: relative;
+	top: 0;
+	display: inline-block;
+	float: right;
+
+}
+
 ul.searchResults {
 	position: absolute;
 	width: 500px;

@@ -99,6 +99,18 @@
 				</svg>
 			</div>
 			<div class="searchValueContainer">
+				<div class="search-dropdown">
+					<button class="searchFilterBtn button dropdown-toggle" type="button">
+						<span class="toggle-active">Filters</span>
+						<span class="ion-arrow-down-b"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><label><input type="checkbox" value="all" checked>All</label></li>
+						<li><label><input type="checkbox" value="models">Models</label></li>
+						<li><label><input type="checkbox" value="nodeNames">Node names</label></li>
+						<li><label><input type="checkbox" value="nodeDescription">Node descriptions</label></li>
+					</ul>
+				</div>
 				<input name="searchString" class="searchString" type="text" placeholder="Search for models or nodes">
 				<ul class="searchResults"></ul>
 			</div>
