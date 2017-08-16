@@ -60,11 +60,9 @@ function Stage(graph, stagestate) {
 
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
-		console.log("Showing search results");
 
 		// Remove all elements from the result list
 		var searchResultsList = $(".searchResults");
-		searchResultsList.empty();
 
 		// Create UI for the results
 		searchResults.forEach(function (searchResultSet) {
@@ -95,11 +93,27 @@ function Stage(graph, stagestate) {
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
 	});
 
+	// Filter stuff for searching
     $(".dropdown-toggle").click(function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $(this).closest(".search-dropdown").toggleClass('open');
+        $(".searchDropDownMenu").toggle(300);
     });
+
+    $("#checkAll").click(function () {
+        $(".searchDropDownMenu input:checkbox").not(this).prop('checked', this.checked);
+    });
+    $(".searchDropDownMenu input:checkbox:not(#checkAll)").change(function () {
+        if ($(".searchDropDownMenu input:checkbox:not(#checkAll):checked").length ==
+			$(".searchDropDownMenu input:checkbox:not(#checkAll)").length) {
+        	$("#checkAll").prop('checked', true);
+        }
+        else $("#checkAll").prop('checked', false);
+	});
+
+    $(".searchDropDownMenu input:checkbox").change(function () {
+    	stage.stageSearch($(".searchString").val());
+	});
 
 	// When you mouseout of the search element hide the search box and results
 	$(".stageSearch").mouseout(function (){
@@ -108,33 +122,53 @@ function Stage(graph, stagestate) {
 
 	$(".searchString").keyup(function() {
 		if( $(this).val() ) {
-			$(".stageSearch .searchValueContainer .searchResults").show();
-			sender.search($( this ).val());
-
-			// Search for nodes on Stage
-            stage.nodeSearch(graph.getVisibleNodes(), $(this).val());
-
+            stage.stageSearch( $(this).val() );
         }
 		else {
 			$(".stageSearch .searchValueContainer .searchResults").hide();
 		}
 	});
 
-	this.nodeSearch = function(visibleNodes, searchString) {
+	this.stageSearch = function(searchString) {
+        console.log("Showing search results");
+        $(".searchResults").empty();
+
+        // Check search filter
+        var modelSearchChecked = $("#checkModel").is(':checked');
+        var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
+        var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
+
+        if (modelSearchChecked) {
+            $(".stageSearch .searchValueContainer .searchResults").show();
+            sender.search(searchString);
+        }
+
+        // Search for nodes on Stage
+        if (nodeNameSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+        }
+        if (nodeDescSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+        }
+	}
+
+	this.nodeSearch = function(visibleNodes, searchString, filter) {
         var nodeSearchResultSet = {};
         var nodeSearchResults = [];
         var searchResultsList = $(".searchResults");
 
         for (i in visibleNodes) {
+        	var result = {};
             var node = visibleNodes[i];
             var nodeLabel = node.displayName.toLowerCase();
             var nodeDescription = node.description.toLowerCase();
             var querryArray = searchString.toLowerCase().split(" ");
 
-            if (querryArray.every(function(keyword) {var foundInName = false;
+            if (querryArray.every(function(keyword) {
+                    var foundInName = false;
                     var foundInDescription = false;
-                    if(nodeLabel.includes(keyword)) foundInName = true;
-                    if(nodeDescription.includes(keyword)) foundInDescription = true;
+                    if(nodeLabel.includes(keyword) && filter == "label") foundInName = true;
+                    if(nodeDescription.includes(keyword) && filter == "description") foundInDescription = true;
 
                     return (foundInName || foundInDescription);
                 })) {
@@ -142,14 +176,16 @@ function Stage(graph, stagestate) {
             }
         }
 
-        nodeSearchResultSet["source"] = "Nodes on Stage";
+        nodeSearchResultSet["source"] = "Nodes on Stage " + "(" + filter + ")";
         nodeSearchResultSet["results"] = nodeSearchResults;
 
-		nodeSearchResultSet.results.sort(function (a, b) {
+        nodeSearchResultSet.results.sort(function (a, b) {
             return a.toLowerCase().localeCompare(b.toLowerCase());
         });
 
-		searchResultsList.append(makeResultSet(nodeSearchResultSet, stage));
+		if (nodeSearchResultSet.results.length > 0) {
+            searchResultsList.append(makeResultSet(nodeSearchResultSet, stage));
+        }
     };
 	
 	$("#saveModel").click(function() {

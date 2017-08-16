@@ -134,7 +134,11 @@ body {
 	top: 0;
 	display: inline-block;
 	float: right;
+}
 
+.searchDropDownMenu {
+	display: none;
+	font-size: 12px;
 }
 
 ul.searchResults {
