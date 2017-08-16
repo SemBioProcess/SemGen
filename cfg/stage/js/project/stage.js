@@ -13,6 +13,7 @@ function Stage(graph, stagestate) {
 	stage.extractions = {};
 
 	$("#addModelButton, .stageSearch").show();
+    $(".searchDropDownMenu input:checkbox").prop('disabled', false);
 
     $('[data-toggle="tooltip"]').tooltip({delay: {show: 1000, hide: 50}});
 
@@ -102,6 +103,7 @@ function Stage(graph, stagestate) {
 
     $("#checkAll").click(function () {
         $(".searchDropDownMenu input:checkbox").not(this).prop('checked', this.checked);
+        stage.stageSearch($(".searchString").val());
     });
     $(".searchDropDownMenu input:checkbox:not(#checkAll)").change(function () {
         if ($(".searchDropDownMenu input:checkbox:not(#checkAll):checked").length ==
@@ -121,34 +123,34 @@ function Stage(graph, stagestate) {
 	});
 
 	$(".searchString").keyup(function() {
-		if( $(this).val() ) {
-            stage.stageSearch( $(this).val() );
-        }
-		else {
-			$(".stageSearch .searchValueContainer .searchResults").hide();
-		}
+		stage.stageSearch($(this).val());
 	});
 
 	this.stageSearch = function(searchString) {
-        console.log("Showing search results");
-        $(".searchResults").empty();
-
-        // Check search filter
-        var modelSearchChecked = $("#checkModel").is(':checked');
-        var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
-        var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
-
-        if (modelSearchChecked) {
+        if( searchString ) {
+            console.log("Showing search results");
             $(".stageSearch .searchValueContainer .searchResults").show();
-            sender.search(searchString);
-        }
+            $(".searchResults").empty();
 
-        // Search for nodes on Stage
-        if (nodeNameSearchChecked) {
-            stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+            // Check search filter
+            var modelSearchChecked = $("#checkModel").is(':checked');
+            var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
+            var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
+
+            if (modelSearchChecked) {
+                sender.search(searchString);
+            }
+
+            // Search for nodes on Stage
+            if (nodeNameSearchChecked) {
+                stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+            }
+            if (nodeDescSearchChecked) {
+                stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+            }
         }
-        if (nodeDescSearchChecked) {
-            stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+        else {
+            $(".stageSearch .searchValueContainer .searchResults").hide();
         }
 	}
 
@@ -478,7 +480,7 @@ function makeResultSet(searchResultSet, stage) {
 			if (source == "Example models") {
                 sender.addModelByName(source, name);
             }
-            else if (source == "Nodes on Stage") {
+            else if (source.includes("Nodes on Stage")) {
                 var visibleNodes = stage.graph.getVisibleNodes();
                 var node = visibleNodes.filter(function ( node ) {
                     return node.name === name;
