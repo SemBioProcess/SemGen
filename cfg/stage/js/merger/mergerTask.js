@@ -169,7 +169,11 @@ MergerTask.prototype.onInitialize = function() {
 		$("#mergeStep1").slideDown();
 		$("#mergeStep2").hide();
 	});
-	
+
+	$(".returnBtn").click(function() {
+        $('#taskModal').modal("hide");
+        sender.changeTask(0);
+    })
 
 	$(".merge").prop('disabled', true)
 		.click(function() {
