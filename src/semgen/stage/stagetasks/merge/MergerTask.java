@@ -261,8 +261,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		//Model id has to be included because we don't know the which model's node is being passed in
 		public void onCreateCustomOverlap(String nodes) {
 			String[] nodestolink = nodes.split(",");
-			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
-			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
+			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getID();
+			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getID();
 			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 			ArrayList<Boolean> units = workbench.getUnitOverlaps();

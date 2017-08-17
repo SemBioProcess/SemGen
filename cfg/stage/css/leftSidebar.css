@@ -93,5 +93,6 @@ ul.modelPopover li.submenuContainer {
 } 
 
 .panelbutton.active {
-	background-color: #9bA9F8;
+	background-color: #3b5998;
+	color: white;
 } 

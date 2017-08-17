@@ -46,7 +46,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			
 			
 			keyElement.innerHTML = '<svg height="16" width="200">' +
-		  		'<circle transform="translate(10,8)" r="8" style="fill:' + keyInfo.color + ';" />' + slash +
+		  		'<circle transform="translate(10,8)" r="6" style="fill:' + keyInfo.color + ';" />' + slash +
 		  		'<text x="54" y="14" stroke="' + keyInfo.nodeType + '">'+ keyInfo.nodeType + '</text>' +
 			 '</svg>';
 			
@@ -54,9 +54,6 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 			if(keyInfo.nodeType == "Mediator") {
 				keyElement.style.webkitTextStroke = ".7px black";
 			}
-			
-
-
 
 			if(keyInfo.canShowHide) {
 				$(keyElement).click(function (e) {

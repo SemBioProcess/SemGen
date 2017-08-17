@@ -99,6 +99,7 @@ public abstract class ParentNode<T extends SemSimCollection> extends Node<T> {
 			returnnode = child.getNodebyId(id);
 			if (returnnode != null) break;
 		}
+
 		return returnnode;
 		
 	}

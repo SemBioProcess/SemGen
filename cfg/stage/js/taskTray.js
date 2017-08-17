@@ -21,7 +21,7 @@ function OpenTask(type, index, modelnodes) {
 			
 
 			if (this.currenttask) {
-				tasktab.style.borderColor = 'yellow';
+				tasktab.style.borderColor = 'GoldenRod';
 			}
 			
 			tasktab.onclick = function() {
