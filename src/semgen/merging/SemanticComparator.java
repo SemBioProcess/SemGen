@@ -1,15 +1,9 @@
 package semgen.merging;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-
 import semgen.SemGen;
 import semgen.merging.ModelOverlapMap.MapType;
 import semsim.model.collection.SemSimModel;
@@ -22,6 +16,11 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.DuplicateChecker;
 import semsim.utilities.SemSimUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SemanticComparator {
 	public SemSimModel model1, model2;
@@ -123,7 +122,7 @@ public class SemanticComparator {
 								
 								// If the properties are siblings, add mapping.
 								if(super1.size()>0)
-									dsmatchlist.add(new SemanticOverlap(ds1,ds2,MapType.SEMANTICALLY_SIMILAR));
+									dsmatchlist.add(new SemanticOverlap(ds1, ds2, MapType.SEMANTICALLY_SIMILAR));
 							}
 						}					
 					}

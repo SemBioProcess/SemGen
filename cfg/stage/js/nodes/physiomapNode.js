@@ -14,6 +14,7 @@ function PhysioMapNode (graph, data, parentNode) {
 	}
 
 	this.displayName = limitWords(this.displayName, 3);
+	if (typeof this.description == "undefined") this.description = this.displayName;
 	this.addClassName("physiomapNode");
 	this.addBehavior(HiddenLabelNodeGenerator);
 
@@ -93,8 +94,7 @@ PhysioMapNode.prototype.updateInfo = function() {
 	$("#nodemenuUnitRow").hide();
 	$("#nodemenuEquationRow").hide();
 	$("#nodemenuAnnotationRow").hide();
-	$("#nodemenuParticipantsRow").show();
-	
+
 	var partstoich = "Sources: \n";
 	for (i=0; i < this.srcobj.sourcenames.length; i++) {
 		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";

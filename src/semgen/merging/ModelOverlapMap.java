@@ -1,15 +1,14 @@
 package semgen.merging;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-
 import org.apache.commons.lang3.tuple.Pair;
-
 import semgen.merging.SemanticComparator.SemanticOverlap;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.owl.SemSimOWLFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class ModelOverlapMap {
 	private Pair<Integer, Integer> modelindicies;
@@ -51,7 +50,12 @@ public class ModelOverlapMap {
 		
 		for (int i=slndomcnt; i<(equivlist.size()); i++ ) {
 			dspair = equivlist.get(i).getMappedPair();
-			addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.SEMANTICALLY_EXACT);
+			if (equivlist.get(i).mappingtype.name() == "SEMANTICALLY_SIMILAR") {
+				addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.SEMANTICALLY_SIMILAR);
+			}
+			else {
+				addDataStructureMapping(dspair.getLeft(), dspair.getRight(), MapType.SEMANTICALLY_EXACT);
+			}
 		}
 		unitsmap = comparator.identifyEquivalentUnits();
 		identicalsubmodelnames = comparator.getIdenticalSubmodels();

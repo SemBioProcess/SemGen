@@ -79,7 +79,14 @@ function SemanticResolutionPane(merger) {
 		
 		clone.querySelector('input.mergeResRadio').disabled = merger.mergecomplete;
 		clone.querySelector('.previewResolutionBtn').setAttribute("onclick", 'sender.requestPreview(' + clone.index + ');');
-		
+
+		if (overlap.similar) {
+            clone.querySelector('.mappingType').innerHTML = "Similar semantic match";
+		}
+		else {
+            clone.querySelector('.mappingType').innerHTML = "Exact semantic match";
+		}
+
 		//Custom mappings can be removed
 		if (overlap.custom) {
 			clone.querySelector('.removeMappingBtn').style.display = 'inherit';
@@ -88,6 +95,8 @@ function SemanticResolutionPane(merger) {
 				sender.removeCustomOverlap(clone.index);
 			};
 			clone.querySelector('.removeMappingBtn').disabled = merger.mergecomplete;
+
+			clone.querySelector('.mappingType').innerHTML = "Manual mapping";
 		}
 
 		clone.setSelection = function(sel) {
