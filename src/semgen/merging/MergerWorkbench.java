@@ -24,6 +24,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
+import sun.security.util.Length;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
@@ -260,6 +261,7 @@ public class MergerWorkbench extends Workbench {
 		//If a datastructure with that name cannot be found, try searching with just the DS name
 		String[] names = cdwd.split("\\.");
 		String dsname = names[names.length-1];
+
 		for (DataStructure ds : exposeddslist.get(modind)) {
 			if (ds.getName().equals(dsname)) {
 				return exposeddslist.get(modind).indexOf(ds);

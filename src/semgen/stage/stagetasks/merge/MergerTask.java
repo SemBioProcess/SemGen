@@ -204,6 +204,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		
 		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
 		for (DependencyNode dnode : depnodes) {
+			if (dnode.issubmodelinput) continue;
 			boolean mapped = false;
 			int mappedhash = -1;
 			int i = workbench.getSolutionDomainCount();
@@ -261,8 +262,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		//Model id has to be included because we don't know the which model's node is being passed in
 		public void onCreateCustomOverlap(String nodes) {
 			String[] nodestolink = nodes.split(",");
-			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getID();
-			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getID();
+			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
+			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
 			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 			ArrayList<Boolean> units = workbench.getUnitOverlaps();
