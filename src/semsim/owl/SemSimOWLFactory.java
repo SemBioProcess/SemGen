@@ -404,6 +404,11 @@ public class SemSimOWLFactory {
 			return labeltexts;
 		}
 	}
+	
+	
+	public static String getRDFLabel(OWLOntology ont, OWLEntity ent){
+		return getRDFLabels(ont,ent)[0];
+	}
 
 	public static void setRDFLabel(OWLOntology ontology, OWLNamedIndividual annind, String value, OWLOntologyManager manager) {
 		if(value!=null && !value.contentEquals("")){
@@ -614,33 +619,20 @@ public class SemSimOWLFactory {
 		return URI.create(model.getNamespace() + URIencoding(ds.getName()) + "_property");
 	}
 	
-	public static String[] getRDFComments(OWLOntology ont, String indiri) {
-		Set<String> commentset = new HashSet<String>();
-		OWLNamedIndividual ind = factory.getOWLNamedIndividual(IRI.create(indiri));
-		OWLLiteral val = null;
-		OWLAnnotationProperty comment = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
-		Set<OWLAnnotation> anns = ind.getAnnotations(ont, comment);
-		for (OWLAnnotation annotation : anns) {
-			val = (OWLLiteral) annotation.getValue();
-			commentset.add(val.getLiteral());
-		}
-		if(commentset.size()>0) return commentset.toArray(new String[] {});
-		return null;
-	}
 
-	public static String getRDFcomment(OWLOntology ont, OWLIndividual ind) {
+	public static String getRDFcomment(OWLOntology ont, OWLEntity ent) {
 		String commentstring = "";
 		OWLAnnotationProperty comment = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
 
-		if (ind.asOWLNamedIndividual().getAnnotations(ont, comment).size() <= 1) {
-			for (OWLAnnotation annotation : ind.asOWLNamedIndividual().getAnnotations(ont, comment)) {
+		if (ent.getAnnotations(ont, comment).size() <= 1) {
+			for (OWLAnnotation annotation : ent.getAnnotations(ont, comment)) {
 				if (annotation.getValue() instanceof OWLLiteral) {
 					OWLLiteral val = (OWLLiteral) annotation.getValue();
 					if (val.getLiteral() != null) commentstring = val.getLiteral();
 				}
 			}
 		} else {
-			System.err.println("ERROR: Multiple comments for " + ind.toString());
+			System.err.println("ERROR: Multiple comments for " + ent.toString());
 		}
 		return commentstring;
 	}
