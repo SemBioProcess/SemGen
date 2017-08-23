@@ -163,6 +163,7 @@ function Stage(graph, stagestate) {
             var node = visibleNodes[i];
             var nodeLabel = node.displayName.toLowerCase();
             var nodeDescription = node.description.toLowerCase();
+            var parentModel = node.id.split(".")[0];
             var querryArray = searchString.toLowerCase().split(" ");
 
             if (querryArray.every(function(keyword) {
@@ -173,7 +174,8 @@ function Stage(graph, stagestate) {
 
                     return (foundInName || foundInDescription);
                 })) {
-                nodeSearchResults.push([node.name, node.getParentModel(node).displayName, node.id]);
+
+                nodeSearchResults.push([node.name, parentModel, node.id]);
             }
         }
 
