@@ -1,25 +1,13 @@
 package semgen.stage.stagetasks.merge;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.gson.annotations.Expose;
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
-
+import org.apache.commons.lang3.tuple.Pair;
 import semgen.merging.DataStructureDescriptor;
-import semgen.merging.MergerWorkbench;
 import semgen.merging.DataStructureDescriptor.Descriptor;
 import semgen.merging.Merger.ResolutionChoice;
+import semgen.merging.MergerWorkbench;
 import semgen.merging.MergerWorkbench.MergeEvent;
 import semgen.merging.ModelOverlapMap.MapType;
 import semgen.stage.serialization.DependencyNode;
@@ -33,6 +21,9 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
+
+import javax.swing.*;
+import java.util.*;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
@@ -192,6 +183,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		int i = workbench.getSolutionDomainCount();
 		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
 			Overlap overlap = new Overlap(dsd);
+			overlap.similar = workbench.getMapPairType(i).equals(MapType.SEMANTICALLY_SIMILAR);
 			overlap.custom = workbench.getMapPairType(i).equals(MapType.MANUAL_MAPPING);
 			overlaps.add(overlap);
 			i++;
@@ -389,7 +381,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	//Classes for passing information to the stage
 	class Overlap {
 		@Expose public StageDSDescriptor dsleft;
-		@Expose public StageDSDescriptor dsright; 
+		@Expose public StageDSDescriptor dsright;
+		@Expose public Boolean similar = false;
 		@Expose public Boolean custom = false;
 		
 		protected Overlap(Pair<DataStructureDescriptor, DataStructureDescriptor> dsdesc) {

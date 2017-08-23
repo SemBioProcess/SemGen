@@ -13,6 +13,7 @@ function Stage(graph, stagestate) {
 	stage.extractions = {};
 
 	$("#addModelButton, .stageSearch").show();
+    $(".searchDropDownMenu input:checkbox").prop('disabled', false);
 
     $('[data-toggle="tooltip"]').tooltip({delay: {show: 1000, hide: 50}});
 
@@ -60,14 +61,12 @@ function Stage(graph, stagestate) {
 
 	// Show search results on stage
 	receiver.onSearch(function (searchResults) {
-		console.log("Showing search results");
 
 		// Remove all elements from the result list
 		var searchResultsList = $(".searchResults");
-		searchResultsList.empty();
 
 		// Create UI for the results
-		searchResults.forEach(function (searchResultSet ) {
+		searchResults.forEach(function (searchResultSet) {
 			searchResultSet.results.sort(function (a, b) {
 				return a.toLowerCase().localeCompare(b.toLowerCase());
 			});
@@ -95,20 +94,101 @@ function Stage(graph, stagestate) {
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
 	});
 
+	// Filter stuff for searching
+    $(".dropdown-toggle").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(".searchDropDownMenu").toggle(300);
+    });
+
+    $("#checkAll").click(function () {
+        $(".searchDropDownMenu input:checkbox").not(this).prop('checked', this.checked);
+        stage.stageSearch($(".searchString").val());
+    });
+    $(".searchDropDownMenu input:checkbox:not(#checkAll)").change(function () {
+        if ($(".searchDropDownMenu input:checkbox:not(#checkAll):checked").length ==
+			$(".searchDropDownMenu input:checkbox:not(#checkAll)").length) {
+        	$("#checkAll").prop('checked', true);
+        }
+        else $("#checkAll").prop('checked', false);
+	});
+
+    $(".searchDropDownMenu input:checkbox").change(function () {
+    	stage.stageSearch($(".searchString").val());
+	});
+
 	// When you mouseout of the search element hide the search box and results
 	$(".stageSearch").mouseout(function (){
 		$(".stageSearch .searchValueContainer").hide();
 	});
 
 	$(".searchString").keyup(function() {
-		if( $(this).val() ) {
-			$(".stageSearch .searchValueContainer .searchResults").show();
-			sender.search($( this ).val());
-		}
-		else {
-			$(".stageSearch .searchValueContainer .searchResults").hide();
-		}
+		stage.stageSearch($(this).val());
 	});
+
+	this.stageSearch = function(searchString) {
+        if( searchString ) {
+            console.log("Showing search results");
+            $(".stageSearch .searchValueContainer .searchResults").show();
+            $(".searchResults").empty();
+
+            // Check search filter
+            var modelSearchChecked = $("#checkModel").is(':checked');
+            var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
+            var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
+
+            if (modelSearchChecked) {
+                sender.search(searchString);
+            }
+
+            // Search for nodes on Stage
+            if (nodeNameSearchChecked) {
+                stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+            }
+            if (nodeDescSearchChecked) {
+                stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+            }
+        }
+        else {
+            $(".stageSearch .searchValueContainer .searchResults").hide();
+        }
+	}
+
+	this.nodeSearch = function(visibleNodes, searchString, filter) {
+        var nodeSearchResultSet = {};
+        var nodeSearchResults = [];
+        var searchResultsList = $(".searchResults");
+
+        for (i in visibleNodes) {
+        	var result = {};
+            var node = visibleNodes[i];
+            var nodeLabel = node.displayName.toLowerCase();
+            var nodeDescription = node.description.toLowerCase();
+            var querryArray = searchString.toLowerCase().split(" ");
+
+            if (querryArray.every(function(keyword) {
+                    var foundInName = false;
+                    var foundInDescription = false;
+                    if(nodeLabel.includes(keyword) && filter == "label") foundInName = true;
+                    if(nodeDescription.includes(keyword) && filter == "description") foundInDescription = true;
+
+                    return (foundInName || foundInDescription);
+                })) {
+                nodeSearchResults.push(node.name);
+            }
+        }
+
+        nodeSearchResultSet["source"] = "Nodes on Stage " + "(" + filter + ")";
+        nodeSearchResultSet["results"] = nodeSearchResults;
+
+        nodeSearchResultSet.results.sort(function (a, b) {
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+
+		if (nodeSearchResultSet.results.length > 0) {
+            searchResultsList.append(makeResultSet(nodeSearchResultSet, stage));
+        }
+    };
 	
 	$("#saveModel").click(function() {
 		var modelstosave = [], count = 0;
@@ -379,7 +459,7 @@ Stage.prototype.setSavedState = function (issaved) {
 }
 
 
-function makeResultSet(searchResultSet) {
+function makeResultSet(searchResultSet, stage) {
 	var resultSet = $(
 		"<li class='searchResultSet'>" +
 			"<label>" + searchResultSet.source + "</label>" +
@@ -392,11 +472,21 @@ function makeResultSet(searchResultSet) {
         item.className = "searchResultSetValue";
         item.appendChild(document.createTextNode(searchResultSet.results[i]));
         list.appendChild(item);
+
         $(item).data("source", searchResultSet.source);
         $(item).click(function() {
-			var modelName = $(this).text().trim();
+			var name = $(this).text().trim();
 			var source = $(this).data("source");
-			sender.addModelByName(source, modelName);
+			if (source == "Example models") {
+                sender.addModelByName(source, name);
+            }
+            else if (source.includes("Nodes on Stage")) {
+                var visibleNodes = stage.graph.getVisibleNodes();
+                var node = visibleNodes.filter(function ( node ) {
+                    return node.name === name;
+                })[0];
+				node.onClick();
+			}
 
 			// Hide the search box
 			$(".stageSearch .searchValueContainer").hide();

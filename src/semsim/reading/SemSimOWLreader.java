@@ -26,6 +26,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
@@ -264,11 +265,9 @@ public class SemSimOWLreader extends ModelReader {
 		// For each process instance in the class SemSim:Physical_process
 		for(String processind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROCESS.getURIasString())){
 			
-			String processlabel = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLNamedIndividual(IRI.create(processind)))[0];
-			String description = null;
-			
-			if(SemSimOWLFactory.getRDFComments(ont, processind)!=null)
-				description = SemSimOWLFactory.getRDFComments(ont, processind)[0];
+			OWLEntity processowlind = factory.getOWLNamedIndividual(IRI.create(processind));
+			String processlabel = SemSimOWLFactory.getRDFLabel(ont, processowlind);
+			String description = SemSimOWLFactory.getRDFcomment(ont, processowlind);
 						
 			PhysicalProcess pproc = null;
 			// Create reference physical process, if there is an annotation
@@ -950,7 +949,9 @@ public class SemSimOWLreader extends ModelReader {
 	
 	/** Make Custom Entity **/
 	private CustomPhysicalEntity makeCustomEntity(String cuperef) {
-		String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(cuperef)))[0];
+		
+		OWLEntity cupecls = factory.getOWLClass(IRI.create(cuperef));
+		String label = SemSimOWLFactory.getRDFLabels(ont, cupecls)[0];
 		
 		String sub = cuperef.subSequence(cuperef.lastIndexOf("_"), cuperef.length()).toString();
 		cuperef = cuperef.replace(sub, "");
@@ -963,8 +964,10 @@ public class SemSimOWLreader extends ModelReader {
 		}
 		CustomPhysicalEntity cupe = new CustomPhysicalEntity(label, null);
 		
-		if(SemSimOWLFactory.getRDFComments(ont, cuperef)!=null)
-			cupe.setDescription(SemSimOWLFactory.getRDFComments(ont, cuperef)[0]);
+		String description = SemSimOWLFactory.getRDFcomment(ont, cupecls);
+		
+		if( ! description.isEmpty()) cupe.setDescription(description);
+		
 		label = cuperef.replace(sub, "");
 		
 		identitymap.put(cuperef.replace(sub, ""), cupe);

@@ -34,8 +34,8 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		getAccessibleContext().setAccessibleDescription("File manipulation menu");
 
 		// File menu items
-		fileitemnewstage = formatMenuItem(fileitemnewstage, "New Stage Tab", KeyEvent.VK_N,true,true);
-		fileitemnewstage.setToolTipText("Open a new Stage Tab");
+		fileitemnewstage = formatMenuItem(fileitemnewstage, "New Project Tab", KeyEvent.VK_N,true,true);
+		fileitemnewstage.setToolTipText("Open a new Project Tab");
 		add(fileitemnewstage);
 		
 		fileitemnewannotator = formatMenuItem(fileitemnewannotator, "New Annotator Tab",KeyEvent.VK_A,true,true);

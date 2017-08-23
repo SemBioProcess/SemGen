@@ -13,6 +13,8 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.id = srcobj.id;
 	this.hash = srcobj.hash;
 	this.displayName = this.name;
+	this.description = srcobj.description;
+	this.metadataid = srcobj.metadataid;
 	this.r = r;
 	this.showchildren = false;
 	this.textSize = textSize;
@@ -202,8 +204,8 @@ Node.prototype.tickHandler = function (element, graph) {
 	var forcey = 0;
 	var forcex = 0;
 
-	if (this.parent && this.graph.fixedMode) {
-			var k = .001;
+	if (this.parent && !this.graph.paused) {
+			var k = .003;
 			forcey = (this.parent.ypos() - this.ypos()) * k;
 			forcex = (this.parent.xpos() - this.xpos()) * k;
 

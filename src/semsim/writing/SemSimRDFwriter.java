@@ -602,7 +602,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	
-	public URI convertURItoIdentifiersDotOrgFormat(URI uri){
+	public static URI convertURItoIdentifiersDotOrgFormat(URI uri){
 		URI newuri = uri;
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 

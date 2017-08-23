@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -183,6 +185,8 @@ public class SBMLreader extends ModelReader{
 		collectEvents();
 		setComputationalDependencyNetwork();
 
+		System.out.println("HERE1: " + semsimmodel.containsDataStructure("v1"));
+	
 		return semsimmodel;
 	}
 	
@@ -979,7 +983,7 @@ public class SBMLreader extends ModelReader{
 				if(speciesAndConservation.containsKey(reactantname)){
 					SpeciesConservation sc = speciesAndConservation.get(reactantname);
 				
-					if(sc.setWithConservationEquation) sc.consumedby.add(reactionID);
+					if(sc.setWithConservationEquation) sc.consumedby.add(Pair.of(process, reaction)); // Use the name field on SemSim objects for species conservation info
 				}
 			}
 			
@@ -994,7 +998,7 @@ public class SBMLreader extends ModelReader{
 				if(speciesAndConservation.containsKey(productname)){
 					SpeciesConservation sc = speciesAndConservation.get(productname);
 				
-					if(sc.setWithConservationEquation) sc.producedby.add(reactionID);
+					if(sc.setWithConservationEquation) sc.producedby.add(Pair.of(process, reaction));
 				}
 			}
 			
@@ -1074,33 +1078,35 @@ public class SBMLreader extends ModelReader{
 				
 				PhysicalEntity speciesent = speciesAndEntitiesMap.get(speciesid);
 				
-				for(String reactionid : speccon.producedby){
-					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSinkStoichiometry(speciesent);
+				for(Pair<PhysicalProcess,Reaction> reactionpair : speccon.producedby){
+					Double stoich = reactionpair.getLeft().getSinkStoichiometry(speciesent);
+					String reactionsbmlid = reactionpair.getRight().getId();
 					
 					if(stoich==1){
-						eqmathml = eqmathml + "\n" + ws +" <ci>"+ reactionid + "</ci>";
-						eqstring = eqstring + " + " + reactionid;
+						eqmathml = eqmathml + "\n" + ws +" <ci>"+ reactionsbmlid + "</ci>";
+						eqstring = eqstring + " + " + reactionsbmlid;
 					}
 					else{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>" + stoich + "</cn>\n" 
-								+ ws + "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";
-						eqstring = eqstring + " + (" + stoich + "*" + reactionid + ")";
+								+ ws + "  <ci>" + reactionsbmlid + "</ci>\n" + ws + " </apply>";
+						eqstring = eqstring + " + (" + stoich + "*" + reactionsbmlid + ")";
 	
 					}
 				}
 				
-				for(String reactionid : speccon.consumedby){
-					Double stoich = semsimmodel.getCustomPhysicalProcessByName(reactionid).getSourceStoichiometry(speciesent);
-					
+				for(Pair<PhysicalProcess,Reaction> reactionpair : speccon.consumedby){
+					Double stoich = reactionpair.getLeft().getSourceStoichiometry(speciesent);
+					String reactionsbmlid = reactionpair.getRight().getId();
+
 					if(stoich==1){
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-1</cn>\n" + ws 
-								+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";					
-						eqstring = eqstring + " - " + reactionid;
+								+ "  <ci>" + reactionsbmlid + "</ci>\n" + ws + " </apply>";					
+						eqstring = eqstring + " - " + reactionsbmlid;
 					}
 					else{
 						eqmathml = eqmathml + "\n" + ws + " <apply>\n" + ws + "  <times/>\n" + ws + "  <cn>-" + stoich + "</cn>\n" + ws 
-								+ "  <ci>" + reactionid + "</ci>\n" + ws + " </apply>";	
-						eqstring = eqstring + " - (" + stoich + "*" + reactionid + ")";
+								+ "  <ci>" + reactionsbmlid + "</ci>\n" + ws + " </apply>";	
+						eqstring = eqstring + " - (" + stoich + "*" + reactionsbmlid + ")";
 					}
 				}
 				
@@ -1182,7 +1188,6 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-		System.out.println(rdfstring);
 		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);		
 	}
 	
@@ -1325,13 +1330,25 @@ public class SBMLreader extends ModelReader{
 		return anns;
 	}
 	
-	// Assign a semsim physical entity object to an sbml model element
-	private PhysicalModelComponent createPhysicalComponentForSBMLobject(SBase sbmlobject){
+
+	 /**
+	 * Assign a semsim physical entity object to an sbml model element. Make sure that if a custom entity or process is created, that it has a unique name
+	 * @param sbmlobject
+	 * @return
+	 */
+	 private PhysicalModelComponent createPhysicalComponentForSBMLobject(SBase sbmlobject){
 		
 		String id = getIDforSBaseObject(sbmlobject);
-		boolean isentity = isEntity(sbmlobject);
+		String name = getNameforSBaseObject(sbmlobject);
 		
-		PhysicalModelComponent pmc = isentity ? new CustomPhysicalEntity(id, "") : new CustomPhysicalProcess(id, "");
+		boolean isentity = isEntity(sbmlobject);
+
+		// If there is a name specified for the physical component, use that for the name of the semsim representation (as long as it's not already taken), otherwise use the id
+		boolean nameAlreadyTaken = isentity ? semsimmodel.getCustomPhysicalEntityByName(name)!=null : semsimmodel.getCustomPhysicalProcessByName(name)!=null;
+		
+		String semsimname = (name!=null && ! name.isEmpty() && ! nameAlreadyTaken) ? name : id;
+		
+		PhysicalModelComponent pmc = isentity ? new CustomPhysicalEntity(semsimname, "") : new CustomPhysicalProcess(semsimname, "");
 	
 		Set<ReferenceOntologyAnnotation> tempanns = new HashSet<ReferenceOntologyAnnotation>();
 		tempanns.addAll(getBiologicalQualifierAnnotations(sbmlobject));
@@ -1387,6 +1404,22 @@ public class SBMLreader extends ModelReader{
 		else if(sbmlobject instanceof Compartment) id = ((Compartment)sbmlobject).getId();
 		else if(sbmlobject instanceof Species) id = ((Species)sbmlobject).getId();
 		return id;
+	}
+	
+	/**
+	 * 
+	 * @param sbmlobject
+	 * @return The SBML name for the object
+	 */
+	private String getNameforSBaseObject(SBase sbmlobject){
+		
+		String name = null;
+		boolean isentity = isEntity(sbmlobject);
+		
+		if(! isentity) name = ((Reaction)sbmlobject).getName();
+		else if(sbmlobject instanceof Compartment) name = ((Compartment)sbmlobject).getName();
+		else if(sbmlobject instanceof Species) name = ((Species)sbmlobject).getName();
+		return name;
 	}
 	
 	/**
@@ -1511,13 +1544,13 @@ public class SBMLreader extends ModelReader{
 	
 	private class SpeciesConservation{
 		public boolean setWithConservationEquation;
-		public ArrayList<String> consumedby;
-		public ArrayList<String> producedby;
+		public ArrayList<Pair<PhysicalProcess,Reaction>> consumedby;
+		public ArrayList<Pair<PhysicalProcess,Reaction>> producedby;
 		
 		public SpeciesConservation(){
 			setWithConservationEquation = true;
-			consumedby = new ArrayList<String>();
-			producedby = new ArrayList<String>();
+			consumedby = new ArrayList<Pair<PhysicalProcess,Reaction>>();
+			producedby = new ArrayList<Pair<PhysicalProcess,Reaction>>();
 		}
 	}
 }

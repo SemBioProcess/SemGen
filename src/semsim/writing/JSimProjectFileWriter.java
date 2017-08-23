@@ -223,6 +223,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 					semsimmodel.removeDataStructure(ds);
 				else{
 					ds.setName(flattenedname);
+					ds.setMetadataID(flattenedname);
 					foundnamesinMML.add(flattenedname);
 				}
 			}

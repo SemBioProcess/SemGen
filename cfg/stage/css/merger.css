@@ -94,7 +94,7 @@
 
 .leftRes {
     position: absolute;
-    right: 50%;
+    right: 45%;
     text-align: right;
     margin-right: 200px;
     margin-top: 0px;
@@ -102,7 +102,7 @@
 
 .rightRes {
     position: absolute;
-    left: 50%;
+    left: 45%;
     text-align: left;
     margin-left: 200px;
 }
@@ -162,8 +162,9 @@
 }
 .overlapButtons {
 	width: 68px;
-    float: center;
     display: inline-block;
+    position: relative;
+    top: 20px;
 }
 
 .rightCollapsePanel {
@@ -180,6 +181,15 @@
 
 .panel-heading {
     cursor: context-menu;
+}
+
+.mappingType {
+    position: absolute;
+    font-size: 12px;
+    font-style: italic;
+    width: 200px;
+    left: -10px;
+    margin-top: 3px;
 }
 
 #mergeStep2 > .panel-group {
@@ -254,5 +264,9 @@ textarea[name=newSubmodelName] {
 }
 
 #quitMergerBtn {
+    float: left;
+}
+
+.returnBtn {
     float: left;
 }

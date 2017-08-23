@@ -77,15 +77,23 @@ public class AnnotationImporter extends SemGenJob {
 	}
 	
 	private boolean importCodewords() {
+		
 		boolean changes = false;
+			
 		for(DataStructure ds : importingmodel.getAssociatedDataStructures()){
-			if(importedmodel.containsDataStructure(ds.getName())){
-				changes = true;
-				DataStructure srcds = importedmodel.getAssociatedDataStructure(ds.getName());
 				
-				ds.copyDescription(srcds);
-				ds.copySingularAnnotations(srcds, SemGen.semsimlib);
-				AnnotationCopier.copyCompositeAnnotation(library, ds, srcds);
+			if(importedmodel.containsDataStructure(ds.getName())){
+				try{
+					changes = true;
+				
+					DataStructure srcds = importedmodel.getAssociatedDataStructure(ds.getName());				
+					ds.copyDescription(srcds);
+					ds.copySingularAnnotations(srcds, SemGen.semsimlib);
+					AnnotationCopier.copyCompositeAnnotation(library, ds, srcds);
+				}
+				catch(Exception ex){
+					ex.printStackTrace();
+				}
 				
 			} // otherwise no matching data structure found in source model
 		} // end of data structure loop
