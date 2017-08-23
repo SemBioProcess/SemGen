@@ -469,15 +469,18 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private class SyntacticDuplicate {
 		@Expose public String duplicate;
 		@Expose public String replacement = "";
+		@Expose public String modelname;
 		@Expose public boolean userightmodel = true;
 		
 		protected SyntacticDuplicate(String dupe) {
 			duplicate = dupe;
+			modelname = workbench.getModelName(1);
 		}
 		
 		public void setReplacementName(boolean rightmodel, String rep) {
 			replacement = rep;
 			userightmodel = rightmodel;
+			
 		}
 	}
 	
@@ -535,11 +538,13 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		@Expose int hash;
 		@Expose int linkedhash = -1;
 		@Expose String id;
+		@Expose String modelname;
 		
 		public MappingCandidate(DependencyNode depnode) {
 			this.name = depnode.name;
 			this.hash = depnode.hash;
 			this.id = depnode.id;
+			this.modelname = depnode.parentModelId;
 		}
 		
 	}

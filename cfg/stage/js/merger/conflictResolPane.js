@@ -22,7 +22,7 @@ function ConflictResolutionPane(merger) {
 		clone.index = smconflicts.length;
 		clone.srcobj = smconf;
 
-		clone.querySelector('.dupname').innerHTML = smconf.duplicate;
+		clone.querySelector('.dupname').innerHTML = smconf.duplicate + " in " + smconf.modelname;
 		var input = clone.querySelector('.newName');
 		
 		input.value = clone.srcobj.replacement;
@@ -55,7 +55,7 @@ function ConflictResolutionPane(merger) {
 
 		clone.disable = merger.mergecomplete;
 		
-		clone.querySelector('.dupname').innerHTML = cwconf.duplicate;
+		clone.querySelector('.dupname').innerHTML = cwconf.duplicate + " in " + cwconf.modelname;
 
 		var input = clone.querySelector('.newName');
 		
