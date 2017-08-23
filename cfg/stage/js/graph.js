@@ -110,10 +110,17 @@ function Graph() {
 		$('#stage').css('cursor', 'auto');
 		graph.defaultcursor = 'auto'; 
 		svg.call(BoundingBox(visibleNodes));
-		svg.call(d3.zoom()
-				.translateExtent(graph.worldsize)
-				.on("zoom", null))
-		        .on("dblclick.zoom", null);
+        svg.call(d3.zoom()
+            .scaleExtent([0.1, 10])
+            .translateExtent(graph.worldsize)
+            .on("zoom", function zoomed() {
+                vis.attr("transform", d3.event.transform);
+            }))
+            .on("dblclick.zoom", null)
+            .on("mousedown.zoom", null)
+            .on("touchstart.zoom", null)
+            .on("touchmove.zoom", null)
+            .on("touchend.zoom", null);
 	});
 	
 

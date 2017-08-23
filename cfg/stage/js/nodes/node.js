@@ -69,6 +69,7 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.performExtraction = function() {
 		
 	}
+
 }
 
 //Get this node's top level parent

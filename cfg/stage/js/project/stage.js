@@ -160,10 +160,10 @@ function Stage(graph, stagestate) {
         var searchResultsList = $(".searchResults");
 
         for (i in visibleNodes) {
-        	var result = {};
             var node = visibleNodes[i];
             var nodeLabel = node.displayName.toLowerCase();
             var nodeDescription = node.description.toLowerCase();
+            var parentModel = node.id.split(".")[0];
             var querryArray = searchString.toLowerCase().split(" ");
 
             if (querryArray.every(function(keyword) {
@@ -174,15 +174,16 @@ function Stage(graph, stagestate) {
 
                     return (foundInName || foundInDescription);
                 })) {
-                nodeSearchResults.push(node.name);
+
+                nodeSearchResults.push([node.name, parentModel, node.id]);
             }
         }
 
-        nodeSearchResultSet["source"] = "Nodes on Stage " + "(" + filter + ")";
+        nodeSearchResultSet["source"] = "Nodes on Stage " + " - " + filter;
         nodeSearchResultSet["results"] = nodeSearchResults;
 
         nodeSearchResultSet.results.sort(function (a, b) {
-            return a.toLowerCase().localeCompare(b.toLowerCase());
+            return a[0].toLowerCase().localeCompare(b[0].toLowerCase());
         });
 
 		if (nodeSearchResultSet.results.length > 0) {
@@ -469,21 +470,30 @@ function makeResultSet(searchResultSet, stage) {
     var list = document.createElement('ul');
     for(var i = 0; i < searchResultSet.results.length; i++) {
         var item = document.createElement('li');
+
         item.className = "searchResultSetValue";
-        item.appendChild(document.createTextNode(searchResultSet.results[i]));
+        if (searchResultSet.source == "Example models") {
+            item.appendChild(document.createTextNode(searchResultSet.results[i]));
+        }
+        else if (searchResultSet.source.includes("Nodes on Stage")) {
+            item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
+        }
         list.appendChild(item);
 
         $(item).data("source", searchResultSet.source);
+        $(item).data("name", searchResultSet.results[i]);
+        $(item).data("id", searchResultSet.results[i][2]);
         $(item).click(function() {
-			var name = $(this).text().trim();
-			var source = $(this).data("source");
-			if (source == "Example models") {
+            var source = $(this).data("source");
+            var name = $(this).data("name");
+            var id = $(this).data("id");
+            if (source == "Example models") {
                 sender.addModelByName(source, name);
             }
             else if (source.includes("Nodes on Stage")) {
                 var visibleNodes = stage.graph.getVisibleNodes();
                 var node = visibleNodes.filter(function ( node ) {
-                    return node.name === name;
+                    return node.id === id;
                 })[0];
 				node.onClick();
 			}
