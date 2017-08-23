@@ -62,12 +62,7 @@
 	cursor: pointer;
 }
 
-#stagekey  ul.hiddenNodeKeys li {
-	background-color: #D0D0D0;
-	opacity: .5;
-}
-
-#stagekey  ul.hiddenLinkKeys li {
+#stagekey  ul.hiddenKeys li {
 	background-color: #D0D0D0;
 	opacity: .5;
 }

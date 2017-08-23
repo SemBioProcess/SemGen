@@ -60,12 +60,22 @@ var DisplayModes = {
 	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.MODEL, NodeType.ENTITY, NodeType.PROCESS, NodeType.UNSPECIFIED]}
 };
 
+
+
 var LinkLevels = {
 		INTRASUB: {text: "Used to Compute", color: "#555555", linewidth: "1.5px"},
 		INTERSUB: {text: "Inter-Submodel", color: "#CA9485", linewidth: "0.25px"},
-		CUSTOM: {text: "Custom", color: "#f0ad4e", linewidth: "1.5px"},
+		AUTOMAP: {text: "Auto-mapping (merging)", color: "#5bc0de", linewidth: "1.5px"},
+		CUSTOM: {text: "Manual-mapping (merging)", color: "#f0ad4e", linewidth: "1.5px"},
+		PRODCON: {text: "Production/Consumption", color: "#555555", linewidth: "1.5px"},
 		MEDIATOR: {text: "Mediator", color: "#555555", linewidth: "1.5px"}
 }
+
+var LinkDisplayModes = {
+		SUBDEP: { id: 0, keys: [LinkLevels.INTRASUB, LinkLevels.INTERSUB, LinkLevels.AUTOMAP, LinkLevels.CUSTOM]},
+		PHYSIOMAP: { id: 1, keys: [LinkLevels.PRODCON, LinkLevels.MEDIATOR]}
+	};
+
 
 var LinkLevelsArray = [
 	LinkLevels.INTRASUB,

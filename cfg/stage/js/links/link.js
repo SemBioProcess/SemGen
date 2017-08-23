@@ -104,6 +104,7 @@ Link.prototype.createVisualElement = function (element, graph) {
             .attr("stroke-opacity", .8);
 	}
 	
+	//Mediator
 	if (this.linkType == NodeType.MEDIATOR) {
 		this.rootElement.select("path")
 			.attr("class", "link mediator");

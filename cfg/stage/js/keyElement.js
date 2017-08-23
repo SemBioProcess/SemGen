@@ -1,35 +1,51 @@
 
-function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLinkKeys) {
+function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hiddenPhysioKeys) {
 	var addedKeys = [];
 	
 	this.initialize = function (graph) {
 		$(graph).on("postupdate", function () {
 			addedKeys = [];
-			visibleNodeKeys.empty();
-			hiddenNodeKeys.empty();
+			visibleModDepKeys.empty();
+			hiddenModDepKeys.empty();
+			visiblePhysioKeys.empty();
+			hiddenPhysioKeys.empty();
 			
 			var activemodes = [false, false, false];
 			graph.getModels().forEach(function (model) {
 				activemodes[model.displaymode.id] = true;
 			});
 			
-			var i = 0;
 			for (x in DisplayModes) {
-					DisplayModes[x].keys.forEach(function(type) {
-						if (graph.nodesVisible[type.id]) {
-							addKeyToParent(graph, visibleNodeKeys, type, "hideNodes");
-						}
-						else {
-							addKeyToParent(graph, hiddenNodeKeys, type, "showNodes");
-						}
-					});
-				i++;
+				if (DisplayModes[x] == DisplayModes.SHOWPHYSIOMAP) {
+					populateNodeKeys(graph, x, visiblePhysioKeys, hiddenPhysioKeys);
+				}
+				else {
+					populateNodeKeys(graph, x, visibleModDepKeys, hiddenModDepKeys);
+				}
+			}
+			
+			for(key in LinkDisplayModes.SUBDEP.keys) {
+				addLinkKeyToParent(graph, visibleModDepKeys, LinkDisplayModes.SUBDEP.keys[key], "hideLinks");
+			}
+			for(key in LinkDisplayModes.PHYSIOMAP.keys) {
+				addLinkKeyToParent(graph, visiblePhysioKeys, LinkDisplayModes.PHYSIOMAP.keys[key], "hideLinks");
 			}
 
 			// Update keys for visible links
-			addLinkKeysToParent(graph, visibleLinkKeys, "hideLinks");
+			//addLinkKeysToParent(graph, visiblePhysioKeys, "hideLinks");
 		});
-	};
+	}
+	
+	var populateNodeKeys = function(graph, x, visible, hidden) {
+		DisplayModes[x].keys.forEach(function(type) {
+			if (graph.nodesVisible[type.id]) {
+				addKeyToParent(graph, visible, type, "hideNodes");
+			}
+			else {
+				addKeyToParent(graph, hidden, type, "showNodes");
+			}
+		});
+	}
 	
 	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
 			if (legendContainsKey(keyInfo)) return; 
@@ -74,14 +90,10 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 	}
 	
 	// Adds link keys to the parent element based on the link in the nodes array
-	var addLinkKeysToParent = function (graph, parentElement, func) {
-		// Clear all keys
-		parentElement.empty();
+	var addLinkKeyToParent = function (graph, parentElement, keyInfo, func) {
 
 		//Add all links
-		for(linkType in LinkLevelsArray) {
-			var keyInfo = LinkLevelsArray[linkType],
-				keyElement = document.createElement('ln'), 
+			var keyElement = document.createElement('ln'), 
 				dasharray = "";
 			
 			if (keyInfo == LinkLevels.MEDIATOR ) {
@@ -107,8 +119,7 @@ function KeyElement (visibleNodeKeys, hiddenNodeKeys, visibleLinkKeys, hiddenLin
 
 				keyElement.className += " canClick";
 			}
-		}
-	};
+	}
 }
 
 KeyElement.instance;
@@ -117,6 +128,6 @@ KeyElement.getInstance = function () {
 }
 
 $(window).load(function () {
-	KeyElement.instance = new KeyElement($("#stagemenu #stagekey ul.visibleNodeKeys"), $("#stagemenu #stagekey ul.hiddenNodeKeys"),
-			$("#stagemenu #stagekey ul.visibleLinkKeys"), $("#stagemenu #stagekey ul.hiddenLinkKeys"));
+	KeyElement.instance = new KeyElement($("#stagemenu #stagekey #subdepkeys ul.visibleKeys"), $("#stagemenu #stagekey #subdepkeys ul.hiddenKeys"),
+			$("#stagemenu #stagekey #physkeys ul.visibleKeys"), $("#stagemenu #stagekey #physkeys ul.hiddenKeys"));
 });
