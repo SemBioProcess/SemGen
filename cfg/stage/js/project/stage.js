@@ -479,7 +479,7 @@ function makeResultSet(searchResultSet, stage) {
         list.appendChild(item);
 
         $(item).data("source", searchResultSet.source);
-        $(item).data("name", searchResultSet.results[i][0]);
+        $(item).data("name", searchResultSet.results[i]);
         $(item).data("id", searchResultSet.results[i][2]);
         $(item).click(function() {
             var source = $(this).data("source");
