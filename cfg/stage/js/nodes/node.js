@@ -69,6 +69,20 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.performExtraction = function() {
 		
 	}
+
+	this.getParentModel = function(node) {
+		if(node) {
+			if (node.nodeType == NodeType.MODEL) {
+				return node;
+			}
+            else if (node.parent.nodeType == NodeType.MODEL) {
+                return node.parent;
+            }
+            else {
+            	this.getParentModel(node.parent);
+            }
+        }
+	}
 }
 
 //Get this node's top level parent
