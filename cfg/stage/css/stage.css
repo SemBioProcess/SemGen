@@ -240,7 +240,8 @@ li.searchResultSet li:hover {
 .taskchooser input {
 	width: 30px;
 	height: 30px;
-	padding-top: 5px;
+	margin-top: 3px;
+	margin-left: 1px;
 
 }
 
