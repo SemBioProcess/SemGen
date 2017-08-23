@@ -32,7 +32,7 @@ public class StageTab extends SemGenTab implements Observer {
 	private SemGenCommunicatingWebBrowser browser;
 
 	public StageTab(SemGenSettings sets, GlobalActions globalacts, StageWorkbench bench) {
-		super("Stage", SemGenIcon.stageicon, "Stage for facilitating SemGen tasks", sets, globalacts);
+		super("Project", SemGenIcon.stageicon, "Interface for facilitating SemGen tasks", sets, globalacts);
 
 		_workbench = bench;
 		bench.addObserver(this);

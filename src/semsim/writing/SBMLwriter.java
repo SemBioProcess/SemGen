@@ -49,8 +49,13 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
+import semsim.annotation.Annotation;
+import semsim.annotation.ReferenceOntologyAnnotation;
+import semsim.annotation.ReferenceTerm;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SBMLconstants;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
@@ -67,6 +72,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
@@ -313,11 +319,8 @@ public class SBMLwriter extends ModelWriter {
 			// and omit writing SemSim annotation
 			if(onerefentity){
 				DSsToOmitFromSemSimRDF.add(ds);
-				CVTerm cvterm = new CVTerm();
-				cvterm.setQualifier(Qualifier.BQB_IS);
 				ReferencePhysicalEntity refent = (ReferencePhysicalEntity) pmcAsCPE.getArrayListOfEntities().get(0);
-				cvterm.addResourceURI(refent.getPhysicalDefinitionURI().toString());
-				comp.addCVTerm(cvterm);
+				addAnnotationsAsCVterms(refent, comp);
 			}
 			
 			boolean hasinputs = ds.getComputationInputs().size()>0;
@@ -335,7 +338,6 @@ public class SBMLwriter extends ModelWriter {
 			setUnitsForModelComponent(comp, ds);
 			
 			addNotesAndMetadataID(pmc, comp);
-			
 		}
 	}
 	
@@ -363,22 +365,27 @@ public class SBMLwriter extends ModelWriter {
 				
 				ArrayList<PhysicalEntity> compentlist = new ArrayList<PhysicalEntity>();
 				compentlist.addAll(fullcpe.getArrayListOfEntities());
-				compentlist.remove(0);
 				
 				ArrayList<StructuralRelation> comprellist = new ArrayList<StructuralRelation>();
 				comprellist.addAll(fullcpe.getArrayListOfStructuralRelations());
-				comprellist.remove(0);
 				
-				CompositePhysicalEntity compcpe = new CompositePhysicalEntity(compentlist, comprellist);
-				
+				Boolean compartmentDefined = (compentlist.size()>1 && comprellist.size()>0);
+				CompositePhysicalEntity compcpe = fullcpe;
 				Compartment cptmt = null;
-				
-				SBase temp = lookupSBaseComponentInEntityMap(compcpe, entityCompartmentMap);
-				
-				// If we've found a suitable compartment in our SBase-component/physical entity map, use it...
-				if(temp != null && (temp instanceof Compartment))
-					cptmt = (Compartment)temp;
-				
+
+				if(compartmentDefined){
+					compentlist.remove(0);
+					comprellist.remove(0);
+
+					compcpe = new CompositePhysicalEntity(compentlist, comprellist);
+					
+					SBase temp = lookupSBaseComponentInEntityMap(compcpe, entityCompartmentMap);
+					
+					// If we've found a suitable compartment in our SBase-component/physical entity map, use it...
+					if(temp != null && (temp instanceof Compartment))
+						cptmt = (Compartment)temp;
+				}
+					
 				
 				// .. if we don't have a compartment for the species, create a new one and add to entity-compartment map
 				if(cptmt == null){
@@ -394,14 +401,25 @@ public class SBMLwriter extends ModelWriter {
 					cptmt.setConstant(true); // Assume compartment is constant since we don't have any other info about it in the model
 					cptmt.setSpatialDimensions(3); // Assuming a 3-D compartment
 					cptmt.setSize(1.0); // Assuming size = 1
-					entityCompartmentMap.put(compcpe, cptmt);
+					
+					if(compartmentDefined)  // If there was a compartment defined in the annotation, map the SemSim and SBML representations
+						entityCompartmentMap.put(compcpe, cptmt);
 				}
-												
+									
+				// If the index entity in the composite entity is a custom term, use
+				// the name of the custom term and be sure to store its annotations
+				
+				PhysicalEntity indexent = fullcpe.getArrayListOfEntities().get(0);
+				
 				Species species = sbmlmodel.createSpecies(ds.getName(), cptmt);
+				
+				if(indexent instanceof CustomPhysicalEntity)
+					species.setName(indexent.getName());
 				
 				// Do not store the annotation for this data structure in the SemSim RDF
 				// Preserve semantics in <species> element
 				DSsToOmitFromSemSimRDF.add(ds);
+				addAnnotationsAsCVterms(indexent, species);
 					
 				// In SBML Level 3 the hasSubstanceUnitsOnly must be set either way. In Level 2 the default is false.
 				URI physdefprop = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -495,7 +513,9 @@ public class SBMLwriter extends ModelWriter {
 			if(pmc instanceof CustomPhysicalProcess){
 				
 				CustomPhysicalProcess process = (CustomPhysicalProcess)pmc;
+				
 				Reaction rxn = sbmlmodel.createReaction(ds.getName());
+				
 				processReactionMap.put(process, rxn);
 				
 				// A <reaction> object must have the required attributes 'id',
@@ -691,7 +711,13 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else par.setConstant(true);
 						
+			// If the parameter is annotated, and doesn't have a meta id, give it one
+			if(ds.hasPhysicalProperty() && ! ds.hasMetadataID()){
+				semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+			}
+			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
+
 			addNotesAndMetadataID(ds, par);
 			
 			setUnitsForModelComponent(par, ds);
@@ -878,6 +904,51 @@ public class SBMLwriter extends ModelWriter {
 			
 			rule.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
 			rule.setVariable(ds.getName());
+		}
+	}
+	
+	private void addAnnotationsAsCVterms(PhysicalModelComponent pmc, SBase sbmlobj){
+		
+		
+		// For ReferencePhysicalEntities and ReferencePhysicalProcesses, we collect annotations this way
+		if(pmc instanceof ReferenceTerm){
+			CVTerm cvterm = new CVTerm();
+			ReferenceTerm refterm = (ReferenceTerm)pmc;
+			cvterm.setQualifier(Qualifier.BQB_IS);
+			String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refterm.getPhysicalDefinitionURI()).toString();
+			cvterm.addResourceURI(uriasstring);
+			sbmlobj.addCVTerm(cvterm);
+		}
+		
+		// For custom physical components we do it this way
+		else{
+			// Preserve semantics on an sbml element
+			for(Annotation ann: pmc.getAnnotations()){
+								
+				if(ann instanceof ReferenceOntologyAnnotation){
+					CVTerm cvterm = new CVTerm();
+					Qualifier qualifier = null;
+
+					ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann; 
+					Relation relation = refann.getRelation();
+									
+					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)){
+						qualifier = Qualifier.BQB_IS_VERSION_OF;	
+					}
+					else if(relation.equals(StructuralRelation.HAS_PART) 
+							|| relation.equals(SemSimRelation.BQB_HAS_PART)){
+						qualifier = Qualifier.BQB_HAS_PART;
+					}
+					else{
+						continue;
+					}
+					
+					cvterm.setQualifier(qualifier);
+					String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refann.getReferenceURI()).toString();
+					cvterm.addResourceURI(uriasstring);
+					sbmlobj.addCVTerm(cvterm);
+				}
+			}
 		}
 	}
 	

@@ -99,7 +99,19 @@
 				</svg>
 			</div>
 			<div class="searchValueContainer">
-				<input name="searchString" class="searchString" type="text" placeholder="Search for models">
+				<div class="search-dropdown">
+					<button class="searchFilterBtn button dropdown-toggle" type="button">
+						<span class="toggle-active">Filters</span>
+						<span class="caret"></span>
+					</button>
+					<ul class="searchDropDownMenu dropdown-menu">
+						<li><label><input id="checkAll" type="checkbox" value="all" checked>All</label></li>
+						<li><label><input id="checkModel" type="checkbox" value="models" checked>Example models</label></li>
+						<li><label><input id="checkNodeName" type="checkbox" value="nodeNames" checked>Node names</label></li>
+						<li><label><input id="checkNodeDesc" type="checkbox" value="nodeDescription" checked>Node descriptions</label></li>
+					</ul>
+				</div>
+				<input name="searchString" class="searchString" type="text" placeholder="Search for models or nodes">
 				<ul class="searchResults"></ul>
 			</div>
 		</div>
@@ -125,16 +137,20 @@
 		<div id="rightSidebar" class="panel panel-default sidebar">
 			<div id="rightmenu" class="panel-default">
 				<div class="panel-heading">
-					Stage Options
+					Visualization
 				</div>
 				<div id="stagemenu" class="panel-default subpanel">
 					<div id="stagekey" class="vertical-menu">
-						<span class="subheading">Node key</span>
-						<ul class="visibleNodeKeys"></ul>
-						<ul class="hiddenNodeKeys"></ul>
-						<span class="subheading">Link key</span>
-						<ul class="visibleLinkKeys"></ul>
-						<ul class="hiddenLinkKeys"></ul>
+						<span class="subheading">Submodel/Dependencies</span>
+						<div id="subdepkeys"> 
+							<ul class="visibleKeys"></ul>
+							<ul class="hiddenKeys"></ul>
+						</div>
+						<span class="subheading">PhysioMapy</span>
+						<div id="physkeys">
+							<ul class="visibleKeys"></ul>
+							<ul class="hiddenKeys"></ul>
+						</div>
 					</div>
 					<div id="d3opts">
 						<span class="subheading">Graph Settings</span>
@@ -243,6 +259,7 @@
 				</div>
 
 				<div class="modal-footer">
+					<button id="returnBtn" type="button" class="returnBtn btn btn-primary">Return to Project</button>
 					<button id="nextBtn" type="button" class="btn btn-success">Resolve Merge Conflicts</button>
 					<button id="mergeBtn" type="button" class="merge btn btn-success">Merge</button>
 					<button type="button" class="btn btn-default hideResolutionsBtn">Visualize</button>
@@ -264,8 +281,9 @@
 				</div>
 
 				<div class="modal-footer">
+					<button id="returnBtn2" type="button" class="returnBtn btn btn-primary">Return to Project</button>
 					<button id="backBtn" type="button" class="btn btn-warning">Back</button>
-					<button id="mergeBtn" type="button" class="merge btn btn-success">Merge</button>
+					<button id="mergeBtn2" type="button" class="merge btn btn-success">Merge</button>
 					<button type="button" class="btn btn-default hideResolutionsBtn">Visualize</button>
 				</div>
 			</div>
@@ -279,6 +297,7 @@
 					<h4 class="panel-title">
 						<a class="collapsePane mergeResCollapsePane" data-toggle="collapse">
 							<div class="overlapPane">
+								<div class="mappingType"></div>
 								<div class="radio leftRes"></div>
 								<div class="radio rightRes"></div>
 								<div class="radio ignoreRes"></div>
@@ -338,7 +357,7 @@
 		<template id="leftProjectMenus">
 			<div id="leftmenu" class="panel-default">
 				<div class="panel-heading">
-					Project
+					Project Actions
 				</div>
 				<div id="projmenu" class="panel-collapse subpanel">
 					<ul class='menulist'>

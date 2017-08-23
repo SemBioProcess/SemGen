@@ -91,6 +91,7 @@ ModelNode.prototype.updateInfo = function() {
 	$("#nodemenuUnitRow").hide();
 	$("#nodemenuEquationRow").hide();
     $("#nodemenuAnnotationRow").hide();
+    $("#nodemenuParticipantsRow").hide();
 }
 
 

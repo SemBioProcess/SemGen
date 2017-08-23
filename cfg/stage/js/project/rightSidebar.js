@@ -27,7 +27,6 @@ function RightSidebar(graph) {
     $("#gravity").bind('change', function() {
         var gravity = this.checked;
         graph.toggleGravity(gravity);
-
     });
 
 	// Advanced d3 parameters disabled for users
@@ -45,26 +44,25 @@ function RightSidebar(graph) {
 		graph.setLinkLength(parseInt(length));
 
 	});
+
 	$("#chargedist").change(function() {
 		var length = $("#chargedist").val();
 		graph.setChargeDistance(parseInt(length));
-
 	});
 
 	
 	this.updateNodeDisplay = function(node) {
 		//Node info box
+		$(".nodemenuRow").show();
 		$("#nodemenuName").text(node.name);
 		$("#nodemenuType").text(node.nodeType.nodeType);
-		$("#nodemenuMetaID").text(node.srcobj.metadataid);
-		$("#nodemenuFreeText").text(node.srcobj.description);
+		$("#nodemenuMetaID").text(node.metadataid);
+		$("#nodemenuFreeText").text(node.description);
 		node.updateInfo();
 		
 		$("#nodemenuRefTermURI").text("");
 
-		//Hide if the node info content is empty
-        $(".nodemenuRow").filter(function() {
-            return $.trim($(this).children(".nodeInfoContent").text()) === '';
-        }).hide();
+        //Hide if the node info content is empty
+        $(".nodeInfoContent:empty").parent().hide();
 	}
 }

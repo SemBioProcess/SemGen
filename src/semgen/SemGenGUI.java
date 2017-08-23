@@ -172,7 +172,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		for (SemGenTab at : opentabs) {
 			if (at.fileURIMatches(uritocheck)) {
 				JOptionPane.showMessageDialog(null,"Cannot create or load \n"+ uritocheck.toString()+
-					"\n because the file is already open for editing.",null, JOptionPane.PLAIN_MESSAGE);
+					"\n because the file is already open for editing.",null, JOptionPane.WARNING_MESSAGE);
 				return true;
 			}
 		}

@@ -148,9 +148,6 @@ DependencyNode.prototype.getContextMenu = function() {
 }
 
 Node.prototype.updateInfo = function() {
-	$("#nodemenuUnitRow").show();
-	$("#nodemenuEquationRow").show();
-	$("#nodemenuAnnotationRow").show();
 	$("#nodemenuParticipantsRow").hide();
 	
 	$("#nodemenuAnnotation").text(this.srcobj.physannotation);

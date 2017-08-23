@@ -27,7 +27,9 @@ function MergerTask(graph, stagestate) {
 	
 	document.querySelector('#leftSidebar').appendChild(clone);
 
-	$("#addModelButton, .stageSearch, #trash").hide();
+	$("#addModelButton, #trash").hide();
+	$("#checkAll, #checkModel").prop('checked', false);
+    // $("#checkAll, #checkModel").prop('disabled', true);
 	$("#stageModel").prop('disabled', !merger.mergecomplete);
 	//Create the resolution pane
 
@@ -169,7 +171,11 @@ MergerTask.prototype.onInitialize = function() {
 		$("#mergeStep1").slideDown();
 		$("#mergeStep2").hide();
 	});
-	
+
+	$(".returnBtn").click(function() {
+        $('#taskModal').modal("hide");
+        sender.changeTask(0);
+    })
 
 	$(".merge").prop('disabled', true)
 		.click(function() {
