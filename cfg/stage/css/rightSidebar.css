@@ -41,8 +41,14 @@
 	font-size: 12px;
 }
 
+#stagekey .heading {
+	font-size: 16px;
+	font-weight: bold;
+}
+
 #stagekey .subheading {
 	font-size: 14px;
+	font-style: italic;
 }
 
 #stagekey ul {

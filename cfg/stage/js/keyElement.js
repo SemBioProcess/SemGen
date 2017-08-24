@@ -5,6 +5,7 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 	this.initialize = function (graph) {
 		$(graph).on("postupdate", function () {
 			addedKeys = [];
+			$("#stagemenu #stagekey #modelkey").empty();
 			visibleModDepKeys.empty();
 			hiddenModDepKeys.empty();
 			visiblePhysioKeys.empty();
@@ -14,6 +15,8 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 			graph.getModels().forEach(function (model) {
 				activemodes[model.displaymode.id] = true;
 			});
+			
+			addKeyToParent(graph, $("#stagemenu #stagekey #modelkey"), NodeType.MODEL);
 			
 			for (x in DisplayModes) {
 				if (DisplayModes[x] == DisplayModes.SHOWPHYSIOMAP) {
@@ -25,29 +28,27 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 			}
 			
 			for(key in LinkDisplayModes.SUBDEP.keys) {
-				addLinkKeyToParent(graph, visibleModDepKeys, LinkDisplayModes.SUBDEP.keys[key], "hideLinks");
+				addLinkKeyToParent(graph, visibleModDepKeys, LinkDisplayModes.SUBDEP.keys[key]);
 			}
 			for(key in LinkDisplayModes.PHYSIOMAP.keys) {
-				addLinkKeyToParent(graph, visiblePhysioKeys, LinkDisplayModes.PHYSIOMAP.keys[key], "hideLinks");
+				addLinkKeyToParent(graph, visiblePhysioKeys, LinkDisplayModes.PHYSIOMAP.keys[key]);
 			}
 
-			// Update keys for visible links
-			//addLinkKeysToParent(graph, visiblePhysioKeys, "hideLinks");
 		});
 	}
 	
 	var populateNodeKeys = function(graph, x, visible, hidden) {
 		DisplayModes[x].keys.forEach(function(type) {
 			if (graph.nodesVisible[type.id]) {
-				addKeyToParent(graph, visible, type, "hideNodes");
+				addKeyToParent(graph, visible, type);
 			}
 			else {
-				addKeyToParent(graph, hidden, type, "showNodes");
+				addKeyToParent(graph, hidden, type);
 			}
 		});
 	}
 	
-	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
+	var addKeyToParent = function (graph, parentElement, keyInfo) {
 			if (legendContainsKey(keyInfo)) return; 
 		
 			var keyElement = document.createElement("li"),
@@ -62,7 +63,7 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 			
 			
 			keyElement.innerHTML = '<svg height="16" width="200">' +
-		  		'<circle transform="translate(10,8)" r="6" style="fill:' + keyInfo.color + ';" />' + slash +
+		  		'<circle transform="translate(10,8)" r="6" style="fill:' + keyInfo.color + '; stroke: #000000;" />' + slash +
 		  		'<text x="54" y="14" stroke="' + keyInfo.nodeType + '">'+ keyInfo.nodeType + '</text>' +
 			 '</svg>';
 			
