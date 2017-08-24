@@ -184,8 +184,6 @@ public class SBMLreader extends ModelReader{
 		collectConstraints();
 		collectEvents();
 		setComputationalDependencyNetwork();
-
-		System.out.println("HERE1: " + semsimmodel.containsDataStructure("v1"));
 	
 		return semsimmodel;
 	}
