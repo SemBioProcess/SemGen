@@ -42,12 +42,13 @@
 }
 
 #stagekey .heading {
-	font-size: 16px;
+	font-size: 13px;
 	font-weight: bold;
 }
 
 #stagekey .subheading {
-	font-size: 14px;
+	padding: 5px 5px;
+	font-size: 12px;
 	font-style: italic;
 }
 
@@ -59,7 +60,6 @@
 
 #stagekey  ul li {
 	margin: 5px 0;
-	font-weight: bold;
 	padding-left: 1em;
     text-indent: -.7em;
 }
