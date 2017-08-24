@@ -1446,9 +1446,8 @@ public class SBMLreader extends ModelReader{
 
 		collectSBaseData(qwu, ds);
 		
-		// Collect annotations		
-		if(rdfreader.hasPropertyAnnotationForDataStructure(ds))
-			rdfreader.getDataStructureAnnotations(ds);
+		// Collect annotations on the parameter		
+		rdfreader.getDataStructureAnnotations(ds);
 		
 		return ds;
 	}

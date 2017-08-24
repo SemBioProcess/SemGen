@@ -591,6 +591,9 @@ public class SBMLwriter extends ModelWriter {
 						// Add units, if needed
 						// Deal with units on compartments if needed
 						setUnitsForModelComponent(lp, gp);
+						System.out.println("1: " + gp.getName());
+						assignMetaIDtoParameterIfAnnotated(gp);
+						addNotesAndMetadataID(gp, lp);	
 					}
 				}
 				
@@ -711,10 +714,7 @@ public class SBMLwriter extends ModelWriter {
 			}
 			else par.setConstant(true);
 						
-			// If the parameter is annotated, and doesn't have a meta id, give it one
-			if(ds.hasPhysicalProperty() && ! ds.hasMetadataID()){
-				semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
-			}
+			assignMetaIDtoParameterIfAnnotated(ds);
 			
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 
@@ -972,6 +972,12 @@ public class SBMLwriter extends ModelWriter {
 		
 
 		return formulaAsDouble;
+	}
+	
+	private void assignMetaIDtoParameterIfAnnotated(DataStructure ds){
+		// If the parameter is annotated, and doesn't have a meta id, give it one
+		if((ds.hasDescription() || ds.hasPhysicalProperty() || ds.hasPhysicalDefinitionAnnotation()) && ! ds.hasMetadataID())
+			semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 	}
 	
 	

@@ -461,6 +461,7 @@ public class SemSimRDFreader extends ModelReader{
 	public void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource){
 		
 		Statement singannst = resource.getProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
+		singannst = (singannst==null) ? resource.getProperty(SemSimRelation.BQB_IS.getRDFproperty()) : singannst; // Check for BQB_IS relation, too
 
 		if(singannst != null){
 			URI singularannURI = URI.create(singannst.getObject().asResource().getURI());
