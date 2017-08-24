@@ -16,7 +16,7 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 				activemodes[model.displaymode.id] = true;
 			});
 			
-			addKeyToParent(graph, $("#stagemenu #stagekey #modelkey"), NodeType.MODEL);
+			addKeyToParent(graph, $("#stagemenu #stagekey #modelkey"), NodeType.MODEL, null);
 			
 			for (x in DisplayModes) {
 				if (DisplayModes[x] == DisplayModes.SHOWPHYSIOMAP) {
@@ -40,15 +40,15 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 	var populateNodeKeys = function(graph, x, visible, hidden) {
 		DisplayModes[x].keys.forEach(function(type) {
 			if (graph.nodesVisible[type.id]) {
-				addKeyToParent(graph, visible, type);
+				addKeyToParent(graph, visible, type, "hideNodes");
 			}
 			else {
-				addKeyToParent(graph, hidden, type);
+				addKeyToParent(graph, hidden, type, "showNodes");
 			}
 		});
 	}
 	
-	var addKeyToParent = function (graph, parentElement, keyInfo) {
+	var addKeyToParent = function (graph, parentElement, keyInfo, func) {
 			if (legendContainsKey(keyInfo)) return; 
 		
 			var keyElement = document.createElement("li"),
