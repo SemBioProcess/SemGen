@@ -185,7 +185,8 @@ public class SemSimTermLibrary extends Observable {
 	
 	public int createCompositePhysicalEntity(ArrayList<Integer> peindicies) {
 		//Avoid creating a composite with a null in the entity list
-		if (peindicies.contains(-1)) return -1;
+		//Return negative index if list is empty
+		if (peindicies.contains(-1) || peindicies.isEmpty()) return -1;
 
 		return addCompositePhysicalEntity(makeCPE(peindicies));	
 	}
