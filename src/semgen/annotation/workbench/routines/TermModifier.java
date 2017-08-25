@@ -164,7 +164,7 @@ public class TermModifier {
 	}
 	
 	private void replaceProcess(int replacement, boolean remove) {
-		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), -1);
+		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), replacement);
 		if (remove) {
 			library.removePhysicalProcesses(termindex);
 		

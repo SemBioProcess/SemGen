@@ -1,6 +1,5 @@
 package semgen;
 
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
@@ -58,33 +57,6 @@ public class GlobalActions extends Observable {
 		seed = obj;
 		setChanged();
 		notifyObservers(appactions.ANNOTATEEXISTING);
-	}
-		
-	public void NewExtractorTab() {
-		setChanged();
-		notifyObservers(appactions.EXTRACT);
-	}
-	
-	public void NewExtractorTab(ModelAccessor obj) {
-		seed = obj;
-		setChanged();
-		notifyObservers(appactions.EXTRACTEXISTING);
-	}
-	
-	public void NewMergerTab() {
-		setChanged();
-		notifyObservers(appactions.MERGE);
-	}
-	
-	public void NewMergerTab(ModelAccessor accessor1, ModelAccessor accessor2) {
-		seeds = new HashSet<ModelAccessor>();
-		seeds.add(accessor1);
-		
-		if(accessor2 != null)
-			seeds.add(accessor2);
-		
-		setChanged();
-		notifyObservers(appactions.MERGEEXISTING);
 	}
 	
 	public void NewStageTab() {
