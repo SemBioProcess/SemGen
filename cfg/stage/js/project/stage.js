@@ -396,7 +396,7 @@ function Stage(graph, stagestate) {
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
-		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, false);
+		extractionnode.createVisualization(basenode.displaymode, false);
 		stage.graph.update();
 		stage.selectNode(extractionnode);
 	}

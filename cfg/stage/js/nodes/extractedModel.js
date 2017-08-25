@@ -12,7 +12,7 @@ function ExtractedModel(graph, srcobj, basenode) {
 	this.sourcenode = basenode;
 	this.addClassName("modelNode");
 	this.canlink = false;
-	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
+	this.displaymode = DisplayModes.SHOWSUBMODELS
 	this.saved = false;
 	this.showchildren = true;
 	this.addBehavior(Hull);	
@@ -28,11 +28,11 @@ ExtractedModel.prototype.createVisualization = function (modeid, expand) {
 	
 	this.children = {};
 	
-	if (modeid == 0) {
+	if (modeid == DisplayModes.SHOWSUBMODELS) {
 		this.createChildren();
 	}
 	//Show physiomap
-	else if (modeid == 2) {
+	else if (modeid == DisplayModes.SHOWPHYSIOMAP) {
 		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
 		physionodes.forEach(function (d) {
 			modelnode.createChild(d);
@@ -40,7 +40,7 @@ ExtractedModel.prototype.createVisualization = function (modeid, expand) {
 		console.log("Showing PhysioMap for model " + this.name);
 	}
 	//Show all dependencies
-	else if (modeid == 1) {
+	else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
 		this.createChildren();
 		var dependencies = {};
 			
@@ -61,8 +61,8 @@ ExtractedModel.prototype.createVisualization = function (modeid, expand) {
 }
 
 ExtractedModel.prototype.showChildren = function() {
-	if (this.mode == 0) {
-		ParentNode.prototype.showChildren.call();
+	if (this.displaymode == DisplayModes.SHOWSUBMODELS) {
+		ParentNode.prototype.showChildren.call(this);
 		return;
 	}
 	this.showchildren = true;

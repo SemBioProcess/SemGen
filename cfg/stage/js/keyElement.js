@@ -17,6 +17,7 @@ function KeyElement (visibleModDepKeys, hiddenModDepKeys, visiblePhysioKeys, hid
 			});
 			
 			addKeyToParent(graph, $("#stagemenu #stagekey #modelkey"), NodeType.MODEL, null);
+			addKeyToParent(graph, $("#stagemenu #stagekey #modelkey"), NodeType.EXTRACTION, null);
 			
 			for (x in DisplayModes) {
 				if (DisplayModes[x] == DisplayModes.SHOWPHYSIOMAP) {

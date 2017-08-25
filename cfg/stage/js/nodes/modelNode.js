@@ -11,7 +11,8 @@ function ModelNode (graph, srcobj) {
 	this.modelindex = srcobj.modelindex;
 	this.addClassName("modelNode");
 	this.canlink = false;
-	this.displaymode = DisplayModes.SHOWSUBMODELS.id;
+	if (this.displaymode == null) this.createChildren();
+	this.displaymode = DisplayModes.SHOWSUBMODELS;
 
 		this.addBehavior(Hull);	
 		this.addBehavior(parentDrag);	
@@ -71,10 +72,10 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 }
 
 ModelNode.prototype.showChildren = function() {
-	if (this.mode == 0) {
-		ParentNode.prototype.showChildren.call();
-		return;
-	}
+//	if (this.displaymode == DisplayModes.SHOWSUBMODELS) {
+//		ParentNode.prototype.showChildren.call(this);
+//		return;
+//	}
 	this.showchildren = true;
 	$(this).triggerHandler('childrenSet', [this.children]);
 }
