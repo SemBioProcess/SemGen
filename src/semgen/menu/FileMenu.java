@@ -118,10 +118,12 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 				if (globalactions.getNumOpenTabs()==0) {
 					fileitemsaveas.setEnabled(false);
 					fileitemclose.setEnabled(false);
+					fileitemexport.setEnabled(false);
 				}
 				else {
 					fileitemsaveas.setEnabled(true);
 					fileitemclose.setEnabled(true);
+					fileitemexport.setEnabled(true);
 				}
 			}
 		}	
