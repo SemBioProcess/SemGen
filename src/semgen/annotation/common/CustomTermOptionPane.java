@@ -134,11 +134,12 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		return "Edit " + library.getComponentName(termindex);
 	}
 	
-	protected void createTerm() {
+	protected Integer createTerm() {
 		termindex = library.createCustomPhysicalEntity(mantextfield.getText(), descriptionarea.getText());
 		for (ObjectPropertyEditor ope : objecteditors) {
 			ope.setRelationships(termindex);
 		}
+		return termindex;
 	}
 	
 	protected void modifyTerm() {
