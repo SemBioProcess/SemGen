@@ -943,14 +943,23 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @param ds The DataStructure to delete.
 	 */
 	public void removeDataStructure(DataStructure ds) {
-			for(DataStructure otherds : ds.getUsedToCompute()){
-				otherds.getComputation().getInputs().remove(ds);
-			}
 			
-			for(Submodel sub : getSubmodels()){
-				if(sub.getAssociatedDataStructures().contains(ds)) sub.getAssociatedDataStructures().remove(ds);
-			}
-			dataStructures.remove(ds);
+		
+		for(DataStructure otherds : ds.getUsedToCompute()){
+			otherds.getComputation().getInputs().remove(ds);
+		}
+		
+		// Remove CellML-style mappings that involve the removed codeword
+		if(ds instanceof MappableVariable){
+			MappableVariable mappedfromvar = ((MappableVariable)ds).getMappedFrom();
+			
+			if(mappedfromvar!=null) mappedfromvar.getMappedTo().remove((MappableVariable)ds);	
+		}
+		
+		for(Submodel sub : getSubmodels()){
+			if(sub.getAssociatedDataStructures().contains(ds)) sub.getAssociatedDataStructures().remove(ds);
+		}
+		dataStructures.remove(ds);
 	}
 	
 	public void removeMappableVariable(MappableVariable mapv) {
