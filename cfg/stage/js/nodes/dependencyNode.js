@@ -138,7 +138,7 @@ DependencyNode.prototype.removeLink = function(inputnode) {
 }
 
 DependencyNode.prototype.isVisible = function () {
-	if (this.srcobj.isorphaned && !this.graph.showorphans) return false;  
+	if (this.srcobj.isorphaned && !this.graph.showorphans && this.getRootParent().nodeType != NodeType.EXTRACTION) return false;  
 	return Node.prototype.isVisible.call(this);
 }
 
