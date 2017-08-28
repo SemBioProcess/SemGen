@@ -58,10 +58,11 @@ function main() {
 	}
 	
 	this.closeTask = function(taskindex) {
-		this.tasktray.removeTask(taskindex);
+		
 		if (this.tasktray.activetaskindex == taskindex) {
 			this.tasktray.setActiveTask(0);
 		}
+		this.tasktray.removeTask(taskindex);
 		
 	}
 	$(".sidebar").contents().hide();

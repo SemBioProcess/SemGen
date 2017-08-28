@@ -60,7 +60,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 								
 				for (ModelInfo info : _models) {
 					if (info != null) {
-						alreadyopen = info.accessor.equals(accessor);
+						if (info.accessor != null) {
+							alreadyopen = info.accessor.equals(accessor);
+						}
+						
 					}
 					if (alreadyopen) break;
 				}

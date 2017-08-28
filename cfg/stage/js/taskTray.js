@@ -104,6 +104,7 @@ function TaskTray() {
 	this.setActiveTask = function(index) {
 		activetaskindex = index;
 		for (x in opentasks) {
+			if (opentasks[x] == null) continue; 
 			opentasks[x].currenttask = false;
 		}
 		opentasks[index].currenttask = true;
