@@ -90,9 +90,13 @@ public class StageTab extends SemGenTab implements Observer {
 		}
 	}
 	
+	public boolean isModelLoaded() {
+		return !_workbench.isProjectEmpty();
+	}
+	
 	@Override
 	public boolean isSaved() {
-		return false;
+		return true;
 	}
 
 	@Override

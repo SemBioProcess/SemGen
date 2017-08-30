@@ -25,7 +25,8 @@ public class GlobalActions extends Observable {
 		TABOPENED,
 		TABCHANGED,
 		TABCLOSEREQUEST,
-		TABCLOSED
+		TABCLOSED,
+		FILECHANGE
 	};
 	private Integer tabsopen = 0;
 	private SemGenTab currentTab;
@@ -116,6 +117,10 @@ public class GlobalActions extends Observable {
 	
 	public int getNumOpenTabs() {
 		return tabsopen;
+	}
+	
+	public boolean isModelLoaded() {
+		return this.currentTab.isModelLoaded();
 	}
 	
 	public void quit() {

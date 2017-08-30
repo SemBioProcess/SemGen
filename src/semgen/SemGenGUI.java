@@ -246,6 +246,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		if (arg == GlobalActions.appactions.STAGEEXISTING) {
 			startNewStageTask(globalactions.getSeed());
 		}
+		
 	}
 	
 	/** Run through each open tab and run its close method. If the user cancels, leave the

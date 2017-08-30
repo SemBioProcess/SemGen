@@ -66,6 +66,10 @@ public abstract class SemGenTab extends JPanel {
 		tablabel.addMouseListener(listener);
 	}
 	
+	public boolean isModelLoaded() {
+		return true;
+	}
+	
 	abstract public boolean isSaved();
 	
 	abstract public void requestSave();

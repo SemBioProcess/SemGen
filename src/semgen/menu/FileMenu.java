@@ -108,6 +108,12 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			globalactions.quit();
 		}
 	}
+	
+	public void canSaveOut(boolean enable) {
+		fileitemsaveas.setEnabled(enable);
+		fileitemexport.setEnabled(enable);
+		
+	}
 
 		@Override
 		public void update(Observable o, Object arg) {
@@ -115,16 +121,13 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 				fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());	
 			}
 			if (arg==GlobalActions.appactions.TABCLOSED || arg==GlobalActions.appactions.TABOPENED) {
-				if (globalactions.getNumOpenTabs()==0) {
-					fileitemsaveas.setEnabled(false);
-					fileitemclose.setEnabled(false);
-					fileitemexport.setEnabled(false);
-				}
-				else {
-					fileitemsaveas.setEnabled(true);
-					fileitemclose.setEnabled(true);
-					fileitemexport.setEnabled(true);
-				}
+					fileitemclose.setEnabled(globalactions.getNumOpenTabs()!=0);
+			}
+			if (globalactions.getNumOpenTabs()!=0) {
+				canSaveOut(this.globalactions.isModelLoaded());
+			}
+			else {
+				fileitemsave.setEnabled(false);
 			}
 		}	
 

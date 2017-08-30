@@ -161,4 +161,8 @@ public class StageWorkbench extends Workbench {
 		return activetask.getTaskIndex();
 	}
 	 
+	public boolean isProjectEmpty() {
+		if (projtask==null) return true;
+		return this.projtask.getModelNodes().isEmpty();
+	}
 }
