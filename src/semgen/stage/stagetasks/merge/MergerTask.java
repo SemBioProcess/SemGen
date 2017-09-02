@@ -27,11 +27,12 @@ import java.util.*;
 
 public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
-	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> dsdescriptors;
+	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> jsoverlaps;
 	
 	private ArrayList<Pair<DependencyNode, DependencyNode>> overlaps = new ArrayList<Pair<DependencyNode, DependencyNode>>();
 	private MergeConflicts conflicts = new MergeConflicts();
 	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
+	private ArrayList<Integer> choices = new ArrayList<Integer>();
 	
 	public MergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
 		super(index);
@@ -48,6 +49,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 		workbench.addModels(files, models, true);
 		primeForMerging();
+		for (int i=0; i< workbench.getMappingCount(); i++) {
+			choices.add(-1);
+		}
 		state = new StageState(Task.MERGER, _models, index);
 
 	}
@@ -65,8 +69,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			SemGenError.showError("SemGen did not find any semantic equivalencies between the models", "Merger message");
 			return;
 		}
-		generateOverlapDescriptors();
+		
 		getOverlappingNodes();
+		generateOverlapDescriptors();
 		collectConflicts();
 	}
 
@@ -77,7 +82,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		for (int i = n; i < (workbench.getMappingCount()); i++) {
 			descriptors.add(workbench.getDSDescriptors(i));
 		}
-		dsdescriptors = descriptors;
+		jsoverlaps = descriptors;
 	}
 	
 	private void getOverlappingNodes() {
@@ -181,10 +186,11 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private ArrayList<Overlap> updateOverlaps() {
 		ArrayList<Overlap> overlaps = new ArrayList<Overlap>();
 		int i = workbench.getSolutionDomainCount();
-		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : dsdescriptors) {
+		for (Pair<DataStructureDescriptor, DataStructureDescriptor> dsd : jsoverlaps) {
 			Overlap overlap = new Overlap(dsd);
 			overlap.similar = workbench.getMapPairType(i).equals(MapType.SEMANTICALLY_SIMILAR);
 			overlap.custom = workbench.getMapPairType(i).equals(MapType.MANUAL_MAPPING);
+			overlap.choice = choices.get(i);
 			overlaps.add(overlap);
 			i++;
 		}
@@ -259,7 +265,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 			ArrayList<Boolean> units = workbench.getUnitOverlaps();
-			
+			choices.add(-1);
 			int i = units.size()-1;
 			checkUnitConflict(i, units.get(i));
 		}
@@ -272,7 +278,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			getOverlappingNodes();
 			conflicts.decrementUnitConflict(unitpairs.get(intval));
 			unitpairs.remove(intval);
-			
+			choices.remove(customindex);
 			_commandSender.clearLink(updateOverlaps().toArray(new Overlap[]{}), ol.getLeft().id, ol.getRight().id);
 			
 		}
@@ -384,6 +390,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		@Expose public StageDSDescriptor dsright;
 		@Expose public Boolean similar = false;
 		@Expose public Boolean custom = false;
+		@Expose public int choice = -1;
 		
 		protected Overlap(Pair<DataStructureDescriptor, DataStructureDescriptor> dsdesc) {
 			dsleft = new StageDSDescriptor(dsdesc.getLeft());
@@ -512,6 +519,9 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	}
 	
 	public class MergerBridge {
+		public void setResolutionChoice(Integer index, Integer choice) {
+			choices.set(index+1, choice);
+		}
 		public void setUnitConversion(Integer index, boolean multiply, String conversion) {
 			conflicts.unitconflicts.get(index).setConversion(Float.valueOf(conversion), multiply);
 		}

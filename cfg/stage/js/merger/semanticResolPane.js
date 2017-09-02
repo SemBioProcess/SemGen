@@ -39,12 +39,12 @@ function SemanticResolutionPane(merger) {
 		clone.index = resolutions.length;
 		clone.name = overlap.dsleft;
 		
-		clone.choice = -1;
+		clone.choice = overlap.choice;
 		clone.radiobtns = [];
 		
 		var radioClick = function(val) {
 			clone.choice = val;
-			
+			task.conflictsj.setResolutionChoice(clone.index, val);
 			pane.allchoicesmade();
 		}
 		
@@ -109,8 +109,10 @@ function SemanticResolutionPane(merger) {
 			return clone.choice;
 		}
 		
+	
 		resolutions.push(clone);
 		document.querySelector('#modalContent #overlapPanels').appendChild(clone);
+		clone.setSelection(overlap.choice);
 		
 		$(".hideResolutionsBtn").click(function() {
 			$('#taskModal').modal("hide");

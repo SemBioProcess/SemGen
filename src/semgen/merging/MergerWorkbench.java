@@ -24,7 +24,6 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
-import sun.security.util.Length;
 
 public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
