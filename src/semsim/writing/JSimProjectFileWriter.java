@@ -113,6 +113,11 @@ public class JSimProjectFileWriter extends ModelWriter{
 			flattenModelForMML(srccodeel.getText());
 		}
 		
+		// Update the name of the model to the name used on write out (needed because 
+		// the RDF resources that refer to the entire model use the model *name*, not 
+		// a metaid in their URI fragments).
+		semsimmodel.setName(modelName);
+				
 		rdfblock = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
 		
 		// Write out model-level annotations

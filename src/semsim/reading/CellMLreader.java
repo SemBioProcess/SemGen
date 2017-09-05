@@ -86,7 +86,9 @@ public class CellMLreader extends ModelReader {
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 		
 		rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
-			
+		
+		rdfblock.getModelLevelAnnotations();
+		
 		// Get imported components
 		Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
 		

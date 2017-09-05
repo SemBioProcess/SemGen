@@ -404,6 +404,10 @@ public class XMMLreader extends ModelReader {
 		if(semsimmodel.getAssociatedDataStructures().isEmpty() && semsimmodel.getPhysicalModelComponents().isEmpty() && semsimmodel.getSubmodels().isEmpty()){
 			semsimmodel.addError(modelaccessor.getModelName() + " model appears to be empty.");
 		}
+		
+		// Set the semsimmodel name field
+		semsimmodel.setName(modelaccessor.getModelName());
+		
 		return semsimmodel;
 	}
 	

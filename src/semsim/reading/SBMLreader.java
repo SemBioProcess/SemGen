@@ -131,6 +131,8 @@ public class SBMLreader extends ModelReader{
 			return semsimmodel;
 		}
 		
+		
+		
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);		
 		semsimmodel.setSourceFileLocation(modelaccessor);
 		
@@ -198,7 +200,7 @@ public class SBMLreader extends ModelReader{
 		semsimmodel.setName(sbmlmodel.getId());
 		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
 		
-		// TODO: collect model-level annotations here, too.		
+		rdfreader.getModelLevelAnnotations();	
 	}
 	
 	
@@ -1186,7 +1188,7 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);		
+		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);
 	}
 	
 	

@@ -122,7 +122,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	// Add model-level annotations 
 	protected void setRDFforModelLevelAnnotations(){
 		
-		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.getName();
+		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
+		
 		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
 		
 		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){

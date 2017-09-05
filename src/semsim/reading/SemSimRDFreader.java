@@ -127,7 +127,33 @@ public class SemSimRDFreader extends ModelReader{
 	
 	// Get model-level annotations
 	public void getModelLevelAnnotations(){
-		Resource modelres = rdf.createResource(semsimmodel.getNamespace().replace("#", ""));
+		
+		Resource modelres = null;
+		
+		switch(modeltype){
+		
+		// If a CellML model and namespace is set, use namespace, otherwise use temp namespace and metadata ID.
+		// The former is to accommodate CellML models annotated using previous SG versions.
+		case CELLML_MODEL: modelres = modelNamespaceIsSet ? rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getMetadataID()) : 
+			rdf.getResource(TEMP_NAMESPACE + "#" + semsimmodel.getMetadataID());
+			 break;
+		 
+		// If an MML model in a JSim project file, use the model namespace (included in serialization) and 
+		// data structure name b/c we don't use metadata ID's in MML files
+		case MML_MODEL_IN_PROJ: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getName());
+			 break;
+		 
+		 // If an SBML model, use the model namespace (included in serialization) and metadata ID
+		case SBML_MODEL: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getMetadataID());
+			 break;
+		
+		default: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getName());
+			break;
+				
+		}
+		
+		System.out.println("HERE: " + semsimmodel.getNamespace() + semsimmodel.getName());
+		
 		StmtIterator stit = modelres.listProperties();
 				
 		while(stit.hasNext()){
@@ -180,8 +206,7 @@ public class SemSimRDFreader extends ModelReader{
 			case MML_MODEL_IN_PROJ: resource = rdf.getResource(semsimmodel.getNamespace() + ds.getName());
 				 break;
 			 
-			 // If an SBML model, use the model namespace (included in serialization) and
-			 // metadata ID
+			 // If an SBML model, use the model namespace (included in serialization) and metadata ID
 			case SBML_MODEL: resource = rdf.getResource(semsimmodel.getNamespace() + ds.getMetadataID());
 				 break;
 			

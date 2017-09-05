@@ -742,6 +742,7 @@ public class SBMLwriter extends ModelWriter {
 	private Document addSemSimRDF(){
 		
 		rdfblock = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
+		
 		rdfblock.setRDFforModelLevelAnnotations();
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){

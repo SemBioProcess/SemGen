@@ -65,6 +65,8 @@ public class CellMLwriter extends ModelWriter {
 			
 			doc = new Document(root);
 			
+			rdfblock.setRDFforModelLevelAnnotations();
+			
 			declareImports();
 			
 			// Add the documentation element
