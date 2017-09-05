@@ -80,7 +80,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	}
 	
 	public boolean hasCustomDeclaration(){
-		return customDeclaration!=null;
+		return customDeclaration != null && ! customDeclaration.isEmpty();
 	}
 	
 	// Required by annotable interface:
