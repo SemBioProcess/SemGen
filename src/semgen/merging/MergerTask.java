@@ -27,7 +27,6 @@ public class MergerTask extends SemGenTask {
 		overlapmap = modelmap;
 		ssm1clone = modelpair.getLeft().clone();
 		ssm2clone = modelpair.getRight().clone();
-
 		cwnamemap = dsnamemap;
 		submodnamemap = smnamemap;
 		choicelist = choices;
