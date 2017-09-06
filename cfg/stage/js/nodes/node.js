@@ -176,7 +176,7 @@ Node.prototype.createVisualElement = function (element, graph) {
             graph.highlightMode(null);
         });
 
-    if(this.nodeType == NodeType.NULLNODE) {
+    if(this.nodeType == NodeType.NULLNODE || this.nodeType == NodeType.UNSPECIFIED) {
         this.rootElement.append("svg:line")
             .attr("x1", this.r)
             .attr("x2", -this.r)

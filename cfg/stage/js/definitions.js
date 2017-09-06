@@ -46,7 +46,8 @@ var NodeTypeArray = [
 		NodeType.PROCESS,
 		NodeType.MEDIATOR,
 		NodeType.NULLNODE,
-		NodeType.EXTRACTION
+		NodeType.EXTRACTION,
+		NodeType.UNSPECIFIED
 		];
 
 

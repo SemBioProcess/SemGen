@@ -57,8 +57,8 @@ function Graph() {
 	this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
 	this.fixedMode = false;
-		//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified
-	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true, true];
+	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified
+	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true];
 	this.showorphans = false;
 	
 	this.depBehaviors = [];

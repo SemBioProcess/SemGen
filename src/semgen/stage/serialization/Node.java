@@ -1,11 +1,10 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
-
 import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.SemSimObject;
+
+import java.util.ArrayList;
 
 /**
  * Represents a node in a d3 graph
@@ -107,6 +106,7 @@ public abstract class Node<T extends SemSimObject> {
 		dtarray.add("Mediator");
 		dtarray.add("Null");
 		dtarray.add("Extraction");
+		dtarray.add("Unspecified");
 
 		nodetypes = dtarray;
 	}
@@ -121,6 +121,7 @@ public abstract class Node<T extends SemSimObject> {
 	static Number MEDIATOR = 7;
 	static Number NULL = 8;
 	static Number EXTRACTION = 9;
+	static Number UNSPECIFIED = 10;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;

@@ -125,7 +125,7 @@ public class PhysioMap {
 
 		private PhysioMapEntityNode getNullNode(PhysicalProcess proc, String sinkOrSource) {
 			PhysicalEntity cpe = new CustomPhysicalEntity("Null " + proc.getName() + sinkOrSource, "Null PhysioMap node");
-			PhysioMapEntityNode nullNode = new PhysioMapEntityNode(cpe, model, Node.NULL);
+			PhysioMapEntityNode nullNode = new PhysioMapEntityNode(cpe, model, Node.UNSPECIFIED);
 			nodeMap.put(cpe, nullNode);
 			return nullNode;
 		}
