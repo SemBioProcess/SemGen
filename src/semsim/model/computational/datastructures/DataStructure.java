@@ -510,4 +510,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public void setExternal(boolean external) {
 		this.external = external;
 	}
+	
+	public void flatten() {}
 }

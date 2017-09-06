@@ -137,6 +137,15 @@ public class MappableVariable extends Decimal {
 		return new MappableVariable(this);
 	}
 	
+	@Override
+	public void flatten() {
+		if (this.mappedFrom != null) {
+			for (DataStructure tods : this.mappedTo) {
+				tods.replaceDataStructureReference(tods, mappedFrom);
+			}
+		}
+	}
+	
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		super.replaceAllDataStructures(dsmap);
 		this.mappedFrom = (MappableVariable) dsmap.get(this.mappedFrom);
@@ -164,7 +173,15 @@ public class MappableVariable extends Decimal {
 	}
 	
 	public DataStructure removeFromModel(SemSimModel model) {
-		model.removeMappableVariable(this);
+		// Remove mappings to the data structure
+		if (getMappedFrom()!=null) getMappedFrom().removeOutput(this);
+
+		// Remove mappings from the data structure
+		for(MappableVariable tov : getMappedTo()){
+			tov.setMappedFrom(null);
+		}
+		
+		model.removeDataStructure(this);
 		return this;
 	}
 	
