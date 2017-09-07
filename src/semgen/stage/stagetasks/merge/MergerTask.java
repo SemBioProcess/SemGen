@@ -520,7 +520,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	public class MergerBridge {
 		public void setResolutionChoice(Integer index, Integer choice) {
-			choices.set(index+1, choice);
+			
+			choices.set(index + workbench.getSolutionDomainCount(), choice);
 		}
 		public void setUnitConversion(Integer index, boolean multiply, String conversion) {
 			conflicts.unitconflicts.get(index).setConversion(Float.valueOf(conversion), multiply);
