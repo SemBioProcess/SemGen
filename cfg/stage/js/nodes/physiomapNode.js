@@ -53,14 +53,14 @@ PhysioMapNode.prototype.getLinks = function () {
 	
 	this.srcobj.inputs.forEach(function (link) {
 		var outputNode = graph.findNode(link.output.id);
-			if (!outputNode) return links; 
+		if (!outputNode.graph.nodesVisible[outputNode.nodeType.id]) return;
 			
 		var inputNode = graph.findNode(link.input.id);
 		if (!inputNode.graph.nodesVisible[inputNode.nodeType.id]) {
 			return;
 		}
 
-		if (!inputNode || inputNode==outputNode) return;
+		if (!inputNode || !outputNode || inputNode==outputNode) return;
 		
 		var length = outputNode.graph.linklength;
 
