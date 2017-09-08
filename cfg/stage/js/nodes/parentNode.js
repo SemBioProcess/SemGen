@@ -94,19 +94,18 @@ ParentNode.prototype.showChildren = function () {
 			visiblenodes += this.dependencytypecount[2];
 		}
 		if (visiblenodes == 0) return;
-	}
-	
-	this.showchildren = true;
-	node.fx = node.xpos();
-	node.fy = node.ypos();
-	
-	 $(this).triggerHandler('childrenSet', [this.children]);
+    }
 
+    this.showchildren = true;
+    node.fx = node.xpos();
+    node.fy = node.ypos();
+
+    $(this).triggerHandler('childrenSet', [this.children]);
 }
 
 //Find the child node with the matching id
 ParentNode.prototype.getChildNode = function(id) {
-	var node = this.children[id];
+    var node = this.children[id];
 	if (node) {
 		return node;
 	}

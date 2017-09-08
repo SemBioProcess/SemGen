@@ -14,8 +14,8 @@ function ModelNode (graph, srcobj) {
 	if (this.displaymode == null) this.createChildren();
 	this.displaymode = DisplayModes.SHOWSUBMODELS;
 
-		this.addBehavior(Hull);	
-		this.addBehavior(parentDrag);	
+    this.addBehavior(Hull);
+    this.addBehavior(parentDrag);
 }
 
 ModelNode.prototype.createVisualElement = function (element, graph) {

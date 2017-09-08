@@ -22,7 +22,9 @@ function parentDrag(parent) {
             n.setLocation(n.xpos() + dx, n.ypos() + dy);
 
         });
-        // d.setLocation((d.xmin+d.xmax)/2, (d.ymin+d.ymax)/2);
+        if(d.showchildren) {
+            d.setLocation((d.xmin + d.xmax) / 2, (d.ymin + d.ymax) / 2);
+        }
 
 	});
 
