@@ -155,7 +155,7 @@ public abstract class Node<T extends SemSimObject> {
 	public boolean isJavaScriptNode(int nodehash, String nodeid) {
 		if (nodehash == hash) {
 			//Additional check to prevent hash collision
-			if (id.matches(nodeid)) {
+			if (id.contentEquals(nodeid)) {
 				return true;
 			}
 		}
