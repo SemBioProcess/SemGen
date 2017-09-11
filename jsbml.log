@@ -6000,3 +6000,904 @@
 [11:56:33,685  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
 [11:56:33,685  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
 [11:56:33,686  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[14:36:59,120  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[14:36:59,122  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[14:36:59,122  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[14:36:59,122  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[14:36:59,122  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[14:36:59,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[14:36:59,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[14:36:59,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[14:36:59,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[14:36:59,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[14:39:03,981  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[14:39:03,983  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[14:39:03,983  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[14:39:03,983  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[14:39:03,984  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[14:39:03,985  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[14:39:03,985  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[14:39:03,985  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[14:39:03,985  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[14:39:03,985  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[14:39:03,986  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[14:45:12,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[14:45:12,891  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[14:45:12,892  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[14:45:12,893  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[14:45:12,894  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[14:45:12,895  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[10:49:16,123  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[10:49:16,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[10:49:16,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[10:49:16,124  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[10:49:16,125  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[10:49:16,126  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[10:49:16,126  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[10:49:16,126  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[10:49:16,126  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[10:49:16,126  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[10:49:16,127  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[11:32:18,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[11:32:18,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[11:32:18,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[11:32:18,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[11:32:18,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[11:32:18,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[11:32:18,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[11:32:18,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[11:32:18,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[11:32:18,717  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[11:33:23,904  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[11:33:23,906  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[11:33:23,906  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[11:33:23,906  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[11:33:23,906  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[11:33:23,906  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[11:33:23,907  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[11:33:23,908  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[11:33:23,908  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[11:33:23,909  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[13:27:38,067  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[13:27:38,068  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[13:27:38,068  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[13:27:38,069  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[13:27:38,070  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[13:27:38,071  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:56:39,241  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:56:39,243  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:56:39,244  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:56:39,244  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:56:39,244  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:56:39,244  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:56:39,244  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:56:39,245  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:56:39,245  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:56:39,245  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[11:59:52,921  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[11:59:52,923  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[11:59:52,924  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[11:59:52,925  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[11:59:52,925  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[14:01:54,394  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[14:01:54,395  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[14:01:54,396  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[14:01:54,397  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[14:01:54,398  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[14:01:54,398  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[12:03:21,319  WARN XMLNodeReader:262] - The type of String '' on the element constraint (Constraint) is unknown! Some data might be lost.
+[12:03:21,322  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,324  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,336  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,341  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,346  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,346  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,346  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,346  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,351  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,356  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,361  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,361  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,361  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,366  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,366  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,366  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,366  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,366  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,371  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,371  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,371  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,371  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,371  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,376  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,376  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,376  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,376  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,386  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,391  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,391  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,391  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,391  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,391  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,396  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,401  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,406  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,411  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,417  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,418  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,419  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,420  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,421  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,426  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,431  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,436  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,441  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,441  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,441  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,441  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,441  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,446  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,446  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,446  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,446  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,446  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,451  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,456  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,461  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,461  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,461  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,461  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,461  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,496  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,522  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,523  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,524  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,525  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,527  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,528  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,528  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,529  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,530  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,530  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,531  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,531  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,532  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,533  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,534  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,535  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,541  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,541  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,541  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,541  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:03:21,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,448  WARN XMLNodeReader:262] - The type of String '' on the element constraint (Constraint) is unknown! Some data might be lost.
+[12:10:00,452  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,453  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,466  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,471  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,476  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,481  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,486  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,491  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,491  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,491  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,496  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,496  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,496  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,496  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,501  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,506  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,511  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,516  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,521  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,526  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,531  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,532  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,533  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,535  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,535  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,536  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,537  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,538  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,539  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,540  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,541  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,542  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,543  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,545  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,546  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,548  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,549  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,551  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,553  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,554  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,555  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,555  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,555  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,555  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,560  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,565  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,570  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,575  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,575  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,575  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,575  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,580  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,580  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,580  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,580  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,580  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,585  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,590  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,595  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,600  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,605  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,605  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,605  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,610  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,615  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,620  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,635  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,635  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,635  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,635  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,640  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,640  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,640  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,640  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,640  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,645  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,646  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,647  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,648  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,649  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,650  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,655  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,660  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,665  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,670  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,675  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[12:10:00,680  WARN SBMLReader:1120] - Cannot find a parser for the http://www.w3.org/XML/1998/namespace namespace
+[15:05:57,145  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:05:57,162  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:05:57,165  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:05:57,165  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:05:57,166  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:05:57,166  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:05:57,166  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:05:57,166  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:05:57,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:05:57,168  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:05:57,168  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:05:57,169  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:12:30,710  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:12:30,713  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:12:30,714  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:12:30,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:12:30,715  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:12:30,716  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:16:57,870  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:16:57,872  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:16:57,872  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:16:57,872  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:16:57,873  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:16:57,874  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:16:57,874  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:16:57,874  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:16:57,874  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:16:57,874  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:16:57,875  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:22:17,799  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:22:17,801  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:22:17,801  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:22:17,801  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:22:17,801  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:22:17,801  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:22:17,802  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:22:17,803  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:22:17,804  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[13:43:52,838  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[13:43:52,840  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[13:43:52,840  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[13:43:52,840  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[13:43:52,840  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[13:43:52,841  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[13:43:52,842  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[13:43:52,842  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[13:43:52,842  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[13:43:52,842  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[13:43:52,842  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[13:43:52,843  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[14:59:58,231  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[14:59:58,233  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[14:59:58,233  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[14:59:58,233  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[14:59:58,233  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[14:59:58,233  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[14:59:58,234  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[14:59:58,235  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[14:59:58,235  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[14:59:58,235  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[14:59:58,235  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[14:59:58,236  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:09:18,929  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:09:18,932  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:09:18,933  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:09:18,934  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:09:18,934  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:09:18,935  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:09:18,935  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:09:18,936  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:09:18,936  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:09:18,937  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:09:18,937  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:09:18,938  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:09:18,938  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:09:18,939  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:09:18,939  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:09:18,940  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:09:18,942  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:25:02,743  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:25:02,744  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:25:02,745  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:25:02,745  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:25:02,745  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:25:02,745  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:25:02,745  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:25:02,746  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:25:02,747  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:25:02,747  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:25:02,747  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:25:02,748  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:27:21,885  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:27:21,887  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:27:21,887  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:27:21,887  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:27:21,887  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:27:21,888  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:27:21,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:27:21,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:27:21,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:27:21,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:27:21,889  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:27:21,890  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:28:55,208  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:28:55,211  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:28:55,211  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:28:55,213  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:28:55,214  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:28:55,215  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:28:55,215  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:28:55,216  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:28:55,216  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:28:55,217  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:28:55,217  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:28:55,217  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:28:55,218  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:28:55,218  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:28:55,219  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:28:55,219  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:28:55,220  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:32:52,072  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:32:52,074  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:32:52,075  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:32:52,076  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:32:52,076  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:32:52,076  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[15:42:40,163  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[15:42:40,166  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[15:42:40,167  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[15:42:40,168  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[15:42:40,168  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[15:42:40,169  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[15:42:40,169  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[15:42:40,169  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[15:42:40,170  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[15:42:40,170  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[15:42:40,171  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[15:42:40,171  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[15:42:40,172  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[15:42:40,172  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[15:42:40,172  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[15:42:40,173  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[15:42:40,174  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[09:55:16,580  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[09:55:16,582  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[09:55:16,582  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[09:55:16,582  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[09:55:16,583  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[09:55:16,583  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[09:55:16,583  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[09:55:16,583  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[09:55:16,583  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[09:55:16,584  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[09:55:16,584  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[09:55:16,584  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[09:55:16,584  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[09:55:16,584  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[09:55:16,585  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[09:55:16,585  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[09:55:16,586  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[09:58:07,204  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[09:58:07,206  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[09:58:07,207  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[09:58:07,208  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[09:58:07,208  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[09:58:07,209  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
+[12:29:55,052  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SBMLCoreParser not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.XMLNodeReader not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MathMLStaxParser not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ArraysParser not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.CompParser not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DistribParser not found
+[12:29:55,054  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.DynParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.FBCParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.GroupsParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.L3LayoutParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.LayoutParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.MultiParser not found
+[12:29:55,055  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.QualParser not found
+[12:29:55,056  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.RenderParser not found
+[12:29:55,056  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.ReqParser not found
+[12:29:55,056  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.SpatialParser not found
+[12:29:55,057  INFO ParserManager:136] - org.sbml.jsbml.xml.parsers.ReadingParser: Provider org.sbml.jsbml.xml.parsers.UncertMLXMLNodeReader not found
