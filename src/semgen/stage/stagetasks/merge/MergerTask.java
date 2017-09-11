@@ -263,9 +263,10 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
 			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
 			
+			choices.add(-1);
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
 			ArrayList<Boolean> units = workbench.getUnitOverlaps();
-			choices.add(-1);
+			
 			int i = units.size()-1;
 			checkUnitConflict(i, units.get(i));
 		}
