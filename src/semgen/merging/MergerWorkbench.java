@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import semgen.merging.Merger.ResolutionChoice;
@@ -378,18 +380,28 @@ public class MergerWorkbench extends Workbench {
 	public ModelAccessor saveModelAs(Integer index) {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
-		
 		if (ma != null) {
+			writeMerge(ma, filec.getFileFilter());
+		}
+		this.modelsaved = (ma!=null);
+		return ma;
+	}
+	
+	public ModelAccessor selectMergeFileLocation() {
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
+		ModelAccessor ma = filec.SaveAsAction();
+		return ma;
+	}
+	
+	public void writeMerge(ModelAccessor ma, FileFilter filter) {
 			mergedmodel.setName(ma.getModelName());
 			
-			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filter);
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}
 			modelaccessorlist.set(2, ma);
-		}
-		this.modelsaved = (ma!=null);
-		return ma;
+			this.modelsaved = true;
 	}
 	
 	@Override

@@ -191,6 +191,79 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 
 		return ma;
 	}
+	
+	public ModelAccessor SaveAsAction(){
+		
+		ModelAccessor ma = null;
+		
+		while(true) {
+
+			int returnVal = showSaveDialog(this);
+			
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+				setFileExtension();
+				File filetosave = getSelectedFile();
+				javax.swing.filechooser.FileFilter savefilter = getFileFilter();
+				
+				boolean overwriting = false;
+
+				// If we're saving to a JSim project file
+				if(savefilter == SemGenFileChooser.projfilter){
+					
+					String modelname = null;
+					ArrayList<String> existingmodelnames = new ArrayList<String>();
+					
+					// If the output file already exists
+					if(filetosave.exists()){
+						Document projdoc = ModelReader.getJDOMdocumentFromFile(filetosave);
+						existingmodelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);	
+					}
+					
+					JSimModelSelectorDialogForWriting jms = 
+							new JSimModelSelectorDialogForWriting(existingmodelnames, modelInArchiveName);
+					
+					modelname = jms.getSelectedModelName();
+					
+					if(modelname == null) return null;
+
+					overwriting = existingmodelnames.contains(modelname);
+					ma = new ModelAccessor(filetosave, modelname);
+				}
+				
+				// Otherwise we're saving to a standalone file
+				else{
+					ma = new ModelAccessor(getSelectedFile());
+					overwriting = ma.getFileThatContainsModel().exists();
+				}
+				
+				// If we're overwriting a model...
+				if (overwriting) {
+					String overwritemsg = "Overwrite " + ma.getFileThatContainsModel().getName() + "?";
+					
+					if(ma.modelIsPartOfArchive()) 
+						overwritemsg = "Overwrite model " + ma.getModelName() + " in " + ma.getFileThatContainsModel().getName() + "?";
+					
+					int overwriteval = JOptionPane.showConfirmDialog(this,
+							overwritemsg, "Confirm overwrite",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+					
+					if (overwriteval == JOptionPane.OK_OPTION) break;
+					else return null;
+				}
+				break;
+			}
+			else if (returnVal == JFileChooser.CANCEL_OPTION) {
+				return null;
+			}
+		}
+
+		currentdirectory = getCurrentDirectory();
+
+		return ma;
+	}
+	
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
