@@ -143,7 +143,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			for(UnitFactor factor : uom.getUnitFactors()){
 				String factoruri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(factor.getBaseUnit().getName());
 				SemSimOWLFactory.setIndObjectPropertyWithAnnotations(ont, unituri, factoruri,
-						SemSimRelation.HAS_UNIT_FACTOR, SemSimRelation.UNIT_FACTOR_FOR, 
+						SemSimRelation.HAS_UNIT_FACTOR, null, 
 						makeUnitFactorAnnotations(factor), manager);
 			}
 		}
@@ -334,7 +334,7 @@ public class SemSimOWLwriter extends ModelWriter {
 					UnitOfMeasurement uom = ds.getUnit();
 					String unituri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
 					SemSimOWLFactory.setIndObjectProperty(ont, dsuri, unituri, SemSimRelation.HAS_UNIT,
-							SemSimRelation.UNIT_FOR, manager);
+							null, manager);
 				}
 			}
 			
