@@ -334,7 +334,7 @@ public class SemSimOWLwriter extends ModelWriter {
 					UnitOfMeasurement uom = ds.getUnit();
 					String unituri = semsimmodel.getNamespace() + "UNIT_" + SemSimOWLFactory.URIencoding(uom.getName());
 					SemSimOWLFactory.setIndObjectProperty(ont, dsuri, unituri, SemSimRelation.HAS_UNIT,
-							null, manager);
+							SemSimRelation.UNIT_FOR, manager);
 				}
 			}
 			
