@@ -13,7 +13,8 @@ import semsim.model.physical.PhysicalProcess;
 public class ExtractExclude extends Extractor {
 	protected Set<DataStructure> dsstoremove = new HashSet<DataStructure>();
 	protected Set<Submodel> smstoremove = new HashSet<Submodel>();
-
+	protected boolean physioextraction = false;
+	
 	public ExtractExclude(SemSimModel source, SemSimModel extractionmodel) {
 		super(source, extractionmodel);
 	}
@@ -44,13 +45,15 @@ public class ExtractExclude extends Extractor {
 			this.includeSubModel(smtokeep);
 		}
 		
-		Set<DataStructure> dsstokeep = new HashSet<DataStructure>(sourcemodel.getAssociatedDataStructures());	
-		for (DataStructure dstoremove : dsstoremove) {
-			dsstokeep.remove(dstoremove);
+		Set<DataStructure> dsstokeep = new HashSet<DataStructure>();
 		
-			for (DataStructure dstokeep : dsstokeep) {
-				dstokeep.removeOutput(dstoremove);
+		for (DataStructure dstocheck : sourcemodel.getAssociatedDataStructures()) {
+			if (dstocheck.hasAssociatedPhysicalComponent() || !physioextraction) {
+				if (!dsstoremove.contains(dstocheck)) {
+					dsstokeep.add(dstocheck);
+				}
 			}
+			
 		}
 		
 		for (DataStructure dstokeep : dsstokeep) {
@@ -90,6 +93,7 @@ public class ExtractExclude extends Extractor {
 		for (DataStructure dstoadd : gatherDatastructureswithPhysicalComponent(pe)) {
 			addDataStructure(dstoadd);
 		}
+		physioextraction = true;
 	}
 
 	@Override
@@ -101,6 +105,7 @@ public class ExtractExclude extends Extractor {
 		for (PhysicalEntity participant : proc.getParticipants()) {
 			addEntity(participant);
 		}
+		physioextraction = true;
 	}
 
 }
