@@ -102,9 +102,9 @@ public class ExtractExclude extends Extractor {
 			addDataStructure(dstoadd);
 		}
 
-		for (PhysicalEntity participant : proc.getParticipants()) {
-			addEntity(participant);
-		}
+//		for (PhysicalEntity participant : proc.getParticipants()) {
+//			addEntity(participant);
+//		}
 		physioextraction = true;
 	}
 

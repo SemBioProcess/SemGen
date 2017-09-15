@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
@@ -75,8 +76,16 @@ public class PhysioMap {
 				}
 			}
 
+			//Add any entities not part of a process.
+			for (DataStructure ds : model.getSourceObject().getAssociatedDataStructures()) {
+				if (ds.getAssociatedPhysicalModelComponent()!=null) {
+					if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) {
+							getParticipantNode((PhysicalEntity)ds.getAssociatedPhysicalModelComponent());
+					}
+				
+				}
+			}
 			entities.addAll(nodeMap.values());
-			
 		}
 		
 		private PhysioMapNode makePhysioMapNode(PhysicalProcess proc){

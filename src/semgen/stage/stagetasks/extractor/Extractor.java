@@ -97,7 +97,7 @@ public abstract class Extractor {
 		
 		for (DataStructure ds : sourcemodel.getAssociatedDataStructures()) {
 			if (ds.getAssociatedPhysicalModelComponent()==null) continue;
-			if (ds.getAssociatedPhysicalModelComponent()==pmc) {
+			if (ds.getAssociatedPhysicalModelComponent().equals(pmc)) {
 				dsswithpmc.add(ds);
 			}
 		}
