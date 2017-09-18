@@ -10,6 +10,9 @@ import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.SemSimInteger;
+import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 
 public abstract class SemSimCollection extends SemSimObject{
 	
@@ -298,6 +301,34 @@ public abstract class SemSimCollection extends SemSimObject{
 			}
 		}
 		return dswprocs;
+	}
+	
+	public Set<DataStructure> getDataStructureswithProcessesandParticipants() {
+		Set<DataStructure> dsphysio = getDataStructureswithPhysicalProcesses();
+		
+		Set<PhysicalEntity> pes = new HashSet<PhysicalEntity>();
+		for (DataStructure ds : dsphysio) {
+			pes.addAll(((PhysicalProcess)ds.getAssociatedPhysicalModelComponent()).getParticipants());
+		}
+		
+		for (PhysicalEntity part : pes) {
+			dsphysio.addAll(gatherDatastructureswithPhysicalComponent(part));
+		}
+		
+		return dsphysio;
+	}
+	
+	public HashSet<DataStructure> gatherDatastructureswithPhysicalComponent(PhysicalModelComponent pmc) {
+		HashSet<DataStructure> dsswithpmc = new HashSet<DataStructure>();
+		
+		for (DataStructure ds : getAssociatedDataStructures()) {
+			if (ds.getAssociatedPhysicalModelComponent()==null) continue;
+			if (ds.getAssociatedPhysicalModelComponent().equals(pmc)) {
+				dsswithpmc.add(ds);
+			}
+		}
+		
+		return dsswithpmc;
 	}
 	
 	/**

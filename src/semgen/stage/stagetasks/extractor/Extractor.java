@@ -8,7 +8,6 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
 public abstract class Extractor {
@@ -90,19 +89,6 @@ public abstract class Extractor {
 				includeDependency(ds);
 			}
 		}
-	}
-	
-	protected HashSet<DataStructure> gatherDatastructureswithPhysicalComponent(PhysicalModelComponent pmc) {
-		HashSet<DataStructure> dsswithpmc = new HashSet<DataStructure>();
-		
-		for (DataStructure ds : sourcemodel.getAssociatedDataStructures()) {
-			if (ds.getAssociatedPhysicalModelComponent()==null) continue;
-			if (ds.getAssociatedPhysicalModelComponent().equals(pmc)) {
-				dsswithpmc.add(ds);
-			}
-		}
-		
-		return dsswithpmc;
 	}
 	
 	protected void includeDependency(DataStructure sourceobj) {

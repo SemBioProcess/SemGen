@@ -76,15 +76,6 @@ public class PhysioMap {
 				}
 			}
 
-			//Add any entities not part of a process.
-			for (DataStructure ds : model.getSourceObject().getAssociatedDataStructures()) {
-				if (ds.getAssociatedPhysicalModelComponent()!=null) {
-					if (ds.getAssociatedPhysicalModelComponent().isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)) {
-							getParticipantNode((PhysicalEntity)ds.getAssociatedPhysicalModelComponent());
-					}
-				
-				}
-			}
 			entities.addAll(nodeMap.values());
 		}
 		
