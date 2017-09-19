@@ -170,10 +170,12 @@ function Task(graph, stagestate) {
 	});
 	
 	this.selectNodes = function(selections) {
+		if (selections.length == 0) return;
 		var cntrlstate = task.graph.cntrlIsPressed;
-		for (i=0; i <  selections.length; i++) {
+		task.selectNode(selections[0]);
+		task.graph.cntrlIsPressed = true;
+		for (i=1; i <  selections.length; i++) {
 			//Make sure all bracketed nodes are selected
-			if (i > 0)  task.graph.cntrlIsPressed = true;
 			if (!selections[i].selected || i ==0) task.selectNode(selections[i]);
 		}
 		task.graph.cntrlIsPressed = cntrlstate;
