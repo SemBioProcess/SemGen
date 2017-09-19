@@ -57,6 +57,7 @@ function Graph() {
 	this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
 	this.fixedMode = false;
+	this.delayfixonupdate = true; //Overrides the graph's default behavior to run for a short period on update even when fixedMode is active.
 	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true];
 	this.showorphans = false;
@@ -233,11 +234,12 @@ function Graph() {
 	    	.restart();
 
 	    $(this).triggerHandler("postupdate");
-	    if (graph.fixedMode) {
+	    if (graph.fixedMode && graph.delayfixonupdate) {
 	    	setTimeout(function() {
 	    		graph.pause();
 	    	}, 7000);
 	    }
+	    graph.delayfixonupdate = true;
 	};
 
 	// Brute force redraw

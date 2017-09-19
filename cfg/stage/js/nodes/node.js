@@ -191,6 +191,8 @@ Node.prototype.createVisualElement = function (element, graph) {
     }
 
 	this.rootElement.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
+	
+	if (this.selected && !this.showchildren) this.highlight();
 	$(this).triggerHandler('createVisualization', [this.rootElement]);
 }
 

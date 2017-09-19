@@ -424,6 +424,7 @@ function Stage(graph, stagestate) {
 	});
 	
 	receiver.onNewExtraction(function(sourceindex, newextraction) {
+		stage.graph.delayfixonupdate = false;
 		stage.addExtractionNode(sourceindex, newextraction);
 	});
 	
