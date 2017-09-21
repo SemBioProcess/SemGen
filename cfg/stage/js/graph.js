@@ -232,12 +232,18 @@ function Graph() {
 	    	.on("tick", this.tick)
 	    	.alpha(1)
 	    	.restart();
+	    
+
 
 	    $(this).triggerHandler("postupdate");
-	    if (graph.fixedMode && graph.delayfixonupdate) {
+	    if (graph.fixedMode) {
+		    var delay = 7000;
+		    if (!graph.delayfixonupdate) {
+		    	delay = 25;
+		    }
 	    	setTimeout(function() {
 	    		graph.pause();
-	    	}, 7000);
+	    	}, delay);
 	    }
 	    graph.delayfixonupdate = true;
 	};
