@@ -33,9 +33,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private MergeConflicts conflicts = new MergeConflicts();
 	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	private ArrayList<Integer> choices = new ArrayList<Integer>();
-	
-	private ModelAccessor mergefiletarget;
-	
+		
 	public MergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
 		super(index);
 		workbench.addObserver(this);
@@ -172,8 +170,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			workbench.getMergedModel().setName(mergefiletarget.getModelName());
-			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), mergefiletarget, _models.size());
+			workbench.writeMerge();
+			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), workbench.getMergedFileAddress(), _models.size());
 			_models.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode, workbench.getModelSaved());
 		}
@@ -286,8 +284,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 
 		public void onExecuteMerge(JSArray choicesmade) {
-			mergefiletarget = workbench.selectMergeFileLocation();
-			if (mergefiletarget == null) return;
+			if (!workbench.selectMergeFileLocation()) return;
 			
 			ArrayList<ResolutionChoice> choicelist = new ArrayList<ResolutionChoice>();
 

@@ -31,6 +31,7 @@ public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
 	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
+	private SaveMergeTarget target = null;
 	public SemSimModel mergedmodel;
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
@@ -381,27 +382,35 @@ public class MergerWorkbench extends Workbench {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		if (ma != null) {
-			writeMerge(ma, filec.getFileFilter());
+			target = new SaveMergeTarget(ma, filec.getFileFilter()); 
+			writeMerge();
 		}
 		this.modelsaved = (ma!=null);
 		return ma;
 	}
 	
-	public ModelAccessor selectMergeFileLocation() {
+	public boolean selectMergeFileLocation() {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction();
-		return ma;
+		if (ma==null) return false;
+		target = new SaveMergeTarget(ma, filec.getFileFilter());
+		
+		return true;
 	}
 	
-	public void writeMerge(ModelAccessor ma, FileFilter filter) {
-			mergedmodel.setName(ma.getModelName());
+	public void writeMerge() {
+			mergedmodel.setName(target.getModelAccessor().getModelName());
 			
-			SaveSemSimModel.writeToFile(mergedmodel, ma, ma.getFileThatContainsModel(), filter);
+			SaveSemSimModel.writeToFile(mergedmodel, target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}
-			modelaccessorlist.set(2, ma);
+			modelaccessorlist.set(2, target.getModelAccessor());
 			this.modelsaved = true;
+	}
+	
+	public ModelAccessor getMergedFileAddress() {
+		return target.getModelAccessor();
 	}
 	
 	@Override
@@ -439,5 +448,23 @@ public class MergerWorkbench extends Workbench {
 	
 	@Override
 	public void update(Observable o, Object arg) {
+	}
+	
+	private class SaveMergeTarget {
+		private ModelAccessor accessor;
+		private FileFilter filetype;
+		
+		public SaveMergeTarget(ModelAccessor ma, FileFilter type) {
+			accessor = ma;
+			filetype = type;
+		}
+		
+		public ModelAccessor getModelAccessor() {
+			return accessor;
+		}
+		
+		public FileFilter getFileType() {
+			return filetype;
+		}
 	}
 }
