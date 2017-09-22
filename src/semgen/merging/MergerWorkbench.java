@@ -326,16 +326,13 @@ public class MergerWorkbench extends Workbench {
 			//At the end of the task get the merged model and save it out as a temporary owl file, reload it and delete the temp file.
 			public void endTask() {
 				mergedmodel = getMergedModel();
-				File tempfile = new File("Merge_Result.owl");
-				ModelAccessor tempaccessor = new ModelAccessor(tempfile);
-				SaveSemSimModel.writeToFile(mergedmodel,  tempaccessor, tempfile, ModelType.SEMSIM_MODEL);
+
+				SaveSemSimModel.writeToFile(mergedmodel,  target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
 				
-				LoadSemSimModel loader = new LoadSemSimModel(tempaccessor, false);
+				LoadSemSimModel loader = new LoadSemSimModel(target.getModelAccessor(), false);
 				loader.run();
 				mergedmodel = loader.getLoadedModel();
-				
-				tempfile.delete();
-				
+								
 				setChanged();
 				notifyObservers(MergeEvent.mergecompleted);
 			}

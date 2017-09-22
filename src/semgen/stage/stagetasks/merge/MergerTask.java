@@ -170,7 +170,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			workbench.writeMerge();
 			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), workbench.getMergedFileAddress(), _models.size());
 			_models.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode, workbench.getModelSaved());
