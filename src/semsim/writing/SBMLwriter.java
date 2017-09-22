@@ -591,7 +591,6 @@ public class SBMLwriter extends ModelWriter {
 						// Add units, if needed
 						// Deal with units on compartments if needed
 						setUnitsForModelComponent(lp, gp);
-						System.out.println("1: " + gp.getName());
 						assignMetaIDtoParameterIfAnnotated(gp);
 						addNotesAndMetadataID(gp, lp);	
 					}
