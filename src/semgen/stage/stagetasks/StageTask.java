@@ -76,14 +76,14 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		return queue;
 	}
 	
-	public void addModeltoTask(ModelInfo newmodel) {
+	public void addModeltoTask(ModelInfo newmodel, boolean updatestage) {
 		_models.add(newmodel);
-		state.updateModelNodes(_models);
+		if (updatestage) state.updateModelNodes(_models);
 	}
 	
 	public void addModelstoTask(ArrayList<ModelInfo> newmodels) {
 		for (ModelInfo infotoadd : newmodels) {
-			_models.add(new ModelInfo(infotoadd, _models.size()));
+			addModeltoTask(new ModelInfo(infotoadd, _models.size()),false);
 		}
 		state.updateModelNodes(_models);
 	}

@@ -77,8 +77,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 
 				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
-				addModeltoTask(info);
+				addModeltoTask(info, true);
 				// Tell the view to add a model
 				_commandSender.addModel(info.modelnode);
 			}
@@ -94,9 +93,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					return;
 				}
 				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-	
-				extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
-				addModeltoTask(info);
+				addModeltoTask(info, true);
 				_commandSender.addModel(info.modelnode);
 			}
 		}
@@ -111,8 +108,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 
 			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-			extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
-			addModeltoTask(info);
+			addModeltoTask(info, true);
 			// Tell the view to add a model
 			_commandSender.addModel(info.modelnode);
 		}
@@ -140,6 +136,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 
 		}
+		
+		
 		
 		public void onCloseModels(JSArray modelindex) {
 			closeModels(modelindex);
@@ -340,6 +338,13 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.removeModel(new Integer[]{indexedtomodel, modelindex});
 		}
 	}
+	
+	@Override
+	public void addModeltoTask(ModelInfo info, boolean updatestage) {
+		extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
+		super.addModeltoTask(info, updatestage);
+	}
+	
 
 	@Override
 	public void update(Observable o, Object arg) {
