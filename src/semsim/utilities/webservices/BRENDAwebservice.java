@@ -37,21 +37,15 @@ public class BRENDAwebservice {
 		System.out.println("Calling BRENDA webservice");
 		ArrayList<String> result = new ArrayList<String>();
 		
-		System.out.println("WHAT6: ");
 		Service service = new Service();
-		System.out.println("WHAT5: ");
 
 		try {
-			System.out.println("WHAT4: ");
 
 			Call call = (Call) service.createCall();
-			System.out.println("WHAT3: ");
 
 			String endpoint = "http://www.brenda-enzymes.org/soap2//brenda_server.php";
-			System.out.println("WHAT2: ");
 
 			call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-			System.out.println("WHAT1: ");
 
 			call.setOperationName(new QName("http://soapinterop.org/", "getRecommendedName"));
 
@@ -64,7 +58,6 @@ public class BRENDAwebservice {
 			}
 			scanner.close();
 		} catch (Exception e) {e.printStackTrace();}
-		System.out.println("HERE: " + result);
 		return result;
    }
 }

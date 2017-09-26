@@ -151,9 +151,7 @@ public class SemSimRDFreader extends ModelReader{
 			break;
 				
 		}
-		
-		System.out.println("HERE: " + semsimmodel.getNamespace() + semsimmodel.getName());
-		
+				
 		StmtIterator stit = modelres.listProperties();
 				
 		while(stit.hasNext()){
