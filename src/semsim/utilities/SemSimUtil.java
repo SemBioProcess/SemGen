@@ -222,10 +222,9 @@ public class SemSimUtil {
 					
 					String oldmathml = dscheck.getComputation().getMathML();
 					String newmathml = oldmathml;
-					String olddsname = oldtext;
 					String newdsname = keptds.getName();
 					
-					Pattern p = Pattern.compile("<ci>\\s*" + olddsname + "\\s*</ci>");
+					Pattern p = Pattern.compile("<ci>\\s*" + oldtext + "\\s*</ci>");
 					Matcher m = p.matcher(oldmathml);
 	
 					String replacementmathml = "";
@@ -240,7 +239,7 @@ public class SemSimUtil {
 					newmathml = m.replaceAll(replacementmathml);
 
 				    dscheck.getComputation().setMathML(newmathml);
-					
+				    					
 					// If the data structure that needs to have its computations edited is a derivative,
 					// Find the state variable and edit its computations, too.
 					if(dscheck.getName().contains(":")){

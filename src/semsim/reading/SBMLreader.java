@@ -93,8 +93,8 @@ public class SBMLreader extends ModelReader{
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
-	private static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
-	private static final String mathMLelementEnd = "</math>";
+	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+	public static final String mathMLelementEnd = "</math>";
 	private String timedomainname = "t";
 	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement modeltimeunits;

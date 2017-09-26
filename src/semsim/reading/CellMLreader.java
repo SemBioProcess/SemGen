@@ -710,6 +710,7 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	protected static void whiteBoxFunctionalSubmodelEquations(Element varmathmlel, String compname, SemSimModel semsimmodel, DataStructure cvar){
+		
 		Iterator<?> conit = varmathmlel.getDescendants();
 		while(conit.hasNext()){
 			Content con = (Content) conit.next();
@@ -731,7 +732,7 @@ public class CellMLreader extends ModelReader {
 						}
 						
 						// Add the input DataStructure
-						if(inputds!=null){
+						if(inputds != null && ! cvar.getComputationInputs().contains(inputds)){
 							cvar.getComputation().addInput(inputds);
 						}
 					}

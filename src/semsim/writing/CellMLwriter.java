@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -219,13 +220,38 @@ public class CellMLwriter extends ModelWriter {
 
 		// If there are no functional submodels, then create a new one that houses all the data structures
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
+			
 			Set<DataStructure> outputset = new HashSet<DataStructure>();
 			outputset.addAll(semsimmodel.getAssociatedDataStructures());
+			
 			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", outputset);
 			maincomponent.setAssociatedDataStructures(semsimmodel.getAssociatedDataStructures());
-			String mathml = "";
 			
+			
+			// Make sure that no variables have "." in their names (need a full flattening of the model)
 			for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
+
+				if(ds.getName().contains(".")){
+					
+					String oldname = ds.getName();
+					String newname = oldname.replace(".", "_");
+					
+					// if model already contains a data structure with the new name, use prefix name without "."
+					Integer x = 0;
+					while(semsimmodel.containsDataStructure(newname)){
+						newname = newname + x.toString();
+						x++;
+					}
+					ds.setName(newname);
+					SemSimUtil.replaceCodewordInAllEquations(ds, ds, semsimmodel, oldname, newname, Pair.of(1.0, "*"));					
+				}
+			}
+			
+			// Collect all the mathml for the single component
+			String mathml = "";
+
+			for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
+				
 				if(ds.getComputation().getEvents().size()>0){
 					System.err.println("Error: Cannot convert models with discrete events into CellML");
 					break;
@@ -235,6 +261,8 @@ public class CellMLwriter extends ModelWriter {
 			maincomponent.getComputation().setMathML(mathml);
 			processFunctionalSubmodel(maincomponent, false);
 		}
+		
+		// Otherwise process each CellML-style submodel
 		else{
 			for(Submodel submodel : semsimmodel.getSubmodels()){
 				if(submodel.isFunctional()){
