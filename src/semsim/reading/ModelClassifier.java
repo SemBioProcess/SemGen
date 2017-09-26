@@ -21,6 +21,9 @@ public class ModelClassifier {
 		return classify(new ModelAccessor(file));
 	}
 	
+	/**
+	 * Return the type of the model based on the file extension
+	 **/
 	public static ModelType classify(ModelAccessor accessor){
 		ModelType type = ModelType.UNKNOWN;
 		try{
@@ -53,6 +56,12 @@ public class ModelClassifier {
 		return type;
 	}
 	
+	/**
+	 * Verifies the the indicated document is well-formed SBML
+	 * @param file to check
+	 * @return
+	 */
+	
 	private static Boolean isValidSBML(File file){
 		System.out.println("Testing SBML validity");
 		try{
@@ -71,7 +80,11 @@ public class ModelClassifier {
 		return false;
 	}
 	
-	
+	/**
+	 * Verifies the the indicated document is well-formed CellML
+	 * @param file to check
+	 * @return
+	 */
 	private static Boolean isCellMLmodel(File file) throws JDOMException, IOException{
 		SAXBuilder builder = new SAXBuilder();
 		try{

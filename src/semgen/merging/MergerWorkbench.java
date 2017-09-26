@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,6 +20,7 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SaveSemSimModel;
+import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
@@ -326,7 +328,13 @@ public class MergerWorkbench extends Workbench {
 			//At the end of the task get the merged model and save it out as a temporary owl file, reload it and delete the temp file.
 			public void endTask() {
 				mergedmodel = getMergedModel();
-
+				//Prevent an invalid CellML model from getting written.
+				if( ! mergedmodel.getEvents().isEmpty() && target.filetype == SemGenFileChooser.cellmlfilter){
+					SemGenError.showError("Cannot save as CellML because model contains discrete events", 
+							"Cannot write to CellML");
+					return;
+				}
+				
 				SaveSemSimModel.writeToFile(mergedmodel,  target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
 				
 				LoadSemSimModel loader = new LoadSemSimModel(target.getModelAccessor(), false);
@@ -380,7 +388,7 @@ public class MergerWorkbench extends Workbench {
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		if (ma != null) {
 			target = new SaveMergeTarget(ma, filec.getFileFilter()); 
-			writeMerge();
+			if (!writeMerge()) return null;
 		}
 		this.modelsaved = (ma!=null);
 		return ma;
@@ -395,7 +403,13 @@ public class MergerWorkbench extends Workbench {
 		return true;
 	}
 	
-	public void writeMerge() {
+	public boolean writeMerge() {
+		
+			if( ! mergedmodel.getEvents().isEmpty() && target.filetype == SemGenFileChooser.cellmlfilter){
+				SemGenError.showError("Cannot save as CellML because model contains discrete events", 
+						"Cannot write to CellML");
+				return false;
+			}
 			mergedmodel.setName(target.getModelAccessor().getModelName());
 			
 			SaveSemSimModel.writeToFile(mergedmodel, target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
@@ -404,6 +418,7 @@ public class MergerWorkbench extends Workbench {
 			}
 			modelaccessorlist.set(2, target.getModelAccessor());
 			this.modelsaved = true;
+			return true;
 	}
 	
 	public ModelAccessor getMergedFileAddress() {

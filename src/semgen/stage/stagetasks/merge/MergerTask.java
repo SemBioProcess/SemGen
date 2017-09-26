@@ -156,10 +156,6 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		unitpairs.add(conflict);
 	}
 	
-//	private ModelAccessor saveMerge() {
-//		return workbench.saveModelAs(0);
-//	}
-	
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg == MergeEvent.threemodelerror) {

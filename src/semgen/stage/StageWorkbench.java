@@ -80,6 +80,9 @@ public class StageWorkbench extends Workbench {
 		this.notifyObservers(StageEvent.CHANGETASK);
 	}
 
+	/** 
+	 * Create new stage task within the project
+	 * **/ 
 	private void createTask() {
 		StageTask<?> newtask = activetask.getNewTaskConfiguration().createTask(tasks.size());
 		newtask.addObserver(this);
@@ -152,6 +155,7 @@ public class StageWorkbench extends Workbench {
 		//Remove task icon
 		setChanged();
 		this.notifyObservers(StageTaskEvent.CLOSETASK);
+		//Clear observers so the task can be deleted properly
 		activetask.deleteObservers();
 		//set active task
 		this.setActiveTask(0);
@@ -161,6 +165,9 @@ public class StageWorkbench extends Workbench {
 		return activetask.getTaskIndex();
 	}
 	 
+	/**
+	 * Return if the project has any open models
+	 **/
 	public boolean isProjectEmpty() {
 		if (projtask==null) return true;
 		return this.projtask.getModelNodes().isEmpty();
