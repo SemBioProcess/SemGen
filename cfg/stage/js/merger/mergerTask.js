@@ -99,7 +99,7 @@ function MergerTask(graph, stagestate) {
 	$("#quitMergerBtn").click(function(e) {
 		if (!merger.isSaved()) {
 			e.preventDefault();
-            var r = confirm("Close without saving?");
+            var r = confirm("Confirm close?");
             if (r) {
             	sender.close();
             }
