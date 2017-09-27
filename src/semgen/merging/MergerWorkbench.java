@@ -316,6 +316,16 @@ public class MergerWorkbench extends Workbench {
 		return overlapmap.compareDataStructureUnits();
 	}
 	
+	/**
+	 * Create a merger task class and define the end task behavior.
+	 * @param dsnamemap
+	 * @param smnamemap
+	 * @param choices
+	 * @param conversions
+	 * @param bar
+	 * @return
+	 */
+	
 	public String executeMerge(HashMap<String,String> dsnamemap, HashMap<String,String> smnamemap, ArrayList<ResolutionChoice> choices, 
 			ArrayList<Pair<Double,String>> conversions, SemGenProgressBar bar) {
 		Pair<SemSimModel, SemSimModel> models = getModelOverlapMapModels(overlapmap);
