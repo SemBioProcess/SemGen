@@ -952,6 +952,22 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		for(Submodel sub : getSubmodels()){
 			if(sub.getAssociatedDataStructures().contains(ds)) sub.getAssociatedDataStructures().remove(ds);
 		}
+		
+		// Remove CellML-style mappings that involve the data structure
+		if(ds instanceof MappableVariable){
+			
+			MappableVariable mv = (MappableVariable)ds;
+			
+			for(MappableVariable mappedto : mv.getMappedTo()){
+				mappedto.setMappedFrom(null);
+			}
+			
+			if(mv.getMappedFrom() != null){
+				MappableVariable mappedfrom = mv.getMappedFrom();
+				mappedfrom.getMappedTo().remove(mv);
+			}
+		}
+		
 		dataStructures.remove(ds);
 	}
 	
