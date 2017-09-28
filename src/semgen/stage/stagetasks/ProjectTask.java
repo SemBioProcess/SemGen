@@ -174,7 +174,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		public void onRequestExtractions() {
 			ArrayList<ArrayList<ExtractionNode>> extractions = new ArrayList<ArrayList<ExtractionNode>>();
 			for (ModelExtractionGroup meg : extractnodeworkbenchmap) {
-				extractions.add(meg.getExtractionArray());
+				if (meg!=null) {
+					extractions.add(meg.getExtractionArray());
+				}
+				
 			}
 				_commandSender.loadExtractions(extractions);
 		}
@@ -255,7 +258,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 			else {
 				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
-				accessor = meg.getAccessorbyIndexAlways(modelindex);
+				if (meg!=null) {
+					accessor = meg.getAccessorbyIndexAlways(modelindex);
+				}
 			}
 			if (accessor == null) continue;
 			SemGen.gacts.NewAnnotatorTab(accessor);
@@ -290,9 +295,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 			}
 			else {
-				modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
+				if (this.extractnodeworkbenchmap.get(indexedtomodel)!=null) {
+					modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
+					this.extractnodeworkbenchmap.get(indexedtomodel).exportExtraction(modelindex);
+				}
 
-				this.extractnodeworkbenchmap.get(indexedtomodel).exportExtraction(modelindex);
 			}
 			
 
@@ -308,7 +315,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				
 			}
 			else {
-				extractnodeworkbenchmap.get(basemodelindex).saveExtraction(targetindex);
+				if (this.extractnodeworkbenchmap.get(basemodelindex)!=null) {
+					extractnodeworkbenchmap.get(basemodelindex).saveExtraction(targetindex);
+				}
 			}
 		}
 	}

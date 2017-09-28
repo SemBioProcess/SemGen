@@ -8,7 +8,8 @@ PhysioMapNode.prototype.constructor = PhysioMapNode;
 function PhysioMapNode (graph, data, parentNode) {
 
 	Node.prototype.constructor.call(this, graph, data, parentNode, 5, 12, graph.nodecharge);
-
+	var _node = this;
+	
 	if(data.name.includes("Portion of ")) {
 		this.displayName = data.name.replace("Portion of ", "").capitalizeFirstLetter();
 	}

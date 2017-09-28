@@ -97,7 +97,10 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 		ArrayList<ModelNode> modelnodes = new ArrayList<ModelNode>();
 		
 		for (ModelInfo info : _models) {
-			modelnodes.add(info.modelnode);
+			if (info != null) {
+				modelnodes.add(info.modelnode);
+			}
+			
 		}
 		return modelnodes;
 	}
