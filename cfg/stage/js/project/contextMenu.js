@@ -15,6 +15,7 @@ function ContextMenu() {
 		button.className  = "contextbtn";
 		var t = document.createTextNode(item.text);       // Button Text
 		button.appendChild(t); 
+		//When a menu item is clicked, send a message to the stage.
 		button.onclick = function() {
 			$('#contextmenu').hide();
 			$('#stage').triggerHandler(item.action, [caller]);
@@ -24,7 +25,7 @@ function ContextMenu() {
 		return menuitem;
 
 	}
-	
+	//
 	this.showMenu = function(caller) {
 		if (activecaller==caller) {
 			return;

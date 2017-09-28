@@ -26,9 +26,17 @@ function SubmodelNode (graph, data, parent) {
 	}
 }
 
+//Get the context menu options applicable to this node
 SubmodelNode.prototype.getContextMenu = function() {
-	return [{text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];
-	
+	var menu = [];
+	if (this.getRootParent().nodeType != NodeType.EXTRACTION) {
+		menu = [{text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];;
+	}
+	else {
+		menu = [{text : "Remove Selected", action : "removeselected"}];
+	}
+
+	return menu;	
 }
 
 SubmodelNode.prototype.updateInfo = function() {

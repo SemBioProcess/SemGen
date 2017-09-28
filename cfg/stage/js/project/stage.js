@@ -387,6 +387,24 @@ function Stage(graph, stagestate) {
 		stage.createExtractionandExclude(stage.selectedNodes,root);
 	});
 	
+	$('#stage').on('removeselected', function(e, caller) {
+		var root = caller.getRootParent();
+		var srcmodindex = root.modelindex;
+		
+		var extractarray = [];
+		for (x in stage.selectedNodes) {
+			var selnode = stage.selectedNodes[x];
+			if (selnode.nodeType == NodeType.MODEL && root!=selnode.getRootParent()) continue;
+			extractarray.push(selnode);
+		}
+		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
+			sender.removePhysioNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
+		}
+		else {
+			sender.removeNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
+		}
+	});
+	
 	this.addExtractionNode = function(basenodeindex, newextraction) {
 		var basenode = stage.getModelNodebyIndex(basenodeindex);
 		var extractionnode = new ExtractedModel(stage.graph, newextraction, basenode);
@@ -409,7 +427,7 @@ function Stage(graph, stagestate) {
 		if (droploc!=null) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
-		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS.id, true);
+		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS, true);
 		stage.graph.update();
 		stage.selectNode(extractionnode);
 	}
