@@ -44,6 +44,10 @@ public class LinkableNode<O extends SemSimComponent> extends Node<O> {
 		inputs.add(new Link(this, inputnode));
 	}
 	
+	public void addLink(PhysioMapNode inputnode) {
+		inputs.add(new Link(this, inputnode));
+	}
+	
 	//Use the provide hashmap to replace link inputs, discard any links that don't have a corresponding object
 	public void replaceLinkInputs(HashMap<LinkableNode<?>, LinkableNode<?>> dsnodemap) {
 		ArrayList<Link> linklist = new ArrayList<Link>();

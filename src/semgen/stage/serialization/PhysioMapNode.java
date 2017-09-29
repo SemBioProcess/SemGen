@@ -24,7 +24,7 @@ public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 	}
 	
 	public void addSinkLink(PhysioMapEntityNode sink) {
-		inputs.add(new Link(sink, this));
+		sink.addLink(this);
 		sinknames.add(sink.name + ": " + this.sourceobj.getSourceStoichiometry(sink.sourceobj));
 	}
 

@@ -60,9 +60,9 @@ DependencyNode.prototype.getLinks = function (linklist) {
 	
 	// Build an array of links from our list of inputs
 	var links = [];
-	if (this.nodeType.id == NodeType.ENTITY.id) {
-		return links;
-	}
+//	if (this.nodeType.id == NodeType.ENTITY.id) {
+//		return links;
+//	}
 	var fade = false;
 	var interSubmodelLink = false;
 	if (!this.graph.nodesVisible[this.nodeType.id] ) {
