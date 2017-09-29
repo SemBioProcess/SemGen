@@ -231,13 +231,7 @@ function Stage(graph, stagestate) {
 		
 		if (node.nodeType == NodeType.MODEL) return;
 		node.drag.push(function(selections) {
-//			if (trash.isOverlappedBy(node, 2.0)) {
-//				$("#trash").prop("background-color", "red");
-//			}
-//			else {
-//				$("#trash").prop("background-color", "transparent");
-//			}
-			
+
 			for (i in stage.nodes) {
 				var ithnode = stage.nodes[i];
 				if (ithnode.hullContainsPoint([node.xpos(), node.ypos()])) {
@@ -272,28 +266,6 @@ function Stage(graph, stagestate) {
 				if (selnode.nodeType == NodeType.MODEL && root!=selnode.getRootParent()) continue;
 				extractarray.push(selnode);
 			}
-			
-//			//If the node is dragged to the trash
-//			if (trash.isOverlappedBy(node, 2.0)) {
-//					droploc= stage.graph.getCenter();
-//					
-//					if (root.nodeType!=NodeType.MODEL) {
-//						var srcmodindex = root.sourcenode.modelindex;
-//						//If an extraction is dragged to the trash, delete it
-//						if (root == node.srcnode) {
-//							sender.closeModels([root.getIndexAddress()]);
-//							return;
-//						}
-//						
-//						if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
-//							sender.removePhysioNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
-//						}
-//						else {
-//							sender.removeNodesFromExtraction(srcmodindex, root.modelindex, extractarray);
-//						}
-//					}
-//					return;
-//			}
 			
 			var destinationnode = null;
 			for (i in stage.nodes) {
@@ -375,19 +347,19 @@ function Stage(graph, stagestate) {
 	this.graph.ghostBehaviors.push(onExtractionAction);
 	
 	//On an extraction event from the context menu, make a new extraction
-	$('#stage').on('extract', function(e, caller) {
+	$('#stage').off('extract').on('extract', function(e, caller) {
 		if (!caller.selected) stage.selectNode(caller);
 		var root = caller.getRootParent();
 		stage.createExtraction(stage.selectedNodes,root);
 	});
 	
-	$('#stage').on('extractexclude', function(e, caller) {
+	$('#stage').off('extractexclude').on('extractexclude', function(e, caller) {
 		if (!caller.selected) stage.selectNode(caller);
 		var root = caller.getRootParent();
 		stage.createExtractionandExclude(stage.selectedNodes,root);
 	});
 	
-	$('#stage').on('removeselected', function(e, caller) {
+	$('#stage').off('removeselected').on('removeselected', function(e, caller) {
 		var root = caller.getRootParent();
 		var srcmodindex = root.modelindex;
 		
