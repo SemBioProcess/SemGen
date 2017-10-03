@@ -177,6 +177,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				if (meg!=null) {
 					extractions.add(meg.getExtractionArray());
 				}
+				else {
+					extractions.add(null);
+				}
 				
 			}
 				_commandSender.loadExtractions(extractions);
