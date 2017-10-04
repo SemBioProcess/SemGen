@@ -8,6 +8,7 @@ import java.util.Set;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
@@ -169,7 +170,8 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 		ArrayList<String> associated = new ArrayList<String>();
 		for (Submodel sm : componentlist.get(currentfocus).getSubmodels()) {
 			
-			if (sm.getAssociatedDataStructures().isEmpty()) continue;
+			// Don't show SemSim-style submodel subsumption if the subsumed models are empty
+			if ( ! (sm instanceof FunctionalSubmodel) && sm.getAssociatedDataStructures().isEmpty()) continue;
 			
 			associated.add(sm.getName());
 		}

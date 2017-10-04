@@ -113,6 +113,14 @@ public abstract class SemSimCollection extends SemSimObject{
 		return toplevelsms;
 	}
 	
+	public ArrayList<FunctionalSubmodel> getTopFunctionalSubmodels(){
+		ArrayList<FunctionalSubmodel> toplevelfsms = new ArrayList<FunctionalSubmodel>();
+		for(Submodel sub : getTopSubmodels()){
+			if(sub.isFunctional()) toplevelfsms.add((FunctionalSubmodel)sub);
+		}
+		return toplevelfsms;
+	}
+	
 	public boolean containsSubmodel(Submodel sm) {
 		return submodels.contains(sm);
 	}

@@ -447,7 +447,7 @@ public class CellMLreader extends ModelReader {
 		stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
 		String remainingrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
 		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, remainingrdf));
-				
+		
 		return semsimmodel;
 	}
 	
@@ -481,6 +481,8 @@ public class CellMLreader extends ModelReader {
 				
 				// Connect the parent and child submodels
 				((FunctionalSubmodel)parentsubmodel).getRelationshipSubmodelMap().put(rel, valueset);
+				
+				parentsubmodel.addSubmodel(childsubmodel);
 				
 				// Iterate recursively
 				processComponentRelationships(rel, subcomp);

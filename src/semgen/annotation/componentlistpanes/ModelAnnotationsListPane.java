@@ -65,7 +65,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 		
 		setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(), "Curational Metadata", 
-				TitledBorder.LEFT, 
+				TitledBorder.CENTER, 
 				TitledBorder.TOP, 
 				SemGenFont.defaultBold(2)
 				));

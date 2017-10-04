@@ -366,10 +366,25 @@ public class Merger {
 	// Collects ungrouped data structures from one of the models used in the merge, along with all
 	// its submodels and puts them into a single parent submodel
 	private void createSubmodelForMergeComponent(SemSimModel mergedmodel, SemSimModel componentmodel){
-		Submodel submodel = new Submodel(componentmodel.getName());
-		submodel.setAssociatedDataStructures(componentmodel.getUngroupedDataStructures());
-		submodel.setSubmodels(componentmodel.getSubmodels());
-		mergedmodel.addSubmodel(submodel);
+		
+		// For CellML-style merges, create CellML-style submodels to house the contents 
+		// of the component models in the merge. Otherwise, create SemSim-style submodels to house them.
+		if(ssm1clone.containsFunctionalSubmodels() && ssm2clone.containsFunctionalSubmodels()){
+			Set<FunctionalSubmodel> fsset = new HashSet<FunctionalSubmodel>();
+			fsset.addAll(componentmodel.getTopFunctionalSubmodels());
+			
+			FunctionalSubmodel fs = new FunctionalSubmodel(componentmodel.getName(), new HashSet<DataStructure>());
+			Map<String,Set<FunctionalSubmodel>> map = fs.getRelationshipSubmodelMap();
+			map.put("encapsulation", fsset);
+			fs.setRelationshipSubmodelMap(map);
+			mergedmodel.addSubmodel(fs);
+		}
+		else{
+			Submodel submodel = new Submodel(componentmodel.getName());
+			submodel.setAssociatedDataStructures(componentmodel.getUngroupedDataStructures());
+			submodel.setSubmodels(componentmodel.getSubmodels());
+			mergedmodel.addSubmodel(submodel);
+		}
 	}
 	
 	// Remove empty submodels
@@ -380,7 +395,15 @@ public class Merger {
 		for(Submodel sub : tempset){
 			
 			if(sub.getAssociatedDataStructures().isEmpty() && sub.getSubmodels().isEmpty()){
-				model.removeSubmodel(sub);
+				
+				if(sub instanceof FunctionalSubmodel){
+					
+					// Preserve empty FunctionalSubmodels that have some encapsulation or containment relation
+					if(((FunctionalSubmodel) sub).getRelationshipSubmodelMap().isEmpty()){
+						model.removeSubmodel(sub);
+					}
+				}
+				else model.removeSubmodel(sub); // If SemSim-style submodel, remove
 			}
 		}
 	}
