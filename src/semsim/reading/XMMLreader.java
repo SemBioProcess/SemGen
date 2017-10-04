@@ -125,7 +125,7 @@ public class XMMLreader extends ModelReader {
 		while (variterator.hasNext()) {
 			Element varchild = (Element) variterator.next();
 			// if variable should go into SemSim
-			if (!varchild.getAttributeValue("id").endsWith(".ct")) {
+			if ( ! varchild.getAttributeValue("id").endsWith(".ct")) {
 				String codeword =  varchild.getAttributeValue("id");
 				
 				DataStructure ds = null;
@@ -137,6 +137,7 @@ public class XMMLreader extends ModelReader {
 				else if(vardatatype.equals("choice")) ds = new MMLchoice(codeword);
 				
 				semsimmodel.addDataStructure(ds);
+				ds.setMetadataID(codeword);
 								
 				if(codeword.contains(":") || codeword.endsWith("__init")) ds.setDeclared(false);
 				else ds.setDeclared(true);

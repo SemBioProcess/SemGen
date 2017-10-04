@@ -188,7 +188,7 @@ public class SemSimRDFwriter extends ModelWriter{
 			
 			// Assign metaid to data structure if there isn't one already
 			String dsmetaid = dsinsub.hasMetadataID() ? dsinsub.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(dsinsub.getName(), dsinsub);
-			Resource dsres = rdf.getResource("#" + dsmetaid);
+			Resource dsres = rdf.getResource(xmlbase + dsmetaid);
 			Statement stds = rdf.createStatement(subres, 
 					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
 					dsres);

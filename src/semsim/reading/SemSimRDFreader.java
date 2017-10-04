@@ -232,11 +232,13 @@ public class SemSimRDFreader extends ModelReader{
 			while(dsstit.hasNext()){
 				Statement dsst = dsstit.next();
 				Resource dsresinsub = dsst.getResource();
+				String dsresinsubURI = dsresinsub.getURI();
 				
-				SemSimObject sso = semsimmodel.getMetadataIDcomponentMap().get(dsresinsub.getLocalName());
+				String metaid = dsresinsubURI.substring(dsresinsubURI.indexOf("#") + 1);
 				
-				if(sso instanceof DataStructure)
-					sub.addDataStructure((DataStructure)sso);
+				SemSimObject sso = semsimmodel.getMetadataIDcomponentMap().get(metaid);
+								
+				if(sso instanceof DataStructure) sub.addDataStructure((DataStructure)sso);
 			}
 			
 			// Collect submodels of submodels

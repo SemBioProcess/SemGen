@@ -744,6 +744,8 @@ public class SBMLwriter extends ModelWriter {
 		
 		rdfblock.setRDFforModelLevelAnnotations();
 		
+		// NOTE: SemSim-style submodels are not currently preserved on SBML export
+		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 		
 			// Only the info for compartments and parameters are stored (i.e. not species or reactions)
