@@ -626,7 +626,7 @@ public class CellMLreader extends ModelReader {
 					if (sso!=null){
 						
 						// Remove dc:description statements (do not need to preserve these)
-						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(SemSimRDFwriter.dcterms_description.getURI()))
+						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
 							listofremovedstatements.add(st);
 					}
 				}

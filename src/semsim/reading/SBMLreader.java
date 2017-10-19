@@ -99,7 +99,7 @@ public class SBMLreader extends ModelReader{
 	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement modeltimeunits;
 	private UnitOfMeasurement modelsubstanceunits;
-	private SemSimRDFreader rdfreader;
+	private AbstractRDFreader rdfreader;
 	
 	
 	public SBMLreader(File file) {
@@ -109,6 +109,8 @@ public class SBMLreader extends ModelReader{
 	public SBMLreader(ModelAccessor accessor){
 		super(accessor);
 	}
+	
+	// TODO: new constructor with an accessor and a String argument that provides the RDF from the CASA file?
 
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
@@ -170,8 +172,13 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getListOfSpecies().size()>0)
 			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
+		// TODO: instantiate RDF reader based on whether the model is standalone or in a COMBINE archive
+		// If from an archive, read in the annotations on the SBML physical components using
+		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
+		// in the collectReactions and collectParameters functions.
+				
+		collectSemSimRDF(); // For SemSim-specific RDF annotations (need to determine first if annotations are CASA or SemSim)
 		
-		collectSemSimRDF();
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
