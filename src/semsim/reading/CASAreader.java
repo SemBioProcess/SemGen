@@ -33,7 +33,7 @@ public class CASAreader extends AbstractRDFreader{
 	}
 
 
-	protected void getAnnotationsForSBMLphysicalComponents(AbstractNamedSBase sbaseobj){
+	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
 		
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
@@ -46,7 +46,7 @@ public class CASAreader extends AbstractRDFreader{
 			Qualifier q = qualifiers[i];
 			
 			if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-				NodeIterator nodeit = rdf.listObjectsOfProperty(res, SemSimRelations.getBiologicalQualifierRelation(q).getRDFproperty());
+				NodeIterator nodeit = rdf.listObjectsOfProperty(res, SemSimRelations.getRelationFromBiologicalQualifier(q).getRDFproperty());
 				
 				while(nodeit.hasNext()){
 					RDFNode nextnode = nodeit.next();

@@ -1266,7 +1266,7 @@ public class SBMLreader extends ModelReader{
 				Qualifier q = term.getBiologicalQualifierType();
 				
 				// If we know the relation
-				if(SemSimRelations.getBiologicalQualifierRelation(q)!= SemSimRelation.UNKNOWN){
+				if(SemSimRelations.getRelationFromBiologicalQualifier(q)!= SemSimRelation.UNKNOWN){
 					
 					int numidentityanns = 0;
 					
@@ -1281,7 +1281,7 @@ public class SBMLreader extends ModelReader{
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainHasReferenceOntology(refont)){
 								Relation relation = (q==Qualifier.BQB_IS) ? 
-										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getBiologicalQualifierRelation(q);
+										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getRelationFromBiologicalQualifier(q);
 								
 								// If we're looking at an identity relation...
 								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION){
