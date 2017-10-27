@@ -1,6 +1,5 @@
 package semsim.reading;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipException;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -102,10 +102,6 @@ public class SBMLreader extends ModelReader{
 	private SemSimRDFreader rdfreader;
 	
 	
-	public SBMLreader(File file) {
-		super(file);
-	}
-	
 	public SBMLreader(ModelAccessor accessor){
 		super(accessor);
 	}
@@ -115,7 +111,7 @@ public class SBMLreader extends ModelReader{
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		sbmldoc = new SBMLReader().readSBMLFromString(modelaccessor.getLocalModelTextAsString());
+		sbmldoc = new SBMLReader().readSBMLFromStream(modelaccessor.getLocalModelStream());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -339,73 +335,79 @@ public class SBMLreader extends ModelReader{
 		boolean timenamepredefined = false;
 		
 		// Check if the time csymbol is used anywhere in the model's MathML.
-		Document doc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
+		try {
+			Document doc = getJDOMdocumentFromStream(modelaccessor.getLocalModelStream());
 		
-		Iterator<?> descit = doc.getRootElement().getDescendants(new ElementFilter());
-		
-		while(descit.hasNext()){
-			Element el = (Element)descit.next();
 			
-			if(el.getName().equals("csymbol")){
+			Iterator<?> descit = doc.getRootElement().getDescendants(new ElementFilter());
+			
+			while(descit.hasNext()){
+				Element el = (Element)descit.next();
 				
-				if(el.getAttributeValue("definitionURL").equals("http://www.sbml.org/sbml/symbols/time")){
-					timedomainname = el.getText().trim();
-					timenamepredefined = true;
-					break;
+				if(el.getName().equals("csymbol")){
+					
+					if(el.getAttributeValue("definitionURL").equals("http://www.sbml.org/sbml/symbols/time")){
+						timedomainname = el.getText().trim();
+						timenamepredefined = true;
+						break;
+					}
 				}
 			}
-		}
-		
-		
-		// If cysmbol time not found, go through model compartments, species, and global parameters to see if we
-		// can use the default name for our time domain data structure
-		if( ! timenamepredefined){
-			Set<String> usedids = new HashSet<String>();
 			
-			for(Compartment c : sbmlmodel.getListOfCompartments())
-				usedids.add(c.getId());
 			
-			for(Species s : sbmlmodel.getListOfSpecies())
-				usedids.add(s.getId());
-			
-			for(Parameter p : sbmlmodel.getListOfParameters())
-				usedids.add(p.getId());
-			
-			Integer x = 0;
-			
-			while(usedids.contains(timedomainname)){
-				timedomainname = timedomainname + x;
-				x++;
+			// If cysmbol time not found, go through model compartments, species, and global parameters to see if we
+			// can use the default name for our time domain data structure
+			if( ! timenamepredefined){
+				Set<String> usedids = new HashSet<String>();
+				
+				for(Compartment c : sbmlmodel.getListOfCompartments())
+					usedids.add(c.getId());
+				
+				for(Species s : sbmlmodel.getListOfSpecies())
+					usedids.add(s.getId());
+				
+				for(Parameter p : sbmlmodel.getListOfParameters())
+					usedids.add(p.getId());
+				
+				Integer x = 0;
+				
+				while(usedids.contains(timedomainname)){
+					timedomainname = timedomainname + x;
+					x++;
+				}
 			}
-		}
-		
-		// Create a data structure that represents the temporal solution domain
-		DataStructure timeds = new Decimal(timedomainname);
-		timeds.setDeclared(true);
-		timeds.setDescription("Temporal solution domain");
-		timeds.setIsSolutionDomain(true);
-		
-		
-		if(semsimmodel.containsUnit("time")){  // Time unit should have already been added for level 2 models
-			modeltimeunits = semsimmodel.getUnit("time");
-		}
-		else{
-			if(sbmlmodel.isSetTimeUnits()){
-				modeltimeunits = new UnitOfMeasurement(sbmlmodel.getTimeUnits());
-				semsimmodel.addUnit(modeltimeunits);
+			
+			// Create a data structure that represents the temporal solution domain
+			DataStructure timeds = new Decimal(timedomainname);
+			timeds.setDeclared(true);
+			timeds.setDescription("Temporal solution domain");
+			timeds.setIsSolutionDomain(true);
+			
+			
+			if(semsimmodel.containsUnit("time")){  // Time unit should have already been added for level 2 models
+				modeltimeunits = semsimmodel.getUnit("time");
 			}
-			else modeltimeunits = addReservedUnit("time", SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get("time"));
+			else{
+				if(sbmlmodel.isSetTimeUnits()){
+					modeltimeunits = new UnitOfMeasurement(sbmlmodel.getTimeUnits());
+					semsimmodel.addUnit(modeltimeunits);
+				}
+				else modeltimeunits = addReservedUnit("time", SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.get("time"));
+			}
+			
+			timeds.setUnit(modeltimeunits);
+	
+			PhysicalProperty timeprop = new PhysicalProperty("Time", SemSimLibrary.OPB_TIME_URI);
+			semsimmodel.addPhysicalProperty(timeprop);
+			timeds.setSingularAnnotation(timeprop);
+			
+			semsimmodel.addDataStructure(timeds);
+			
+			if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		timeds.setUnit(modeltimeunits);
-
-		PhysicalProperty timeprop = new PhysicalProperty("Time", SemSimLibrary.OPB_TIME_URI);
-		semsimmodel.addPhysicalProperty(timeprop);
-		timeds.setSingularAnnotation(timeprop);
-		
-		semsimmodel.addDataStructure(timeds);
-		
-		if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);		
 	}
 
 	
@@ -1158,10 +1160,11 @@ public class SBMLreader extends ModelReader{
 	/**
 	 * Collect the SemSim annotations for data structures in the model.
 	 * This excludes data structures corresponding to species and reactions in the model.
+	 * @throws IOException 
+	 * @throws ZipException 
 	 */
-	private void collectSemSimRDF(){
-		
-		Document projdoc = getJDOMdocumentFromString(semsimmodel, modelaccessor.getLocalModelTextAsString());
+	private void collectSemSimRDF() throws ZipException, IOException{
+		Document projdoc = getJDOMdocumentFromStream(modelaccessor.getLocalModelStream());
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
 		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();

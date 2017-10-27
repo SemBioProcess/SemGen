@@ -18,7 +18,8 @@ public abstract class SemGenFileChooser extends JFileChooser {
 	public static final FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
 	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("JSim project file model (*.proj)", "proj");
 	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
-	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj"});
+	public static final FileNameExtensionFilter omexfilter = new FileNameExtensionFilter("Combine Archive (*.omex)", "omex");
+	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj", "omex"});
 	
 	private static HashMap<String, FileNameExtensionFilter> filtermap = new HashMap<String, FileNameExtensionFilter>(); 
 	
@@ -46,6 +47,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		filtermap.put("mod", mmlfilter);
 		filtermap.put("proj", projfilter);
 		filtermap.put("csv", csvfilter);
+		filtermap.put("omex", omexfilter);
 	}
 	
 	protected FileNameExtensionFilter getFilter(String key) {

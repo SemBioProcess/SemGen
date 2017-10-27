@@ -13,46 +13,49 @@ import org.sbml.jsbml.SBMLReader;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL, SBML_MODEL, CELLML_MODEL, MML_MODEL, MML_MODEL_IN_PROJ, UNKNOWN
+		SEMSIM_MODEL("owl"), SBML_MODEL("sbml"), CELLML_MODEL("cellml"), MML_MODEL("m"), MML_MODEL_IN_PROJ("proj"), OMEX_ARCHIVE("omex"), UNKNOWN("null");
+		
+		public String extension;
+		ModelType(String ext) {
+			extension = ext;
+		}
+	}
+	
+	public static ModelType classify(ModelAccessor accessor) throws JDOMException, IOException{
+		return classify(accessor.getModelwithBaseFile());
 	}
 	
 	
-	public static ModelType classify(File file){
-		return classify(new ModelAccessor(file));
+	public static ModelType classify(File file) throws JDOMException, IOException {
+		return classify(file.getPath());
 	}
 	
 	/**
 	 * Return the type of the model based on the file extension
+	 * @throws IOException 
+	 * @throws JDOMException 
 	 **/
-	public static ModelType classify(ModelAccessor accessor){
+	public static ModelType classify(String file) throws JDOMException, IOException{
 		ModelType type = ModelType.UNKNOWN;
-		try{
-			
-			if(accessor.modelIsPartOfArchive()){
-				
-				if(accessor.modelIsPartOfJSimProjectFile()){
+				if (file.toLowerCase().endsWith(".omex")){
+					type = ModelType.OMEX_ARCHIVE;
+				}
+				else if(file.toLowerCase().endsWith(".proj")){
 					type = ModelType.MML_MODEL_IN_PROJ;
 				}
-			}
-			else{
-				File file = accessor.getFileThatContainsModel();
-				if (file.toString().toLowerCase().endsWith(".mod")){
+				else if (file.toLowerCase().endsWith(".mod")){
 					type = ModelType.MML_MODEL;
 				}
-				else if (file.toString().endsWith(".owl")) {
+				else if (file.endsWith(".owl")) {
 					type =  ModelType.SEMSIM_MODEL;
 				}
-				else if(isCellMLmodel(file)){
+				else if(file.endsWith(".cellml")){
 					type =  ModelType.CELLML_MODEL;
 				}
-				else if(isValidSBML(file)){
+				else if(file.endsWith(".xml") || file.endsWith(".sbml")){
 					type =  ModelType.SBML_MODEL;
 				}
-			}
-		}
-		catch(JDOMException | IOException e) {
-			e.printStackTrace();
-		} 
+
 		return type;
 	}
 	
@@ -62,7 +65,7 @@ public class ModelClassifier {
 	 * @return
 	 */
 	
-	private static Boolean isValidSBML(File file){
+	public static Boolean isValidSBML(File file){
 		System.out.println("Testing SBML validity");
 		try{
 			SBMLDocument sbmldoc = SBMLReader.read(file);
@@ -85,7 +88,7 @@ public class ModelClassifier {
 	 * @param file to check
 	 * @return
 	 */
-	private static Boolean isCellMLmodel(File file) throws JDOMException, IOException{
+	public static Boolean isValidCellMLmodel(File file) throws JDOMException, IOException{
 		SAXBuilder builder = new SAXBuilder();
 		try{
 			Document doc = builder.build(file);
@@ -97,6 +100,15 @@ public class ModelClassifier {
 		catch(JDOMParseException e){
 			e.printStackTrace();
 		}
+		return false;
+	}
+	
+	public static boolean hasValidFileExtension(String filename) {
+		for (ModelType type : ModelType.values()) {
+			if (type.equals(ModelType.OMEX_ARCHIVE)) continue;
+			if (filename.endsWith("xml") || filename.endsWith(type.extension)) return true;
+		}
+		
 		return false;
 	}
 }

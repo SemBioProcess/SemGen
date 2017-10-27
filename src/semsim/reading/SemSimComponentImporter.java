@@ -1,7 +1,9 @@
 package semsim.reading;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
@@ -17,11 +19,13 @@ public class SemSimComponentImporter {
  * This class provides methods for importing submodels 
  * and units from other models. Motivated by need to support
  * CellML 1.1 models.
+ * @throws IOException 
+ * @throws JDOMException 
  * @throws CloneNotSupportedException 
  */
 
-	public static FunctionalSubmodel importFunctionalSubmodel(File receivingmodelfile, SemSimModel receivingmodel,
-			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib){
+	public static FunctionalSubmodel importFunctionalSubmodel(ModelAccessor receivingmodelfile, SemSimModel receivingmodel,
+			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib) throws JDOMException, IOException{
 		
 		String supplyingmodelfilepath = getPathToSupplyingModel(receivingmodelfile, receivingmodel, hrefValue);
 		if(supplyingmodelfilepath==null){
@@ -35,18 +39,20 @@ public class SemSimComponentImporter {
 			System.err.println(error);
 			return null;
 		}
+		ModelAccessor importedmodelaccessor = new ModelAccessor(importedmodelfile);
 		SemSimModel importedmodel = null;
-		ModelType modeltype = ModelClassifier.classify(importedmodelfile);
+		ModelType modeltype = receivingmodelfile.getFileType();
 		if(modeltype == ModelType.SEMSIM_MODEL){
 			try {
-				importedmodel = new SemSimOWLreader(importedmodelfile).read();
+				importedmodel = new SemSimOWLreader(importedmodelaccessor).read();
 			} catch (OWLException e) {
 				e.printStackTrace();
 			}
 		}
 		else if(modeltype == ModelType.CELLML_MODEL){
 			try {
-				importedmodel = new CellMLreader(importedmodelfile).read();
+				if (!ModelClassifier.isValidCellMLmodel(importedmodelfile)) return null;
+				importedmodel = new CellMLreader(importedmodelaccessor).read();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -145,7 +151,8 @@ public class SemSimComponentImporter {
 		}
 	}
 	
-	private static String getPathToSupplyingModel(File receivingmodelfile, SemSimModel receivingmodel, String hrefValue){
+	//Get the receiving model directory and append the name of the contributing model
+	private static String getPathToSupplyingModel(ModelAccessor receivingmodelfile, SemSimModel receivingmodel, String hrefValue){
 		String supplyingmodelfilepath = null;
 		if(hrefValue.startsWith("http://")){
 			String error = "ERROR: Cannot import components from...\n\n\t" + hrefValue + "\n\n...because it is not a local file.";
@@ -156,7 +163,7 @@ public class SemSimComponentImporter {
 		else if(hrefValue.startsWith("/") || hrefValue.startsWith("\\"))
 			hrefValue = hrefValue.substring(1);
 		
-		supplyingmodelfilepath = receivingmodelfile.getParent() + "/" + hrefValue;
+		supplyingmodelfilepath = receivingmodelfile.getBaseFile().getParent() + "/" + hrefValue;
 		return supplyingmodelfilepath;
 	}
 }

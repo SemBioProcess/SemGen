@@ -187,14 +187,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void exportModel(Integer index){
 		
-		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFileThatContainsModel().getName());
+		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getModelwithBaseFile().getName());
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, "owl", semsimmodel.getName(), suggestedfilename);
 		
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
 		if (ma != null) {
 			validateModelComposites();
-			SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getFileThatContainsModel(), filec.getFileFilter());			
+			SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getModelwithBaseFile(), filec.getFileFilter());			
 		}
 	}
 	
@@ -217,8 +217,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				msg = msg + "[unsaved file]?";
 			
 			else if( ! modelaccessor.modelIsPartOfArchive())
-				msg = msg + modelaccessor.getFileThatContainsModel().getName() + "?";
-			else msg = msg + modelaccessor.getModelName() + " in " + modelaccessor.getFileThatContainsModel().getName() + "?";
+				msg = msg + modelaccessor.getModelwithBaseFile().getName() + "?";
+			else msg = msg + modelaccessor.getModelName() + " in " + modelaccessor.getModelwithBaseFile().getName() + "?";
 			
 			int returnval= JOptionPane.showConfirmDialog(null,
 					msg, title,
@@ -323,7 +323,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public File getSourceSubmodelFile() {
-		File returnfile = new File(getModelAccessor().getFileThatContainsModel().getParent() + "/" + smdrawer.getHrefValue());
+		File returnfile = new File(getModelAccessor().getModelwithBaseFile().getParent() + "/" + smdrawer.getHrefValue());
 		return returnfile;
 	}
 	

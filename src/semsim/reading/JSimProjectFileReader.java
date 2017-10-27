@@ -1,7 +1,10 @@
 package semsim.reading;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +28,7 @@ public class JSimProjectFileReader {
 		
 		if(ma.modelIsPartOfJSimProjectFile()){
 			
-			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getFileThatContainsModel());
+			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getBaseFile());
 			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
 			
 			// If there are no semsim annotations associated with the model, return false
@@ -51,7 +54,7 @@ public class JSimProjectFileReader {
 		return false;
 	}
 	
-	public static Document getDocument(File file){
+	public static Document getDocument(InputStream file){
 		Document doc = null;
 		SAXBuilder builder = new SAXBuilder();
 		
@@ -88,10 +91,13 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	protected static String getModelSourceCode(Document projdoc, String modelname){
+	protected static InputStream getModelSourceCode(Document projdoc, String modelname) throws UnsupportedEncodingException{
 		
-		if(getModelSourceCodeElement(projdoc, modelname) != null)
-			return getModelSourceCodeElement(projdoc, modelname).getText();
+		if(getModelSourceCodeElement(projdoc, modelname) != null) {
+			String modeltext = getModelSourceCodeElement(projdoc, modelname).getText();
+			return new ByteArrayInputStream(modeltext.getBytes(StandardCharsets.UTF_8.name()));
+		}
+			
 		return null;
 	}
 	

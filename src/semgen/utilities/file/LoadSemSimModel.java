@@ -1,8 +1,11 @@
 package semgen.utilities.file;
 
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.IOUtils;
 import org.jdom.Document;
+import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
@@ -15,7 +18,6 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
 import semsim.reading.ModelAccessor;
 import semsim.reading.XMMLreader;
-import semsim.reading.ModelClassifier;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
 import semsim.reading.SemSimOWLreader;
@@ -49,19 +51,16 @@ public class LoadSemSimModel extends SemGenJob {
 		this.autoannotate = autoannotate;
 	}
 	
-	private void loadSemSimModelFromFile() {
+	private void loadSemSimModelFromFile() throws JDOMException, IOException {
 		
     	setStatus("Reading " + modelaccessor.getShortLocation());
 
-    	ModelType modeltype = ModelClassifier.classify(modelaccessor);
+    	ModelType modeltype = modelaccessor.getFileType();
 		try {
 			switch (modeltype){
 			
 			case SEMSIM_MODEL:
-				if(modelaccessor.modelIsPartOfArchive())
-					ErrorLog.addError("Cannot load a SemSim model from within an archive file.", true, false);
-				else
-					semsimmodel = new SemSimOWLreader(modelaccessor.getFileThatContainsModel()).read();	
+					semsimmodel = new SemSimOWLreader(modelaccessor).read();	
 				break;
 			
 			case CELLML_MODEL:
@@ -128,12 +127,13 @@ public class LoadSemSimModel extends SemGenJob {
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
 		
-		String srcText = ma.getLocalModelTextAsString();
+		InputStream stream = ma.getLocalModelStream();
+		String srcText = IOUtils.toString(stream, StandardCharsets.UTF_8.name());
 		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getModelName());
 		
 		if (ErrorLog.hasErrors()) return null;
 		
-		XMMLreader xmmlreader = new XMMLreader(modelaccessor, xmmldoc, srcText);		
+		XMMLreader xmmlreader = new XMMLreader(modelaccessor, xmmldoc, srcText.toString());		
 		semsimmodel = xmmlreader.readFromDocument();
 		
 		if((semsimmodel == null) || (! semsimmodel.getErrors().isEmpty()))
@@ -170,10 +170,16 @@ public class LoadSemSimModel extends SemGenJob {
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 			}
 		}
+	
+
 
 	@Override
 	public void run() {
-		loadSemSimModelFromFile();
+		try {
+			loadSemSimModelFromFile();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
 		if (semsimmodel == null || ErrorLog.errorsAreFatal()) {
 			abort();
 			return;

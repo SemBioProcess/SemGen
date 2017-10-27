@@ -17,7 +17,7 @@ import semgen.utilities.uicomponent.SemGenDialog;
 public class JSimModelSelectorDialogForReading extends SemGenDialog implements PropertyChangeListener{
 
 	private static final long serialVersionUID = -6899404099942989139L;
-	private ArrayList<String> selectedModelNames = new ArrayList<String>();
+	private ArrayList<Integer> selectedModelNames = new ArrayList<Integer>();
 	private JOptionPane optionPane;
 	private JPanel panel = new JPanel();
 	private ArrayList<JCheckBox> modelstoread = new ArrayList<JCheckBox>();
@@ -52,7 +52,7 @@ public class JSimModelSelectorDialogForReading extends SemGenDialog implements P
 		
 	}
 	
-	public ArrayList<String> getSelectedModelNames(){
+	public ArrayList<Integer> getSelectedModelNames(){
 		return selectedModelNames;
 	}
 
@@ -65,7 +65,7 @@ public class JSimModelSelectorDialogForReading extends SemGenDialog implements P
 			if (value.equals("OK")) {				
 				for(JCheckBox checkbox : modelstoread){
 					if(checkbox.isSelected()){
-						selectedModelNames.add(checkbox.getText());
+						selectedModelNames.add(modelstoread.indexOf(checkbox));
 					}
 				}
 			}

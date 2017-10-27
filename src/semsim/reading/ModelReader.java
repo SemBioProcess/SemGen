@@ -1,6 +1,5 @@
 package semsim.reading;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +18,6 @@ public abstract class ModelReader {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel = new SemSimModel();
 	protected ModelAccessor modelaccessor;
-	
-	ModelReader(File file) {
-		modelaccessor = new ModelAccessor(file);
-	}
 	
 	ModelReader(ModelAccessor accessor){
 		this.modelaccessor = accessor;
@@ -45,13 +40,12 @@ public abstract class ModelReader {
 		return doc;
 	}
 	
-	public Document getJDOMdocumentFromString(SemSimModel semsimmodel, String thestring){
+	public Document getJDOMdocumentFromStream(InputStream stream){
 		Document doc = null;
 		SAXBuilder builder = new SAXBuilder();
 		
 		try {
-			InputStream is = new ByteArrayInputStream(thestring.getBytes("UTF-8"));
-			doc = builder.build(is);
+			doc = builder.build(stream);
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 			semsimmodel.addError(e.getLocalizedMessage());

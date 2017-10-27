@@ -163,15 +163,15 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				// Otherwise we're saving to a standalone file
 				else{
 					ma = new ModelAccessor(getSelectedFile());
-					overwriting = ma.getFileThatContainsModel().exists();
+					overwriting = ma.getModelwithBaseFile().exists();
 				}
 				
 				// If we're overwriting a model...
 				if (overwriting) {
-					String overwritemsg = "Overwrite " + ma.getFileThatContainsModel().getName() + "?";
+					String overwritemsg = "Overwrite " + ma.getModelwithBaseFile().getName() + "?";
 					
 					if(ma.modelIsPartOfArchive()) 
-						overwritemsg = "Overwrite model " + ma.getModelName() + " in " + ma.getFileThatContainsModel().getName() + "?";
+						overwritemsg = "Overwrite model " + ma.getModelName() + " in " + ma.getModelwithBaseFile().getName() + "?";
 					
 					int overwriteval = JOptionPane.showConfirmDialog(this,
 							overwritemsg, "Confirm overwrite",

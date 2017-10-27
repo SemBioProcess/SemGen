@@ -1,57 +1,106 @@
 package semsim.reading;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.util.Scanner;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class ModelAccessor {
 
-	private URI modelURI;
+	private String baseURI;
+	private String modelURI = "";
 	public static final String separator = "#";
-
+	private boolean isarchive = false;
+	private ModelType basetype;
+	private ModelType modeltype;
+	
 	// Copy constructor
 	public ModelAccessor(ModelAccessor matocopy) {
-		modelURI = URI.create(matocopy.modelURI.toString());
+		baseURI = matocopy.baseURI.toString();
+		isarchive = matocopy.isarchive;
+		basetype = matocopy.basetype;
+		modeltype = matocopy.modeltype;
 	}
 		
 	// Use this constructor for models that are stored as standalone files
 	public ModelAccessor(File standAloneFile){
-		modelURI = standAloneFile.toURI();
+		try {
+			basetype = ModelClassifier.classify(standAloneFile);
+			modeltype = basetype;
+			baseURI = standAloneFile.getPath();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
-	// Use this constructor for models that are stored within archive files
+	// Use this constructor for models that are stored within JSim Project files
 	public ModelAccessor(File archiveFile, String modelNameInArchive){
-		modelURI = URI.create(archiveFile.toURI().toString() + separator + modelNameInArchive);
+		try {
+			baseURI = archiveFile.getPath().toString();
+			modelURI = separator + modelNameInArchive;
+			isarchive = true;
+			
+			basetype = ModelClassifier.classify(archiveFile);
+			modeltype = basetype;
+			
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// This constructor parses a string input and assigns values to the object's fields
 	public ModelAccessor(String location){
 				
-		if(location.startsWith("http") || location.startsWith("file")) modelURI = URI.create(location);
+		if(location.startsWith("http") || location.startsWith("file")) baseURI = location;
 				
 		else if(location.contains(separator)){ // Account for locations formatted like C:\whatever\junk.owl#model1
 			String path = location.substring(0, location.indexOf(separator));
 			String frag = location.substring(location.indexOf(separator) + 1, location.length());
 
-			URI pathuri = new File(path).toURI();
-			modelURI = URI.create(pathuri.toString() + separator + frag);
+			baseURI = path;
+			modelURI = separator + frag;
 		}
 		
-		else modelURI = new File(location).toURI();
+		else baseURI = location;
+		try {
+			basetype = ModelClassifier.classify(new File(baseURI));
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public URI getModelURI(){
-		return modelURI;
+	//OMEX Constructor
+	public ModelAccessor(File omexarchive, File file) {
+		try {
+			baseURI = omexarchive.getPath().toString();
+			modelURI = file.getPath();
+			isarchive = true;
+			
+			basetype = ModelClassifier.classify(omexarchive);
+			modeltype = ModelClassifier.classify(file);
+			
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public URI getBaseURI(){
+		return URI.create(baseURI);
 	}
 	
 	public void setModelURI(URI uri){
-		modelURI = uri;
+		baseURI = uri.toString();
 	}
 	
 
@@ -59,94 +108,87 @@ public class ModelAccessor {
 	// or returns the standalone uri if the model is in a standalone file.
 	public URI getFileThatContainsModelAsURI(){
 		
-		if( ! modelIsPartOfArchive()) return modelURI;
-		else{
-			String uri = modelURI.toString();
-			return URI.create(uri.substring(0, uri.indexOf(separator)));
-		}
+		return URI.create(baseURI);
 	}
 	
-	public File getFileThatContainsModel(){
+	public File getModelwithBaseFile(){
 		if(modelIsOnline()) return null;
-		return new File(getFileThatContainsModelAsURI());
+		return new File(baseURI + modelURI);
+	}
+	
+	public File getModelFile() {
+		return new File(modelURI);
+	}
+	
+	public File getBaseFile() {
+		return new File(baseURI);
 	}
 	
 	public boolean modelIsPartOfArchive(){
-		return getModelURI().getFragment() != null;
+		return isarchive;
 	}
 	
 	public boolean modelIsOnline(){
-		return ! getFileThatContainsModelAsURI().toString().startsWith("file");
+		return baseURI.startsWith("http");
 	}
-	
+
 	// Retrieve model text as a string (only for locally-stored models)
-	public String getLocalModelTextAsString(){
-		String returnstring = "";
+	public InputStream getLocalModelStream() throws ZipException, IOException{
+		InputStream returnstring = null;
 		
 		if(modelIsOnline()) return null;
-		else if(modelIsPartOfArchive()){
-			
-			if(modelIsPartOfJSimProjectFile()){
-				Document projdoc = JSimProjectFileReader.getDocument(getFileThatContainsModel());
-				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
-			}
-		}
-		else if(getFileThatContainsModel().exists()){
-			Scanner scanner = null;
+		else {
+				if (this.modeliIsPartofOMEXArchive()) {
+						ZipFile archive = new ZipFile(getBaseFile());
+						String path = getModelFile().getPath().substring(2).replace('\\', '/');
+						Enumeration<? extends ZipEntry> entries = archive.entries();
 
-			try {
-				scanner = new Scanner(getFileThatContainsModel());
-				
-				while(scanner.hasNextLine()){
-					String nextline = scanner.nextLine();
-					returnstring = returnstring + nextline + "\n";
+						while (entries.hasMoreElements()) {
+							ZipEntry current = entries.nextElement();
+							System.out.println(current.getName());
+						}
+						
+						ZipEntry entry = archive.getEntry(path);
+						returnstring = archive.getInputStream(entry);
+						
+						//archive.close();
 				}
-			} 
-			catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			finally{
-				scanner.close();
-			}
-		}
-
-		else if(modelIsPartOfArchive()){
+				
+				else if(modelIsPartOfJSimProjectFile()){
+	
+					Document projdoc = JSimProjectFileReader.getDocument(new FileInputStream(baseURI));
+					returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
+				}
 			
-			if(modelIsPartOfJSimProjectFile()){
-				Document projdoc = ModelReader.getJDOMdocumentFromFile(getFileThatContainsModel());
-				returnstring = JSimProjectFileReader.getModelSourceCode(projdoc, getModelName());
+			else if(getModelwithBaseFile().exists()){
+				try {
+					returnstring = new FileInputStream(getModelwithBaseFile());
+				} 
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 			
 		return returnstring;
 	}
 	
+	public Boolean modeliIsPartofOMEXArchive() {
+		
+		return this.basetype.equals(ModelType.OMEX_ARCHIVE);
+	}
 	
 	public Boolean modelIsPartOfJSimProjectFile(){
-		
-		if(modelIsPartOfArchive()){
-			SAXBuilder builder = new SAXBuilder();
-			
-			try{
-				Document doc = builder.build(getFileThatContainsModel());
-				String rootname = doc.getRootElement().getName();
-				
-				if(rootname.equals("JSim")) return true;
-			}
-			catch(JDOMException | IOException e){
-				e.printStackTrace();
-			}
-		}
-		return false;
+		return this.basetype.equals(ModelType.MML_MODEL_IN_PROJ);
 	}
 	
 	
 	public String getModelName(){
 		
-		if(modelIsPartOfArchive())
-			return getModelURI().getFragment();
+		if(modelIsPartOfJSimProjectFile())
+			return modelURI.substring(1, modelURI.length());
 		else{
-			String filename = getFileThatContainsModel().getName();
+			String filename = getModelwithBaseFile().getName();
 			return filename.substring(0, filename.indexOf("."));
 		}
 	}
@@ -156,15 +198,21 @@ public class ModelAccessor {
 	// otherwise a string with format [name of archive] > [name of model] is returned
 	public String getShortLocation(){
 		
-		if( ! modelIsPartOfArchive()) return getFileThatContainsModel().getName();
+		if( ! modelIsPartOfArchive()) return new File(this.baseURI).getName();
 		else{
-			String archiveloc = modelURI.toString();
-			return archiveloc.substring(archiveloc.lastIndexOf(File.separator)+1, archiveloc.length());
+			return modelURI;
 		}
 	}
 		
+	public ModelType getFileType() {
+		return modeltype;
+	}
 	
 	public boolean equals(ModelAccessor ma){
-		return modelURI.toString().equals(ma.getModelURI().toString());
+		return getModelwithBaseFile().getPath().contentEquals(ma.getModelwithBaseFile().getPath());
+	}
+	
+	public boolean isArchive() {
+		return isarchive;
 	}
 }
