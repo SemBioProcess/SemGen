@@ -7,11 +7,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.jdom.JDOMException;
+import org.xml.sax.SAXException;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
@@ -52,7 +57,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	private void setLocationInTextField(ModelAccessor ma){
 		
 		String text = "";
-		URI uri = ma.getModelURI();
+		URI uri = ma.getBaseURI();
 		
 		if(ma.modelIsOnline()) text = uri.toString();
 		else if(ma.modelIsPartOfArchive()) text = uri.getPath() + ModelAccessor.separator + uri.getFragment();
@@ -69,7 +74,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 				locationtoadd = txtfld.getText();
 			
 			else if(value == "Cancel")
-				locationtoadd = currentma.getModelURI().toString();
+				locationtoadd = currentma.getBaseURI().toString();
 			
 			dispose();
 		}
@@ -86,8 +91,15 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 			File file = sgc.getSelectedFile();
 			if (file!=null){
 				
-				ModelAccessor ma = sgc.convertFileToModelAccessorList(file).get(0);
-				setLocationInTextField(ma);
+				ModelAccessor ma;
+				try {
+					ma = sgc.convertFileToModelAccessorList(file).get(0);
+					setLocationInTextField(ma);
+				} catch (ParserConfigurationException | SAXException | URISyntaxException | JDOMException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		}
 	}

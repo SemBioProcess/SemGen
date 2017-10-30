@@ -1,6 +1,5 @@
 package semsim.reading;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
@@ -26,8 +25,8 @@ import semsim.writing.AbstractRDFwriter;
 
 public class CASAreader extends AbstractRDFreader{
 
-	CASAreader(File file, String rdfstring) {
-		super(file);
+	CASAreader(ModelAccessor ma, String rdfstring) {
+		super(ma);
 		
 		if(rdfstring!=null){ readStringToRDFmodel(rdf, rdfstring);}
 	}

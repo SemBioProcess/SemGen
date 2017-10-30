@@ -1,7 +1,6 @@
 package semsim.reading;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -36,9 +35,6 @@ public abstract class AbstractRDFreader extends ModelReader{
 	protected boolean modelNamespaceIsSet = true;
 	
 	
-	AbstractRDFreader(File file) {
-		super(file);
-	}
 	
 	AbstractRDFreader(ModelAccessor accessor){
 		super(accessor);

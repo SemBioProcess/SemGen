@@ -1,6 +1,5 @@
 package semsim.reading;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -83,15 +82,15 @@ public class SemSimOWLreader extends ModelReader {
 	private OWLOntology ont;
 	private URI physicaldefinitionURI;
 
-	public SemSimOWLreader(File file) {
-		super(file);
+	public SemSimOWLreader(ModelAccessor accessor) {
+		super(accessor);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		factory = manager.getOWLDataFactory();
 		semsimmodel.setName(modelaccessor.getModelName());
 		
 		try {
-			ont = manager.loadOntologyFromOntologyDocument(file);
-		} catch (OWLOntologyCreationException e) {
+			ont = manager.loadOntologyFromOntologyDocument(accessor.getLocalModelStream());
+		} catch (OWLOntologyCreationException | IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -798,10 +797,14 @@ public class SemSimOWLreader extends ModelReader {
 			else{
 				String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, sub, SemSimRelation.IMPORTED_FROM.getURI(),
 						importval, SemSimRelation.REFERENCE_NAME_OF_IMPORT.getURI());
-				sssubmodel = 
-						SemSimComponentImporter.importFunctionalSubmodel(
-								modelaccessor.getFileThatContainsModel(),
-								semsimmodel, subname, referencename, importval, sslib);
+				try {
+					sssubmodel = 
+							SemSimComponentImporter.importFunctionalSubmodel(
+									modelaccessor,
+									semsimmodel, subname, referencename, importval, sslib);
+				} catch (JDOMException | IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

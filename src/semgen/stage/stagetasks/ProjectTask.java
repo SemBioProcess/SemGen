@@ -287,14 +287,14 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
 				else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
 				
-				String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileThatContainsModel().getName());
+				String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getModelwithBaseFile().getName());
 				String modelnameinarchive = modelinfo.accessor.getModelName();
 				
 				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
 				if (ma != null)	{			
-					SaveSemSimModel.writeToFile(modelinfo.Model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());	
+					SaveSemSimModel.writeToFile(modelinfo.Model, ma, ma.getModelwithBaseFile(), filec.getFileFilter());	
 				}
 			}
 			else {

@@ -67,7 +67,7 @@ public class ExtractorWorkbench extends Workbench {
 		ModelAccessor ma = modelaccessorlist.get(index);
 		if (ma == null) ma = saveModelAs(index);
 		else {
-			SaveSemSimModel.writeToFile(extractions.get(index), ma, ma.getFileThatContainsModel(), extractions.get(index).getSourceModelType());
+			SaveSemSimModel.writeToFile(extractions.get(index), ma, ma.getModelwithBaseFile(), extractions.get(index).getSourceModelType());
 		}
 		return ma;
 	}
@@ -81,7 +81,7 @@ public class ExtractorWorkbench extends Workbench {
 		if (ma != null) {
 			model.setName(ma.getModelName());
 			
-			SaveSemSimModel.writeToFile(model, ma, ma.getFileThatContainsModel(), filec.getFileFilter());
+			SaveSemSimModel.writeToFile(model, ma, ma.getModelwithBaseFile(), filec.getFileFilter());
 
 			model.setSourceFileLocation(ma);
 		}

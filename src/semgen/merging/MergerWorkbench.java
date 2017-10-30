@@ -344,7 +344,7 @@ public class MergerWorkbench extends Workbench {
 					return;
 				}
 				
-				SaveSemSimModel.writeToFile(mergedmodel,  target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
+				SaveSemSimModel.writeToFile(mergedmodel,  target.getModelAccessor(), target.getModelAccessor().getModelwithBaseFile(), target.getFileType());
 				
 				LoadSemSimModel loader = new LoadSemSimModel(target.getModelAccessor(), false);
 				loader.run();
@@ -421,7 +421,7 @@ public class MergerWorkbench extends Workbench {
 			}
 			mergedmodel.setName(target.getModelAccessor().getModelName());
 			
-			SaveSemSimModel.writeToFile(mergedmodel, target.getModelAccessor(), target.getModelAccessor().getFileThatContainsModel(), target.getFileType());
+			SaveSemSimModel.writeToFile(mergedmodel, target.getModelAccessor(), target.getModelAccessor().getModelwithBaseFile(), target.getFileType());
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}

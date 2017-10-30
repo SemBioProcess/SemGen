@@ -1,6 +1,7 @@
 package semsim.writing;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
 		modelName = modelaccessor.getModelName();
-		outputProjectFile = modelaccessor.getFileThatContainsModel();
+		outputProjectFile = modelaccessor.getModelwithBaseFile();
 		outputModelAccessor = modelaccessor;
 		modelNamespace = semsimmodel.getNamespace();
 	}
@@ -90,7 +91,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
-				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getFileThatContainsModel());
+				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getModelwithBaseFile());
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			
@@ -187,10 +188,11 @@ public class JSimProjectFileWriter extends ModelWriter{
 		ModelAccessor sourceCodeLocation = semsimmodel.getLegacyCodeLocation();
 		
 		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
-			modelText = sourceCodeLocation.getLocalModelTextAsString();
-		
-		// TODO: if MML source code is online, retrieve it
-
+			try {
+				modelText = sourceCodeLocation.getLocalModelStream().toString();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		else modelText = new MMLwriter(semsimmodel).writeToString();
 		
 		controlelsrc.setText(modelText);
