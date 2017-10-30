@@ -13,12 +13,14 @@ import org.sbml.jsbml.SBMLReader;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL("owl"), SBML_MODEL("sbml"), CELLML_MODEL("cellml"), MML_MODEL("m"), MML_MODEL_IN_PROJ("proj"), OMEX_ARCHIVE("omex"), UNKNOWN("null");
-		
-		public String extension;
-		ModelType(String ext) {
-			extension = ext;
-		}
+		SEMSIM_MODEL, 
+		SBML_MODEL, 
+		CELLML_MODEL, 
+		MML_MODEL, 
+		MML_MODEL_IN_PROJ, 
+		OMEX_ARCHIVE,
+		CASA_FILE,
+		UNKNOWN;
 	}
 	
 	public static ModelType classify(ModelAccessor accessor) throws JDOMException, IOException{
@@ -46,14 +48,17 @@ public class ModelClassifier {
 				else if (file.toLowerCase().endsWith(".mod")){
 					type = ModelType.MML_MODEL;
 				}
-				else if (file.endsWith(".owl")) {
+				else if (file.toLowerCase().endsWith(".owl")) {
 					type =  ModelType.SEMSIM_MODEL;
 				}
-				else if(file.endsWith(".cellml")){
+				else if(file.toLowerCase().endsWith(".cellml")){
 					type =  ModelType.CELLML_MODEL;
 				}
-				else if(file.endsWith(".xml") || file.endsWith(".sbml")){
+				else if(file.toLowerCase().endsWith(".xml") || file.endsWith(".sbml")){
 					type =  ModelType.SBML_MODEL;
+				}
+				else if(file.toLowerCase().endsWith(".rdf")){
+					type = ModelType.CASA_FILE;
 				}
 
 		return type;
@@ -103,12 +108,11 @@ public class ModelClassifier {
 		return false;
 	}
 	
-	public static boolean hasValidFileExtension(String filename) {
-		for (ModelType type : ModelType.values()) {
-			if (type.equals(ModelType.OMEX_ARCHIVE)) continue;
-			if (filename.endsWith("xml") || filename.endsWith(type.extension)) return true;
-		}
-		
-		return false;
+	public static boolean hasValidOMEXmodelFileFormat(String format) {
+		return format.matches(".*/sbml.*$") || format.endsWith("cellml");
+	}
+	
+	public static boolean hasValidOMEXannotationFileFormat(String format) {
+		return format.endsWith("rdf+xml");
 	}
 }

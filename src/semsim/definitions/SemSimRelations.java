@@ -12,7 +12,7 @@ import semsim.annotation.Relation;
 
 public class SemSimRelations {
 
-	public static Relation getBiologicalQualifierRelation(Qualifier q) {
+	public static Relation getRelationFromBiologicalQualifier(Qualifier q) {
 		switch (q) {
 		case BQB_IS:
 			return SemSimRelation.BQB_IS;
@@ -27,6 +27,27 @@ public class SemSimRelations {
 		default:
 			return null;
 		}
+	}
+	
+	public static Qualifier getBiologicalQualifierFromRelation(Relation r) {
+		if(r instanceof SemSimRelation){
+			SemSimRelation ssr = (SemSimRelation)r;
+			switch (ssr) {
+			case BQB_IS:
+				return Qualifier.BQB_IS;
+			case BQB_HAS_PART:
+				return Qualifier.BQB_HAS_PART;
+			case BQB_IS_PART_OF:
+				return Qualifier.BQB_IS_PART_OF;
+			case BQB_IS_VERSION_OF:
+				return Qualifier.BQB_IS_VERSION_OF;
+			case BQB_OCCURS_IN:
+				return Qualifier.BQB_OCCURS_IN;
+			default:
+				return null;
+			}
+		}
+		else return null;
 	}
 	
 	public static Relation getModelQualifierRelation(Qualifier id) {

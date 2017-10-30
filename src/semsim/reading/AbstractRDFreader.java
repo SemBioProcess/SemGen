@@ -44,7 +44,7 @@ public abstract class AbstractRDFreader extends ModelReader{
 	abstract protected void getModelLevelAnnotations();
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);
-
+	abstract protected void getAllSemSimSubmodelAnnotations();
 	
 	// Read a string into an RDF model
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring){

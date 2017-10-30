@@ -115,4 +115,9 @@ public class CASAreader extends AbstractRDFreader{
 		return null;
 	}
 
+
+	@Override
+	protected void getAllSemSimSubmodelAnnotations() {		
+	}
+
 }

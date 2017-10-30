@@ -96,7 +96,7 @@ public class ModelAccessor {
 	}
 
 	public URI getBaseURI(){
-		return URI.create(baseURI);
+		return new File(baseURI).toURI();
 	}
 	
 	public void setModelURI(URI uri){
@@ -108,7 +108,7 @@ public class ModelAccessor {
 	// or returns the standalone uri if the model is in a standalone file.
 	public URI getFileThatContainsModelAsURI(){
 		
-		return URI.create(baseURI);
+		return new File(baseURI).toURI();
 	}
 	
 	public File getModelwithBaseFile(){
@@ -138,7 +138,7 @@ public class ModelAccessor {
 		
 		if(modelIsOnline()) return null;
 		else {
-				if (this.modeliIsPartofOMEXArchive()) {
+				if (this.modelIsPartofOMEXArchive()) {
 						ZipFile archive = new ZipFile(getBaseFile());
 						String path = getModelFile().getPath().substring(2).replace('\\', '/');
 						Enumeration<? extends ZipEntry> entries = archive.entries();
@@ -173,7 +173,7 @@ public class ModelAccessor {
 		return returnstring;
 	}
 	
-	public Boolean modeliIsPartofOMEXArchive() {
+	public Boolean modelIsPartofOMEXArchive() {
 		
 		return this.basetype.equals(ModelType.OMEX_ARCHIVE);
 	}
@@ -188,8 +188,7 @@ public class ModelAccessor {
 		if(modelIsPartOfJSimProjectFile())
 			return modelURI.substring(1, modelURI.length());
 		else{
-			String filename = getModelwithBaseFile().getName();
-			return filename.substring(0, filename.indexOf("."));
+			return getModelwithBaseFile().getName();
 		}
 	}
 	
