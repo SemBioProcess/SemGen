@@ -28,7 +28,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFReader;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -89,9 +88,8 @@ public class CellMLreader extends ModelReader {
 				rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 			
 			// CASA file for the model and read in the contents
-			if(modelaccessor.modelIsPartofOMEXArchive()){
+			if(modelaccessor.modelIsPartofOMEXArchive())
 				getRDFfromAssociatedCASAfile(rdfstring); // TODO: need to accommodate situation where there are more than one valid CASA files in the archive
-			}
 			else	
 				rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 			
@@ -626,8 +624,8 @@ public class CellMLreader extends ModelReader {
 					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
 					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
 					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
-					|| rdfprop.equals(SemSimRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
-					|| rdfprop.equals(SemSimRelation.BQB_IS_PART_OF.getURIasString())){
+					|| rdfprop.equals(StructuralRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
+					|| rdfprop.equals(StructuralRelation.BQB_IS_PART_OF.getURIasString())){
 				listofremovedstatements.add(st);
 				continue;
 			}
@@ -817,7 +815,7 @@ public class CellMLreader extends ModelReader {
 					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
 					
 					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
-					rdfblock = new CASAreader(acc, combinedrdf);
+					rdfblock = new CASAreader(acc, semsimmodel, combinedrdf, ModelType.CELLML_MODEL);
 			    }
 			}
 		}

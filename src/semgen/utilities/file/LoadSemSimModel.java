@@ -13,6 +13,7 @@ import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.CASAreader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
@@ -69,7 +70,8 @@ public class LoadSemSimModel extends SemGenJob {
 				
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
-				boolean previouslyannotated = (reader.rdfblock.rdf.getNsPrefixURI("semsim") != null);
+				boolean previouslyannotated = (reader.rdfblock.rdf.getNsPrefixURI("semsim") != null
+						|| reader.rdfblock instanceof CASAreader);
 				
 				// If the model wasn't previously annotated in SemGen and autoannotate is turned on,
 				// perform auto-annotation

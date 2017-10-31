@@ -55,6 +55,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SBMLconstants;
+import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
@@ -933,17 +934,13 @@ public class SBMLwriter extends ModelWriter {
 
 					ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann; 
 					Relation relation = refann.getRelation();
-									
-					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)){
-						qualifier = Qualifier.BQB_IS_VERSION_OF;	
+					
+					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)
+							|| relation.equals(StructuralRelation.HAS_PART) 
+							|| relation.equals(StructuralRelation.BQB_HAS_PART)){
+						qualifier = SemSimRelations.getBiologicalQualifierFromRelation(relation);
 					}
-					else if(relation.equals(StructuralRelation.HAS_PART) 
-							|| relation.equals(SemSimRelation.BQB_HAS_PART)){
-						qualifier = Qualifier.BQB_HAS_PART;
-					}
-					else{
-						continue;
-					}
+					else continue;
 					
 					cvterm.setQualifier(qualifier);
 					String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refann.getReferenceURI()).toString();
