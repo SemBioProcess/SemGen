@@ -99,12 +99,14 @@ public class SBMLreader extends ModelReader{
 	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement modeltimeunits;
 	private UnitOfMeasurement modelsubstanceunits;
-	private SemSimRDFreader rdfreader;
+	private AbstractRDFreader rdfreader;
 	
 	
 	public SBMLreader(ModelAccessor accessor){
 		super(accessor);
 	}
+	
+	// TODO: new constructor with an accessor and a String argument that provides the RDF from the CASA file?
 
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
@@ -166,8 +168,13 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getListOfSpecies().size()>0)
 			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
+		// TODO: instantiate RDF reader based on whether the model is standalone or in a COMBINE archive
+		// If from an archive, read in the annotations on the SBML physical components using
+		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
+		// in the collectReactions and collectParameters functions.
+				
+		collectSemSimRDF(); // For SemSim-specific RDF annotations (need to determine first if annotations are CASA or SemSim)
 		
-		collectSemSimRDF();
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
@@ -1262,7 +1269,7 @@ public class SBMLreader extends ModelReader{
 				Qualifier q = term.getBiologicalQualifierType();
 				
 				// If we know the relation
-				if(SemSimRelations.getBiologicalQualifierRelation(q)!= SemSimRelation.UNKNOWN){
+				if(SemSimRelations.getRelationFromBiologicalQualifier(q)!= SemSimRelation.UNKNOWN){
 					
 					int numidentityanns = 0;
 					
@@ -1277,7 +1284,7 @@ public class SBMLreader extends ModelReader{
 							// If the knowledge resource is part of the limited set used for SemSim annotation 
 							if(ontdomain.domainHasReferenceOntology(refont)){
 								Relation relation = (q==Qualifier.BQB_IS) ? 
-										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getBiologicalQualifierRelation(q);
+										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getRelationFromBiologicalQualifier(q);
 								
 								// If we're looking at an identity relation...
 								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION){

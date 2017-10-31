@@ -1,34 +1,25 @@
 package semsim.writing;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-import semsim.definitions.ReferenceOntologies;
-import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimTypes;
-import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
-import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -36,23 +27,17 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.owl.SemSimOWLFactory;
 import semsim.reading.SemSimRDFreader;
+import semsim.reading.AbstractRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
-public class SemSimRDFwriter extends ModelWriter{
+public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
-	private Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
-	private Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
-	private Set<String> localids = new HashSet<String>();
 	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>(); // includes CellML and SemSim-style submodels
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
-	public Model rdf = ModelFactory.createDefaultModel();
 	private ModelType modeltype;
-	private String xmlbase;
 	
 	// Constructor without existing RDF block
 	public SemSimRDFwriter(SemSimModel semsimmodel, ModelType modeltype){
@@ -120,6 +105,7 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	// Add model-level annotations 
+	@Override
 	protected void setRDFforModelLevelAnnotations(){
 		
 		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
@@ -136,15 +122,7 @@ public class SemSimRDFwriter extends ModelWriter{
 		
 	}
 	
-	// Add annotations for data structure
-	protected void setRDFforDataStructureAnnotations(){
-		
-		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			setRDFforDataStructureAnnotations(ds);
-		}
-	}
-	
-	
+	@Override
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 
 		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
@@ -216,21 +194,6 @@ public class SemSimRDFwriter extends ModelWriter{
 		}
 	}
 	
-	
-	// Set free text annotation
-	public void setFreeTextAnnotationForObject(SemSimObject sso, Resource ares){
-
-		// Set the free-text annotation
-		if( sso.hasDescription()){
-			Statement st = rdf.createStatement(ares, dcterms_description, sso.getDescription());
-			addStatement(st);
-			
-			// If we're assigning free text to a FunctionalSubmodel that doesn't have a metadata ID,
-			// make sure we add the metadata ID when we write out
-			if( ! sso.hasMetadataID() && (sso instanceof FunctionalSubmodel)) 
-				sso.setMetadataID(ares.getURI().replace("#", ""));
-		}
-	}
 	
 	// Add singular annotation
 	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
@@ -344,7 +307,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 
 	// For creating the statements that specify which physical entities participate in which processes
-	private void setProcessParticipationRDFstatements(
+	@Override
+	protected void setProcessParticipationRDFstatements(
 			PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
 				
 		Resource processres = getResourceForPMCandAnnotate(rdf, process);
@@ -390,7 +354,8 @@ public class SemSimRDFwriter extends ModelWriter{
 	
 	// Add statements that describe a composite physical entity in the model
 	// Uses recursion to store all composite physical entities that make it up, too.
-	private URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe){
+	@Override
+	protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe){
 		
 		// Get the Resource corresponding to the index entity of the composite entity
 		// If we haven't added this composite entity before, log it
@@ -467,26 +432,6 @@ public class SemSimRDFwriter extends ModelWriter{
 	}
 	
 	
-	// Get the RDF resource for a physical model component (entity or process)
-	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
-		
-		String typeprefix = pmc.getComponentTypeasString();
-		boolean isphysproperty = typeprefix.matches("property");
-		
-		if(PMCandResourceURImap.containsKey(pmc) && ! isphysproperty)
-			return rdf.getResource(PMCandResourceURImap.get(pmc).toString());
-		
-		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
-			typeprefix = "unknown";
-		
-		Resource res = createNewResourceForSemSimObject(typeprefix);
-		
-		if(! isphysproperty) PMCandResourceURImap.put(pmc, URI.create(res.getURI()));
-		
-		setReferenceOrCustomResourceAnnotations(pmc, res);
-		
-		return res;
-	}
 	
 	// Get the RDF resource for a data structure's associated physical property
 	protected Resource getResourceForDataStructurePropertyAndAnnotate(Model rdf, DataStructure ds){
@@ -501,27 +446,8 @@ public class SemSimRDFwriter extends ModelWriter{
 		return res;
 	}
 	
-	// Generate an RDF resource for a physical component
-	private Resource createNewResourceForSemSimObject(String typeprefix){
-		
-		//Use relative URIs
-		String resname = xmlbase;	
-		int idnum = 0;
-		
-		while(localids.contains(resname + typeprefix + "_" + idnum)){
-			idnum++;
-		}
-		resname = resname + typeprefix + "_" + idnum;
-
-		localids.add(resname);
-		
-		Resource res = rdf.createResource(resname);
-		return res;
-	}
-
-	
-
-	private void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res){
+	@Override
+	protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res){
 		Resource refres = null;
 		
 		// If it's a reference resource
@@ -580,96 +506,12 @@ public class SemSimRDFwriter extends ModelWriter{
 				
 				if(pmc.getDescription()!=null){
 					Statement descst = rdf.createStatement(res, 
-							dcterms_description, pmc.getDescription());
+							AbstractRDFreader.dcterms_description, pmc.getDescription());
 					
 					addStatement(descst);
 				}
 			}
 		}
 	}
-	
-	
-	private Resource findReferenceResourceFromURI(URI uri){
-		Resource refres = null;
-		
-		if(refURIsandresources.containsKey(uri))
-			refres = refURIsandresources.get(uri);
-		else{
-			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-			refres = rdf.createResource(furi.toString());
-			refURIsandresources.put(furi, refres);
-		}
-		return refres;
-	}
-	
-	
-	public static URI convertURItoIdentifiersDotOrgFormat(URI uri){
-		URI newuri = uri;
-		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 
-		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if( ! uri.toString().startsWith("http://identifiers.org") 
-				&& ReferenceOntologies.getReferenceOntologyByNamespace(namespace) != ReferenceOntology.UNKNOWN){
-			
-			ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
-			String fragment = SemSimOWLFactory.getIRIfragment(uri.toString());
-			String newnamespace = null;
-			
-			// Look up identifiers.org namespace
-			for(String ns : refont.getNamespaces()){
-				if(ns.startsWith("http://identifiers.org") && ! ns.startsWith("http://identifiers.org/obo.")){
-					newnamespace = ns;
-					break;
-				}
-			}
-
-			// Replacement rules for specific knowledge bases
-			if(refont==ReferenceOntology.UNIPROT){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(refont==ReferenceOntology.OPB){
-				newuri = URI.create(newnamespace + fragment);
-			}
-			if(refont==ReferenceOntology.CHEBI){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(refont==ReferenceOntology.GO){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(refont==ReferenceOntology.CL){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(refont==ReferenceOntology.FMA){
-				// assumes that FMA IDs are formatted
-				// like http://purl.org/sig/ont/fma/fma70586
-				String newfragment = fragment.replace("fma","FMA:");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-			if(refont==ReferenceOntology.MA){
-				String newfragment = fragment.replace("_", ":");
-				newuri = URI.create(newnamespace + newfragment);
-			}
-		}
-		return newuri;
-	}
-	
-	private void addStatement(Statement st){
-		if( ! rdf.contains(st)) rdf.add(st);
-	}
-	
-	public static String getRDFmodelAsString(Model rdf){
-		
-		// TODO: if just use RDF/XML then get node refs and not pretty
-		// If use -ABBREV, get rdf:IDs
-		RDFWriter writer = rdf.getWriter("RDF/XML-ABBREV");
-		writer.setProperty("blockRules", "idAttr");
-		writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
-		StringWriter out = new StringWriter();
-		writer.write(rdf, out, SemSimRDFreader.TEMP_NAMESPACE);
-		
-		return out.toString();
-	}
 }

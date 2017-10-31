@@ -19,6 +19,7 @@ public class ModelClassifier {
 		MML_MODEL(".m", new String[]{}), 
 		MML_MODEL_IN_PROJ(".proj",  new String[]{}), 
 		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"}), 
+		CASA_FILE(".casa", new String[]{}),
 		UNKNOWN("null", new String[]{"null/null"});
 		
 		private String extension;
@@ -66,14 +67,17 @@ public class ModelClassifier {
 				else if (file.toLowerCase().endsWith(".mod")){
 					type = ModelType.MML_MODEL;
 				}
-				else if (file.endsWith(".owl")) {
+				else if (file.toLowerCase().endsWith(".owl")) {
 					type =  ModelType.SEMSIM_MODEL;
 				}
-				else if(file.endsWith(".cellml")){
+				else if(file.toLowerCase().endsWith(".cellml")){
 					type =  ModelType.CELLML_MODEL;
 				}
-				else if(file.endsWith(".xml") || file.endsWith(".sbml")){
+				else if(file.toLowerCase().endsWith(".xml") || file.endsWith(".sbml")){
 					type =  ModelType.SBML_MODEL;
+				}
+				else if(file.toLowerCase().endsWith(".rdf")){
+					type = ModelType.CASA_FILE;
 				}
 
 		return type;
@@ -133,5 +137,13 @@ public class ModelClassifier {
 		}
 		
 		return false;
+	}
+
+	public static boolean hasValidOMEXmodelFileFormat(String format) {
+		return format.matches(".*/sbml.*$") || format.endsWith("cellml");
+	}
+	
+	public static boolean hasValidOMEXannotationFileFormat(String format) {
+		return format.endsWith("rdf+xml");
 	}
 }

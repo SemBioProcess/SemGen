@@ -12,7 +12,7 @@ import semsim.annotation.Relation;
 
 public class SemSimRelations {
 
-	public static Relation getBiologicalQualifierRelation(Qualifier q) {
+	public static Relation getRelationFromBiologicalQualifier(Qualifier q) {
 		switch (q) {
 		case BQB_IS:
 			return SemSimRelation.BQB_IS;
@@ -27,6 +27,30 @@ public class SemSimRelations {
 		default:
 			return null;
 		}
+	}
+	
+	public static Qualifier getBiologicalQualifierFromRelation(Relation r) {
+		
+		if(r == SemSimRelation.BQB_IS)
+			return Qualifier.BQB_IS;
+		
+		else if(r == StructuralRelation.BQB_HAS_PART)
+			return Qualifier.BQB_HAS_PART;
+		
+		else if(r == StructuralRelation.BQB_IS_PART_OF)
+			return Qualifier.BQB_IS_PART_OF;
+		
+		else if(r == SemSimRelation.BQB_IS_VERSION_OF)
+			return Qualifier.BQB_IS_VERSION_OF;
+		
+		else if(r == SemSimRelation.BQB_OCCURS_IN)
+			return Qualifier.BQB_OCCURS_IN;
+		
+		else if(r == SemSimRelation.BQB_IS_PROPERTY_OF)
+			return Qualifier.BQB_IS_PROPERTY_OF;
+		
+		else return null;
+		
 	}
 	
 	public static Relation getModelQualifierRelation(Qualifier id) {
@@ -58,6 +82,10 @@ public class SemSimRelations {
 			return StructuralRelation.INDEX_ENTITY_FOR;
 		case ADJACENT:
 			return StructuralRelation.ADJACENT;
+		case BQB_IS_PART_OF:
+			return StructuralRelation.BQB_HAS_PART;
+		case BQB_HAS_PART:
+			return StructuralRelation.BQB_IS_PART_OF;
 	}
 
 		return null;
@@ -153,17 +181,16 @@ public class SemSimRelations {
 		UNIT_FOR("unitFor", RDFNamespace.SEMSIM.getNamespaceasString(), "physical units for a property", RDFNamespace.SEMSIM.getOWLid()),
 		
 		//BioModels qualifiers
-		BQB_HAS_PART("hasPart", RDFNamespace.BQB.getNamespaceasString(), 
-				"The biological entity represented by the model element includes the subject of the referenced resource, either physically or logically", RDFNamespace.BQM.getOWLid()),
-		BQB_IS_PART_OF("isPartOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a physical or logical part of the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
 		BQB_IS("is", RDFNamespace.BQB.getNamespaceasString(), 
-				"The biological entity represented by the model element has identity with the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
-		BQB_IS_VERSION_OF("isVersionOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a version or an instance of the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
-		BQB_OCCURS_IN("occursIn", RDFNamespace.BQB.getNamespaceasString(), "Model processes occur in some taxon", RDFNamespace.BQM.getOWLid()),
+				"The biological entity represented by the model element has identity with the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_VERSION_OF("isVersionOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a version or an instance of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_OCCURS_IN("occursIn", RDFNamespace.BQB.getNamespaceasString(), "Model processes occur in some taxon", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_PROPERTY_OF("isPropertyOf", RDFNamespace.BQB.getNamespaceasString(), "The model element is a physical property of the referenced resource", RDFNamespace.BQB.getOWLid()),
+
 		BQM_IS("is", RDFNamespace.BQM.getNamespaceasString(), "The modelling object represented by the model element is identical with the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
 		BQM_IS_DESCRIBED_BY("isDescribedBy", RDFNamespace.BQM.getNamespaceasString(), "The modelling object represented by the model element is described by the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
 		BQM_IS_DERIVED_FROM("isDerivedFrom", RDFNamespace.BQM.getNamespaceasString(), "The modelling object represented by the model element is derived from the modelling object represented by the referenced resource", RDFNamespace.BQM.getOWLid()),
-				
+			
 		UNKNOWN("unknown", RDFNamespace.SEMSIM.getNamespaceasString(), "Unrecognized Relation Type", RDFNamespace.SEMSIM.getOWLid());
 		
 		private String name;
@@ -231,7 +258,12 @@ public class SemSimRelations {
 		INDEX_ENTITY_FOR("index entity for", "physical entity is index entity for another physical entity", 
 				RDFNamespace.SEMSIM.getNamespaceasString() + "isIndexEntityFor", "semsim:isIndexEntityFor"),
 		HAS_INDEX_ENTITY("has index entity", "physical entity has entity as its index entity",
-				RDFNamespace.SEMSIM.getNamespaceasString() + "hasIndexEntity", "semsim:hasIndexEntity");
+				RDFNamespace.SEMSIM.getNamespaceasString() + "hasIndexEntity", "semsim:hasIndexEntity"),
+		BQB_HAS_PART("has part", "physical entity has part other another physical entity",
+				RDFNamespace.BQB.getNamespaceasString() + "hasPart", "bqbiol:hasPart"),
+		BQB_IS_PART_OF("part of", "physical entity is part of another physical entity",
+				RDFNamespace.BQB.getNamespaceasString() + "isPartOf", "bqbiol:isPartOf");
+		
 		
 		String description;
 		String shortdesc;

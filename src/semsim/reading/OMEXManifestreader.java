@@ -28,10 +28,10 @@ public class OMEXManifestreader {
 		
 	}
 	
-	public ArrayList<ModelAccessor> collectModels() throws JDOMException, IOException {
+	@SuppressWarnings("unchecked")
+	public ArrayList<Element> getManifestEntries() throws JDOMException, IOException {
 			
-			    Enumeration<? extends ZipEntry> entries = archive.entries();
-
+	    Enumeration<? extends ZipEntry> entries = archive.entries();
 			    ZipEntry entry = null;
 			    while(entries.hasMoreElements()){
 			        entry = entries.nextElement();
@@ -42,8 +42,7 @@ public class OMEXManifestreader {
 			    InputStream stream = archive.getInputStream(entry);
 		        Document doc = new SAXBuilder().build(stream);
 		        Element child = doc.getRootElement();//.getChild("omexManifest");
-		        @SuppressWarnings("unchecked")
-				ArrayList<Element> children = new ArrayList<Element>(child.getChildren());
+		        ArrayList<Element> children = new ArrayList<Element>(child.getChildren());
 		        
 		        ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
 		        for (Element content : children) {
@@ -55,8 +54,51 @@ public class OMEXManifestreader {
 		        	
 		        }
 
-			return accessors;
+        
+        children = new ArrayList<Element>(child.getChildren());
+        
+        return children;
 	}
+	
+	// Return all valid model files in archive (SBML and CellML for now)
+	public ArrayList<ModelAccessor> getModelsInArchive() throws JDOMException, IOException{
+		ArrayList<Element> manifestelements = getManifestEntries();
+		
+		 ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
+	        for (Element content : manifestelements) {
+	        	Attribute format = content.getAttribute("format");
+	        	String formvalue = format.getValue().toLowerCase();
+	        	
+	        	// Only return files with valid SBML or CellML extensions for now
+	        	if (ModelClassifier.hasValidOMEXmodelFileFormat(formvalue)) {
+	        		
+	        		Attribute location = content.getAttribute("location");
+	        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
+	        	}
+	        }
+
+		return accessors;
+	}
+	
+	// Return all valid annotation files in archive, including CASA files
+	public ArrayList<ModelAccessor> getAnnotationFilesInArchive() throws JDOMException, IOException{
+		ArrayList<Element> manifestelements = getManifestEntries();
+		
+		 ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
+	        for (Element content : manifestelements) {
+	        	Attribute format = content.getAttribute("format");
+	        	String formvalue = format.getValue().toLowerCase();
+	        	
+	        	// Assume that all valid annotaion files end in "rdf"
+	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue)){
+	        		Attribute location = content.getAttribute("location");
+	        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
+	        	}
+	        }
+
+		return accessors;
+	}
+	
 	
 	public void close() {
 		try {

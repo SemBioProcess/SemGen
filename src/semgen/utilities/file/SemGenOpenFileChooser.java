@@ -81,7 +81,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	}
 	
 	
-	// This returns a list of accessors because if a user selects a JSim
+	// This returns a list of accessors because if a user selects an OMEX files or JSim
 	// project file there may be multiple models within the file they 
 	// want to open
 	public ArrayList<ModelAccessor> convertFileToModelAccessorList(File file) throws ParserConfigurationException, SAXException, URISyntaxException, JDOMException{
@@ -90,7 +90,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 		if (file.exists() && file.getName().toLowerCase().endsWith(".omex")) {
 			try {
 				OMEXManifestreader omexreader = new OMEXManifestreader(file);
-				ArrayList<ModelAccessor> models = omexreader.collectModels();
+				ArrayList<ModelAccessor> models = omexreader.getModelsInArchive();
 				if (models.size()==1) {
 					modelaccessors.add(models.get(0));
 					return modelaccessors;
