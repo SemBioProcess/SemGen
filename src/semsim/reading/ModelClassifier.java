@@ -13,11 +13,31 @@ import org.sbml.jsbml.SBMLReader;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL("owl"), SBML_MODEL("sbml"), CELLML_MODEL("cellml"), MML_MODEL("m"), MML_MODEL_IN_PROJ("proj"), OMEX_ARCHIVE("omex"), UNKNOWN("null");
+		SEMSIM_MODEL(".owl", new String[]{}), 
+		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml.level-2.version-1"}), 
+		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"}), 
+		MML_MODEL(".m", new String[]{}), 
+		MML_MODEL_IN_PROJ(".proj",  new String[]{}), 
+		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"}), 
+		UNKNOWN("null", new String[]{"null/null"});
 		
-		public String extension;
-		ModelType(String ext) {
+		private String extension;
+		private String[] format;
+		ModelType(String ext, String[] format) {
 			extension = ext;
+			this.format = format;
+		}
+		
+		public String getExtension() {
+			return extension;
+		}
+		
+		public boolean matchesFormat(String teststring) {
+			for (String frmt : format) {
+				if (frmt.matches(teststring)) return true;
+			}
+			return false;
+			
 		}
 	}
 	
@@ -103,10 +123,13 @@ public class ModelClassifier {
 		return false;
 	}
 	
-	public static boolean hasValidFileExtension(String filename) {
+	public static boolean hasValidFileExtension(String filename, String format) {
 		for (ModelType type : ModelType.values()) {
-			if (type.equals(ModelType.OMEX_ARCHIVE)) continue;
-			if (filename.endsWith("xml") || filename.endsWith(type.extension)) return true;
+			if (filename.endsWith(".xml")) {
+				if (type.matchesFormat(format)) return true;
+			}
+					
+			else if ( filename.endsWith(type.extension)) return true;
 		}
 		
 		return false;

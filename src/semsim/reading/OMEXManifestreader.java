@@ -47,10 +47,9 @@ public class OMEXManifestreader {
 		        
 		        ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
 		        for (Element content : children) {
+		        	Attribute location = content.getAttribute("location");
 		        	Attribute format = content.getAttribute("format");
-		        	String formvalue = format.getValue();
-		        	if (ModelClassifier.hasValidFileExtension(formvalue)) {
-		        		Attribute location = content.getAttribute("location");
+		        	if (ModelClassifier.hasValidFileExtension(location.getValue(), format.getValue())) {
 		        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
 		        	}
 		        	
