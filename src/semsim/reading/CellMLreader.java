@@ -89,7 +89,9 @@ public class CellMLreader extends ModelReader {
 			
 			// CASA file for the model and read in the contents
 			if(modelaccessor.modelIsPartofOMEXArchive())
-				getRDFfromAssociatedCASAfile(rdfstring); // TODO: need to accommodate situation where there are more than one valid CASA files in the archive
+				if (!getRDFfromAssociatedCASAfile(rdfstring)) {
+					rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+				} // TODO: need to accommodate situation where there are more than one valid CASA files in the archive
 			else	
 				rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 			
@@ -778,7 +780,7 @@ public class CellMLreader extends ModelReader {
 		}
 	}
 	
-	private void getRDFfromAssociatedCASAfile(String rdfincellml) throws ZipException, IOException, JDOMException{
+	private boolean getRDFfromAssociatedCASAfile(String rdfincellml) throws ZipException, IOException, JDOMException{
 		
 		OMEXManifestreader OMEXreader = new OMEXManifestreader(modelaccessor.getBaseFile());
 		
@@ -786,6 +788,7 @@ public class CellMLreader extends ModelReader {
 
 		ArrayList<ModelAccessor> accs = OMEXreader.getAnnotationFilesInArchive();
 		
+		boolean casafound = false;
 		for(ModelAccessor acc : accs){
 			
 			if(acc.getFileType()==ModelType.CASA_FILE){
@@ -816,10 +819,13 @@ public class CellMLreader extends ModelReader {
 					
 					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
 					rdfblock = new CASAreader(acc, semsimmodel, combinedrdf, ModelType.CELLML_MODEL);
+					casafound = true;
 			    }
 			}
 		}
-		archive.close();
+
+		archive.close();		
+		return casafound;
 	}
 }
 
