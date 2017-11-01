@@ -88,12 +88,13 @@ public class CellMLreader extends ModelReader {
 				rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 			
 			// CASA file for the model and read in the contents
-			if(modelaccessor.modelIsPartofOMEXArchive())
-				if (!getRDFfromAssociatedCASAfile(rdfstring)) {
+			if(modelaccessor.modelIsPartofOMEXArchive()){
+				
+				if (!getRDFfromAssociatedCASAfile(rdfstring))
 					rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
-				} // TODO: need to accommodate situation where there are more than one valid CASA files in the archive
-			else	
-				rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+				// TODO: need to accommodate situation where there are more than one valid CASA files in the archive
+			}
+			else rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
 			
 			rdfblock.getModelLevelAnnotations();
 			
