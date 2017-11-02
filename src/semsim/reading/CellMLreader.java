@@ -1,17 +1,12 @@
 package semsim.reading;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 
 import org.jdom.Content;
 import org.jdom.Document;
@@ -23,19 +18,11 @@ import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.JSBML;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.RDFReader;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-
-import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
-import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -43,13 +30,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SemSimRDFwriter;
 
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
-	public AbstractRDFreader rdfblock;
+	public AbstractRDFreader rdfreader;
 	private Element rdfblockelement;
 	private static XMLOutputter xmloutputter = new XMLOutputter();
 
@@ -82,21 +68,18 @@ public class CellMLreader extends ModelReader {
 			// Get the main RDF block for the CellML model
 			rdfblockelement = getRDFmarkupForElement(doc.getRootElement());
 			
-			String rdfstring = null;
+			String existingrdf = null;
 			
 			if(rdfblockelement != null)
-				rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
+				existingrdf = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 			
-			// CASA file for the model and read in the contents
-			if(modelaccessor.modelIsPartofOMEXArchive()){
-				
-				if (!getRDFfromAssociatedCASAfile(rdfstring))
-					rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
-				// TODO: need to accommodate situation where there are more than one valid CASA files in the archive
-			}
-			else rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+			// Assign an RDF reader based on whether the model is in a COMBINE archive and has a CASA file,
+			// or the model code contains the RDF specifying the model's semantics
 			
-			rdfblock.getModelLevelAnnotations();
+			// TODO: need to accommodate situation where there are more than one valid CASA files in the archive
+			rdfreader = AbstractRDFreader.getRDFreaderForModel(modelaccessor, semsimmodel, existingrdf);
+			
+			rdfreader.getModelLevelAnnotations();
 			
 			// Get imported components
 			Iterator<?> importsit = doc.getRootElement().getChildren("import", mainNS).iterator();
@@ -272,7 +255,7 @@ public class CellMLreader extends ModelReader {
 					semsimmodel.assignValidMetadataIDtoSemSimObject(varmetaID, cvar);
 	
 					// Collect the biological annotations, if present
-					if(cvar.getMetadataID() != null) rdfblock.getDataStructureAnnotations(cvar);
+					if(cvar.getMetadataID() != null) rdfreader.getDataStructureAnnotations(cvar);
 	
 					semsimmodel.addDataStructure(cvar);
 				}
@@ -334,8 +317,8 @@ public class CellMLreader extends ModelReader {
 				semsimmodel.assignValidMetadataIDtoSemSimObject(metadataid, submodel);
 				
 				// Collect the free text annotation for the component
-				rdfblock.collectFreeTextAnnotation(submodel, 
-						rdfblock.rdf.getResource(SemSimRDFreader.TEMP_NAMESPACE + "#" + submodel.getMetadataID()));		
+				rdfreader.collectFreeTextAnnotation(submodel, 
+						rdfreader.rdf.getResource(SemSimRDFreader.TEMP_NAMESPACE + "#" + submodel.getMetadataID()));		
 				semsimmodel.addSubmodel(submodel);
 			}
 			
@@ -454,11 +437,12 @@ public class CellMLreader extends ModelReader {
 			}
 			
 			// Collect info about SemSim style submodels
-			rdfblock.getAllSemSimSubmodelAnnotations();
+			rdfreader.getAllSemSimSubmodelAnnotations();
 			
 			// Strip the semsim-related content from the main RDF block
-			stripSemSimRelatedContentFromRDFblock(rdfblock.rdf);
-			String remainingrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
+			rdfreader.rdf = AbstractRDFreader.stripSemSimRelatedContentFromRDFblock(rdfreader.rdf, semsimmodel);
+			
+			String remainingrdf = SemSimRDFwriter.getRDFmodelAsString(rdfreader.rdf);
 			semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, remainingrdf));
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -595,66 +579,7 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	public static Element getRDFmarkupForElement(Element el){
-		return el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
-	}
 	
-	
-	// Remove all semsim-related content from the main RDF block
-	// It gets replaced, if needed, on write out
-	private void stripSemSimRelatedContentFromRDFblock(Model rdf){
-		
-		// Currently getting rid of anything with semsim predicates
-		// and descriptions on variables and components
-		// AND
-		// * part-of statements for physical entities (prbly need to assign metaids to physical entities)
-		// * isVersionOf statements on custom terms
-		// * has-part statements on custom terms
-		// Test to make sure we're not preserving extraneous stuff in CellMLRDFmarkup block
-		// within SemSim models (test with all kinds of anns)
-		// MAYBE THE RIGHT WAY TO DO THIS IS TO USE THE METAIDS/??
-		
-		Iterator<Statement> stit = rdf.listStatements();
-		List<Statement> listofremovedstatements = new ArrayList<Statement>();
-		
-		// Go through all statements in RDF
-		while(stit.hasNext()){
-			Statement st = (Statement) stit.next();
-			String rdfprop = st.getPredicate().getURI();
-			
-			// Flag any statement that uses a predicate with a semsim namespace for removal
-			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())
-					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
-					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
-					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
-					|| rdfprop.equals(StructuralRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
-					|| rdfprop.equals(StructuralRelation.BQB_IS_PART_OF.getURIasString())){
-				listofremovedstatements.add(st);
-				continue;
-			}
-			
-			Resource subject = st.getSubject();
-			
-			if(subject.getURI() != null){
-				
-				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
-					
-					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
-					SemSimObject sso = semsimmodel.getModelComponentByMetadataID(subject.getLocalName());
-					
-					if (sso!=null){
-						
-						// Remove dc:description statements (do not need to preserve these)
-						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
-							listofremovedstatements.add(st);
-					}
-				}
-			}
-			
-		}
-		
-		rdf.remove(listofremovedstatements);
-	}
 	
 	
 	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
@@ -772,6 +697,11 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
+	public static Element getRDFmarkupForElement(Element el){
+		return el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
+	}
+	
+	
 	protected static String getUTFformattedString(String str){
 		try {
 			return new String(str.getBytes(), "UTF-8");
@@ -779,54 +709,6 @@ public class CellMLreader extends ModelReader {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	private boolean getRDFfromAssociatedCASAfile(String rdfincellml) throws ZipException, IOException, JDOMException{
-		
-		OMEXManifestreader OMEXreader = new OMEXManifestreader(modelaccessor.getBaseFile());
-		
-		ZipFile archive = new ZipFile(modelaccessor.getBaseFile());
-
-		ArrayList<ModelAccessor> accs = OMEXreader.getAnnotationFilesInArchive();
-		
-		boolean casafound = false;
-		for(ModelAccessor acc : accs){
-			
-			if(acc.getFileType()==ModelType.CASA_FILE){
-				
-			    ZipEntry entry = archive.getEntry(acc.getModelName());
-		        InputStream stream = archive.getInputStream(entry);
-
-		        Model casardf = ModelFactory.createDefaultModel();
-		        Model cellmlrdf = ModelFactory.createDefaultModel();
-		        
-		        RDFReader casardfreader = casardf.getReader();
-				casardfreader.setProperty("relativeURIs","same-document,relative");
-				casardfreader.read(casardf, stream, AbstractRDFreader.TEMP_NAMESPACE);
-								
-		        if(rdfincellml != null && ! rdfincellml.equals("")){
-		        	RDFReader cellmlrdfreader = cellmlrdf.getReader();
-		        	cellmlrdfreader.setProperty("relativeURIs","same-document,relative");
-		        	InputStream cellmlstream = new ByteArrayInputStream(rdfincellml.getBytes());
-		        	cellmlrdfreader.read(casardf, cellmlstream, AbstractRDFreader.TEMP_NAMESPACE);
-		        }
-		        
-				Resource casamodelres = casardf.getResource(AbstractRDFreader.TEMP_NAMESPACE + "#" + modelaccessor.getModelName());
-				
-				if(casardf.containsResource(casamodelres)){
-					
-					stripSemSimRelatedContentFromRDFblock(cellmlrdf); // when read in rdfblock in CellML file there may be annotations that we want to ignore
-					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
-					
-					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
-					rdfblock = new CASAreader(acc, semsimmodel, combinedrdf, ModelType.CELLML_MODEL);
-					casafound = true;
-			    }
-			}
-		}
-
-		archive.close();		
-		return casafound;
 	}
 }
 

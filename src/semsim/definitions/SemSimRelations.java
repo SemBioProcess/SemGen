@@ -14,16 +14,32 @@ public class SemSimRelations {
 
 	public static Relation getRelationFromBiologicalQualifier(Qualifier q) {
 		switch (q) {
+		case BQB_ENCODES:
+			return SemSimRelation.BQB_ENCODES;
+		case BQB_HAS_PART:
+			return StructuralRelation.HAS_PART; // Maybe this should be BQB_HAS_PART?
+		case BQB_HAS_PROPERTY:
+			return SemSimRelation.BQB_HAS_PROPERTY;
+		case BQB_HAS_VERSION:
+			return SemSimRelation.BQB_HAS_VERSION;
+		case BQB_HAS_TAXON:
+			return SemSimRelation.BQB_HAS_TAXON;
 		case BQB_IS:
 			return SemSimRelation.BQB_IS;
-		case BQB_HAS_PART:
-			return StructuralRelation.HAS_PART;
-		case BQB_IS_PART_OF:
-			return StructuralRelation.PART_OF;
+		case BQB_IS_DESCRIBED_BY:
+			return SemSimRelation.BQB_IS_DESCRIBED_BY;
+		case BQB_IS_ENCODED_BY:
+			return SemSimRelation.BQB_IS_ENCODED_BY;
+		case BQB_IS_HOMOLOG_TO:
+			return SemSimRelation.BQB_IS_HOMOLOG_TO;
+		case BQB_IS_PROPERTY_OF:
+			return SemSimRelation.BQB_IS_PROPERTY_OF;
 		case BQB_IS_VERSION_OF:
 			return SemSimRelation.BQB_IS_VERSION_OF;
 		case BQB_OCCURS_IN:
 			return SemSimRelation.BQB_OCCURS_IN;
+		case BQB_IS_PART_OF:
+			return StructuralRelation.PART_OF;	 // Maybe this should be BQB_PART_OF?
 		default:
 			return null;
 		}
@@ -181,11 +197,19 @@ public class SemSimRelations {
 		UNIT_FOR("unitFor", RDFNamespace.SEMSIM.getNamespaceasString(), "physical units for a property", RDFNamespace.SEMSIM.getOWLid()),
 		
 		//BioModels qualifiers
-		BQB_IS("is", RDFNamespace.BQB.getNamespaceasString(), 
-				"The biological entity represented by the model element has identity with the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
-		BQB_IS_VERSION_OF("isVersionOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a version or an instance of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
-		BQB_OCCURS_IN("occursIn", RDFNamespace.BQB.getNamespaceasString(), "Model processes occur in some taxon", RDFNamespace.BQB.getOWLid()),
+		BQB_ENCODES("encodes", RDFNamespace.BQB.getNamespaceasString(),"The biological entity represented by the model element encodes, directly or transitively, the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_HAS_PART("hasPart",RDFNamespace.BQB.getNamespaceasString(),"The biological entity represented by the model element includes the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_HAS_PROPERTY("hasProperty",RDFNamespace.BQB.getNamespaceasString(),"The subject of the referenced resource is a property of the biological entity represented by the model element", RDFNamespace.BQB.getOWLid()),
+		BQB_HAS_VERSION("hasVersopm",RDFNamespace.BQB.getNamespaceasString(),"The subject of the referenced resource (biological entity B) is a version or an instance of the biological entity represented by the model element", RDFNamespace.BQB.getOWLid()),
+		BQB_IS("is", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element has identity with the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_DESCRIBED_BY("isDescribedBy", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is described by the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_ENCODED_BY("isEncodedBy", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is encoded, directly or transitively, by the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_HOMOLOG_TO("isHomologTo", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is homologous to the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_PART_OF("isPartOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a physical or logical part of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_PROPERTY_OF("isPropertyOf", RDFNamespace.BQB.getNamespaceasString(), "The model element is a physical property of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_IS_VERSION_OF("isVersionOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a version or an instance of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_HAS_TAXON("hasTaxon", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is taxonomically restricted, where the restriction is the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
+		BQB_OCCURS_IN("occursIn", RDFNamespace.BQB.getNamespaceasString(), "Model processes occur in some taxon", RDFNamespace.BQB.getOWLid()),
 
 		BQM_IS("is", RDFNamespace.BQM.getNamespaceasString(), "The modelling object represented by the model element is identical with the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),
 		BQM_IS_DESCRIBED_BY("isDescribedBy", RDFNamespace.BQM.getNamespaceasString(), "The modelling object represented by the model element is described by the subject of the referenced resource", RDFNamespace.BQM.getOWLid()),

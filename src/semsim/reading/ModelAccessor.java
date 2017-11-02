@@ -141,12 +141,6 @@ public class ModelAccessor {
 				if (this.modelIsPartofOMEXArchive()) {
 						ZipFile archive = new ZipFile(getBaseFile());
 						String path = getModelFile().getPath().substring(2).replace('\\', '/');
-						Enumeration<? extends ZipEntry> entries = archive.entries();
-
-						while (entries.hasMoreElements()) {
-							ZipEntry current = entries.nextElement();
-							System.out.println(current.getName());
-						}
 						
 						ZipEntry entry = archive.getEntry(path);
 						returnstring = archive.getInputStream(entry);

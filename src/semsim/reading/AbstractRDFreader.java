@@ -1,14 +1,22 @@
 package semsim.reading;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+
+import org.jdom.JDOMException;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -27,6 +35,7 @@ import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -39,6 +48,7 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.writing.SemSimRDFwriter;
 
 
 public abstract class AbstractRDFreader extends ModelReader{
@@ -62,6 +72,7 @@ public abstract class AbstractRDFreader extends ModelReader{
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);
 	abstract protected void getAllSemSimSubmodelAnnotations();
+	abstract protected boolean isCASAreader();
 	
 	// Read a string into an RDF model
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring){
@@ -331,6 +342,122 @@ public abstract class AbstractRDFreader extends ModelReader{
 		
 		return returnent;
 	}
+	
+	
+	protected static AbstractRDFreader getRDFreaderForModel(ModelAccessor modacc, SemSimModel thesemsimmodel, String curationalrdf) 
+			throws ZipException, IOException, JDOMException{
+			
+		if(modacc.modelIsPartofOMEXArchive()){
+			
+			OMEXManifestreader OMEXreader = new OMEXManifestreader(modacc.getBaseFile());
+			
+			ZipFile archive = new ZipFile(modacc.getBaseFile());
+	
+			ArrayList<ModelAccessor> accs = OMEXreader.getAnnotationFilesInArchive();
+			
+			for(ModelAccessor acc : accs){
+				
+				if(acc.getFileType()==ModelType.CASA_FILE){
+					
+				    ZipEntry entry = archive.getEntry(acc.getModelName());
+			        InputStream stream = archive.getInputStream(entry);
+	
+			        Model casardf = ModelFactory.createDefaultModel();
+			        
+			        RDFReader casardfreader = casardf.getReader();
+					casardfreader.setProperty("relativeURIs","same-document,relative");
+					casardfreader.read(casardf, stream, AbstractRDFreader.TEMP_NAMESPACE);
+						
+					Resource casamodelres = casardf.getResource(AbstractRDFreader.TEMP_NAMESPACE + "#" + modacc.getModelName());
+					
+					if(casardf.containsResource(casamodelres)){
+						
+						Model curationalrdfmodel = ModelFactory.createDefaultModel();
+	
+				        if(curationalrdf != null && ! curationalrdf.equals("")){
+				        	RDFReader curationalrdfreader = curationalrdfmodel.getReader();
+				        	curationalrdfreader.setProperty("relativeURIs","same-document,relative");
+				        	InputStream curationalrdfstream = new ByteArrayInputStream(curationalrdf.getBytes());
+				        	curationalrdfreader.read(casardf, curationalrdfstream, AbstractRDFreader.TEMP_NAMESPACE);
+				        }
+				        
+				        curationalrdfmodel = stripSemSimRelatedContentFromRDFblock(curationalrdfmodel, thesemsimmodel); // when read in rdfblock in CellML file there may be annotations that we want to ignore
+						casardf.add(curationalrdfmodel.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
+						
+						String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
+						return new CASAreader(acc, thesemsimmodel, combinedrdf, ModelType.CELLML_MODEL);
+				    }
+				}
+			}
+	
+			archive.close();
+		}
+		
+		return new SemSimRDFreader(modacc, thesemsimmodel, curationalrdf, ModelType.CELLML_MODEL);
+		
+	}
+
+	
+	
+	// Remove all semsim-related content from the main RDF block
+	// It gets replaced, if needed, on write out
+	protected static Model stripSemSimRelatedContentFromRDFblock(Model rdf, SemSimModel thesemsimmodel){
+		
+		// Currently getting rid of anything with semsim predicates
+		// and descriptions on variables and components
+		// AND
+		// * part-of statements for physical entities (prbly need to assign metaids to physical entities)
+		// * isVersionOf statements on custom terms
+		// * has-part statements on custom terms
+		// Test to make sure we're not preserving extraneous stuff in CellMLRDFmarkup block
+		// within SemSim models (test with all kinds of anns)
+		// MAYBE THE RIGHT WAY TO DO THIS IS TO USE THE METAIDS/??
+		
+		Iterator<Statement> stit = rdf.listStatements();
+		List<Statement> listofremovedstatements = new ArrayList<Statement>();
+		
+		// Go through all statements in RDF
+		while(stit.hasNext()){
+			Statement st = (Statement) stit.next();
+			String rdfprop = st.getPredicate().getURI();
+			
+			// Flag any statement that uses a predicate with a semsim namespace for removal
+			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())
+					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
+					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
+					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
+					|| rdfprop.equals(StructuralRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
+					|| rdfprop.equals(StructuralRelation.BQB_IS_PART_OF.getURIasString())){
+				listofremovedstatements.add(st);
+				continue;
+			}
+			
+			Resource subject = st.getSubject();
+			
+			if(subject.getURI() != null){
+				
+				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
+					
+					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
+					SemSimObject sso = thesemsimmodel.getModelComponentByMetadataID(subject.getLocalName());
+					
+					if (sso!=null){
+						
+						// Remove dc:description statements (do not need to preserve these)
+						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
+							listofremovedstatements.add(st);
+					}
+				}
+			}
+			
+		}
+		
+		rdf.remove(listofremovedstatements);
+		
+		return rdf;
+	}
+	
+	
 
 
 	

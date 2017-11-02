@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -42,13 +43,17 @@ public class CASAreader extends AbstractRDFreader{
 		this.modelNamespaceIsSet = false;
 	}
 
+	
+	protected boolean isCASAreader(){
+		return true;
+	}
 
+	
 	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
 		
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
 		Resource res = rdf.getResource(TEMP_NAMESPACE + "#" + metaid);
-		
 		Qualifier[] qualifiers = Qualifier.values();
 		
 		for(int i=0;i<qualifiers.length;i++){
@@ -56,16 +61,21 @@ public class CASAreader extends AbstractRDFreader{
 			Qualifier q = qualifiers[i];
 			
 			if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-				NodeIterator nodeit = rdf.listObjectsOfProperty(res, SemSimRelations.getRelationFromBiologicalQualifier(q).getRDFproperty());
 				
-				while(nodeit.hasNext()){
-					RDFNode nextnode = nodeit.next();
-					Resource objres = nextnode.asResource();
-					CVTerm cvterm = new CVTerm();
-					cvterm.setQualifier(q);
-					String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
-					cvterm.addResourceURI(uriasstring);
-					sbaseobj.addCVTerm(cvterm);
+				Relation relation = SemSimRelations.getRelationFromBiologicalQualifier(q);
+				
+				if(relation != null){
+					NodeIterator nodeit = rdf.listObjectsOfProperty(res, relation.getRDFproperty());
+					
+					while(nodeit.hasNext()){
+						RDFNode nextnode = nodeit.next();
+						Resource objres = nextnode.asResource();
+						CVTerm cvterm = new CVTerm();
+						cvterm.setQualifier(q);
+						String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
+						cvterm.addResourceURI(uriasstring);
+						sbaseobj.addCVTerm(cvterm);
+					}
 				}
 			}
 		}

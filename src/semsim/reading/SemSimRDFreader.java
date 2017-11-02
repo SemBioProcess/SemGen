@@ -51,7 +51,13 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		//If an explicit namespace is specified with the "model" prefix, use it
 		semsimmodel.setNamespace(getModelNamespaceFromRDF());
 	}
+	
+	
+	protected boolean isCASAreader(){
+		return false;
+	}
 
+	
 	private void createSemSimSubmodelURIandObjectMap(){
 		
 		ResIterator subit = rdf.listSubjectsWithProperty(SemSimRelation.HAS_NAME.getRDFproperty());
