@@ -148,8 +148,8 @@ public abstract class AnnotationObjectButton extends JPanel implements MouseList
 	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
+	public void mouseReleased(MouseEvent e) {}
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		this.setBorder(outlineborder);
