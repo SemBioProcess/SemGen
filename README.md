@@ -114,20 +114,11 @@ Example: Suppose you are annotating a beta cell glycolysis model that includes a
 A detailed composite annotation would be:
 
 ```
-OPB:Chemical concentration <propertyOf> CHEBI:glucose <part_of> FMA:Portion of cytosol <part_of> FMA:Beta cell
+OPB:Chemical concentration <propertyOf> CHEBI:glucose <part_of> FMA:Portion of cytosol <part_of> FMA:Type B cell of pancreatic islet
 ```
 
-In this case we use the term Chemical concentration from the OPB for the physical property part of the annotation, and we compose the physical entity part by linking four concepts - one from the OPB, one from ChEBI and two from the FMA. This example illustrates the post-coordinated nature of the SemSim approach to annotation and how it provides high expressivity for annotating model terms.
+In this case we use the term Chemical concentration from the OPB for the physical property part of the annotation, and we compose the physical entity part by linking three concepts - one from ChEBI and two from the FMA. This example illustrates the post-coordinated nature of the SemSim approach to annotation and how it provides high expressivity for annotating model terms.
 
-The above example represents a very detailed composite annotation, however, such detail may not be necessary to disambiguate concepts in a given model. For example, there may not be any other portions of glucose within the model apart from that in the cytosol. In this case, one could use the first three terms in the composite annotation and still disambiguate the model codeword from the rest of the model's contents:
-
-```
-OPB:Chemical concentration <propertyOf> CHEBI:glucose
-```
-
-Although this annotation approach does not fully capture the biophysical meaning of the model codeword, SemGen is more likely to find semantic overlap between models if they use this shallower annotation style. This is mainly because the SemGen Merger tool currently only recognizes semantic equivalencies; it does not identify semantically similar terms in models that a user wants to integrate. Therefore, if a user wants to integrate our example glycolysis model with a TCA cycle model based on cardiac myocyte metabolism, the shallower approach would likely identify more semantic equivalencies than the more detailed approach.  
-
-Nonetheless, we recommend using the more detailed approach, given that future versions of SemGen will include a "Merging Wizard" that will identify and rank codewords that are semantically similar, not just semantically identical. 
 
 ### Extractor
 
