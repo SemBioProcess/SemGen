@@ -47,7 +47,7 @@ In SemGen, the Project tab will be your main workspace:
 - **Search**: Hovering your cursor over the magnifying glass brings up the search bar. You can search for example models, or currently visualized nodes by typing in search terms. The search can be performed over the name, description, or the annotation.
 - **Project Actions**: The menu on the left side contains project-level actions. This menu can be collapsed/expanded by clicking the chevron on the left edge.
 - **Stage Options**: The menu on the right side contains visualization options, as well as additional information about the selected node. This menu can be collapsed/expanded by clicking the chevron on the right edge.
-- **Selection/Navigation**: The buttons in the top right corner toggles click-and-drag between moving the visualization, and selecting multiple nodes. Additionally, the mouse scroll wheel can be used to zoom in/out of the visualization.
+- **Selection/Navigation**: The buttons in the top right corner toggle click-and-drag behavior between moving the visualization and selecting multiple nodes with a bounding box. Additionally, the mouse scroll wheel can be used to zoom in/out of the visualization.
 
 ### Loading a model
 
