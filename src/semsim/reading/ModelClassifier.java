@@ -3,6 +3,9 @@ package semsim.reading;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.JDOMParseException;
@@ -13,20 +16,22 @@ import org.sbml.jsbml.SBMLReader;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL(".owl", new String[]{}), 
-		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml.level-2.version-1"}), 
-		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"}), 
-		MML_MODEL(".m", new String[]{}), 
-		MML_MODEL_IN_PROJ(".proj",  new String[]{}), 
-		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"}), 
-		CASA_FILE(".casa", new String[]{}),
-		UNKNOWN("null", new String[]{"null/null"});
+		SEMSIM_MODEL(".owl", new String[]{}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
+		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml.level-2.version-1"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml")), 
+		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml")), 
+		MML_MODEL(".m", new String[]{},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
+		MML_MODEL_IN_PROJ(".proj",  new String[]{},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
+		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
+		CASA_FILE(".casa", new String[]{},null),
+		UNKNOWN("null", new String[]{"null/null"}, null);
 		
 		private String extension;
 		private String[] format;
-		ModelType(String ext, String[] format) {
+		private FileFilter filefilter;
+		ModelType(String ext, String[] format, FileNameExtensionFilter filter) {
 			extension = ext;
 			this.format = format;
+			filefilter = filter;
 		}
 		
 		public String getExtension() {
@@ -40,10 +45,18 @@ public class ModelClassifier {
 			return false;
 			
 		}
+		
+		public FileFilter getFileFilter() {
+			return filefilter;
+		}
+		
+		public boolean fileFilterMatches(FileFilter tomatch) {
+			return filefilter.equals(tomatch);
+		}
 	}
 	
 	public static ModelType classify(ModelAccessor accessor) throws JDOMException, IOException{
-		return classify(accessor.getModelwithBaseFile());
+		return classify(accessor.getFile());
 	}
 	
 	
@@ -138,7 +151,21 @@ public class ModelClassifier {
 		
 		return false;
 	}
+	
+	public static ModelType getTypebyFormat(String formatstring) {
+		for (ModelType type : ModelType.values()) {
+			if (type.matchesFormat(formatstring)) return type;
+		}
+		return ModelType.UNKNOWN;
+	}
 
+	public static ModelType getTypebyFilter(FileFilter filter) {
+		for (ModelType type : ModelType.values()) {
+			if (type.fileFilterMatches(filter)) return type;
+		}
+		return ModelType.UNKNOWN;
+	}
+	
 	public static boolean hasValidOMEXmodelFileFormat(String format) {
 		return format.matches(".*/sbml.*$") || format.endsWith("cellml");
 	}

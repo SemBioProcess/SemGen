@@ -1,9 +1,9 @@
 package semsim.writing;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,8 +45,6 @@ import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.validator.SyntaxChecker;
-import org.semanticweb.owlapi.model.OWLException;
-
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -116,9 +114,7 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
-	@Override
-	public void writeToFile(File destination) {
-				
+	public String encodeModel() {
 		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
 		String sbmlmodname = semsimmodel.getName();
 		
@@ -153,14 +149,20 @@ public class SBMLwriter extends ModelWriter {
 			
 			for(int i = 0; i< sbmldoc.getErrorCount(); i++)
 				System.err.println(sbmldoc.getError(i));
-			
-			return;
+			return null;
 		}
-	
-		String outputstring =  new XMLOutputter().outputString(doc);
-		SemSimUtil.writeStringToFile(outputstring, destination);
+		return new XMLOutputter().outputString(doc);
 	}
-
+	
+	@Override
+	protected boolean writeToStream(OutputStream stream) {
+		String outputstring = encodeModel();
+		if (outputstring == null) {
+			return false;
+		}
+		commitStringtoStream(stream, outputstring);
+		return true;
+	}
 	
 	/**
 	 *  Determine which data structures potentially simulate properties of SBML compartments,
@@ -979,10 +981,6 @@ public class SBMLwriter extends ModelWriter {
 			semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 	}
 	
-	
-	@Override
-	public void writeToFile(URI uri) throws OWLException {
-		writeToFile(new File(uri));
 
-	}
+
 }

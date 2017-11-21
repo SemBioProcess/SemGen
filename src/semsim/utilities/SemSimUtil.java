@@ -1,10 +1,7 @@
 package semsim.utilities;
 
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
@@ -488,22 +485,7 @@ public class SemSimUtil {
 		return "";
 	}
 	
-	/**
-	 * Write a string to a file
-	 *  @param content The string to write out
-	 *  @param outputfile The file to which the string will be written
-	 */
-	public static void writeStringToFile(String content, File outputfile){
-		if(content!=null && !content.isEmpty() && outputfile!=null){
-			try {
-				PrintWriter pwriter = new PrintWriter(new FileWriter(outputfile));
-				pwriter.print(content);
-				pwriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+
 	
 	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){		
 		if(cpe == null) System.err.println("Next cpe was null");

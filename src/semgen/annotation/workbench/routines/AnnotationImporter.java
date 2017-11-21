@@ -1,6 +1,9 @@
 package semgen.annotation.workbench.routines;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.jdom.JDOMException;
 
 import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary;
@@ -10,6 +13,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier;
 
 public class AnnotationImporter extends SemGenJob {
 	SemSimModel importedmodel;
@@ -28,12 +32,16 @@ public class AnnotationImporter extends SemGenJob {
 	
 	@Override
 	public void run() {
-		loadSourceModel();
+		try {
+			loadSourceModel();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
 		copyModelAnnotations();
 	}
 	
-	private void loadSourceModel() {
-		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(sourcefile), this);
+	private void loadSourceModel() throws JDOMException, IOException {
+		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(sourcefile, ModelClassifier.classify(sourcefile)), this);
 		loader.run();
 		if (!loader.isValid()) {
 			abort();

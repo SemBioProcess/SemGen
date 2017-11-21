@@ -1,7 +1,9 @@
 package semsim.writing;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.io.StreamDocumentTarget;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -22,7 +25,6 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -73,14 +75,31 @@ public class SemSimOWLwriter extends ModelWriter {
 		ont = manager.createOntology(allbaseaxioms, ontiri);
 	}
 	
-	public void writeToFile(File destination) throws OWLException{
-		createOWLOntologyFromModel();
-		manager.saveOntology(ont,new RDFXMLOntologyFormat(), IRI.create(destination));
+	@Override 
+	public String encodeModel()  {
+		String modasstring = null;
+		try {
+			createOWLOntologyFromModel();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			StreamDocumentTarget target = new StreamDocumentTarget(baos);
+			
+	        manager.saveOntology(ont, target);
+	        modasstring = new String(baos.toByteArray(), "UTF-8");
+		} catch (OWLException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        return modasstring;
 	}
 	
-	public void writeToFile(URI uri) throws OWLException{
-		createOWLOntologyFromModel();
-		manager.saveOntology(ont, new RDFXMLOntologyFormat(), IRI.create(uri));
+	@Override
+	protected boolean writeToStream(OutputStream outstream) {
+		try {
+			createOWLOntologyFromModel();
+			manager.saveOntology(ont,new RDFXMLOntologyFormat(), outstream);
+		} catch (OWLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	//*****************************OWL CREATION METHODS*************************//
@@ -574,7 +593,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		
 		if(semsimmodel.getLegacyCodeLocation()!=null)
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
-					semsimmodel.getLegacyCodeLocation().getBaseURI().toString(), manager);
+					semsimmodel.getLegacyCodeLocation().getFilePath().toString(), manager);
 		
 		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
 		anns.addAll(semsimmodel.getAnnotations());
@@ -880,4 +899,6 @@ public class SemSimOWLwriter extends ModelWriter {
 			rels.add(rel);
 		}
 	}
+
+
 }

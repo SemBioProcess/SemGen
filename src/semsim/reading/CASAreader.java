@@ -16,6 +16,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+import semsim.SemSimLibrary;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -31,13 +32,12 @@ import semsim.writing.AbstractRDFwriter;
 
 public class CASAreader extends AbstractRDFreader{
 
-	CASAreader(ModelAccessor ma, SemSimModel semsimmodel, String rdfstring, ModelType type) {
-		super(ma);
+	CASAreader(ModelAccessor accessor,  SemSimModel model, String rdfstring, ModelType type, SemSimLibrary sslibrary) {
+		super(accessor, model, sslibrary);
 		
 		if(rdfstring!=null)
 			readStringToRDFmodel(rdf, rdfstring);
 		
-		this.semsimmodel = semsimmodel;
 		this.modeltype = type;
 		this.modelNamespaceIsSet = false;
 	}
@@ -171,15 +171,6 @@ public class CASAreader extends AbstractRDFreader{
 	}
 	
 	
-
-	@Override
-	public SemSimModel read()
-			throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 	@Override
 	protected void getAllSemSimSubmodelAnnotations() {		
 	}

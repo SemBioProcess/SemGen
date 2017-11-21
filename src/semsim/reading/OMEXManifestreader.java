@@ -49,7 +49,8 @@ public class OMEXManifestreader {
 		        	Attribute location = content.getAttribute("location");
 		        	Attribute format = content.getAttribute("format");
 		        	if (ModelClassifier.hasValidFileExtension(location.getValue(), format.getValue())) {
-		        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
+		   
+		        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(format.getValue())));
 		        	}
 		        	
 		        }
@@ -73,7 +74,7 @@ public class OMEXManifestreader {
 	        	if (ModelClassifier.hasValidOMEXmodelFileFormat(formvalue)) {
 	        		
 	        		Attribute location = content.getAttribute("location");
-	        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
+	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(formvalue)));
 	        	}
 	        }
 
@@ -92,7 +93,7 @@ public class OMEXManifestreader {
 	        	// Assume that all valid annotaion files end in "rdf"
 	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue)){
 	        		Attribute location = content.getAttribute("location");
-	        		accessors.add(new ModelAccessor(omexfile, new File(location.getValue())));
+	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(formvalue)));
 	        	}
 	        }
 

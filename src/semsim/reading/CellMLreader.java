@@ -61,7 +61,7 @@ public class CellMLreader extends ModelReader {
 		try {
 			xmloutputter.setFormat(Format.getPrettyFormat());
 			
-			Document doc = getJDOMdocumentFromStream(modelaccessor.getLocalModelStream());
+			Document doc = getJDOMdocumentFromStream(modelaccessor.modelInStream());
 			
 			if(doc.getRootElement()==null){
 				semsimmodel.addError("Could not parse original model: Root element of XML document was null");
@@ -87,13 +87,7 @@ public class CellMLreader extends ModelReader {
 			if(rdfblockelement != null)
 				rdfstring = getUTFformattedString(xmloutputter.outputString(rdfblockelement));
 			
-			// CASA file for the model and read in the contents
-			if(modelaccessor.modelIsPartofOMEXArchive())
-				if (!getRDFfromAssociatedCASAfile(rdfstring)) {
-					rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
-				} // TODO: need to accommodate situation where there are more than one valid CASA files in the archive
-			else	
-				rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+			rdfblock = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.CELLML_MODEL, sslib);
 			
 			rdfblock.getModelLevelAnnotations();
 			
@@ -461,8 +455,6 @@ public class CellMLreader extends ModelReader {
 			semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, remainingrdf));
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		} catch (JDOMException e) {
-			e.printStackTrace();
 		}
 		
 		return semsimmodel;
@@ -782,9 +774,9 @@ public class CellMLreader extends ModelReader {
 	
 	private boolean getRDFfromAssociatedCASAfile(String rdfincellml) throws ZipException, IOException, JDOMException{
 		
-		OMEXManifestreader OMEXreader = new OMEXManifestreader(modelaccessor.getBaseFile());
+		OMEXManifestreader OMEXreader = new OMEXManifestreader(modelaccessor.getFile());
 		
-		ZipFile archive = new ZipFile(modelaccessor.getBaseFile());
+		ZipFile archive = new ZipFile(modelaccessor.getFile());
 
 		ArrayList<ModelAccessor> accs = OMEXreader.getAnnotationFilesInArchive();
 		
@@ -793,7 +785,7 @@ public class CellMLreader extends ModelReader {
 			
 			if(acc.getFileType()==ModelType.CASA_FILE){
 				
-			    ZipEntry entry = archive.getEntry(acc.getModelName());
+			    ZipEntry entry = archive.getEntry(acc.getFileName());
 		        InputStream stream = archive.getInputStream(entry);
 
 		        Model casardf = ModelFactory.createDefaultModel();
@@ -810,7 +802,7 @@ public class CellMLreader extends ModelReader {
 		        	cellmlrdfreader.read(casardf, cellmlstream, AbstractRDFreader.TEMP_NAMESPACE);
 		        }
 		        
-				Resource casamodelres = casardf.getResource(AbstractRDFreader.TEMP_NAMESPACE + "#" + modelaccessor.getModelName());
+				Resource casamodelres = casardf.getResource(AbstractRDFreader.TEMP_NAMESPACE + "#" + modelaccessor.getFileName());
 				
 				if(casardf.containsResource(casamodelres)){
 					
@@ -818,7 +810,7 @@ public class CellMLreader extends ModelReader {
 					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
 					
 					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
-					rdfblock = new CASAreader(acc, semsimmodel, combinedrdf, ModelType.CELLML_MODEL);
+					rdfblock = new CASAreader(acc, semsimmodel, combinedrdf, ModelType.CELLML_MODEL, sslib);
 					casafound = true;
 			    }
 			}

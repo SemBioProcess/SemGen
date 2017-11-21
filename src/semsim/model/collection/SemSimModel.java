@@ -831,15 +831,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
 	}
-	
-	/**
-	 * Converts the SemSimModel into an OWLOntology object
-	 * @return An OWLOntology representation of the SemSimModel
-	 * @throws OWLException
-	 */
-	public OWLOntology toOWLOntology() throws OWLException{
-		return new SemSimOWLwriter(this).createOWLOntologyFromModel();
-	}
 
 	/**
 	 * @return A new SemSim model namespace from the current date and time

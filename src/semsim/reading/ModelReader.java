@@ -53,5 +53,5 @@ public abstract class ModelReader {
 		return doc;
 	}
 	
-	public abstract SemSimModel read() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException;
+	public abstract SemSimModel read() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException, JDOMException;
 }

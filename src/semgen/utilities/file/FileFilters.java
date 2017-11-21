@@ -2,10 +2,10 @@ package semgen.utilities.file;
 
 import java.io.File;
 
-public class FileFilter extends javax.swing.filechooser.FileFilter {
+public class FileFilters extends javax.swing.filechooser.FileFilter {
 	public String[] filetypes;
 
-	public FileFilter(String[] filetypes) {
+	public FileFilters(String[] filetypes) {
 		this.filetypes = filetypes;
 	}
 

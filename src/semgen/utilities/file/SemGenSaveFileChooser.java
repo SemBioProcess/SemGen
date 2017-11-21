@@ -13,6 +13,7 @@ import org.jdom.Document;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
+import semsim.reading.ModelClassifier;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
 
@@ -31,7 +32,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String[] exts, String selectedtype) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(exts));
+		addFilters(exts);
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 	}
@@ -39,7 +40,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String selectedtype, String modelinarchivename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(ALL_ANNOTATABLE_TYPES));
+		addFilters(ALL_ANNOTATABLE_TYPES);
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -48,7 +49,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String[] exts, String selectedtype, String modelinarchivename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(exts));
+		addFilters(exts);
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -57,7 +58,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String selectedtype, String modelinarchivename, String suggestedfilename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(ALL_ANNOTATABLE_TYPES));
+		addFilters(ALL_ANNOTATABLE_TYPES);
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -67,7 +68,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	public SemGenSaveFileChooser(String[] exts, String selectedtype, String modelinarchivename, String suggestedfilename) {
 		super("Choose save location");
 		setAcceptAllFileFilterUsed(false);
-		addFilters(getFilter(exts));
+		addFilters(exts);
 		setFileFilter(getFilter(selectedtype));
 		setPreferredSize(filechooserdims);
 		modelInArchiveName = modelinarchivename;
@@ -78,23 +79,23 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		String type = null;
 		File file = getSelectedFile();
 		
-		if(getFileFilter()==owlfilter){
+		if(ModelType.SEMSIM_MODEL.fileFilterMatches(getFileFilter())){
 			type = "owl";
 			modeltype = ModelType.SEMSIM_MODEL;
 		}
-		else if(getFileFilter()==sbmlfilter){
+		else if(ModelType.SBML_MODEL.fileFilterMatches(getFileFilter())){
 			type = "xml";
 			modeltype = ModelType.SBML_MODEL;
 		}
-		else if(getFileFilter()==cellmlfilter){
+		else if(ModelType.CELLML_MODEL.fileFilterMatches(getFileFilter())){
 			type = "cellml";
 			modeltype = ModelType.CELLML_MODEL;
 		}
-		else if(getFileFilter()==mmlfilter){
+		else if(ModelType.MML_MODEL.fileFilterMatches(getFileFilter())){
 			type = "mod";
 			modeltype = ModelType.MML_MODEL;
 		}
-		else if(getFileFilter()==projfilter){
+		else if(ModelType.MML_MODEL_IN_PROJ.fileFilterMatches(getFileFilter())){
 			type = "proj";
 			modeltype = ModelType.MML_MODEL_IN_PROJ;
 		}
@@ -124,9 +125,10 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				setFileExtension();
 				File filetosave = getSelectedFile();
 				javax.swing.filechooser.FileFilter savefilter = getFileFilter();
+				ModelType modeltype = ModelClassifier.getTypebyFilter(savefilter);
 				
 				// If we're attempting to write a CellML model with discrete events, show error
-				if (savefilter == SemGenFileChooser.cellmlfilter && semsimmodel != null) {
+				if (modeltype == ModelType.CELLML_MODEL && semsimmodel != null) {
 					if( ! semsimmodel.getEvents().isEmpty()){
 						JOptionPane.showMessageDialog(this, 
 								"Cannot save as CellML because model contains discrete events", 
@@ -138,7 +140,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				boolean overwriting = false;
 
 				// If we're saving to a JSim project file
-				if(savefilter == SemGenFileChooser.projfilter){
+				if(modeltype == ModelType.MML_MODEL_IN_PROJ){
 					
 					String modelname = null;
 					ArrayList<String> existingmodelnames = new ArrayList<String>();
@@ -161,17 +163,17 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				}
 				
 				// Otherwise we're saving to a standalone file
+				else if (modeltype==ModelType.OMEX_ARCHIVE) {
+					
+				}
 				else{
-					ma = new ModelAccessor(getSelectedFile());
-					overwriting = ma.getModelwithBaseFile().exists();
+					ma = new ModelAccessor(getSelectedFile(), modeltype);
+					overwriting = ma.getFile().exists();
 				}
 				
 				// If we're overwriting a model...
 				if (overwriting) {
-					String overwritemsg = "Overwrite " + ma.getModelwithBaseFile().getName() + "?";
-					
-					if(ma.modelIsPartOfArchive()) 
-						overwritemsg = "Overwrite model " + ma.getModelName() + " in " + ma.getModelwithBaseFile().getName() + "?";
+					String overwritemsg = "Overwrite " + ma.getFileName() + "?";
 					
 					int overwriteval = JOptionPane.showConfirmDialog(this,
 							overwritemsg, "Confirm overwrite",

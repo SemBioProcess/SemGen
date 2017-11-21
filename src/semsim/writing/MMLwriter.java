@@ -1,7 +1,6 @@
 package semsim.writing;
 
-import java.io.File;
-import java.net.URI;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,8 @@ public class MMLwriter extends ModelWriter{
 		super(model);
 	}
 	
-	public String writeToString(){	
+	@Override
+	public String encodeModel() {
 		String output = "";
 
 		// If the SemSim model contains Functional Submodels ala CellML models, output the CellML code first,
@@ -41,7 +41,7 @@ public class MMLwriter extends ModelWriter{
 		// NEED BETTER ERROR HANDLING FOR CellML 1.1 models
 		if(semsimmodel.getFunctionalSubmodels().size()>0){
 			System.out.println("Using CellML as intermediary language");
-			String tempcontent = new CellMLwriter(semsimmodel).writeToString();
+			String tempcontent = new CellMLwriter(semsimmodel).encodeModel();
 			String srcText = UtilIO.readText(tempcontent.getBytes());
 			int srcType = ASModel.TEXT_CELLML;
 		    int destType = ASModel.TEXT_MML;
@@ -368,8 +368,18 @@ public class MMLwriter extends ModelWriter{
 		}
 		output = output.concat("-------------------------------\n");
 		output = output.concat("*/\n");
-
 		return output;
+	}
+	
+	@Override
+	protected boolean  writeToStream(OutputStream stream) {
+		
+		String output = encodeModel();
+		if (output == null) return false;
+		
+		this.commitStringtoStream(stream, output);
+
+		return true;
 
 	}
 	
@@ -399,12 +409,7 @@ public class MMLwriter extends ModelWriter{
 	private boolean isDeclaredDependentVariable(DataStructure ds){
 		return ds.isDeclared() && ! ds.isSolutionDomain() && ! semsimmodel.getSolutionDomainBoundaries().contains(ds);
 	}
-	
-	public void writeToFile(File destination){
-		SemSimUtil.writeStringToFile(writeToString(), destination);
-	}
-	
-	public void writeToFile(URI destination){
-		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
-	}
+
+
+
 }

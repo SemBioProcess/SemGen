@@ -1,9 +1,8 @@
 package semsim.writing;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -42,7 +41,14 @@ public class MATLABwriter extends ModelWriter{
 		super(model);
 	}
 	
-	public String writeToString() {
+	@Override
+	public String encodeModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	protected boolean writeToStream(OutputStream stream) {
 				
 		outputter.setFormat(Format.getPrettyFormat());
 
@@ -286,9 +292,8 @@ public class MATLABwriter extends ModelWriter{
 		}
 		outstring = outstring + "\n";
 		
-		outstring = writeNeededFunctions(outstring);
-		
-		return outstring;
+		this.commitStringtoStream(stream, writeNeededFunctions(outstring));
+		return true;
 	}
 	
 	
@@ -392,15 +397,6 @@ public class MATLABwriter extends ModelWriter{
 		
 		return thestring;
 	}
-	
 
-	@Override
-	public void writeToFile(File destination) {
-		SemSimUtil.writeStringToFile(writeToString(), destination);
-	}
 
-	@Override
-	public void writeToFile(URI destination) {
-		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
-	}
 }

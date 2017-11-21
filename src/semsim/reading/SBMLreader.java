@@ -113,7 +113,7 @@ public class SBMLreader extends ModelReader{
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		sbmldoc = new SBMLReader().readSBMLFromStream(modelaccessor.getLocalModelStream());
+		sbmldoc = new SBMLReader().readSBMLFromStream(modelaccessor.modelInStream());
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -343,7 +343,7 @@ public class SBMLreader extends ModelReader{
 		
 		// Check if the time csymbol is used anywhere in the model's MathML.
 		try {
-			Document doc = getJDOMdocumentFromStream(modelaccessor.getLocalModelStream());
+			Document doc = getJDOMdocumentFromStream(modelaccessor.modelInStream());
 		
 			
 			Iterator<?> descit = doc.getRootElement().getDescendants(new ElementFilter());
@@ -1171,7 +1171,7 @@ public class SBMLreader extends ModelReader{
 	 * @throws ZipException 
 	 */
 	private void collectSemSimRDF() throws ZipException, IOException{
-		Document projdoc = getJDOMdocumentFromStream(modelaccessor.getLocalModelStream());
+		Document projdoc = getJDOMdocumentFromStream(modelaccessor.modelInStream());
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
 		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();
@@ -1198,7 +1198,7 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL);
+		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL, sslib);
 	}
 	
 	

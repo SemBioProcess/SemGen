@@ -2,7 +2,7 @@ package semsim.writing;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,8 +14,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.semanticweb.owlapi.model.OWLException;
-
 import semsim.SemSimLibrary;
 import semsim.definitions.RDFNamespace;
 import semsim.model.collection.SemSimModel;
@@ -24,7 +22,6 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
-import semsim.utilities.SemSimUtil;
 
 public class JSimProjectFileWriter extends ModelWriter{
 
@@ -41,24 +38,27 @@ public class JSimProjectFileWriter extends ModelWriter{
 		super(semsimmodel);
 		outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
-		modelName = modelaccessor.getModelName();
-		outputProjectFile = modelaccessor.getModelwithBaseFile();
+		modelName = modelaccessor.getFileName();
+		outputProjectFile = modelaccessor.getFile();
 		outputModelAccessor = modelaccessor;
 		modelNamespace = semsimmodel.getNamespace();
 	}
 
 	@Override
-	public void writeToFile(File destination) {
+	public void writeToFile(ModelAccessor destination) {
+		
+	}
+	
+	public String encodeModel() {
 		
 		Document projdoc = null; 
 		boolean fromannotator = (semsimmodel.getLegacyCodeLocation() != null);
 		
 		// Create the project document.
-			
 		Element modelel = null;
 
 		// If the file already exists...
-		if(destination.exists()){
+		if(fromannotator){
 			
 			projdoc = ModelReader.getJDOMdocumentFromFile(outputProjectFile);
 		
@@ -69,7 +69,8 @@ public class JSimProjectFileWriter extends ModelWriter{
 			
 			if(modelel != null) {
 				Element srccodeel = JSimProjectFileReader.getModelSourceCodeElement(projdoc, modelName);
-				srccodeel.setText(new MMLwriter(semsimmodel).writeToString());
+				
+				srccodeel.setText(new MMLwriter(semsimmodel).encodeModel());
 				semsimControlElement = JSimProjectFileReader.getSemSimControlElementForModel(projdoc, modelName);
 			}
 			
@@ -91,7 +92,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
-				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getModelwithBaseFile());
+				Document origindoc = ModelReader.getJDOMdocumentFromFile(semsimmodel.getLegacyCodeLocation().getFile());
 				modelel = JSimProjectFileReader.getModelElement(origindoc, modelName);
 			}
 			
@@ -144,22 +145,28 @@ public class JSimProjectFileWriter extends ModelWriter{
 		}
 		
 		if(projdoc != null){
-			String outputstring =  outputter.outputString(projdoc);
-			SemSimUtil.writeStringToFile(outputstring, destination);
+			return  outputter.outputString(projdoc);
 		}
+		return null;
 	}
+	
+	@Override
+	public boolean writeToStream(OutputStream stream) {
+		String encodedproject = encodeModel();
+		if (encodedproject != null) {
+			this.commitStringtoStream(stream, encodedproject);
+			return true;
+		}
+		return false;
+	}
+	
+
 
 	private void addNewSemSimControlElementToModel(Element modelel){
 		semsimControlElement = new Element("control");
 		semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
 		modelel.addContent(semsimControlElement);
 	}
-	
-	@Override
-	public void writeToFile(URI uri) throws OWLException {
-		writeToFile(new File(uri));
-	}
-
 	
 	private Document createEmptyProject(){
 		Element jsimel = new Element("JSim");
@@ -189,11 +196,11 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
 			try {
-				modelText = sourceCodeLocation.getLocalModelStream().toString();
+				modelText = sourceCodeLocation.getModelasString();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		else modelText = new MMLwriter(semsimmodel).writeToString();
+		else modelText = new MMLwriter(semsimmodel).encodeModel();
 		
 		controlelsrc.setText(modelText);
 		modelel.addContent(controlelsrc);

@@ -56,8 +56,8 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	
 	private void setLocationInTextField(ModelAccessor ma){
 		
-		String text = "";
-		URI uri = ma.getBaseURI();
+		String text;
+		URI uri = ma.getFileThatContainsModelAsURI();
 		
 		if(ma.modelIsOnline()) text = uri.toString();
 		else if(ma.modelIsPartOfArchive()) text = uri.getPath() + ModelAccessor.separator + uri.getFragment();
@@ -74,7 +74,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 				locationtoadd = txtfld.getText();
 			
 			else if(value == "Cancel")
-				locationtoadd = currentma.getBaseURI().toString();
+				locationtoadd = currentma.getFileThatContainsModelAsURI().toString();
 			
 			dispose();
 		}

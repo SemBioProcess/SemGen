@@ -163,7 +163,7 @@ public class SemSimComponentImporter {
 		else if(hrefValue.startsWith("/") || hrefValue.startsWith("\\"))
 			hrefValue = hrefValue.substring(1);
 		
-		supplyingmodelfilepath = receivingmodelfile.getBaseFile().getParent() + "/" + hrefValue;
+		supplyingmodelfilepath = receivingmodelfile.getFile().getParent() + "/" + hrefValue;
 		return supplyingmodelfilepath;
 	}
 }

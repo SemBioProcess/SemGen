@@ -3,7 +3,6 @@ package semgen.utilities.file;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JFileChooser;
@@ -11,12 +10,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
-import semgen.SemGen;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelAccessor;
 import semsim.reading.ModelReader;
 import semsim.reading.OMEXManifestreader;
-import semsim.utilities.SemSimUtil;
 
 public class SemGenOpenFileChooser extends SemGenFileChooser {
 	
@@ -70,16 +67,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 			setSelectedFiles(null);
 			setSelectedFile(null);	}
 	}
-	
-	public void closeAndWriteStringAsModelContent(URL url, String content){
-		cancelSelection();
-		String urlstring = url.toString();
-		String name = urlstring.substring(urlstring.lastIndexOf("/"));
-		
-		File tempfile = new File(SemGen.tempdir.getAbsoluteFile() + "/" + name);
-		SemSimUtil.writeStringToFile(content, tempfile);
-	}
-	
+
 	
 	// This returns a list of accessors because if a user selects an OMEX files or JSim
 	// project file there may be multiple models within the file they 
@@ -98,7 +86,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 				
 				ArrayList<String> modelnames = new ArrayList<String>();
 				for (ModelAccessor omexmodel : models) {
-					modelnames.add(omexmodel.getModelName());
+					modelnames.add(omexmodel.getFileName());
 				}
 				
 				

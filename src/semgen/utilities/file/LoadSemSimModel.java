@@ -117,21 +117,21 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				return;
 			}
-			semsimmodel.setName(modelaccessor.getModelName());
+			semsimmodel.setName(modelaccessor.getFileName());
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else
-			ErrorLog.addError(modelaccessor.getModelName() + " was an invalid model.", true, false);
+			ErrorLog.addError(modelaccessor.getFileName() + " was an invalid model.", true, false);
 		
 	}
 
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
 		
-		InputStream stream = ma.getLocalModelStream();
+		InputStream stream = ma.modelInStream();
 		String srcText = IOUtils.toString(stream, StandardCharsets.UTF_8.name());
-		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getModelName());
+		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getFileName());
 		
 		if (ErrorLog.hasErrors()) return null;
 		
@@ -143,7 +143,7 @@ public class LoadSemSimModel extends SemGenJob {
 		
 		else{
 			
-			if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma)){
+			if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma, SemGen.semsimlib)){
 				//If annotations present, collect names of reference terms
 				setStatus("Collecting annotations");
 				nameOntologyTerms();

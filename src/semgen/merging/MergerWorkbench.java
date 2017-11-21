@@ -1,15 +1,11 @@
 package semgen.merging;
 
-import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
-
-import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -19,7 +15,6 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SaveSemSimModel;
-import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.model.collection.SemSimModel;
@@ -32,7 +27,7 @@ public class MergerWorkbench extends Workbench {
 	private int modelselection = -1;
 	private ModelOverlapMap overlapmap = null;
 	private ArrayList<SemSimModel> loadedmodels = new ArrayList<SemSimModel>();
-	private SaveMergeTarget target = null;
+	private ModelAccessor target = null;
 	public SemSimModel mergedmodel;
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
 	private ArrayList<ArrayList<DataStructure>> alldslist = new ArrayList<ArrayList<DataStructure>>();
@@ -338,15 +333,15 @@ public class MergerWorkbench extends Workbench {
 			public void endTask() {
 				mergedmodel = getMergedModel();
 				//Prevent an invalid CellML model from getting written.
-				if( ! mergedmodel.getEvents().isEmpty() && target.filetype == SemGenFileChooser.cellmlfilter){
+				if( ! mergedmodel.getEvents().isEmpty() && target.getModelType() == ModelType.CELLML_MODEL){
 					SemGenError.showError("Cannot save as CellML because model contains discrete events", 
 							"Cannot write to CellML");
 					return;
 				}
 				
-				SaveSemSimModel.writeToFile(mergedmodel,  target.getModelAccessor(), target.getModelAccessor().getModelwithBaseFile(), target.getFileType());
+				SaveSemSimModel.writeToFile(mergedmodel,  target);
 				
-				LoadSemSimModel loader = new LoadSemSimModel(target.getModelAccessor(), false);
+				LoadSemSimModel loader = new LoadSemSimModel(target, false);
 				loader.run();
 				mergedmodel = loader.getLoadedModel();
 								
@@ -379,11 +374,9 @@ public class MergerWorkbench extends Workbench {
 	@Override
 	public ModelAccessor saveModel(Integer index) {
 		if (modelaccessorlist.size() >= 3) {
-			URI fileuri = modelaccessorlist.get(2).getFileThatContainsModelAsURI();
 			
-			if(fileuri != null){
-				File file = new File(fileuri);
-				SaveSemSimModel.writeToFile(mergedmodel,  modelaccessorlist.get(2), file, ModelType.SEMSIM_MODEL);
+			if(modelaccessorlist.get(2) != null){
+				SaveSemSimModel.writeToFile(mergedmodel,  modelaccessorlist.get(2));
 				setModelSaved(true);
 				return  modelaccessorlist.get(2);
 			}
@@ -396,7 +389,7 @@ public class MergerWorkbench extends Workbench {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		if (ma != null) {
-			target = new SaveMergeTarget(ma, filec.getFileFilter()); 
+			target = ma;
 			if (!writeMerge()) return null;
 		}
 		this.modelsaved = (ma!=null);
@@ -407,31 +400,31 @@ public class MergerWorkbench extends Workbench {
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction();
 		if (ma==null) return false;
-		target = new SaveMergeTarget(ma, filec.getFileFilter());
+		target = ma;
 		
 		return true;
 	}
 	
 	public boolean writeMerge() {
 		
-			if( ! mergedmodel.getEvents().isEmpty() && target.filetype == SemGenFileChooser.cellmlfilter){
+			if( ! mergedmodel.getEvents().isEmpty() && target.getModelType() == ModelType.CELLML_MODEL){
 				SemGenError.showError("Cannot save as CellML because model contains discrete events", 
 						"Cannot write to CellML");
 				return false;
 			}
-			mergedmodel.setName(target.getModelAccessor().getModelName());
+			mergedmodel.setName(target.getModelName());
 			
-			SaveSemSimModel.writeToFile(mergedmodel, target.getModelAccessor(), target.getModelAccessor().getModelwithBaseFile(), target.getFileType());
+			SaveSemSimModel.writeToFile(mergedmodel, target);
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}
-			modelaccessorlist.set(2, target.getModelAccessor());
+			modelaccessorlist.set(2, target);
 			this.modelsaved = true;
 			return true;
 	}
 	
 	public ModelAccessor getMergedFileAddress() {
-		return target.getModelAccessor();
+		return target;
 	}
 	
 	@Override
@@ -471,21 +464,4 @@ public class MergerWorkbench extends Workbench {
 	public void update(Observable o, Object arg) {
 	}
 	
-	private class SaveMergeTarget {
-		private ModelAccessor accessor;
-		private FileFilter filetype;
-		
-		public SaveMergeTarget(ModelAccessor ma, FileFilter type) {
-			accessor = ma;
-			filetype = type;
-		}
-		
-		public ModelAccessor getModelAccessor() {
-			return accessor;
-		}
-		
-		public FileFilter getFileType() {
-			return filetype;
-		}
-	}
 }

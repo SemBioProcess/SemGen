@@ -24,12 +24,12 @@ public class JSimProjectFileReader {
 	// This method collects all annotations for an MML model using the RDF block
 	// associated with it in its parent project file. The method returns whether 
 	// the model has already been annotated to some degree.
-	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, ModelAccessor ma){
+	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, ModelAccessor ma,SemSimLibrary sslib){
 		
 		if(ma.modelIsPartOfJSimProjectFile()){
 			
-			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getBaseFile());
-			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
+			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getFile());
+			Element ssael = getSemSimControlElementForModel(projdoc, ma.getFileName());
 			
 			// If there are no semsim annotations associated with the model, return false
 			if(ssael == null){
@@ -42,7 +42,7 @@ public class JSimProjectFileReader {
 				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				
-				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), ModelType.MML_MODEL_IN_PROJ);
+				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), ModelType.MML_MODEL_IN_PROJ, sslib);
 				
 				rdfreader.getModelLevelAnnotations();
 				rdfreader.getAllDataStructureAnnotations();

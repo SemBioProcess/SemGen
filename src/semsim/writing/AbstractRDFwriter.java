@@ -28,8 +28,8 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.SemSimRDFreader;
 
-public abstract class AbstractRDFwriter extends ModelWriter{
-	
+public abstract class AbstractRDFwriter {
+	protected SemSimModel semsimmodel;
 	protected Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	protected Model rdf = ModelFactory.createDefaultModel();
 	protected String xmlbase;
@@ -38,7 +38,7 @@ public abstract class AbstractRDFwriter extends ModelWriter{
 
 
 	AbstractRDFwriter(SemSimModel model) {
-		super(model);
+		semsimmodel = model;
 		// TODO Auto-generated constructor stub
 	}
 

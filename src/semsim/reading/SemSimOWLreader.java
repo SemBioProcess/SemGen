@@ -89,7 +89,7 @@ public class SemSimOWLreader extends ModelReader {
 		semsimmodel.setName(modelaccessor.getModelName());
 		
 		try {
-			ont = manager.loadOntologyFromOntologyDocument(accessor.getLocalModelStream());
+			ont = manager.loadOntologyFromOntologyDocument(accessor.modelInStream());
 		} catch (OWLOntologyCreationException | IOException e) {
 			e.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	//*****************************READ METHODS*************************//
 		
-	public SemSimModel read() throws OWLException{	
+	public SemSimModel read() throws OWLException, JDOMException, IOException{	
 		if (verifyModel()) return semsimmodel;
 		
 		setPhysicalDefinitionURI();
@@ -144,7 +144,7 @@ public class SemSimOWLreader extends ModelReader {
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
 	}
 	
-	private void collectModelAnnotations() {
+	private void collectModelAnnotations() throws JDOMException, IOException {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
 		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();

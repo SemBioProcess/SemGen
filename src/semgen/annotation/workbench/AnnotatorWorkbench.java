@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -23,7 +24,6 @@ import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SaveSemSimModel;
-import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
@@ -136,13 +136,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 	@Override
 	public ModelAccessor saveModel(Integer index) {
-		
-		URI fileuri = modelaccessor.getFileThatContainsModelAsURI();
-		
-		if(fileuri != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
-			File file = new File(fileuri);
+				
+		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
 			validateModelComposites();
-			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor, file, lastsavedas);			
+			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor);			
 			setModelSaved(true);
 			return modelaccessor;
 		}
@@ -166,18 +163,19 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		if (newaccessor != null) {
 			
 			modelaccessor = newaccessor;
+			FileFilter filter = filec.getFileFilter();
 						
-			if(filec.getFileFilter() == SemGenFileChooser.owlfilter)
+			if(ModelType.SEMSIM_MODEL.fileFilterMatches(filter))
 				lastsavedas = ModelType.SEMSIM_MODEL;
-			else if(filec.getFileFilter() == SemGenFileChooser.sbmlfilter)
+			else if(ModelType.SBML_MODEL.fileFilterMatches(filter))
 				lastsavedas = ModelType.SBML_MODEL;
-			else if(filec.getFileFilter() == SemGenFileChooser.projfilter)
+			else if(ModelType.MML_MODEL_IN_PROJ.fileFilterMatches(filter))
 				lastsavedas = ModelType.MML_MODEL_IN_PROJ;
-			else if(filec.getFileFilter() == SemGenFileChooser.cellmlfilter)
+			else if(ModelType.CELLML_MODEL.fileFilterMatches(filter))
 				lastsavedas = ModelType.CELLML_MODEL;
 				
 			saveModel(0);
-			semsimmodel.setName(modelaccessor.getModelName());
+			semsimmodel.setName(modelaccessor.getFileName());
 			
 			return modelaccessor;
 		}
@@ -187,14 +185,14 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void exportModel(Integer index){
 		
-		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getModelwithBaseFile().getName());
+		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFullPath());
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, "owl", semsimmodel.getName(), suggestedfilename);
 		
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
 		if (ma != null) {
 			validateModelComposites();
-			SaveSemSimModel.writeToFile(semsimmodel, ma, ma.getModelwithBaseFile(), filec.getFileFilter());			
+			SaveSemSimModel.writeToFile(semsimmodel, ma);			
 		}
 	}
 	
@@ -217,8 +215,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				msg = msg + "[unsaved file]?";
 			
 			else if( ! modelaccessor.modelIsPartOfArchive())
-				msg = msg + modelaccessor.getModelwithBaseFile().getName() + "?";
-			else msg = msg + modelaccessor.getModelName() + " in " + modelaccessor.getModelwithBaseFile().getName() + "?";
+				msg = msg + modelaccessor.getFileName() + "?";
+			else msg = msg + modelaccessor.getFileName() + " in " + modelaccessor.getFileName() + "?";
 			
 			int returnval= JOptionPane.showConfirmDialog(null,
 					msg, title,
@@ -241,6 +239,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	public ModelAccessor getModelAccessor() {
 		return modelaccessor;
+	}
+	
+	public void setModelAccessor(ModelAccessor accessor) {
+		modelaccessor = accessor;
 	}
 
 	public void changeModelSourceLocation() {
@@ -323,7 +325,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	}
 	
 	public File getSourceSubmodelFile() {
-		File returnfile = new File(getModelAccessor().getModelwithBaseFile().getParent() + "/" + smdrawer.getHrefValue());
+		File returnfile = new File(getModelAccessor().getFile().getParent() + "/" + smdrawer.getHrefValue());
 		return returnfile;
 	}
 	

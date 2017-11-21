@@ -1,12 +1,9 @@
 package semsim.writing;
 
-import java.io.File;
 import java.net.URI;
 import java.util.Set;
 
 import org.sbml.jsbml.CVTerm.Qualifier;
-import org.semanticweb.owlapi.model.OWLException;
-
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -106,17 +103,5 @@ public class CASAwriter extends AbstractRDFwriter{
 		
 	}
 
-
-	@Override
-	public void writeToFile(File destination) throws OWLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void writeToFile(URI uri) throws OWLException {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

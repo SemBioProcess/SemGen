@@ -1,7 +1,8 @@
 package semsim.writing;
 
-import java.io.File;
-import java.net.URI;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +18,6 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
@@ -44,9 +44,23 @@ public class CellMLwriter extends ModelWriter {
 		super(model);
 	}
 	
-	//*************WRITE PROCEDURE********************************************//
+	public String encodeModel() {
+		String modasstring = null;
+		try {
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			writeToStream(baos);			
+	        
+	        modasstring = new String(baos.toByteArray(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        return modasstring;
+	}
 	
-	public String writeToString(){
+	//*************WRITE PROCEDURE********************************************//
+	@Override
+	public boolean writeToStream(OutputStream outstream) {
 		Document doc = null;
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
@@ -58,7 +72,8 @@ public class CellMLwriter extends ModelWriter {
 			if(semsimmodel.getEvents().size()>0){
 				Element eventerror = new Element("error");
 				eventerror.setAttribute("msg", "SemSim-to-CellML translation not supported for models with discrete events.");
-				return outputter.outputString(new Document(eventerror));
+				outputter.outputString(new Document(eventerror));
+				return false; 
 			}
 						
 			createRDFBlock();
@@ -93,8 +108,8 @@ public class CellMLwriter extends ModelWriter {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		return outputter.outputString(doc);
+		outputter.outputString(doc);
+		return true;
 	}
 
 	private void createRDFBlock() {
@@ -464,17 +479,6 @@ public class CellMLwriter extends ModelWriter {
 			root.addContent(comp);
 		}
 	}
-	
-	@Override
-	public void writeToFile(File destination){
-		SemSimUtil.writeStringToFile(writeToString(), destination);
-	}
-	
-	@Override
-	public void writeToFile(URI destination){
-		SemSimUtil.writeStringToFile(writeToString(), new File(destination));
-	}
-
 	
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		

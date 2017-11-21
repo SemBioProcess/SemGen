@@ -59,7 +59,7 @@ public class XMMLreader extends ModelReader {
 	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, CloneNotSupportedException, XMLStreamException {
 		
-		File srcfile = modelaccessor.getModelwithBaseFile();
+		File srcfile = modelaccessor.getFile();
 		if(srcfile != null){
 			doc = null;
 

@@ -1,13 +1,8 @@
 package semsim.reading;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
-import org.semanticweb.owlapi.model.OWLException;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
@@ -35,12 +30,11 @@ import semsim.reading.ModelClassifier.ModelType;
 public class SemSimRDFreader extends AbstractRDFreader{
 
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
+	protected ModelAccessor modelaccessor;
 
-
-	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, ModelType modeltype) {
-		super(accessor);
+	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, ModelType modeltype, SemSimLibrary sslibrary) {
+		super(accessor, semsimmodel, sslibrary);
 		
-		this.semsimmodel = semsimmodel;
 		this.modeltype = modeltype;
 		
 		if(rdfasstring!=null){
@@ -73,12 +67,6 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				}
 			}
 		}
-	}
-	
-	@Override
-	public SemSimModel read() throws IOException, InterruptedException,
-			OWLException, CloneNotSupportedException, XMLStreamException {
-		return null;
 	}
 	
 	public String getModelNamespaceFromRDF(){

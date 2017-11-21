@@ -19,6 +19,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
+import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
@@ -41,7 +42,7 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier.ModelType;
 
 
-public abstract class AbstractRDFreader extends ModelReader{
+public abstract class AbstractRDFreader {
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
@@ -50,11 +51,15 @@ public abstract class AbstractRDFreader extends ModelReader{
 	public static String TEMP_NAMESPACE = "http://tempns.net/temp";
 	protected String unnamedstring = "[unnamed!]";
 	protected boolean modelNamespaceIsSet = true;
+	protected SemSimLibrary sslib;
+	protected SemSimModel semsimmodel;
+	protected ModelAccessor modelaccessor;
 	
 	
-	
-	AbstractRDFreader(ModelAccessor accessor){
-		super(accessor);
+	AbstractRDFreader(ModelAccessor accessor,  SemSimModel model, SemSimLibrary sslibrary){
+		semsimmodel = model;
+		modelaccessor = accessor;
+		sslib = sslibrary;
 	}
 
 	// Abstract methods

@@ -1,6 +1,5 @@
 package semsim.writing;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +62,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	}
 	
 	
+	
 	private void initialize(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
 		
@@ -82,15 +82,8 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-	}
+	}	
 
-	// Empty functions so that we can pass in sslib
-	@Override
-	public void writeToFile(File file){}
-	
-	@Override 
-	public void writeToFile(URI uri){}
-	
 	
 	private void createSubmodelURIandNameMap(){
 		for(Submodel sub : semsimmodel.getSubmodels()){
@@ -513,5 +506,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			}
 		}
 	}
+
+
 
 }

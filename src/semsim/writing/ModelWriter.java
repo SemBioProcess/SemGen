@@ -2,18 +2,21 @@ package semsim.writing;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.semanticweb.owlapi.model.OWLException;
-
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelAccessor;
 
 public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;
@@ -28,9 +31,38 @@ public abstract class ModelWriter {
 		sslib = lib;
 	}
 	
-	public abstract void writeToFile(File destination) throws OWLException;
+	public void writeToFile(ModelAccessor destination) {
+		FileOutputStream outstream;
+		try {
+			outstream = new FileOutputStream(destination.getFile());
+			writeToStream(outstream);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+		
+	//Return whether write succeeded
+	protected abstract boolean writeToStream(OutputStream stream);
 	
-	public abstract void writeToFile(URI uri) throws OWLException;
+	protected boolean commitStringtoStream(OutputStream stream, String outputstring) {
+		OutputStreamWriter writer = new OutputStreamWriter(stream, Charset.defaultCharset());
+		
+		try {
+			writer.write(outputstring);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public abstract String encodeModel();
+	
+	public void writeToArchive(ModelAccessor archive) {
+		
+	}
 	
 	public static Content makeXMLContentFromString(String xml){
 		try {
@@ -42,4 +74,21 @@ public abstract class ModelWriter {
 			return null;
 		} 
 	}
+	
+//	/**
+//	 * Write a string to a file
+//	 *  @param content The string to write out
+//	 *  @param outputfile The file to which the string will be written
+//	 */
+//	public static void writeStringToFile(OutputStream content, File outputfile){
+//		if(content!=null && (content!=null) && outputfile!=null){
+//			try {
+//				PrintWriter pwriter = new PrintWriter(new FileWriter(outputfile));
+//				pwriter.print(content);
+//				pwriter.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

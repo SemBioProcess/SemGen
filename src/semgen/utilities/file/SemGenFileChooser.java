@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import semsim.reading.ModelClassifier.ModelType;
@@ -12,16 +13,10 @@ import semsim.reading.ModelClassifier.ModelType;
 
 public abstract class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
-	public static final FileNameExtensionFilter owlfilter = new FileNameExtensionFilter("SemSim (*.owl)", "owl");
-	public static final FileNameExtensionFilter cellmlfilter = new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml");
-	public static final FileNameExtensionFilter sbmlfilter = new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml");
-	public static final FileNameExtensionFilter mmlfilter = new FileNameExtensionFilter("MML (*.mod)", "mod");
-	public static final FileNameExtensionFilter projfilter = new FileNameExtensionFilter("JSim project file model (*.proj)", "proj");
 	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
-	public static final FileNameExtensionFilter omexfilter = new FileNameExtensionFilter("Combine Archive (*.omex)", "omex");
-	protected FileFilter fileextensions = new FileFilter(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj", "omex"});
+	protected FileFilters fileextensions = new FileFilters(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj", "omex"});
 	
-	private static HashMap<String, FileNameExtensionFilter> filtermap = new HashMap<String, FileNameExtensionFilter>(); 
+	private static HashMap<String, ModelType> filtermap = new HashMap<String, ModelType>(); 
 	
 	Dimension filechooserdims = new Dimension(550,550);
 	public static File currentdirectory;
@@ -41,24 +36,24 @@ public abstract class SemGenFileChooser extends JFileChooser {
 	}
 	
 	private void createMap() {
-		filtermap.put("owl", owlfilter);
-		filtermap.put("cellml", cellmlfilter);
-		filtermap.put("sbml", sbmlfilter);
-		filtermap.put("mod", mmlfilter);
-		filtermap.put("proj", projfilter);
-		filtermap.put("csv", csvfilter);
-		filtermap.put("omex", omexfilter);
+		filtermap.put("owl", ModelType.SEMSIM_MODEL);
+		filtermap.put("cellml", ModelType.CELLML_MODEL);
+		filtermap.put("sbml", ModelType.SBML_MODEL);
+		filtermap.put("mod", ModelType.MML_MODEL);
+		filtermap.put("proj", ModelType.MML_MODEL_IN_PROJ);
+		//filtermap.put("csv", csvfilter);
+		filtermap.put("omex", ModelType.OMEX_ARCHIVE);
 	}
 	
-	protected FileNameExtensionFilter getFilter(String key) {
-		return filtermap.get(key);
+	protected FileFilter getFilter(String key) {
+		return filtermap.get(key).getFileFilter();
 	}
 	
-	protected FileNameExtensionFilter[] getFilter(String[] keys) {
-		FileNameExtensionFilter[] filters = new FileNameExtensionFilter[keys.length];
+	protected FileFilter[] getFilter(String[] keys) {
+		FileFilter[] filters = new FileFilter[keys.length];
 		int i = 0;
 		for (String key : keys) {
-			filters[i] = filtermap.get(key);
+			filters[i] = filtermap.get(key).getFileFilter();
 			i++;
 		}
 		return filters;

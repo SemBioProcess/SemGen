@@ -71,13 +71,13 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		
 		if(srccodema != null){
 			
-			modelloc = srccodema.getBaseURI().toString();
+			modelloc = srccodema.getFilePath();
 			
 			// If the legacy model code is on the web
 			if (srccodema.modelIsOnline()) {
 				SemGenProgressBar progframe = new SemGenProgressBar("Retrieving code...", false);
 
-				URL url = new URL(srccodema.getBaseURI().toString());
+				URL url = new URL(srccodema.getFilePath());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 				httpcon.setReadTimeout(60000);
@@ -89,7 +89,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				} catch (Exception e) {
 					e.printStackTrace();
 					SemGenError.showWarning("Legacy code for " + workbench.getModelAccessor().getShortLocation() + " could not be found at address\n" +
-							srccodema.getBaseURI().toString(), "404 Not Found");
+							srccodema.getFullPath(), "404 Not Found");
 					online = false;
 				}
 				if (online) {
@@ -127,17 +127,17 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				
 				// If the local file doesn't exist, check the directory that the
 				// SemSim model is in
-				if( ! srccodema.getModelwithBaseFile().exists()){
-					String srcfilename = srccodema.getModelwithBaseFile().getName();
+				if( ! srccodema.getFile().exists()){
+					String srcfilename = srccodema.getFile().getName();
 					File samedirfile = new File (
-							workbench.getModelAccessor().getModelwithBaseFile().getParentFile().toString() + 
+							workbench.getModelAccessor().getFile().getParentFile().toString() + 
 							"/" + srcfilename);
 					
 					if(samedirfile.exists())
-						srccodema.setModelURI(samedirfile.toURI());
+						workbench.setModelAccessor(new ModelAccessor(samedirfile));
 				}
 				
-				String modelcode = srccodema.getLocalModelStream().toString();
+				String modelcode = srccodema.getModelasString();
 				
 				if (modelcode != null && ! modelcode.equals("")){
 					append(modelcode);
