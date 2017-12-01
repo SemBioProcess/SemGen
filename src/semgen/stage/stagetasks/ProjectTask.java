@@ -19,12 +19,12 @@ import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.LoadSemSimModel;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
@@ -85,7 +85,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
-				ModelAccessor file = new ModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+				ModelAccessor file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
 				LoadSemSimModel loader = new LoadSemSimModel(file, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
@@ -294,7 +294,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
 				if (ma != null)	{			
-					SaveSemSimModel.writeToFile(modelinfo.Model, ma);	
+					ma.writeToFile(modelinfo.Model);	
 				}
 			}
 			else {

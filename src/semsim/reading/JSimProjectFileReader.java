@@ -1,7 +1,6 @@
 package semsim.reading;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -11,11 +10,10 @@ import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimLibrary;
+import semsim.fileaccessors.JSIMProjectAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelClassifier.ModelType;
 
@@ -24,19 +22,14 @@ public class JSimProjectFileReader {
 	// This method collects all annotations for an MML model using the RDF block
 	// associated with it in its parent project file. The method returns whether 
 	// the model has already been annotated to some degree.
-	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, ModelAccessor ma,SemSimLibrary sslib){
-		
-		if(ma.modelIsPartOfJSimProjectFile()){
-			
-			Document projdoc = ModelReader.getJDOMdocumentFromFile(ma.getFile());
-			Element ssael = getSemSimControlElementForModel(projdoc, ma.getFileName());
+	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, JSIMProjectAccessor ma,SemSimLibrary sslib){
+
+			Document projdoc = ma.getJDOMDocument();
+			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
 			
 			// If there are no semsim annotations associated with the model, return false
-			if(ssael == null){
-				return false;
-			}
-			// Otherwise collect the annotations
-			else{
+			if(ssael != null){
+				//Collect the annotations
 				XMLOutputter xmloutputter = new XMLOutputter();
 				
 				// TODO: Move getRDFmarkup fxn somewhere else?
@@ -50,23 +43,8 @@ public class JSimProjectFileReader {
 				
 				return true;
 			}
-		}
 		return false;
 	}
-	
-	public static Document getDocument(InputStream file){
-		Document doc = null;
-		SAXBuilder builder = new SAXBuilder();
-		
-		try{ 
-			doc = builder.build(file);
-		}
-		catch(JDOMException | IOException e) {
-			e.printStackTrace();
-		}
-		return doc;
-	}
-	
 	
 	private static Element getProjectElement(Document projdoc){
 		Element root = projdoc.getRootElement();
@@ -91,10 +69,10 @@ public class JSimProjectFileReader {
 	}
 	
 	
-	protected static InputStream getModelSourceCode(Document projdoc, String modelname) throws UnsupportedEncodingException{
-		
-		if(getModelSourceCodeElement(projdoc, modelname) != null) {
-			String modeltext = getModelSourceCodeElement(projdoc, modelname).getText();
+	public static InputStream getModelSourceCode(Document projdoc, String modelname) throws UnsupportedEncodingException{
+		Element sourcecodeelemnt = getModelSourceCodeElement(projdoc, modelname);
+		if(sourcecodeelemnt != null) {
+			String modeltext = sourcecodeelemnt.getText();
 			return new ByteArrayInputStream(modeltext.getBytes(StandardCharsets.UTF_8.name()));
 		}
 			

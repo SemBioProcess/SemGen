@@ -1,8 +1,8 @@
 package semgen.stage.stagetasks;
 
 import semgen.stage.serialization.ModelNode;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 public class ModelInfo extends StageRootInfo<ModelNode> {
 

@@ -3,10 +3,9 @@ package semgen.stage.stagetasks.extractor;
 import java.util.ArrayList;
 import java.util.Observable;
 import semgen.utilities.Workbench;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenSaveFileChooser;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 
 public class ExtractorWorkbench extends Workbench {
@@ -67,7 +66,7 @@ public class ExtractorWorkbench extends Workbench {
 		ModelAccessor ma = modelaccessorlist.get(index);
 		if (ma == null) ma = saveModelAs(index);
 		else {
-			SaveSemSimModel.writeToFile(extractions.get(index), ma);
+			ma.writeToFile(extractions.get(index));
 		}
 		return ma;
 	}
@@ -81,7 +80,7 @@ public class ExtractorWorkbench extends Workbench {
 		if (ma != null) {
 			model.setName(ma.getFileName());
 			
-			SaveSemSimModel.writeToFile(model, ma);
+			ma.writeToFile(model);
 
 			model.setSourceFileLocation(ma);
 		}

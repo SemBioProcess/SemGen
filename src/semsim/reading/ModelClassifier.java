@@ -13,6 +13,8 @@ import org.jdom.input.SAXBuilder;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 
+import semsim.fileaccessors.ModelAccessor;
+
 public class ModelClassifier {
 	
 	public static enum ModelType{

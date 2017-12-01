@@ -17,7 +17,7 @@ import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.utilities.uicomponent.TabFactory;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 import java.net.URI;
 import java.awt.Color;

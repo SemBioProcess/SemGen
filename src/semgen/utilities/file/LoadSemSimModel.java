@@ -12,12 +12,13 @@ import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
+import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CASAreader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
-import semsim.reading.ModelAccessor;
 import semsim.reading.XMMLreader;
 import semsim.reading.ReferenceTermNamer;
 import semsim.reading.SBMLreader;
@@ -56,7 +57,7 @@ public class LoadSemSimModel extends SemGenJob {
 		
     	setStatus("Reading " + modelaccessor.getShortLocation());
 
-    	ModelType modeltype = modelaccessor.getFileType();
+    	ModelType modeltype = modelaccessor.getModelType();
 		try {
 			switch (modeltype){
 			
@@ -143,21 +144,27 @@ public class LoadSemSimModel extends SemGenJob {
 		
 		else{
 			
-			if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, ma, SemGen.semsimlib)){
-				//If annotations present, collect names of reference terms
-				setStatus("Collecting annotations");
-				nameOntologyTerms();
+			if (ma.getModelType().equals(ModelType.MML_MODEL_IN_PROJ)) {
+				if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, (JSIMProjectAccessor)ma, SemGen.semsimlib)){
+					//If annotations present, collect names of reference terms
+					setStatus("Collecting annotations");
+					nameOntologyTerms();
+				}
 			}
+			
 			else if(autoannotate){
 				// Otherwise auto-annotate, if turned on, 
-				setStatus("Annotating physical properties");
-				AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+				annotateModel();
 			}
 		}
 		
 		return semsimmodel;
 	}
 	
+	private void annotateModel() {
+		setStatus("Annotating physical properties");
+		AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+	}
 	
 	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel, SemGen.semsimlib).size()>0){

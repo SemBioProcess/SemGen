@@ -9,11 +9,10 @@ import semgen.SemGen;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenJob;
 import semgen.utilities.file.LoadSemSimModel;
+import semsim.fileaccessors.FileAccessorFactory;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.reading.ModelAccessor;
-import semsim.reading.ModelClassifier;
 
 public class AnnotationImporter extends SemGenJob {
 	SemSimModel importedmodel;
@@ -41,7 +40,7 @@ public class AnnotationImporter extends SemGenJob {
 	}
 	
 	private void loadSourceModel() throws JDOMException, IOException {
-		LoadSemSimModel loader = new LoadSemSimModel(new ModelAccessor(sourcefile, ModelClassifier.classify(sourcefile)), this);
+		LoadSemSimModel loader = new LoadSemSimModel(FileAccessorFactory.getModelAccessor(sourcefile), this);
 		loader.run();
 		if (!loader.isValid()) {
 			abort();

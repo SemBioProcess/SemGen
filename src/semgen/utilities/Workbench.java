@@ -11,7 +11,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 public abstract class Workbench extends Observable implements Observer, PropertyChangeListener{
 	protected boolean modelsaved = true;

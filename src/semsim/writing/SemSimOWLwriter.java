@@ -92,7 +92,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	@Override
-	protected boolean writeToStream(OutputStream outstream) {
+	public boolean writeToStream(OutputStream outstream) {
 		try {
 			createOWLOntologyFromModel();
 			manager.saveOntology(ont,new RDFXMLOntologyFormat(), outstream);

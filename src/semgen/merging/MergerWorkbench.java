@@ -14,12 +14,11 @@ import semgen.merging.ModelOverlapMap.MapType;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.LoadSemSimModel;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
@@ -339,7 +338,7 @@ public class MergerWorkbench extends Workbench {
 					return;
 				}
 				
-				SaveSemSimModel.writeToFile(mergedmodel,  target);
+				target.writeToFile(mergedmodel);
 				
 				LoadSemSimModel loader = new LoadSemSimModel(target, false);
 				loader.run();
@@ -376,7 +375,7 @@ public class MergerWorkbench extends Workbench {
 		if (modelaccessorlist.size() >= 3) {
 			
 			if(modelaccessorlist.get(2) != null){
-				SaveSemSimModel.writeToFile(mergedmodel,  modelaccessorlist.get(2));
+				modelaccessorlist.get(2).writeToFile(mergedmodel);
 				setModelSaved(true);
 				return  modelaccessorlist.get(2);
 			}
@@ -414,7 +413,7 @@ public class MergerWorkbench extends Workbench {
 			}
 			mergedmodel.setName(target.getModelName());
 			
-			SaveSemSimModel.writeToFile(mergedmodel, target);
+			target.writeToFile(mergedmodel);
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}

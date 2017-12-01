@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	boolean autoannotate = false;

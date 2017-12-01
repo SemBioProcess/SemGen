@@ -45,6 +45,8 @@ import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -160,7 +162,7 @@ public class SemSimOWLreader extends ModelReader {
 				String location = ((OWLLiteral)named.getValue()).getLiteral();
 				
 				if( ! location.isEmpty()){
-					ModelAccessor ma = new ModelAccessor(location);
+					ModelAccessor ma = FileAccessorFactory.getModelAccessor(location);
 					semsimmodel.setSourceFileLocation(ma);
 					annstoremove.add(named);
 				}

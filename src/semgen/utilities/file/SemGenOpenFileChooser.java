@@ -10,8 +10,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
+
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.JSimProjectFileReader;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelReader;
 import semsim.reading.OMEXManifestreader;
 
@@ -86,7 +89,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 				
 				ArrayList<String> modelnames = new ArrayList<String>();
 				for (ModelAccessor omexmodel : models) {
-					modelnames.add(omexmodel.getFileName());
+					modelnames.add(omexmodel.getModelName());
 				}
 				
 				
@@ -106,18 +109,18 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 			Document projdoc = ModelReader.getJDOMdocumentFromFile(file);
 			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
-			if(modelnames.size()==1)  modelaccessors.add(new ModelAccessor(file, modelnames.get(0)));
+			if(modelnames.size()==1)  modelaccessors.add(FileAccessorFactory.getJSIMProjectAccessor(file, modelnames.get(0)));
 			
 			else{
 				JSimModelSelectorDialogForReading pfmsd = 
 						new JSimModelSelectorDialogForReading("Select model(s) in " + file.getName(), modelnames);
 	
 				for(Integer index : pfmsd.getSelectedModelNames()){
-					modelaccessors.add(new ModelAccessor(file, modelnames.get(index)));
+					modelaccessors.add(FileAccessorFactory.getJSIMProjectAccessor(file, modelnames.get(index)));
 				}
 			}
 		}
-		else modelaccessors.add(new ModelAccessor(file));
+		else modelaccessors.add(FileAccessorFactory.getModelAccessor(file));
 		
 		return modelaccessors;
 	}

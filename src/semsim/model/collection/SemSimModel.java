@@ -11,9 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
-
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -27,6 +24,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
@@ -46,10 +44,8 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimCopy;
-import semsim.writing.SemSimOWLwriter;
 
 /**
  * A SemSim model is a declarative representation of a quantified physical system.

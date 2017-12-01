@@ -18,9 +18,9 @@ import semgen.stage.stagetasks.StageTask;
 import semgen.utilities.SemGenError;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.reading.ModelAccessor;
 
 import javax.swing.*;
 import java.util.*;

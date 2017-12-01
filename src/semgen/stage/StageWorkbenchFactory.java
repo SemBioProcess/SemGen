@@ -2,7 +2,7 @@ package semgen.stage;
 
 import semgen.stage.stagetasks.ProjectTask.ProjectCommandReceiver;
 import semgen.utilities.WorkbenchFactory;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 public class StageWorkbenchFactory extends WorkbenchFactory<StageWorkbench> {
 

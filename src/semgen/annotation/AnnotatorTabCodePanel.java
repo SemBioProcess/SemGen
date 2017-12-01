@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -37,7 +36,8 @@ import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTextArea;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 
 public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -129,12 +129,9 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				// SemSim model is in
 				if( ! srccodema.getFile().exists()){
 					String srcfilename = srccodema.getFile().getName();
-					File samedirfile = new File (
-							workbench.getModelAccessor().getFile().getParentFile().toString() + 
-							"/" + srcfilename);
 					
-					if(samedirfile.exists())
-						workbench.setModelAccessor(new ModelAccessor(samedirfile));
+					if(workbench.getModelAccessor().sharesDirectory(srcfilename))
+						workbench.setModelAccessor(FileAccessorFactory.getModelAccessor(workbench.getModelAccessor().getDirectoryPath() + "/" + srcfilename));
 				}
 				
 				String modelcode = srccodema.getModelasString();

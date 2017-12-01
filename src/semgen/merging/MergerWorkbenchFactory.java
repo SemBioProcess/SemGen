@@ -1,7 +1,7 @@
 package semgen.merging;
 
 import semgen.utilities.WorkbenchFactory;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 public class MergerWorkbenchFactory extends WorkbenchFactory<MergerWorkbench>{
 	

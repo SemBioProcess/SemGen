@@ -7,8 +7,8 @@ import com.google.gson.annotations.Expose;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
 import semgen.stage.stagetasks.ModelInfo;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 public class ModelExtractionGroup {
 	@Expose public Integer sourcemodelindex;

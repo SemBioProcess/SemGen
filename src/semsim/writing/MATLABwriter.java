@@ -48,7 +48,7 @@ public class MATLABwriter extends ModelWriter{
 	}
 	
 	@Override
-	protected boolean writeToStream(OutputStream stream) {
+	public boolean writeToStream(OutputStream stream) {
 				
 		outputter.setFormat(Format.getPrettyFormat());
 

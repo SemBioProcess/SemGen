@@ -11,8 +11,8 @@ import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 public class ModelAnnotationsBench extends Observable {
 	SemSimModel model;

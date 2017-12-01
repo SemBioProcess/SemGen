@@ -23,13 +23,12 @@ import semgen.annotation.workbench.routines.TermCollector;
 import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
-import semgen.utilities.file.SaveSemSimModel;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
 public class AnnotatorWorkbench extends Workbench implements Observer {
@@ -139,7 +138,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				
 		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
 			validateModelComposites();
-			SaveSemSimModel.writeToFile(semsimmodel, modelaccessor);			
+			modelaccessor.writeToFile(semsimmodel);			
 			setModelSaved(true);
 			return modelaccessor;
 		}
@@ -192,7 +191,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 		if (ma != null) {
 			validateModelComposites();
-			SaveSemSimModel.writeToFile(semsimmodel, ma);			
+			ma.writeToFile(semsimmodel);			
 		}
 	}
 	
@@ -214,9 +213,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			if(fileURI == null)
 				msg = msg + "[unsaved file]?";
 			
-			else if( ! modelaccessor.modelIsPartOfArchive())
-				msg = msg + modelaccessor.getFileName() + "?";
-			else msg = msg + modelaccessor.getFileName() + " in " + modelaccessor.getFileName() + "?";
+			else msg = msg + modelaccessor.getShortLocation() + "?";
 			
 			int returnval= JOptionPane.showConfirmDialog(null,
 					msg, title,

@@ -22,7 +22,7 @@ import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
 import semsim.SemSimObject;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 import java.net.URI;
 import java.awt.*;

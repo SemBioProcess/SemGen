@@ -24,6 +24,7 @@ import org.jdom.output.XMLOutputter;
 import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;

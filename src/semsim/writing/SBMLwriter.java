@@ -155,7 +155,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	@Override
-	protected boolean writeToStream(OutputStream stream) {
+	public boolean writeToStream(OutputStream stream) {
 		String outputstring = encodeModel();
 		if (outputstring == null) {
 			return false;

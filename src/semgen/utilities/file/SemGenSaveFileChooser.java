@@ -10,9 +10,10 @@ import javax.swing.JOptionPane;
 
 import org.jdom.Document;
 
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.JSimProjectFileReader;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
@@ -99,6 +100,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			type = "proj";
 			modeltype = ModelType.MML_MODEL_IN_PROJ;
 		}
+		else if(ModelType.OMEX_ARCHIVE.fileFilterMatches(getFileFilter())){
+			
+		}
 		else if(getFileFilter()==csvfilter){
 			type = "csv";
 		}
@@ -159,7 +163,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					if(modelname == null) return null;
 
 					overwriting = existingmodelnames.contains(modelname);
-					ma = new ModelAccessor(filetosave, modelname);
+					ma = FileAccessorFactory.getJSIMProjectAccessor(filetosave, modelname);
 				}
 				
 				// Otherwise we're saving to a standalone file
@@ -167,12 +171,11 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					
 				}
 				else{
-					ma = new ModelAccessor(getSelectedFile(), modeltype);
-					overwriting = ma.getFile().exists();
+					ma = FileAccessorFactory.getModelAccessor(filetosave, modeltype);
 				}
 				
 				// If we're overwriting a model...
-				if (overwriting) {
+				if (ma.isLocalFile()) {
 					String overwritemsg = "Overwrite " + ma.getFileName() + "?";
 					
 					int overwriteval = JOptionPane.showConfirmDialog(this,

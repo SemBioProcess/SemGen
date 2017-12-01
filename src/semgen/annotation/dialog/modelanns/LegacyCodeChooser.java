@@ -20,7 +20,8 @@ import org.xml.sax.SAXException;
 
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 
 public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		PropertyChangeListener {
@@ -60,7 +61,6 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 		URI uri = ma.getFileThatContainsModelAsURI();
 		
 		if(ma.modelIsOnline()) text = uri.toString();
-		else if(ma.modelIsPartOfArchive()) text = uri.getPath() + ModelAccessor.separator + uri.getFragment();
 		else text = uri.getPath();
 		txtfld.setText(text);
 	}
@@ -81,7 +81,7 @@ public class LegacyCodeChooser extends SemGenDialog implements ActionListener,
 	}
 
 	public ModelAccessor getCodeLocation() {
-		return new ModelAccessor(locationtoadd);
+		return FileAccessorFactory.getModelAccessor(locationtoadd);
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {

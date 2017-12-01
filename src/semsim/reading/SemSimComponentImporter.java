@@ -7,6 +7,8 @@ import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.SemSimLibrary;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -39,9 +41,9 @@ public class SemSimComponentImporter {
 			System.err.println(error);
 			return null;
 		}
-		ModelAccessor importedmodelaccessor = new ModelAccessor(importedmodelfile);
+		ModelAccessor importedmodelaccessor = FileAccessorFactory.getModelAccessor(importedmodelfile);
 		SemSimModel importedmodel = null;
-		ModelType modeltype = receivingmodelfile.getFileType();
+		ModelType modeltype = receivingmodelfile.getModelType();
 		if(modeltype == ModelType.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelaccessor).read();

@@ -11,7 +11,7 @@ import semgen.stage.stagetasks.StageTask.Task;
 import semgen.utilities.Workbench;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semgen.visualizations.WebBrowserCommandSenderGenerator;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 import java.util.ArrayList;
 import java.util.Observable;

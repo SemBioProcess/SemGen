@@ -372,7 +372,7 @@ public class MMLwriter extends ModelWriter{
 	}
 	
 	@Override
-	protected boolean  writeToStream(OutputStream stream) {
+	public boolean  writeToStream(OutputStream stream) {
 		
 		String output = encodeModel();
 		if (output == null) return false;

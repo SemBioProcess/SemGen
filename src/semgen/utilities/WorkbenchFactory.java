@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import semgen.menu.FileMenu;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 
 public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  implements Runnable {
 	protected ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();

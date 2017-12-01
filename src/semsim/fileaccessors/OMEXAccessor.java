@@ -1,4 +1,4 @@
-package semsim.reading;
+package semsim.fileaccessors;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 import semsim.reading.ModelClassifier.ModelType;
 
@@ -19,15 +22,14 @@ public class OMEXAccessor extends ModelAccessor {
 	protected ZipFile archive;
 	
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
-		super();
-		filepath = omexarchive.getPath();
+		super(omexarchive, ModelType.OMEX_ARCHIVE);
+		this.file = omexarchive;
 		archivedfile = new ModelAccessor(file, type);
 	}
 	
 	public OMEXAccessor(File omexarchive, File file, String fragment) {
-		super();
-		filepath = omexarchive.getPath();
-		archivedfile = new ModelAccessor(file, fragment);
+		super(omexarchive, ModelType.OMEX_ARCHIVE);
+		archivedfile = new JSIMProjectAccessor(file, fragment);
 	}
 
 	// Copy constructor
@@ -36,6 +38,7 @@ public class OMEXAccessor extends ModelAccessor {
 
 		archivedfile = new ModelAccessor(matocopy);
 	}
+	
 	@Override
 	public InputStream modelInStream() throws IOException {
 		archive = new ZipFile(filepath);
@@ -46,7 +49,7 @@ public class OMEXAccessor extends ModelAccessor {
 			ZipEntry current = entries.nextElement();
 			System.out.println(current.getName());
 		}
-		
+		path = path.substring(2, path.length());
 		ZipEntry entry = archive.getEntry(path);
 		return archive.getInputStream(entry);
 		
@@ -59,7 +62,20 @@ public class OMEXAccessor extends ModelAccessor {
 		return writer.toString();
 	}
 	
-	public String getName() {
+	public Document getJDOMDocument() {		
+		Document doc = null;
+		try{ 
+			InputStream instream = modelInStream();
+			SAXBuilder builder = new SAXBuilder();
+			doc = builder.build(instream);
+		}
+		catch(JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+		return doc;
+	}
+	
+	public String getModelName() {
 		return archivedfile.getFileName();
 	}
 	
@@ -74,8 +90,24 @@ public class OMEXAccessor extends ModelAccessor {
 		}
 	}
 	
-	public ModelType getFileType() {
-		return ModelType.OMEX_ARCHIVE;
+	// If the model is in a standalone file, the name of the file is returned
+	// otherwise a string with format [name of archive] > [name of model] is returned
+	public String getShortLocation(){
+		
+		return getFileName() + '>'  + getModelName();
+
+	}
+	
+	public String getDirectoryPath() {
+		return file.getPath();
+	}
+	
+	public ZipEntry getEntry() {
+		return new ZipEntry(file.getPath());
+	}
+	
+	public ModelType getModelType() {
+		return archivedfile.getModelType();
 	}
 	
 }

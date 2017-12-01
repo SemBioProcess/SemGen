@@ -1,6 +1,5 @@
 package semsim.writing;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -16,51 +15,46 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import semsim.SemSimLibrary;
 import semsim.definitions.RDFNamespace;
+import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.reading.JSimProjectFileReader;
-import semsim.reading.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
 
 public class JSimProjectFileWriter extends ModelWriter{
 
-	File outputProjectFile;
-	ModelAccessor outputModelAccessor;
+	private Document projdoc = null; 
 	String modelName;
-	XMLOutputter outputter;
-	SemSimRDFwriter rdfblock;
 	Element semsimControlElement;
-	String modelNamespace;
+	private JSIMProjectAccessor projaccessor;
 
 
-	public JSimProjectFileWriter(ModelAccessor modelaccessor, SemSimModel semsimmodel) {
+	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor modelaccessor) {
 		super(semsimmodel);
-		outputter = new XMLOutputter();
-		outputter.setFormat(Format.getPrettyFormat());
+
 		modelName = modelaccessor.getFileName();
-		outputProjectFile = modelaccessor.getFile();
-		outputModelAccessor = modelaccessor;
-		modelNamespace = semsimmodel.getNamespace();
+		projaccessor = modelaccessor;
+	}
+	
+	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor newlocation, JSIMProjectAccessor oldlocation) {
+		super(semsimmodel);
+
+		modelName = newlocation.getFileName();
+		projaccessor = newlocation;
 	}
 
 	@Override
-	public void writeToFile(ModelAccessor destination) {
-		
-	}
-	
 	public String encodeModel() {
-		
-		Document projdoc = null; 
-		boolean fromannotator = (semsimmodel.getLegacyCodeLocation() != null);
-		
+
 		// Create the project document.
 		Element modelel = null;
 
 		// If the file already exists...
-		if(fromannotator){
+		if(projaccessor.isLocalFile()){
 			
-			projdoc = ModelReader.getJDOMdocumentFromFile(outputProjectFile);
+			projdoc = projaccessor.getJDOMDocument();
 		
 			// If the model already exists in the project file, overwrite the model code
 			// and the SemSim annotation control element. This will preserve parsets, etc. for the 
@@ -84,11 +78,12 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		//...otherwise create a new empty project file, add model element and annotations.
 		else {
+			boolean fromannotator = (semsimmodel.getLegacyCodeLocation() != null);
 			projdoc = createEmptyProject();
 									
 			// If the model is to be copied from an existing file like using SaveAs in the Annotator, collect <model> element
 			// from legacy code location
-			if(fromannotator && semsimmodel.getLegacyCodeLocation().modelIsPartOfJSimProjectFile()){
+			if(fromannotator){
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file
@@ -120,7 +115,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		// a metaid in their URI fragments).
 		semsimmodel.setName(modelName);
 				
-		rdfblock = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
+		SemSimRDFwriter rdfblock = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
 		
 		// Write out model-level annotations
 		rdfblock.setRDFforModelLevelAnnotations();
@@ -145,6 +140,8 @@ public class JSimProjectFileWriter extends ModelWriter{
 		}
 		
 		if(projdoc != null){
+			XMLOutputter outputter = new XMLOutputter();
+			outputter.setFormat(Format.getPrettyFormat());
 			return  outputter.outputString(projdoc);
 		}
 		return null;

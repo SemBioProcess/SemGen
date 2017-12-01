@@ -2,8 +2,6 @@ package semsim.writing;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,8 +13,8 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelAccessor;
 
 public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;
@@ -31,20 +29,7 @@ public abstract class ModelWriter {
 		sslib = lib;
 	}
 	
-	public void writeToFile(ModelAccessor destination) {
-		FileOutputStream outstream;
-		try {
-			outstream = new FileOutputStream(destination.getFile());
-			writeToStream(outstream);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
-		
 	//Return whether write succeeded
-	protected abstract boolean writeToStream(OutputStream stream);
 	
 	protected boolean commitStringtoStream(OutputStream stream, String outputstring) {
 		OutputStreamWriter writer = new OutputStreamWriter(stream, Charset.defaultCharset());
@@ -59,6 +44,8 @@ public abstract class ModelWriter {
 	}
 	
 	public abstract String encodeModel();
+	
+	public abstract boolean writeToStream(OutputStream encodedmodel);
 	
 	public void writeToArchive(ModelAccessor archive) {
 		

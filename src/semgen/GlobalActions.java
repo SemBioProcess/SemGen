@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Set;
 
 import semgen.utilities.uicomponent.SemGenTab;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.ModelAccessor;
 /**
  * Class for notifying application level classes of requests and events 
  * from elsewhere in SemGen. Contains methods for passing a file

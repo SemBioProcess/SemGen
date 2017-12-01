@@ -24,7 +24,7 @@ import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.SubModelToolDrawer;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
-import semsim.reading.ModelAccessor;
+import semsim.fileaccessors.FileAccessorFactory;
 
 public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer> {
 	private static final long serialVersionUID = 1L;
@@ -188,7 +188,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 		if(e.getComponent() == loadsourcemodelbutton){
 			File file = workbench.getSourceSubmodelFile();
 			if(file.exists())
-				globalacts.NewAnnotatorTab(new ModelAccessor(file));
+				globalacts.NewAnnotatorTab(FileAccessorFactory.getModelAccessor(file));
 			else
 				JOptionPane.showMessageDialog(this, "Could not locate source file for this sub-model.", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}

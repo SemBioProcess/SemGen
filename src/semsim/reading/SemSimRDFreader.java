@@ -16,6 +16,8 @@ import semsim.SemSimObject;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -120,7 +122,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 			}
 			
 			else if (predicateURI.equals(SemSimModel.LEGACY_CODE_LOCATION_IRI.toURI())) {
-				ModelAccessor ma = new ModelAccessor(st.getObject().asLiteral().toString());
+				ModelAccessor ma = FileAccessorFactory.getModelAccessor(st.getObject().asLiteral().toString());
 				semsimmodel.setSourceFileLocation(ma);
 			}
 			
