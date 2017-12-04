@@ -2,13 +2,13 @@
 
 SemGen is an experimental software tool for automating the modular composition and decomposition of biosimulation models.
 
-SemGen facilitates the construction of complex, integrated models, and the swift extraction of reusable sub-models from larger ones. SemGen relies on the semantically-rich [SemSim model description format](http://sbp.bhi.washington.edu/projects/semsim) to help automate these modeling tasks. 
+SemGen facilitates the construction of complex, integrated models, and the swift extraction of reusable submodels from larger ones. SemGen relies on the semantically-rich [SemSim model description format](http://sbp.bhi.washington.edu/projects/semsim) to help automate these modeling tasks. 
 
 With SemGen, users can:
 
 - Visualize models using D3 force-directed networks,
 - Create SemSim versions of existing models and annotate them with rich semantic data,
-- Automatically decompose models into interoperable sub-models,
+- Automatically decompose models into interoperable submodels,
 - Semi-automatically merge models into more complex systems, and
 - Encode models in executable simulation formats.
 
@@ -47,7 +47,7 @@ In SemGen, the Project tab will be your main workspace:
 - **Search**: Hovering your cursor over the magnifying glass brings up the search bar. You can search for example models, or currently visualized nodes by typing in search terms. The search can be performed over the name, description, or the annotation.
 - **Project Actions**: The menu on the left side contains project-level actions. This menu can be collapsed/expanded by clicking the chevron on the left edge.
 - **Stage Options**: The menu on the right side contains visualization options, as well as additional information about the selected node. This menu can be collapsed/expanded by clicking the chevron on the right edge.
-- **Selection/Navigation**: The buttons in the top right corner toggle click-and-drag behavior between moving the visualization and selecting multiple nodes with a bounding box. Additionally, the mouse scroll wheel can be used to zoom in/out of the visualization.
+- **Selection/Navigation**: The buttons in the top right corner toggles click-and-drag between moving the visualization, and selecting multiple nodes. Additionally, the mouse scroll wheel can be used to zoom in/out of the visualization.
 
 ### Loading a model
 
@@ -114,23 +114,45 @@ Example: Suppose you are annotating a beta cell glycolysis model that includes a
 A detailed composite annotation would be:
 
 ```
-OPB:Chemical concentration <propertyOf> CHEBI:glucose <part_of> FMA:Portion of cytosol <part_of> FMA:Type B cell of pancreatic islet
+OPB:Chemical concentration <propertyOf> CHEBI:glucose <part_of> FMA:Portion of cytosol <part_of> FMA:Beta cell
 ```
 
-In this case we use the term Chemical concentration from the OPB for the physical property part of the annotation, and we compose the physical entity part by linking three concepts - one from ChEBI and two from the FMA. This example illustrates the post-coordinated nature of the SemSim approach to annotation and how it provides high expressivity for annotating model terms.
+In this case we use the term Chemical concentration from the OPB for the physical property part of the annotation, and we compose the physical entity part by linking four concepts - one from the OPB, one from ChEBI and two from the FMA. This example illustrates the post-coordinated nature of the SemSim approach to annotation and how it provides high expressivity for annotating model terms.
 
+The above example represents a very detailed composite annotation, however, such detail may not be necessary to disambiguate concepts in a given model. For example, there may not be any other portions of glucose within the model apart from that in the cytosol. In this case, one could use the first three terms in the composite annotation and still disambiguate the model codeword from the rest of the model's contents:
+
+```
+OPB:Chemical concentration <propertyOf> CHEBI:glucose
+```
+
+Although this annotation approach does not fully capture the biophysical meaning of the model codeword, SemGen is more likely to find semantic overlap between models if they use this shallower annotation style. This is mainly because the SemGen Merger tool currently only recognizes semantic equivalencies; it does not identify semantically similar terms in models that a user wants to integrate. Therefore, if a user wants to integrate our example glycolysis model with a TCA cycle model based on cardiac myocyte metabolism, the shallower approach would likely identify more semantic equivalencies than the more detailed approach.  
+
+Nonetheless, we recommend using the more detailed approach, given that future versions of SemGen will include a "Merging Wizard" that will identify and rank codewords that are semantically similar, not just semantically identical. 
 
 ### Extractor
 
-The Extractor tool provides ways to decompose SemSim models into sub-models. This decomposition process is useful if you want to "carve out" a smaller portion of a given model in order to remove extraneous model features.
+The Extractor tool provides ways to decompose SemSim models into submodels. This decomposition process is useful if you want to "carve out" a smaller portion of a given model in order to remove extraneous model features.
 
-*More on the new visualization-based Extractor coming soon...*
+1. Simply load a model and select one or more nodes you would like to extract by left-clicking. Multiple nodes can be selected by control+click (command+click on Mac), or by toggling *selection* in the top right corner.
+2. Right-click one of the selected nodes and click *Extract Selected*. In case you want to extract the majority of the model, it may be more convenient to select the nodes you do not wish to save in the extraction, and click *Extract Unselected*. ![](https://i.imgur.com/vEywONu.png)
+3. Enter a new name for the extracted nodes, and the newly extracted nodes will appear in SemGen. ![](https://i.imgur.com/Be6RSn8.png) ![](https://i.imgur.com/zSZzVqE.png)
+4. Extraction can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
+
 
 ### Merger
 
 The Merger tool helps automate the integration of two SemSim models. The Merger identifies the interface between two models by comparing the biological meaning of the models' codewords as expressed by their composite and singular annotations. If the two models share the same biological concept, the codewords representing this concept are mapped to each other and the user must decide which computational representation of the concept they want to preserve in the integrated model.
 
-*More on the new visualization-based Merger coming soon...*
+Below is an step-by-step example of a merge between a cardiovascular dynamics and a baroreceptor model:
+
+1. Load two models you would like to merge in SemGen. ![](https://i.imgur.com/PA2xoBd.png)
+2. Drag-and-drop one of the models on top of the other. SemGen will automatically find semantic overlaps between the two models. ![](https://i.imgur.com/vIS8lr0.png) ![](https://i.imgur.com/EHHzpmj.png)
+3. Click the panel to see more information about the codewords, and click the *Preview* button to visualize the local dependency network around those codewords.
+4. Indicate which computational representation of the concept you wish to preserve in the merged model. ![](https://i.imgur.com/hJjUmzj.png)
+5. Add manual mappings as necessary by selecting individual codewords from the bottom panels and clicking the *Add manual mapping* button.  ![](https://i.imgur.com/HrfHk1w.png) ![](https://i.imgur.com/Eqrq3Cy.png) Manual mappings can also be added visually by clicking *Visualize* and dragging-and-dropping a node onto another (blue link indicates exact semantic match, and yellow link indicates manual mapping). ![](https://i.imgur.com/nmZiBUH.png)
+6. Once you have indicated all of the merge resolution points, click *Resolve Merge Conflicts*. Resolve any duplicate code name or unit conversion conflicts. ![](https://i.imgur.com/FNp2P59.png)
+7. When finished, click *Merge* to save the new merged model!
+
 
 ## Authors
 
