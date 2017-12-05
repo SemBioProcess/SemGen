@@ -44,10 +44,6 @@ public class JSIMProjectAccessor extends ModelAccessor {
 		return new String(filepath + separator + fragment);
 	}
 	
-	@Override
-	public String getModelName() {
-		return new String(fragment);
-	}
 	
 	// If the model is in a standalone file, the name of the file is returned
 	// otherwise a string with format [name of archive] > [name of model] is returned
@@ -55,11 +51,10 @@ public class JSIMProjectAccessor extends ModelAccessor {
 		return fragment + '>'  + getFileName();
 	}
 	
-	
-	public ModelType getFileType() {
-		return ModelType.MML_MODEL_IN_PROJ;
+	public String getModelName() {
+		return fragment;
 	}
-	
+
 	public ModelType getModelType() {
 		return ModelType.MML_MODEL_IN_PROJ;
 	}

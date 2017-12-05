@@ -78,7 +78,7 @@ public class ExtractorWorkbench extends Workbench {
 		ModelAccessor ma = filec.SaveAsAction(model);
 		
 		if (ma != null) {
-			model.setName(ma.getFileName());
+			model.setName(ma.getModelName());
 			
 			ma.writeToFile(model);
 

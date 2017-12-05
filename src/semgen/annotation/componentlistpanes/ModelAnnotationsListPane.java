@@ -150,7 +150,7 @@ public class ModelAnnotationsListPane extends SemGenScrollPane implements Observ
 			target = targ;
 		}
 		
-		public void mouseClicked(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 			focus = metadataarray.indexOf(target);
 			metadatabench.notifyOberserversofMetadataSelection(focus);
 			assignFocus();

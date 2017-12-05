@@ -27,18 +27,15 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
-import semsim.reading.ModelClassifier.ModelType;
 
 public class SemSimRDFreader extends AbstractRDFreader{
 
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
 	protected ModelAccessor modelaccessor;
 
-	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, ModelType modeltype, SemSimLibrary sslibrary) {
+	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, SemSimLibrary sslibrary) {
 		super(accessor, semsimmodel, sslibrary);
-		
-		this.modeltype = modeltype;
-		
+				
 		if(rdfasstring!=null){
 			readStringToRDFmodel(rdf, rdfasstring);
 			createSemSimSubmodelURIandObjectMap();
@@ -47,7 +44,13 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		//If an explicit namespace is specified with the "model" prefix, use it
 		semsimmodel.setNamespace(getModelNamespaceFromRDF());
 	}
+	
+	
+	protected boolean isCASAreader(){
+		return false;
+	}
 
+	
 	private void createSemSimSubmodelURIandObjectMap(){
 		
 		ResIterator subit = rdf.listSubjectsWithProperty(SemSimRelation.HAS_NAME.getRDFproperty());

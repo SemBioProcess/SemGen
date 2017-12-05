@@ -174,7 +174,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				lastsavedas = ModelType.CELLML_MODEL;
 				
 			saveModel(0);
-			semsimmodel.setName(modelaccessor.getFileName());
+			semsimmodel.setName(modelaccessor.getModelName());
 			
 			return modelaccessor;
 		}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipException;
@@ -16,9 +17,11 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.XMLOutputter;
+import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -79,7 +82,6 @@ import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SBMLwriter;
 
@@ -107,7 +109,6 @@ public class SBMLreader extends ModelReader{
 		super(accessor);
 	}
 	
-	// TODO: new constructor with an accessor and a String argument that provides the RDF from the CASA file?
 
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
@@ -129,7 +130,6 @@ public class SBMLreader extends ModelReader{
 			addErrorToModel("SBML-to-SemSim conversion for SBML level 1 models not yet supported");
 			return semsimmodel;
 		}
-		
 		
 		
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);		
@@ -173,8 +173,26 @@ public class SBMLreader extends ModelReader{
 		// If from an archive, read in the annotations on the SBML physical components using
 		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
 		// in the collectReactions and collectParameters functions.
+		try {
+			String existingrdf = collectSemSimRDF(); // For SemSim-specific RDF annotations
+			rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, existingrdf, sslib);
+			
+			if(rdfreader.isCASAreader()){
 				
-		collectSemSimRDF(); // For SemSim-specific RDF annotations (need to determine first if annotations are CASA or SemSim)
+				List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
+				annotablestuff.addAll(sbmlmodel.getListOfCompartments());
+				annotablestuff.addAll(sbmlmodel.getListOfSpecies());
+				annotablestuff.addAll(sbmlmodel.getListOfReactions());
+				annotablestuff.addAll(sbmlmodel.getListOfParameters());
+				
+				for(AbstractNamedSBase ansbase : annotablestuff){
+					((CASAreader)rdfreader).getAnnotationsForPhysicalComponent(ansbase);
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		}
+		
 		
 		collectModelLevelData();
 		setBaseUnits();
@@ -1164,7 +1182,8 @@ public class SBMLreader extends ModelReader{
 	 * @throws IOException 
 	 * @throws ZipException 
 	 */
-	private void collectSemSimRDF() throws ZipException, IOException{
+
+	private String collectSemSimRDF() throws ZipException, IOException{
 		Document projdoc = modelaccessor.getJDOMDocument();
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
@@ -1192,7 +1211,8 @@ public class SBMLreader extends ModelReader{
 				}
 			}
 		}
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, ModelType.SBML_MODEL, sslib);
+
+		return rdfstring;
 	}
 	
 	

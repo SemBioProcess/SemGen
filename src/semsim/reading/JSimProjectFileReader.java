@@ -15,7 +15,6 @@ import org.jdom.output.XMLOutputter;
 import semsim.SemSimLibrary;
 import semsim.fileaccessors.JSIMProjectAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelClassifier.ModelType;
 
 public class JSimProjectFileReader {
 	
@@ -25,7 +24,7 @@ public class JSimProjectFileReader {
 	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, JSIMProjectAccessor ma,SemSimLibrary sslib){
 
 			Document projdoc = ma.getJDOMDocument();
-			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());
+			Element ssael = getSemSimControlElementForModel(projdoc, ma.getFileName());
 			
 			// If there are no semsim annotations associated with the model, return false
 			if(ssael != null){
@@ -35,7 +34,7 @@ public class JSimProjectFileReader {
 				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				
-				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), ModelType.MML_MODEL_IN_PROJ, sslib);
+				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), sslib);
 				
 				rdfreader.getModelLevelAnnotations();
 				rdfreader.getAllDataStructureAnnotations();

@@ -12,7 +12,6 @@ import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 import semsim.fileaccessors.FileAccessorFactory;
-import semsim.fileaccessors.JSIMProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelReader;
@@ -89,7 +88,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 				
 				ArrayList<String> modelnames = new ArrayList<String>();
 				for (ModelAccessor omexmodel : models) {
-					modelnames.add(omexmodel.getModelName());
+					modelnames.add(omexmodel.getFileName());
 				}
 				
 				

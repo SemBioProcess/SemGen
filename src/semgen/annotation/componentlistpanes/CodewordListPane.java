@@ -76,11 +76,14 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
+		public void mousePressed(MouseEvent arg0) {
 			changeButtonFocus(this);
 			if (arg0.getSource()==humdeflabel) {
 				workbench.requestFreetextChange();
 			}
 		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {}
 	}
 }

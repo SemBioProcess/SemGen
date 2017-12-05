@@ -1,15 +1,10 @@
 package semsim.reading;
 
-import java.io.IOException;
 import java.net.URI;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
-import org.semanticweb.owlapi.model.OWLException;
-
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -17,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimLibrary;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -28,28 +24,31 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.AbstractRDFwriter;
 
 public class CASAreader extends AbstractRDFreader{
 
-	CASAreader(ModelAccessor accessor,  SemSimModel model, String rdfstring, ModelType type, SemSimLibrary sslibrary) {
-		super(accessor, model, sslibrary);
+	public CASAreader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
+		super(ma, semsimmodel, lib);
 		
 		if(rdfstring!=null)
 			readStringToRDFmodel(rdf, rdfstring);
 		
-		this.modeltype = type;
+		this.semsimmodel = semsimmodel;
 		this.modelNamespaceIsSet = false;
 	}
 
+	
+	protected boolean isCASAreader(){
+		return true;
+	}
 
+	
 	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
 		
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
 		Resource res = rdf.getResource(TEMP_NAMESPACE + "#" + metaid);
-		
 		Qualifier[] qualifiers = Qualifier.values();
 		
 		for(int i=0;i<qualifiers.length;i++){
@@ -57,16 +56,21 @@ public class CASAreader extends AbstractRDFreader{
 			Qualifier q = qualifiers[i];
 			
 			if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-				NodeIterator nodeit = rdf.listObjectsOfProperty(res, SemSimRelations.getRelationFromBiologicalQualifier(q).getRDFproperty());
 				
-				while(nodeit.hasNext()){
-					RDFNode nextnode = nodeit.next();
-					Resource objres = nextnode.asResource();
-					CVTerm cvterm = new CVTerm();
-					cvterm.setQualifier(q);
-					String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
-					cvterm.addResourceURI(uriasstring);
-					sbaseobj.addCVTerm(cvterm);
+				Relation relation = SemSimRelations.getRelationFromBiologicalQualifier(q);
+				
+				if(relation != null){
+					NodeIterator nodeit = rdf.listObjectsOfProperty(res, relation.getRDFproperty());
+					
+					while(nodeit.hasNext()){
+						RDFNode nextnode = nodeit.next();
+						Resource objres = nextnode.asResource();
+						CVTerm cvterm = new CVTerm();
+						cvterm.setQualifier(q);
+						String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
+						cvterm.addResourceURI(uriasstring);
+						sbaseobj.addCVTerm(cvterm);
+					}
 				}
 			}
 		}

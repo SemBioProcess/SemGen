@@ -66,13 +66,13 @@ public class LoadSemSimModel extends SemGenJob {
 				break;
 			
 			case CELLML_MODEL:
-				CellMLreader reader = new CellMLreader(modelaccessor);
-				semsimmodel = reader.read();
+				CellMLreader cellmlreader = new CellMLreader(modelaccessor);
+				semsimmodel = cellmlreader.read();
 				
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
-				boolean previouslyannotated = (reader.rdfblock.rdf.getNsPrefixURI("semsim") != null
-						|| reader.rdfblock instanceof CASAreader);
+				boolean previouslyannotated = (cellmlreader.rdfreader.rdf.getNsPrefixURI("semsim") != null
+						|| cellmlreader.rdfreader instanceof CASAreader);
 				
 				// If the model wasn't previously annotated in SemGen and autoannotate is turned on,
 				// perform auto-annotation
@@ -118,7 +118,7 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				return;
 			}
-			semsimmodel.setName(modelaccessor.getFileName());
+			semsimmodel.setName(modelaccessor.getModelName());
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}

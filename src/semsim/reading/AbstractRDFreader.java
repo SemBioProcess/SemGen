@@ -7,9 +7,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -29,6 +30,7 @@ import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -57,10 +59,11 @@ public abstract class AbstractRDFreader {
 	protected ModelAccessor modelaccessor;
 	
 	
-	AbstractRDFreader(ModelAccessor accessor,  SemSimModel model, SemSimLibrary sslibrary){
+	public AbstractRDFreader(ModelAccessor accessor,  SemSimModel model, SemSimLibrary sslibrary){
 		semsimmodel = model;
 		modelaccessor = accessor;
 		sslib = sslibrary;
+		modeltype = accessor.getModelType();
 	}
 
 	// Abstract methods
@@ -68,6 +71,7 @@ public abstract class AbstractRDFreader {
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);
 	abstract protected void getAllSemSimSubmodelAnnotations();
+	abstract protected boolean isCASAreader();
 	
 	// Read a string into an RDF model
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring){
@@ -337,6 +341,70 @@ public abstract class AbstractRDFreader {
 		
 		return returnent;
 	}
+	
+	
+	
+	
+	
+	// Remove all semsim-related content from the main RDF block
+	// It gets replaced, if needed, on write out
+	public static Model stripSemSimRelatedContentFromRDFblock(Model rdf, SemSimModel thesemsimmodel){
+		
+		// Currently getting rid of anything with semsim predicates
+		// and descriptions on variables and components
+		// AND
+		// * part-of statements for physical entities (prbly need to assign metaids to physical entities)
+		// * isVersionOf statements on custom terms
+		// * has-part statements on custom terms
+		// Test to make sure we're not preserving extraneous stuff in CellMLRDFmarkup block
+		// within SemSim models (test with all kinds of anns)
+		// MAYBE THE RIGHT WAY TO DO THIS IS TO USE THE METAIDS/??
+		
+		Iterator<Statement> stit = rdf.listStatements();
+		List<Statement> listofremovedstatements = new ArrayList<Statement>();
+		
+		// Go through all statements in RDF
+		while(stit.hasNext()){
+			Statement st = (Statement) stit.next();
+			String rdfprop = st.getPredicate().getURI();
+			
+			// Flag any statement that uses a predicate with a semsim namespace for removal
+			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())
+					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
+					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
+					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
+					|| rdfprop.equals(StructuralRelation.BQB_HAS_PART.getURIasString())  // Adding in the BQB structural relations here for good measure, even though we're not currently using them
+					|| rdfprop.equals(StructuralRelation.BQB_IS_PART_OF.getURIasString())){
+				listofremovedstatements.add(st);
+				continue;
+			}
+			
+			Resource subject = st.getSubject();
+			
+			if(subject.getURI() != null){
+				
+				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
+					
+					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
+					SemSimObject sso = thesemsimmodel.getModelComponentByMetadataID(subject.getLocalName());
+					
+					if (sso!=null){
+						
+						// Remove dc:description statements (do not need to preserve these)
+						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
+							listofremovedstatements.add(st);
+					}
+				}
+			}
+			
+		}
+		
+		rdf.remove(listofremovedstatements);
+		
+		return rdf;
+	}
+	
+	
 
 
 	
