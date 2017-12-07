@@ -133,7 +133,10 @@ Nonetheless, we recommend using the more detailed approach, given that future ve
 
 The Extractor tool provides ways to decompose SemSim models into submodels. This decomposition process is useful if you want to "carve out" a smaller portion of a given model in order to remove extraneous model features.
 
-1. Simply load a model and select one or more nodes you would like to extract by left-clicking. Multiple nodes can be selected by control+click (command+click on Mac), or by toggling *selection* in the top right corner.
+Below is an step-by-step example of an extraction:
+
+
+1. Load a model and select one or more nodes you would like to extract by left-clicking. Multiple nodes can be selected by control+click (command+click on Mac), or by toggling *selection* in the top right corner.
 2. Right-click one of the selected nodes and click *Extract Selected*. In case you want to extract the majority of the model, it may be more convenient to select the nodes you do not wish to save in the extraction, and click *Extract Unselected*. ![](https://i.imgur.com/vEywONu.png)
 3. Enter a new name for the extracted nodes, and the newly extracted nodes will appear in SemGen. ![](https://i.imgur.com/Be6RSn8.png) ![](https://i.imgur.com/zSZzVqE.png)
 4. Extraction can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
@@ -146,10 +149,10 @@ The Merger tool helps automate the integration of two SemSim models. The Merger 
 Below is an step-by-step example of a merge between a cardiovascular dynamics and a baroreceptor model:
 
 1. Load two models you would like to merge in SemGen. ![](https://i.imgur.com/PA2xoBd.png)
-2. Drag-and-drop one of the models on top of the other. SemGen will automatically find semantic overlaps between the two models. ![](https://i.imgur.com/vIS8lr0.png) ![](https://i.imgur.com/EHHzpmj.png)
-3. Click the panel to see more information about the codewords, and click the *Preview* button to visualize the local dependency network around those codewords.
+2. Drag-and-drop one of the models on top of the other. SemGen will automatically find semantic overlaps between the two models. ![](https://i.imgur.com/vIS8lr0.png)
+3. Click the panel to see more information about the codewords. Click the *Preview* button to visualize what the local dependency network would look like for the merged model using each computational representation. ![](https://i.imgur.com/EHHzpmj.png)
 4. Indicate which computational representation of the concept you wish to preserve in the merged model. ![](https://i.imgur.com/hJjUmzj.png)
-5. Add manual mappings as necessary by selecting individual codewords from the bottom panels and clicking the *Add manual mapping* button.  ![](https://i.imgur.com/HrfHk1w.png) ![](https://i.imgur.com/Eqrq3Cy.png) Manual mappings can also be added visually by clicking *Visualize* and dragging-and-dropping a node onto another (blue link indicates exact semantic match, and yellow link indicates manual mapping). ![](https://i.imgur.com/nmZiBUH.png)
+5. If SemGen did not include all of the merge points, you can manually add mappings by selecting individual codewords from the bottom panels and clicking the *Add manual mapping* button.  ![](https://i.imgur.com/HrfHk1w.png) ![](https://i.imgur.com/Eqrq3Cy.png) Manual mappings can also be added visually by clicking *Visualize* and dragging-and-dropping a node onto another (blue link indicates exact semantic match, and yellow link indicates manual mapping). ![](https://i.imgur.com/nmZiBUH.png)
 6. Once you have indicated all of the merge resolution points, click *Resolve Merge Conflicts*. Resolve any duplicate code name or unit conversion conflicts. ![](https://i.imgur.com/FNp2P59.png)
 7. When finished, click *Merge* to save the new merged model!
 
