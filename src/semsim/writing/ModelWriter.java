@@ -13,7 +13,6 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
-import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 
 public abstract class ModelWriter {
@@ -46,11 +45,7 @@ public abstract class ModelWriter {
 	public abstract String encodeModel();
 	
 	public abstract boolean writeToStream(OutputStream encodedmodel);
-	
-	public void writeToArchive(ModelAccessor archive) {
-		
-	}
-	
+
 	public static Content makeXMLContentFromString(String xml){
 		try {
 			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
@@ -62,20 +57,4 @@ public abstract class ModelWriter {
 		} 
 	}
 	
-//	/**
-//	 * Write a string to a file
-//	 *  @param content The string to write out
-//	 *  @param outputfile The file to which the string will be written
-//	 */
-//	public static void writeStringToFile(OutputStream content, File outputfile){
-//		if(content!=null && (content!=null) && outputfile!=null){
-//			try {
-//				PrintWriter pwriter = new PrintWriter(new FileWriter(outputfile));
-//				pwriter.print(content);
-//				pwriter.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 }

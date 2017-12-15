@@ -168,6 +168,13 @@ public class ModelClassifier {
 		return ModelType.UNKNOWN;
 	}
 	
+	public static ModelType getTypebyExtension(String extension) {
+		for (ModelType type : ModelType.values()) {
+			if (type.extension.matches(extension)) return type;
+		}
+		return ModelType.UNKNOWN;
+	}
+	
 	public static boolean hasValidOMEXmodelFileFormat(String format) {
 		return format.matches(".*/sbml.*$") || format.endsWith("cellml");
 	}

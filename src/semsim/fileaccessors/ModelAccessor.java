@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -168,15 +170,20 @@ public class ModelAccessor {
 			
 	}
 
-		public void writeToFile(SemSimModel model) {
+		public void writetoFile(SemSimModel model) {
 			ModelWriter writer = makeWriter(model);
 			FileOutputStream outstream;
 			try {
 				outstream = new FileOutputStream(getFile());
 				writer.writeToStream(outstream);
-			} catch (FileNotFoundException e) {
+				PrintWriter pwriter = new PrintWriter(new FileWriter(file));
+				pwriter.print(outstream);
+				pwriter.close();
+			} catch (IOException e) {
 				e.printStackTrace();
+				SemGen.logfilewriter.println(getShortLocation() + " write failed.");
 			}
+			
 			SemGen.logfilewriter.println(getShortLocation() + " was saved");
 			
 		}

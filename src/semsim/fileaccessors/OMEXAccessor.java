@@ -11,7 +11,6 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
 import org.apache.commons.io.IOUtils;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -27,8 +26,9 @@ import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.CASAreader;
 import semsim.reading.OMEXManifestreader;
-import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.writing.ModelWriter;
+import semsim.writing.OMEXArchiveWriter;
 import semsim.writing.SemSimRDFwriter;
 
 public class OMEXAccessor extends ModelAccessor {
@@ -149,10 +149,7 @@ public class OMEXAccessor extends ModelAccessor {
 		archive.close();
 		return null;
 	}
-	
 
-
-	
 	// If the model is in a standalone file, the name of the file is returned
 	// otherwise a string with format [name of archive] > [name of model] is returned
 	public String getShortLocation(){
@@ -177,8 +174,18 @@ public class OMEXAccessor extends ModelAccessor {
 		return new ZipEntry(file.getPath());
 	}
 	
+	@Override
+	public void writetoFile(SemSimModel model) {
+		ModelWriter writer = makeWriter(model);
+		OMEXArchiveWriter omexwriter = new OMEXArchiveWriter(writer);
+		omexwriter.appendOMEXArchive(this);
+	}
+	
 	public ModelType getModelType() {
 		return archivedfile.getModelType();
+	}
+	protected ModelWriter makeWriter(SemSimModel semsimmodel) {
+		return archivedfile.makeWriter(semsimmodel);
 	}
 	
 }

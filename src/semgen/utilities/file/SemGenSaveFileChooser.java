@@ -21,8 +21,8 @@ import semsim.reading.ModelReader;
 public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 	private String modelInArchiveName;
-	private static String[] ALL_ANNOTATABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj"};
-	public static String[] ALL_WRITABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "mod"};
+	private static String[] ALL_ANNOTATABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "omex"};
+	public static String[] ALL_WRITABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "mod, omex"};
 	
 	public SemGenSaveFileChooser() {
 		super("Choose save location");
@@ -101,7 +101,8 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			modeltype = ModelType.MML_MODEL_IN_PROJ;
 		}
 		else if(ModelType.OMEX_ARCHIVE.fileFilterMatches(getFileFilter())){
-			
+			type = "omex";
+			modeltype = ModelType.OMEX_ARCHIVE;
 		}
 		else if(getFileFilter()==csvfilter){
 			type = "csv";
@@ -168,14 +169,21 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				
 				// Otherwise we're saving to a standalone file
 				else if (modeltype==ModelType.OMEX_ARCHIVE) {
+					OMEXSaveDialog omexdialog = new OMEXSaveDialog();
+					String name = omexdialog.getModelName();
+					if (name.isEmpty()) return null;
 					
+					ModelType archivedmodeltype = ModelClassifier.getTypebyExtension(omexdialog.getFormat());
+					File modelfile = new File("model/" + name + archivedmodeltype.getExtension());
+					ma = FileAccessorFactory.getOMEXArchive(filetosave, modelfile, archivedmodeltype);
 				}
 				else{
 					ma = FileAccessorFactory.getModelAccessor(filetosave, modeltype);
+					overwriting = ma.isLocalFile();
 				}
 				
 				// If we're overwriting a model...
-				if (ma.isLocalFile()) {
+				if (overwriting) {
 					String overwritemsg = "Overwrite " + ma.getFileName() + "?";
 					
 					int overwriteval = JOptionPane.showConfirmDialog(this,
@@ -209,7 +217,6 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	

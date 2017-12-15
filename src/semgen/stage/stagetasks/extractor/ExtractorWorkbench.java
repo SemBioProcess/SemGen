@@ -66,7 +66,7 @@ public class ExtractorWorkbench extends Workbench {
 		ModelAccessor ma = modelaccessorlist.get(index);
 		if (ma == null) ma = saveModelAs(index);
 		else {
-			ma.writeToFile(extractions.get(index));
+			ma.writetoFile(extractions.get(index));
 		}
 		return ma;
 	}
@@ -74,13 +74,13 @@ public class ExtractorWorkbench extends Workbench {
 	@Override
 	public ModelAccessor saveModelAs(Integer index) {
 		SemSimModel model = extractions.get(index);
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml", "omex"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(model);
 		
 		if (ma != null) {
 			model.setName(ma.getModelName());
 			
-			ma.writeToFile(model);
+			ma.writetoFile(model);
 
 			model.setSourceFileLocation(ma);
 		}

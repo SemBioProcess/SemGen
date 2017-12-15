@@ -294,7 +294,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
 				if (ma != null)	{			
-					ma.writeToFile(modelinfo.Model);	
+					ma.writetoFile(modelinfo.Model);	
 				}
 			}
 			else {

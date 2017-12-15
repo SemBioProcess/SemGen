@@ -138,7 +138,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				
 		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
 			validateModelComposites();
-			modelaccessor.writeToFile(semsimmodel);			
+			modelaccessor.writetoFile(semsimmodel);			
 			setModelSaved(true);
 			return modelaccessor;
 		}
@@ -155,7 +155,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
 		else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
 		
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "cellml", "sbml","proj"}, selectedtype, semsimmodel.getName());
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "cellml", "sbml","proj", "omex"}, selectedtype, semsimmodel.getName());
 		
 		ModelAccessor newaccessor = filec.SaveAsAction(semsimmodel);
 
@@ -191,7 +191,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 
 		if (ma != null) {
 			validateModelComposites();
-			ma.writeToFile(semsimmodel);			
+			ma.writetoFile(semsimmodel);
 		}
 	}
 	

@@ -338,7 +338,7 @@ public class MergerWorkbench extends Workbench {
 					return;
 				}
 				
-				target.writeToFile(mergedmodel);
+				target.writetoFile(mergedmodel);
 				
 				LoadSemSimModel loader = new LoadSemSimModel(target, false);
 				loader.run();
@@ -375,7 +375,7 @@ public class MergerWorkbench extends Workbench {
 		if (modelaccessorlist.size() >= 3) {
 			
 			if(modelaccessorlist.get(2) != null){
-				modelaccessorlist.get(2).writeToFile(mergedmodel);
+				modelaccessorlist.get(2).writetoFile(mergedmodel);
 				setModelSaved(true);
 				return  modelaccessorlist.get(2);
 			}
@@ -385,7 +385,7 @@ public class MergerWorkbench extends Workbench {
 
 	@Override
 	public ModelAccessor saveModelAs(Integer index) {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml", "omex"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction(mergedmodel);
 		if (ma != null) {
 			target = ma;
@@ -396,7 +396,7 @@ public class MergerWorkbench extends Workbench {
 	}
 	
 	public boolean selectMergeFileLocation() {
-		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml"}, "owl");
+		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(new String[]{"owl", "proj", "cellml", "sbml", "omex"}, "owl");
 		ModelAccessor ma = filec.SaveAsAction();
 		if (ma==null) return false;
 		target = ma;
@@ -413,7 +413,7 @@ public class MergerWorkbench extends Workbench {
 			}
 			mergedmodel.setName(target.getModelName());
 			
-			target.writeToFile(mergedmodel);
+			target.writetoFile(mergedmodel);
 			if (modelaccessorlist.size() != 3) {
 				modelaccessorlist.add(null);
 			}
