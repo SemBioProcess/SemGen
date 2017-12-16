@@ -74,13 +74,13 @@ public abstract class AbstractRDFreader {
 	abstract protected boolean isCASAreader();
 	
 	// Read a string into an RDF model
-	public static void readStringToRDFmodel(Model rdf, String rdfasstring){
+	public static void readStringToRDFmodel(Model rdf, String rdfasstring, String namespace){
 		
 		try {
 			InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
 			RDFReader reader = rdf.getReader();
 			reader.setProperty("relativeURIs","same-document,relative");
-			reader.read(rdf, stream, TEMP_NAMESPACE);
+			reader.read(rdf, stream, namespace);
 		} 
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

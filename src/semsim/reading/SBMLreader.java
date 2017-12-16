@@ -59,6 +59,7 @@ import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
@@ -175,20 +176,34 @@ public class SBMLreader extends ModelReader{
 		// in the collectReactions and collectParameters functions.
 		try {
 			String existingrdf = collectSemSimRDF(); // For SemSim-specific RDF annotations
-			rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, existingrdf, sslib);
 			
-			if(rdfreader.isCASAreader()){
+			// If a standalone SBML model, reader should just be a SemSimRDFreader
+			
+			if(modelaccessor instanceof OMEXAccessor){
 				
-				List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
-				annotablestuff.addAll(sbmlmodel.getListOfCompartments());
-				annotablestuff.addAll(sbmlmodel.getListOfSpecies());
-				annotablestuff.addAll(sbmlmodel.getListOfReactions());
-				annotablestuff.addAll(sbmlmodel.getListOfParameters());
+				rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, existingrdf, sslib);
 				
-				for(AbstractNamedSBase ansbase : annotablestuff){
-					((CASAreader)rdfreader).getAnnotationsForPhysicalComponent(ansbase);
+				if(rdfreader != null){
+					
+					if(rdfreader.isCASAreader()){
+										
+						List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
+						annotablestuff.addAll(sbmlmodel.getListOfCompartments());
+						annotablestuff.addAll(sbmlmodel.getListOfSpecies());
+						annotablestuff.addAll(sbmlmodel.getListOfReactions());
+						annotablestuff.addAll(sbmlmodel.getListOfParameters());
+						
+						for(AbstractNamedSBase ansbase : annotablestuff){
+							for(int cv=0; cv<ansbase.getCVTermCount(); cv++) ansbase.removeCVTerm(cv); // Strip existing CV terms that were in SBML code 
+							
+							((CASAreader)rdfreader).getAnnotationsForPhysicalComponent(ansbase);
+						}
+					}
 				}
 			}
+			else rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, null, sslib);
+			
+			
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		}

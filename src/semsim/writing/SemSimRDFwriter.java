@@ -54,7 +54,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		initialize(semsimmodel);
 		
 		if(rdfasstring!=null){
-			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring);
+			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring, SemSimRDFreader.TEMP_NAMESPACE);
 			
 			if(modeltype.equals(ModelType.CELLML_MODEL))
 				rdf.removeNsPrefix("model"); // In case old RDF with a declared namespace is present (older CellML models)
