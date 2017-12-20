@@ -7,7 +7,6 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.jdom.Attribute;
@@ -21,20 +20,11 @@ import semsim.fileaccessors.OMEXAccessor;
 
 public class OMEXManifestreader {
 
-	ZipFile archive;
-	File omexfile;
-	
-	
-	public OMEXManifestreader(File file) throws ZipException, IOException {
-		omexfile = file;
-		archive = new ZipFile(file);
-		
-	}
 	
 	@SuppressWarnings("unchecked")
-	public ArrayList<Element> getManifestEntries() throws JDOMException, IOException {
+	public static ArrayList<Element> getManifestEntries(ZipFile zarchive, File arcfile) throws JDOMException, IOException {
 			
-	    Enumeration<? extends ZipEntry> entries = archive.entries();
+	    Enumeration<? extends ZipEntry> entries = zarchive.entries();
 			    ZipEntry entry = null;
 			    while(entries.hasMoreElements()){
 			        entry = entries.nextElement();
@@ -42,7 +32,7 @@ public class OMEXManifestreader {
 			    }
 			    if (entry==null) throw new InvalidObjectException("Missing Manifest");
 			   
-			    InputStream stream = archive.getInputStream(entry);
+			    InputStream stream = zarchive.getInputStream(entry);
 		        Document doc = new SAXBuilder().build(stream);
 		        Element child = doc.getRootElement();//.getChild("omexManifest");
 		        ArrayList<Element> children = new ArrayList<Element>(child.getChildren());
@@ -53,7 +43,7 @@ public class OMEXManifestreader {
 		        	Attribute format = content.getAttribute("format");
 		        	if (ModelClassifier.hasValidFileExtension(location.getValue(), format.getValue())) {
 		   
-		        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(format.getValue())));
+		        		accessors.add(new OMEXAccessor(arcfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(format.getValue())));
 		        	}
 		        	
 		        }
@@ -65,8 +55,8 @@ public class OMEXManifestreader {
 	}
 	
 	// Return all valid model files in archive (SBML and CellML for now)
-	public ArrayList<ModelAccessor> getModelsInArchive() throws JDOMException, IOException{
-		ArrayList<Element> manifestelements = getManifestEntries();
+	public static ArrayList<ModelAccessor> getModelsInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
+		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
 		
 		 ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
 	        for (Element content : manifestelements) {
@@ -85,8 +75,8 @@ public class OMEXManifestreader {
 	}
 	
 	// Return all valid annotation files in archive, including CASA files
-	public ArrayList<ModelAccessor> getAnnotationFilesInArchive() throws JDOMException, IOException{
-		ArrayList<Element> manifestelements = getManifestEntries();
+	public static ArrayList<ModelAccessor> getAnnotationFilesInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
+		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
 		
 		 ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
 	        for (Element content : manifestelements) {
@@ -103,14 +93,21 @@ public class OMEXManifestreader {
 		return accessors;
 	}
 	
-	
-	public void close() {
-		try {
-			archive.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static boolean archiveContainsModelFile(ZipFile archive, File omexfile, File modelfile) throws JDOMException, IOException {
+		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
+        for (Element content : manifestelements) {
+        	Attribute format = content.getAttribute("format");
+        	String formvalue = format.getValue().toLowerCase();
+        	
+        	// Only return files with valid SBML or CellML extensions for now
+        	if (ModelClassifier.hasValidOMEXmodelFileFormat(formvalue)) {
+        		
+        		Attribute location = content.getAttribute("location");
+        		if (location.getValue().matches(omexfile.getPath())) return true;
+        	}
+        }
+
+		return false;
 	}
-	
 
 }

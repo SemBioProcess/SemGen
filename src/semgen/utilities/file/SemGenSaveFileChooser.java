@@ -17,6 +17,7 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
+import semsim.reading.OMEXManifestreader;
 
 public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -175,6 +176,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					
 					ModelType archivedmodeltype = ModelClassifier.getTypebyExtension(omexdialog.getFormat());
 					File modelfile = new File("model/" + name + archivedmodeltype.getExtension());
+
 					ma = FileAccessorFactory.getOMEXArchive(filetosave, modelfile, archivedmodeltype);
 				}
 				else{

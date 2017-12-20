@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.zip.ZipFile;
+
 import javax.swing.JFileChooser;
 import javax.xml.parsers.ParserConfigurationException;
 import org.jdom.Document;
@@ -79,8 +81,9 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 		
 		if (file.exists() && file.getName().toLowerCase().endsWith(".omex")) {
 			try {
-				OMEXManifestreader omexreader = new OMEXManifestreader(file);
-				ArrayList<ModelAccessor> models = omexreader.getModelsInArchive();
+				ZipFile zfile = new ZipFile(file);
+
+				ArrayList<ModelAccessor> models = OMEXManifestreader.getModelsInArchive(zfile, file);
 				if (models.size()==1) {
 					modelaccessors.add(models.get(0));
 					return modelaccessors;

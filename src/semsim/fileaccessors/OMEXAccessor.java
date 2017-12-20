@@ -106,11 +106,10 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	public CASAreader getAssociatedCASAFile(SemSimModel semsimmodel, SemSimLibrary sslib) throws ZipException, IOException, JDOMException {
-		OMEXManifestreader OMEXreader = new OMEXManifestreader(file);
 		
 		ZipFile archive = new ZipFile(file);
 
-		ArrayList<ModelAccessor> accs = OMEXreader.getAnnotationFilesInArchive();
+		ArrayList<ModelAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
 		
 		for(ModelAccessor acc : accs){
 			String rdfincellml = "";
