@@ -32,7 +32,7 @@ public class CASAreader extends AbstractRDFreader{
 		super(ma, semsimmodel, lib);
 		
 		if(rdfstring!=null)
-			readStringToRDFmodel(rdf, rdfstring);
+			readStringToRDFmodel(rdf, rdfstring, "");
 		
 		this.semsimmodel = semsimmodel;
 		this.modelNamespaceIsSet = false;
@@ -45,21 +45,23 @@ public class CASAreader extends AbstractRDFreader{
 
 	
 	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
+		
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
-		
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
-		Resource res = rdf.getResource(TEMP_NAMESPACE + "#" + metaid);
+		String ns = semsimmodel.getLegacyCodeLocation().getFileName();
+		Resource res = rdf.getResource(ns + "#" + metaid);
 		Qualifier[] qualifiers = Qualifier.values();
-		
+				
 		for(int i=0;i<qualifiers.length;i++){
 			
 			Qualifier q = qualifiers[i];
 			
 			if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-				
+								
 				Relation relation = SemSimRelations.getRelationFromBiologicalQualifier(q);
-				
+								
 				if(relation != null){
+					
 					NodeIterator nodeit = rdf.listObjectsOfProperty(res, relation.getRDFproperty());
 					
 					while(nodeit.hasNext()){
@@ -95,6 +97,19 @@ public class CASAreader extends AbstractRDFreader{
 			PhysicalProperty prop = getSingularPhysicalProperty(singularannURI);
 			ds.setSingularAnnotation(prop);
 		}
+	}
+	
+	
+	@Override
+	public void getDataStructureAnnotations(DataStructure ds){
+		
+		String metaid = ds.getMetadataID(); // TODO: what if no metaid assigned? Just do nothing?
+		String ns = semsimmodel.getLegacyCodeLocation().getFileName();
+		Resource resource = rdf.getResource(ns + "#" + metaid);
+						
+		collectFreeTextAnnotation(ds, resource);
+		collectSingularBiologicalAnnotation(ds, resource);
+		collectCompositeAnnotation(ds, resource);
 	}
 		
 	

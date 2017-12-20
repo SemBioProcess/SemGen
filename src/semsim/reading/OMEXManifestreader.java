@@ -17,6 +17,7 @@ import org.jdom.input.SAXBuilder;
 
 import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXManifestreader {
 
@@ -82,11 +83,11 @@ public class OMEXManifestreader {
 	        for (Element content : manifestelements) {
 	        	Attribute format = content.getAttribute("format");
 	        	String formvalue = format.getValue().toLowerCase();
-	        	
+	        		        	
 	        	// Assume that all valid annotaion files end in "rdf"
 	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue)){
 	        		Attribute location = content.getAttribute("location");
-	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelClassifier.getTypebyFormat(formvalue)));
+	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelType.CASA_FILE));
 	        	}
 	        }
 

@@ -37,7 +37,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		super(accessor, semsimmodel, sslibrary);
 				
 		if(rdfasstring!=null){
-			readStringToRDFmodel(rdf, rdfasstring);
+			readStringToRDFmodel(rdf, rdfasstring, TEMP_NAMESPACE);
 			createSemSimSubmodelURIandObjectMap();
 		}
 		

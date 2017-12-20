@@ -43,7 +43,7 @@ public class CellMLreader extends ModelReader {
 		super(modelaccessor);
 	}
 	
-	public SemSimModel read() throws IOException {
+	public SemSimModel read() throws IOException, JDOMException {
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
 		Document doc = modelaccessor.getJDOMDocument();
@@ -72,7 +72,7 @@ public class CellMLreader extends ModelReader {
 		if(rdfreaderelement != null)
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfreaderelement));
 		
-		rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, rdfstring, sslib);
+		rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, rdfstring, sslib);
 		
 		rdfreader.getModelLevelAnnotations();
 		
