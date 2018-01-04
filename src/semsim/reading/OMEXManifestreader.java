@@ -84,7 +84,7 @@ public class OMEXManifestreader {
 	        	Attribute format = content.getAttribute("format");
 	        	String formvalue = format.getValue().toLowerCase();
 	        		        	
-	        	// Assume that all valid annotaion files end in "rdf"
+	        	// Assume that all valid annotation files end in "rdf"
 	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue)){
 	        		Attribute location = content.getAttribute("location");
 	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelType.CASA_FILE));

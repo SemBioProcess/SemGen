@@ -23,7 +23,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	private static final long serialVersionUID = 1L;
 	private String modelInArchiveName;
 	private static String[] ALL_ANNOTATABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "omex"};
-	public static String[] ALL_WRITABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "mod, omex"};
+	public static String[] ALL_WRITABLE_TYPES = new String[]{"owl", "cellml", "sbml", "proj", "mod", "omex"};
 	
 	public SemGenSaveFileChooser() {
 		super("Choose save location");

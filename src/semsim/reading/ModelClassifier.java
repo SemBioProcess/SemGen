@@ -18,13 +18,13 @@ import semsim.fileaccessors.ModelAccessor;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL(".owl", new String[]{}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
-		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml.level-2.version-1"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml")), 
+		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
+		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml")), 
 		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml")), 
-		MML_MODEL(".m", new String[]{},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
-		MML_MODEL_IN_PROJ(".proj",  new String[]{},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
+		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
+		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
 		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
-		CASA_FILE(".casa", new String[]{},null),
+		CASA_FILE(".casa", new String[]{"casa"},null),
 		UNKNOWN("null", new String[]{"null/null"}, null);
 		
 		private String extension;
@@ -40,9 +40,13 @@ public class ModelClassifier {
 			return extension;
 		}
 		
+		public String getFormat() {
+			return format[0];
+		}
+		
 		public boolean matchesFormat(String teststring) {
 			for (String frmt : format) {
-				if (frmt.matches(teststring)) return true;
+				if (frmt.contains(teststring)) return true;
 			}
 			return false;
 			
@@ -176,7 +180,7 @@ public class ModelClassifier {
 	}
 	
 	public static boolean hasValidOMEXmodelFileFormat(String format) {
-		return format.matches(".*/sbml.*$") || format.endsWith("cellml");
+		return format.matches(".*/sbml.*$") || format.endsWith("cellml") || ModelType.SEMSIM_MODEL.matchesFormat(format);
 	}
 	
 	public static boolean hasValidOMEXannotationFileFormat(String format) {

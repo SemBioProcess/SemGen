@@ -1,10 +1,8 @@
 package semsim.writing;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InvalidObjectException;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
@@ -16,24 +14,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
-
-import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
-import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
-import semsim.reading.ModelClassifier;
-import semsim.reading.OMEXManifestreader;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXArchiveWriter {
 	private ModelWriter writer;
@@ -62,7 +53,7 @@ public class OMEXArchiveWriter {
 	        zwriter.write(model);
 	        zwriter.close(); 	
 	        if (!fileexists) {
-	        	createManifestEntry(fs, nf);
+	        	createManifestEntry(fs, nf, archive.getModelType());
 	        }
 	        
 	        fs.close();
@@ -99,24 +90,35 @@ public class OMEXArchiveWriter {
   		}
     }
     
-	private void createManifestEntry(FileSystem fs, Path modelfile) throws ZipException, IOException, JDOMException {
+	private void createManifestEntry(FileSystem fs, Path modelfile, ModelType type) throws ZipException, IOException, JDOMException {
 		Path manifestpath = fs.getPath("manifest.xml");        
 		
 		Reader zreader = Files.newBufferedReader(manifestpath, StandardCharsets.UTF_8);
 		
 		StringBuilder buf = new StringBuilder();
-		CharBuffer cbuff = CharBuffer.allocate(1024);
+		CharBuffer cbuff = CharBuffer.allocate(2048);
 		
 	    while(zreader.read(cbuff) != -1){
+	    	cbuff.flip();
 	        buf.append(cbuff);
 	        cbuff.clear();
 	    }
 		InputStream targetStream = new ByteArrayInputStream(
 			      buf.toString().getBytes(StandardCharsets.UTF_8));
+		zreader.close();
         Document doc = new SAXBuilder().build(targetStream);
-        Element child = doc.getRootElement();//.getChild("omexManifest");
-        //ArrayList<Element> children = new ArrayList<Element>(child.getChildren());
         
+        Element root = doc.getRootElement();//.getChild("omexManifest");
+        
+        Element newentry = new Element("content", "http://identifiers.org/combine.specifications/omex-manifest");
+        newentry.setAttribute("location", "./" + modelfile.toString());
+        newentry.setAttribute("format", type.getFormat());
+        
+        root.addContent(newentry);
+        Writer zwriter = Files.newBufferedWriter(manifestpath, StandardCharsets.UTF_8, StandardOpenOption.CREATE);  
+        zwriter.write(new XMLOutputter().outputString(doc));
+        zwriter.close();
+
 	}
 
 
