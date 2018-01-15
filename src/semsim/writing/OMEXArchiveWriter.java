@@ -56,6 +56,10 @@ public class OMEXArchiveWriter {
 	        	createManifestEntry(fs, nf, archive.getModelType());
 	        }
 	        
+	        if (archive.hasCASAFile()) {
+	        	createCASA(fs, archive);
+	        }
+	        
 	        fs.close();
 	        
 	        
@@ -88,6 +92,19 @@ public class OMEXArchiveWriter {
   		catch (IOException e1) {
   				e1.printStackTrace();
   		}
+    }
+    
+    private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
+        Path nf = fs.getPath("model\\" + archive.getCASAPath());
+        boolean fileexists = Files.exists(nf);
+        
+        Writer casawriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+        
+        casawriter.close(); 
+        
+        if (!fileexists) {
+        	createManifestEntry(fs, nf, ModelType.CASA_FILE);
+        }
     }
     
 	private void createManifestEntry(FileSystem fs, Path modelfile, ModelType type) throws ZipException, IOException, JDOMException {

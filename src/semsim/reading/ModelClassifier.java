@@ -18,11 +18,11 @@ import semsim.fileaccessors.ModelAccessor;
 public class ModelClassifier {
 	
 	public static enum ModelType{
-		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
-		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml")), 
-		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml")), 
-		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
-		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
+		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl", "omex")), 
+		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
+		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml", "omex")), 
+		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod", "omex")), 
+		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj", "omex")), 
 		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
 		CASA_FILE(".casa", new String[]{"casa"},null),
 		UNKNOWN("null", new String[]{"null/null"}, null);
@@ -46,7 +46,7 @@ public class ModelClassifier {
 		
 		public boolean matchesFormat(String teststring) {
 			for (String frmt : format) {
-				if (frmt.contains(teststring)) return true;
+				if (teststring.contains(frmt)) return true;
 			}
 			return false;
 			

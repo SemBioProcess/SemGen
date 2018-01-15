@@ -17,7 +17,6 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
-import semsim.reading.OMEXManifestreader;
 
 public class SemGenSaveFileChooser extends SemGenFileChooser implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;

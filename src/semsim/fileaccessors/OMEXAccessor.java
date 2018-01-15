@@ -35,18 +35,22 @@ import semsim.writing.SemSimRDFwriter;
 public class OMEXAccessor extends ModelAccessor {
 	
 	protected ModelAccessor archivedfile;
-	protected OMEXAccessor casafile = null;
+	protected ModelAccessor casafile = null;
 	protected ZipFile archive;
 	
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		this.file = omexarchive;
 		archivedfile = new ModelAccessor(file, type);
+
+		
+
 	}
 	
 	public OMEXAccessor(File omexarchive, File file, String fragment) {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		archivedfile = new JSIMProjectAccessor(file, fragment);
+		
 	}
 
 	// Copy constructor
@@ -54,9 +58,8 @@ public class OMEXAccessor extends ModelAccessor {
 		super(matocopy);
 
 		archivedfile = new ModelAccessor(matocopy.archivedfile);
-		casafile = new OMEXAccessor(matocopy.casafile);
-		
-		
+		casafile = new ModelAccessor(matocopy.casafile);
+
 	}
 	
 	@Override
@@ -116,52 +119,70 @@ public class OMEXAccessor extends ModelAccessor {
 
 	}
 	
+	protected void getCASAFile() {
+
+		try {
+				ZipFile archive = new ZipFile(file);
+				
+				ArrayList<ModelAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
+
+				for(ModelAccessor acc : accs){
+					
+					//			String rdfincellml = "";
+					
+					if(acc.getModelType()==ModelType.CASA_FILE){
+						
+						    this.casafile = acc;
+						    break;
+					}
+				}
+				archive.close();
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+
+
+	}
 	
 	public CASAreader getAssociatedCASAFile(SemSimModel semsimmodel, SemSimLibrary sslib) throws ZipException, IOException, JDOMException {
+		//Get the CASA file if this is an SBML model and it hasn't been retrieved yet.
+		if (getModelType() == ModelType.SBML_MODEL && this.casafile==null) {
+			this.getCASAFile();
+		}	
+		if (this.casafile==null) return null;	
 		
-		ZipFile archive = new ZipFile(file);
-
-		ArrayList<ModelAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
-		
-		for(ModelAccessor acc : accs){
-			
-//			String rdfincellml = "";
-			
-			if(acc.getModelType()==ModelType.CASA_FILE){
-				
-				    ZipEntry entry = archive.getEntry(acc.getFileName());
-			        InputStream stream = archive.getInputStream(entry);
-			        
-			        Model casardf = ModelFactory.createDefaultModel();
-			        Model cellmlrdf = ModelFactory.createDefaultModel();
-			        
-			        RDFReader casardfreader = casardf.getReader();
-					casardfreader.setProperty("relativeURIs","same-document,relative");
-					casardfreader.read(casardf, stream, "");
-									
+			ZipFile archive = new ZipFile(file);
+			ZipEntry entry = archive.getEntry(casafile.getFileName());
+	        InputStream stream = archive.getInputStream(entry);
+	        
+	        Model casardf = ModelFactory.createDefaultModel();
+	        Model cellmlrdf = ModelFactory.createDefaultModel();
+	        
+	        RDFReader casardfreader = casardf.getReader();
+			casardfreader.setProperty("relativeURIs","same-document,relative");
+			casardfreader.read(casardf, stream, "");
+							
 //			        if(rdfincellml.isEmpty()){
 //			        	RDFReader cellmlrdfreader = cellmlrdf.getReader();
 //			        	cellmlrdfreader.setProperty("relativeURIs","same-document,relative");
 //			        	InputStream cellmlstream = new ByteArrayInputStream(rdfincellml.getBytes());
 //			        	cellmlrdfreader.read(casardf, cellmlstream, AbstractRDFreader.TEMP_NAMESPACE);
 //			        }
-			        
 	        
-			        // If we find a reference to the model in the RDF resources, we use the file as the source of the model's annotations
-			        for(Resource subj : casardf.listSubjects().toSet()){
-			        			        	
-			        	if (subj.getNameSpace().equals(semsimmodel.getLegacyCodeLocation().getFileName() + "#")){
-			        		AbstractRDFreader.stripSemSimRelatedContentFromRDFblock(cellmlrdf, semsimmodel); // when read in rdfreader in CellML file there may be annotations that we want to ignore
-							casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
-							
-							String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
-							archive.close();
-							return new CASAreader(acc, semsimmodel, sslib, combinedrdf);
-			        	}
-			        }			        
-			}
-		}
-		archive.close();
+    
+	        // If we find a reference to the model in the RDF resources, we use the file as the source of the model's annotations
+	        for(Resource subj : casardf.listSubjects().toSet()){
+	        			        	
+	        	if (subj.getNameSpace().equals(semsimmodel.getLegacyCodeLocation().getFileName() + "#")){
+	        		AbstractRDFreader.stripSemSimRelatedContentFromRDFblock(cellmlrdf, semsimmodel); // when read in rdfreader in CellML file there may be annotations that we want to ignore
+					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
+					
+					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
+					archive.close();
+					return new CASAreader(casafile, semsimmodel, sslib, combinedrdf);
+	        	}
+	        }			        
+	       archive.close();
 		return null;
 	}
 	
@@ -182,6 +203,13 @@ public class OMEXAccessor extends ModelAccessor {
 	
 	public String getFileName() {
 		return this.archivedfile.getFileName();
+	}
+	
+	public String getCASAPath() {
+		if (hasCASAFile()) {
+			return casafile.getFileName();
+		}
+		return "";
 	}
 	
 	public String getModelName() {
@@ -205,5 +233,9 @@ public class OMEXAccessor extends ModelAccessor {
 	
 	protected ModelWriter makeWriter(SemSimModel semsimmodel) {
 		 return archivedfile.makeWriter(semsimmodel);
+	}
+	
+	public boolean hasCASAFile() {
+		return casafile != null;
 	}
 }

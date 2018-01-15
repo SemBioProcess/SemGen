@@ -23,12 +23,10 @@ public class CASAwriter extends AbstractRDFwriter{
 
 	CASAwriter(SemSimModel model) {
 		super(model);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void setRDFforModelLevelAnnotations() {
-		// TODO Auto-generated method stub
 		
 	}
 	
