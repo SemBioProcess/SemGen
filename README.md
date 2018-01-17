@@ -97,6 +97,8 @@ Different node types can be hidden or shown in the **Stage Option** menu, which 
 
 ### Annotator
 
+[Click here for a comprehensive Annotator tutorial.](https://sites.google.com/site/semanticsofbiologicalprocesses/projects/semgen/semgenhelp/annotator-tutorial)
+
 With the Annotator tool, you can convert mathematical models into the SemSim format and annotate the model's codewords using concepts from online reference ontologies. Currently the Annotator can convert MML, SBML, and CellML models into the SemSim format. The Semantics of Biological Processes group maintains [a protocol for annotating a model](https://github.com/SemBioProcess/SemGen/wiki/Protocol-for-annotating-a-SemSim-model) which can help guide the annotation process.
 
 To annotate a model, click **Annotate** button under **Project Actions**. This will create a new Annotation tab:
