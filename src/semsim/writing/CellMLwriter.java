@@ -100,7 +100,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Declare the RDF metadata
 			if( ! rdfblock.rdf.isEmpty()){
-				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);
+				String rawrdf = rdfblock.getObjectRDFmodelAsString();
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}

@@ -21,10 +21,14 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 
 public class CASAwriter extends AbstractRDFwriter{
 
-	CASAwriter(SemSimModel model) {
+	public CASAwriter(SemSimModel model) {
 		super(model);
 	}
 
+	protected void initialize(SemSimModel model) {
+		
+	}
+	
 	@Override
 	protected void setRDFforModelLevelAnnotations() {
 		

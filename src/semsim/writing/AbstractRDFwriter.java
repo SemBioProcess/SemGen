@@ -39,7 +39,6 @@ public abstract class AbstractRDFwriter {
 
 	AbstractRDFwriter(SemSimModel model) {
 		semsimmodel = model;
-		// TODO Auto-generated constructor stub
 	}
 
 	// Abstract methods
@@ -183,6 +182,10 @@ public abstract class AbstractRDFwriter {
 			}
 		}
 		return newuri;
+	}
+	
+	public String getObjectRDFmodelAsString() {
+		return getRDFmodelAsString(rdf);
 	}
 	
 	

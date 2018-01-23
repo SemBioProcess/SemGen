@@ -29,11 +29,19 @@ import semsim.reading.ModelClassifier.ModelType;
 public class OMEXArchiveWriter {
 	private ModelWriter writer;
 	private FileSystem fs;
+	private CASAwriter casawriter;
 	
 	public OMEXArchiveWriter(ModelWriter writer) {
 		
 		this.writer = writer;
 	}
+	
+	public OMEXArchiveWriter(ModelWriter writer, CASAwriter casawriter) {
+		
+		this.writer = writer;
+		this.casawriter = casawriter;
+	}
+
 
 	public void appendOMEXArchive(OMEXAccessor archive) {
       //  String inputFileName = archive.getFilePath();
@@ -45,7 +53,14 @@ public class OMEXArchiveWriter {
 	        URI uri = URI.create("jar:" + path.toUri());
 	        
 	        fs = FileSystems.newFileSystem(uri, env);
-	        Path nf = fs.getPath("model\\" + archive.getFileName());
+	        Path nf = null;
+	        if (Files.exists(fs.getPath("model\\"))) {
+	        	nf = fs.getPath("model\\" + archive.getFileName());
+	        }
+	        else {
+	        	nf = fs.getPath(archive.getFileName());
+	        }
+	        
 	        boolean fileexists = Files.exists(nf);
 	        
 	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
@@ -59,7 +74,7 @@ public class OMEXArchiveWriter {
 	        if (archive.hasCASAFile()) {
 	        	createCASA(fs, archive);
 	        }
-	        
+	        archive.closeStream();
 	        fs.close();
 	        
 	        
@@ -95,12 +110,19 @@ public class OMEXArchiveWriter {
     }
     
     private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
-        Path nf = fs.getPath("model\\" + archive.getCASAPath());
+        Path nf = null;
+        if (Files.exists(fs.getPath("model\\"))) {
+        	nf = fs.getPath("model\\" + archive.getCASAFileName());
+        }
+        else {
+        	nf = fs.getPath(archive.getCASAFileName());
+        }
         boolean fileexists = Files.exists(nf);
         
-        Writer casawriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-        
-        casawriter.close(); 
+        Writer omexwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+        String model = casawriter.getObjectRDFmodelAsString();
+        omexwriter.write(model);
+        omexwriter.close(); 
         
         if (!fileexists) {
         	createManifestEntry(fs, nf, ModelType.CASA_FILE);
@@ -124,6 +146,7 @@ public class OMEXArchiveWriter {
 			      buf.toString().getBytes(StandardCharsets.UTF_8));
 		zreader.close();
         Document doc = new SAXBuilder().build(targetStream);
+        targetStream.close();
         
         Element root = doc.getRootElement();//.getChild("omexManifest");
         
@@ -133,6 +156,7 @@ public class OMEXArchiveWriter {
         
         root.addContent(newentry);
         Writer zwriter = Files.newBufferedWriter(manifestpath, StandardCharsets.UTF_8, StandardOpenOption.CREATE);  
+        
         zwriter.write(new XMLOutputter().outputString(doc));
         zwriter.close();
 

@@ -80,7 +80,11 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		String type = null;
 		File file = getSelectedFile();
 		
-		if(ModelType.SEMSIM_MODEL.fileFilterMatches(getFileFilter())){
+		if(ModelType.OMEX_ARCHIVE.fileFilterMatches(getFileFilter()) || file.getName().endsWith(".omex")){
+			type = "omex";
+			modeltype = ModelType.OMEX_ARCHIVE;
+		}
+		else if(ModelType.SEMSIM_MODEL.fileFilterMatches(getFileFilter())){
 			type = "owl";
 			modeltype = ModelType.SEMSIM_MODEL;
 		}
@@ -100,13 +104,10 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			type = "proj";
 			modeltype = ModelType.MML_MODEL_IN_PROJ;
 		}
-		else if(ModelType.OMEX_ARCHIVE.fileFilterMatches(getFileFilter())){
-			type = "omex";
-			modeltype = ModelType.OMEX_ARCHIVE;
-		}
 		else if(getFileFilter()==csvfilter){
 			type = "csv";
 		}
+		
 
 		// If there's an extension for the file type, make sure the filename ends in it
 		if(type!=null){
@@ -131,6 +132,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				File filetosave = getSelectedFile();
 				javax.swing.filechooser.FileFilter savefilter = getFileFilter();
 				ModelType modeltype = ModelClassifier.getTypebyFilter(savefilter);
+				if (filetosave.getName().endsWith(".omex")) modeltype = ModelType.OMEX_ARCHIVE;
 				
 				// If we're attempting to write a CellML model with discrete events, show error
 				if (modeltype == ModelType.CELLML_MODEL && semsimmodel != null) {

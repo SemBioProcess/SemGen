@@ -28,6 +28,7 @@ import semsim.reading.CASAreader;
 import semsim.reading.OMEXManifestreader;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.writing.CASAwriter;
 import semsim.writing.ModelWriter;
 import semsim.writing.OMEXArchiveWriter;
 import semsim.writing.SemSimRDFwriter;
@@ -42,9 +43,6 @@ public class OMEXAccessor extends ModelAccessor {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		this.file = omexarchive;
 		archivedfile = new ModelAccessor(file, type);
-
-		
-
 	}
 	
 	public OMEXAccessor(File omexarchive, File file, String fragment) {
@@ -58,7 +56,10 @@ public class OMEXAccessor extends ModelAccessor {
 		super(matocopy);
 
 		archivedfile = new ModelAccessor(matocopy.archivedfile);
-		casafile = new ModelAccessor(matocopy.casafile);
+		if (matocopy.casafile != null) {
+			casafile = new ModelAccessor(matocopy.casafile);
+		}
+		
 
 	}
 	
@@ -178,10 +179,12 @@ public class OMEXAccessor extends ModelAccessor {
 					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
 					
 					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
+					stream.close();
 					archive.close();
 					return new CASAreader(casafile, semsimmodel, sslib, combinedrdf);
 	        	}
-	        }			        
+	        }		
+	        stream.close();
 	       archive.close();
 		return null;
 	}
@@ -205,11 +208,11 @@ public class OMEXAccessor extends ModelAccessor {
 		return this.archivedfile.getFileName();
 	}
 	
-	public String getCASAPath() {
+	public String getCASAFileName() {
 		if (hasCASAFile()) {
 			return casafile.getFileName();
 		}
-		return "";
+		return getModelName() + ".rdf";
 	}
 	
 	public String getModelName() {
@@ -223,7 +226,19 @@ public class OMEXAccessor extends ModelAccessor {
 	@Override
 	public void writetoFile(SemSimModel model) {
 		ModelWriter writer = makeWriter(model);
-		OMEXArchiveWriter omexwriter = new OMEXArchiveWriter(writer);
+		OMEXArchiveWriter omexwriter;
+		
+		if (this.getModelType()==ModelType.SBML_MODEL) {
+			CASAwriter casawriter = new CASAwriter(model);
+			if (!this.hasCASAFile()) {
+				casafile = new ModelAccessor(new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
+			}
+			omexwriter = new OMEXArchiveWriter(writer, casawriter);
+		}
+		else {
+			omexwriter = new OMEXArchiveWriter(writer);
+		}
+		
 		omexwriter.appendOMEXArchive(this);
 	 }
 	
