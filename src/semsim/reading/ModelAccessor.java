@@ -75,6 +75,7 @@ public class ModelAccessor {
 		else baseURI = location;
 		try {
 			basetype = ModelClassifier.classify(new File(baseURI));
+			modeltype = basetype;
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
