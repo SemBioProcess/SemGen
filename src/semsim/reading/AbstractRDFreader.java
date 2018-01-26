@@ -1,8 +1,8 @@
 package semsim.reading;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,11 +67,12 @@ public abstract class AbstractRDFreader {
 	}
 
 	// Abstract methods
+	protected void getAnnotationsForPhysicalComponents(org.sbml.jsbml.Model sbmlmodel) {}
+	
 	abstract protected void getModelLevelAnnotations();
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);
 	abstract protected void getAllSemSimSubmodelAnnotations();
-	abstract protected boolean isCASAreader();
 	
 	// Read a string into an RDF model
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring, String namespace){
@@ -81,12 +82,12 @@ public abstract class AbstractRDFreader {
 			RDFReader reader = rdf.getReader();
 			reader.setProperty("relativeURIs","same-document,relative");
 			reader.read(rdf, stream, namespace);
+			stream.close();
 		} 
-		catch (UnsupportedEncodingException e) {
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	// Get all the data structure annotations
 	public void getAllDataStructureAnnotations(){
@@ -95,7 +96,6 @@ public abstract class AbstractRDFreader {
 			getDataStructureAnnotations(ds);
 		}
 	}
-	
 	
 	public void getDataStructureAnnotations(DataStructure ds){
 		
@@ -341,11 +341,7 @@ public abstract class AbstractRDFreader {
 		
 		return returnent;
 	}
-	
-	
-	
-	
-	
+
 	// Remove all semsim-related content from the main RDF block
 	// It gets replaced, if needed, on write out
 	public static Model stripSemSimRelatedContentFromRDFblock(Model rdf, SemSimModel thesemsimmodel){

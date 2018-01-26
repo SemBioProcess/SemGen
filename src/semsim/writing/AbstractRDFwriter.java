@@ -1,5 +1,6 @@
 package semsim.writing;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.HashMap;
@@ -60,7 +61,6 @@ public abstract class AbstractRDFwriter {
 		}
 	}
 	
-	
 	// Set free text annotation
 	public void setFreeTextAnnotationForObject(SemSimObject sso, Resource ares){
 
@@ -75,7 +75,6 @@ public abstract class AbstractRDFwriter {
 				sso.setMetadataID(ares.getURI().replace("#", ""));
 		}
 	}
-	
 	
 	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
@@ -116,7 +115,6 @@ public abstract class AbstractRDFwriter {
 		return res;
 	}
 	
-	
 	protected Resource findReferenceResourceFromURI(URI uri){
 		Resource refres = null;
 		
@@ -129,7 +127,6 @@ public abstract class AbstractRDFwriter {
 		}
 		return refres;
 	}
-	
 	
 	public static URI convertURItoIdentifiersDotOrgFormat(URI uri){
 		URI newuri = uri;
@@ -190,7 +187,6 @@ public abstract class AbstractRDFwriter {
 	
 	
 	public static String getRDFmodelAsString(Model rdf){
-		
 		// TODO: if just use RDF/XML then get node refs and not pretty
 		// If use -ABBREV, get rdf:IDs
 		RDFWriter writer = rdf.getWriter("RDF/XML-ABBREV");
@@ -198,8 +194,13 @@ public abstract class AbstractRDFwriter {
 		writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
 		StringWriter out = new StringWriter();
 		writer.write(rdf, out, SemSimRDFreader.TEMP_NAMESPACE);
-		
-		return out.toString();
+		String outstring = out.toString();
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return outstring;
 	}
 	
 	protected void addStatement(Statement st){

@@ -115,10 +115,11 @@ public class ModelAccessor {
 		StringWriter writer = new StringWriter();
 		InputStream instream = modelInStream();
 		IOUtils.copy(instream, writer, Charset.defaultCharset());
+		instream.close();
 		return writer.toString();
 	}
 
-	// Retrieve model text as a string (only for locally-stored models)
+	// Retrieve model text as a stream (only for locally-stored models)
 	public InputStream modelInStream() throws IOException{
 		InputStream returnstring = null;
 		
@@ -167,6 +168,7 @@ public class ModelAccessor {
 				writer.writeToStream(outstream);
 				PrintWriter pwriter = new PrintWriter(new FileWriter(file));
 				pwriter.print(outstream);
+				outstream.close();
 				pwriter.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -208,11 +210,7 @@ public class ModelAccessor {
 	public boolean equals(ModelAccessor ma){
 		return getFile().getPath().contentEquals(ma.getFile().getPath());
 	}
-	
-	public CASAreader getAssociatedCASAFile() throws ZipException, IOException, JDOMException {
-		return null;
-	}
-	
+
 	public String getModelName() {
 		String filename = file.getName();
 		return filename.substring(0, filename.indexOf('.'));

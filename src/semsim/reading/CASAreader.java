@@ -1,10 +1,14 @@
 package semsim.reading;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
+import org.sbml.jsbml.Model;
+
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -38,9 +42,19 @@ public class CASAreader extends AbstractRDFreader{
 		this.modelNamespaceIsSet = false;
 	}
 
-	
-	protected boolean isCASAreader(){
-		return true;
+	public void getAnnotationsForPhysicalComponents(Model sbmlmodel) {
+		List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
+		annotablestuff.addAll(sbmlmodel.getListOfCompartments());
+		annotablestuff.addAll(sbmlmodel.getListOfSpecies());
+		annotablestuff.addAll(sbmlmodel.getListOfReactions());
+		annotablestuff.addAll(sbmlmodel.getListOfParameters());
+		
+		for(AbstractNamedSBase ansbase : annotablestuff){
+			for(int cv=0; cv<ansbase.getCVTermCount(); cv++) ansbase.removeCVTerm(cv); // Strip existing CV terms that were in SBML code 
+			
+			getAnnotationsForPhysicalComponent(ansbase);
+		}
+		
 	}
 
 	

@@ -1,12 +1,12 @@
 package semsim.reading;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipException;
@@ -21,7 +21,6 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.XMLOutputter;
-import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -116,7 +115,9 @@ public class SBMLreader extends ModelReader{
 			OWLException, XMLStreamException {
 		
 		// Load the SBML file into a new SBML model
-		sbmldoc = new SBMLReader().readSBMLFromStream(modelaccessor.modelInStream());
+		InputStream instream = modelaccessor.modelInStream();
+		sbmldoc = new SBMLReader().readSBMLFromStream(instream);
+		instream.close();
 		
 		if (sbmldoc.getNumErrors()>0){
 		      System.err.println("Encountered the following SBML errors:");
@@ -179,30 +180,11 @@ public class SBMLreader extends ModelReader{
 			
 			// If a standalone SBML model, reader should just be a SemSimRDFreader
 			
-			if(modelaccessor instanceof OMEXAccessor){
-				
 				rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, existingrdf, sslib);
 				
 				if(rdfreader != null){
-					
-					if(rdfreader.isCASAreader()){
-										
-						List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
-						annotablestuff.addAll(sbmlmodel.getListOfCompartments());
-						annotablestuff.addAll(sbmlmodel.getListOfSpecies());
-						annotablestuff.addAll(sbmlmodel.getListOfReactions());
-						annotablestuff.addAll(sbmlmodel.getListOfParameters());
-						
-						for(AbstractNamedSBase ansbase : annotablestuff){
-							for(int cv=0; cv<ansbase.getCVTermCount(); cv++) ansbase.removeCVTerm(cv); // Strip existing CV terms that were in SBML code 
-							
-							((CASAreader)rdfreader).getAnnotationsForPhysicalComponent(ansbase);
-						}
-					}
+					rdfreader.getAnnotationsForPhysicalComponents(sbmlmodel);
 				}
-			}
-			else rdfreader = new SemSimRDFreader(modelaccessor, semsimmodel, null, sslib);
-			
 			
 		} catch (JDOMException e) {
 			e.printStackTrace();

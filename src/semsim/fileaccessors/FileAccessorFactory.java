@@ -37,8 +37,7 @@ public class FileAccessorFactory {
 		if(location.startsWith("http://") || location.startsWith("file:")) new ModelAccessor(new File(location), type);
 		
 		else if (hasseperator) {
-			
-			
+
 			if (type.equals(ModelType.MML_MODEL_IN_PROJ)) {
 				return new JSIMProjectAccessor(new File(path), frag);
 			}

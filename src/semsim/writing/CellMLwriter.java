@@ -1,8 +1,8 @@
 package semsim.writing;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +52,8 @@ public class CellMLwriter extends ModelWriter {
 			writeToStream(baos);			
 	        
 	        modasstring = new String(baos.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+	        baos.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
         return modasstring;

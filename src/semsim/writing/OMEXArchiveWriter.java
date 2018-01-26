@@ -28,7 +28,6 @@ import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXArchiveWriter {
 	private ModelWriter writer;
-	private FileSystem fs;
 	private CASAwriter casawriter;
 	
 	public OMEXArchiveWriter(ModelWriter writer) {
@@ -52,7 +51,7 @@ public class OMEXArchiveWriter {
 	        Path path = Paths.get(archive.getDirectoryPath());
 	        URI uri = URI.create("jar:" + path.toUri());
 	        
-	        fs = FileSystems.newFileSystem(uri, env);
+	        FileSystem fs = FileSystems.newFileSystem(uri, env);
 	        Path nf = null;
 	        if (Files.exists(fs.getPath("model\\"))) {
 	        	nf = fs.getPath("model\\" + archive.getFileName());
@@ -72,7 +71,7 @@ public class OMEXArchiveWriter {
 	        }
 	        
 	        if (archive.hasCASAFile()) {
-	        	createCASA(fs, archive);
+	        //	createCASA(fs, archive);
 	        }
 	        archive.closeStream();
 	        fs.close();
