@@ -9,4 +9,5 @@ organizeByPropertyType; true
 sortbyCompositeCompleteness; true
 treeView; false
 helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp
+annotatorHelpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp/annotator-tutorial
 autoAnnotateMapped; true
