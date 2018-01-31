@@ -21,7 +21,6 @@ import semgen.SemGen;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
-import semsim.reading.CASAreader;
 import semsim.reading.ModelClassifier;
 import semsim.reading.ModelReader;
 import semsim.reading.SemSimRDFreader;
