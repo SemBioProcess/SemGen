@@ -1,37 +1,39 @@
 package semgen.menu;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.FileNotFoundException;
-
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.LogViewer;
 import semgen.utilities.uicomponent.SemGenMenu;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+
 public class HelpMenu extends SemGenMenu implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem viewlog;
 	private JMenuItem helpitemabout;
 	private JMenuItem helpitemweb;
+	private JMenuItem helpitemannotator;
 
 	public HelpMenu(SemGenSettings sets) {
 		super("Help", sets);
 		getAccessibleContext().setAccessibleDescription("User help, Versioning, etc.");
 		helpitemabout = formatMenuItem(helpitemabout,"About",null,true,true);
 		
-		helpitemweb = formatMenuItem(helpitemweb,"Help manual (opens browser)",KeyEvent.VK_H,true,true);
+		helpitemweb = formatMenuItem(helpitemweb,"Help manual (opens browser)", KeyEvent.VK_H,true,true);
+
+		helpitemannotator = formatMenuItem(helpitemannotator, "Annotator tutorial (opens browser)", null, true, true);
 		
 		viewlog = formatMenuItem(viewlog,"Session log",KeyEvent.VK_L,true,true);
 		viewlog.setToolTipText("View the current session's log file");
 		
 		add(helpitemabout);
 		add(helpitemweb);
+		add(helpitemannotator);
 	}
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -46,6 +48,9 @@ public class HelpMenu extends SemGenMenu implements ActionListener {
 		
 			if (o == helpitemweb) 
 				BrowserLauncher.openURL(settings.getHelpURL());
+
+			if (o == helpitemannotator)
+				BrowserLauncher.openURL(settings.getAnnotatorHelpURL());
 	}	
 	
 	public void AboutDialog() {

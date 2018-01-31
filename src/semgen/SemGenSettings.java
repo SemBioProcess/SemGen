@@ -1,21 +1,14 @@
 package semgen;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import semgen.utilities.file.SemGenOpenFileChooser;
+import semsim.utilities.ResourcesManager;
+
+import java.awt.*;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Observable;
-
-import semgen.utilities.file.SemGenOpenFileChooser;
-import semsim.utilities.ResourcesManager;
 /**
  * Structure for storing and retrieving application settings during run time. A copy can
  * be made for an object's private use.
@@ -283,6 +276,10 @@ public class SemGenSettings extends Observable{
 	public String getHelpURL() {
 		return startsettingstable.get("helpURL")[0];
 	}
+
+	public String getAnnotatorHelpURL() {
+		return startsettingstable.get("annotatorHelpURL")[0];
+	}
 	
 	public void setIsMaximized(boolean maxed) {
 		maximize = maxed;
@@ -304,6 +301,7 @@ public class SemGenSettings extends Observable{
 			writer.println("sortbyCompositeCompleteness; " + organizeByCompositeCompleteness());
 			writer.println("treeView; " + useTreeView().toString());
 			writer.println("helpURL; " + getHelpURL());
+			writer.println("annotatorHelpURL; " + getAnnotatorHelpURL());
 			writer.println("autoAnnotateMapped; " + doAutoAnnotateMapped().toString());
 			
 			writer.flush();
