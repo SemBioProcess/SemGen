@@ -27,7 +27,7 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 	private String modelname = "";
 	private Integer formatselection = -1;
 	
-	private static String[] ALL_WRITABLE_TYPES = new String[]{".owl", ".cellml", ".sbml", ".proj", ".mod"};
+	private static String[] ALL_WRITABLE_TYPES = new String[]{".cellml", ".sbml"};
 	
 	public OMEXSaveDialog() {
 		super("Save to OMEX Archive As");
