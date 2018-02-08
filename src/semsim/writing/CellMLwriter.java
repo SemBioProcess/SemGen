@@ -33,7 +33,7 @@ import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
-	private SemSimRDFwriter rdfblock;
+	private AbstractRDFwriter rdfblock;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	

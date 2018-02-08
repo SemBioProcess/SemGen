@@ -20,6 +20,7 @@ import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -51,6 +52,7 @@ public abstract class AbstractRDFwriter {
 	abstract protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier);
 	abstract protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe);
 	abstract protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res);
+	abstract protected void setRDFforSubmodelAnnotations(Submodel sub);
 
 	
 	// Add annotations for data structures

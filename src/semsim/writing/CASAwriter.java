@@ -13,6 +13,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.SemSimRelations;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -33,6 +34,25 @@ public class CASAwriter extends AbstractRDFwriter{
 	protected void setRDFforModelLevelAnnotations() {
 		
 	}
+	
+	@Override
+	protected void setRDFforDataStructureAnnotations(DataStructure ds){
+
+		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+		String resuri = xmlbase + metaid;
+		Resource ares = rdf.createResource(resuri);
+		
+		// Set free-text annotation
+		setFreeTextAnnotationForObject(ds, ares);
+		
+		// If a singular reference annotation is present, write it out
+		setSingularAnnotationForDataStructure(ds, ares);
+		
+		// Include the necessary composite annotation info
+		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+	}
+	
+	
 	
 	public void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
 		
@@ -61,13 +81,6 @@ public class CASAwriter extends AbstractRDFwriter{
 	}
 	
 	
-	@Override
-	protected void setRDFforDataStructureAnnotations(DataStructure ds) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
 	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares) {
 		// TODO Auto-generated method stub
@@ -101,6 +114,12 @@ public class CASAwriter extends AbstractRDFwriter{
 
 	@Override
 	protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void setRDFforSubmodelAnnotations(Submodel sub) {
 		// TODO Auto-generated method stub
 		
 	}
