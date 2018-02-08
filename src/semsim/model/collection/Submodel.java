@@ -1,10 +1,12 @@
 package semsim.model.collection;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.SemSimTypes;
 import semsim.model.Importable;
+import semsim.model.computational.datastructures.DataStructure;
 
 public class Submodel extends SemSimCollection implements Importable {
 	
@@ -18,6 +20,16 @@ public class Submodel extends SemSimCollection implements Importable {
 	
 	public Submodel(String name){ 
 		super(SemSimTypes.SUBMODEL);
+		setName(name);
+	}
+	
+	public Submodel(String name, ArrayList<DataStructure> dscollection){ 
+		super(SemSimTypes.SUBMODEL, dscollection);
+		setName(name);
+	}
+	
+	public Submodel(String name, ArrayList<DataStructure> dscollection, ArrayList<Submodel> smcollection){ 
+		super(SemSimTypes.SUBMODEL, dscollection, smcollection);
 		setName(name);
 	}
 	

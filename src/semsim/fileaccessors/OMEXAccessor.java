@@ -176,7 +176,7 @@ public class OMEXAccessor extends ModelAccessor {
 		ModelWriter writer = makeWriter(model);
 		OMEXArchiveWriter omexwriter;
 		
-		if (this.getModelType()==ModelType.SBML_MODEL) {
+		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
 			CASAwriter casawriter = new CASAwriter(model);
 			if (!this.hasCASAFile()) {
 				casafile = new ModelAccessor(new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);

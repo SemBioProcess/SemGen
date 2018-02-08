@@ -1,5 +1,6 @@
 package semsim.model.collection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
+import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -44,6 +46,11 @@ public class FunctionalSubmodel extends Submodel {
 		computation = new Computation(outputs);
 		functional = true;
 	}
+	
+	public FunctionalSubmodel(String name, ArrayList<DataStructure> dscollection){ 
+		super(name, dscollection);
+	}
+	
 	
 	public FunctionalSubmodel(String name, String localName, String referencedName, String hrefValue){
 		super(name);

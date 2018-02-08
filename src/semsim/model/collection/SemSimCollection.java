@@ -23,6 +23,18 @@ public abstract class SemSimCollection extends SemSimObject{
 		super(type);
 	}
 	
+	public SemSimCollection(SemSimTypes type, ArrayList<DataStructure> dscollection) {
+		super(type);
+		dataStructures.addAll(dscollection);
+	}
+	
+	public SemSimCollection(SemSimTypes type, ArrayList<DataStructure> dscollection, ArrayList<Submodel> smcollection) {
+		super(type);
+		dataStructures.addAll(dscollection);
+		submodels.addAll(smcollection);
+	}
+	
+	
 	public SemSimCollection(SemSimCollection coltocopy) {
 		super(coltocopy);
 	}
