@@ -1,6 +1,7 @@
 package semsim.reading;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
@@ -91,7 +92,9 @@ public class SemSimOWLreader extends ModelReader {
 		semsimmodel.setName(modelaccessor.getModelName());
 		
 		try {
-			ont = manager.loadOntologyFromOntologyDocument(accessor.modelInStream());
+			InputStream stream = accessor.modelInStream();
+			ont = manager.loadOntologyFromOntologyDocument(stream);
+			stream.close();
 		} catch (OWLOntologyCreationException | IOException e) {
 			e.printStackTrace();
 		}

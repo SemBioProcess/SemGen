@@ -3,7 +3,6 @@ package semsim.fileaccessors;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -161,13 +160,12 @@ public class ModelAccessor {
 
 		public void writetoFile(SemSimModel model) {
 			ModelWriter writer = makeWriter(model);
-			FileOutputStream outstream;
+			//FileOutputStream outstream;
 			try {
-				outstream = new FileOutputStream(getFile());
-				writer.writeToStream(outstream);
-				PrintWriter pwriter = new PrintWriter(new FileWriter(file));
-				pwriter.print(outstream);
-				outstream.close();
+				//outstream = new FileOutputStream(getFile());
+				PrintWriter pwriter = new PrintWriter(new FileWriter(getFile()), true);
+				String modelstring = writer.encodeModel();
+				pwriter.print(modelstring);
 				pwriter.close();
 			} catch (IOException e) {
 				e.printStackTrace();

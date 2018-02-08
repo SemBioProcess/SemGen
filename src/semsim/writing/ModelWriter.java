@@ -44,7 +44,14 @@ public abstract class ModelWriter {
 	
 	public abstract String encodeModel();
 	
-	public abstract boolean writeToStream(OutputStream encodedmodel);
+	public boolean writeToStream(OutputStream stream) {
+		String outputstring = encodeModel();
+		if (outputstring == null) {
+			return false;
+		}
+		commitStringtoStream(stream, outputstring);
+		return true;
+	}
 
 	public static Content makeXMLContentFromString(String xml){
 		try {

@@ -1,8 +1,5 @@
 package semsim.writing;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,28 +42,10 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	public String encodeModel() {
-		String modasstring = null;
-		try {
-			
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			writeToStream(baos);			
-	        
-	        modasstring = new String(baos.toByteArray(), "UTF-8");
-	        baos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        return modasstring;
-	}
-	
-	//*************WRITE PROCEDURE********************************************//
-	@Override
-	public boolean writeToStream(OutputStream outstream) {
 		Document doc = null;
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
 		
-		try{	
 			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
 			
 			// Check for events, if present write out error msg
@@ -74,7 +53,7 @@ public class CellMLwriter extends ModelWriter {
 				Element eventerror = new Element("error");
 				eventerror.setAttribute("msg", "SemSim-to-CellML translation not supported for models with discrete events.");
 				outputter.outputString(new Document(eventerror));
-				return false; 
+				return null; 
 			}
 						
 			createRDFBlock();
@@ -105,13 +84,11 @@ public class CellMLwriter extends ModelWriter {
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		outputter.outputString(doc);
-		return true;
+
+        return outputter.outputString(doc);
 	}
+	
+	//*************WRITE PROCEDURE********************************************//
 
 	private void createRDFBlock() {
 		String rdfstring = null;

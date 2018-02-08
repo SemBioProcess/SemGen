@@ -109,7 +109,7 @@ public class OMEXAccessor extends ModelAccessor {
 	public AbstractRDFreader getRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
 			throws ZipException, IOException, JDOMException{
 		
-		if (getModelType() == ModelType.SBML_MODEL && this.casafile==null) {
+		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL && this.casafile==null) {
 			this.getCASAFile();
 			if (casafile != null) return casafile.getRDFreaderForModel(thesemsimmodel, curationalrdf, sslib);
 		}	

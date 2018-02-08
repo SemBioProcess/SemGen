@@ -1,9 +1,6 @@
 package semgen.utilities.file;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import org.apache.commons.io.IOUtils;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.semanticweb.owlapi.model.OWLException;
@@ -130,8 +127,7 @@ public class LoadSemSimModel extends SemGenJob {
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
 		
-		InputStream stream = ma.modelInStream();
-		String srcText = IOUtils.toString(stream, StandardCharsets.UTF_8.name());
+		String srcText = ma.getModelasString();
 		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getFileName());
 		
 		if (ErrorLog.hasErrors()) return null;

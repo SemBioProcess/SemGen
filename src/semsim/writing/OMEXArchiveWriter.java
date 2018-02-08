@@ -71,7 +71,7 @@ public class OMEXArchiveWriter {
 	        }
 	        
 	        if (archive.hasCASAFile()) {
-	        //	createCASA(fs, archive);
+	        	createCASA(fs, archive);
 	        }
 	        archive.closeStream();
 	        fs.close();
@@ -128,6 +128,7 @@ public class OMEXArchiveWriter {
         }
     }
     
+    //Create an entry in the OMEX manifest for a file
 	private void createManifestEntry(FileSystem fs, Path modelfile, ModelType type) throws ZipException, IOException, JDOMException {
 		Path manifestpath = fs.getPath("manifest.xml");        
 		

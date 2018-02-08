@@ -3,7 +3,6 @@ package semsim.writing;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -154,15 +153,7 @@ public class SBMLwriter extends ModelWriter {
 		return new XMLOutputter().outputString(doc);
 	}
 	
-	@Override
-	public boolean writeToStream(OutputStream stream) {
-		String outputstring = encodeModel();
-		if (outputstring == null) {
-			return false;
-		}
-		commitStringtoStream(stream, outputstring);
-		return true;
-	}
+
 	
 	/**
 	 *  Determine which data structures potentially simulate properties of SBML compartments,
