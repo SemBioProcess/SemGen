@@ -29,6 +29,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 	String modelName;
 	Element semsimControlElement;
 	private JSIMProjectAccessor projaccessor;
+	private SemSimRDFwriter rdfwriter;
 
 
 	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor modelaccessor) {
@@ -115,21 +116,21 @@ public class JSimProjectFileWriter extends ModelWriter{
 		// a metaid in their URI fragments).
 		semsimmodel.setName(modelName);
 				
-		SemSimRDFwriter rdfblock = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
+		rdfwriter = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
 		
 		// Write out model-level annotations
-		rdfblock.setRDFforModelLevelAnnotations();
+		rdfwriter.setRDFforModelLevelAnnotations();
 		
 		// Write out annotations for data structures
-		rdfblock.setRDFforDataStructureAnnotations();
+		rdfwriter.setRDFforDataStructureAnnotations();
 		
 		// Write out annotations for submodels
-		rdfblock.setRDFforSemSimSubmodelAnnotations();
+		rdfwriter.setRDFforSemSimSubmodelAnnotations();
 		
 		// Add the RDF metadata to the appropriate element in the JSim project file
-		if( ! rdfblock.rdf.isEmpty()){
+		if( ! rdfwriter.rdf.isEmpty()){
 			
-			String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);			
+			String rawrdf = AbstractRDFwriter.getRDFmodelAsString(rdfwriter.rdf,"RDF/XML-ABBREV");			
 			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
 				
 			// Remove old RDF if present
@@ -241,4 +242,10 @@ public class JSimProjectFileWriter extends ModelWriter{
 			else foundnamesinMML.add(name);
 		}		
 	}
+	
+	@Override
+	public AbstractRDFwriter getRDFwriter(){
+		return rdfwriter;
+	}
+
 }

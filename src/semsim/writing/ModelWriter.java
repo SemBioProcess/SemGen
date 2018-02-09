@@ -13,12 +13,14 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 
 public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel;
 	protected File srcfile;
+	public ModelAccessor writelocation;
 	
 	ModelWriter(SemSimModel model) {
 		semsimmodel = model;
@@ -28,6 +30,8 @@ public abstract class ModelWriter {
 		sslib = lib;
 	}
 	
+	public abstract AbstractRDFwriter getRDFwriter();
+
 	//Return whether write succeeded
 	
 	protected boolean commitStringtoStream(OutputStream stream, String outputstring) {
@@ -62,6 +66,14 @@ public abstract class ModelWriter {
 			e.printStackTrace();
 			return null;
 		} 
+	}
+	
+	public void setWriteLocation(ModelAccessor ma){
+		writelocation = ma;
+	}
+	
+	public ModelAccessor getWriteLocation(){
+		return writelocation;
 	}
 	
 }

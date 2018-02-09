@@ -398,5 +398,11 @@ public class MATLABwriter extends ModelWriter{
 		return thestring;
 	}
 
+	@Override
+	public AbstractRDFwriter getRDFwriter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

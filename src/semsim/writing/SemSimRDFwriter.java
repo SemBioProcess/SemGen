@@ -1,11 +1,9 @@
 package semsim.writing;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -29,12 +27,10 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
-import semsim.utilities.SemSimUtil;
 
 public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
-	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
 	private Map<String, String> submodelNameAndURImap = new HashMap<String, String>(); // includes CellML and SemSim-style submodels
 	private ModelType modeltype;
 	
@@ -115,22 +111,6 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 	}
 	
-	@Override
-	protected void setRDFforDataStructureAnnotations(DataStructure ds){
-
-		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
-		String resuri = xmlbase + metaid;
-		Resource ares = rdf.createResource(resuri);
-		
-		// Set free-text annotation
-		setFreeTextAnnotationForObject(ds, ares);
-		
-		// If a singular reference annotation is present, write it out
-		setSingularAnnotationForDataStructure(ds, ares);
-		
-		// Include the necessary composite annotation info
-		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
-	}
 	
 	
 	// Add annotation for submodel
@@ -189,6 +169,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	
 	// Add singular annotation
+	@Override
 	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
 		
 		if(ds.hasPhysicalDefinitionAnnotation()){
@@ -203,9 +184,8 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 	}
 		
-	
-	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares){
-		
+	@Override
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
 		if(ds.hasPhysicalProperty()){
 			Property iccfprop = SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty();
 			Resource propres = getResourceForDataStructurePropertyAndAnnotate(rdf, (DataStructure)ds);
@@ -214,10 +194,11 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			addStatement(st);
 			
 			setDataStructurePropertyOfAnnotation((DataStructure)ds);
-		}
+		}		
 	}
 	
 	
+	@Override
 	protected void setDataStructurePropertyOfAnnotation(DataStructure ds){		
 		// Collect physical model components with properties
 		if( ! ds.isImportedViaSubmodel()){
@@ -345,99 +326,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		}
 	}
 	
-	// Add statements that describe a composite physical entity in the model
-	// Uses recursion to store all composite physical entities that make it up, too.
-	@Override
-	protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe){
-		
-		// Get the Resource corresponding to the index entity of the composite entity
-		// If we haven't added this composite entity before, log it
-		if(cpe.equals(SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, PMCandResourceURImap))){
-			PMCandResourceURImap.put(cpe, URI.create(getResourceForPMCandAnnotate(rdf, cpe).getURI()));
-		}
-		// Otherwise use the CPE already stored
-		else cpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, PMCandResourceURImap);
-		
-		URI indexuri = PMCandResourceURImap.get(cpe);
-		Resource indexresource = null;
-		
-		if(indexuri == null){
-			indexresource = getResourceForPMCandAnnotate(rdf, cpe);
-			indexuri = URI.create(indexresource.getURI());
-		}
-		else indexresource = rdf.getResource(indexuri.toString());
-		
-		PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
-		
-		setReferenceOrCustomResourceAnnotations(indexent, indexresource);
-
-		if (cpe.getArrayListOfEntities().size()==1) return indexuri;
-		
-		// Truncate the composite by one entity
-		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
-		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
-		
-		for(int u = 1; u<cpe.getArrayListOfEntities().size(); u++){
-			nextents.add(cpe.getArrayListOfEntities().get(u));
-		}
-		for(int u = 1; u<cpe.getArrayListOfStructuralRelations().size(); u++){
-			nextrels.add(cpe.getArrayListOfStructuralRelations().get(u));
-		}
-		
-		CompositePhysicalEntity nextcpe = new CompositePhysicalEntity(nextents, nextrels);
-		URI nexturi = null;
-		
-		// Add sub-composites recursively
-		if(nextcpe.getArrayListOfEntities().size()>1){
-			
-			// If we haven't added this composite entity before, log it
-			if(nextcpe == SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, PMCandResourceURImap)){
-				PMCandResourceURImap.put(nextcpe, URI.create(getResourceForPMCandAnnotate(rdf, nextcpe).getURI()));
-			}
-			// Otherwise use the CPE already stored
-			else nextcpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, PMCandResourceURImap);
-			
-			nexturi = setCompositePhysicalEntityMetadata(nextcpe);
-		}
-		// If we're at the end of the composite
-		else {
-			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
-			
-			// If it's an entity we haven't processed yet
-			if(!PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
-				nexturi = URI.create(getResourceForPMCandAnnotate(rdf, lastent).getURI());
-				PMCandResourceURImap.put(lastent, nexturi);
-			}
-			// Otherwise get the terminal entity that we logged previously
-			else nexturi = PMCandResourceURImap.get(lastent);
-		}
-			
-		Property structprop = StructuralRelation.PART_OF.getRDFproperty();
-		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
-		
-		if(rel==StructuralRelation.CONTAINED_IN) structprop = StructuralRelation.CONTAINED_IN.getRDFproperty();
-		
-		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
-		
-		addStatement(structst);
-		
-		return indexuri;
-	}
 	
-	
-	
-	// Get the RDF resource for a data structure's associated physical property
-	protected Resource getResourceForDataStructurePropertyAndAnnotate(Model rdf, DataStructure ds){
-		
-		if(variablesAndPropertyResourceURIs.containsKey(ds)){
-			return rdf.getResource(variablesAndPropertyResourceURIs.get(ds).toString());
-		}
-		
-		Resource res = createNewResourceForSemSimObject("property");
-		variablesAndPropertyResourceURIs.put(ds, URI.create(res.getURI()));
-		setReferenceOrCustomResourceAnnotations(ds.getPhysicalProperty(), res);
-		return res;
-	}
 	
 	@Override
 	protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res){
@@ -507,6 +396,10 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		}
 	}
 
-
+	@Override
+	protected Property getPartOfPropertyForComposites(){
+		return StructuralRelation.PART_OF.getRDFproperty();
+	}
+	
 
 }

@@ -19,6 +19,7 @@ import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -33,7 +34,7 @@ import semsim.utilities.SemSimUtil;
 
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
-	private AbstractRDFwriter rdfblock;
+	private AbstractRDFwriter rdfwriter;
 	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
 	
@@ -61,7 +62,7 @@ public class CellMLwriter extends ModelWriter {
 			
 			doc = new Document(root);
 			
-			rdfblock.setRDFforModelLevelAnnotations();
+			rdfwriter.setRDFforModelLevelAnnotations();
 			
 			declareImports();
 			
@@ -78,9 +79,9 @@ public class CellMLwriter extends ModelWriter {
 			declareGroupings();
 			declareConnections();
 			
-			// Declare the RDF metadata
-			if( ! rdfblock.rdf.isEmpty()){
-				String rawrdf = rdfblock.getObjectRDFmodelAsString();
+			// Add the RDF metadata, if we are writing to a standalone CellML file
+			if( ! rdfwriter.rdf.isEmpty() && ! (getWriteLocation() instanceof OMEXAccessor)){
+				String rawrdf = AbstractRDFwriter.getRDFmodelAsString(rdfwriter.rdf, "RDF/XML-ABBREV");
 				Content newrdf = makeXMLContentFromString(rawrdf);
 				if(newrdf!=null) root.addContent(newrdf);
 			}
@@ -91,15 +92,24 @@ public class CellMLwriter extends ModelWriter {
 	//*************WRITE PROCEDURE********************************************//
 
 	private void createRDFBlock() {
-		String rdfstring = null;
-		for(Annotation ann : semsimmodel.getAnnotations()){
-			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP){
-				rdfstring = (String) ann.getValue();
-				break;
-			}
-		}
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+		// If we're writing to an OMEX file, make the RDF writer a CASAwriter that follows COMBINE conventions
+		if(getWriteLocation() instanceof OMEXAccessor){
+			rdfwriter = new CASAwriter(semsimmodel);
+			rdfwriter.xmlbase = getWriteLocation().getDirectoryPath();
+		}
+		// Otherwise use a SemSimRDFwriter
+		else{
+			String rdfstring = null;
+			for(Annotation ann : semsimmodel.getAnnotations()){
+				if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP){
+					rdfstring = (String) ann.getValue();
+					break;
+				}
+			}
+			
+			rdfwriter = new SemSimRDFwriter(semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+		}
 	}
 	
 	private void createRootElement() {		
@@ -162,10 +172,10 @@ public class CellMLwriter extends ModelWriter {
 				importedpiece.setAttribute(importedpiecerefattr, ssc.getReferencedName());
 				
 				// Add the RDF block for any singular reference ontology annotations and free-text descriptions
-				if(ssc instanceof DataStructure) rdfblock.setRDFforDataStructureAnnotations((DataStructure)ssc);
+				if(ssc instanceof DataStructure) rdfwriter.setRDFforDataStructureAnnotations((DataStructure)ssc);
 				
 				//TODO: might need to rethink the data that gets written out for submodels
-				else if(ssc instanceof Submodel) rdfblock.setRDFforSubmodelAnnotations((Submodel)ssc);
+				else if(ssc instanceof Submodel) rdfwriter.setRDFforSubmodelAnnotations((Submodel)ssc);
 			}
 			if(importel!=null && importedpiece!=null){
 				importel.addContent(importedpiece);
@@ -374,7 +384,7 @@ public class CellMLwriter extends ModelWriter {
 		for(Submodel submodel : semsimmodel.getSubmodels()){
 			
 			if( ! submodel.isFunctional()){
-				rdfblock.setRDFforSubmodelAnnotations(submodel);
+				rdfwriter.setRDFforSubmodelAnnotations(submodel);
 			}
 		}
 	}
@@ -386,7 +396,7 @@ public class CellMLwriter extends ModelWriter {
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any annotations on the submodel
-			rdfblock.setRDFforSubmodelAnnotations(submodel);
+			rdfwriter.setRDFforSubmodelAnnotations(submodel);
 			
 			comp.setAttribute("name", submodel.getName());  // Add name
 			
@@ -418,7 +428,7 @@ public class CellMLwriter extends ModelWriter {
 					initialval = ds.getStartValue();
 				
 				// Add the RDF block for any annotations
-				rdfblock.setRDFforDataStructureAnnotations(ds);
+				rdfwriter.setRDFforDataStructureAnnotations(ds);
 				
 				String metadataid = ds.getMetadataID();
 				// Add other attributes
@@ -494,4 +504,10 @@ public class CellMLwriter extends ModelWriter {
 			this.rel = rel;
 		}
 	}
+	
+	@Override
+	public AbstractRDFwriter getRDFwriter(){
+		return rdfwriter;
+	}
+
 }
