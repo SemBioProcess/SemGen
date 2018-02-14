@@ -19,7 +19,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.CASAreader;
 import semsim.reading.ModelClassifier.ModelType;
-import semsim.writing.SemSimRDFwriter;
+import semsim.writing.AbstractRDFwriter;
 
 public class CASAccessor extends ModelAccessor {
 
@@ -62,7 +62,7 @@ public class CASAccessor extends ModelAccessor {
 	        		AbstractRDFreader.stripSemSimRelatedContentFromRDFblock(cellmlrdf, semsimmodel); // when read in rdfreader in CellML file there may be annotations that we want to ignore
 					casardf.add(cellmlrdf.listStatements()); // Add curatorial statements to rdf model. When instantiate CASA reader, need to provide all RDF statements as string.
 					
-					String combinedrdf = SemSimRDFwriter.getRDFmodelAsString(casardf);
+					String combinedrdf = AbstractRDFwriter.getRDFmodelAsString(casardf,"RDF/XML");
 					
 					archive.close();
 					return new CASAreader(this, semsimmodel, sslib, combinedrdf);

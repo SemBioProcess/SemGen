@@ -43,6 +43,7 @@ import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.writing.AbstractRDFwriter;
 
 
 public abstract class AbstractRDFreader {
@@ -401,15 +402,17 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-
-
-	
 	// Replace the namespace of a URI with the OPB's preferred namespace
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
 		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
 		
 		return URI.create(uristring);
+	}
+	
+	
+	public static String getRDFmodelAsString(Model rdf, String rdfxmlformat){
+		return AbstractRDFwriter.getRDFmodelAsString(rdf, rdfxmlformat);
 	}
 	
 }

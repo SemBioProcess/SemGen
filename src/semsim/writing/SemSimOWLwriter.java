@@ -900,5 +900,9 @@ public class SemSimOWLwriter extends ModelWriter {
 		}
 	}
 
+	@Override
+	public AbstractRDFwriter getRDFwriter(){
+		return null;
+	}
 
 }

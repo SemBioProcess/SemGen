@@ -410,6 +410,12 @@ public class MMLwriter extends ModelWriter{
 		return ds.isDeclared() && ! ds.isSolutionDomain() && ! semsimmodel.getSolutionDomainBoundaries().contains(ds);
 	}
 
+	@Override
+	public AbstractRDFwriter getRDFwriter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

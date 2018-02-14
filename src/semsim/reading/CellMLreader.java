@@ -31,7 +31,6 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
-import semsim.writing.SemSimRDFwriter;
 
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
@@ -436,7 +435,7 @@ public class CellMLreader extends ModelReader {
 		
 		// Strip the semsim-related content from the main RDF block
 		AbstractRDFreader.stripSemSimRelatedContentFromRDFblock(rdfreader.rdf, semsimmodel);
-		String remainingrdf = SemSimRDFwriter.getRDFmodelAsString(rdfreader.rdf);
+		String remainingrdf = AbstractRDFreader.getRDFmodelAsString(rdfreader.rdf,"RDF/XML-ABBREV");
 		semsimmodel.addAnnotation(new Annotation(SemSimRelation.CELLML_RDF_MARKUP, remainingrdf));
 		
 		return semsimmodel;

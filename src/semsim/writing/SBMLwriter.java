@@ -35,6 +35,7 @@ import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.RateRule;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
@@ -55,6 +56,7 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
@@ -72,7 +74,6 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
-import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.SBMLreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
@@ -96,14 +97,14 @@ public class SBMLwriter extends ModelWriter {
 	// This includes species and reaction elements. DataStructures representing
 	// properties of species and reactions will have their annotations stored
 	// in the usual SBML annotation element.
-	private Set<DataStructure> DSsToOmitFromSemSimRDF = new HashSet<DataStructure>();
+	private Set<DataStructure> DSsToOmitFromCompositesRDF = new HashSet<DataStructure>();
 	
 	private Set<DataStructure> candidateDSsForCompartments = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForSpecies = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForReactions = new HashSet<DataStructure>();
 	private Set<DataStructure> globalParameters = new HashSet<DataStructure>(); // Boolean indicates whether to write out assignment for parameter
 	
-	private SemSimRDFwriter rdfblock;
+	private AbstractRDFwriter rdfwriter;
 
 	private Set<String> metaIDsUsed = new HashSet<String>();
 	
@@ -126,6 +127,12 @@ public class SBMLwriter extends ModelWriter {
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
 			SemSimUtil.flattenModel(semsimmodel);
 		
+		// Initialize a CASA writer, if we're writing to an OMEX file
+		if(getWriteLocation() instanceof OMEXAccessor){
+			rdfwriter = new CASAwriter(semsimmodel);
+			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
+		}
+		
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
 		
@@ -140,7 +147,8 @@ public class SBMLwriter extends ModelWriter {
 		addGlobalParameters();
 		addConstraints();
 		
-		Document doc = addSemSimRDF();
+		
+		Document doc = getWriteLocation() instanceof OMEXAccessor ? addCASArdf() : addSemSimRDF();
 
 		// If no errors, write out the model. (Converted to XML doc in addSemSimRDF()).		
 		// First catch errors
@@ -307,14 +315,13 @@ public class SBMLwriter extends ModelWriter {
 
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
-			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).hasPhysicalDefinitionAnnotation();
+			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();
 						
-			// If composite physical entity is just one entity, store annotation in <compartment> block
-			// and omit writing SemSim annotation
-			if(onerefentity){
-				DSsToOmitFromSemSimRDF.add(ds);
-				ReferencePhysicalEntity refent = (ReferencePhysicalEntity) pmcAsCPE.getArrayListOfEntities().get(0);
-				addAnnotationsAsCVterms(refent, comp);
+			// If composite physical entity is just one entity, store annotation in <compartment> block (or CASA file if writing to an OMEX file)
+			// and omit writing SemSim annotation as a composite
+			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
+				DSsToOmitFromCompositesRDF.add(ds);
+				addRDFannotationForPhysicalSBMLelement(pmcAsCPE.getArrayListOfEntities().get(0), comp);
 			}
 			
 			boolean hasinputs = ds.getComputationInputs().size()>0;
@@ -412,8 +419,8 @@ public class SBMLwriter extends ModelWriter {
 				
 				// Do not store the annotation for this data structure in the SemSim RDF
 				// Preserve semantics in <species> element
-				DSsToOmitFromSemSimRDF.add(ds);
-				addAnnotationsAsCVterms(indexent, species);
+				DSsToOmitFromCompositesRDF.add(ds);
+				addRDFannotationForPhysicalSBMLelement(indexent, species);
 					
 				// In SBML Level 3 the hasSubstanceUnitsOnly must be set either way. In Level 2 the default is false.
 				URI physdefprop = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -520,7 +527,7 @@ public class SBMLwriter extends ModelWriter {
 				
 				// Do not store the annotation for this data structure in the SemSim RDF.
 				// Preserve semantics in <reaction> element.
-				DSsToOmitFromSemSimRDF.add(ds);
+				DSsToOmitFromCompositesRDF.add(ds);
 				
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
@@ -729,71 +736,65 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	private Document addCASArdf(){
+		
+		writeCompositesInRDF();
+
+		return makeXMLdocFromSBMLdoc();
+	}
+	
+	
+	
+	
 	/**
-	 *  Add the SemSim-structured annotations for the model elements
+	 *  If writing to a standalone SBML model, create the SemSim-structured annotations for the model elements
 	 */ 
 	private Document addSemSimRDF(){
 		
-		rdfblock = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
+		rdfwriter = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
 		
-		rdfblock.setRDFforModelLevelAnnotations();
+		rdfwriter.setRDFforModelLevelAnnotations();
 		
 		// NOTE: SemSim-style submodels are not currently preserved on SBML export
 		
-		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+		writeCompositesInRDF();
 		
-			// Only the info for compartments and parameters are stored (i.e. not species or reactions)
-			// because the <species> and <reaction> elements already contain the needed info
-			if(DSsToOmitFromSemSimRDF.contains(ds)) continue;
-			else rdfblock.setRDFforDataStructureAnnotations(ds);
+		Document doc = makeXMLdocFromSBMLdoc();
+
+		// Add the RDF metadata to the appropriate element in the SBML file
+		if( ! rdfwriter.rdf.isEmpty()){
+			
+			String rawrdf = AbstractRDFwriter.getRDFmodelAsString(rdfwriter.rdf,"RDF/XML-ABBREV");			
+			Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
+			
+			Element modelel = doc.getRootElement().getChild("model", sbmlNS);
+			
+			if(modelel == null){
+				System.err.println("SBML writer error - no 'model' element found in XML doc");
+				return doc;
+			}
+			
+			Element modelannel = modelel.getChild("annotation", sbmlNS);
+			
+			if(modelannel == null){
+				modelannel = new Element("annotation", sbmlNS);
+				modelel.addContent(modelannel);
+			}
+			
+			Element ssannel = modelannel.getChild(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace());
+			
+			if(ssannel == null){
+				ssannel = new Element(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace()); 
+				modelannel.addContent(ssannel);
+			}
+			// Remove old RDF if present
+			else modelannel.removeContent(ssannel);
+			
+			// Add the SemSim RDF
+			if(newrdf !=null) ssannel.addContent(newrdf);
 		}
 		
-		Document doc = null;
-
-		try {
-			
-			String sbmlstring = new SBMLWriter().writeSBMLToString(sbmldoc);
-			
-			SAXBuilder builder = new SAXBuilder();
-			
-			InputStream is = new ByteArrayInputStream(sbmlstring.getBytes("UTF-8"));
-			doc = builder.build(is);
-			
-			// Add the RDF metadata to the appropriate element in the SBML file
-			if( ! rdfblock.rdf.isEmpty()){
-				
-				String rawrdf = SemSimRDFwriter.getRDFmodelAsString(rdfblock.rdf);			
-				Content newrdf = ModelWriter.makeXMLContentFromString(rawrdf);
-				
-				Element modelel = doc.getRootElement().getChild("model", sbmlNS);
-				
-				if(modelel == null){
-					System.err.println("SBML writer error - no 'model' element found in XML doc");
-					return doc;
-				}
-				
-				Element modelannel = modelel.getChild("annotation", sbmlNS);
-				
-				if(modelannel == null){
-					modelannel = new Element("annotation", sbmlNS);
-					modelel.addContent(modelannel);
-				}
-				
-				Element ssannel = modelannel.getChild(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace());
-				
-				if(ssannel == null){
-					ssannel = new Element(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace()); 
-					modelannel.addContent(ssannel);
-				}
-				// Remove old RDF if present
-				else modelannel.removeContent(ssannel);
-				
-				// Add the SemSim RDF
-				if(newrdf !=null) ssannel.addContent(newrdf);
-			}
-		} catch (XMLStreamException | IOException | JDOMException e) {
-			e.printStackTrace();
-		} 
 		
 		return doc;
 	}
@@ -903,10 +904,16 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	private void addAnnotationsAsCVterms(PhysicalModelComponent pmc, SBase sbmlobj){
+	
+	private void addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
 		
+		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
+		if(getWriteLocation() instanceof OMEXAccessor){
+			((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
+			return;
+		}
 		
-		// For ReferencePhysicalEntities and ReferencePhysicalProcesses, we collect annotations this way
+		// This is used when writing RDF-based semantic annotations within the SBML file
 		if(pmc instanceof ReferenceTerm){
 			CVTerm cvterm = new CVTerm();
 			ReferenceTerm refterm = (ReferenceTerm)pmc;
@@ -972,6 +979,32 @@ public class SBMLwriter extends ModelWriter {
 			semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 	}
 	
-
+	@Override
+	public AbstractRDFwriter getRDFwriter(){
+		return rdfwriter;
+	}
+	
+	private Document makeXMLdocFromSBMLdoc(){
+		try {
+			String sbmlstring = new SBMLWriter().writeSBMLToString(sbmldoc);
+			SAXBuilder builder = new SAXBuilder();
+			InputStream is = new ByteArrayInputStream(sbmlstring.getBytes("UTF-8"));
+			return builder.build(is);
+		} catch (JDOMException | IOException | SBMLException | XMLStreamException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	private void writeCompositesInRDF(){
+		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
+			
+			// Only the info for compartments and parameters are stored (i.e. not species or reactions)
+			// because the <species> and <reaction> elements already contain the needed info
+			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
+			else rdfwriter.setRDFforDataStructureAnnotations(ds);
+		}		
+	}
 
 }

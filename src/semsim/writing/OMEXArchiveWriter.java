@@ -28,17 +28,13 @@ import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXArchiveWriter {
 	private ModelWriter writer;
-	private CASAwriter casawriter;
 	
 	public OMEXArchiveWriter(ModelWriter writer) {
-		
 		this.writer = writer;
 	}
 	
-	public OMEXArchiveWriter(ModelWriter writer, CASAwriter casawriter) {
-		
+	public OMEXArchiveWriter(ModelWriter writer, CASAwriter casawriter) {		
 		this.writer = writer;
-		this.casawriter = casawriter;
 	}
 
 
@@ -63,6 +59,7 @@ public class OMEXArchiveWriter {
 	        boolean fileexists = Files.exists(nf);
 	        
 	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+	        writer.setWriteLocation(archive);
 	        String model = writer.encodeModel();
 	        zwriter.write(model);
 	        zwriter.close(); 	
@@ -97,6 +94,7 @@ public class OMEXArchiveWriter {
   	        
   	        Path nf = fs.getPath("model\\" + archive.getFileName());
   	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+  	        writer.setWriteLocation(archive);
   	        String model = writer.encodeModel();
   	        zwriter.write(model);
   	        zwriter.close();
@@ -119,7 +117,7 @@ public class OMEXArchiveWriter {
         boolean fileexists = Files.exists(nf);
         
         Writer omexwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-        String model = casawriter.getObjectRDFmodelAsString();
+        String model = AbstractRDFwriter.getRDFmodelAsString(writer.getRDFwriter().rdf, "RDF/XML");
         omexwriter.write(model);
         omexwriter.close(); 
         
