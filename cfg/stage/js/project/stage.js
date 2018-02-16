@@ -487,6 +487,8 @@ function makeResultSet(searchResultSet, stage) {
                     return node.id === id;
                 })[0];
 				node.onClick();
+				node.pulse();
+
 			}
 
 			// Hide the search box
