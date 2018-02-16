@@ -188,6 +188,10 @@ public class SBMLwriter extends ModelWriter {
 				
 			}
 			else if ( ! ds.isSolutionDomain()) globalParameters.add(ds);
+			
+			if(ds.getName().contains(".")){
+				makeDataStructureNameValid(ds);
+			}
 		}
 	}
 	
@@ -955,7 +959,8 @@ public class SBMLwriter extends ModelWriter {
 		Double formulaAsDouble = null;
 		
 		if(ds.getComputation().hasMathML()){
-			String formula = getFormulaFromRHSofMathML(ds.getComputation().getMathML(), ds.getName());
+			String mathml = ds.getComputation().getMathML();
+			String formula = getFormulaFromRHSofMathML(mathml, ds.getName());			
 			formulaAsDouble = Double.parseDouble(formula);
 		}
 		
@@ -978,6 +983,37 @@ public class SBMLwriter extends ModelWriter {
 		if((ds.hasDescription() || ds.hasPhysicalProperty() || ds.hasPhysicalDefinitionAnnotation()) && ! ds.hasMetadataID())
 			semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 	}
+
+	// For data structures that don't have valid IDs, rename them and also replace occurrences of the old name 
+	// in the MathML of dependent data structures
+	private void makeDataStructureNameValid(DataStructure ds){
+		Set<String> existingnames = semsimmodel.getDataStructureNames();
+		String oldname = ds.getName();
+		String newname = oldname.replaceAll("\\.", "_");
+			
+		while(existingnames.contains(newname)){
+			newname = newname + "_";
+		}
+		
+		ds.setName(newname);
+
+		Set<DataStructure> dssettoedit = new HashSet<DataStructure>();
+		dssettoedit.addAll(ds.getUsedToCompute());
+		dssettoedit.add(ds);
+		
+		// Go through all data structures that are dependent on the one we are renaming and replace occurences of old name in equations
+		for(DataStructure depds : dssettoedit){ 
+			
+			if(depds.hasComputation()){
+				Computation depcomp = depds.getComputation();
+				String oldmathml = depcomp.getMathML();
+				String newmathml = SemSimUtil.replaceCodewordsInString(oldmathml, newname, oldname);
+				depcomp.setMathML(newmathml);
+			}
+		}
+		
+	}
+	
 	
 	@Override
 	public AbstractRDFwriter getRDFwriter(){
