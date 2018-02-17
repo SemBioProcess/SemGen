@@ -359,7 +359,11 @@ public class SBMLwriter extends ModelWriter {
 			// is the chemical, item, or particle and the rest of the entity is the compartment
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
 			
+			System.out.println(ds.getName());
+			
 			if(pmc instanceof CompositePhysicalEntity){
+				System.out.println(ds.getName() + " has composite phys ent");
+
 				CompositePhysicalEntity fullcpe = (CompositePhysicalEntity)pmc;
 								
 				// From libSBML 5 spec:
@@ -495,6 +499,8 @@ public class SBMLwriter extends ModelWriter {
 					else if (init!=null) species.setInitialConcentration(init);
 				}
 				
+				System.out.println("Added " + fullcpe.getName());
+
 				entitySpeciesMap.put(fullcpe, species);
 				
 				addNotesAndMetadataID(fullcpe, species);
@@ -845,7 +851,9 @@ public class SBMLwriter extends ModelWriter {
 	private SBase lookupSBaseComponentInEntityMap(PhysicalModelComponent pmc, LinkedHashMap<? extends PhysicalModelComponent, ? extends SBase> map){
 		
 		for(PhysicalModelComponent testpmc : map.keySet()){
-							
+			
+			System.out.println("TRying to find " + pmc.getName() + ": " + testpmc.getName() + " : " + pmc.equals(testpmc));
+			
 			if(pmc.equals(testpmc)) return map.get(testpmc);
 		}
 		return null;
