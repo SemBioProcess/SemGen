@@ -83,6 +83,7 @@ public class SemSimLibrary {
 	public static URI OPB_MASS_LINEAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00190");
 	public static URI OPB_MASS_AREAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00258");
 	public static URI OPB_MASS_VOLUMETRIC_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00101");
+	public static URI OPB_STATE_FRACTION_OF_CHEMICAL_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01298");
 	public static URI OPB_CHEMICAL_MOLAR_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00592");
 	public static URI OPB_PARTICLE_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00544");
 	public static URI OPB_MATERIAL_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01220");

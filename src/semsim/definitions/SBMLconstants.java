@@ -96,6 +96,7 @@ public class SBMLconstants {
 		set2.add(SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);
 		set2.add(SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);
 		set2.add(SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);
+		set2.add(SemSimLibrary.OPB_STATE_FRACTION_OF_CHEMICAL_URI);
 		
 		OPB_PROPERTIES_FOR_SPECIES = Collections.unmodifiableSet(set2);
 		

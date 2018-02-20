@@ -51,9 +51,14 @@ public class ModelAnnotationsBench extends Observable {
 		LegacyCodeChooser lc = new LegacyCodeChooser(currentloc);
 		ModelAccessor newloc = lc.getCodeLocation();
 		
-		if (newloc != null && ! (currentloc.equals(newloc)))
-			setModelSourceLocation(newloc);
-		
+		if(newloc != null){
+			if(currentloc == null){
+				setModelSourceLocation(newloc);
+				return;
+			}
+			else if( ! currentloc.equals(newloc))
+				setModelSourceLocation(newloc);
+		}		
 	}
 	
 	public ArrayList<String[]> getAllMetadataInformation() {

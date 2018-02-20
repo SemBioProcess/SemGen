@@ -214,7 +214,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		for(PhysicalEntity ent : cpe.getArrayListOfEntities()){
 			ent.addToModel(this);
 		}
-		System.out.println("Added cpe " + cpe.getName());
 		this.physicalentities.add(cpe);
 		return cpe;
 	}
