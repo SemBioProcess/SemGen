@@ -42,6 +42,16 @@ public class OMEXArchiveWriter {
       //  String inputFileName = archive.getFilePath();
         try {
 
+        	if (!archive.isLocalFile()) {
+        		 try {
+        	        	OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archive);
+        	        	builder.build();
+        		 }
+        	      	catch (IOException e1) {
+        	  				e1.printStackTrace();
+        	  		}
+        	}
+        	
 	        Map<String, String> env = new HashMap<>(); 
 	        env.put("create", "false");
 	        Path path = Paths.get(archive.getDirectoryPath());
@@ -80,31 +90,6 @@ public class OMEXArchiveWriter {
 		}
 	        
 	}
-	
-
-    private void createArchive(OMEXAccessor archive) {
-        try {
-
-  	        Map<String, String> env = new HashMap<>(); 
-  	        env.put("create", "true");
-  	        Path path = Paths.get(archive.getDirectoryPath());
-  	        URI uri = URI.create("jar:" + path.toUri());
-  	        
-  	        FileSystem fs = FileSystems.newFileSystem(uri, env);
-  	        
-  	        Path nf = fs.getPath("model\\" + archive.getFileName());
-  	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-  	        writer.setWriteLocation(archive);
-  	        String model = writer.encodeModel();
-  	        zwriter.write(model);
-  	        zwriter.close();
-  	        fs.close();
-  	        
-          }
-  		catch (IOException e1) {
-  				e1.printStackTrace();
-  		}
-    }
     
     private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
         Path nf = null;

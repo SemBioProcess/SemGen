@@ -61,13 +61,14 @@ public class CASAwriter extends AbstractRDFwriter{
 				ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
 				Property rdfprop = roa.getRelation().getRDFproperty();
 				Qualifier q = SemSimRelations.getBiologicalQualifierFromRelation(roa.getRelation());
-				
-				if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-					
-					ResourceFactory.createProperty(q.toString());
-					Resource objres = rdf.createResource(roa.getReferenceURI().toString());
-					Statement st = rdf.createStatement(res, rdfprop, objres);
-					addStatement(st);
+				if (q!=null) {
+					if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
+						
+						ResourceFactory.createProperty(q.toString());
+						Resource objres = rdf.createResource(roa.getReferenceURI().toString());
+						Statement st = rdf.createStatement(res, rdfprop, objres);
+						addStatement(st);
+					}
 				}
 			}
 		}
