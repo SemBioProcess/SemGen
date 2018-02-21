@@ -271,6 +271,13 @@ Node.prototype.onClick = function () {
     }
 }
 
+Node.prototype.pulse = function () {
+    var nodeEnlarge = this.rootElement.select(".highlight");
+    nodeEnlarge = nodeEnlarge.transition()
+        .duration(2000)
+        .attr("r", 30);
+}
+
 Node.prototype.isVisible = function () {
 	var parent = this.parent;
 	var show = true;
