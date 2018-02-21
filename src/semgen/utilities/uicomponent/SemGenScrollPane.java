@@ -1,18 +1,11 @@
 package semgen.utilities.uicomponent;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
-import javax.swing.JComponent;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 public class SemGenScrollPane extends JScrollPane implements MouseWheelListener {
 	private static final long serialVersionUID = 2703381146331909737L;
@@ -152,23 +145,23 @@ public class SemGenScrollPane extends JScrollPane implements MouseWheelListener 
         	setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         }
 
-        @Override
-        public void mouseDragged(MouseEvent e) {       	
-            if (origin != null) {
-                if (viewport != null && getVerticalScrollBar().isVisible()) {
-                    //int deltaX = origin.x - e.getX();
-                    int deltaY = origin.y - e.getY();
-
-                    Point view = viewport.getViewPosition();
-                    //view.x += deltaX;
-                    view.y += deltaY;
-                    
-                    if (view.y >= 0 && view.y < viewport.getView().getHeight()) {
-                    	viewport.setViewPosition(view);
-                    }
-                    
-                }
-            }
-        }
+//        @Override
+//        public void mouseDragged(MouseEvent e) {
+//            if (origin != null) {
+//                if (viewport != null && getVerticalScrollBar().isVisible()) {
+//                    //int deltaX = origin.x - e.getX();
+//                    int deltaY = origin.y - e.getY();
+//
+//                    Point view = viewport.getViewPosition();
+//                    //view.x += deltaX;
+//                    view.y += deltaY;
+//
+//                    if (view.y >= 0 && view.y < viewport.getView().getHeight()) {
+//                    	viewport.setViewPosition(view);
+//                    }
+//
+//                }
+//            }
+//        }
 	}
 }
