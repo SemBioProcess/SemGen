@@ -54,20 +54,43 @@ public class CASAwriter extends AbstractRDFwriter{
 		
 		Set<Annotation> anns = pmc.getAnnotations();
 		
-		for(Annotation ann : anns){
+		// If it's a composite physical entity, write out the composite
+		if(pmc instanceof CompositePhysicalEntity){
+			URI enturi = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)pmc);
+			Statement st = rdf.createStatement(res, SemSimRelation.BQB_IS.getRDFproperty(), rdf.createResource(enturi.toString()));
+			addStatement(st);
+		}
+		
+		// If it's a singular physical entity, write out the singular annotation(s)
+		else{
+
+			// If the physical component has a physical identity annotation (is a ReferenceTerm), write the identity annotation
+			if(pmc instanceof ReferenceTerm){
+				Resource objres = rdf.createResource(((ReferenceTerm)pmc).getPhysicalDefinitionURI().toString());
+				Statement st = rdf.createStatement(res, SemSimRelation.BQB_IS.getRDFproperty(), objres);
+				addStatement(st);
+			}
 			
-			if(ann instanceof ReferenceOntologyAnnotation){
-				
-				ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
-				Property rdfprop = roa.getRelation().getRDFproperty();
-				Qualifier q = SemSimRelations.getBiologicalQualifierFromRelation(roa.getRelation());
-				if (q!=null) {
-					if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
+			// Otherwise it's a custom physical component. Store any non-identity annotations on it.
+			else{
+				for(Annotation ann : anns){
+					
+					if(ann instanceof ReferenceOntologyAnnotation){
 						
-						ResourceFactory.createProperty(q.toString());
-						Resource objres = rdf.createResource(roa.getReferenceURI().toString());
-						Statement st = rdf.createStatement(res, rdfprop, objres);
-						addStatement(st);
+						ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
+						Property rdfprop = roa.getRelation().getRDFproperty();						
+						Qualifier q = SemSimRelations.getBiologicalQualifierFromRelation(roa.getRelation());
+						
+						if (q!=null) {
+							
+							if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
+								
+								ResourceFactory.createProperty(q.toString());
+								Resource objres = rdf.createResource(roa.getReferenceURI().toString());
+								Statement st = rdf.createStatement(res, rdfprop, objres);
+								addStatement(st);
+							}
+						}
 					}
 				}
 			}

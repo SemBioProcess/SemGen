@@ -47,13 +47,13 @@ public class SemSimRelations {
 	
 	public static Qualifier getBiologicalQualifierFromRelation(Relation r) {
 		
-		if(r == SemSimRelation.BQB_IS)
+		if(r == SemSimRelation.BQB_IS || r == SemSimRelation.HAS_PHYSICAL_DEFINITION)
 			return Qualifier.BQB_IS;
 		
-		else if(r == StructuralRelation.BQB_HAS_PART)
+		else if(r == StructuralRelation.BQB_HAS_PART || r == StructuralRelation.HAS_PART)
 			return Qualifier.BQB_HAS_PART;
 		
-		else if(r == StructuralRelation.BQB_IS_PART_OF)
+		else if(r == StructuralRelation.BQB_IS_PART_OF || r == StructuralRelation.PART_OF)
 			return Qualifier.BQB_IS_PART_OF;
 		
 		else if(r == SemSimRelation.BQB_IS_VERSION_OF)
@@ -62,7 +62,7 @@ public class SemSimRelations {
 		else if(r == SemSimRelation.BQB_OCCURS_IN)
 			return Qualifier.BQB_OCCURS_IN;
 		
-		else if(r == SemSimRelation.BQB_IS_PROPERTY_OF)
+		else if(r == SemSimRelation.BQB_IS_PROPERTY_OF || r == SemSimRelation.PHYSICAL_PROPERTY_OF)
 			return Qualifier.BQB_IS_PROPERTY_OF;
 		
 		else return null;

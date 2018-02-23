@@ -321,11 +321,10 @@ public class SBMLwriter extends ModelWriter {
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
 			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();
 						
-			// If composite physical entity is just one entity, store annotation in <compartment> block (or CASA file if writing to an OMEX file)
-			// and omit writing SemSim annotation as a composite
+			// Store annotation for compartment
 			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
 				DSsToOmitFromCompositesRDF.add(ds);
-				addRDFannotationForPhysicalSBMLelement(pmcAsCPE.getArrayListOfEntities().get(0), comp);
+				addRDFannotationForPhysicalSBMLelement(pmc, comp);
 			}
 			
 			boolean hasinputs = ds.getComputationInputs().size()>0;
@@ -359,11 +358,7 @@ public class SBMLwriter extends ModelWriter {
 			// is the chemical, item, or particle and the rest of the entity is the compartment
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
 			
-			System.out.println(ds.getName());
-			
 			if(pmc instanceof CompositePhysicalEntity){
-				System.out.println(ds.getName() + " has composite phys ent");
-
 				CompositePhysicalEntity fullcpe = (CompositePhysicalEntity)pmc;
 								
 				// From libSBML 5 spec:
@@ -411,8 +406,19 @@ public class SBMLwriter extends ModelWriter {
 					cptmt.setSpatialDimensions(3); // Assuming a 3-D compartment
 					cptmt.setSize(1.0); // Assuming size = 1
 					
-					if(compartmentDefined)  // If there was a compartment defined in the annotation, map the SemSim and SBML representations
+					if(compartmentDefined){  // If there was a compartment defined in the annotation, map the SemSim and SBML representations
+						
+						// Because we are creating a new compartment that isn't explicitly asserted as a physical entity
+						// in the SemSim model, we have to add it. Otherwise, when we can end up duplicating meta ID's
+						// on SBML objects (not allowed) when we create the annotation statements that link compartments
+						// to reference terms. This is because when assigning new meta ID's, we look at the existing meta ID's
+						// on SemSim model components and choose one that's not taken. We have to make sure the new compartment's
+						// meta ID is part of that existing list.
+						// If an equivalent CompositePhysicalEntity is already in the model, we use it from here on
+						compcpe = semsimmodel.addCompositePhysicalEntity(compcpe); 
 						entityCompartmentMap.put(compcpe, cptmt);
+						addRDFannotationForPhysicalSBMLelement(compcpe, cptmt);
+					}
 				}
 									
 				// If the index entity in the composite entity is a custom term, use
@@ -499,10 +505,7 @@ public class SBMLwriter extends ModelWriter {
 					else if (init!=null) species.setInitialConcentration(init);
 				}
 				
-				System.out.println("Added " + fullcpe.getName());
-
 				entitySpeciesMap.put(fullcpe, species);
-				
 				addNotesAndMetadataID(fullcpe, species);
 			}
 			
@@ -749,7 +752,7 @@ public class SBMLwriter extends ModelWriter {
 	
 	private Document addCASArdf(){
 		
-		writeCompositesInRDF();
+		writeFullCompositesInRDF();
 
 		return makeXMLdocFromSBMLdoc();
 	}
@@ -768,7 +771,7 @@ public class SBMLwriter extends ModelWriter {
 		
 		// NOTE: SemSim-style submodels are not currently preserved on SBML export
 		
-		writeCompositesInRDF();
+		writeFullCompositesInRDF();
 		
 		Document doc = makeXMLdocFromSBMLdoc();
 
@@ -851,9 +854,7 @@ public class SBMLwriter extends ModelWriter {
 	private SBase lookupSBaseComponentInEntityMap(PhysicalModelComponent pmc, LinkedHashMap<? extends PhysicalModelComponent, ? extends SBase> map){
 		
 		for(PhysicalModelComponent testpmc : map.keySet()){
-			
-			System.out.println("TRying to find " + pmc.getName() + ": " + testpmc.getName() + " : " + pmc.equals(testpmc));
-			
+						
 			if(pmc.equals(testpmc)) return map.get(testpmc);
 		}
 		return null;
@@ -919,13 +920,19 @@ public class SBMLwriter extends ModelWriter {
 	
 	private void addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
 		
+		// If neither the SBML object nor the SemSim physical model component have a metadata ID, assign them both the same one
+		if( ! sbmlobj.isSetMetaId() && ! pmc.hasMetadataID()){
+			String metaid = semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", pmc);
+			sbmlobj.setMetaId(metaid);
+		}
+		
 		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
 		if(getWriteLocation() instanceof OMEXAccessor){
 			((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
 			return;
 		}
 		
-		// This is used when writing RDF-based semantic annotations within the SBML file
+		// This is used when writing RDF-based semantic annotations within a standalone SBML file
 		if(pmc instanceof ReferenceTerm){
 			CVTerm cvterm = new CVTerm();
 			ReferenceTerm refterm = (ReferenceTerm)pmc;
@@ -1041,11 +1048,12 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	private void writeCompositesInRDF(){
+	private void writeFullCompositesInRDF(){
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
-			// Only the info for compartments and parameters are stored (i.e. not species or reactions)
-			// because the <species> and <reaction> elements already contain the needed info
+			// Only the info for parameters are stored (i.e. not compartments, species or reactions)
+			// because the <species> and <reaction> elements already contain the needed info, and 
+			// the <compartments> refer to physical entities (which can be composite), not properties of entities
 			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
 			else rdfwriter.setRDFforDataStructureAnnotations(ds);
 		}		
