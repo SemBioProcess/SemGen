@@ -321,7 +321,7 @@ public class SBMLwriter extends ModelWriter {
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
 			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();
 						
-			// Store annotation for compartment
+			// Store annotation for compartment.
 			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
 				DSsToOmitFromCompositesRDF.add(ds);
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);

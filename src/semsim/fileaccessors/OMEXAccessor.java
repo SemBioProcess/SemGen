@@ -19,6 +19,7 @@ import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
+import semsim.reading.CASAreader;
 import semsim.reading.OMEXManifestreader;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
@@ -29,7 +30,7 @@ import semsim.writing.OMEXArchiveWriter;
 public class OMEXAccessor extends ModelAccessor {
 	
 	protected ModelAccessor archivedfile;
-	protected ModelAccessor casafile = null;
+	protected ModelAccessor casaaccessor = null;
 	protected ZipFile archive;
 	
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
@@ -49,16 +50,18 @@ public class OMEXAccessor extends ModelAccessor {
 		super(matocopy);
 
 		archivedfile = new ModelAccessor(matocopy.archivedfile);
-		if (matocopy.casafile != null) {
-			casafile = new ModelAccessor(matocopy.casafile);
+		if (matocopy.casaaccessor != null) {
+			casaaccessor = new ModelAccessor(matocopy.casaaccessor);
 		}
 	}
 	
 	@Override
 	public InputStream modelInStream() throws IOException {
+		
 		archive = new ZipFile(filepath);
 		String path = archivedfile.getFilePath().replace('\\', '/');
 		Enumeration<? extends ZipEntry> entries = archive.entries();
+		
 		while (entries.hasMoreElements()) {
 			ZipEntry current = entries.nextElement();
 			System.out.println(current.getName());
@@ -66,6 +69,7 @@ public class OMEXAccessor extends ModelAccessor {
 		
 		path = path.substring(2, path.length());
 		ZipEntry entry = archive.getEntry(path);
+		
 		return archive.getInputStream(entry);
 		
 	}
@@ -106,18 +110,23 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	@Override
-	public AbstractRDFreader getRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
+	public AbstractRDFreader createRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
 			throws ZipException, IOException, JDOMException{
 		
-		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL && this.casafile==null) {
-			this.getCASAFile();
-			if (casafile != null) return casafile.getRDFreaderForModel(thesemsimmodel, curationalrdf, sslib);
+		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL && this.casaaccessor==null) {
+			
+			getCASAaccessor();
+			
+			if (casaaccessor != null){
+				String casardfstring = casaaccessor.getModelasString();
+				return new CASAreader(this, thesemsimmodel, null, casardfstring);
+			}
 		}	
 		return new SemSimRDFreader(archivedfile, thesemsimmodel, curationalrdf, sslib);
 
 	}
 	
-	protected void getCASAFile() {
+	protected void getCASAaccessor() {
 
 		try {
 				ZipFile archive = new ZipFile(file);
@@ -125,13 +134,10 @@ public class OMEXAccessor extends ModelAccessor {
 				ArrayList<ModelAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
 
 				for(ModelAccessor acc : accs){
-					
 					//			String rdfincellml = "";
-					
-					if(acc.getModelType()==ModelType.CASA_FILE){
-						
-						    this.casafile = acc;
-						    break;
+					if(acc.getModelType()==ModelType.CASA_FILE){	
+					    this.casaaccessor = acc;
+					    break;
 					}
 				}
 				archive.close();
@@ -158,7 +164,7 @@ public class OMEXAccessor extends ModelAccessor {
 	
 	public String getCASAFileName() {
 		if (hasCASAFile()) {
-			return casafile.getFileName();
+			return casaaccessor.getFileName();
 		}
 		return getModelName() + ".rdf";
 	}
@@ -179,7 +185,7 @@ public class OMEXAccessor extends ModelAccessor {
 		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
 			CASAwriter casawriter = new CASAwriter(model);
 			if (!this.hasCASAFile()) {
-				casafile = new ModelAccessor(new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
+				casaaccessor = new ModelAccessor(new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
 			}
 			omexwriter = new OMEXArchiveWriter(writer, casawriter);
 		}
@@ -199,6 +205,6 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	public boolean hasCASAFile() {
-		return casafile != null;
+		return casaaccessor != null;
 	}
 }

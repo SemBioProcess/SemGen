@@ -184,6 +184,6 @@ public class ModelClassifier {
 	}
 	
 	public static boolean hasValidOMEXannotationFileFormat(String format) {
-		return format.endsWith("rdf+xml");
+		return format.endsWith("casa") || format.equals("http://identifiers.org/combine.specifications/omex-metadata");
 	}
 }
