@@ -883,90 +883,90 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Cardiac_myocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma14067 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cardiac_myocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma14067">
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma72444 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma72444">
         <rdfs:label xml:lang="en">Cytoplasmic organelle matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma72444</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_extracellular_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma9672 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_extracellular_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9672">
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Sarcomere -->
+    <!-- http://purl.org/sig/ont/fma/fma67895 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Sarcomere">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma67895">
         <rdfs:label xml:lang="en">Sarcomere</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Sarcomere</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67895</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -17116,9 +17116,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cardiac_myocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cardiac_myocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cardiac_myocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma14067"/>
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</SemSim:refersTo>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES.Temp_property"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Diadic_space_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Junctional_sarcoplasmic_reticulum_0"/>
@@ -17133,9 +17133,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cytoplasmic_organelle_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cytoplasmic_organelle_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma72444"/>
         <rdfs:label xml:lang="en">Cytoplasmic organelle matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma72444</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29108_1"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES.VJSR_property"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cytoplasmic_organelle_matrix_part_of_Junctional_sarcoplasmic_reticulum_part_of_Cardiac_myocyte"/>
@@ -17148,9 +17148,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cytoplasmic_organelle_matrix_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cytoplasmic_organelle_matrix_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma72444"/>
         <rdfs:label xml:lang="en">Cytoplasmic organelle matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma72444</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29108_2"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_39124_1"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES.VNSR_property"/>
@@ -22622,9 +22622,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29101_2"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29103_2"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29108_5"/>
@@ -22656,9 +22656,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29101_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29103_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29108_0"/>
@@ -22674,9 +22674,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_cytosol_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_cytosol_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#COMPUTE_CONCENTRATION_AND_VOLTAGE_DERIVATIVES.VSS_property"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Diadic_space_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_cytosol_part_of_Diadic_space_part_of_Cardiac_myocyte"/>
@@ -22705,9 +22705,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_extracellular_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Portion_of_extracellular_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29101_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29103_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#CHEBI_29108_3"/>
@@ -22823,9 +22823,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Sarcomere_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Sarcomere_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Sarcomere"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma67895"/>
         <rdfs:label xml:lang="en">Sarcomere</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Sarcomere</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67895</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Calcium_bound_to_high_affinity_troponin_C_binding_sites_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Calcium_bound_to_low_affinity_troponin_C_binding_site_0"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/01032015221240978m0500#Cardiac_myocyte_0"/>

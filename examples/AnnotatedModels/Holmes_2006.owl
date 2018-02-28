@@ -619,60 +619,60 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Elastic_tissue -->
+    <!-- http://purl.org/sig/ont/fma/fma20113 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Elastic_tissue">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma20113">
         <rdfs:label xml:lang="en">Elastic tissue</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Elastic_tissue</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma20113</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Set_of_skeletal_muscle_cells -->
+    <!-- http://purl.org/sig/ont/fma/fma260657 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Set_of_skeletal_muscle_cells">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma260657">
         <rdfs:label xml:lang="en">Set of skeletal muscle cells</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Set_of_skeletal_muscle_cells</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma260657</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Skeletal_muscle_tissue -->
+    <!-- http://purl.org/sig/ont/fma/fma14069 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Skeletal_muscle_tissue">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma14069">
         <rdfs:label xml:lang="en">Skeletal muscle tissue</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Skeletal_muscle_tissue</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14069</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Striated_muscle_tissue -->
+    <!-- http://purl.org/sig/ont/fma/fma67905 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Striated_muscle_tissue">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma67905">
         <rdfs:label xml:lang="en">Striated muscle tissue</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Striated_muscle_tissue</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67905</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -930,9 +930,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Elastic_tissue_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Elastic_tissue_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Elastic_tissue"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma20113"/>
         <rdfs:label xml:lang="en">Elastic tissue</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Elastic_tissue</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma20113</SemSim:refersTo>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Elastic_tissue_part_of_Striated_muscle_tissue"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Striated_muscle_tissue_0"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#contraction.L_se_property"/>
@@ -952,9 +952,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Set_of_skeletal_muscle_cells_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Set_of_skeletal_muscle_cells_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Set_of_skeletal_muscle_cells"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma260657"/>
         <rdfs:label xml:lang="en">Set of skeletal muscle cells</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Set_of_skeletal_muscle_cells</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma260657</SemSim:refersTo>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Set_of_skeletal_muscle_cells_part_of_Striated_muscle_tissue"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Striated_muscle_tissue_0"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#contraction.L_ce_property"/>
@@ -999,9 +999,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Skeletal_muscle_tissue_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Skeletal_muscle_tissue_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Skeletal_muscle_tissue"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma14069"/>
         <rdfs:label xml:lang="en">Skeletal muscle tissue</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Skeletal_muscle_tissue</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14069</SemSim:refersTo>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#contraction.P_property"/>
     </owl:NamedIndividual>
     
@@ -1010,9 +1010,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Striated_muscle_tissue_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Striated_muscle_tissue_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Striated_muscle_tissue"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma67905"/>
         <rdfs:label xml:lang="en">Striated muscle tissue</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Striated_muscle_tissue</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67905</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Elastic_tissue_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015124909013m0600#Set_of_skeletal_muscle_cells_0"/>
     </owl:NamedIndividual>

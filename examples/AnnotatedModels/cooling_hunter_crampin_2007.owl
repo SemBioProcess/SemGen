@@ -734,60 +734,60 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Extracellular_space -->
+    <!-- http://purl.org/sig/ont/fma/fma70022 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Extracellular_space">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma70022">
         <rdfs:label xml:lang="en">Extracellular space</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Extracellular_space</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma70022</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Regular_atrial_cardiac_myocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma83108 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Regular_atrial_cardiac_myocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma83108">
         <rdfs:label xml:lang="en">Regular atrial cardiac myocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Regular_atrial_cardiac_myocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma83108</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1493,9 +1493,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Extracellular_space_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Extracellular_space_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Extracellular_space"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma70022"/>
         <rdfs:label xml:lang="en">Extracellular space</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Extracellular_space</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma70022</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Ligand_0"/>
     </owl:NamedIndividual>
     
@@ -1780,9 +1780,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#CHEBI_18348_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#G-alpha-GDP_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#G-alpha-GTP_0"/>
@@ -1813,9 +1813,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#CHEBI_16595_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#CHEBI_29108_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Portion_of_cytosol_part_of_Regular_atrial_cardiac_myocyte"/>
@@ -1901,9 +1901,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Regular_atrial_cardiac_myocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Regular_atrial_cardiac_myocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Regular_atrial_cardiac_myocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma83108"/>
         <rdfs:label xml:lang="en">Regular atrial cardiac myocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Regular_atrial_cardiac_myocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma83108</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Plasma_membrane_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122814911m0500#Portion_of_cytosol_0"/>
     </owl:NamedIndividual>

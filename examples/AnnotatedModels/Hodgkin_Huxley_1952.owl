@@ -928,30 +928,30 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Nerve_fiber -->
+    <!-- http://purl.org/sig/ont/fma/fma5914 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Nerve_fiber">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma5914">
         <rdfs:label xml:lang="en">Nerve fiber</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Nerve_fiber</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma5914</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1334,9 +1334,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Nerve_fiber_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Nerve_fiber_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Nerve_fiber"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma5914"/>
         <rdfs:label xml:lang="en">Nerve fiber</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Nerve_fiber</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma5914</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#CHEBI_29101_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#CHEBI_29103_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#CHEBI_39124_0"/>
@@ -1348,9 +1348,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Nerve_fiber_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Plasma_membrane_part_of_Nerve_fiber"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#potassium_channel.V_property"/>
@@ -1361,9 +1361,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Plasma_membrane_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#Plasma_membrane_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#leakage_current.V_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#membrane.V_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/08032015155118835m0500#potassium_channel_n_gate.V_property"/>

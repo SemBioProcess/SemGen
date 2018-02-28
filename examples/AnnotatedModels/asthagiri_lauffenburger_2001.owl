@@ -1037,15 +1037,15 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Oocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma18644 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Oocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma18644">
         <rdfs:label xml:lang="en">Oocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Oocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma18644</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1303,9 +1303,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015122750337m0500#Oocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015122750337m0500#Oocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Oocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma18644"/>
         <rdfs:label xml:lang="en">Oocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Oocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma18644</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015122750337m0500#P28482_0"/>
     </owl:NamedIndividual>
     
