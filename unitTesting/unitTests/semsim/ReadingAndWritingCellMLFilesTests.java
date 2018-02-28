@@ -1,26 +1,26 @@
-package semsim;
+package unitTests.semsim;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
+import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import semgen.UnitTestBase;
-import semsim.CollateralHelper;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.CellMLreader;
-import semsim.writing.CellMLwriter;
+import unitTests.semgen.UnitTestBase;
 
 public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	
 	@Rule
-	private TemporaryFolder _tempFolder = new TemporaryFolder();
+	public TemporaryFolder _tempFolder = new TemporaryFolder();
 
 	@Before
 	public void setup() throws IOException, NoSuchMethodException, SecurityException {
@@ -35,26 +35,28 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	@Test
 	public void readFromFile_readThenWriteValidFile_VerifyFileNotEmpty() {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
+		ModelAccessor validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.AlbrechtColegroveFriel2002_CellML);
 		CellMLreader reader = new CellMLreader(validCellMLFile);
 		
 		// Act
-		semsim.model.collection.SemSimModel model = reader.read();
-		CellMLwriter writer = new CellMLwriter(model);
-		File newModelFile = createTempFile();
-		writer.writeToFile(newModelFile);
+		semsim.model.collection.SemSimModel model;
 		
-		// Assert
 		try {
-			assertTrue(!FileUtils.readFileToString(newModelFile, "utf-8").isEmpty());
-		} catch (IOException e) {
+			model = reader.read();
+		
+			ModelAccessor newModelFile = FileAccessorFactory.getModelAccessor(createTempFile());
+			newModelFile.writetoFile(model);
+			
+			//assert
+			assertTrue(!newModelFile.getModelasString().isEmpty());
+		} catch (IOException | JDOMException e) {
 			fail();
 		}
 	}
 	
 	private File createTempFile() {
 		try {
-			return _tempFolder.newFile();
+			return _tempFolder.newFile("cellmltemp");
 		}
 		catch(Exception e) {
 			fail();
@@ -62,4 +64,5 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 		
 		return null;
 	}
+	
 }

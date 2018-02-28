@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipException;
 
 import org.apache.commons.io.IOUtils;
@@ -112,7 +112,7 @@ public class ModelAccessor {
 	public String getModelasString() throws IOException {
 		StringWriter writer = new StringWriter();
 		InputStream instream = modelInStream();
-		IOUtils.copy(instream, writer, Charset.defaultCharset());
+		IOUtils.copy(instream, writer, StandardCharsets.UTF_8);
 		instream.close();
 		return writer.toString();
 	}
@@ -160,9 +160,7 @@ public class ModelAccessor {
 
 		public void writetoFile(SemSimModel model) {
 			ModelWriter writer = makeWriter(model);
-			//FileOutputStream outstream;
 			try {
-				//outstream = new FileOutputStream(getFile());
 				PrintWriter pwriter = new PrintWriter(new FileWriter(getFile()), true);
 				String modelstring = writer.encodeModel();
 				pwriter.print(modelstring);

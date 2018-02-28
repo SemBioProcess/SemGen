@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -74,7 +74,7 @@ public class OMEXAccessor extends ModelAccessor {
 	public String getModelasString() throws IOException {
 		StringWriter writer = new StringWriter();
 		
-		IOUtils.copy(modelInStream(), writer, Charset.defaultCharset());
+		IOUtils.copy(modelInStream(), writer, StandardCharsets.UTF_8);
 		archive.close();
 		return writer.toString();
 	}

@@ -1,21 +1,23 @@
-package semsim;
+package unitTests.semsim;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.jdom.JDOMException;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
-import semgen.UnitTestBase;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.SemSimOWLreader;
-import semsim.writing.SemSimOWLwriter;
 
-public class ModelCopyTest extends UnitTestBase {
+public class ModelCopyTest extends unitTests.semgen.UnitTestBase {
 	@Test
 	public void readFromFile_readThenWriteValidFile_VerifyFileNotEmpty() throws OWLOntologyCreationException {
 		// Arrange
-		File validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.Cardiovascularmodel_OWL);
+		ModelAccessor validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.Cardiovascularmodel_OWL);
 		
 		try {
 			SemSimOWLreader reader = new SemSimOWLreader(validCellMLFile);
@@ -23,10 +25,10 @@ public class ModelCopyTest extends UnitTestBase {
 			// Act
 			semsim.model.collection.SemSimModel model = reader.read();
 			SemSimModel copy = model.clone();
-			SemSimOWLwriter writer = new SemSimOWLwriter(copy);
-			File newModelFile = new File(System.getProperty("user.home"),"CVCopy.owl");
-			writer.writeToFile(newModelFile);
-		} catch (OWLException e) {
+			ModelAccessor newModelFile = FileAccessorFactory.getModelAccessor(new File(System.getProperty("user.home"),"CVCopy.owl"));
+
+		
+		} catch (OWLException | JDOMException | IOException e) {
 			e.printStackTrace();
 		}
 		

@@ -1,4 +1,4 @@
-package semgen;
+package unitTests.semgen;
 import java.io.IOException;
 
 import org.junit.BeforeClass;

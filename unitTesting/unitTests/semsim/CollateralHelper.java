@@ -1,7 +1,9 @@
-package semsim;
+package unitTests.semsim;
 
-import java.io.File;
 import java.net.URL;
+
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 
 /**
  * This class helps retrieve files from the collateral directory
@@ -27,9 +29,11 @@ public class CollateralHelper {
 	 * @param fileName - Name of the file
 	 * @return File object for file
 	 */
-	public static File GetCollateral(String fileName) {
+	public static ModelAccessor GetCollateral(String fileName) {
+		
 		URL url = DummyCollateralHelper.getClass().getResource(_collateralDirName + fileName);
-		return new File(url.getFile());
+		ModelAccessor accessor = FileAccessorFactory.getModelAccessor(url.getFile());
+		return new ModelAccessor(accessor);
 	}
 	
 	/**
