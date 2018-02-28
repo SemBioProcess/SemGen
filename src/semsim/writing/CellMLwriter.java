@@ -96,7 +96,7 @@ public class CellMLwriter extends ModelWriter {
 		// If we're writing to an OMEX file, make the RDF writer a CASAwriter that follows COMBINE conventions
 		if(getWriteLocation() instanceof OMEXAccessor){
 			rdfwriter = new CASAwriter(semsimmodel);
-			rdfwriter.xmlbase = getWriteLocation().getDirectoryPath();
+			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
 		}
 		// Otherwise use a SemSimRDFwriter
 		else{

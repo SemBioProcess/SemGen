@@ -71,7 +71,7 @@ public class CellMLreader extends ModelReader {
 		if(rdfreaderelement != null)
 			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfreaderelement));
 		
-		rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, rdfstring, sslib);
+		rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, rdfstring, sslib);
 		
 		rdfreader.getModelLevelAnnotations();
 		

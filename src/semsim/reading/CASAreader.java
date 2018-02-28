@@ -54,7 +54,6 @@ public class CASAreader extends AbstractRDFreader{
 			
 			getAnnotationsForPhysicalComponent(ansbase);
 		}
-		
 	}
 
 	
@@ -71,18 +70,20 @@ public class CASAreader extends AbstractRDFreader{
 			Qualifier q = qualifiers[i];
 			
 			if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
-								
 				Relation relation = SemSimRelations.getRelationFromBiologicalQualifier(q);
 								
 				if(relation != null){
-					
 					NodeIterator nodeit = rdf.listObjectsOfProperty(res, relation.getRDFproperty());
 					
 					while(nodeit.hasNext()){
+
 						RDFNode nextnode = nodeit.next();
 						Resource objres = nextnode.asResource();
 						CVTerm cvterm = new CVTerm();
 						cvterm.setQualifier(q);
+						
+						if(objres.getURI().contains(ns + "#")) break; // If the annotation is the start of a composite physical entity, break while loop
+
 						String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
 						cvterm.addResourceURI(uriasstring);
 						sbaseobj.addCVTerm(cvterm);

@@ -45,6 +45,9 @@ import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.JSBML;
 import org.semanticweb.owlapi.model.OWLException;
 
+import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -58,6 +61,7 @@ import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
@@ -170,20 +174,21 @@ public class SBMLreader extends ModelReader{
 		if(sbmlmodel.getListOfSpecies().size()>0)
 			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
-		// TODO: instantiate RDF reader based on whether the model is standalone or in a COMBINE archive
-		// If from an archive, read in the annotations on the SBML physical components using
+		// If model is from an archive, read in the annotations on the SBML physical components using
 		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
-		// in the collectReactions and collectParameters functions.
+		// in the collectReactions (for local reaction-specific parameters) and collectParameters functions.
 		try {
-			String existingrdf = collectSemSimRDF(); // For SemSim-specific RDF annotations
 			
-			// If a standalone SBML model, reader should just be a SemSimRDFreader
-			
-				rdfreader = modelaccessor.getRDFreaderForModel(semsimmodel, existingrdf, sslib);
+			if(modelaccessor instanceof OMEXAccessor){
+				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, null);
+				((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
+			}
+			else{
+				String existingrdf = collectSemSimRDF(); // For SemSim-specific RDF annotations
 				
-				if(rdfreader != null){
-					rdfreader.getAnnotationsForPhysicalComponents(sbmlmodel);
-				}
+				// If a standalone SBML model, modelaccessor will just be a regular ModelAccessor and will return a SemSimRDFreader
+				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, existingrdf, sslib);
+			}
 			
 		} catch (JDOMException e) {
 			e.printStackTrace();
@@ -523,8 +528,33 @@ public class SBMLreader extends ModelReader{
 			// Collect the physical entity representation of the compartment
 			PhysicalEntity compartmentent = null;
 
-			// If the compartment is annotated with a SemSim annotation, collect it
-			if(rdfreader.hasPropertyAnnotationForDataStructure(ds)){				
+			
+			// If we're reading in from an OMEX file, see if the CASA file contains any composite physical entity annotations 
+			// for the compartment. Single physical entity annotations should have already been picked up and attached
+			// as CV terms.
+			if(modelaccessor instanceof OMEXAccessor && sbmlc.getCVTermCount()==0){
+				
+				ds.setAssociatedPhysicalProperty(prop);
+				
+				// TODO: collecting the RDF resource duplicates code in CASA reader. Put in one function.
+				String metaid = sbmlc.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
+				String ns = semsimmodel.getLegacyCodeLocation().getFileName();
+				Resource res = rdfreader.rdf.getResource(ns + "#" + metaid); // Don't use "./" + ns
+								
+				// See if the compartment has an IS annotation that links to a composite physical entity
+				NodeIterator nodeit = rdfreader.rdf.listObjectsOfProperty(res, SemSimRelation.BQB_IS.getRDFproperty());
+				
+				if(nodeit.hasNext()){
+					Resource entityres = nodeit.next().asResource();
+					
+					if(entityres.getURI().contains(ns + "#")){
+						compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(entityres);
+						ds.setAssociatedPhysicalModelComponent(compartmentent);
+					}
+				}
+			}
+			// If the compartment is annotated with a SemSim annotation in a standalone SBML model, collect it
+			else if(rdfreader.hasPropertyAnnotationForDataStructure(ds)){
 				rdfreader.getDataStructureAnnotations(ds);
 				
 				PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
@@ -538,7 +568,7 @@ public class SBMLreader extends ModelReader{
 			else{	
 				ds.setAssociatedPhysicalProperty(prop);
 				
-				PhysicalEntity singlecompartmentent = (PhysicalEntity) createPhysicalComponentForSBMLobject(sbmlc);
+				PhysicalEntity singlecompartmentent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(sbmlc);
 							
 				ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 				entlist.add(singlecompartmentent);
@@ -547,6 +577,7 @@ public class SBMLreader extends ModelReader{
 				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 				ds.setAssociatedPhysicalModelComponent(compartmentent);
 			}
+			
 			
 			compartmentAndEntitiesMap.put(compid, compartmentent);
 			
@@ -733,8 +764,7 @@ public class SBMLreader extends ModelReader{
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
 			rellist.add(StructuralRelation.PART_OF);
 
-
-			PhysicalEntity speciesent = (PhysicalEntity) createPhysicalComponentForSBMLobject(species);
+			PhysicalEntity speciesent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
 			
 			if(compartmentent instanceof CompositePhysicalEntity){
@@ -742,7 +772,6 @@ public class SBMLreader extends ModelReader{
 				rellist.addAll(((CompositePhysicalEntity) compartmentent).getArrayListOfStructuralRelations());
 			}
 			else entlist.add(compartmentent);
-			
 			
 			CompositePhysicalEntity compositeent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
@@ -987,7 +1016,7 @@ public class SBMLreader extends ModelReader{
 				}				
 			}
 						
-			PhysicalProcess process = (PhysicalProcess) createPhysicalComponentForSBMLobject(reaction);
+			PhysicalProcess process = (PhysicalProcess) createSingularPhysicalComponentForSBMLobject(reaction);
 						
 			// Set sources (reactants)
 			for(int s=0; s<reaction.getNumReactants(); s++){
@@ -1297,7 +1326,7 @@ public class SBMLreader extends ModelReader{
 										SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getRelationFromBiologicalQualifier(q);
 								
 								// If we're looking at an identity relation...
-								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION){
+								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION || relation==SemSimRelation.BQB_IS){
 									
 									// And we haven't added one yet, add it
 									if(numidentityanns==0){
@@ -1352,11 +1381,11 @@ public class SBMLreader extends ModelReader{
 	
 
 	 /**
-	 * Assign a semsim physical entity object to an sbml model element. Make sure that if a custom entity or process is created, that it has a unique name
+	 * Assign a singular semsim physical entity object to an sbml model element. Make sure that if a custom entity or process is created, that it has a unique name
 	 * @param sbmlobject
 	 * @return
 	 */
-	 private PhysicalModelComponent createPhysicalComponentForSBMLobject(SBase sbmlobject){
+	 private PhysicalModelComponent createSingularPhysicalComponentForSBMLobject(SBase sbmlobject){
 		
 		String id = getIDforSBaseObject(sbmlobject);
 		String name = getNameforSBaseObject(sbmlobject);
@@ -1375,8 +1404,11 @@ public class SBMLreader extends ModelReader{
 		
 		for(ReferenceOntologyAnnotation ann : getBiologicalQualifierAnnotations(sbmlobject)){
 			
-			// If there is a physical definition annotation, create reference physical component
-			if(ann.getRelation().equals(SemSimRelation.HAS_PHYSICAL_DEFINITION)){
+			Relation annrelation = ann.getRelation();
+			
+			// If there is a physical identity annotation, create reference physical component
+			if(annrelation.equals(SemSimRelation.HAS_PHYSICAL_DEFINITION) || annrelation.equals(SemSimRelation.BQB_IS)){
+				
 				// if entity, use reference term, but don't otherwise
 				if(isentity)
 					pmc = semsimmodel.addReferencePhysicalEntity(

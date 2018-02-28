@@ -68,8 +68,6 @@ public abstract class AbstractRDFreader {
 	}
 
 	// Abstract methods
-	protected void getAnnotationsForPhysicalComponents(org.sbml.jsbml.Model sbmlmodel) {}
-	
 	abstract protected void getModelLevelAnnotations();
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);

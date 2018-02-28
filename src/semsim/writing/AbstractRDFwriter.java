@@ -217,7 +217,7 @@ public abstract class AbstractRDFwriter {
 			typeprefix = "unknown";
 		
 		Resource res = createNewResourceForSemSimObject(typeprefix);
-		
+				
 		if(! isphysproperty) PMCandResourceURImap.put(pmc, URI.create(res.getURI()));
 		
 		setReferenceOrCustomResourceAnnotations(pmc, res);

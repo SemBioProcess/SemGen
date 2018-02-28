@@ -83,10 +83,10 @@ public class OMEXManifestreader {
 	        for (Element content : manifestelements) {
 	        	Attribute format = content.getAttribute("format");
 	        	String formvalue = format.getValue().toLowerCase();
-	        		        	
-	        	// Assume that all valid annotation files end in "rdf"
-	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue)){
-	        		Attribute location = content.getAttribute("location");
+        		Attribute location = content.getAttribute("location");
+
+	        	// Use format value and name of file to determine if it's a CASA file. Ignore the main metadata.rdf file
+	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue) && ! location.getValue().endsWith("/metadata.rdf")){
 	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelType.CASA_FILE));
 	        	}
 	        }

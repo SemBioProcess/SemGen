@@ -211,7 +211,7 @@ public class ModelAccessor {
 		return filename.substring(0, filename.indexOf('.'));
 	}
 
-	public AbstractRDFreader getRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
+	public AbstractRDFreader createRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
 			throws ZipException, IOException, JDOMException{
 				
 		return new SemSimRDFreader(this, thesemsimmodel, curationalrdf, sslib);

@@ -36,11 +36,10 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 	}
 	
 	private void layoutDialog() {
-		setPreferredSize(new Dimension(300, 200));	
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(SemGenSettings.lightblue);
 		
-		JLabel selectmodeltype = new JLabel("Model Name");
+		JLabel selectmodeltype = new JLabel("Model Name: ");
 		
 		JPanel modelnamepane = new JPanel();
 		modelnamepane.setLayout(new BoxLayout(modelnamepane, BoxLayout.X_AXIS));
@@ -49,7 +48,7 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 		modelnamefield.setForeground(Color.blue);
 		modelnamefield.setBorder(BorderFactory.createBevelBorder(1));
 		modelnamefield.setFont(SemGenFont.defaultPlain());
-		modelnamefield.setMaximumSize(new Dimension(50, 25));
+		modelnamefield.setPreferredSize(new Dimension(250, 25));
 		
 		modelnamepane.add(selectmodeltype);
 		modelnamepane.add(modelnamefield);
@@ -59,6 +58,7 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 
 		typechooser = new JComboBox<String>(ALL_WRITABLE_TYPES);
 		typechooser.setFont(SemGenFont.defaultPlain());
+		typechooser.setPreferredSize(new Dimension(40,25));
 		
 		// Set ontology chooser to recently used ontology
 		typechooser.setSelectedIndex(0);
@@ -68,6 +68,7 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 		modeltypepane.setAlignmentX(Box.LEFT_ALIGNMENT);
 		modeltypepane.add(selform);
 		modeltypepane.add(typechooser);
+		modeltypepane.add(Box.createHorizontalGlue());
 		
 		Object[] array = {modelnamepane, modeltypepane };
 
