@@ -847,75 +847,75 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     
 
 
-    <!-- http://sig.uw.edu/fma#Cardiac_myocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma14067 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cardiac_myocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma14067">
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Myocardium -->
+    <!-- http://purl.org/sig/ont/fma/fma9462 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Myocardium">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9462">
         <rdfs:label xml:lang="en">Myocardium</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Myocardium</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9462</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_extracellular_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma9672 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_extracellular_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9672">
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -4433,9 +4433,9 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     <!-- http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Cardiac_myocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Cardiac_myocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cardiac_myocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma14067"/>
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Diadic_space_for_a_single_functional_calcium_release_unit_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Junctional_sarcoplasmic_reticulum_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Network_sarcoplasmic_reticulum_0"/>
@@ -5064,9 +5064,9 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     <!-- http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Myocardium_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Myocardium_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Myocardium"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9462"/>
         <rdfs:label xml:lang="en">Myocardium</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Myocardium</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9462</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_extracellular_matrix_0"/>
     </owl:NamedIndividual>
     
@@ -6681,9 +6681,9 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     <!-- http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Cardiac_myocyte_0"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#DHPR_transition_probabilities.V_property"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Generic_calcium_buffer_1"/>
@@ -6706,9 +6706,9 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     <!-- http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#CHEBI_29108_1"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Cardiac_myocyte_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_cytosol_part_of_Cardiac_myocyte"/>
@@ -6729,9 +6729,9 @@ The model does not run in the PCEnv simulator because it is underconstrained.  N
     <!-- http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_extracellular_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_extracellular_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#CHEBI_29108_3"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Myocardium_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/05032015141307333m0500#Portion_of_extracellular_matrix_part_of_Myocardium"/>

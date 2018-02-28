@@ -811,45 +811,45 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     
 
 
-    <!-- http://sig.uw.edu/fma#Distal_convoluted_tubule -->
+    <!-- http://purl.org/sig/ont/fma/fma17721 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Distal_convoluted_tubule">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma17721">
         <rdfs:label xml:lang="en">Distal convoluted tubule</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Distal_convoluted_tubule</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma17721</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_extracellular_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma9672 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_extracellular_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9672">
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1375,9 +1375,9 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Distal_convoluted_tubule_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Distal_convoluted_tubule_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Distal_convoluted_tubule"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma17721"/>
         <rdfs:label xml:lang="en">Distal convoluted tubule</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Distal_convoluted_tubule</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma17721</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CL_0005010_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_0"/>
     </owl:NamedIndividual>
@@ -4156,9 +4156,9 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_29101_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_29239_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_35274_0"/>
@@ -4181,9 +4181,9 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_29101_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_29239_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#CHEBI_35274_1"/>
@@ -4197,9 +4197,9 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Na-H_Exchanger_2"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_2"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_part_of_Portion_of_extracellular_matrix"/>
@@ -4210,9 +4210,9 @@ The model runs in the PCEnv simulator but gives a flat output.&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_2 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_2">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/04032015105900718m0600#Portion_of_extracellular_matrix_1"/>
     </owl:NamedIndividual>
     

@@ -874,30 +874,30 @@ The model runs in the PCEnv simulator and gives a nice curved output...  But not
     
 
 
-    <!-- http://sig.uw.edu/fma#Endoplasmic_reticulum -->
+    <!-- http://purl.org/sig/ont/fma/fma63842 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Endoplasmic_reticulum">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63842">
         <rdfs:label xml:lang="en">Endoplasmic reticulum</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Endoplasmic_reticulum</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63842</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1743,9 +1743,9 @@ The model runs in the PCEnv simulator and gives a nice curved output...  But not
     <!-- http://www.bhi.washington.edu/SemSim/08032015152525250m0500#Endoplasmic_reticulum_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015152525250m0500#Endoplasmic_reticulum_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Endoplasmic_reticulum"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63842"/>
         <rdfs:label xml:lang="en">Endoplasmic reticulum</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Endoplasmic_reticulum</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63842</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015152525250m0500#CHEBI_39124_1"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015152525250m0500#IP3_Ca_channel_0"/>
     </owl:NamedIndividual>
@@ -2088,9 +2088,9 @@ The model runs in the PCEnv simulator and gives a nice curved output...  But not
     <!-- http://www.bhi.washington.edu/SemSim/08032015152525250m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015152525250m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015152525250m0500#CHEBI_39124_0"/>
     </owl:NamedIndividual>
     

@@ -974,60 +974,60 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Cardiac_myocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma14067 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cardiac_myocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma14067">
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell -->
+    <!-- http://purl.org/sig/ont/fma/fma62387 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma62387">
         <rdfs:label xml:lang="en">Junctional sarcoplasmic reticulum of cardiac muscle cell</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma62387</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1593,9 +1593,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Cardiac_myocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Cardiac_myocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cardiac_myocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma14067"/>
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Plasma_membrane_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Portion_of_cytosol_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Sarcoplasmic_reticulum_uptake_store_0"/>
@@ -1758,9 +1758,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma62387"/>
         <rdfs:label xml:lang="en">Junctional sarcoplasmic reticulum of cardiac muscle cell</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Junctional_sarcoplasmic_reticulum_of_cardiac_muscle_cell</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma62387</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#CHEBI_29108_2"/>
     </owl:NamedIndividual>
     
@@ -2478,9 +2478,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Cardiac_myocyte_0"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Na_Ca_exchanger.V_property"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#P48768_0"/>
@@ -2521,9 +2521,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#CHEBI_29101_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#CHEBI_29103_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/26032015152001561m0500#CHEBI_29108_0"/>
