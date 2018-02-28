@@ -761,60 +761,60 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Cardiac_myocyte -->
+    <!-- http://purl.org/sig/ont/fma/fma14067 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cardiac_myocyte">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma14067">
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma72444 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma72444">
         <rdfs:label xml:lang="en">Cytoplasmic organelle matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma72444</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Sarcoplasmic_reticulum -->
+    <!-- http://purl.org/sig/ont/fma/fma67225 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Sarcoplasmic_reticulum">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma67225">
         <rdfs:label xml:lang="en">Sarcoplasmic reticulum</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Sarcoplasmic_reticulum</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67225</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1182,9 +1182,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cardiac_myocyte_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cardiac_myocyte_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cardiac_myocyte"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma14067"/>
         <rdfs:label xml:lang="en">Cardiac myocyte</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_myocyte</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma14067</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Portion_of_cytosol_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Sarcoplasmic_reticulum_0"/>
     </owl:NamedIndividual>
@@ -1194,9 +1194,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cytoplasmic_organelle_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cytoplasmic_organelle_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma72444"/>
         <rdfs:label xml:lang="en">Cytoplasmic organelle matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cytoplasmic_organelle_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma72444</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#CHEBI_29108_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cytoplasmic_organelle_matrix_part_of_Sarcoplasmic_reticulum_part_of_Cardiac_myocyte"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Sarcoplasmic_reticulum_0"/>
@@ -1216,9 +1216,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#CHEBI_15422_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#CHEBI_16761_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#CHEBI_26020_0"/>
@@ -2477,9 +2477,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Sarcoplasmic_reticulum_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Sarcoplasmic_reticulum_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Sarcoplasmic_reticulum"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma67225"/>
         <rdfs:label xml:lang="en">Sarcoplasmic reticulum</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Sarcoplasmic_reticulum</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67225</SemSim:refersTo>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cardiac_myocyte_0"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Cytoplasmic_organelle_matrix_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/03032015130319068m0500#Sarcoplasmic_reticulum_part_of_Cardiac_myocyte"/>

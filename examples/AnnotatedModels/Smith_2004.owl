@@ -881,75 +881,75 @@
     
 
 
-    <!-- http://sig.uw.edu/fma#Cardiac_septum -->
+    <!-- http://purl.org/sig/ont/fma/fma7180 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Cardiac_septum">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma7180">
         <rdfs:label xml:lang="en">Cardiac septum</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_septum</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma7180</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Pericardium -->
+    <!-- http://purl.org/sig/ont/fma/fma9869 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Pericardium">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9869">
         <rdfs:label xml:lang="en">Pericardium</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Pericardium</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9869</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_blood -->
+    <!-- http://purl.org/sig/ont/fma/fma9670 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_blood">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9670">
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Wall_of_left_ventricle -->
+    <!-- http://purl.org/sig/ont/fma/fma9556 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Wall_of_left_ventricle">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9556">
         <rdfs:label xml:lang="en">Wall of left ventricle</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Wall_of_left_ventricle</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9556</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Wall_of_right_ventricle -->
+    <!-- http://purl.org/sig/ont/fma/fma9533 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Wall_of_right_ventricle">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9533">
         <rdfs:label xml:lang="en">Wall of right ventricle</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Wall_of_right_ventricle</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9533</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1340,9 +1340,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Cardiac_septum_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Cardiac_septum_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Cardiac_septum"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma7180"/>
         <rdfs:label xml:lang="en">Cardiac septum</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Cardiac_septum</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma7180</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Cardiac_septum"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#left_ventricle.V_spt_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#right_ventricle.V_spt_property"/>
@@ -1363,9 +1363,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Pericardium_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Pericardium_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Pericardium"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9869"/>
         <rdfs:label xml:lang="en">Pericardium</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Pericardium</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9869</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Pericardium"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#pericardium.V_pcd_property"/>
     </owl:NamedIndividual>
@@ -1375,9 +1375,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma9291"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#flow.P_rv_property"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#fma9291_0"/>
@@ -1395,9 +1395,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma9466"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#aorta.P_lv_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#flow.P_lv_property"/>
@@ -1415,9 +1415,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_2 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_2">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma12239"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#aorta.P_ao_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#aorta.V_ao_property"/>
@@ -1432,9 +1432,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_3 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_3">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma52455"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#flow.P_pu_property"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#fma52455_0"/>
@@ -1449,9 +1449,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_4 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_4">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma14167"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#flow.P_pa_property"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#fma14167_0"/>
@@ -1465,9 +1465,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_5 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_5">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma280059"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#aorta.P_vc_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#flow.P_vc_property"/>
@@ -1482,9 +1482,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_6 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_6">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_blood"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9670"/>
         <rdfs:label xml:lang="en">Portion of blood</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_blood</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9670</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Portion_of_blood_part_of_fma52449"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#fma52449_0"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#pulmonary_artery.V_pa_property"/>
@@ -1962,9 +1962,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_left_ventricle_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_left_ventricle_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Wall_of_left_ventricle"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9556"/>
         <rdfs:label xml:lang="en">Wall of left ventricle</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Wall_of_left_ventricle</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9556</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_left_ventricle"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#left_ventricle.V_lvf_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#lvf_calculator.V_lvf_property"/>
@@ -1984,9 +1984,9 @@
     <!-- http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_right_ventricle_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_right_ventricle_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Wall_of_right_ventricle"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9533"/>
         <rdfs:label xml:lang="en">Wall of right ventricle</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Wall_of_right_ventricle</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9533</SemSim:hasPhysicalDefinition>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#Wall_of_right_ventricle"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#right_ventricle.V_rvf_property"/>
         <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/10102017092926439m0700#rvf_calculator.V_rvf_property"/>

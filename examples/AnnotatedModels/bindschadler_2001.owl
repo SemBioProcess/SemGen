@@ -816,75 +816,75 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     
 
 
-    <!-- http://sig.uw.edu/fma#Endoplasmic_reticulum -->
+    <!-- http://purl.org/sig/ont/fma/fma63842 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Endoplasmic_reticulum">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63842">
         <rdfs:label xml:lang="en">Endoplasmic reticulum</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Endoplasmic_reticulum</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63842</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Intercellular_junction -->
+    <!-- http://purl.org/sig/ont/fma/fma67945 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Intercellular_junction">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma67945">
         <rdfs:label xml:lang="en">Intercellular junction</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Intercellular_junction</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67945</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Plasma_membrane -->
+    <!-- http://purl.org/sig/ont/fma/fma63841 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Plasma_membrane">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma63841">
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_cytosol -->
+    <!-- http://purl.org/sig/ont/fma/fma66836 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_cytosol">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma66836">
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- http://sig.uw.edu/fma#Portion_of_extracellular_matrix -->
+    <!-- http://purl.org/sig/ont/fma/fma9672 -->
 
-    <owl:Class rdf:about="http://sig.uw.edu/fma#Portion_of_extracellular_matrix">
+    <owl:Class rdf:about="http://purl.org/sig/ont/fma/fma9672">
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.bhi.washington.edu/SemSim#refersTo"/>
-                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</owl:hasValue>
+                <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</owl:hasValue>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -1509,9 +1509,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Endoplasmic_reticulum"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63842"/>
         <rdfs:label xml:lang="en">Endoplasmic reticulum</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Endoplasmic_reticulum</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63842</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_part_of_First_pancreatic_acinar_cell"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#First_pancreatic_acinar_cell_0"/>
@@ -1523,9 +1523,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Endoplasmic_reticulum"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63842"/>
         <rdfs:label xml:lang="en">Endoplasmic reticulum</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Endoplasmic_reticulum</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63842</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_3"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Endoplasmic_reticulum_part_of_Second_pancreatic_acinar_cell"/>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#IP3_Ca_channel_1"/>
@@ -1641,9 +1641,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Intercellular_junction_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Intercellular_junction_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Intercellular_junction"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma67945"/>
         <rdfs:label xml:lang="en">Intercellular junction</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Intercellular_junction</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67945</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_4"/>
     </owl:NamedIndividual>
     
@@ -1652,9 +1652,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#ATPase_pumps_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_part_of_Second_pancreatic_acinar_cell"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Second_pancreatic_acinar_cell_0"/>
@@ -1665,9 +1665,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CL_0002064_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_part_of_CL_0002064"/>
     </owl:NamedIndividual>
@@ -1677,9 +1677,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_2 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_2">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Plasma_membrane"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma63841"/>
         <rdfs:label xml:lang="en">Plasma membrane</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Plasma_membrane</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma63841</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#ATPase_pumps_1"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#First_pancreatic_acinar_cell_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Plasma_membrane_part_of_First_pancreatic_acinar_cell"/>
@@ -1717,9 +1717,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_1"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#First_pancreatic_acinar_cell_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_part_of_First_pancreatic_acinar_cell"/>
@@ -1730,9 +1730,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_1 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_1">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_2"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_part_of_Second_pancreatic_acinar_cell"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Second_pancreatic_acinar_cell_0"/>
@@ -1743,9 +1743,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_2 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_2">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_cytosol"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma66836"/>
         <rdfs:label xml:lang="en">Portion of cytosol</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_cytosol</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma66836</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_6"/>
         <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CL_0002064_0"/>
         <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_cytosol_part_of_CL_0002064"/>
@@ -1783,9 +1783,9 @@ Updated documentation, curation status&lt;/rdf:value&gt;
     <!-- http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_extracellular_matrix_0 -->
 
     <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#Portion_of_extracellular_matrix_0">
-        <rdf:type rdf:resource="http://sig.uw.edu/fma#Portion_of_extracellular_matrix"/>
+        <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma9672"/>
         <rdfs:label xml:lang="en">Portion of extracellular matrix</rdfs:label>
-        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://sig.uw.edu/fma#Portion_of_extracellular_matrix</SemSim:refersTo>
+        <SemSim:refersTo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma9672</SemSim:refersTo>
         <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/08032015130337645m0500#CHEBI_39124_5"/>
     </owl:NamedIndividual>
     
