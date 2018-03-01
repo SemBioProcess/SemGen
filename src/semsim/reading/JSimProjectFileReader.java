@@ -34,11 +34,13 @@ public class JSimProjectFileReader {
 				// TODO: Move getRDFmarkup fxn somewhere else?
 				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
 				
-				SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), sslib);
-				
-				rdfreader.getModelLevelAnnotations();
-				rdfreader.getAllDataStructureAnnotations();
-				rdfreader.getAllSemSimSubmodelAnnotations();
+				if(rdfel != null){
+					SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), sslib);
+					
+					rdfreader.getModelLevelAnnotations();
+					rdfreader.getAllDataStructureAnnotations();
+					rdfreader.getAllSemSimSubmodelAnnotations();
+				}
 				
 				return true;
 			}

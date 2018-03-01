@@ -84,7 +84,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 									
 			// If the model is to be copied from an existing file like using SaveAs in the Annotator, collect <model> element
 			// from legacy code location
-			if(fromannotator){
+			if(fromannotator && semsimmodel.getSourceModelType() == ModelType.MML_MODEL_IN_PROJ){
 				
 				// If the model comes from a JSim project file, collect the model element
 				// so we can write it to the new project file

@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import semsim.fileaccessors.OMEXAccessor;
@@ -43,7 +44,10 @@ public class OMEXArchiveBuilder {
   	        
   			Files.createDirectory(fs.getPath("model"));
   			
-  	        zwriter.write(new XMLOutputter().outputString(manifest));
+  			XMLOutputter outputter = new XMLOutputter();
+			outputter.setFormat(Format.getPrettyFormat());
+			
+  	        zwriter.write(outputter.outputString(manifest));
   	        zwriter.close();
   	        
   	        //Path nf = fs.getPath("model\\" + archive.getFileName());

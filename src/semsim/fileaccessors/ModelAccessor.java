@@ -161,8 +161,8 @@ public class ModelAccessor {
 		public void writetoFile(SemSimModel model) {
 			ModelWriter writer = makeWriter(model);
 			try {
-				PrintWriter pwriter = new PrintWriter(new FileWriter(getFile()), true);
 				String modelstring = writer.encodeModel();
+				PrintWriter pwriter = new PrintWriter(new FileWriter(getFile()), true);
 				pwriter.print(modelstring);
 				pwriter.close();
 			} catch (IOException e) {

@@ -24,7 +24,7 @@ public class ModelClassifier {
 		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
 		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
 		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
-		CASA_FILE(".casa", new String[]{"casa"},null),
+		CASA_FILE(".casa", new String[]{"http://identifiers.org/combine.specifications/omex-metadata"},null),
 		UNKNOWN("null", new String[]{"null/null"}, null);
 		
 		private String extension;
