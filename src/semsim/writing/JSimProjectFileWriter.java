@@ -35,14 +35,14 @@ public class JSimProjectFileWriter extends ModelWriter{
 	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor modelaccessor) {
 		super(semsimmodel);
 
-		modelName = modelaccessor.getFileName();
+		modelName = modelaccessor.getModelName();
 		projaccessor = modelaccessor;
 	}
 	
 	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor newlocation, JSIMProjectAccessor oldlocation) {
 		super(semsimmodel);
 
-		modelName = newlocation.getFileName();
+		modelName = newlocation.getModelName();
 		projaccessor = newlocation;
 	}
 
