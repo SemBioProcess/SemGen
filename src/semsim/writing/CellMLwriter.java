@@ -35,8 +35,9 @@ import semsim.utilities.SemSimUtil;
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
 	private AbstractRDFwriter rdfwriter;
-	private Set<DataStructure> looseDataStructures = new HashSet<DataStructure>();
 	private Element root;
+	private static String timedomainname = "time";
+	private Map<String,String> oldAndNewUnitNameMap = new HashMap<String,String>();
 	
 	public CellMLwriter(SemSimModel model) {
 		super(model);
@@ -59,6 +60,7 @@ public class CellMLwriter extends ModelWriter {
 						
 			createRDFBlock();
 			createRootElement();
+			createUnitNameMap();
 			
 			doc = new Document(root);
 			
@@ -133,7 +135,14 @@ public class CellMLwriter extends ModelWriter {
 			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.sourcemodelid);
 			root.setAttribute("id", namestring, RDFNamespace.CMETA.createJdomNamespace());
 		}
-		
+	}
+	
+	
+	private void createUnitNameMap(){
+		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
+			String oldname = uom.getName();
+			oldAndNewUnitNameMap.put(oldname, makeValidUnitName(oldname));
+		}
 		
 	}
 	
@@ -191,7 +200,12 @@ public class CellMLwriter extends ModelWriter {
 			if(!sslib.isCellMLBaseUnit(uom.getName()) && !uom.isImported()){
 				
 				Element unitel = new Element("units", mainNS);
-				unitel.setAttribute("name", uom.getName().replace(" ", "_"));
+				
+				// Convert name into CellML-friendly version
+				
+				String unitname = oldAndNewUnitNameMap.get(uom.getName());
+				
+				unitel.setAttribute("name", unitname);
 				
 				if(uom.isFundamental()) unitel.setAttribute("base_units", "yes");
 				
@@ -209,7 +223,8 @@ public class CellMLwriter extends ModelWriter {
 						if(factor.getMultiplier()!=1.0 && factor.getMultiplier()!=0.0)
 							factorel.setAttribute("multiplier", Double.toString(factor.getMultiplier()));
 						
-						factorel.setAttribute("units", factor.getBaseUnit().getName().replace(" ", "_"));
+						String baseunitname = oldAndNewUnitNameMap.get(factor.getBaseUnit().getName());
+						factorel.setAttribute("units", baseunitname);
 						unitel.addContent(factorel);
 					}
 				}
@@ -219,7 +234,6 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	private void declareComponentsandVariables() {
-		looseDataStructures.addAll(semsimmodel.getAssociatedDataStructures());
 
 		// If there are no functional submodels, then create a new one that houses all the data structures
 		if(semsimmodel.getFunctionalSubmodels().size()==0){
@@ -228,7 +242,8 @@ public class CellMLwriter extends ModelWriter {
 			outputset.addAll(semsimmodel.getAssociatedDataStructures());
 			
 			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", outputset);
-			maincomponent.setAssociatedDataStructures(semsimmodel.getAssociatedDataStructures());
+			
+			maincomponent.setAssociatedDataStructures(semsimmodel.getDeclaredDataStructures()); // leave out undeclared data structures that can show up in JSim models
 			
 			
 			// Make sure that no variables have "." in their names (need a full flattening of the model)
@@ -259,7 +274,32 @@ public class CellMLwriter extends ModelWriter {
 					System.err.println("Error: Cannot convert models with discrete events into CellML");
 					break;
 				}
-				else mathml = mathml + ds.getComputation().getMathML() + "\n";
+				else if(ds.getComputation().hasMathML()){
+					
+					// Make sure the MathML contains a left-hand side
+					String dsmathml = ds.getComputation().getMathML();
+				
+					if( ! SemSimUtil.mathmlHasLHS(dsmathml))
+						dsmathml = SemSimUtil.addLHStoMathML(dsmathml, ds.getName(), ds.hasStartValue(), timedomainname);
+					
+					// Make sure that any in-equation unit declarations are CellML-compliant
+					int index = dsmathml.indexOf("units=\"");
+					while(index >= 0) {
+						// Get the unit name in the first two quotes
+					   String submathml = dsmathml.substring(index+7, dsmathml.length()-1);
+					   int quoteindex = submathml.indexOf("\"");
+					   String oldunitname = submathml.substring(0, quoteindex);
+					   
+					   if(oldAndNewUnitNameMap.containsKey(oldunitname)){
+						   String newunitname = oldAndNewUnitNameMap.get(oldunitname);
+						   dsmathml.replace("units=\"" + oldunitname + "\"", "units=\"" + newunitname + "\"");
+					   }
+					   
+					   index = submathml.indexOf(dsmathml, index+1);
+					}
+					
+					mathml = mathml + dsmathml + "\n";
+				}
 			}
 			maincomponent.getComputation().setMathML(mathml);
 			processFunctionalSubmodel(maincomponent, false);
@@ -272,11 +312,6 @@ public class CellMLwriter extends ModelWriter {
 					processFunctionalSubmodel((FunctionalSubmodel) submodel, true);
 				}
 			}
-		}
-		
-		if( ! looseDataStructures.isEmpty()){
-			System.err.println("There were data structures left over");
-			for(DataStructure ds : looseDataStructures) System.err.println(ds.getName());
 		}
 	}
 	
@@ -392,7 +427,7 @@ public class CellMLwriter extends ModelWriter {
 	//*************END WRITE PROCEDURE********************************************//
 	
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
-		if( ! ((FunctionalSubmodel)submodel).isImported()){
+		if( ! submodel.isImported()){
 			Element comp = new Element("component", mainNS);
 			
 			// Add the RDF block for any annotations on the submodel
@@ -405,11 +440,11 @@ public class CellMLwriter extends ModelWriter {
 			
 			// Add the variables
 			for(DataStructure ds : submodel.getAssociatedDataStructures()){
+				
 				Element variable = new Element("variable", mainNS);
-				
 				String initialval = ds.getStartValue();  // Overwritten later by getCellMLintialValue if ds is CellML-type variable
-				
 				String nameval = ds.getName();
+				
 				if(truncatenames && nameval.contains("."))
 					nameval = nameval.substring(nameval.indexOf(".")+1);
 				
@@ -423,7 +458,7 @@ public class CellMLwriter extends ModelWriter {
 					publicintval = cellmlvar.getPublicInterfaceValue();
 					privateintval = cellmlvar.getPrivateInterfaceValue();
 				}
-				// Otherwise, if the variable has a start value store it as the initial_value
+				// Otherwise, if the variable has a start value, store it as the CellML initial_value
 				else if(ds.hasStartValue())
 					initialval = ds.getStartValue();
 				
@@ -443,24 +478,27 @@ public class CellMLwriter extends ModelWriter {
 				if(privateintval!=null && !privateintval.equals(""))
 					variable.setAttribute("private_interface", privateintval);
 				
-				if(ds.hasUnits()) variable.setAttribute("units", ds.getUnit().getName().replace(" ", "_"));
+				if(ds.hasUnits()){
+					String unitsname = oldAndNewUnitNameMap.get( ds.getUnit().getName());
+
+					variable.setAttribute("units",unitsname);
+				}
 				else variable.setAttribute("units", "dimensionless");
 				
 				comp.addContent(variable);
-				looseDataStructures.remove(ds);
 			}
 		
 			// Add the mathml
-			Computation cmptn = ((FunctionalSubmodel)submodel).getComputation();
+			Computation cmptn = submodel.getComputation();
 			
 			if(cmptn.getMathML() != null && ! cmptn.getMathML().isEmpty()){
-				comp.addContent(makeXMLContentFromStringForMathML(cmptn.getMathML()));
+				comp.addContent(makeXMLContentFromStringForMathML(cmptn.getMathML()));				
 			}
 			else{
 				String allmathml = "";
-				for(DataStructure ds : submodel.getAssociatedDataStructures()){
-					String mathml = ds.getComputation().getMathML();
-					allmathml = allmathml + "\n" + mathml;
+				
+				for(DataStructure ds : submodel.getAssociatedDataStructures()){					
+					allmathml = allmathml + "\n" + ds.getComputation().getMathML();
 				}
 				comp.addContent(makeXMLContentFromStringForMathML(allmathml));
 			}
@@ -481,6 +519,21 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
+	}
+	
+	// Create a CellML-friendly unit name
+	private String makeValidUnitName(String oldname){
+		String newname = oldname;
+		newname = newname.replace("\\s", "_");
+		newname = newname.replace("/", "_per_");
+		newname = newname.replace("*", "_times_");
+		newname = newname.replace("^", "_exp_");
+		newname = newname.replace("(", "_");
+		newname = newname.replace(")", "_");
+				
+		if(Character.isDigit(newname.charAt(0))) newname = "x" + newname;
+		
+		return newname;
 	}
 	
 	
