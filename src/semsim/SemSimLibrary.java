@@ -67,7 +67,7 @@ public class SemSimLibrary {
 	private Set<String> OPBstateProperties = new HashSet<String>();
 	
 	public static URI OPB_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00147");
-	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00135");
+	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00135"); // TODO: this ID changed in in OPB version 1.05, on
 	public static URI OPB_FORCE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00574");
 	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00569");
 	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00573");
