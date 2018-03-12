@@ -178,7 +178,7 @@ public class SBMLreader extends ModelReader{
 		try {
 			
 			if(modelaccessor instanceof OMEXAccessor){
-				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, null);
+				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, sslib);
 				((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
 			}
 			else{

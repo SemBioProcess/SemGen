@@ -241,7 +241,10 @@ public class CellMLwriter extends ModelWriter {
 			Set<DataStructure> outputset = new HashSet<DataStructure>();
 			outputset.addAll(semsimmodel.getAssociatedDataStructures());
 			
-			FunctionalSubmodel maincomponent = new FunctionalSubmodel("component_0", outputset);
+			String modelname = semsimmodel.getName();
+			modelname.replaceAll(".", "_");
+			
+			FunctionalSubmodel maincomponent = new FunctionalSubmodel(modelname, outputset);
 			
 			maincomponent.setAssociatedDataStructures(semsimmodel.getDeclaredDataStructures()); // leave out undeclared data structures that can show up in JSim models
 			
