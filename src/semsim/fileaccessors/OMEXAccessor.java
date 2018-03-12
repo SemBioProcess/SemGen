@@ -119,7 +119,7 @@ public class OMEXAccessor extends ModelAccessor {
 			
 			if (casaaccessor != null){
 				String casardfstring = casaaccessor.getModelasString();
-				return new CASAreader(this, thesemsimmodel, null, casardfstring);
+				return new CASAreader(this, thesemsimmodel, sslib, casardfstring);
 			}
 		}	
 		return new SemSimRDFreader(archivedfile, thesemsimmodel, curationalrdf, sslib);
