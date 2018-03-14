@@ -109,12 +109,12 @@ PhysioMapNode.prototype.updateInfo = function() {
 		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
 	}
 	partstoich += "\nSinks: \n";
-	for (i=0; i < this.srcobj.sourcenames.length; i++) {
-		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
+	for (i=0; i < this.srcobj.sinknames.length; i++) {
+		partstoich += this.srcobj.sinknames[i].replace(": ", " (") + ") \n";
 	}
 	partstoich += "\nMediators: \n";
-	for (i=0; i < this.srcobj.sourcenames.length; i++) {
-		partstoich += this.srcobj.sourcenames[i].replace(": ", " (") + ") \n";
+	for (i=0; i < this.srcobj.mediatornames.length; i++) {
+		partstoich += this.srcobj.mediatornames[i] + "\n";
 	}
 	
 	$("#nodemenuParticipants > pre").text(partstoich);

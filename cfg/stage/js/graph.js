@@ -549,12 +549,14 @@ function Graph() {
 		}
 			
 		if(event.which=="32") {
-			graph.fixedMode = !graph.fixedMode;
-			$("#fixedNodes").attr('checked',graph.fixedMode);
-			if (graph.fixedMode)
-				graph.pause();
-			else graph.resume();
-		}
+            if (!$(event.target).closest(".searchString").length) {
+                graph.fixedMode = !graph.fixedMode;
+                $("#fixedNodes").attr('checked', graph.fixedMode);
+                if (graph.fixedMode)
+                    graph.pause();
+                else graph.resume();
+            }
+        }
 	});
 	
 	

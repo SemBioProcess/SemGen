@@ -1,15 +1,23 @@
 // Create the scroll pane for the imported model code
 package semgen.annotation;
 
-import java.awt.Color;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import semgen.SemGenSettings;
+import semgen.annotation.workbench.AnnotatorWorkbench;
+import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.utilities.SemGenError;
+import semgen.utilities.SemGenFont;
+import semgen.utilities.uicomponent.SemGenProgressBar;
+import semgen.utilities.uicomponent.SemGenTextArea;
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,23 +29,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
-
-import semgen.SemGenSettings;
-import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
-import semgen.utilities.SemGenError;
-import semgen.utilities.SemGenFont;
-import semgen.utilities.uicomponent.SemGenProgressBar;
-import semgen.utilities.uicomponent.SemGenTextArea;
-import semsim.fileaccessors.FileAccessorFactory;
-import semsim.fileaccessors.ModelAccessor;
 
 public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -58,7 +49,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		addMouseListener(new PopupListener());
 		
 		try {
-			setCodeView(workbench.getModelSourceLocation());
+			setCodeView(workbench.getModelAccessor());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
