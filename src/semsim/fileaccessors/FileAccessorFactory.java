@@ -60,9 +60,9 @@ public class FileAccessorFactory {
 	
 	private static OMEXAccessor getOMEXArchive(String fullpath) {
 		int extindex = fullpath.lastIndexOf(".omex");
-		String modelpath = fullpath.substring(extindex + 1, fullpath.length());
+		String modelpath = fullpath.substring(extindex + 6, fullpath.length());
 		ModelType type = classifyFile(modelpath);
-		return getOMEXArchive(new File(fullpath.substring(0, extindex )), new File(modelpath), type);
+		return getOMEXArchive(new File(fullpath.substring(0, extindex+5 )), new File(modelpath), type);
 	}
 	
 	private static ModelType classifyFile(String standAloneFile) {

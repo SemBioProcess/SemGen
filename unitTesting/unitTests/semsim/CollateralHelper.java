@@ -1,9 +1,11 @@
 package unitTests.semsim;
 
+import java.io.File;
 import java.net.URL;
 
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.reading.ModelClassifier.ModelType;
 
 /**
  * This class helps retrieve files from the collateral directory
@@ -17,7 +19,7 @@ public class CollateralHelper {
 	private static final CollateralHelper DummyCollateralHelper = new CollateralHelper();
 	
 	// Collateral director name
-	private static final String _collateralDirName = "/collateral/";
+	private static final String _collateralDirName = "/unitTests/collateral/";
 	
 	/**
 	 * Get a file by name from the collateral directory.
@@ -31,9 +33,9 @@ public class CollateralHelper {
 	 */
 	public static ModelAccessor GetCollateral(String fileName) {
 		
-		URL url = DummyCollateralHelper.getClass().getResource(_collateralDirName + fileName);
-		ModelAccessor accessor = FileAccessorFactory.getModelAccessor(url.getFile());
-		return new ModelAccessor(accessor);
+		
+		URL url = DummyCollateralHelper.getClass().getResource(_collateralDirName);
+		return FileAccessorFactory.getModelAccessor(url.getFile() + fileName);
 	}
 	
 	/**
@@ -42,9 +44,11 @@ public class CollateralHelper {
 	 * @author Ryan
 	 *
 	 */
-	public class Files
-	{
+	public class Files {
 		public static final String AlbrechtColegroveFriel2002_CellML = "albrecht_colegrove_friel_2002.cellml";
 		public static final String Cardiovascularmodel_OWL = "CardiovascularDynamics.owl";
+		public static final String BIOMD006_SBML = "BIOMD0000000006.xml";
+		public static final String CellML_OMEX_Example = "CellML_example.omex#smith_chase_nokes_shaw_wake_2004.cellml";
+		public static final String SBML_OMEX_Example = "SBML_example.omex";
 	}
 }

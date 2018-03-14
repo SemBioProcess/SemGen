@@ -58,17 +58,20 @@ public class OMEXAccessor extends ModelAccessor {
 	@Override
 	public InputStream modelInStream() throws IOException {
 		
-		archive = new ZipFile(filepath);
+		archive = new ZipFile(filepath.replace('\\', '/'));
 		String path = archivedfile.getFilePath().replace('\\', '/');
 		Enumeration<? extends ZipEntry> entries = archive.entries();
 		
-		while (entries.hasMoreElements()) {
-			ZipEntry current = entries.nextElement();
-			System.out.println(current.getName());
-		}
-		
-		path = path.substring(2, path.length());
+//		while (entries.hasMoreElements()) {
+//			ZipEntry current = entries.nextElement();
+//			System.out.println(current.getName());
+//		}
+//		
 		ZipEntry entry = archive.getEntry(path);
+		if (entry==null) {
+			path = path.substring(2, path.length());
+			entry = archive.getEntry(path);
+		}
 		
 		return archive.getInputStream(entry);
 		
