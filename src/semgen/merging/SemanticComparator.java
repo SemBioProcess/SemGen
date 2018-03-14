@@ -49,6 +49,8 @@ public class SemanticComparator {
 	public Set<String> getIdenticalCodewords() {
 		Set<String> matchedcdwds = new HashSet<String>();
 		
+		// TODO: If we're merging a CellML model and a non-CellML model, do we need to flag instances where there
+		// is a codeword X in the non-CellML model and component.X in the CellML one?
 		for (DataStructure ds : model1.getAssociatedDataStructures()) {
 			if(! ds.isFunctionalSubmodelInput()){
 				if (model2.containsDataStructure(ds.getName()))	matchedcdwds.add(ds.getName());

@@ -23,12 +23,14 @@ import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.writing.AbstractRDFwriter;
+import semsim.writing.SemSimRDFwriter;
 
 public class CASAreader extends AbstractRDFreader{
 
@@ -108,9 +110,22 @@ public class CASAreader extends AbstractRDFreader{
 		singannst = (singannst==null) ? resource.getProperty(SemSimRelation.BQB_IS.getRDFproperty()) : singannst; // Check for BQB_IS relation, too
 
 		if(singannst != null){
+
 			URI singularannURI = URI.create(singannst.getObject().asResource().getURI());
 			PhysicalProperty prop = getSingularPhysicalProperty(singularannURI);
 			ds.setSingularAnnotation(prop);
+			
+			// If we're reading an annotated CellML model and there is an output variable 
+			// annotated against OPB:Time, set it as a solution domain
+			if(ds instanceof MappableVariable){
+								
+				if( ( ((MappableVariable)ds).getPublicInterfaceValue().equals("out") 
+						|| ((MappableVariable)ds).getPublicInterfaceValue().equals("") )
+						&& prop.getPhysicalDefinitionURI().equals(SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(SemSimLibrary.OPB_TIME_URI))){
+					
+					ds.setIsSolutionDomain(true);
+				}
+			}
 		}
 	}
 	

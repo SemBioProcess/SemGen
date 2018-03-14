@@ -99,8 +99,6 @@ public class SBMLreader extends ModelReader{
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
-	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
-	public static final String mathMLelementEnd = "</math>";
 	private String timedomainname = "t";
 	public static final String reactionprefix = "Reaction_";
 	private UnitOfMeasurement modeltimeunits;
@@ -180,7 +178,7 @@ public class SBMLreader extends ModelReader{
 		try {
 			
 			if(modelaccessor instanceof OMEXAccessor){
-				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, null);
+				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, sslib);
 				((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
 			}
 			else{
@@ -446,8 +444,8 @@ public class SBMLreader extends ModelReader{
 			ds.setDeclared(true);
 			compartmentsubmodel.addDataStructure(ds);
 			
-			String mathml = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
-					+ sbmlc.getSize() + "</cn>\n </apply>\n" + mathMLelementEnd;
+			String mathml = SemSimUtil.mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
+					+ sbmlc.getSize() + "</cn>\n </apply>\n" + SemSimUtil.mathMLelementEnd;
 			ds.getComputation().setMathML(mathml);
 			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 			
@@ -822,7 +820,7 @@ public class SBMLreader extends ModelReader{
 				try {
 					mathmlstring = JSBML.writeMathMLToString(sbmlrule.getMath());
 					mathmlstring = stripXMLheader(mathmlstring);
-					mathmlstring = addLHStoMathML(mathmlstring, varname, sbmlrule.isRate());
+					mathmlstring = SemSimUtil.addLHStoMathML(mathmlstring, varname, sbmlrule.isRate(), timedomainname);
 					ds.getComputation().setMathML(mathmlstring);
 					
 				} catch (SBMLException | XMLStreamException e) {
@@ -890,7 +888,7 @@ public class SBMLreader extends ModelReader{
 					
 					String assignmentmathmlstring = JSBML.writeMathMLToString(ea.getMath());
 					assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
-					assignmentmathmlstring = addLHStoMathML(assignmentmathmlstring, varname, false);
+					assignmentmathmlstring = SemSimUtil.addLHStoMathML(assignmentmathmlstring, varname, false, timedomainname);
 					ssea.setMathML(assignmentmathmlstring);
 					
 					DataStructure outputds = semsimmodel.getAssociatedDataStructure(varname);
@@ -999,7 +997,7 @@ public class SBMLreader extends ModelReader{
 					
 						// For some reason the mathml string output for kinetic laws has <?xml version="1.0"...> at the head. Strip it.
 						mathmlstring = stripXMLheader(mathmlstring);
-						mathmlstring = addLHStoMathML(mathmlstring, reactionID, false);
+						mathmlstring = SemSimUtil.addLHStoMathML(mathmlstring, reactionID, false, timedomainname);
 									
 						for(int l=0; l<kineticlaw.getListOfLocalParameters().size(); l++){
 							LocalParameter lp = kineticlaw.getLocalParameter(l);
@@ -1099,14 +1097,14 @@ public class SBMLreader extends ModelReader{
 			
 			String LHS = "d(" + speciesid + ")/d(" + timedomainname + ")";
 			
-			eqmathml = mathMLelementStart + makeLHSforStateVariable(speciesid);
+			eqmathml = SemSimUtil.mathMLelementStart + SemSimUtil.makeLHSforStateVariable(speciesid, timedomainname);
 			
 			SpeciesConservation speccon = speciesAndConservation.get(speciesid);
 			
 			
 			// If the species is set as a boundary condition, set RHS to zero
 			if(sbmlspecies.getBoundaryCondition()==true || sbmlspecies.getConstant()==true){
-				eqmathml = eqmathml + "  <cn>0</cn>\n </apply>\n" + mathMLelementEnd;
+				eqmathml = eqmathml + "  <cn>0</cn>\n </apply>\n" + SemSimUtil.mathMLelementEnd;
 				eqstring = "0";
 			}
 			
@@ -1157,7 +1155,7 @@ public class SBMLreader extends ModelReader{
 				}
 				
 				String eqmathmlend = subunits ? "" : "   <ci>" + compartmentid + "</ci>\n  </apply>\n"; // if concentration units, include the divide operation closer
-				eqmathml = eqmathml + "\n" + ws + "</apply>\n" + eqmathmlend + " </apply>\n" + mathMLelementEnd;  // end plus operation, end eq operation
+				eqmathml = eqmathml + "\n" + ws + "</apply>\n" + eqmathmlend + " </apply>\n" + SemSimUtil.mathMLelementEnd;  // end plus operation, end eq operation
 				
 				// Annotate the data structure's computation as an OPB Derivative Constraint
 				ReferencePhysicalDependency rpd = semsimmodel.addReferencePhysicalDependency(
@@ -1494,8 +1492,8 @@ public class SBMLreader extends ModelReader{
 		ds.setUnit(unitforpar);
 		
 		ds.getComputation().setComputationalCode(ID + " = " + Double.toString(qwu.getValue()));
-		String mathmlstring = mathMLelementStart + " <apply>\n  <eq />\n  <ci>" 
-				+ ID + "</ci>\n  <cn>" + qwu.getValue() + "</cn>\n </apply>\n" + mathMLelementEnd;
+		String mathmlstring = SemSimUtil.mathMLelementStart + " <apply>\n  <eq />\n  <ci>" 
+				+ ID + "</ci>\n  <cn>" + qwu.getValue() + "</cn>\n </apply>\n" + SemSimUtil.mathMLelementEnd;
 		ds.getComputation().setMathML(mathmlstring);
 
 		collectSBaseData(qwu, ds);
@@ -1562,34 +1560,6 @@ public class SBMLreader extends ModelReader{
 		mathmlstring = mathmlstring.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", "");
 		mathmlstring = mathmlstring.replace("<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n", ""); // For single quotes
 		return mathmlstring;
-	}
-	
-	/**
-	 * Add the left-hand side of a MathML equation
-	 * @param mathmlstring The right-hand side of a MathML equation
-	 * @param varname The name of the solved variable
-	 * @param isODE Whether the variable is solved with an ODE
-	 * @return The MathML equation containing both the left- and right-hand side
-	 */
-	private String addLHStoMathML(String mathmlstring, String varname, boolean isODE){
-		String LHSstart = null;
-		if(isODE) 
-			LHSstart = makeLHSforStateVariable(varname);
-		else LHSstart = " <apply>\n  <eq />\n  <ci>" + varname + "  </ci>\n";
-		String LHSend = "</apply>\n";
-		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
-		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
-		return mathmlstring;
-	}
-	
-	/**
-	 * Create the MathML left-hand side for a variable that is solved using an ODE
-	 * @param varname
-	 * @return
-	 */
-	private String makeLHSforStateVariable(String varname){
-		return " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
-				+ timedomainname + "</ci>\n   </bvar>\n   <ci>" + varname + "</ci>\n  </apply>\n  ";
 	}
 	
 	

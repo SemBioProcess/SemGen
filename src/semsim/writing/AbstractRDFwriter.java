@@ -18,7 +18,9 @@ import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimObject;
 import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
@@ -53,7 +55,6 @@ public abstract class AbstractRDFwriter {
 	abstract protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares);
 	abstract protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares);
 	abstract protected void setDataStructurePropertyOfAnnotation(DataStructure ds);		
-	abstract protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier);
 	abstract protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res);
 	abstract protected void setRDFforSubmodelAnnotations(Submodel sub);
 	abstract protected Property getPartOfPropertyForComposites();
@@ -120,6 +121,51 @@ public abstract class AbstractRDFwriter {
 		variablesAndPropertyResourceURIs.put(ds, URI.create(res.getURI()));
 		setReferenceOrCustomResourceAnnotations(ds.getPhysicalProperty(), res);
 		return res;
+	}
+	
+	
+	// Add statements that assert the sources, sinks and mediators participating in a process as
+	// well as their stoichiometry
+	protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
+		Resource processres = getResourceForPMCandAnnotate(rdf, process);
+		
+		// Create a new participant resource
+		String type = null;
+		
+		if(relationship.getLocalName().equals(SemSimRelation.HAS_SOURCE_PARTICIPANT.getName())) type = "source";
+		else if(relationship.getLocalName().equals(SemSimRelation.HAS_SINK_PARTICIPANT.getName())) type = "sink";
+		else if(relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())) type = "mediator";
+		else return;
+		
+		Resource participantres = createNewResourceForSemSimObject(type);
+		Statement partst = rdf.createStatement(processres, relationship, participantres);
+		addStatement(partst);
+		
+		Resource physentrefres = null;
+		
+		// Create link between process participant and the physical entity it references
+		if(physent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
+			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
+			physentrefres = rdf.getResource(physentrefuri.toString());
+		}
+		else physentrefres = getResourceForPMCandAnnotate(rdf, physent);
+		
+		if(physentrefres!=null){
+			Statement st = rdf.createStatement(participantres, 
+					SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty(), 
+					physentrefres);
+			addStatement(st);
+		}
+		else System.err.println("Error in setting participants for process: null value for Resource corresponding to " + physent.getName());
+
+		// Add multiplier info
+		if( multiplier != null && ! relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())){
+			Statement st = rdf.createStatement(participantres, 
+					SemSimRelation.HAS_MULTIPLIER.getRDFproperty(), 
+					multiplier.toString());
+			
+			addStatement(st);
+		}
 	}
 	
 	
@@ -284,30 +330,33 @@ public abstract class AbstractRDFwriter {
 			if(refont==ReferenceOntology.UNIPROT){
 				newuri = URI.create(newnamespace + fragment);
 			}
-			if(refont==ReferenceOntology.OPB){
+			else if(refont==ReferenceOntology.OPB){
 				newuri = URI.create(newnamespace + fragment);
 			}
-			if(refont==ReferenceOntology.CHEBI){
+			else if(refont==ReferenceOntology.CHEBI){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(refont==ReferenceOntology.GO){
+			else if(refont==ReferenceOntology.GO){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(refont==ReferenceOntology.CL){
+			else if(refont==ReferenceOntology.CL){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(refont==ReferenceOntology.FMA){
+			else if(refont==ReferenceOntology.FMA){
 				// assumes that FMA IDs are formatted
 				// like http://purl.org/sig/ont/fma/fma70586
 				String newfragment = fragment.replace("fma","FMA:");
 				newuri = URI.create(newnamespace + newfragment);
 			}
-			if(refont==ReferenceOntology.MA){
+			else if(refont==ReferenceOntology.MA){
 				String newfragment = fragment.replace("_", ":");
 				newuri = URI.create(newnamespace + newfragment);
+			}
+			else if(refont==ReferenceOntology.PR){
+				// how to replace correctly?
 			}
 		}
 		return newuri;

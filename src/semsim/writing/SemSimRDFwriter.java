@@ -279,52 +279,6 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			}
 		}
 	}
-
-	// For creating the statements that specify which physical entities participate in which processes
-	@Override
-	protected void setProcessParticipationRDFstatements(
-			PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
-				
-		Resource processres = getResourceForPMCandAnnotate(rdf, process);
-		
-		// Create a new participant resource
-		String type = null;
-		
-		if(relationship.getLocalName().equals(SemSimRelation.HAS_SOURCE_PARTICIPANT.getName())) type = "source";
-		else if(relationship.getLocalName().equals(SemSimRelation.HAS_SINK_PARTICIPANT.getName())) type = "sink";
-		else if(relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())) type = "mediator";
-		else return;
-		
-		Resource participantres = createNewResourceForSemSimObject(type);
-		Statement partst = rdf.createStatement(processres, relationship, participantres);
-		addStatement(partst);
-		
-		Resource physentrefres = null;
-		
-		// Create link between process participant and the physical entity it references
-		if(physent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
-			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
-			physentrefres = rdf.getResource(physentrefuri.toString());
-		}
-		else physentrefres = getResourceForPMCandAnnotate(rdf, physent);
-		
-		if(physentrefres!=null){
-			Statement st = rdf.createStatement(participantres, 
-					SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty(), 
-					physentrefres);
-			addStatement(st);
-		}
-		else System.err.println("Error in setting participants for process: null value for Resource corresponding to " + physent.getName());
-
-		// Add multiplier info
-		if( multiplier != null && ! relationship.getLocalName().equals(SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getName())){
-			Statement st = rdf.createStatement(participantres, 
-					SemSimRelation.HAS_MULTIPLIER.getRDFproperty(), 
-					multiplier.toString());
-			
-			addStatement(st);
-		}
-	}
 	
 	
 	

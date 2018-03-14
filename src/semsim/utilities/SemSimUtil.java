@@ -45,6 +45,9 @@ import semsim.writing.CaseInsensitiveComparator;
  */
 public class SemSimUtil {
 
+	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+	public static final String mathMLelementEnd = "</math>";
+	
 	public static enum regexQualifier{GREEDY, RELUCTANT, POSSESSIVE, NONE}; 
 	
 	
@@ -424,6 +427,37 @@ public class SemSimUtil {
 		}
 	}
 	
+	
+	/**
+	 * Add the left-hand side of a MathML equation
+	 * @param mathmlstring The right-hand side of a MathML equation
+	 * @param varname The name of the solved variable
+	 * @param isODE Whether the variable is solved with an ODE
+	 * @return The MathML equation containing both the left- and right-hand side
+	 */
+	public static String addLHStoMathML(String mathmlstring, String varname, boolean isODE, String timedomainname){
+		String LHSstart = null;
+		if(isODE) 
+			LHSstart = makeLHSforStateVariable(varname, timedomainname);
+		else LHSstart = " <apply>\n  <eq />\n  <ci>" + varname + "  </ci>\n";
+		String LHSend = "</apply>\n";
+		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
+		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
+		return mathmlstring;
+	}
+	
+	/**
+	 * Create the MathML left-hand side for a variable that is solved using an ODE
+	 * @param varname
+	 * @return
+	 */
+	public static String makeLHSforStateVariable(String varname, String timedomainname){
+		return " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
+				+ timedomainname + "</ci>\n   </bvar>\n   <ci>" + varname + "</ci>\n  </apply>\n  ";
+	}
+	
+	
+	
 	/**
 	 * Find the right hand side of the equation for a data structure from 
 	 * the MathML associated with the data structure's computation.
@@ -433,20 +467,13 @@ public class SemSimUtil {
 	 *  the data structure's value
 	 */
 	public static String getRHSofMathML(String mathmlstring, String solvedvarlocalname){
-		SAXBuilder saxbuilder = new SAXBuilder();
-		Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
 		
 		try {
-			Document doc = saxbuilder.build(new StringReader(mathmlstring));
-			
-			// Get the <eq> element if there is one...
-			Boolean hastopeqel = false;
-			if(doc.getRootElement().getChild("apply",mmlns)!=null){
-				if(doc.getRootElement().getChild("apply",mmlns).getChild("eq", mmlns)!=null){
-					hastopeqel = true;
-				}
-			}
-			if(hastopeqel){
+			if(mathmlHasLHS(mathmlstring)){
+				
+				SAXBuilder saxbuilder = new SAXBuilder();
+				Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
+				Document doc = saxbuilder.build(new StringReader(mathmlstring));
 				
 				Element eqel = doc.getRootElement().getChild("apply",mmlns).getChild("eq",mmlns);
 				Element eqparentel = eqel.getParentElement();
@@ -475,7 +502,7 @@ public class SemSimUtil {
 					}
 				}
 			}
-			// Otherwise there's no <eq> element, we assume that the mathml is OK as it exists
+			// Otherwise there's no <eq> element, we assume that the mathml is the RHS
 			else return mathmlstring;
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
@@ -483,6 +510,27 @@ public class SemSimUtil {
 
 		// If we're here we haven't found the RHS
 		return "";
+	}
+	
+	public static boolean mathmlHasLHS(String mathml){
+		SAXBuilder saxbuilder = new SAXBuilder();
+		Document doc;
+		try {
+			doc = saxbuilder.build(new StringReader(mathml));
+			Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
+
+			// Get the <eq> element if there is one...
+			if(doc.getRootElement().getChild("apply",mmlns)!=null){
+				if(doc.getRootElement().getChild("apply",mmlns).getChild("eq", mmlns)!=null){
+					return true;
+				}
+			}
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+		
 	}
 	
 
