@@ -1,12 +1,11 @@
 package semgen.stage.serialization;
 
-import java.util.ArrayList;
-
 import com.google.gson.annotations.Expose;
-
 import semgen.stage.stagetasks.extractor.Extractor;
 import semsim.model.collection.SemSimCollection;
 import semsim.model.physical.PhysicalProcess;
+
+import java.util.ArrayList;
 
 public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 	@Expose public ArrayList<String> sourcenames = new ArrayList<String>();
@@ -25,12 +24,12 @@ public class PhysioMapNode extends LinkableNode<PhysicalProcess> {
 	
 	public void addSinkLink(PhysioMapEntityNode sink) {
 		sink.addLink(this);
-		sinknames.add(sink.name + ": " + this.sourceobj.getSourceStoichiometry(sink.sourceobj));
+		sinknames.add(sink.name + ": " + this.sourceobj.getSinkStoichiometry(sink.sourceobj));
 	}
 
 	public void addMediatorLink(PhysioMapEntityNode mediator) {
 		inputs.add(new Link(this, mediator, Node.MEDIATOR));
-		sinknames.add(mediator.name);
+		mediatornames.add(mediator.name);
 	}
 	
 	@Override
