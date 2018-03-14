@@ -281,13 +281,6 @@ public class CASAwriter extends AbstractRDFwriter{
 		}
 	}
 
-	@Override
-	protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent,
-			Property relationship, Double multiplier) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	@Override
 	protected void setRDFforSubmodelAnnotations(Submodel sub) {

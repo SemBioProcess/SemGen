@@ -188,7 +188,7 @@ public class ReferenceOntologies {
 				new String[]{"http://purl.org/obo/owl/PATO#"},
 				"phenotypes and traits not represented as properties in the OPB"),
 		PR("Protein Ontology", "PR", "http://purl.obolibrary.org/obo/PR",
-				new String[]{},
+				new String[]{"http://purl.obolibrary.org/obo/"},
 				"proteins"),
 		SBO("Systems Biology Ontology", "SBO", "http://purl.obolibrary.org/obo/SBO",
 				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#"},
