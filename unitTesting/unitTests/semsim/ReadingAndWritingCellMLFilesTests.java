@@ -17,7 +17,8 @@ import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.reading.CellMLreader;
 import semsim.reading.ModelClassifier.ModelType;
-import unitTests.semgen.UnitTestBase;
+import unitTests.unitTestBase.CollateralHelper;
+import unitTests.unitTestBase.UnitTestBase;
 
 public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 	
@@ -72,30 +73,23 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 			//assert
 			assertTrue(!newModelFile.getModelasString().isEmpty());
 			
-			OMEXAccessor newOMEXArchive =  FileAccessorFactory.getOMEXArchive(createTempArchive(), createTempFile(), ModelType.CELLML_MODEL);
+			OMEXAccessor newOMEXArchive =  FileAccessorFactory.getOMEXArchive(new File("cellmlomextemp.omex"), new File("model/cellmltemp.cellml"), ModelType.CELLML_MODEL);
 			//assert
 			newOMEXArchive.writetoFile(model);
 			String text = newOMEXArchive.getModelasString();
 			assertTrue(!text.isEmpty());
 		} catch (IOException | JDOMException e) {
+			e.printStackTrace();
 			fail();
+			
+			_tempFolder.delete();
 		}
+		_tempFolder.delete();
 	}
 	
 	private File createTempFile() {
 		try {
 			return _tempFolder.newFile("cellmltemp.cellml");
-		}
-		catch(Exception e) {
-			fail();
-		}
-		
-		return null;
-	}
-	
-	private File createTempArchive() {
-		try {
-			return _tempFolder.newFile("cellmlomextemp.omex");
 		}
 		catch(Exception e) {
 			fail();

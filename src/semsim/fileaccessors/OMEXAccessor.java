@@ -62,11 +62,11 @@ public class OMEXAccessor extends ModelAccessor {
 		String path = archivedfile.getFilePath().replace('\\', '/');
 		Enumeration<? extends ZipEntry> entries = archive.entries();
 		
-//		while (entries.hasMoreElements()) {
-//			ZipEntry current = entries.nextElement();
-//			System.out.println(current.getName());
-//		}
-//		
+		while (entries.hasMoreElements()) {
+			ZipEntry current = entries.nextElement();
+			System.out.println(current.getName());
+		}
+		
 		ZipEntry entry = archive.getEntry(path);
 		if (entry==null) {
 			path = path.substring(2, path.length());
