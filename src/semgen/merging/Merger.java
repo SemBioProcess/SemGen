@@ -15,6 +15,7 @@ import semsim.SemSimObject;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
+import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -30,6 +31,7 @@ public class Merger {
 	private ArrayList<ResolutionChoice> choicelist;
 	private ArrayList<Pair<Double,String>> conversionfactors;
 	private HashMap<String, String> oldnewdsnamemap;
+	private SemSimModel flattenedmodel = null;
 	
 	public static enum ResolutionChoice {
 		noselection, first, second, ignore; 
@@ -61,7 +63,7 @@ public class Merger {
 		boolean prune = true;
 		
 		// If one of the models contains functional submodels and the other doesn't,
-		 // flatten the one 
+		 // flatten the one that does
 		 boolean fxnalsubsinmodel1 = ssm1clone.containsFunctionalSubmodels();
 		 boolean fxnalsubsinmodel2 = ssm2clone.containsFunctionalSubmodels();
 		 Map<String,String> mod1renamemap = new HashMap<String,String>();
@@ -69,10 +71,12 @@ public class Merger {
 		 
 		 if(fxnalsubsinmodel1 && ! fxnalsubsinmodel2){ 
 			 mod1renamemap = SemSimUtil.flattenModel(ssm1clone);
+			 flattenedmodel = ssm1clone;
 		 }
 		 		
 		 else if(fxnalsubsinmodel2 && ! fxnalsubsinmodel1){
 			 mod2renamemap = SemSimUtil.flattenModel(ssm2clone);
+			 flattenedmodel = ssm2clone;
 		 }
 		
 		 
@@ -250,9 +254,52 @@ public class Merger {
 			mergedmodel.addEvent(event);
 		}	
 		
-		// Copy in all data structures
+		// Copy in all data structures. If one of the models needed to be flattened,
+		// check that flattening didn't create a conflict in data structure names
 		for(DataStructure dsfrom2 : ssm2clone.getAssociatedDataStructures()){
+			
+			if(flattenedmodel != null){
+				
+				if(mergedmodel.containsDataStructure(dsfrom2.getName())){
+					
+					// TODO: Should probably create a "renameDataStructure" method in SemSimModel or elsewhere
+					String oldname = dsfrom2.getName();
+					String newname = oldname;
+					
+					Set<String> dsnames = mergedmodel.getDataStructureNames();
+					
+					// Find a new name for the data structure
+					while(dsnames.contains(newname)){
+						newname = newname + "_";
+					}
+					
+					dsfrom2.setName(newname);
+					
+					Set<DataStructure> dssettoedit = new HashSet<DataStructure>();
+					dssettoedit.addAll(dsfrom2.getUsedToCompute());
+					dssettoedit.add(dsfrom2);
+					
+					// Go through all data structures that are dependent on the one we are renaming and replace occurrences of old name in equations
+					for(DataStructure depds : dssettoedit){ 
+						
+						if(depds.hasComputation()){
+							Computation depcomp = depds.getComputation();
+							String oldmathml = depcomp.getMathML();
+							String newmathml = SemSimUtil.replaceCodewordsInString(oldmathml, newname, oldname);
+							depcomp.setMathML(newmathml);
+							
+							if( ! depcomp.getComputationalCode().equals("") && depcomp.getComputationalCode()!=null){
+								String newcompcode = SemSimUtil.replaceCodewordsInString(depcomp.getComputationalCode(), newname, oldname);
+								depcomp.setComputationalCode(newcompcode);
+							}
+						}
+					}
+					System.err.println("Both models had data structure : " + oldname + " so it was renamed to " + newname + " when adding contents of " + ssm2clone.getName() + " to merged model");
+				}
+			}
+			
 			dsfrom2.addToModel(mergedmodel);
+			
 		}		
 
 		// Copy in the submodels
