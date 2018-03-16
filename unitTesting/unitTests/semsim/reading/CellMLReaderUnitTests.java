@@ -11,8 +11,8 @@ import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
-import unitTests.semgen.UnitTestBase;
-import unitTests.semsim.CollateralHelper;
+import unitTests.unitTestBase.CollateralHelper;
+import unitTests.unitTestBase.UnitTestBase;
 
 public class CellMLReaderUnitTests extends UnitTestBase {
 	

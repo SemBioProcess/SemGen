@@ -17,7 +17,8 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.SBMLreader;
-import unitTests.semgen.UnitTestBase;
+import unitTests.unitTestBase.CollateralHelper;
+import unitTests.unitTestBase.UnitTestBase;
 
 public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 	

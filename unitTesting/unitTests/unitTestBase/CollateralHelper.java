@@ -1,4 +1,4 @@
-package unitTests.semsim;
+package unitTests.unitTestBase;
 
 import java.io.File;
 import java.net.URL;
