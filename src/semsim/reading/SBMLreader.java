@@ -179,7 +179,9 @@ public class SBMLreader extends ModelReader{
 			
 			if(modelaccessor instanceof OMEXAccessor){
 				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, sslib);
-				((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
+				if (rdfreader instanceof CASAreader) {
+					((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
+				}
 			}
 			else{
 				String existingrdf = collectSemSimRDF(); // For SemSim-specific RDF annotations
