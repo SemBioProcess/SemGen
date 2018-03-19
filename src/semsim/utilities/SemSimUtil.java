@@ -123,11 +123,11 @@ public class SemSimUtil {
 						// replace all occurrences of the input's name in the equations that use it
 						if( ! sourcelocalname.equals(mvlocalname)){
 							
-							String newmathml = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getMathML(), sourcelocalname, mvlocalname);
+							String newmathml = replaceCodewordsInString(dependentmv.getComputation().getMathML(), sourcelocalname, mvlocalname);
 							dependentmv.getComputation().setMathML(newmathml);
 							
 							if(!dependentmv.getComputation().getComputationalCode().isEmpty()){
-								String newcompcode = SemSimUtil.replaceCodewordsInString(dependentmv.getComputation().getComputationalCode(), sourcelocalname, mvlocalname);
+								String newcompcode = replaceCodewordsInString(dependentmv.getComputation().getComputationalCode(), sourcelocalname, mvlocalname);
 								dependentmv.getComputation().setComputationalCode(newcompcode);
 							}
 						}
