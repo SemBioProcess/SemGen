@@ -17,7 +17,12 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 
 	public CompositePhysicalEntity(ArrayList<PhysicalEntity> ents, ArrayList<StructuralRelation> rels){
 		super(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY);
-		if(ents.size()-1 != rels.size()){
+		if (ents.contains(null)) {
+			System.err.println("Error constructing composite physical entity: " +
+					"entity list (" + rels.size() + 
+					") contained null entry.");
+		}
+		else if(ents.size()-1 != rels.size()){
 			System.err.println("Error constructing composite physical entity: " +
 					"length of relations array (" + rels.size() + 
 					") must be one less than entity array (" + ents.size() + ").");

@@ -762,16 +762,20 @@ public class SBMLreader extends ModelReader{
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-			rellist.add(StructuralRelation.PART_OF);
+			
 
 			PhysicalEntity speciesent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
 			
 			if(compartmentent instanceof CompositePhysicalEntity){
+				rellist.add(StructuralRelation.PART_OF);
 				entlist.addAll(((CompositePhysicalEntity) compartmentent).getArrayListOfEntities());
 				rellist.addAll(((CompositePhysicalEntity) compartmentent).getArrayListOfStructuralRelations());
 			}
-			else entlist.add(compartmentent);
+			else if (compartmentent!=null) { 
+				rellist.add(StructuralRelation.PART_OF);
+				entlist.add(compartmentent); 
+				}
 			
 			CompositePhysicalEntity compositeent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
