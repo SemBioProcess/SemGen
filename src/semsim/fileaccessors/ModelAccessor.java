@@ -65,6 +65,12 @@ public class ModelAccessor {
 			file = standAloneFile;
 	}
 	
+	// Use this constructor for models that are stored online as opposed to a local drive
+	protected ModelAccessor(String path, ModelType type){
+		filepath = path;
+		modeltype = type;
+	}
+	
 	// Copy constructor
 	public ModelAccessor(ModelAccessor matocopy) {
 		filepath = matocopy.filepath;
@@ -84,8 +90,8 @@ public class ModelAccessor {
 	// This returns the archive uri if the model is part of an archive, 
 	// or returns the standalone uri if the model is in a standalone file.
 	public URI getFileThatContainsModelAsURI(){
-		
-		return file.toURI();
+		if(modelIsOnline()) return URI.create(filepath);
+		else return file.toURI();
 	}
 	
 	public String getDirectoryPath() {
@@ -112,8 +118,12 @@ public class ModelAccessor {
 	public String getModelasString() throws IOException {
 		StringWriter writer = new StringWriter();
 		InputStream instream = modelInStream();
-		IOUtils.copy(instream, writer, StandardCharsets.UTF_8);
-		instream.close();
+		
+		if(instream != null){
+			IOUtils.copy(instream, writer, StandardCharsets.UTF_8);
+			instream.close();
+		}
+		
 		return writer.toString();
 	}
 

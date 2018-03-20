@@ -49,7 +49,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		addMouseListener(new PopupListener());
 		
 		try {
-			setCodeView(workbench.getModelAccessor());
+			setCodeView(workbench.getModelSourceLocation());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -61,7 +61,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 		String modelloc = "";
 		
 		if(srccodema != null){
-			
+						
 			modelloc = srccodema.getFilePath();
 			
 			// If the legacy model code is on the web
