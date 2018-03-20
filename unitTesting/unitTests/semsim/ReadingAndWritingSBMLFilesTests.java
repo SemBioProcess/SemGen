@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +17,10 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
+import semsim.reading.CellMLreader;
 import semsim.reading.SBMLreader;
+import semsim.reading.ModelClassifier.ModelType;
 import unitTests.unitTestBase.CollateralHelper;
 import unitTests.unitTestBase.UnitTestBase;
 
@@ -55,6 +59,36 @@ public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 		} catch (IOException | InterruptedException | OWLException | XMLStreamException e) {
 			fail();
 		}
+	}
+	
+	@Test
+	public void readFromArchive_readThenCreateValidFileinArchive_VerifyFileNotEmpty() {
+		ModelAccessor validCellMLFile = CollateralHelper.GetCollateral(CollateralHelper.Files.SBML_OMEX_Example);
+		SBMLreader reader = new SBMLreader(validCellMLFile);
+		// Act
+		semsim.model.collection.SemSimModel model;
+		
+		try {
+			model = reader.read();
+		
+			ModelAccessor newModelFile = FileAccessorFactory.getModelAccessor(createTempFile());
+			newModelFile.writetoFile(model);
+			
+			//assert
+			assertTrue(!newModelFile.getModelasString().isEmpty());
+			
+			OMEXAccessor newOMEXArchive =  FileAccessorFactory.getOMEXArchive(new File("sbmlomextemp.omex"), new File("model/sbmltemp.sbml"), ModelType.SBML_MODEL);
+			//assert
+			newOMEXArchive.writetoFile(model);
+			String text = newOMEXArchive.getModelasString();
+			assertTrue(!text.isEmpty());
+		} catch (IOException | InterruptedException | OWLException | XMLStreamException e) {
+			e.printStackTrace();
+			fail();
+			
+			_tempFolder.delete();
+		}
+		_tempFolder.delete();
 	}
 	
 	private File createTempFile() {
