@@ -527,7 +527,7 @@ public class CellMLwriter extends ModelWriter {
 	// Create a CellML-friendly unit name
 	private String makeValidUnitName(String oldname){
 		String newname = oldname;
-		newname = newname.replace("\\s", "_");
+		newname = newname.replaceAll("\\s", "_");
 		newname = newname.replace("/", "_per_");
 		newname = newname.replace("*", "_times_");
 		newname = newname.replace("^", "_exp_");

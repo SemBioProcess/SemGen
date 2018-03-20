@@ -156,7 +156,7 @@ public class SemSimComponentImporter {
 	//Get the receiving model directory and append the name of the contributing model
 	private static String getPathToSupplyingModel(ModelAccessor receivingmodelfile, SemSimModel receivingmodel, String hrefValue){
 		String supplyingmodelfilepath = null;
-		if(hrefValue.startsWith("http://")){
+		if(hrefValue.startsWith("http")){
 			String error = "ERROR: Cannot import components from...\n\n\t" + hrefValue + "\n\n...because it is not a local file.";
 			System.err.println(error);
 			receivingmodel.addError(error);

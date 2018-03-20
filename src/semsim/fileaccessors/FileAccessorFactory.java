@@ -34,7 +34,11 @@ public class FileAccessorFactory {
 		
 		ModelAccessor accessor = null;
 		ModelType type = classifyFile(path);
-		if(location.startsWith("http://") || location.startsWith("file:")) new ModelAccessor(new File(location), type);
+		if(location.startsWith("http"))
+			return new ModelAccessor(location, type);
+		
+		else if(location.startsWith("file:"))
+			return new ModelAccessor(new File(location), type);
 		
 		else if (hasseperator) {
 
