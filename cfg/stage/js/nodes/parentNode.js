@@ -124,7 +124,7 @@ ParentNode.prototype.getAllChildNodes = function() {
 	var childnodes = [];
 	immediate.forEach(function(child) {
 		child.globalApply(function(d){
-			immediate.push(d);
+			childnodes.push(d);
 		});
 	});
 	return childnodes;
@@ -135,7 +135,7 @@ ParentNode.prototype.applytoChildren = function(funct) {
 	for (var key in this.children) {
 		var child = this.children[key];
 		child.globalApply(funct);
-	}	
+	}
 }
 
 //Apply to self and children
@@ -144,7 +144,7 @@ ParentNode.prototype.globalApply = function(funct) {
 	for (var key in this.children) {
 		var child = this.children[key];
 		child.globalApply(funct);
-	}	
+	}
 }
 
 //Apply to children until the function returns true
@@ -166,10 +166,17 @@ ParentNode.prototype.visibleGlobalApply = function(funct) {
 	for (var key in this.children) {
 		var child = this.children[key];
 		child.globalApply(funct);
-	}	
+	}
 }
 
 ParentNode.prototype.onDoubleClick = function () {
-		this.showChildren();
-		this.graph.update();
+    this.showChildren();
+    if(this.graph.fixedMode) {
+        var nodesToUpdate = this.getRootParent().getAllChildNodes();
+        nodesToUpdate.push(this.getRootParent());
+        this.graph.update(nodesToUpdate);
+    }
+    else {
+    	this.graph.update();
+	}
 }

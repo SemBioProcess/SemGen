@@ -20,8 +20,16 @@ function Hull(node) {
                     node.fy = null;
                 }
                 node.setLocation((node.xmin+node.xmax)/2, (node.ymin+node.ymax)/2);
-                node.graph.update();
+                if(node.graph.fixedMode) {
+                    var nodesToUpdate = node.getRootParent().getAllChildNodes();
+                    nodesToUpdate.push(node.getRootParent());
+                    node.graph.update(nodesToUpdate);
+                }
+                else {
+                    node.graph.update();
+                }
                 main.task.selectNode(node);
+
             });
 	});
 	

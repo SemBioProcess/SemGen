@@ -196,7 +196,7 @@ function Graph() {
 	 */
 	var path;
 	var node;
-	this.update = function () {
+	this.update = function (nodesToUpdate) {
 		$(this).triggerHandler("preupdate");
 
 		bruteForceRefresh.call(this);
@@ -224,23 +224,33 @@ function Graph() {
 	    node.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
 
-	   node.exit().remove();
-	    
-	    // Define the tick function
-	    this.force
-	    	.nodes(visibleNodes)
-	    	.on("tick", this.tick)
-	    	.alpha(1)
-	    	.restart();
-	    
+        node.exit().remove();
 
 
-	    $(this).triggerHandler("postupdate");
-	    if (graph.fixedMode) {
-		    var delay = 7000;
-		    if (!graph.delayfixonupdate) {
-		    	delay = 25;
-		    }
+        if(nodesToUpdate != null) {
+            // Define the tick function
+            this.force
+                .nodes(nodesToUpdate)
+                .on("tick", this.tick)
+                .alpha(1)
+                .restart();
+        }
+
+        else {
+            this.force
+                .nodes(visibleNodes)
+                .on("tick", this.tick)
+                .alpha(1)
+                .restart();
+        }
+
+
+        $(this).triggerHandler("postupdate");
+        if (graph.fixedMode) {
+            var delay = 7000;
+            if (!graph.delayfixonupdate) {
+                delay = 25;
+            }
 	    	setTimeout(function() {
 	    		graph.pause();
 	    	}, delay);
