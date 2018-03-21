@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,7 +17,6 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
-import semsim.reading.CellMLreader;
 import semsim.reading.SBMLreader;
 import semsim.reading.ModelClassifier.ModelType;
 import unitTests.unitTestBase.CollateralHelper;
