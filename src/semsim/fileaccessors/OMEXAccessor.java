@@ -60,6 +60,12 @@ public class OMEXAccessor extends ModelAccessor {
 		
 		archive = new ZipFile(filepath.replace('\\', '/'));
 		String path = archivedfile.getFilePath().replace('\\', '/');
+
+		// Maybe something wrong in the way that the smith archive was written out?
+		// i.e. the zip file itself contains wrong entry data???
+		// Problem is that smith archive is packaged in a top-level folder whereas
+		// sbml one includes all files in top-level directory
+		
 		Enumeration<? extends ZipEntry> entries = archive.entries();
 		
 		while (entries.hasMoreElements()) {
@@ -68,11 +74,12 @@ public class OMEXAccessor extends ModelAccessor {
 		}
 		
 		ZipEntry entry = archive.getEntry(path);
+		
 		if (entry==null) {
 			path = path.substring(2, path.length());
 			entry = archive.getEntry(path);
 		}
-		
+				
 		return archive.getInputStream(entry);
 		
 	}
@@ -116,9 +123,12 @@ public class OMEXAccessor extends ModelAccessor {
 	public AbstractRDFreader createRDFreaderForModel(SemSimModel thesemsimmodel, String curationalrdf, SemSimLibrary sslib) 
 			throws ZipException, IOException, JDOMException{
 		
-		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL && this.casaaccessor==null) {
+		
+		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL) {
 			
-			getCASAaccessor();
+			if(casaaccessor == null){ // If the CASA file is not set for this archive, find the CASA file
+				getCASAaccessor();
+			}
 			
 			if (casaaccessor != null){
 				String casardfstring = casaaccessor.getModelasString();
