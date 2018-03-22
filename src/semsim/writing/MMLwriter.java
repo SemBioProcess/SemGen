@@ -160,7 +160,12 @@ public class MMLwriter extends ModelWriter{
 					
 			// Domains are without units. Unit conversion turned off in outputted MML.
 			UnitOfMeasurement soldomunit = domaindatastr.getUnit();
-			String soldomunitname = formatUnitForMML(soldomunit, soldomunit.getComputationalCode());
+			
+			String soldomunitname = ""; 
+			if (soldomunit!= null) {
+				soldomunitname = formatUnitForMML(soldomunit, soldomunit.getComputationalCode());
+			}
+			
 			output = output.concat("\trealDomain " + name + " " + soldomunitname + ";");
 			
 			// if the solution domain parameters aren't included in the ontology, include them in the code output

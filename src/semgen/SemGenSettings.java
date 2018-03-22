@@ -6,7 +6,6 @@ import semsim.utilities.ResourcesManager;
 import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Observable;
 /**
@@ -15,8 +14,6 @@ import java.util.Observable;
  */
 public class SemGenSettings extends Observable{
 	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, cwsort, toggleproptype, autoannotatemapped}
-	public static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
-	public static SimpleDateFormat sdflog = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 	private HashMap<String, String[]> startsettingstable;
 	private Boolean maximize = false;
 	private Boolean autoannmapped;

@@ -50,5 +50,6 @@ public class CollateralHelper {
 		public static final String BIOMD006_SBML = "BIOMD0000000006.xml";
 		public static final String CellML_OMEX_Example = "CellML_example.omex#smith_chase_nokes_shaw_wake_2004.cellml";
 		public static final String SBML_OMEX_Example = "SBML_example.omex#BIOMD0000000176_example.xml";
+		public static final String LouRudy_Mod = "Lou-Rudy.mod";
 	}
 }
