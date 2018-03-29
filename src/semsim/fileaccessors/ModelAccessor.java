@@ -74,7 +74,11 @@ public class ModelAccessor {
 	// Copy constructor
 	public ModelAccessor(ModelAccessor matocopy) {
 		filepath = matocopy.filepath;
-		file = new File(matocopy.file.toString());
+		
+		if(file != null){
+			file = new File(matocopy.file.getPath());
+		}
+		
 		modeltype = matocopy.modeltype;
 	}
 
