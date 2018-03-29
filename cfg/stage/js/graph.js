@@ -109,8 +109,9 @@ function Graph() {
 		$('#toggleMoveStageButton').removeClass('on');
 		
 		$('#stage').css('cursor', 'auto');
-		graph.defaultcursor = 'auto'; 
-		svg.call(BoundingBox(visibleNodes));
+		graph.defaultcursor = 'auto';
+        d3.select('.node').on('mousedown.drag', null);
+        svg.call(BoundingBox(visibleNodes));
         svg.call(d3.zoom()
             .scaleExtent([0.1, 10])
             .translateExtent(graph.worldsize)
