@@ -39,6 +39,7 @@ public class CASAwriter extends AbstractRDFwriter{
 		// Add namespaces here
 		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
 	}
 	
 	@Override
