@@ -528,6 +528,11 @@ public class SBMLwriter extends ModelWriter {
 				
 				CustomPhysicalProcess process = (CustomPhysicalProcess)pmc;
 				
+				if( ! entitySpeciesMap.keySet().containsAll(process.getParticipants())){ // Make sure that all participants in reaction were asserted successfully as SBML species
+					globalParameters.add(ds);
+					continue;
+				}
+				
 				Reaction rxn = sbmlmodel.createReaction(ds.getName());
 				
 				processReactionMap.put(process, rxn);
