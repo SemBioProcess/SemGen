@@ -295,11 +295,14 @@ public class CellMLwriter extends ModelWriter {
 					   
 					   if(oldAndNewUnitNameMap.containsKey(oldunitname)){
 						   String newunitname = oldAndNewUnitNameMap.get(oldunitname);
-						   dsmathml.replace("units=\"" + oldunitname + "\"", "units=\"" + newunitname + "\"");
+						   dsmathml = dsmathml.replace("units=\"" + oldunitname + "\"", "units=\"" + newunitname + "\"");
 					   }
 					   
 					   index = submathml.indexOf(dsmathml, index+1);
 					}
+					
+					// OpenCOR doesn't like "integer" type declarations in MathML so get rid of them
+					dsmathml = dsmathml.replace("<cn type=\"integer\">","<cn>");
 					
 					mathml = mathml + dsmathml + "\n";
 				}
