@@ -20,7 +20,7 @@ import org.jdom.output.XMLOutputter;
 
 import semsim.fileaccessors.OMEXAccessor;
 
-//class for generating a new OMEX archive on the file system
+/**class for generating a new OMEX archive on the file system**/
 
 public class OMEXArchiveBuilder {
 	private OMEXAccessor archive;
@@ -35,13 +35,15 @@ public class OMEXArchiveBuilder {
 	        env.put("create", "true");
 	        Path path = Paths.get(archive.getDirectoryPath());
 	        URI uri = URI.create("jar:" + path.toUri());
-	        
+	       
+	        //Create the manifest
 	        FileSystem fs = FileSystems.newFileSystem(uri, env);
   	        Document manifest = buildManifest();
   	        
   			Path manifestpath = fs.getPath("manifest.xml");
   			Writer zwriter = Files.newBufferedWriter(manifestpath, StandardCharsets.UTF_8, StandardOpenOption.CREATE);  
   	        
+  			//Create the model directory
   			Files.createDirectory(fs.getPath("model"));
   			
   			XMLOutputter outputter = new XMLOutputter();
@@ -66,6 +68,7 @@ public class OMEXArchiveBuilder {
 		return manifest;
 	}
 	
+	//Add an entry to the manifest
 	private void addManifestElement(Element root, String location, String format) {
 		Element element = new Element("content");
 		element.setAttribute("location", location);

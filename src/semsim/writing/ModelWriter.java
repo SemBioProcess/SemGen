@@ -57,9 +57,9 @@ public abstract class ModelWriter {
 		return true;
 	}
 
+	//Convert String to XML
 	public static Content makeXMLContentFromString(String xml){
-		try {
-			InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+		try (InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"))) {
 			Document aDoc = new SAXBuilder().build(stream);
 			return aDoc.getRootElement().detach();
 		} catch (JDOMException | IOException e) {

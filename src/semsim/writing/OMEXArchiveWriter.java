@@ -38,12 +38,12 @@ public class OMEXArchiveWriter {
 	}
 
 
+	//Add a new or modify an existing file within an omex archive
 	public void appendOMEXArchive(OMEXAccessor archive) {
-      //  String inputFileName = archive.getFilePath();
-        try {
+        
 
         	if (!archive.isLocalFile()) {
-        		 try {
+        		 try  {
         	        	OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archive);
         	        	builder.build();
         		 }
@@ -57,7 +57,8 @@ public class OMEXArchiveWriter {
 	        Path path = Paths.get(archive.getDirectoryPath());
 	        URI uri = URI.create("jar:" + path.toUri());
 	        
-	        FileSystem fs = FileSystems.newFileSystem(uri, env);
+	     //Create the omex file system
+	     try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
 	        Path nf = null;
 	        if (Files.exists(fs.getPath("model\\"))) {
 	        	nf = fs.getPath("model\\" + archive.getFileName());
@@ -67,22 +68,21 @@ public class OMEXArchiveWriter {
 	        }
 	        
 	        boolean fileexists = Files.exists(nf);
-	        
+	        //Write out the model
 	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
 	        writer.setWriteLocation(archive);
 	        String model = writer.encodeModel();
 	        zwriter.write(model);
 	        zwriter.close(); 	
+	        //Add an entry if the file doesn't already exist
 	        if (!fileexists) {
 	        	createManifestEntry(fs, nf, archive.getModelType());
 	        }
-	        
+	        //Write out the casa file if the model should have one
 	        if (archive.hasCASAFile()) {
 	        	createCASA(fs, archive);
 	        }
-	        archive.closeStream();
-	        fs.close();
-	        
+	        archive.closeStream();	        
 	        
         }
 		catch (IOException | JDOMException e1) {
@@ -119,7 +119,7 @@ public class OMEXArchiveWriter {
 		
 		StringBuilder buf = new StringBuilder();
 		CharBuffer cbuff = CharBuffer.allocate(2048);
-		
+		//Read in manifest
 	    while(zreader.read(cbuff) != -1){
 	    	cbuff.flip();
 	        buf.append(cbuff);
@@ -144,6 +144,5 @@ public class OMEXArchiveWriter {
         zwriter.close();
 
 	}
-
 
 }
