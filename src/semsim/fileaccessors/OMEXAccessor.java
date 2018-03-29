@@ -30,7 +30,7 @@ import semsim.writing.OMEXArchiveWriter;
 public class OMEXAccessor extends ModelAccessor {
 	
 	protected ModelAccessor archivedfile;
-	protected ModelAccessor casaaccessor = null;
+	protected OMEXAccessor casaaccessor = null;
 	protected ZipFile archive;
 	
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
@@ -50,9 +50,10 @@ public class OMEXAccessor extends ModelAccessor {
 		super(matocopy);
 
 		archivedfile = new ModelAccessor(matocopy.archivedfile);
-		if (matocopy.casaaccessor != null) {
-			casaaccessor = new ModelAccessor(matocopy.casaaccessor);
-		}
+		
+		if (matocopy.casaaccessor != null)
+			casaaccessor = new OMEXAccessor(matocopy.casaaccessor);
+		
 	}
 	
 	@Override
@@ -130,7 +131,11 @@ public class OMEXAccessor extends ModelAccessor {
 				getCASAaccessor();
 			}
 			
+			
+			System.out.println("Creating reader " + (casaaccessor));
+			
 			if (casaaccessor != null){
+				System.out.println("HERE");
 				String casardfstring = casaaccessor.getModelasString();
 				return new CASAreader(this, thesemsimmodel, sslib, casardfstring);
 			}
@@ -144,9 +149,9 @@ public class OMEXAccessor extends ModelAccessor {
 		try {
 				ZipFile archive = new ZipFile(file);
 				
-				ArrayList<ModelAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
+				ArrayList<OMEXAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
 
-				for(ModelAccessor acc : accs){
+				for(OMEXAccessor acc : accs){
 					//			String rdfincellml = "";
 					if(acc.getModelType()==ModelType.CASA_FILE){	
 					    this.casaaccessor = acc;
@@ -198,7 +203,8 @@ public class OMEXAccessor extends ModelAccessor {
 		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
 			CASAwriter casawriter = new CASAwriter(model);
 			if (!this.hasCASAFile()) {
-				casaaccessor = new ModelAccessor(new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
+
+				casaaccessor = new OMEXAccessor(file, new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
 			}
 			omexwriter = new OMEXArchiveWriter(writer, casawriter);
 		}

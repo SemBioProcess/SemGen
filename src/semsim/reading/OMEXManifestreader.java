@@ -76,10 +76,10 @@ public class OMEXManifestreader {
 	}
 	
 	// Return all valid annotation files in archive, including CASA files
-	public static ArrayList<ModelAccessor> getAnnotationFilesInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
+	public static ArrayList<OMEXAccessor> getAnnotationFilesInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
 		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
 		
-		 ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
+		 ArrayList<OMEXAccessor> accessors = new ArrayList<OMEXAccessor>();
 	        for (Element content : manifestelements) {
 	        	Attribute format = content.getAttribute("format");
 	        	String formvalue = format.getValue().toLowerCase();
