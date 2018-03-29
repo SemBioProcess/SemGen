@@ -18,7 +18,6 @@ path.mediator {
 }
 
 .node {
-	cursor: move;
 	stroke: none;
 	stroke-width: 1.5px;
 }

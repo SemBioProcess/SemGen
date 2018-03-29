@@ -58,14 +58,18 @@
 	padding: 0;
 }
 
-#stagekey  ul li {
+#stagekey ul li {
 	margin: 5px 0;
 	padding-left: 1em;
     text-indent: -.7em;
 }
 
-#stagekey  ul li.canClick:hover {
+#stagekey ul li.canClick:hover {
 	cursor: pointer;
+}
+
+#stagekey ul li circle, #stagekey ul li line {
+	pointer-events: none;
 }
 
 .hiddenKeys {
