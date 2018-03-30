@@ -147,6 +147,7 @@ public class CellMLreader extends ModelReader {
 				String baseunits = unitfactor.getAttributeValue("units");
 				String prefix = unitfactor.getAttributeValue("prefix");
 				String exponent = unitfactor.getAttributeValue("exponent");
+				String multiplier = unitfactor.getAttributeValue("multiplier");
 				
 				UnitOfMeasurement baseuom = semsimmodel.getUnit(baseunits);
 				if(baseuom==null){
@@ -155,7 +156,8 @@ public class CellMLreader extends ModelReader {
 					semsimmodel.addUnit(baseuom);
 				}
 				double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
-				uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix));
+				double mult = (multiplier==null) ? 1.0 : Double.parseDouble(multiplier);
+				uom.addUnitFactor(new UnitFactor(baseuom, exp, prefix, mult));
 			}
 		}
 
