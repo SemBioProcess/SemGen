@@ -30,6 +30,7 @@ public class ModelClassifier {
 		private String extension;
 		private String[] format;
 		private FileFilter filefilter;
+		
 		ModelType(String ext, String[] format, FileNameExtensionFilter filter) {
 			extension = ext;
 			this.format = format;
@@ -57,7 +58,9 @@ public class ModelClassifier {
 		}
 		
 		public boolean fileFilterMatches(FileFilter tomatch) {
-			return filefilter.equals(tomatch);
+			if(filefilter != null)
+				return filefilter.equals(tomatch);
+			else return false;
 		}
 	}
 	

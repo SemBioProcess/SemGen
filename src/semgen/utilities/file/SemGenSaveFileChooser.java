@@ -104,7 +104,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			type = "proj";
 			modeltype = ModelType.MML_MODEL_IN_PROJ;
 		}
-		else if(getFileFilter()==csvfilter){
+		else if(getFileFilter()==CSV_FILTER){
 			type = "csv";
 		}
 		

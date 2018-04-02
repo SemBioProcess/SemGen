@@ -13,7 +13,7 @@ import semsim.reading.ModelClassifier.ModelType;
 
 public abstract class SemGenFileChooser extends JFileChooser {
 	private static final long serialVersionUID = 1L;
-	public static final FileNameExtensionFilter csvfilter = new FileNameExtensionFilter("CSV (*.csv)", "csv");
+	public static final FileNameExtensionFilter CSV_FILTER = new FileNameExtensionFilter("Comma-separated values (*.csv)", "csv");
 	protected FileFilters fileextensions = new FileFilters(new String[]{"owl", "xml", "sbml", "cellml", "mod", "proj", "omex"});
 	
 	private static HashMap<String, ModelType> filtermap = new HashMap<String, ModelType>(); 
@@ -41,12 +41,12 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		filtermap.put("sbml", ModelType.SBML_MODEL);
 		filtermap.put("mod", ModelType.MML_MODEL);
 		filtermap.put("proj", ModelType.MML_MODEL_IN_PROJ);
-		//filtermap.put("csv", csvfilter);
 		filtermap.put("omex", ModelType.OMEX_ARCHIVE);
 	}
 	
 	protected FileFilter getFilter(String key) {
-		return filtermap.get(key).getFileFilter();
+		if(key.equals("csv")) return CSV_FILTER;
+		else return filtermap.get(key).getFileFilter();
 	}
 	
 	protected FileFilter[] getFilter(String[] keys) {
