@@ -34,6 +34,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.SemSimInteger;
+import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
@@ -104,7 +105,40 @@ public class XMMLreader extends ModelReader {
 				}
 				else if(unitel.getName().equals("derivedUnit")){
 					uom.setFundamental(false);
-					// TODO:... need methods here to collect the unitFactors, etc.
+					// Process the realFactors (multipliers) and unit factors
+					String multiplier = null;
+					Iterator<?> realfactorit = unitel.getChildren("realFactor").iterator();
+					
+					// There should only be one realFactor, but we loop anyway
+					while(realfactorit.hasNext()){
+						Element realfactor = (Element) realfactorit.next();
+						multiplier = realfactor.getAttributeValue("multiplier");
+					}
+										
+					// Get the factors for the unit
+					Iterator<?> unitfactorit = unitel.getChildren("unitFactor").iterator();
+					
+					while(unitfactorit.hasNext()){
+						Element unitfactor = (Element) unitfactorit.next();
+						String baseunits = unitfactor.getAttributeValue("unitID");
+						// NOTE: there is no "prefix" attribute assigned to unit factors
+						String exponent = unitfactor.getAttributeValue("exponent");
+						UnitOfMeasurement baseuom = semsimmodel.getUnit(baseunits);
+						
+						// This assumes that all unit factors are fundamental units, 
+						// which appears true based on my experience with XMML (-MLN)
+						if(baseuom==null){
+							baseuom = new UnitOfMeasurement(baseunits);
+							baseuom.setFundamental(true);
+							semsimmodel.addUnit(baseuom);
+						}
+						double exp = (exponent==null) ? 1.0 : Double.parseDouble(exponent);
+						double mult = (multiplier==null) ? 1.0 : Double.parseDouble(multiplier);
+						
+						if(uom.getUnitFactors().size()==0)
+							uom.addUnitFactor(new UnitFactor(baseuom, exp, null, mult)); // Only add multiplier to first unit factor
+						else uom.addUnitFactor(new UnitFactor(baseuom, exp, null));  
+					}
 				}
 			}
 		}

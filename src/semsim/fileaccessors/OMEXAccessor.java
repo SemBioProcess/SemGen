@@ -135,7 +135,6 @@ public class OMEXAccessor extends ModelAccessor {
 			System.out.println("Creating reader " + (casaaccessor));
 			
 			if (casaaccessor != null){
-				System.out.println("HERE");
 				String casardfstring = casaaccessor.getModelasString();
 				return new CASAreader(this, thesemsimmodel, sslib, casardfstring);
 			}

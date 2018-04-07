@@ -592,6 +592,10 @@ public class SemSimUtil {
 	// Used in tandem with getFundamentalBaseUnits
 	// TODO: should add a parameter here that allows the user to choose whether they want to decompose into
 	// CellML OR SBML base units
+	// TODO: This should also be rewritten so that for units with more than one
+	// unit factor, the multipliers on all factors for the units should be multiplied first,
+	// then compared. Otherwise, equivalent units might get flagged as unequivalent.
+	// Currently, multipliers are compared for each unit factor.
 	public static Set<UnitFactor> recurseBaseUnits(UnitOfMeasurement uom, Double oldExp, SemSimLibrary sslib) {
 
 		Set<UnitFactor> unitFactors = uom.getUnitFactors();
@@ -604,10 +608,11 @@ public class SemSimUtil {
 			double newExp = factor.getExponent()*oldExp;
 			
 			String prefix = factor.getPrefix();
+			double multiplier = factor.getMultiplier();
 			
 			
 			if(sslib.isCellMLBaseUnit(baseuom.getName())) {
-				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix);
+				UnitFactor baseUnitFactor = new UnitFactor(baseuom, newExp, prefix, multiplier);
 				newUnitFactors.add(baseUnitFactor);
 			}
 			

@@ -148,7 +148,7 @@ public class SemanticComparator {
 		for (String unitnamemodel1 : baseUnitsTableModel1.keySet()) {
 			
 			for(String unitnamemodel2 : baseUnitsTableModel2.keySet()){
-								
+						
 				Set<UnitFactor> unitfrommodel1baseunits = baseUnitsTableModel1.get(unitnamemodel1);
 				Set<UnitFactor> unitfrommodel2baseunits = baseUnitsTableModel2.get(unitnamemodel2);
 				
@@ -169,7 +169,9 @@ public class SemanticComparator {
 					Set<UnitFactor> baseunitsmatched = new HashSet<UnitFactor>();
 					
 					for(UnitFactor baseunitfactor1 : unitfrommodel1baseunits){
+						
 						for(UnitFactor baseunitfactor2 : unitfrommodel2baseunits){
+							
 							if(!baseunitsmatched.contains(baseunitfactor2)){
 								
 								boolean samename = false;
@@ -190,6 +192,7 @@ public class SemanticComparator {
 								
 								boolean sameexponent = false;
 								boolean sameprefix = false;
+								boolean samemultiplier = false;
 
 								// Compare exponents
 								if(Double.valueOf(baseunitfactor1.getExponent())!=null 
@@ -215,7 +218,21 @@ public class SemanticComparator {
 									sameprefix = true;
 								}
 								
-								if(samename && sameexponent && sameprefix){
+								// Compare multipliers
+								if(Double.valueOf(baseunitfactor1.getMultiplier())!=null 
+										&& Double.valueOf(baseunitfactor2.getMultiplier())!=null){
+									
+									if(baseunitfactor1.getMultiplier()==baseunitfactor2.getMultiplier()){
+										samemultiplier = true;
+									}
+								}
+								else if(Double.valueOf(baseunitfactor1.getMultiplier())==null 
+										&& Double.valueOf(baseunitfactor2.getMultiplier())==null){
+									samemultiplier = true;
+								}
+								
+								// If everything matches, then we've got equivalent unit factors
+								if(samename && sameexponent && sameprefix && samemultiplier){
 									baseunitsmatched.add(baseunitfactor2);
 									break;
 								}
