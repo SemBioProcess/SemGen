@@ -265,7 +265,7 @@ public class SBMLwriter extends ModelWriter {
 							if(power!=null) sbmluf.setScale(power);
 							else System.err.println("Couldn't find power for prefix " + uf.getPrefix());
 						}
-						else sbmluf.setScale(1);
+						else sbmluf.setScale(0);
 						
 						ud.addUnit(sbmluf);
 					}
