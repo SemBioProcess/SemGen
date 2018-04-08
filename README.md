@@ -173,7 +173,7 @@ SemGen development is currently supported by a grant from the [National Library 
 
 SEMGEN
 
-Copyright (c) 2010-2017 Maxwell Neal, University of Washington.
+Copyright (c) 2010-2018 Maxwell Neal, University of Washington.
 
 All rights reserved.
 
