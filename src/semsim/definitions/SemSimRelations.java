@@ -198,14 +198,12 @@ public class SemSimRelations {
 		
 		//BioModels qualifiers
 		BQB_ENCODES("encodes", RDFNamespace.BQB.getNamespaceasString(),"The biological entity represented by the model element encodes, directly or transitively, the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
-		BQB_HAS_PART("hasPart",RDFNamespace.BQB.getNamespaceasString(),"The biological entity represented by the model element includes the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_HAS_PROPERTY("hasProperty",RDFNamespace.BQB.getNamespaceasString(),"The subject of the referenced resource is a property of the biological entity represented by the model element", RDFNamespace.BQB.getOWLid()),
 		BQB_HAS_VERSION("hasVersopm",RDFNamespace.BQB.getNamespaceasString(),"The subject of the referenced resource (biological entity B) is a version or an instance of the biological entity represented by the model element", RDFNamespace.BQB.getOWLid()),
 		BQB_IS("is", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element has identity with the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_DESCRIBED_BY("isDescribedBy", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is described by the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_ENCODED_BY("isEncodedBy", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is encoded, directly or transitively, by the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_HOMOLOG_TO("isHomologTo", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is homologous to the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
-		BQB_IS_PART_OF("isPartOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a physical or logical part of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_PROPERTY_OF("isPropertyOf", RDFNamespace.BQB.getNamespaceasString(), "The model element is a physical property of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_IS_VERSION_OF("isVersionOf", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is a version or an instance of the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),
 		BQB_HAS_TAXON("hasTaxon", RDFNamespace.BQB.getNamespaceasString(), "The biological entity represented by the model element is taxonomically restricted, where the restriction is the subject of the referenced resource", RDFNamespace.BQB.getOWLid()),

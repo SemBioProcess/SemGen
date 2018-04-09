@@ -101,6 +101,10 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		objecteditors.add(new CustomEntityEditor(library, SemSimRelation.BQB_IS_VERSION_OF, versionrels));
 		
 		ArrayList<Integer> haspartrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.HAS_PART);
+		
+		ArrayList<Integer> bqbhaspartrels = library.getIndiciesofReferenceRelations(termindex, StructuralRelation.BQB_HAS_PART);
+		haspartrels.addAll(bqbhaspartrels);
+				
 		objecteditors.add(new CustomEntityEditor(library, StructuralRelation.HAS_PART, haspartrels));
 		
 		// Custom entities are currently not allowed to have part-of annotations on them because there isn't a 

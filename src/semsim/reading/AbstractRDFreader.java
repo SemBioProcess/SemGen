@@ -305,12 +305,15 @@ public abstract class AbstractRDFreader {
 		StmtIterator isversionofann = res.listProperties(SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty());
 		//StmtIterator partofann = res.listProperties(StructuralRelation.PART_OF.getRDFproperty());
 		StmtIterator haspartann = res.listProperties(StructuralRelation.HAS_PART.getRDFproperty());
+		StmtIterator bqbhaspartann = res.listProperties(StructuralRelation.BQB_HAS_PART.getRDFproperty());
+
 		
 		// Collect all annotations on custom term
 		Set<Statement> allannstatements = new HashSet<Statement>();
 		allannstatements.addAll(isversionofann.toSet());
 		//allannstatements.addAll(partofann.toSet());
 		allannstatements.addAll(haspartann.toSet());
+		allannstatements.addAll(bqbhaspartann.toSet());
 		
 		// Collect name
 		String name = unnamedstring;

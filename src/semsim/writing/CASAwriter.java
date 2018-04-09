@@ -135,10 +135,11 @@ public class CASAwriter extends AbstractRDFwriter{
 					
 					// Add the annotations on the custom term					
 					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)
-							|| relation.equals(StructuralRelation.HAS_PART)){
+							|| relation.equals(StructuralRelation.HAS_PART)
+							|| relation.equals(StructuralRelation.BQB_HAS_PART)){
 //							|| relation.equals(StructuralRelation.PART_OF)){ // can't distinguish between part_of in composite statements and annotations on custom term
 
-						if(relation.equals(StructuralRelation.HAS_PART)) relation = SemSimRelation.BQB_HAS_PART;
+						if(relation.equals(StructuralRelation.HAS_PART)) relation = StructuralRelation.BQB_HAS_PART;
 						
 						Property refprop = relation.getRDFproperty();
 						Statement annagainstst = rdf.createStatement(res, refprop, refres);
