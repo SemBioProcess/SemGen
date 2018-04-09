@@ -102,7 +102,11 @@ public abstract class Extractor {
 	public abstract void addProcess(PhysicalProcess proc);
 	
 	public abstract void addSubmodel(Submodel sourceobj);
+	
 	public abstract void addDataStructure(DataStructure sourceobj);
-		
-
+	
+	public boolean containsDataStructures() {
+		return !this.datastructures.isEmpty();
+	}
+	
 }

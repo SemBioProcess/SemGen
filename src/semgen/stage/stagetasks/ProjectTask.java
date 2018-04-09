@@ -384,8 +384,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	public void createNewExtraction(Integer infoindex, ArrayList<Node<?>> nodestoextract, String extractname) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.createExtraction(extractname, nodestoextract);
-		
-		_commandSender.newExtraction(infoindex, extraction);
+		if (extraction !=null) {
+			_commandSender.newExtraction(infoindex, extraction);
+		}
+		else SemGenError.showError("Empty Model", "Attempted extraction results in an empty model");
 	}	
 	
 	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
@@ -397,7 +399,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	public void addNodestoExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.addNodestoExtraction(extractionindex, nodestoadd);
+		
 		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
+
+		
 	}
 	
 	public void removeNodesfromExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
