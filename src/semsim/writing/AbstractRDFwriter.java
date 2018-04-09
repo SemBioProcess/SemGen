@@ -303,9 +303,6 @@ public abstract class AbstractRDFwriter {
 		return refres;
 	}
 	
-	
-	
-	
 	public static URI convertURItoIdentifiersDotOrgFormat(URI uri){
 		URI newuri = uri;
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());

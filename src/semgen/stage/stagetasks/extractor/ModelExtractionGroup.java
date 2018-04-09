@@ -27,6 +27,9 @@ public class ModelExtractionGroup {
 		Extractor extractor = workbench.makeNewExtraction(extractname);
 		
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoextract);
+		
+		if (extractedmodel==null) return null;
+		
 		ExtractionInfo newextract = new ExtractionInfo(sourcemodelinfo.Model, extractedmodel, extractionnodes.size());
 		extractionnodes.add(newextract);
 		return newextract.modelnode;
@@ -44,7 +47,7 @@ public class ModelExtractionGroup {
 	public ExtractionNode addNodestoExtraction(Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
 		Extractor extractor = workbench.makeAddExtractor(extractionindex);
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoadd);
-		
+
 		extractionnodes.get(extractionindex).Model = extractedmodel;
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
 		
@@ -96,6 +99,8 @@ public class ModelExtractionGroup {
 		for (Node<?> node : nodestoextract) {
 			node.collectforExtraction(extractor);
 		}
+		//Ensure the model contains data structures to avoid creating an empty model
+		if (!extractor.containsDataStructures()) return null;
 		SemSimModel result = extractor.run();
 		return result;
 	}
