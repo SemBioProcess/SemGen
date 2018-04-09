@@ -506,7 +506,7 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				entitySpeciesMap.put(fullcpe, species);
-				addNotesAndMetadataID(fullcpe, species);
+				addNotesAndMetadataID(indexent, species);
 			}
 			
 			// Otherwise the data structure is not associated with a physical entity and we 

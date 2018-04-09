@@ -781,7 +781,7 @@ public class SBMLreader extends ModelReader{
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 			speciesAndEntitiesMap.put(species.getId(), compositeent);
 						
-			collectSBaseData(species, compositeent);
+			collectSBaseData(species, speciesent);
 		}
 	}
 	
