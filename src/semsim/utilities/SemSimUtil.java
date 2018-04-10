@@ -229,7 +229,7 @@ public class SemSimUtil {
 	
 					String replacementmathml = "";
 					
-					if(conversionfactor.getLeft() != 1.0){
+					if(conversionfactor.getLeft() != 1.0 && ! dscheck.hasStartValue()){
 						String operator = conversionfactor.getRight().equals("*") ? "<times />" : "<divide />";
 						replacementmathml = "<apply>" + operator + "<ci>" + newdsname + "</ci>" + 
 						"<cn>" + String.valueOf(conversionfactor.getLeft()) + "</cn></apply>";
