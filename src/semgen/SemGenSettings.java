@@ -30,14 +30,19 @@ public class SemGenSettings extends Observable{
 			String settingspath = SemGen.cfgwritepath + "startSettings.txt";
 			File settingsfile = new File(settingspath);
 			
-			if(settingsfile.exists())
+			if(settingsfile.exists()){
 				startsettingstable = ResourcesManager.createHashMapFromFile(settingspath, true);
-			else
+				System.out.println("Using configuration file at " + settingspath);
+			}
+			else{
 				startsettingstable = ResourcesManager.createHashMapFromFile(SemGen.cfgreadpath + "startSettings.txt", true);
+				System.out.println("Using configuration file at " + SemGen.cfgreadpath + "startSettings.txt");
+			}
 		} 
 		catch (FileNotFoundException e3) {
 				e3.printStackTrace();
 		}
+				
 		screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		getPreviousScreenSize();
 		getPreviousScreenPosition();

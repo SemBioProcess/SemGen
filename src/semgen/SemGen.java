@@ -203,7 +203,7 @@ public class SemGen extends JFrame implements Observer{
 			if(appbundlepath.contains("SemGen.app")){
 				cfgreadpath = appbundlepath + "/Contents/Resources/cfg/";
 				String homeDir = System.getProperty("user.home");
-				cfgwritepath = new File(homeDir + "/Library/Preferences/SemGen/cfg/").getAbsolutePath() + "/";
+				cfgwritepath = new File(homeDir + "/Library/Caches/SemGen/cfg/").getAbsolutePath() + "/";
 				examplespath = appbundlepath + "/Contents/Resources/examples/";
 			}
 			break;
