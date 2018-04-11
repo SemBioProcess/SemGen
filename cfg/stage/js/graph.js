@@ -110,7 +110,7 @@ function Graph() {
 		
 		$('#stage').css('cursor', 'auto');
 		graph.defaultcursor = 'auto';
-        d3.select('.node').on('mousedown.drag', null);
+        d3.selectAll('.node').on('mousedown.drag', null);
         svg.call(BoundingBox(visibleNodes));
         svg.call(d3.zoom()
             .scaleExtent([0.1, 10])
