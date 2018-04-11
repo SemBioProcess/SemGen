@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
@@ -88,6 +90,8 @@ public class SBMLwriter extends ModelWriter {
 	private static final Namespace sbmlNS = Namespace.getNamespace(SBMLDocument.URI_NAMESPACE_L3V1Core);
 	
 	private static final String cellmlInlineUnitsNSdeclaration = "xmlns:cellml=\"http://www.cellml.org/cellml/1.0#\"";	
+	private Map<String,String> oldAndNewUnitNameMap = new HashMap<String,String>();
+	private Map<String,String> oldAndNewParameterNameMap = new HashMap<String,String>();
 	
 	private LinkedHashMap<CompositePhysicalEntity, Compartment> entityCompartmentMap = new LinkedHashMap<CompositePhysicalEntity, Compartment>();
 	private LinkedHashMap<CompositePhysicalEntity, Species> entitySpeciesMap = new LinkedHashMap<CompositePhysicalEntity, Species>();
@@ -105,9 +109,7 @@ public class SBMLwriter extends ModelWriter {
 	private Set<DataStructure> globalParameters = new HashSet<DataStructure>(); // Boolean indicates whether to write out assignment for parameter
 	
 	private AbstractRDFwriter rdfwriter;
-
 	private Set<String> metaIDsUsed = new HashSet<String>();
-	
 	public static String semsimAnnotationElementName = "semsimAnnotation";
 	
 	public SBMLwriter(SemSimModel model) {
@@ -143,8 +145,8 @@ public class SBMLwriter extends ModelWriter {
 		addCompartments();
 		addSpecies();
 		addReactions();
-		addEvents();
 		addGlobalParameters();
+		addEvents();
 		addConstraints();
 		
 		
@@ -201,6 +203,10 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addUnits(){
 
+		// First rename any units that don't have SBML-compliant names and create a map
+		// relating the old names to the new
+		SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);
+
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){	
 			
 			// Do not overwrite base units
@@ -229,7 +235,9 @@ public class SBMLwriter extends ModelWriter {
 				}
 			
 				// If we're here we are explicitly writing out the unit to the SBML file
-				UnitDefinition ud = sbmlmodel.createUnitDefinition(uom.getName());
+				String unitname = uom.getName();
+				if(oldAndNewUnitNameMap.containsKey(unitname)) unitname = oldAndNewUnitNameMap.get(unitname);
+				UnitDefinition ud = sbmlmodel.createUnitDefinition(unitname);
 				
 				addNotesAndMetadataID(uom, ud);
 				
@@ -636,12 +644,18 @@ public class SBMLwriter extends ModelWriter {
 			org.sbml.jsbml.Event sbmle = sbmlmodel.createEvent();
 			
 			// Store delay info
-			if(e.hasDelayMathML())
-				sbmle.createDelay(JSBML.readMathMLFromString(e.getDelayMathML()));
+			if(e.hasDelayMathML()){
+				String origdelaymathml = e.getDelayMathML();
+				String newdelaymathml = updateParameterNamesInMathML(origdelaymathml);
+				sbmle.createDelay(JSBML.readMathMLFromString(newdelaymathml));
+			}
 				
 			// Store priority info
-			if(e.hasPriorityMathML())
-				sbmle.createPriority(JSBML.readMathMLFromString(e.getPriorityMathML()));
+			if(e.hasPriorityMathML()){
+				String origprioritymathml = e.getPriorityMathML();
+				String newprioritymathml = updateParameterNamesInMathML(origprioritymathml);
+				sbmle.createPriority(JSBML.readMathMLFromString(newprioritymathml));
+			}
 			
 			// Store name in "id" attribute
 			if(e.hasName())
@@ -653,30 +667,72 @@ public class SBMLwriter extends ModelWriter {
 			
 			if(e.hasMetadataID())
 				sbmle.setMetaId(e.getMetadataID());
-			
+								
 			// Store trigger info
-			sbmle.createTrigger(JSBML.readMathMLFromString(e.getTriggerMathML()));
+			String oldtriggermathml = e.getTriggerMathML();
+			String newtriggermathml = updateParameterNamesInMathML(oldtriggermathml);
+			sbmle.createTrigger(JSBML.readMathMLFromString(newtriggermathml));
 			
 			// Store each event assignment
 			for(EventAssignment ea : e.getEventAssignments()){
-				DataStructure output = ea.getOutput();
-				sbmle.createEventAssignment(output.getName(), getASTNodeFromRHSofMathML(ea.getMathML(), output.getName()));
+				String outputname = ea.getOutput().getName();
+				
+				if(oldAndNewParameterNameMap.containsKey(outputname))
+					outputname = oldAndNewParameterNameMap.get(outputname);
+				
+				String origassignmathml = ea.getMathML();
+				String newassignmathml = updateParameterNamesInMathML(origassignmathml);
+				
+				sbmle.createEventAssignment(outputname, getASTNodeFromRHSofMathML(newassignmathml, outputname));
 			}
 			
 			addNotesAndMetadataID(e, sbmle);
 		}
 	}
+
+	private String updateParameterNamesInMathML(String mathml){
+		for(String oldname : oldAndNewParameterNameMap.keySet())
+			mathml = SemSimUtil.replaceCodewordsInString(mathml, oldAndNewParameterNameMap.get(oldname), oldname);
+		
+		return mathml;
+	}
+		
 	
 	/**
 	 *  Collect global parameters for SBML model
 	 */
 	private void addGlobalParameters(){
 		
+		// TODO: t.delta, etc. are getting renamed to t_delta but this change isn't being reflected in the model's MathML.
+		// e.g. t.delta is used to compute EDVLV but doesn't look like EDVLV's MathML is being updated
 		for(DataStructure ds : globalParameters){
 			
-			Parameter par = sbmlmodel.createParameter(ds.getName());
-						
+			// Don't add parameter if it's not a declared element
+			if( ! ds.isDeclared())	continue;
+			
+			String dsname = ds.getName();
 			String mathml = ds.getComputation().getMathML();
+
+			if(oldAndNewParameterNameMap.containsKey(dsname)){
+				dsname = oldAndNewParameterNameMap.get(dsname);
+				
+				Set<DataStructure> dssettoedit = new HashSet<DataStructure>();
+				dssettoedit.addAll(ds.getUsedToCompute());
+				dssettoedit.add(ds);
+				
+				// Go through all data structures that are dependent on the one we are renaming and replace occurrences of old name in equations
+				for(DataStructure depds : dssettoedit){ 
+					
+					if(depds.hasComputation()){
+						Computation depcomp = depds.getComputation();
+						String oldmathml = depcomp.getMathML();
+						String newmathml = SemSimUtil.replaceCodewordsInString(oldmathml, dsname, ds.getName());
+						depcomp.setMathML(newmathml);
+					}
+				}
+			}
+			
+			Parameter par = sbmlmodel.createParameter(dsname);
 			
 			boolean hasinputs = ds.getComputationInputs().size() > 0;
 			boolean usesevents = ds.getComputation().hasEvents();
@@ -739,6 +795,7 @@ public class SBMLwriter extends ModelWriter {
 			addNotesAndMetadataID(ds, par);
 			
 			setUnitsForModelComponent(par, ds);
+			
 		}
 	}
 	
@@ -898,10 +955,10 @@ public class SBMLwriter extends ModelWriter {
 		
 		if(ds.hasUnits()){
 			String uomname = ds.getUnit().getName();
+			if(oldAndNewUnitNameMap.containsKey(uomname)) uomname = oldAndNewUnitNameMap.get(uomname);
 			
-			if( sbmlmodel.containsUnitDefinition(uomname)){ 
-				qwu.setUnits(uomname);
-			}
+			if( sbmlmodel.containsUnitDefinition(uomname)) qwu.setUnits(uomname);
+			
 		}
 	}
 	
@@ -1015,23 +1072,7 @@ public class SBMLwriter extends ModelWriter {
 			newname = newname + "_";
 		}
 		
-		ds.setName(newname);
-
-		Set<DataStructure> dssettoedit = new HashSet<DataStructure>();
-		dssettoedit.addAll(ds.getUsedToCompute());
-		dssettoedit.add(ds);
-		
-		// Go through all data structures that are dependent on the one we are renaming and replace occurences of old name in equations
-		for(DataStructure depds : dssettoedit){ 
-			
-			if(depds.hasComputation()){
-				Computation depcomp = depds.getComputation();
-				String oldmathml = depcomp.getMathML();
-				String newmathml = SemSimUtil.replaceCodewordsInString(oldmathml, newname, oldname);
-				depcomp.setMathML(newmathml);
-			}
-		}
-		
+		oldAndNewParameterNameMap.put(oldname, newname);
 	}
 	
 	

@@ -621,4 +621,30 @@ public class SemSimUtil {
 		}
 		return newUnitFactors;
 	}
+	
+	// Create map of unit names that are changed when writing out a CellML or SBML model
+	public static Map<String,String> createUnitNameMap(SemSimModel semsimmodel,Map<String,String> map){
+		
+		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
+			String oldname = uom.getName();
+			map.put(oldname, SemSimUtil.makeValidUnitNameForCellMLorSBML(oldname));
+		}
+		return map;
+		
+	}
+	
+	// Create a CellML- and SBML-friendly unit name
+	public static String makeValidUnitNameForCellMLorSBML(String oldname){
+		String newname = oldname;
+		newname = newname.replaceAll("\\s", "_");
+		newname = newname.replace("/", "_per_");
+		newname = newname.replace("*", "_times_");
+		newname = newname.replace("^", "_exp_");
+		newname = newname.replace("(", "_");
+		newname = newname.replace(")", "_");
+				
+		if(Character.isDigit(newname.charAt(0))) newname = "x" + newname;
+		
+		return newname;
+	}
 }

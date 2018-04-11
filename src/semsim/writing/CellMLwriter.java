@@ -60,7 +60,7 @@ public class CellMLwriter extends ModelWriter {
 						
 			createRDFBlock();
 			createRootElement();
-			createUnitNameMap();
+			SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);
 			
 			doc = new Document(root);
 			
@@ -137,14 +137,6 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
-	
-	private void createUnitNameMap(){
-		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
-			String oldname = uom.getName();
-			oldAndNewUnitNameMap.put(oldname, makeValidUnitName(oldname));
-		}
-		
-	}
 	
 	private void declareImports() {
 		// Declare the imports
@@ -525,21 +517,6 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
-	}
-	
-	// Create a CellML-friendly unit name
-	private String makeValidUnitName(String oldname){
-		String newname = oldname;
-		newname = newname.replaceAll("\\s", "_");
-		newname = newname.replace("/", "_per_");
-		newname = newname.replace("*", "_times_");
-		newname = newname.replace("^", "_exp_");
-		newname = newname.replace("(", "_");
-		newname = newname.replace(")", "_");
-				
-		if(Character.isDigit(newname.charAt(0))) newname = "x" + newname;
-		
-		return newname;
 	}
 	
 	
