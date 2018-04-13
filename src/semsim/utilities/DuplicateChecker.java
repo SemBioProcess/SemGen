@@ -9,6 +9,11 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 
+/**
+ * Utility class for finding and removing duplicate instances of the same annotation in two models
+ * The duplicate instance is replaced with the instance in the first model
+ * This allows for much faster comparisons during the mapping phase of a merge
+ * **/
 public class DuplicateChecker {
 
 	public static void removeDuplicatePhysicalEntities(SemSimModel model1, SemSimModel model2) {

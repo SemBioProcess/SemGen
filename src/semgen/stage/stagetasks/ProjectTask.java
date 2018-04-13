@@ -185,6 +185,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				_commandSender.loadExtractions(extractions);
 		}
 		
+		//Each possible extraction task needs two methods, one for submodels and data structures and another
+		//for physiomap based extractions 
+		
 		public void onNewExtraction(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 			createNewExtraction(sourceindex.intValue(), jnodes, extractname);
@@ -390,28 +393,29 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		else SemGenError.showError("Empty Model", "Attempted extraction results in an empty model");
 	}	
 	
+	//Create an extraction including all nodes except those selected
 	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.createExtractionExcluding(extractname, nodestoexclude);
 		_commandSender.newExtraction(infoindex, extraction);
 	}
 	
+	//Add nodes to an existing extraction
 	public void addNodestoExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.addNodestoExtraction(extractionindex, nodestoadd);
 		
 		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
-
-		
 	}
 	
+	//Remove nodes from existing extraction
 	public void removeNodesfromExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.removeNodesfromExtraction(extractionindex, nodestoremove);
 		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
 	}
 	
-
+	//Close an extraction on the stage
 	protected void removeExtraction(Double sourceindex, Double indextoremove) {		
 		this.extractnodeworkbenchmap.get(sourceindex.intValue()).removeExtraction(indextoremove.intValue());	
 	}
@@ -438,7 +442,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		return javanodes;
 	}
 
-	
+	//Get a node by its model index and hash number
 	protected StageRootInfo<?> getInfobyAddress(JSArray address) {
 		if (address.get(0).asNumber().getInteger()==-1) {
 			return _models.get(address.get(1).asNumber().getInteger());

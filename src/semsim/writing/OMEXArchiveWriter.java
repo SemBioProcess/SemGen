@@ -91,6 +91,7 @@ public class OMEXArchiveWriter {
 	        
 	}
     
+	//Create a CASA file from a semsimmodel
     private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
         Path nf = null;
         if (Files.exists(fs.getPath("model\\"))) {

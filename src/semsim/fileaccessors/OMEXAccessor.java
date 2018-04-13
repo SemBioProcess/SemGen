@@ -143,6 +143,7 @@ public class OMEXAccessor extends ModelAccessor {
 
 	}
 	
+	//If the model is a SBML or CellML model, check for a CASA file and read it if one exists
 	protected void getCASAaccessor() {
 
 		try {

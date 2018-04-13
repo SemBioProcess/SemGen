@@ -56,6 +56,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 
 	}
 
+	//Compare the models and collect potential semantic overlaps
 	private void primeForMerging() {
 		if (workbench.getNumberofStagedModels() == 0) return;
 		if(workbench.hasMultipleModels()) {
@@ -144,6 +145,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			String leftunit = descs.getLeft().getDescriptorValue(Descriptor.units);
 			String rightunit = descs.getRight().getDescriptorValue(Descriptor.units);
 			for (UnitConflict con : conflicts.unitconflicts) {
+				//Check for duplicate unit conflict entries
 				if (leftunit.equalsIgnoreCase(con.unitleft) && rightunit.equalsIgnoreCase(con.unitright)) {
 					con.incrementPairCount();
 					unitpairs.add(con);
@@ -191,11 +193,13 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		return overlaps;
 	}
 	
+	//Return all dependency nodes eligible for manual mapping
 	private ArrayList<MappingCandidate> getMappingCandidates(int modelindex) {
 		HashSet<DependencyNode> depnodes = this._models.get(modelindex).modelnode.requestAllChildDependencies();
 		
 		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
 		for (DependencyNode dnode : depnodes) {
+			//Ignore cellml input variables
 			if (dnode.issubmodelinput) continue;
 			boolean mapped = false;
 			int mappedhash = -1;
@@ -273,7 +277,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 			getOverlappingNodes();
 			conflicts.decrementUnitConflict(unitpairs.get(intval));
 			unitpairs.remove(intval);
-			choices.remove(customindex);
+			choices.remove(intval);
 			_commandSender.clearLink(updateOverlaps().toArray(new Overlap[]{}), ol.getLeft().id, ol.getRight().id);
 			
 		}

@@ -13,6 +13,9 @@ import semsim.SemSimLibrary;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 
+/** 
+ * Base class for readers of all file types
+ * **/
 public abstract class ModelReader {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel = new SemSimModel();
@@ -25,7 +28,7 @@ public abstract class ModelReader {
 	public static void pointtoSemSimLibrary(SemSimLibrary lib) {
 		sslib = lib;
 	}
-	
+	//Build document from xml encoded file
 	public static Document getJDOMdocumentFromFile(File file){
 		Document doc = null;
 		SAXBuilder builder = new SAXBuilder();

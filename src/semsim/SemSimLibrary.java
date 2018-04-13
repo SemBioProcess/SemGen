@@ -35,7 +35,7 @@ import semsim.model.physical.object.PhysicalPropertyinComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.ResourcesManager;
 
-//Class for holding reference terms and data required for SemGen - intended to replace SemSimConstants class
+/** Class for holding reference terms and data required for SemGen **/
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSimVersion");

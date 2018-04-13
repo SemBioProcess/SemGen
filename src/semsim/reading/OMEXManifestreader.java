@@ -19,14 +19,18 @@ import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
+/**
+ * Contains methods for reading an OMEX archive
+ **/
 public class OMEXManifestreader {
 
-	
+	//Get all entries in the manifest and return the paths of any valid model formats
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Element> getManifestEntries(ZipFile zarchive, File arcfile) throws JDOMException, IOException {
 			
 	    Enumeration<? extends ZipEntry> entries = zarchive.entries();
 			    ZipEntry entry = null;
+			    //Find the Manifest
 			    while(entries.hasMoreElements()){
 			        entry = entries.nextElement();
 			        if (entry.getName().contains("manifest.xml")) break;
@@ -35,7 +39,7 @@ public class OMEXManifestreader {
 			   
 			    InputStream stream = zarchive.getInputStream(entry);
 		        Document doc = new SAXBuilder().build(stream);
-		        Element child = doc.getRootElement();//.getChild("omexManifest");
+		        Element child = doc.getRootElement();
 		        ArrayList<Element> children = new ArrayList<Element>(child.getChildren());
 		        
 		        ArrayList<ModelAccessor> accessors = new ArrayList<ModelAccessor>();
@@ -94,6 +98,7 @@ public class OMEXManifestreader {
 		return accessors;
 	}
 	
+	//Check if a file already exists with path modelfile
 	public static boolean archiveContainsModelFile(ZipFile archive, File omexfile, File modelfile) throws JDOMException, IOException {
 		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
         for (Element content : manifestelements) {

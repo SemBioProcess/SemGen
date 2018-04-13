@@ -119,6 +119,7 @@ public class ModelAccessor {
 		return file.exists();
 	}
 	
+	//Read in a file as a string.
 	public String getModelasString() throws IOException {
 		StringWriter writer = new StringWriter();
 		InputStream instream = modelInStream();
