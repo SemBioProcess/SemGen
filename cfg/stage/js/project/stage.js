@@ -141,7 +141,7 @@ function Stage(graph, stagestate) {
                 sender.search(searchString);
             }
 
-            // Search for nodes on Stage
+            // Search for nodes in Project Tab
             if (nodeNameSearchChecked) {
                 stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
             }
@@ -179,7 +179,7 @@ function Stage(graph, stagestate) {
             }
         }
 
-        nodeSearchResultSet["source"] = "Nodes on Stage " + " - " + filter;
+        nodeSearchResultSet["source"] = "Nodes in Project " + " - " + filter;
         nodeSearchResultSet["results"] = nodeSearchResults;
 
         nodeSearchResultSet.results.sort(function (a, b) {
@@ -466,7 +466,7 @@ function makeResultSet(searchResultSet, stage) {
         if (searchResultSet.source == "Example models") {
             item.appendChild(document.createTextNode(searchResultSet.results[i]));
         }
-        else if (searchResultSet.source.includes("Nodes on Stage")) {
+        else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
         }
         list.appendChild(item);
@@ -481,7 +481,7 @@ function makeResultSet(searchResultSet, stage) {
             if (source == "Example models") {
                 sender.addModelByName(source, name);
             }
-            else if (source.includes("Nodes on Stage")) {
+            else if (source.includes("Nodes in Project")) {
                 var visibleNodes = stage.graph.getVisibleNodes();
                 var node = visibleNodes.filter(function ( node ) {
                     return node.id === id;
