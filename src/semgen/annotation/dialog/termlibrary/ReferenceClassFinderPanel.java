@@ -133,7 +133,8 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		findbox.setForeground(Color.blue);
 		findbox.setBorder(BorderFactory.createBevelBorder(1));
 		findbox.setFont(SemGenFont.defaultPlain());
-		findbox.setMaximumSize(new Dimension(300, 25));
+		findbox.setPreferredSize(new Dimension(375,25));
+		findbox.setMaximumSize(new Dimension(375,25));
 		findbox.addActionListener(this);
 
 		findbutton.setVisible(true);
@@ -150,6 +151,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		loadingbutton.setBorderPainted(false);
 		loadingbutton.setContentAreaFilled(false);
 		findpanel.add(loadingbutton);
+		findpanel.add(Box.createHorizontalGlue());
 
 		JPanel resultspanelright = new JPanel();
 		resultspanelright.setLayout(new BoxLayout(resultspanelright,BoxLayout.Y_AXIS));
