@@ -45,7 +45,7 @@ import semsim.writing.CaseInsensitiveComparator;
  */
 public class SemSimUtil {
 
-	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
 	public static final String mathMLelementEnd = "</math>";
 	
 	public static enum regexQualifier{GREEDY, RELUCTANT, POSSESSIVE, NONE}; 
@@ -442,7 +442,7 @@ public class SemSimUtil {
 			LHSstart = makeLHSforStateVariable(varname, timedomainname);
 		else LHSstart = " <apply>\n  <eq />\n  <ci>" + varname + "  </ci>\n";
 		String LHSend = "</apply>\n";
-		mathmlstring = mathmlstring.replace(mathMLelementStart, mathMLelementStart + LHSstart);
+		mathmlstring = mathmlstring.replaceFirst(mathMLelementStart, mathMLelementStart + "\n" + LHSstart);
 		mathmlstring = mathmlstring.replace(mathMLelementEnd, LHSend + mathMLelementEnd);
 		return mathmlstring;
 	}
