@@ -64,8 +64,20 @@
     text-indent: -.7em;
 }
 
+#stagekey ul li.canClick {
+	width: 200px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #808080;
+	background-color: white;
+	font-weight: bold;
+}
+
 #stagekey ul li.canClick:hover {
 	cursor: pointer;
+	background-color: #3b5998;
+	color: white;
+	opacity: .7;
 }
 
 #stagekey ul li circle, #stagekey ul li line {

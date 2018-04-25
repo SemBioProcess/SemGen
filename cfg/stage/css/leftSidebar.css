@@ -82,10 +82,10 @@ ul.modelPopover li.submenuContainer {
 }
 
 .panelbutton:disabled {
-		background-color: #3b5998;
-		color: white;
-		opacity: 0.15;
-	}
+	background-color: #3b5998;
+	color: white;
+	opacity: 0.15;
+}
 	
 .panelbutton:hover {
 	background-color: #3b5998;
