@@ -62,7 +62,7 @@ public class PhysioMap {
 			
 			// Here we identify those processes that have associated data structures (i.e. those
 			// whose properties are computed by the model)
-			for(DataStructure ds : model.sourceobj.getDataStructureswithPhysicalProcesses()){
+			for(DataStructure ds : model.sourceobj.getDataStructuresWithPhysicalProcesses()){
 				processesWithProperties.add((PhysicalProcess)ds.getAssociatedPhysicalModelComponent());
 			}
 			

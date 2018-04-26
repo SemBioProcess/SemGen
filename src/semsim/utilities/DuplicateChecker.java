@@ -28,7 +28,7 @@ public class DuplicateChecker {
 			pes.add(pe);
 		}
 		model2.setPhysicalEntities(pes);
-		for (DataStructure ds : model2.getDataStructureswithCompositesEntities()) {
+		for (DataStructure ds : model2.getDataStructuresWithCompositesEntities()) {
 			for (CompositePhysicalEntity cpe : model2.getCompositePhysicalEntities()) {
 				if (ds.getAssociatedPhysicalModelComponent().equals(cpe)) {
 					ds.setAssociatedPhysicalModelComponent(cpe);

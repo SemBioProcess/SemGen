@@ -22,7 +22,7 @@ import semsim.reading.ModelClassifier.ModelType;
 /**
  * Contains methods for reading an OMEX archive
  **/
-public class OMEXManifestreader {
+public class OMEXmanifestReader {
 
 	//Get all entries in the manifest and return the paths of any valid model formats
 	@SuppressWarnings("unchecked")

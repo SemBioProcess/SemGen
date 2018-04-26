@@ -44,7 +44,7 @@ public class ExtractExclude extends Extractor {
 			this.includeSubModel(smtokeep);
 		}
 		
-		Set<DataStructure> dsstokeep = sourcemodel.getDataStructureswithProcessesandParticipants();	
+		Set<DataStructure> dsstokeep = sourcemodel.getDataStructuresWithProcessesandParticipants();	
 		for (DataStructure dstoremove : dsstoremove) {
 			dsstokeep.remove(dstoremove);
 		
@@ -87,14 +87,14 @@ public class ExtractExclude extends Extractor {
 
 	@Override
 	public void addEntity(PhysicalEntity pe) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(pe)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(pe)) {
 			addDataStructure(dstoadd);
 		}
 	}
 
 	@Override
 	public void addProcess(PhysicalProcess proc) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(proc)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(proc)) {
 			addDataStructure(dstoadd);
 		}
 

@@ -42,14 +42,14 @@ public class ExtractAdd extends Extractor {
 	
 	@Override
 	public void addEntity(PhysicalEntity pe) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(pe)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(pe)) {
 			addDataStructure(dstoadd);
 		}
 	}
 	
 	@Override
 	public void addProcess(PhysicalProcess proc) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(proc)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(proc)) {
 			addDataStructure(dstoadd);
 		}
 

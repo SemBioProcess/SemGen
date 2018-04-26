@@ -19,7 +19,7 @@ import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.CASAreader;
-import semsim.reading.OMEXManifestreader;
+import semsim.reading.OMEXmanifestReader;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.CASAwriter;
@@ -133,7 +133,7 @@ public class OMEXAccessor extends ModelAccessor {
 		try {
 				ZipFile archive = new ZipFile(file);
 				
-				ArrayList<OMEXAccessor> accs = OMEXManifestreader.getAnnotationFilesInArchive(archive, file);
+				ArrayList<OMEXAccessor> accs = OMEXmanifestReader.getAnnotationFilesInArchive(archive, file);
 
 				for(OMEXAccessor acc : accs){
 					//			String rdfincellml = "";

@@ -78,7 +78,7 @@ public class ExtractRemove extends Extractor {
 
 	@Override
 	public void addEntity(PhysicalEntity pe) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(pe)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(pe)) {
 			dstoadd = sourcemodel.getAssociatedDataStructure(dstoadd.getName());
 			addDataStructure(dstoadd);
 		}
@@ -86,7 +86,7 @@ public class ExtractRemove extends Extractor {
 
 	@Override
 	public void addProcess(PhysicalProcess proc) {
-		for (DataStructure dstoadd : sourcemodel.gatherDatastructureswithPhysicalComponent(proc)) {
+		for (DataStructure dstoadd : sourcemodel.gatherDatastructuresWithPhysicalComponent(proc)) {
 			dstoadd = sourcemodel.getAssociatedDataStructure(dstoadd.getName());
 			addDataStructure(dstoadd);
 		}

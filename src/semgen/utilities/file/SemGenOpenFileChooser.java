@@ -17,7 +17,7 @@ import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelReader;
-import semsim.reading.OMEXManifestreader;
+import semsim.reading.OMEXmanifestReader;
 
 public class SemGenOpenFileChooser extends SemGenFileChooser {
 	
@@ -83,7 +83,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 			try {
 				ZipFile zfile = new ZipFile(file);
 
-				ArrayList<ModelAccessor> models = OMEXManifestreader.getModelsInArchive(zfile, file);
+				ArrayList<ModelAccessor> models = OMEXmanifestReader.getModelsInArchive(zfile, file);
 				if (models.size()==1) {
 					modelaccessors.add(models.get(0));
 					return modelaccessors;

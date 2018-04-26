@@ -295,7 +295,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return The set of {@link DataStructure}s with composite entities in the model.
 	 */
-	public Set<DataStructure> getDataStructureswithCompositesEntities(){
+	public Set<DataStructure> getDataStructuresWithCompositesEntities(){
 		Set<DataStructure> dswcpes = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
@@ -310,7 +310,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return The set of {@link DataStructure}s with physical properties in the model.
 	 */
-	public Set<DataStructure> getDataStructureswithPhysicalProcesses(){
+	public Set<DataStructure> getDataStructuresWithPhysicalProcesses(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (ds.hasAssociatedPhysicalComponent()) {
@@ -323,8 +323,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dswprocs;
 	}
 	
-	public Set<DataStructure> getDataStructureswithProcessesandParticipants() {
-		Set<DataStructure> dsphysio = getDataStructureswithPhysicalProcesses();
+	public Set<DataStructure> getDataStructuresWithProcessesandParticipants() {
+		Set<DataStructure> dsphysio = getDataStructuresWithPhysicalProcesses();
 		
 		Set<PhysicalEntity> pes = new HashSet<PhysicalEntity>();
 		for (DataStructure ds : dsphysio) {
@@ -332,13 +332,13 @@ public abstract class SemSimCollection extends SemSimObject{
 		}
 		
 		for (PhysicalEntity part : pes) {
-			dsphysio.addAll(gatherDatastructureswithPhysicalComponent(part));
+			dsphysio.addAll(gatherDatastructuresWithPhysicalComponent(part));
 		}
 		
 		return dsphysio;
 	}
 	
-	public HashSet<DataStructure> gatherDatastructureswithPhysicalComponent(PhysicalModelComponent pmc) {
+	public HashSet<DataStructure> gatherDatastructuresWithPhysicalComponent(PhysicalModelComponent pmc) {
 		HashSet<DataStructure> dsswithpmc = new HashSet<DataStructure>();
 		
 		for (DataStructure ds : getAssociatedDataStructures()) {
@@ -354,7 +354,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	/**
 	 * @return The set of {@link DataStructure}s with physical properties in the model.
 	 */
-	public Set<DataStructure> getDataStructureswithoutAssociatedPhysicalComponents(){
+	public Set<DataStructure> getDataStructuresWithoutAssociatedPhysicalComponents(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
 			if (!ds.hasAssociatedPhysicalComponent()) {
