@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -60,19 +59,7 @@ public class OMEXAccessor extends ModelAccessor {
 	public InputStream modelInStream() throws IOException {
 		
 		archive = new ZipFile(filepath.replace('\\', '/'));
-		String path = archivedfile.getFilePath().replace('\\', '/');
-
-		// Maybe something wrong in the way that the smith archive was written out?
-		// i.e. the zip file itself contains wrong entry data???
-		// Problem is that smith archive is packaged in a top-level folder whereas
-		// sbml one includes all files in top-level directory
-		
-		Enumeration<? extends ZipEntry> entries = archive.entries();
-		
-		while (entries.hasMoreElements()) {
-			ZipEntry current = entries.nextElement();
-			System.out.println(current.getName());
-		}
+		String path = archivedfile.getFilePath().replace('\\', '/');		
 		
 		ZipEntry entry = archive.getEntry(path);
 		
@@ -130,10 +117,7 @@ public class OMEXAccessor extends ModelAccessor {
 			if(casaaccessor == null){ // If the CASA file is not set for this archive, find the CASA file
 				getCASAaccessor();
 			}
-			
-			
-			System.out.println("Creating reader " + (casaaccessor));
-			
+						
 			if (casaaccessor != null){
 				String casardfstring = casaaccessor.getModelasString();
 				return new CASAreader(this, thesemsimmodel, sslib, casardfstring);

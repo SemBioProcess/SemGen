@@ -1,0 +1,37 @@
+volt^1; OPB_00506 #electricalpotential
+mole^1, litre^-1; OPB_00340 #chemicalconcentration
+mole^1, liter^-1; OPB_00340 #chemicalconcentration
+mole^1, metre^-3; OPB_00340 #chemicalconcentration
+mole^1, meter^-3; OPB_00340 #chemicalconcentration
+mole^1, litre^-1, second^-1; OPB_00593 #flux
+mole^1, liter^-1, second^-1; OPB_00593 #flux
+metre^2; OPB_00295 #area
+meter^2; OPB_00295 #area
+metre^3; OPB_00154 #volume
+meter^3; OPB_00154 #volume
+litre^1; OPB_00154 #volume
+liter^1; OPB_00154 #volume
+ampere^1; OPB_00318 #current
+ampere^1, metre^-2; OPB_00318 #charge flow rate
+ampere^1, meter^-2; OPB_00318 #charge flow rate
+litre^1, second^-1; OPB_00299 #flow
+liter^1, second^-1; OPB_00299 #flow
+metre^3, second^-1; OPB_00299 #flow
+meter^3, second^-1; OPB_00299 #flow
+newton^1, metre^-2; OPB_00509 #pressure
+newton^1, meter^-2; OPB_00509 #pressure/stress
+pascal^1; OPB_00509 #pressure
+mole^1; OPB_00425 #amount
+kilogram^1; OPB_01226 #mass
+gram^1; OPB_01226 #mass
+kelvin^1; OPB_00293 #temperature
+celcius^1; OPB_00293 #temperature
+coulomb^1; OPB_00411 #charge
+hertz^1; OPB_00045 #frequency
+second^-1; OPB_0045 #frequency
+metre^1; OPB_01064 #length
+meter^1; OPB_01064 #length
+metre^1, second^-1; OPB_00251 #velocity
+meter^1, second^-1; OPB_00251 #velocity
+moles^1, second^-1; OPB_00592 #molarflowrate
+katal^1; OPB_00592 #molarflowrate

@@ -23,6 +23,7 @@ public abstract class ModelReader {
 	
 	ModelReader(ModelAccessor accessor){
 		this.modelaccessor = accessor;
+		if(sslib==null) sslib = new SemSimLibrary();
 	}
 	
 	public static void pointtoSemSimLibrary(SemSimLibrary lib) {

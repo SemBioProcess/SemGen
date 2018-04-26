@@ -1,6 +1,7 @@
 package semsim;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSimVersion");
 
+	public static final String DEFAULT_CFG_PATH = "/semsim/cfg_default/";
 	public static final String SemSimInJSimControlValue = "semSimAnnotate";
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -92,23 +94,39 @@ public class SemSimLibrary {
 	
 	private String cfgpath;
 	
-	public SemSimLibrary(String pathToConfigFolder) {
-		cfgpath = pathToConfigFolder;
-		loadLibrary();
+	public SemSimLibrary(){
+		loadLibrary(false);
 	}
 	
-	private void loadLibrary() {
+	public SemSimLibrary(String pathToConfigFolder) {
+		cfgpath = pathToConfigFolder;
+		loadLibrary(true);
+	}
+	
+	private void loadLibrary(boolean loadFromExternalDir) {
 		try {
 			loadCommonProperties();
-			loadOntologyDescriptions();
-			jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
 			
-			OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
-            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(cfgpath + "OPBClassesForBaseUnits.txt");
-			unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
-			cellMLUnitsTable = ResourcesManager.createSetFromFile(cfgpath + "CellMLUnits.txt");
+			if(loadFromExternalDir){
+				jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
+				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
+	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(cfgpath + "OPBClassesForBaseUnits.txt");
+				unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
+				cellMLUnitsTable = ResourcesManager.createSetFromFile(cfgpath + "CellMLUnits.txt");
+				loadOntologyDescriptions(cfgpath);
+			}
+			else{
+				jsimUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "jsimUnits", true);
+				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "OPBClassesForUnits.txt", true);
+	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(DEFAULT_CFG_PATH + "OPBClassesForBaseUnits.txt");
+				unitPrefixesAndPowersTable = makeUnitPrefixesAndPowersTable();
+				cellMLUnitsTable = ResourcesManager.createSetFromResource(DEFAULT_CFG_PATH + "CellMLUnits.txt");
+				loadOntologyDescriptions(DEFAULT_CFG_PATH);
+			}
 		} catch (FileNotFoundException e3) {
 			e3.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 
@@ -135,16 +153,16 @@ public class SemSimLibrary {
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
-	private void loadCommonProperties() throws FileNotFoundException {
-		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile(cfgpath + "CommonProperties.txt", true);
+	private void loadCommonProperties() throws IOException {
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource("/semsim/cfg_default/CommonProperties.txt", true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
 		}
 	}
 	
 	//Map ontology namespaces to ontologies
-	private void loadOntologyDescriptions() throws FileNotFoundException {
-		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions(cfgpath);
+	private void loadOntologyDescriptions(String pathtodescriptions) throws IOException {
+		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions(pathtodescriptions);
 		for (Ontology ont : onts) {
 			ontologies.add(ont);
 		}
