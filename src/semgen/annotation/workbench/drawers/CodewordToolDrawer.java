@@ -19,7 +19,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.utilities.SemSimComponentComparator;
 /**
  * Class for accessing and modifying codewords (data structures) in a model 
@@ -198,7 +198,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean isProcess() {
-		PhysicalPropertyinComposite pp = getFocusAssociatedProperty();
+		PhysicalPropertyInComposite pp = getFocusAssociatedProperty();
 		if (pp == null && !hasPhysicalModelComponent()) return false; 
 		if (pp==null) {
 			return getPhysicalCompositeType().equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) || 
@@ -379,7 +379,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return getFocus().getAssociatedPhysicalModelComponent();
 	}
 	
-	private PhysicalPropertyinComposite getFocusAssociatedProperty() {
+	private PhysicalPropertyInComposite getFocusAssociatedProperty() {
 		return getFocus().getPhysicalProperty();
 	}
 	

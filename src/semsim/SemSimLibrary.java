@@ -32,17 +32,18 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.ResourcesManager;
 
-/** Class for holding reference terms and data required for SemGen **/
+/** Class for holding OPB reference properties, physical unit settings and other data required
+ *  for reading and writing models**/
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSimVersion");
 
 	public static final String DEFAULT_CFG_PATH = "/semsim/cfg_default/";
-	public static final String SemSimInJSimControlValue = "semSimAnnotate";
+	public static final String SEMSIM_IN_JSIM_CONTROL_VALUE = "semSimAnnotate";
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	public OWLOntology OPB;
@@ -59,11 +60,10 @@ public class SemSimLibrary {
 	private Map<String, Integer> unitPrefixesAndPowersTable;
 	private Set<String> cellMLUnitsTable;
 	
-	private HashMap<String, PhysicalPropertyinComposite> commonproperties = new HashMap<String, PhysicalPropertyinComposite>();
+	private HashMap<String, PhysicalPropertyInComposite> commonproperties = new HashMap<String, PhysicalPropertyInComposite>();
 	private Set<String> OPBproperties = new HashSet<String>();
 	private Set<String> OPBflowProperties = new HashSet<String>();
 	private Set<String> OPBprocessProperties = new HashSet<String>();
-	//private Set<String> OPBdynamicalProperties = new HashSet<String>();
 	private Set<String> OPBamountProperties = new HashSet<String>();
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
@@ -94,15 +94,28 @@ public class SemSimLibrary {
 	
 	private String cfgpath;
 	
+	/**
+	 * Use this constructor to load library from the default, read-only configuration folder 
+	 * provided within the SemSim Java package
+	 */
 	public SemSimLibrary(){
 		loadLibrary(false);
 	}
 	
+	/**
+	 * Use this constructor to load library info from a locally-stored, writable
+	 * configuration directory
+	 * @param pathToConfigFolder
+	 */
 	public SemSimLibrary(String pathToConfigFolder) {
 		cfgpath = pathToConfigFolder;
 		loadLibrary(true);
 	}
 	
+	/**
+	 * Load the library from standalone files.
+	 * @param loadFromExternalDir 
+	 */
 	private void loadLibrary(boolean loadFromExternalDir) {
 		try {
 			loadCommonProperties();
@@ -153,13 +166,22 @@ public class SemSimLibrary {
 		} catch (OWLException e2) {e2.printStackTrace();}
 	}
 	
+	/**
+	 * Load OPB properties that are commonly represented in models
+	 * @throws IOException
+	 */
 	private void loadCommonProperties() throws IOException {
 		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource("/semsim/cfg_default/CommonProperties.txt", true);
 		for (String s : ptable.keySet()) {
-			this.commonproperties.put(s, new PhysicalPropertyinComposite(ptable.get(s)[0], URI.create(s)));
+			this.commonproperties.put(s, new PhysicalPropertyInComposite(ptable.get(s)[0], URI.create(s)));
 		}
 	}
 	
+	/**
+	 * Load textual descriptions of ontologies used for annotation
+	 * @param pathtodescriptions
+	 * @throws IOException
+	 */
 	//Map ontology namespaces to ontologies
 	private void loadOntologyDescriptions(String pathtodescriptions) throws IOException {
 		HashSet<Ontology> onts = ResourcesManager.loadOntologyDescriptions(pathtodescriptions);
@@ -168,14 +190,26 @@ public class SemSimLibrary {
 		}
 	}
 	
-	public Set<PhysicalPropertyinComposite> getCommonProperties() {
-		return new HashSet<PhysicalPropertyinComposite>(commonproperties.values());
+	public Set<PhysicalPropertyInComposite> getCommonProperties() {
+		return new HashSet<PhysicalPropertyInComposite>(commonproperties.values());
 	}
 	
+	/**
+	 * Look up OPB terms associated with a particular unit
+	 * @param unit
+	 * @return String array of OPB properties that could be quantified using
+	 * the given unit
+	 */
 	public String[] getOPBUnitRefTerm(String unit) {
 		return OPBClassesForUnitsTable.get(unit);
 	}
 	
+	/**
+	 * Get OPB properties associated with the units on a given {@link DataStructure}
+	 * @param ds
+	 * @return String array of candidate OPB properties that could be quantified using
+	 * the units on the {@link DataStructure}
+	 */
 	public String[] getOPBBaseUnitRefTerms(DataStructure ds) {
 		UnitOfMeasurement uom = ds.getUnit();
 		String unitName = uom.getName();
@@ -199,36 +233,59 @@ public class SemSimLibrary {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param unit Unit name
+	 * @return Whether the unit is prefixable within JSim
+	 */
 	public boolean isJSimUnitPrefixable(String unit) {
 		return (jsimUnitsTable.get(unit)[0]).equals("true");
 	}
 	
+	/**
+	 * 
+	 * @param unit
+	 * @return Whether the unit is in the list of fundamental JSim units
+	 */
 	public boolean jsimHasUnit(String unit) {
 		return jsimUnitsTable.containsKey(unit);
 	}
 
-	public PhysicalPropertyinComposite getOPBAnnotationFromPhysicalUnit(DataStructure ds){
+	/**
+	 * Creates a {@link PhysicalPropertyInComposite} instance with an OPB term
+	 * assigned based on the given {@link DataStructure}'s physical units.
+	 * @param ds
+	 * @return
+	 */
+	public PhysicalPropertyInComposite getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
 		// If there is no OPB class, check base units.
 		if (candidateOPBclasses == null) {
 			candidateOPBclasses = getOPBBaseUnitRefTerms(ds);
 		}
-		PhysicalPropertyinComposite pp = null;
+		PhysicalPropertyInComposite pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
 			String term = RDFNamespace.OPB.getNamespaceasString() + candidateOPBclasses[0];
 			pp = commonproperties.get(term);
 			if (pp==null) {
 				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
-				pp = new PhysicalPropertyinComposite(SemSimOWLFactory.getRDFLabels(OPB, cls)[0], URI.create(term));
+				pp = new PhysicalPropertyInComposite(SemSimOWLFactory.getRDFLabels(OPB, cls)[0], URI.create(term));
 			}
 		}
 		return pp;
 	}
 	
-	public PhysicalPropertyinComposite getOPBAnnotationFromReferenceID(String id){
+	/** Returns a {@link PhysicalPropertyInComposite} instance based on an input OPB class URI*/
+	public PhysicalPropertyInComposite getOPBAnnotationFromReferenceID(String id){
 		return commonproperties.get(id);
 	}
 	
+	/** Read an OWL ontology into a new OWLOntology instance. If ontology is already loaded,
+	 * return the existing instance.
+	 * @param onturi
+	 * @return OWLOntology instance read in from specified URI
+	 * @throws OWLOntologyCreationException
+	 */
 	public OWLOntology getLoadedOntology(String onturi) throws OWLOntologyCreationException {
 		OWLOntology localont = SemSimOWLFactory.getOntologyIfPreviouslyLoaded(IRI.create(onturi), manager);
 		if (localont == null) {
@@ -237,68 +294,135 @@ public class SemSimLibrary {
 		return localont;
 	}
 	
+	/** Get all subclasses of a given OPB class.
+	 * @param parentclass String of an OPB class URI
+	 * @return All subclasses of the parent class
+	 * @throws OWLException
+	 */
 	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
 		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceasString() + parentclass, false);
 		return subclassset;
 	}
 	
+	/** Create an instance of an OWLDataFactory */
 	public OWLDataFactory makeOWLFactory() {
 		return manager.getOWLDataFactory() ;
 	}
 	
+	/**
+	 * @param s A URI string 
+	 * @return Whether the URI string corresponds to an OPB physical property class
+	 */
 	public boolean OPBhasProperty(String s) {
 		return OPBproperties.contains(s);
 	}
 	
+	/** 
+	 * @param roa A {@link ReferenceOntologyAnnotation}
+	 * @return Whether the URI referred to in the {@link ReferenceOntologyAnnotation}
+	 * matches the URI of any OPB flow property class
+	 */
 	public boolean OPBhasFlowProperty(ReferenceOntologyAnnotation roa) {
 		return OPBflowProperties.contains(roa.getReferenceURI().toString());
 	}
 	
+	/**
+	 * @param s A string
+	 * @return Whether the string matches the URI of any OPB flow property class
+	 */
 	public boolean OPBhasFlowProperty(String s) {
 		return OPBflowProperties.contains(s);
 	}
 	
+	/**
+	 * @param u A URI
+	 * @return Whether the URI matches the URI of any OPB flow property class
+	 */
 	public boolean OPBhasFlowProperty(URI u) {
 		return OPBflowProperties.contains(u.toString());
 	}
 	
+	/**
+	 * @param roa A {@link ReferenceOntologyAnnotation}
+	 * @return Whether the reference URI in the annotation matches any OPB force property class
+	 */
 	public boolean OPBhasForceProperty(ReferenceOntologyAnnotation roa) {
 		return OPBforceProperties.contains(roa.getReferenceURI().toString());
 	}
 	
+	/**
+	 * @param uri A URI
+	 * @return Whether the URI matches any OPB force property class
+	 */
 	public boolean OPBhasForceProperty(URI uri) {
 		return OPBforceProperties.contains(uri.toString());
 	}
 	
-	public boolean OPBhasAmountProperty(URI roa) {
-		return OPBamountProperties.contains(roa.toString());
+	/**
+	 * @param uri A URI
+	 * @return Whether the URI matches any OPB amount property class
+	 */
+	public boolean OPBhasAmountProperty(URI uri) {
+		return OPBamountProperties.contains(uri.toString());
 	}
 	
+	/**
+	 * @param roa A {@link ReferenceOntologyAnnotation}
+	 * @return Whether the referenced URI in the annotation matches any OPB state property class
+	 */
 	public boolean OPBhasStateProperty(ReferenceOntologyAnnotation roa) {
 		return OPBstateProperties.contains(roa.getReferenceURI().toString());
 	}
 	
+	/**
+	 * @param uri A URI
+	 * @return Whether the URI matches any OPB state property class
+	 */
 	public boolean OPBhasStateProperty(URI uri) {
 		return OPBstateProperties.contains(uri);
 	}
 	
+	/**
+	 * @param roa A {@link ReferenceOntologyAnnotation}
+	 * @return Whether the reference URI in the annotation matches any OPB process property class
+	 */
 	public boolean OPBhasProcessProperty(ReferenceOntologyAnnotation roa) {
 		return OPBprocessProperties.contains(roa.getReferenceURI().toString());
 	}
 	
+	/**
+	 * @param s A String
+	 * @return Whether the string matches the URI of any OPB process property class
+	 */
 	public boolean OPBhasProcessProperty(String s) {
 		return OPBprocessProperties.contains(s);
 	}
 	
+	/**
+	 * @param u A URI
+	 * @return Whether the URI matches any OPB process property class
+	 */
 	public boolean OPBhasProcessProperty(URI u) {
 		return OPBprocessProperties.contains(u.toString());
 	}
 	
+	/**
+	 * @param u A URI
+	 * @return Whether the URI matches an OPB property that is applicable 
+	 * for use in annotating a dynamical rate variable
+	 */
 	public boolean isOPBprocessProperty(URI u){
 		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
 	}
 	
-	public boolean checkOPBpropertyValidity(PhysicalPropertyinComposite prop, PhysicalModelComponent pmc){
+	/**
+	 * @param prop A {@link PhysicalPropertyInComposite} instance
+	 * @param pmc A {@link PhysicalModelComponent} instance
+	 * @return Whether the {@link PhysicalPropertyInComposite} is a valid property of the {@link PhysicalModelComponent}.
+	 * For example, a {@ link PhysicalModelComponent} that is a {@link PhysicalProcess} should only bear
+	 * OPB process properties.
+	 */
+	public boolean checkOPBpropertyValidity(PhysicalPropertyInComposite prop, PhysicalModelComponent pmc){
 		if(pmc!=null){
 			
 			Boolean URIisprocessproperty = isOPBprocessProperty(prop.getPhysicalDefinitionURI());
@@ -314,7 +438,11 @@ public class SemSimLibrary {
 		return true;
 	}
 	
-	public PropertyType getPropertyinCompositeType(PhysicalPropertyinComposite pp) {
+	/**
+	 * @param pp A {@link PhysicalPropertyInComposite} instance
+	 * @return The type of physical property represented by the {@link PhysicalPropertyInComposite} instance
+	 */
+	public PropertyType getPropertyinCompositeType(PhysicalPropertyInComposite pp) {
 		URI roa = (pp.getPhysicalDefinitionURI());
 		
 		if(OPBhasStateProperty(roa) || OPBhasForceProperty(roa) || OPBhasAmountProperty(roa)){
@@ -326,11 +454,16 @@ public class SemSimLibrary {
 		else return PropertyType.Unknown;
 	}
 	
+	/**
+	 * @param unit A unit name
+	 * @return Whether the name is in the list of CellML base units
+	 */
 	public boolean isCellMLBaseUnit(String unit) {
 		return cellMLUnitsTable.contains(unit);
 	}
 	
-	// Remove any OPB terms that are not Physical Properties
+	/** Remove any OPB terms that are not physical properties from a HashMap that links 
+	 * OPB RDF labels to URI strings*/
 	public HashMap<String,String> removeNonPropertiesFromOPB(HashMap<String, String> table){
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -340,7 +473,8 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
-	// Remove any OPB terms that are Physical Properties
+	/** Remove any OPB terms that are physical properties from a HashMap that links 
+	 * OPB RDF labels to URI strings*/
 	public HashMap<String,String> removeOPBAttributeProperties(HashMap<String, String> table){
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -350,7 +484,8 @@ public class SemSimLibrary {
 		return newtable;
 	}
 
-	// Remove any OPB terms that are not Physical Properties of a process
+	/** Remove any OPB terms that are not physical process properties from a HashMap that links 
+	 * OPB RDF labels to URI strings*/
 	public HashMap<String, String> removeNonProcessProperties(HashMap<String, String> table) {
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -360,7 +495,8 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
-	// Remove any OPB terms that are not Physical Properties of an entity
+	/** Remove any OPB terms that are not physical entity properties from a HashMap that links 
+	 * OPB RDF labels to URI strings*/
 	public HashMap<String, String> removeNonPropertiesofEntities(HashMap<String, String> table) {
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -370,17 +506,29 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
+	/**
+	 * @param uri A class URI from an ontology
+	 * @return The name of the ontology containing the class
+	 */
 	public String getReferenceOntologyName(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 		return getOntologyByNamespace(namespace).getFullName();
 	}
 	
+	/**
+	 * @param uri A class URI from an ontology
+	 * @return The abbreviation of the ontology containing the class
+	 */
 	public String getReferenceOntologyAbbreviation(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 		
 		return getOntologyByNamespace(namespace).getNickName();
 	}
 	
+	/**
+	 * @param namespace The namespace of an ontology
+	 * @return The {@link Ontology} identified by the namespace
+	 */
 	private Ontology getOntologyByNamespace(String namespace) {
 		Ontology ont = ReferenceOntologies.getOntologyByNamespace(namespace);
 		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
@@ -394,17 +542,27 @@ public class SemSimLibrary {
 		return ont;
 	}
 	
+	/**
+	 * @param termuri The URI of an ontology class
+	 * @return The {@link Ontology} containing the class
+	 */
 	public Ontology getOntologyfromTermURI(String termuri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(termuri);
 		return getOntologyByNamespace(namespace);
 	}
 	
-	
+	/**
+	 * @param uri The URI of an ontology class
+	 * @return The URI with its namespace removed
+	 */
 	public String getReferenceID(URI uri) {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 		return uri.toString().replace(namespace, "");
 	}
 	
+	/**
+	 * @return A map that links unit prefix strings with the exponent value used in unit conversions
+	 */
 	public Map<String, Integer> makeUnitPrefixesAndPowersTable(){
 		Map<String,Integer> map = new HashMap<String,Integer>();
 		map.put("yotta", 24);
@@ -431,6 +589,7 @@ public class SemSimLibrary {
 		return map;
 	}
 	
+	/** @return Get the unit prefixes and exponents map */
 	public Map<String,Integer> getUnitPrefixesAndPowersMap(){
 		return unitPrefixesAndPowersTable;
 	}

@@ -162,7 +162,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 
 	private void addNewSemSimControlElementToModel(Element modelel){
 		semsimControlElement = new Element("control");
-		semsimControlElement.setAttribute("name", SemSimLibrary.SemSimInJSimControlValue);
+		semsimControlElement.setAttribute("name", SemSimLibrary.SEMSIM_IN_JSIM_CONTROL_VALUE);
 		modelel.addContent(semsimControlElement);
 	}
 	

@@ -38,7 +38,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
@@ -82,7 +82,7 @@ public abstract class AbstractRDFreader {
 			reader.setProperty("relativeURIs","same-document,relative");
 			reader.read(rdf, stream, namespace);
 			stream.close();
-		} 
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -157,15 +157,15 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	protected PhysicalPropertyinComposite getPhysicalPropertyInComposite(String key) {
+	protected PhysicalPropertyInComposite getPhysicalPropertyInComposite(String key) {
 		PhysicalModelComponent term = ResourceURIandPMCmap.get(key);
 		if (term==null) {
 			String description = "";
-			term = new PhysicalPropertyinComposite(description, URI.create(key));
+			term = new PhysicalPropertyInComposite(description, URI.create(key));
 			ResourceURIandPMCmap.put(key, term);
-			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyinComposite) term);
+			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyInComposite) term);
 		}
-		return (PhysicalPropertyinComposite)term;
+		return (PhysicalPropertyInComposite)term;
 	}
 	
 	

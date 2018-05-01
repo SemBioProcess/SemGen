@@ -26,7 +26,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 
 public class SemSimRDFreader extends AbstractRDFreader{
 
@@ -209,7 +209,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
 					uri = swapInOPBnamespace(uri);
 				
-				PhysicalPropertyinComposite pp = getPhysicalPropertyInComposite(uri.toString());
+				PhysicalPropertyInComposite pp = getPhysicalPropertyInComposite(uri.toString());
 				ds.setAssociatedPhysicalProperty(pp);
 			}
 

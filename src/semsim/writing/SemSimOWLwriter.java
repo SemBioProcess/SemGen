@@ -49,7 +49,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 
@@ -377,10 +377,10 @@ public class SemSimOWLwriter extends ModelWriter {
 
 			// Classify the physical property under its reference ontology class
 			// that it is annotated against
-			PhysicalPropertyinComposite dspp = ds.getPhysicalProperty();
+			PhysicalPropertyInComposite dspp = ds.getPhysicalProperty();
 				
 			//Create empty property if one has not been assigned
-			if (dspp==null)  dspp = new PhysicalPropertyinComposite("",URI.create(""));
+			if (dspp==null)  dspp = new PhysicalPropertyInComposite("",URI.create(""));
 			
 			URI propertyuri = SemSimOWLFactory.getURIforPhysicalProperty(semsimmodel, ds);
 			createPhysicalModelIndividual(dspp, propertyuri.toString());
@@ -813,7 +813,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		// Otherwise it's a custom entity, custom process or unspecified property
 		else if (!(pmc instanceof CompositePhysicalEntity)){
 			
-			if(pmc instanceof PhysicalPropertyinComposite) 
+			if(pmc instanceof PhysicalPropertyInComposite) 
 				parenturistring = SemSimTypes.PHYSICAL_PROPERTY.getURIasString();
 			
 			else{

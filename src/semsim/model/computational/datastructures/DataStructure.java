@@ -21,7 +21,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.utilities.SemSimCopy;
 
 /**
@@ -30,7 +30,7 @@ import semsim.utilities.SemSimCopy;
  */
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
 	private Computation computation = null;
-	private PhysicalPropertyinComposite physicalProperty = null;
+	private PhysicalPropertyInComposite physicalProperty = null;
 	private PhysicalModelComponent physicalcomponent = null;
 	private PhysicalProperty singularterm = null;
 	private DataStructure solutionDomain;
@@ -112,9 +112,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * @return The {@link PhysicalPropertyinComposite} simulated by the DataStructure
+	 * @return The {@link PhysicalPropertyInComposite} simulated by the DataStructure
 	 */
-	public PhysicalPropertyinComposite getPhysicalProperty(){
+	public PhysicalPropertyInComposite getPhysicalProperty(){
 		return physicalProperty;
 	}
 	
@@ -199,10 +199,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/**
-	 * Assign a {@link PhysicalPropertyinComposite} to the DataStructure 
+	 * Assign a {@link PhysicalPropertyInComposite} to the DataStructure 
 	 * @param pp The PhysicalProperty instance to assign to the DataStructure
 	 */
-	public void setAssociatedPhysicalProperty(PhysicalPropertyinComposite pp){
+	public void setAssociatedPhysicalProperty(PhysicalPropertyInComposite pp){
 		physicalProperty = pp;
 	}
 	

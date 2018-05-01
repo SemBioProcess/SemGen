@@ -40,7 +40,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -60,9 +60,9 @@ import semsim.utilities.SemSimCopy;
  * <p>
  * For example, a model of cellular glycolysis may represent the chemical concentration of
  * intracellular glucose with a variable called "cgluc." This can be captured within a SemSim model by
- * creating a {@link DataStructure} with the name "cgluc" and a corresponding {@link PhysicalPropertyinComposite}
+ * creating a {@link DataStructure} with the name "cgluc" and a corresponding {@link PhysicalPropertyInComposite}
  * that is annotated against the Ontology of Physics for Biology term "Chemical concentration."
- * This {@link PhysicalPropertyinComposite} would be a property of a {@link PhysicalEntity} representing 
+ * This {@link PhysicalPropertyInComposite} would be a property of a {@link PhysicalEntity} representing 
  * intracellular glucose. In this case we would use a {@link CompositePhysicalEntity} that consists of
  * a singular {@link PhysicalEntity} representing glucose that is linked to another singular {@link PhysicalEntity}
  * representing the cytosol via the "part of" {@link SemSimRelation}. To capture the biological meaning
@@ -103,7 +103,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	// Physical model components
 	private Set<PhysicalEntity> physicalentities = new HashSet<PhysicalEntity>();
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
-	private Set<PhysicalPropertyinComposite> associatephysicalproperties = new HashSet<PhysicalPropertyinComposite>();
+	private Set<PhysicalPropertyInComposite> associatephysicalproperties = new HashSet<PhysicalPropertyInComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
 	
@@ -277,7 +277,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	public PhysicalPropertyinComposite addAssociatePhysicalProperty(PhysicalPropertyinComposite pp){
+	public PhysicalPropertyInComposite addAssociatePhysicalProperty(PhysicalPropertyInComposite pp){
 		
 		if(getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
 		else associatephysicalproperties.add(pp);
@@ -285,7 +285,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
-	public void removeAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
+	public void removeAssociatePhysicalProperty(PhysicalPropertyInComposite pp) {
 		this.associatephysicalproperties.remove(pp);
 	}
 	
@@ -297,8 +297,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
-	public PhysicalPropertyinComposite getAssociatePhysicalPropertybyURI(URI uri) {
-		for (PhysicalPropertyinComposite pp : associatephysicalproperties) {
+	public PhysicalPropertyInComposite getAssociatePhysicalPropertybyURI(URI uri) {
+		for (PhysicalPropertyInComposite pp : associatephysicalproperties) {
 			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}
 		return null;
@@ -611,7 +611,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * @return All PhysicalProperties which can be associated with a composite in the model.
 	 */
-	public Set<PhysicalPropertyinComposite> getAssociatePhysicalProperties() {
+	public Set<PhysicalPropertyInComposite> getAssociatePhysicalProperties() {
 		return associatephysicalproperties;
 	}
 	
@@ -1129,11 +1129,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.semsimversion = Double.valueOf(semsimversion);
 	}
 		
-	public void replacePhysicalProperty(PhysicalPropertyinComposite tobereplaced, PhysicalPropertyinComposite toreplace) {
-		Set<PhysicalPropertyinComposite> pps = new HashSet<PhysicalPropertyinComposite>();
+	public void replacePhysicalProperty(PhysicalPropertyInComposite tobereplaced, PhysicalPropertyInComposite toreplace) {
+		Set<PhysicalPropertyInComposite> pps = new HashSet<PhysicalPropertyInComposite>();
 		pps.addAll(associatephysicalproperties);
 		
-		for (PhysicalPropertyinComposite pp : pps) {
+		for (PhysicalPropertyInComposite pp : pps) {
 			
 			if (pp.equals(tobereplaced)) {
 				associatephysicalproperties.remove(pp);

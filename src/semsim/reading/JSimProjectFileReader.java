@@ -121,7 +121,7 @@ public class JSimProjectFileReader {
 		while(controlit.hasNext()){
 			Element controlel = controlit.next();
 			
-			if(controlel.getAttributeValue("name").equals(SemSimLibrary.SemSimInJSimControlValue)){
+			if(controlel.getAttributeValue("name").equals(SemSimLibrary.SEMSIM_IN_JSIM_CONTROL_VALUE)){
 				return controlel;
 			}
 		}

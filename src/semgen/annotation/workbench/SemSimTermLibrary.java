@@ -24,7 +24,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.writing.CaseInsensitiveComparator;
@@ -52,7 +52,7 @@ public class SemSimTermLibrary extends Observable {
 	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE, TERM_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
-		for (PhysicalPropertyinComposite pp : SemGen.semsimlib.getCommonProperties()) {
+		for (PhysicalPropertyInComposite pp : SemGen.semsimlib.getCommonProperties()) {
 			addAssociatePhysicalProperty(pp);
 		}
 		addTermsinModel(model);
@@ -64,7 +64,7 @@ public class SemSimTermLibrary extends Observable {
 	 * @param model
 	 */
 	public void addTermsinModel(SemSimModel model) {
-		for (PhysicalPropertyinComposite pp : model.getAssociatePhysicalProperties()) {
+		for (PhysicalPropertyInComposite pp : model.getAssociatePhysicalProperties()) {
 			addAssociatePhysicalProperty(pp);
 		}
 		for (PhysicalProperty pp : model.getPhysicalProperties()) {
@@ -87,16 +87,16 @@ public class SemSimTermLibrary extends Observable {
 //**************************************TERM ADDITION METHODS***************************//
 	
 	public int createAssociatedPhysicalProperty(String name, URI uri) {
-		int i = addAssociatePhysicalProperty(new PhysicalPropertyinComposite(name, uri));
+		int i = addAssociatePhysicalProperty(new PhysicalPropertyInComposite(name, uri));
 		notifySingularAdded();
 		return i;
 	}
 	
-	private int addAssociatePhysicalProperty(PhysicalPropertyinComposite pp) {
+	private int addAssociatePhysicalProperty(PhysicalPropertyInComposite pp) {
 		int i = getPhysicalPropertyIndex(pp);
 		if (i!=-1) return i; 
 		
-		IndexCard<PhysicalPropertyinComposite> ppic = new IndexCard<PhysicalPropertyinComposite>(pp);
+		IndexCard<PhysicalPropertyInComposite> ppic = new IndexCard<PhysicalPropertyInComposite>(pp);
 		masterlist.add(ppic);
 		
 		i = masterlist.indexOf(ppic);
@@ -254,11 +254,11 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	// Retrieving physical properties
-		public PhysicalPropertyinComposite getAssociatePhysicalProperty(Integer index) {
-			return (PhysicalPropertyinComposite)masterlist.get(index).getObject();
+		public PhysicalPropertyInComposite getAssociatePhysicalProperty(Integer index) {
+			return (PhysicalPropertyInComposite)masterlist.get(index).getObject();
 		}
 		
-		public Integer getPhysicalPropertyIndex(PhysicalPropertyinComposite pp) {
+		public Integer getPhysicalPropertyIndex(PhysicalPropertyInComposite pp) {
 			for (Integer i : ppccompindexer) {
 				if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 			}
@@ -281,7 +281,7 @@ public class SemSimTermLibrary extends Observable {
 			switch (type) {
 			case PropertyOfPhysicalEntity:
 				for (Integer i : ppccompindexer) {
-					URI ppc = ((PhysicalPropertyinComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
+					URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
 					if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
 						results.add(i);
 					}
@@ -289,7 +289,7 @@ public class SemSimTermLibrary extends Observable {
 				break;
 			case PropertyOfPhysicalProcess:
 				for (Integer i : ppccompindexer) {
-					PhysicalPropertyinComposite ppc = (PhysicalPropertyinComposite)masterlist.get(i).getObject();
+					PhysicalPropertyInComposite ppc = (PhysicalPropertyInComposite)masterlist.get(i).getObject();
 					if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
 						results.add(i);
 					}

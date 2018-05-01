@@ -4,6 +4,11 @@ import java.net.URI;
 
 import semsim.definitions.SemSimTypes;
 
+/**
+ * Class representing elements within a SemSim model
+ * @author mneal
+ *
+ */
 public abstract class SemSimObject {
 	private String name = new String("");
 	private String description = new String("");
@@ -14,6 +19,10 @@ public abstract class SemSimObject {
 		semsimtype = type;
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param objtocopy
+	 */
 	public SemSimObject(SemSimObject objtocopy) {
 		semsimtype = objtocopy.semsimtype;
 		name = new String(objtocopy.name);
@@ -25,45 +34,34 @@ public abstract class SemSimObject {
 			metadataID = new String(objtocopy.metadataID);
 	}
 	
-	/**
-	 * Get the component's free-text description
-	 */
+	/** Get the component's free-text description */
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * Get the component's name
-	 */
+	/** Get the component's name */
 	public String getName(){
 		return name;
 	}
 	
-	/**
-	 * Whether the object has an associated name
-	 */
+	/** Whether the object has an associated name*/
 	public boolean hasName(){
 		return ( ! name.equals("") && name != null);
 	}
 	
-	/**
-	 * Whether the object has an associated textual description
-	 */
+	/** Whether the object has an associated textual description */
 	public boolean hasDescription(){
 		if( description != null && ! description.equals("")) return true;
 		else return false;
 	}
 	
-	/**
-	 * Whether the object has an associated metadata ID
-	 */
+	/** Whether the object has an associated metadata ID */
 	public boolean hasMetadataID(){
 		return ( ! metadataID.equals("") && metadataID != null);
 	}
 	
 	/**
 	 * Set the object's name
-	 * 
 	 * @param name The name to apply
 	 */
 	public void setName(String name){

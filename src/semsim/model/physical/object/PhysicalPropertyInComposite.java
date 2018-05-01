@@ -12,9 +12,9 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.owl.SemSimOWLFactory;
 
-public class PhysicalPropertyinComposite extends PhysicalModelComponent implements ReferenceTerm{
+public class PhysicalPropertyInComposite extends PhysicalModelComponent implements ReferenceTerm{
 		
-	public PhysicalPropertyinComposite(String label, URI uri) {
+	public PhysicalPropertyInComposite(String label, URI uri) {
 		super(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE);
 		referenceuri = uri;
 		setName(label);
@@ -46,7 +46,7 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 	@Override
 	protected boolean isEquivalent(Object obj) {
-		URI physdefuri = ((PhysicalPropertyinComposite)obj).getPhysicalDefinitionURI();
+		URI physdefuri = ((PhysicalPropertyInComposite)obj).getPhysicalDefinitionURI();
 		
 		String physdefID = getTermID().replace(":", "_");
 		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
@@ -67,7 +67,7 @@ public class PhysicalPropertyinComposite extends PhysicalModelComponent implemen
 
 
 	@Override
-	public PhysicalPropertyinComposite addToModel(SemSimModel model) {
+	public PhysicalPropertyInComposite addToModel(SemSimModel model) {
 		return model.addAssociatePhysicalProperty(this);
 	}
 	

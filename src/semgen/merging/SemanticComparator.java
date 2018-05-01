@@ -12,7 +12,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.DuplicateChecker;
 import semsim.utilities.SemSimUtil;
@@ -98,8 +98,8 @@ public class SemanticComparator {
 			
 				// If the physical properties in the composite annotation are not null...
 				if(ds1.hasPhysicalProperty() && ds2.hasPhysicalProperty()){
-					PhysicalPropertyinComposite prop1 = ds1.getPhysicalProperty();
-					PhysicalPropertyinComposite prop2 = ds2.getPhysicalProperty();
+					PhysicalPropertyInComposite prop1 = ds1.getPhysicalProperty();
+					PhysicalPropertyInComposite prop2 = ds2.getPhysicalProperty();
 						
 					// Test whether the associated physical components are equivalent
 					if(ds1.hasAssociatedPhysicalComponent() && ds2.hasAssociatedPhysicalComponent()){

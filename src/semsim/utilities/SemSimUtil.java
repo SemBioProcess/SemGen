@@ -37,7 +37,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.writing.CaseInsensitiveComparator;
 
 /**
@@ -567,7 +567,7 @@ public class SemSimUtil {
 	 * maintaining a single set of unique property instances
 	 * */
 	public static void regularizePhysicalProperties(SemSimModel model, SemSimLibrary lib) {
-		for (PhysicalPropertyinComposite pp : lib.getCommonProperties()) {
+		for (PhysicalPropertyInComposite pp : lib.getCommonProperties()) {
 			model.replacePhysicalProperty(pp, pp);
 		}
 	}

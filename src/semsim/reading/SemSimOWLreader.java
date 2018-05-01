@@ -68,7 +68,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -81,7 +81,7 @@ public class SemSimOWLreader extends ModelReader {
 	private Map<String, PhysicalModelComponent> identitymap = new HashMap<String, PhysicalModelComponent>();
 	private Map<String, ReferencePhysicalDependency> iddependencymap = new HashMap<String, ReferencePhysicalDependency>();
 
-	private Map<String, PhysicalPropertyinComposite> idpropertymap = new HashMap<String, PhysicalPropertyinComposite>();
+	private Map<String, PhysicalPropertyInComposite> idpropertymap = new HashMap<String, PhysicalPropertyInComposite>();
 	private OWLOntology ont;
 	private URI physicaldefinitionURI;
 
@@ -197,7 +197,7 @@ public class SemSimOWLreader extends ModelReader {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
 			
-			PhysicalPropertyinComposite pp = new PhysicalPropertyinComposite(label, URI.create(refuri));
+			PhysicalPropertyInComposite pp = new PhysicalPropertyInComposite(label, URI.create(refuri));
 			
 			semsimmodel.addAssociatePhysicalProperty(pp);
 			idpropertymap.put(refuri, pp);

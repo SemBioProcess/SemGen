@@ -10,7 +10,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.utilities.SemSimUtil;
 
 public class AutoAnnotate {
@@ -30,7 +30,7 @@ public class AutoAnnotate {
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
 			if(ds.hasUnits()){
-				PhysicalPropertyinComposite pp = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);			
+				PhysicalPropertyInComposite pp = SemGen.semsimlib.getOPBAnnotationFromPhysicalUnit(ds);			
 				
 				if(pp!=null){
 					

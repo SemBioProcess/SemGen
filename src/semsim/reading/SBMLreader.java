@@ -80,7 +80,7 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
-import semsim.model.physical.object.PhysicalPropertyinComposite;
+import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -452,22 +452,22 @@ public class SBMLreader extends ModelReader{
 			ds.getComputation().setComputationalCode(compid + " = " + Double.toString(sbmlc.getSize()));
 			
 			String reservedunits = null;
-			PhysicalPropertyinComposite prop = null;
+			PhysicalPropertyInComposite prop = null;
 			String modelobjectspecifieddefaultunits = "";
 			
 			// Add physical property
 			if(sbmlc.getSpatialDimensions()==3.0 || ! sbmlc.isSetSpatialDimensions()){  // For compartments where the spatial dimension isn't specified, we assume 3
-				prop = new PhysicalPropertyinComposite("Fluid volume", SemSimLibrary.OPB_FLUID_VOLUME_URI);
+				prop = new PhysicalPropertyInComposite("Fluid volume", SemSimLibrary.OPB_FLUID_VOLUME_URI);
 				reservedunits = "volume";
 				modelobjectspecifieddefaultunits = sbmlmodel.getVolumeUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==2.0){
-				prop = new PhysicalPropertyinComposite("Area of spatial entity", SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI);
+				prop = new PhysicalPropertyInComposite("Area of spatial entity", SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI);
 				reservedunits = "area";
 				modelobjectspecifieddefaultunits = sbmlmodel.getAreaUnits();
 			}
 			else if(sbmlc.getSpatialDimensions()==1.0){
-				prop = new PhysicalPropertyinComposite("Span of spatial entity", SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI);
+				prop = new PhysicalPropertyInComposite("Span of spatial entity", SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI);
 				reservedunits = "length";
 				modelobjectspecifieddefaultunits = sbmlmodel.getLengthUnits();
 			}
@@ -634,7 +634,7 @@ public class SBMLreader extends ModelReader{
 			
 					
 			// Deal with equations for species concentration/amount here
-			PhysicalPropertyinComposite prop = null;
+			PhysicalPropertyInComposite prop = null;
 			
 			UnitOfMeasurement speciessubstanceunits = null;
 			
@@ -685,7 +685,7 @@ public class SBMLreader extends ModelReader{
 			
 			// Assign OPB properties
 			if(baseunitname.equals("dimensionless"))
-				prop = new PhysicalPropertyinComposite(null,null);
+				prop = new PhysicalPropertyInComposite(null,null);
 			
 			// Deal with amount/concentration units
 			else if(baseunitname.equals("mole")){
@@ -694,39 +694,39 @@ public class SBMLreader extends ModelReader{
 					// look up factor for unit substance in semsimmodel and determine OPB property from that.
 					// but if substance not in model...(level 3) ...
 
-					prop = new PhysicalPropertyinComposite("Chemical molar amount", SemSimLibrary.OPB_CHEMICAL_MOLAR_AMOUNT_URI);
+					prop = new PhysicalPropertyInComposite("Chemical molar amount", SemSimLibrary.OPB_CHEMICAL_MOLAR_AMOUNT_URI);
 				}
-				else prop = new PhysicalPropertyinComposite("Chemical concentration", SemSimLibrary.OPB_CHEMICAL_CONCENTRATION_URI);
+				else prop = new PhysicalPropertyInComposite("Chemical concentration", SemSimLibrary.OPB_CHEMICAL_CONCENTRATION_URI);
 			}
 			// Deal with particle units
 			else if(baseunitname.equals("item")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Particle count", SemSimLibrary.OPB_PARTICLE_COUNT_URI);
-				else prop = new PhysicalPropertyinComposite("Particle concentration", SemSimLibrary.OPB_PARTICLE_CONCENTRATION_URI);
+					prop = new PhysicalPropertyInComposite("Particle count", SemSimLibrary.OPB_PARTICLE_COUNT_URI);
+				else prop = new PhysicalPropertyInComposite("Particle concentration", SemSimLibrary.OPB_PARTICLE_CONCENTRATION_URI);
 			}
 			// Deal with mass/density units
 			else if(baseunitname.equals("kilogram") || baseunitname.equals("gram")){
 				
 				if(hasonlysub)
-					prop = new PhysicalPropertyinComposite("Mass of solid entity", SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI);				
+					prop = new PhysicalPropertyInComposite("Mass of solid entity", SemSimLibrary.OPB_MASS_OF_SOLID_ENTITY_URI);				
 				else {
 					double compartmentdims = sbmlmodel.getCompartment(compartmentname).getSpatialDimensions();
 					
 					if(compartmentdims==0.0){
 						addErrorToModel("Compartment dimensions for species " + speciesid + " cannot be zero because species has mass units.");
-						prop = new PhysicalPropertyinComposite(null,null);
+						prop = new PhysicalPropertyInComposite(null,null);
 					}
 					
 					else if(compartmentdims==1.0)
-						prop = new PhysicalPropertyinComposite("Mass lineal density", SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);					
+						prop = new PhysicalPropertyInComposite("Mass lineal density", SemSimLibrary.OPB_MASS_LINEAL_DENSITY_URI);					
 					else if(compartmentdims==2.0)
-						prop = new PhysicalPropertyinComposite("Mass areal density", SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);					
+						prop = new PhysicalPropertyInComposite("Mass areal density", SemSimLibrary.OPB_MASS_AREAL_DENSITY_URI);					
 					else if(compartmentdims==3.0)
-						prop = new PhysicalPropertyinComposite("Mass volumetric density", SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);					
+						prop = new PhysicalPropertyInComposite("Mass volumetric density", SemSimLibrary.OPB_MASS_VOLUMETRIC_DENSITY_URI);					
 				}
 			}
-			else prop = new PhysicalPropertyinComposite(null,null);
+			else prop = new PhysicalPropertyInComposite(null,null);
 
 						
 			// Set initial condition
@@ -957,19 +957,19 @@ public class SBMLreader extends ModelReader{
 		
 		// Assign OPB properties based on units
 		String basesubstanceunitsname = getSubstanceBaseUnits(modelsubstanceunits);
-		PhysicalPropertyinComposite prop = null;
+		PhysicalPropertyInComposite prop = null;
 
 		if(basesubstanceunitsname.equals("dimensionless"))
-			prop = new PhysicalPropertyinComposite(null,null);
+			prop = new PhysicalPropertyInComposite(null,null);
 		
 		else if(basesubstanceunitsname.equals("mole"))
-			prop = new PhysicalPropertyinComposite("Chemical molar flow rate", SemSimLibrary.OPB_CHEMICAL_MOLAR_FLOW_RATE_URI);
+			prop = new PhysicalPropertyInComposite("Chemical molar flow rate", SemSimLibrary.OPB_CHEMICAL_MOLAR_FLOW_RATE_URI);
 		
 		else if(basesubstanceunitsname.equals("item"))
-			prop = new PhysicalPropertyinComposite("Particle flow rate", SemSimLibrary.OPB_PARTICLE_FLOW_RATE_URI);		
+			prop = new PhysicalPropertyInComposite("Particle flow rate", SemSimLibrary.OPB_PARTICLE_FLOW_RATE_URI);		
 		else if(basesubstanceunitsname.equals("kilogram") || basesubstanceunitsname.equals("gram"))
-			prop = new PhysicalPropertyinComposite("Material flow rate", SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);		
-		else prop = new PhysicalPropertyinComposite(null,null);
+			prop = new PhysicalPropertyInComposite("Material flow rate", SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);		
+		else prop = new PhysicalPropertyInComposite(null,null);
 		
 		semsimmodel.addAssociatePhysicalProperty(prop);
 				
