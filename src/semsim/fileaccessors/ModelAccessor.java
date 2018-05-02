@@ -3,7 +3,6 @@ package semsim.fileaccessors;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -13,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 
@@ -185,7 +185,7 @@ public class ModelAccessor {
 			ModelWriter writer = makeWriter(model);
 			try {
 				String modelstring = writer.encodeModel();
-				PrintWriter pwriter = new PrintWriter(new FileWriter(getFile()), true);
+				PrintWriter pwriter = new PrintWriter(new FileWriterWithEncoding(getFile(),"UTF-8"), true);
 				pwriter.print(modelstring);
 				pwriter.close();
 			} catch (IOException e) {
