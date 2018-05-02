@@ -262,10 +262,12 @@ public class ReferenceOntologies {
 			return bioportalnamespace;
 		}
 		
+		/** @return The namespaces associated with the ReferenceOntology */
 		public ArrayList<String> getNamespaces() {
 			return namespaces;
 		}
 		
+		/** Cast the ReferenceOntology as an {@link Ontology} */
 		public Ontology getAsOntology() {
 			return ontology;
 		}

@@ -166,7 +166,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					if(modelname == null) return null;
 
 					overwriting = existingmodelnames.contains(modelname);
-					ma = FileAccessorFactory.getJSIMProjectAccessor(filetosave, modelname);
+					ma = FileAccessorFactory.getJSIMprojectAccessor(filetosave, modelname);
 				}
 				
 				// Otherwise we're saving to a standalone file

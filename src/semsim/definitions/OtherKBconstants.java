@@ -3,7 +3,7 @@ package semsim.definitions;
 /**
  * A set of constants for working with SemSim models
  */
-public class SemSimConstants {
+public class OtherKBconstants {
 	
 	// Full names of ontologies & knowledge bases
 	public static final String BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME = "Braunschweig Enzyme Database";

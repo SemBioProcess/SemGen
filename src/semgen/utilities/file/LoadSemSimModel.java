@@ -9,7 +9,7 @@ import JSim.util.Xcept;
 import semgen.SemGen;
 import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
-import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CASAreader;
@@ -141,7 +141,7 @@ public class LoadSemSimModel extends SemGenJob {
 		else{
 			
 			if (ma.getModelType().equals(ModelType.MML_MODEL_IN_PROJ)) {
-				if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, (JSIMProjectAccessor)ma, SemGen.semsimlib)){
+				if(JSimProjectFileReader.getModelPreviouslyAnnotated(semsimmodel, (JSimProjectAccessor)ma, SemGen.semsimlib)){
 					//If annotations present, collect names of reference terms
 					setStatus("Collecting annotations");
 					nameOntologyTerms();

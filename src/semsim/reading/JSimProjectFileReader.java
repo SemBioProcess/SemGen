@@ -13,7 +13,7 @@ import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
 import semsim.SemSimLibrary;
-import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.model.collection.SemSimModel;
 
 public class JSimProjectFileReader {
@@ -21,7 +21,7 @@ public class JSimProjectFileReader {
 	// This method collects all annotations for an MML model using the RDF block
 	// associated with it in its parent project file. The method returns whether 
 	// the model has already been annotated to some degree.
-	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, JSIMProjectAccessor ma,SemSimLibrary sslib){
+	public static boolean getModelPreviouslyAnnotated(SemSimModel semsimmodel, JSimProjectAccessor ma,SemSimLibrary sslib){
 
 			Document projdoc = ma.getJDOMDocument();
 			Element ssael = getSemSimControlElementForModel(projdoc, ma.getModelName());

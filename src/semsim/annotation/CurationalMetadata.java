@@ -63,10 +63,7 @@ public class CurationalMetadata {
 		}
 	}
 	
-	/**
-	 * Enum of the different relations available for curational metadata annotations
-	 *
-	 */
+	/** Enum of the different relations available for curational metadata annotations */
 	public enum Metadata implements Relation {
 		fullname("Full Name", "a human-readable name for the model", MODEL_NAME_URI, "dc:title"),
 		description("Description", "a free-text description of the model", MODEL_DESCRIPTION_URI, "dc:description"),

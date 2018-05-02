@@ -11,20 +11,35 @@ import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.JSimProjectFileWriter;
 import semsim.writing.ModelWriter;
 
-public class JSIMProjectAccessor extends ModelAccessor {
+/**
+ * Class containing functions for accessing the model contents
+ * within a JSim project file
+ * @author mneal
+ *
+ */
+public class JSimProjectAccessor extends ModelAccessor {
 	
 	// Use this constructor for models that are stored within JSim Project files
-	protected JSIMProjectAccessor(File archiveFile, String modelNameInArchive){
+	/**
+	 * Constructor for models that are stored within JSim project files
+	 * @param archiveFile Location of project file
+	 * @param modelNameInArchive Name of model in the project file
+	 */
+	protected JSimProjectAccessor(File archiveFile, String modelNameInArchive){
 			super(archiveFile, modelNameInArchive, ModelType.MML_MODEL_IN_PROJ);
 
 	}
 	
-	// Copy constructor
-	public JSIMProjectAccessor(JSIMProjectAccessor matocopy) {
+	/**
+	 * Copy contructor
+	 * @param matocopy The JSimProjectAccessor to copy
+	 */
+	public JSimProjectAccessor(JSimProjectAccessor matocopy) {
 		super(matocopy);
 		fragment = matocopy.fragment;
 	}
 
+	/** Creates an InputStream for the model in the project file */
 	public InputStream modelInStream() throws IOException{
 		
 		if(modelIsOnline()) return null;
@@ -44,17 +59,20 @@ public class JSIMProjectAccessor extends ModelAccessor {
 		return new String(filepath + separator + fragment);
 	}
 	
-	
-	// If the model is in a standalone file, the name of the file is returned
-	// otherwise a string with format [name of archive] > [name of model] is returned
+	/**
+	 * @return If the model is in a standalone file, the name of the file is returned
+	 * otherwise a string with format [name of archive] > [name of model] is returned
+	 */
 	public String getShortLocation(){
 		return fragment + '>'  + getFileName();
 	}
 	
+	/** @return The name of the model in the project file that the JSimProjectAccessor points to */
 	public String getModelName() {
 		return fragment;
 	}
 
+	/** @return The type of model pointed to by the JSimProjectAccessor */
 	public ModelType getModelType() {
 		return ModelType.MML_MODEL_IN_PROJ;
 	}

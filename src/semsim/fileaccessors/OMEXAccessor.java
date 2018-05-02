@@ -40,7 +40,7 @@ public class OMEXAccessor extends ModelAccessor {
 	
 	public OMEXAccessor(File omexarchive, File file, String fragment) {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
-		archivedfile = new JSIMProjectAccessor(file, fragment);
+		archivedfile = new JSimProjectAccessor(file, fragment);
 		
 	}
 

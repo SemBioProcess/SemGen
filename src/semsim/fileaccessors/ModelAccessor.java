@@ -30,6 +30,11 @@ import semsim.writing.ModelWriter;
 import semsim.writing.SBMLwriter;
 import semsim.writing.SemSimOWLwriter;
 
+/**
+ * A class for accessing the contents of a model file
+ * @author mneal
+ *
+ */
 public class ModelAccessor {
 
 	protected String filepath;
@@ -39,7 +44,10 @@ public class ModelAccessor {
 	public static final String separator = "#";
 	protected ModelType modeltype;	
 
-	// Use this constructor for models that are stored as standalone files
+	/**
+	 * Constructor for models that are stored as standalone files (not in archives)
+	 * @param standAloneFile The model file
+	 */
 	protected ModelAccessor(File standAloneFile){
 			try {
 				modeltype = ModelClassifier.classify(standAloneFile);

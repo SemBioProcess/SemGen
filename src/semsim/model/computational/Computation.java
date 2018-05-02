@@ -45,6 +45,10 @@ public class Computation extends ComputationalModelComponent{
 		outputs = new HashSet<DataStructure>(outputs);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param comptocopy The Computation to copy
+	 */
 	public Computation(Computation comptocopy) {
 		super(comptocopy);
 		

@@ -9,6 +9,11 @@ import java.util.Set;
 
 import semsim.SemSimLibrary;
 
+/**
+ * Convenience sets and mappings for working with SBML models
+ * @author mneal
+ *
+ */
 public class SBMLconstants {
 
 	public static final Map<String,String> SBML_LEVEL_2_RESERVED_UNITS_MAP;

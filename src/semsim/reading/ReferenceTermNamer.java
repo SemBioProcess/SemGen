@@ -17,7 +17,7 @@ import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
-import semsim.definitions.SemSimConstants;
+import semsim.definitions.OtherKBconstants;
 import semsim.model.SemSimComponent;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -207,17 +207,17 @@ public class ReferenceTermNamer {
 
 		}
 
-		else if(KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME)
-				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME)
-				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME)
-				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME)
-				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME)
-				|| KBname.equals(SemSimConstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME)){
+		else if(KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_COMPOUND_KB_FULLNAME)
+				|| KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_DRUG_KB_FULLNAME)
+				|| KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_REACTION_KB_FULLNAME)
+				|| KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_ORTHOLOGY_KB_FULLNAME)
+				|| KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_PATHWAY_KB_FULLNAME)
+				|| KBname.equals(OtherKBconstants.KYOTO_ENCYCLOPEDIA_OF_GENES_AND_GENOMES_GENES_KB_FULLNAME)){
 			try {
 				name = KEGGsearcher.getNameForID(id);
 			} catch (IOException e) {e.printStackTrace();}
 		}
-		else if(KBname.equals(SemSimConstants.BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME)){
+		else if(KBname.equals(OtherKBconstants.BRAUNSCHWEIG_ENZYME_DATABASE_FULLNAME)){
 			// Use KEGG for EC codes
 			try {
 				name = KEGGsearcher.getNameForID("ec:" + id);
@@ -225,7 +225,7 @@ public class ReferenceTermNamer {
 
 		}
 
-		else if(KBname.equals(SemSimConstants.UNIPROT_FULLNAME)){
+		else if(KBname.equals(OtherKBconstants.UNIPROT_FULLNAME)){
 			try {
 				name = UniProtSearcher.getPreferredNameForID(id);
 			} 

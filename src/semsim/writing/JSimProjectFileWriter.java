@@ -15,7 +15,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import semsim.SemSimLibrary;
 import semsim.definitions.RDFNamespace;
-import semsim.fileaccessors.JSIMProjectAccessor;
+import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -28,18 +28,18 @@ public class JSimProjectFileWriter extends ModelWriter{
 	private Document projdoc = null; 
 	String modelName;
 	Element semsimControlElement;
-	private JSIMProjectAccessor projaccessor;
+	private JSimProjectAccessor projaccessor;
 	private SemSimRDFwriter rdfwriter;
 
 
-	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor modelaccessor) {
+	public JSimProjectFileWriter(SemSimModel semsimmodel, JSimProjectAccessor modelaccessor) {
 		super(semsimmodel);
 
 		modelName = modelaccessor.getModelName();
 		projaccessor = modelaccessor;
 	}
 	
-	public JSimProjectFileWriter(SemSimModel semsimmodel, JSIMProjectAccessor newlocation, JSIMProjectAccessor oldlocation) {
+	public JSimProjectFileWriter(SemSimModel semsimmodel, JSimProjectAccessor newlocation, JSimProjectAccessor oldlocation) {
 		super(semsimmodel);
 
 		modelName = newlocation.getModelName();

@@ -10,8 +10,18 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 import semsim.annotation.Relation;
 
+/**
+ * Constants and functions for working with relations (AKA predicates or qualifiers)
+ * in SemSim models
+ * @author mneal
+ *
+ */
 public class SemSimRelations {
 
+	/**
+	 * @param q A BioModels.net biological qualifier
+	 * @return The {@link Relation} corresponding to the qualifier
+	 */
 	public static Relation getRelationFromBiologicalQualifier(Qualifier q) {
 		switch (q) {
 		case BQB_ENCODES:
@@ -45,6 +55,10 @@ public class SemSimRelations {
 		}
 	}
 	
+	/**
+	 * @param r A {@link Relation}
+	 * @return The BioModels.net biological qualifier corresponding to the relation
+	 */
 	public static Qualifier getBiologicalQualifierFromRelation(Relation r) {
 		
 		if(r == SemSimRelation.BQB_IS || r == SemSimRelation.HAS_PHYSICAL_DEFINITION)
@@ -69,6 +83,10 @@ public class SemSimRelations {
 		
 	}
 	
+	/**
+	 * @param q A BioModels.net model qualifier
+	 * @return The {@link Relation} corresponding to the qualifier
+	 */
 	public static Relation getModelQualifierRelation(Qualifier id) {
 		switch (id) {
 		case BQM_IS:
@@ -82,6 +100,10 @@ public class SemSimRelations {
 		}
 	}
 	
+	/**
+	 * @param rel A {@link StructuralRelation}
+	 * @return The logical inverse of the StructuralRelation
+	 */
 	public static StructuralRelation getInverseStructuralRelation(StructuralRelation rel) {
 		switch (rel) {
 		case PART_OF:
@@ -220,8 +242,7 @@ public class SemSimRelations {
 		private String description;
 		private String sparqlcode;
 	
-	/** Class constructor (generally you'd want to use the relations in SemSimConstants,
-	 * rather than construct a new SemSimRelation de novo)
+	/** Class constructor 
 	 * @param description A free-text description of the relation
 	 * @param relationURI A URI for the relation */
 		SemSimRelation(String name, String namespace, String desc, String owlid) {
@@ -231,6 +252,7 @@ public class SemSimRelations {
 			sparqlcode = owlid + ":" + name;
 		}
 
+		/** @return Get the name of the SemSimRelation */
 		public String getName() {
 			return name;
 		}
@@ -240,22 +262,27 @@ public class SemSimRelations {
 			return URI.create(uri);
 		}
 		
+		/** @return The URI of the relation as a string */
 		public String getURIasString() {
 			return uri;
 		}
 		
+		/** @return The relation's specified description */
 		public String getDescription() {
 			return description;
 		}
 		
+		/** @return Namespace of relation for use in SPARQL queries */
 		public String getSPARQLCode() {
 			return sparqlcode;
 		}
 		
+		/** @return The URI for the relation converted into an IRI */
 		public IRI getIRI() {
 			return IRI.create(uri);
 		}
 		
+		/** @return The relation as an RDF property */
 		public Property getRDFproperty(){
 			return ResourceFactory.createProperty(getURIasString());
 		}
@@ -263,7 +290,7 @@ public class SemSimRelations {
 	}
 	
 	/** A type of SemSimRelation for establishing structural relationships between
-	 * SemSim Physical Entities. */
+	 * SemSim physical entities. */
 
 	// A structural relationship between two physical entities
 	public enum StructuralRelation implements Relation {

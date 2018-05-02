@@ -34,28 +34,28 @@ public abstract class SemSimObject {
 			metadataID = new String(objtocopy.metadataID);
 	}
 	
-	/** Get the component's free-text description */
+	/** Get the object's free-text description */
 	public String getDescription() {
 		return description;
 	}
 
-	/** Get the component's name */
+	/** Get the object's name */
 	public String getName(){
 		return name;
 	}
 	
-	/** Whether the object has an associated name*/
+	/** @return Whether the object has an associated name*/
 	public boolean hasName(){
 		return ( ! name.equals("") && name != null);
 	}
 	
-	/** Whether the object has an associated textual description */
+	/** @return Whether the object has an associated textual description */
 	public boolean hasDescription(){
 		if( description != null && ! description.equals("")) return true;
 		else return false;
 	}
 	
-	/** Whether the object has an associated metadata ID */
+	/** @return Whether the object has an associated metadata ID */
 	public boolean hasMetadataID(){
 		return ( ! metadataID.equals("") && metadataID != null);
 	}
@@ -70,13 +70,16 @@ public abstract class SemSimObject {
 
 	/**
 	 * Set the component's free-text description
-	 * 
 	 * @param description The free-text description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * Copy this object's description to another SemSimObject
+	 * @param srcds
+	 */
 	public void copyDescription(SemSimObject srcds){
 		// Copy free-text description
 		setDescription(new String(srcds.getDescription()));
@@ -85,7 +88,7 @@ public abstract class SemSimObject {
 	/**
 	 * Set the component's metadata ID. These ID's are often used
 	 * by XML-based modeling languages such as SBML and CellML
-	 * to link XML elements to RDF statements that further describe
+	 * to link XML elements to RDF statements that describe
 	 * the elements.
 	 * 
 	 * @param metadataID The ID to apply
@@ -99,7 +102,7 @@ public abstract class SemSimObject {
 	/**
 	 * Get the component's metadata ID. These ID's are often used
 	 * by XML-based modeling languages such as SBML and CellML
-	 * to link XML elements to RDF statements that further describe
+	 * to link XML elements to RDF statements that describe
 	 * the elements.
 	 */
 	public String getMetadataID() {
@@ -107,14 +110,21 @@ public abstract class SemSimObject {
 	}
 	
 
+	/** @return This object's SemSimType */
 	public SemSimTypes getSemSimType() {
 		return semsimtype;
 	}
 	
+	/** @return This object's SemSim class URI */
 	public URI getSemSimClassURI() {
 		return semsimtype.getURI();
 	}
 	
+	/**
+	 * Tests whether this object is a specified SemSimType
+	 * @param type A specified SemSimType
+	 * @return
+	 */
 	public boolean isType(SemSimTypes type) {
 		return type == semsimtype;
 	}

@@ -76,56 +76,94 @@ public class Extraction {
 		setSubmodelsToExtract(new HashMap<Submodel, Boolean>());
 	}
 	
+	/** @return The model from which the extraction originates */
 	public SemSimModel getSourceModel() {
 		return sourcemodel;
 	}
 
+	/**
+	 * Set the source model for this extraction
+	 * @param sourcemodel The extraction's source model
+	 */
 	public void setSourceModel(SemSimModel sourcemodel) {
 		this.sourcemodel = sourcemodel;
 	}
 	
 
 	// Physical processes
+	/** @return The physical processes to include in the extraction */
 	public Map<PhysicalProcess, Boolean> getProcessesToExtract() {
 		return processestoextract;
 	}
 
+	/**
+	 * Define which physical processes to include in the extraction
+	 * @param processestoextract The processes to extract
+	 */
 	public void setProcessesToExtract(Map<PhysicalProcess, Boolean> processestoextract) {
 		this.processestoextract = processestoextract;
 	}
 	
+	/**
+	 * Add a physical process to the extraction
+	 * @param process The physical process
+	 * @param includeparticipants Whether to include the process's physical entity participants in the extraction as well
+	 */
 	public void addProcessToExtract(PhysicalProcess process, Boolean includeparticipants){
 		this.getProcessesToExtract().put(process, includeparticipants);
 	}
 
 	// Physical entities
+	/** @return The physical entities included in the extraction */
 	public Map<PhysicalEntity, Boolean> getEntitiesToExtract() {
 		return entitiestoextract;
 	}
 
+	/**
+	 * Set which physical entities to include in the extraction
+	 * @param entitiestoextract The physical entities to include
+	 */
 	public void setEntitiesToExtract(Map<PhysicalEntity, Boolean> entitiestoextract) {
 		this.entitiestoextract = entitiestoextract;
 	}
 	
+	/**
+	 * Add a physical entity to the extraction
+	 * @param entity The physical entity to add
+	 * @param val Currently meaningless, but are included for homogeneity with other extraction maps
+	 */
 	public void addEntityToExtract(PhysicalEntity entity, Boolean val){
 		this.getEntitiesToExtract().put(entity, val);
 	}
 
 	// Data structures
+	/** @return A Map indicating the set of {@link DataStructure}s to extract and whether 
+	 * to include their computational inputs as well
+	 */
 	public Map<DataStructure, Boolean> getDataStructuresToExtract() {
 		return datastructurestoextract;
 	}
 
+	/**
+	 * Set the {@link DataStructure}s to extract
+	 * @param datastructurestoextract A Map of {@link DataStructure}s and boolean values
+	 * indicating whether to also include their computational inputs
+	 */
 	public void setDataStructuresToExtract(Map<DataStructure, Boolean> datastructurestoextract) {
 		this.datastructurestoextract = datastructurestoextract;
 	}
 	
+	/**
+	 * Add a {@link DataStructure} to the extraction
+	 * @param ds The {@link DataStructure} to add
+	 * @param includeinputs Whether to include the {@link DataStructure}'s computational inputs as well
+	 */
 	public void addDataStructureToExtraction(DataStructure ds, Boolean includeinputs){
 		getDataStructuresToExtract().put(ds, includeinputs);
 	}
 	
 	/**
-	 * Add a data structure's computational inputs to the extraction
+	 * Add a {@link DataStructure}'s computational inputs to the extraction
 	 * @param ds
 	 */
 	public void addInputsToExtract(DataStructure ds){
@@ -143,22 +181,30 @@ public class Extraction {
 	}
 
 	// Submodels
+	/** @return A Map indicating which {@link Submodel}s to extract and whether to preserve the submodel's submodels. */
 	public Map<Submodel, Boolean> getSubmodelsToExtract() {
 		return submodelstoextract;
 	}
 
+	/**
+	 * Set which {@link Submodel}s to extract
+	 * @param submodelstoextract A Map indicating which {@link Submodel}s to extract
+	 * and whether to include their submodels as well
+	 */
 	public void setSubmodelsToExtract(Map<Submodel, Boolean> submodelstoextract) {
 		this.submodelstoextract = submodelstoextract;
 	}
 	
+	/**
+	 * Add a {@link Submodel to an extraction}
+	 * @param submodel The {@link Submodel} to add
+	 * @param val Whether to include the submodel's submodels
+	 */
 	public void addSubmodelToExtract(Submodel submodel, Boolean val){
 		this.getSubmodelsToExtract().put(submodel, val);
 	}
 	
-	/**
-	 * 
-	 * @return True if there is nothing specified for extraction, otherwise false
-	 */
+	/** @return True if there is nothing specified for extraction, otherwise false */
 	public boolean isEmpty(){
 		return (getDataStructuresToExtract().isEmpty() && getEntitiesToExtract().isEmpty() 
 				&& getProcessesToExtract().isEmpty() && getSubmodelsToExtract().isEmpty());

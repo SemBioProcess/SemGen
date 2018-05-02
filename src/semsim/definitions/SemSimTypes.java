@@ -4,6 +4,11 @@ import java.net.URI;
 
 import org.semanticweb.owlapi.model.IRI;
 
+/**
+ * Enum and functions for the different types of objects used in SemSim models
+ * @author mneal
+ *
+ */
 public enum SemSimTypes {
 	SEMSIM_COMPONENT("SemSim Component", RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component", "", ""),
 	MODEL("SemSim Model", RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_Model", "", "SemSim:SemSim_Model"),
@@ -49,26 +54,32 @@ public enum SemSimTypes {
 		this.sparqlcode = sparqlcode;
 	}
 	
+	/** @return The name of the SemSimType */
 	public String getName() {
 		return name;
 	}
 	
+	/** @return The URI of the SemSimType as a string*/
 	public String getURIasString() {
 		return uri;
 	}
 	
+	/** @return The URI of the SemSimType */
 	public URI getURI() {
 		return URI.create(uri);
 	}
 	
+	/** @return The URI of the SemSimType cast as an IRI */
 	public IRI getIRI() {
 		return IRI.create(uri);
 	}
 	
+	/** @return The SemSimType formatted for SPARQL queries */
 	public String getSparqlCode() {
 		return sparqlcode;
 	}
 	
+	/** @return The description of the SemSimType */
 	public String getDescription() {
 		return description;
 	}

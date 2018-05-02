@@ -111,14 +111,14 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 			Document projdoc = ModelReader.getJDOMdocumentFromFile(file);
 			ArrayList<String> modelnames = JSimProjectFileReader.getNamesOfModelsInProject(projdoc);
 			
-			if(modelnames.size()==1)  modelaccessors.add(FileAccessorFactory.getJSIMProjectAccessor(file, modelnames.get(0)));
+			if(modelnames.size()==1)  modelaccessors.add(FileAccessorFactory.getJSIMprojectAccessor(file, modelnames.get(0)));
 			
 			else{
 				JSimModelSelectorDialogForReading pfmsd = 
 						new JSimModelSelectorDialogForReading("Select model(s) in " + file.getName(), modelnames);
 	
 				for(Integer index : pfmsd.getSelectedModelNames()){
-					modelaccessors.add(FileAccessorFactory.getJSIMProjectAccessor(file, modelnames.get(index)));
+					modelaccessors.add(FileAccessorFactory.getJSIMprojectAccessor(file, modelnames.get(index)));
 				}
 			}
 		}
