@@ -14,6 +14,11 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 
+/**
+ * A SemSimObject that contains {@link Submodel}s and {@link DataStructure}s
+ * @author mneal
+ *
+ */
 public abstract class SemSimCollection extends SemSimObject{
 	
 	protected ArrayList<Submodel> submodels = new ArrayList<Submodel>();
@@ -23,11 +28,23 @@ public abstract class SemSimCollection extends SemSimObject{
 		super(type);
 	}
 	
+	/**
+	 * Constructor specifying the type of collection and the associated {@link DataStructure}s
+	 * @param type The type of collection
+	 * @param dscollection The list of {@link DataStructure}s
+	 */
 	public SemSimCollection(SemSimTypes type, ArrayList<DataStructure> dscollection) {
 		super(type);
 		dataStructures.addAll(dscollection);
 	}
 	
+	/**
+	 * Constructor specifying the type of collection, the associated {@link DataStructure}s,
+	 * and the associated {@link Submodel}s
+	 * @param type The type of collection
+	 * @param dscollection The list of {@link DataStructure}s
+	 * @param smcollection The list of {@link Submodel}s
+	 */
 	public SemSimCollection(SemSimTypes type, ArrayList<DataStructure> dscollection, ArrayList<Submodel> smcollection) {
 		super(type);
 		dataStructures.addAll(dscollection);
@@ -35,6 +52,10 @@ public abstract class SemSimCollection extends SemSimObject{
 	}
 	
 	
+	/**
+	 * Copy constructor
+	 * @param coltocopy The SemSimCollection to copy
+	 */
 	public SemSimCollection(SemSimCollection coltocopy) {
 		super(coltocopy);
 	}
@@ -82,6 +103,11 @@ public abstract class SemSimCollection extends SemSimObject{
 		return ds;
 	}
 	
+	/**
+	 * Add a {@link Submodel} to the collection
+	 * @param submodel The {@link Submodel} to add
+	 * @return The {@link Submodel} added to the colleciton
+	 */
 	public Submodel addSubmodel(Submodel submodel){
 		submodels.add(submodel);
 		return submodel;

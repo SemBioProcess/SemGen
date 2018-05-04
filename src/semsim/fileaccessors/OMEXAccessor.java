@@ -26,25 +26,44 @@ import semsim.writing.CASAwriter;
 import semsim.writing.ModelWriter;
 import semsim.writing.OMEXArchiveWriter;
 
+/**
+ * Specialized ModelAccessor for working with models in OMEX archives
+ * @author mneal
+ */
 public class OMEXAccessor extends ModelAccessor {
 	
 	protected ModelAccessor archivedfile;
 	protected OMEXAccessor casaaccessor = null;
 	protected ZipFile archive;
 	
+	/**
+	 * Constructor for pointing to a CellML or SBML model in an archive
+	 * @param omexarchive A File pointing to the OMEX archive
+	 * @param file A File pointing to a model within the OMEX archive
+	 * @param type The type of the model within the OMEX archive
+	 */
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		this.file = omexarchive;
 		archivedfile = new ModelAccessor(file, type);
 	}
 	
+	/**
+	 * Constructor for pointing to a model within a JSim project file within an archive
+	 * @param omexarchive A File pointing to the OMEX archive
+	 * @param file A File pointing to a JSim project file within the OMEX archive
+	 * @param fragment The name of the model within the JSim project file within the OMEX archive
+	 */
 	public OMEXAccessor(File omexarchive, File file, String fragment) {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		archivedfile = new JSimProjectAccessor(file, fragment);
 		
 	}
 
-	// Copy constructor
+	/**
+	 * Copy constructor
+	 * @param matocopy the OMEXAccessor to copy
+	 */
 	public OMEXAccessor(OMEXAccessor matocopy) {
 		super(matocopy);
 
@@ -81,6 +100,7 @@ public class OMEXAccessor extends ModelAccessor {
 		return writer.toString();
 	}
 	
+	@Override
 	public Document getJDOMDocument() {		
 		Document doc = null;
 		try{ 
@@ -96,6 +116,7 @@ public class OMEXAccessor extends ModelAccessor {
 		return doc;
 	}
 	
+	/** Close stream to archive */
 	public void closeStream() {		
 		try {
 			if (archive != null) {
@@ -127,7 +148,8 @@ public class OMEXAccessor extends ModelAccessor {
 
 	}
 	
-	//If the model is a SBML or CellML model, check for a CASA file and read it if one exists
+	
+	/** If the model is a SBML or CellML model, check for a CASA file and read it in if one exists */
 	protected void getCASAaccessor() {
 
 		try {
@@ -148,22 +170,22 @@ public class OMEXAccessor extends ModelAccessor {
 		}
 	}
 	
-	// If the model is in a standalone file, the name of the file is returned
-	// otherwise a string with format [name of archive] > [name of model] is returned
+	@Override
 	public String getShortLocation(){
-		
 		return getFileName() + '>'  + getModelName();
-
 	}
 
+	@Override
 	public String getDirectoryPath() {
 		return file.getPath();
 	}
 	
+	@Override
 	public String getFileName() {
 		return this.archivedfile.getFileName();
 	}
 	
+	/** @return The name of the CASA file in the archive, if present */
 	public String getCASAFileName() {
 		if (hasCASAFile()) {
 			return casaaccessor.getFileName();
@@ -171,10 +193,12 @@ public class OMEXAccessor extends ModelAccessor {
 		return getModelName() + ".rdf";
 	}
 	
+	@Override
 	public String getModelName() {
 		return archivedfile.getModelName();
 	}
 	
+	/** @return The model location within the archive as a ZipEntry */
 	public ZipEntry getEntry() {
 		return new ZipEntry(file.getPath());
 	}
@@ -199,14 +223,17 @@ public class OMEXAccessor extends ModelAccessor {
 		omexwriter.appendOMEXArchive(this);
 	 }
 	
+	@Override
 	public ModelType getModelType() {
 		return archivedfile.getModelType();
 	}
 	
+	@Override
 	protected ModelWriter makeWriter(SemSimModel semsimmodel) {
 		 return archivedfile.makeWriter(semsimmodel);
 	}
 	
+	/** @return Whether a CASA file has been associated with this OMEXAccessor */
 	public boolean hasCASAFile() {
 		return casaaccessor != null;
 	}

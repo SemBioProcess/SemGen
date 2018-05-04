@@ -12,7 +12,6 @@ import org.jdom.Content;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
 
-import semsim.definitions.SemSimTypes;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -20,7 +19,7 @@ import semsim.reading.CellMLreader;
 import semsim.writing.CellMLwriter;
 
 /**
- * Class created to represent CellML component constructs.
+ * Class created to represent CellML components.
  * Instances are associated with a Computation that outputs
  * the variables in the component that have a public interface 
  * of "out." 
@@ -34,12 +33,22 @@ public class FunctionalSubmodel extends Submodel {
 	private Map<String, Set<FunctionalSubmodel>> relationshipSubmodelMap = new HashMap<String, Set<FunctionalSubmodel>>();
 	private Computation computation;
 	
+	/**
+	 * Constructor for FunctionalSubmodel with one output
+	 * @param name The name of the FunctionalSubmodel
+	 * @param output The output
+	 */
 	public FunctionalSubmodel(String name, DataStructure output) {
 		super(name);
 		computation = new Computation(output);
 		functional = true;
 	}
 	
+	/**
+	 * Constructor for FunctionalSubmodel with a specified set of outputs
+	 * @param name The name of the FunctionalSubmodel
+	 * @param outputs The outputs
+	 */
 	public FunctionalSubmodel(String name, Set<DataStructure> outputs) {
 		super(name);
 		this.setLocalName(name);
@@ -47,11 +56,22 @@ public class FunctionalSubmodel extends Submodel {
 		functional = true;
 	}
 	
+	/**
+	 * Constructor for FunctionalSubmodel with a specified ArrayList of associated {@link DataStructure}s
+	 * @param name The name of the FunctionalSubmodel
+	 * @param dscollection The ArrayList of associated {@link DataStructure}s
+	 */
 	public FunctionalSubmodel(String name, ArrayList<DataStructure> dscollection){ 
 		super(name, dscollection);
 	}
 	
-	
+	/**
+	 * Constructor for imported FunctionalSubmodels
+	 * @param name Name of the FunctionalSubmodel
+	 * @param localName The locally-used name of the FunctionalSubmodel in the model
+	 * @param referencedName The reference name of the FunctionalSubmodel in the model from which it is imported
+	 * @param hrefValue The href value used for referencing the imported FunctionalSubmodel
+	 */
 	public FunctionalSubmodel(String name, String localName, String referencedName, String hrefValue){
 		super(name);
 		if(localName!=null){
@@ -67,6 +87,10 @@ public class FunctionalSubmodel extends Submodel {
 		functional = true;
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param fsmtocopy The FunctionalSubmodel to copy
+	 */
 	public FunctionalSubmodel(FunctionalSubmodel fsmtocopy) {
 		super(fsmtocopy);
 		relationshipSubmodelMap.putAll(fsmtocopy.relationshipSubmodelMap);
@@ -74,25 +98,41 @@ public class FunctionalSubmodel extends Submodel {
 		computation = new Computation(fsmtocopy.getComputation());
 	}
 	
+	/**
+	 * Copy constructor for more general {@link Submodel} class
+	 * @param smtocopy The {@link Submodel} to copy
+	 */
 	public FunctionalSubmodel(Submodel smtocopy) {
 		super(smtocopy);
 		functional = true;
 		computation = new Computation();
 	}
 	
+	/** @return The Map that stores the relationships that the FunctionalSubmodel
+	 * has with other FunctionalSubmodels in the model (containment, encapsulation, etc.)
+	 */
 	public Map<String, Set<FunctionalSubmodel>> getRelationshipSubmodelMap() {
 		return relationshipSubmodelMap;
 	}
 
+	/**
+	 * Set the Map that stores the relationships that the FunctionalSubmodel
+	 * has with other FunctionalSubmodels in the model (containment, encapsulation, etc.)
+	 * @param relsmmap The Map
+	 */
 	public void setRelationshipSubmodelMap(Map<String, Set<FunctionalSubmodel>> relsmmap) {
 		relationshipSubmodelMap = relsmmap;
 	}
 
-	
+	/** @return The {@link Computation} associated with a FunctionalSubmodel */
 	public Computation getComputation() {
 		return computation;
 	}
 	
+	/**
+	 * Set the {@link Computation} associated with a FunctionalSubmodel
+	 * @param comp The {@link Computation}
+	 */
 	public void setComputation(Computation comp) {
 		computation = comp;
 	}
@@ -108,7 +148,10 @@ public class FunctionalSubmodel extends Submodel {
 		}
 	}
 	
-	// Remove the MathML block for a particular codeword from a functional submodel
+	/**
+	 * Remove the equation that solves for a variable from the FunctionalModel's MathML
+	 * @param var The variable whose equation is to be removed
+	 */
 	public void removeVariableEquationFromMathML(MappableVariable var){
 		
 		String componentMathMLstring = getComputation().getMathML();
@@ -125,12 +168,14 @@ public class FunctionalSubmodel extends Submodel {
 		}
 	}
 	
+	/** Replace {@link DataStructure}s in the FunctionalModel with other {@link DataStructure}s*/
 	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		super.replaceDataStructures(dsmap);
 		
 		computation.replaceAllDataStructures(dsmap);
 	}
 	
+	/** Replace {@link Submodel}s contained in the FunctionalSubmodel */
 	public void replaceSubmodels(HashMap<Submodel, Submodel> smmap) {
 		super.replaceSubmodels(smmap);
 		
@@ -145,6 +190,7 @@ public class FunctionalSubmodel extends Submodel {
 		setRelationshipSubmodelMap(relsmmap);
 	}
 	
+	/** Replace a single {@link DataStructure} in the FunctionalSubmodel */
 	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
 		super.replaceDataStructure(replacee, replacer);
 		
@@ -158,6 +204,7 @@ public class FunctionalSubmodel extends Submodel {
 		}
 	}
 	
+	/** Clone the object. (To create a copy, probably better to use the copy constructor.) */
 	public FunctionalSubmodel clone() {
 		return new FunctionalSubmodel(this);
 	}

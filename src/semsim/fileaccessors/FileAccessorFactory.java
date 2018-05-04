@@ -2,6 +2,7 @@ package semsim.fileaccessors;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 import org.jdom.JDOMException;
 
@@ -56,7 +57,7 @@ public class FileAccessorFactory {
 		ModelAccessor accessor = null;
 		ModelType type = classifyFile(path);
 		if(location.startsWith("http"))
-			return new ModelAccessor(location, type);
+			return new ModelAccessor(URI.create(location), type);
 		
 		else if(location.startsWith("file:"))
 			return new ModelAccessor(new File(location), type);

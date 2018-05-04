@@ -2,7 +2,7 @@ package semsim.model;
 
 /**
  * Interface providing methods for importing
- * SemSim model elements.
+ * SemSim model elements
  * 
  */
 public interface Importable {
@@ -14,7 +14,7 @@ public interface Importable {
 	public String getLocalName();
 	
 	/**
-	 * Get the imported element's local name, i.e. the name that is used within the SemSim model.
+	 * Set the imported element's local name, i.e. the name that is used within the SemSim model.
 	 * @param name The local name for the element
 	 */
 	public void setLocalName(String name);
