@@ -35,6 +35,10 @@ public class RelationalConstraint extends ComputationalModelComponent{
 		this.setErrorMessage(errorMsg);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param rctocopy The RelationConstraint to copy
+	 */
 	public RelationalConstraint(RelationalConstraint rctocopy) {
 		super(rctocopy);
 		computationalCode = new String(rctocopy.computationalCode);
@@ -86,6 +90,10 @@ public class RelationalConstraint extends ComputationalModelComponent{
 		errorMsg = msg;
 	}
 	
+	/**
+	 * Replace all {@link DataStructure}s
+	 * @param dsmap A HashMap that maps {@link DataStructure}s to replace with their replacements
+	 */
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newinputs = new HashSet<DataStructure>();
 		for (DataStructure dstoreplace : inputs) {

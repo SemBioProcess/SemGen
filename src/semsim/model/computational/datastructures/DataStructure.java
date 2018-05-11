@@ -46,6 +46,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		super(type);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param dstocopy The DataStructure to copy
+	 */
 	public DataStructure(DataStructure dstocopy) {
 		super(dstocopy);
 		if (dstocopy.computation != null) {
@@ -96,39 +100,43 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 	
-	/**
-	 * @return The {@link Computation} that solves the DataStructure
-	 */
+	/** @return The {@link Computation} that solves the DataStructure */
 	public Computation getComputation(){
 		return computation;
 	}
 	
+	/** @return The DataStructure's computational inputs */
 	public Set<DataStructure> getComputationInputs() {
 		return computation.getInputs();
 	}
 	
+	/** @return The outputs of this DataStructure's {@link Computation}*/
 	public Set<DataStructure> getComputationOutputs() {
 		return computation.getOutputs();
 	}
 	
-	/**
-	 * @return The {@link PhysicalPropertyInComposite} simulated by the DataStructure
-	 */
+	/** @return The {@link PhysicalPropertyInComposite} simulated by the DataStructure */
 	public PhysicalPropertyInComposite getPhysicalProperty(){
 		return physicalProperty;
 	}
 	
+	/** @return The physical entity, process or dependency that bears the 
+	 * property simulated by the DataStructure */
 	public PhysicalModelComponent getAssociatedPhysicalModelComponent() {
 		return physicalcomponent;
 	}
 	
+	/**
+	 * Set the physical entity, process or dependency that bears the 
+	 * property simulated by the DataStructure
+	 * @param pmc The physical component bearing the property simulated by the DataStructure
+	 */
 	public void setAssociatedPhysicalModelComponent(PhysicalModelComponent pmc) {
 		physicalcomponent = pmc;
 	}
 	
 	/** @return The domain in which the data structure is solved
-	 *  (time, length, height, breadth, e.g.)
-	 */
+	 *  (time, length, height, breadth, e.g.) */
 	public DataStructure getSolutionDomain(){
 		return solutionDomain;
 	}
@@ -180,8 +188,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	
 	/**
 	 * Set the start value of the DataStructure for the simulation
-	 * @param val A string representing the start value
-	 */
+	 * @param val A string representing the start value */
 	public void setStartValue(String val){
 		
 		if(val == null) startValue = null;
@@ -207,7 +214,6 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 	
 	/** Set whether this DataStructure is explicitly declared in the model or not */
-
 	public void setDeclared(boolean isDeclared) {
 		this.isDeclared = isDeclared;
 	}
@@ -258,6 +264,14 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return compann;
 	}
 
+	/**
+	 * Recursive function for obtaining all DataStructures that are computationally
+	 * dependent on a DataStructure
+	 * @param candidates The set of DataStructures that are eligible to be included in the returned set
+	 * @param mainroot Root DataStructure that should terminate a recursive branch search
+	 * (usually null when function called in code)
+	 * @return The DataStructure's computational dependents
+	 */
 	public  Set<DataStructure> getDownstreamDataStructures(Set<DataStructure> candidates, DataStructure mainroot){
 		// traverse all nodes that belong to the parent
 		Set<DataStructure> newamounts = new HashSet<DataStructure>();
@@ -281,29 +295,33 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return usedToCompute;
 	}
 	
+	/** @return Whether the DataStructure has a specified {@link Computation} for computing its value */
 	public boolean hasComputation() {
 		return computation!=null;
 	}
 	
-	// Required by annotable interface:
+	/** Required by {@link Annotatable} interface */
 	public Set<Annotation> getAnnotations() {
 		return annotations;
 	}
 	
+	/** Required by {@link Annotatable} interface */
 	public void setAnnotations(Set<Annotation> annset){
 		annotations.clear();
 		annotations.addAll(annset);
 	}
 
+	/** Required by {@link Annotatable} interface */
 	public void addAnnotation(Annotation ann) {
 		annotations.add(ann);
 	}
 	
+	/** Required by {@link Annotatable} interface */
 	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	
+	/** Required by {@link Annotatable} interface */
 	public Set<ReferenceOntologyAnnotation> getAllReferenceOntologyAnnotations(){
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
@@ -314,7 +332,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	
+	/** Required by {@link Annotatable} interface */
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(ReferenceOntologyAnnotation ann : getAllReferenceOntologyAnnotations()){
@@ -325,10 +343,12 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
+	/** Required by {@link Annotatable} interface */
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
 	}
 
+	/** Required by {@link Annotatable} interface */
 	public void removeAllReferenceAnnotations() {
 		Set<Annotation> newset = new HashSet<Annotation>();
 		for(Annotation ann : this.getAnnotations()){
@@ -355,6 +375,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return isImported;
 	}
 	
+	/** @return Whether the DataStructure represents only real valued numbers */
 	public abstract boolean isReal();
 	
 	
@@ -363,6 +384,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return false;
 	}
 	
+	/**
+	 * @param lib A {@link SemSimLibrary} instance
+	 * @return The type of property simulated by the DataStructure
+	 */
 	public PropertyType getPropertyType(SemSimLibrary lib){
 		if(hasPhysicalProperty()){
 			// If there's already an OPB reference annotation
@@ -381,6 +406,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return PropertyType.Unknown;
 	}
 	
+	/**
+	 * Copy singular annotations in from another DataStructure
+	 * @param srcds The DataStructure to copy annotations from
+	 * @param lib A {@link SemSimLibrary} instance
+	 */
 	public void copySingularAnnotations(DataStructure srcds, SemSimLibrary lib){
 		removeAllReferenceAnnotations();
 		setSingularAnnotation(srcds.getSingularTerm());
@@ -389,18 +419,28 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 	
+	/** @return Whether this DataStructure's associated physical component is specified */
 	public boolean hasAssociatedPhysicalComponent() {
 		return getAssociatedPhysicalModelComponent()!=null;
 	}
 	
+	/**
+	 * Set the singular annotation on the DataStructure
+	 * @param refterm The reference physical property to use in the annotation
+	 */
 	public void setSingularAnnotation(PhysicalProperty refterm) {
 		singularterm = refterm;
 	}
 	
+	/** Set the DataStructure's singular annotation to null*/
 	public void removeSingularAnnotation() {
 		singularterm = null;
 	}
 	
+	/**
+	 * @param lib A {@link SemSimLibrary} instance
+	 * @return The singular annotation that provides the physical definition for the DataStructure, if specified
+	 */
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
 			return singularterm.getPhysicalDefinitionReferenceOntologyAnnotation(lib);
@@ -408,6 +448,12 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return null;
 	}
 	
+	/**
+	 * Replace the occurrences of a DataStructures that this DataStructure computes, or is computed from,
+	 * with another DataStructure
+	 * @param replacer The replacement DataStructure
+	 * @param replacee The DataStructure to replace
+	 */
 	public void replaceDataStructureReference(DataStructure replacer, DataStructure replacee) {
 		if (computation.getOutputs().contains(replacee)) {
 			computation.getOutputs().remove(replacee);
@@ -426,6 +472,10 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 
+	/**
+	 * Replace DataStructures directly computed from this DataStructure with others
+	 * @param dsmap A HashMap mapping DataStructures to replace with their replacements
+	 */
 	public void replaceUsedtoCompute(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newused = new HashSet<DataStructure>();
 		for (DataStructure used : this.getUsedToCompute()) {
@@ -437,7 +487,11 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		setUsedToCompute(newused);
 	}
 	
-	
+	/**
+	 * Replace DataStructures used to compute this DataStructure
+	 * as well as those that are directly computed from it
+	 * @param dsmap A HashMap mapping DataStructures to replace to their replacements
+	 */
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		computation.replaceAllDataStructures(dsmap);
 		replaceUsedtoCompute(dsmap);
@@ -446,10 +500,18 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		}
 	}
 	
+	/**
+	 * Replace DataStructures that are directly computed from this DataStructure
+	 * @param dsmap A HashMap mapping DataStructures to replace to their replacements
+	 */
 	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
 		computation.replaceOutputs(dsmap);
 	}
 	
+	/**
+	 * Replace the immediate DataStructures that are used to compute this DataStructure
+	 * @param dsmap A HashMap mapping DataStructures to replace to their replacements
+	 */
 	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
 		computation.replaceInputs(dsmap);
 	}
@@ -459,14 +521,18 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return singularterm!=null;
 	}
 	
+	/** @return The URI of this DataStructure's singular physical definition annotation */
 	public URI getPhysicalDefinitionURI() {
 		return singularterm.getPhysicalDefinitionURI();
 	}
 	
+	/** @return The {@link PhysicalProperty} instance providing the physical definition 
+	 * for the DataStructure */
 	public PhysicalProperty getSingularTerm() {
 		return singularterm;
 	}
 	
+	/** @return Whether the DataStructure is a mappable, in the CellML sense, to other DataStructures */
 	public boolean isMapped() {
 		return false;
 	}
@@ -474,6 +540,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	public abstract DataStructure copy();
 	
 	//Attempt to add annotations and use any preexisting ones
+	@Override
 	public DataStructure addToModel(SemSimModel model) {
 		
 		if (this.hasPhysicalDefinitionAnnotation()) singularterm = model.addPhysicalProperty(singularterm);
@@ -486,11 +553,17 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return model.addDataStructure(this);
 	}
 	
+	/**
+	 * Remove the DataStructure from a SemSimModel
+	 * @param model The {@link SemSimModel} that should have the DataStructure removed
+	 * @return The DataStructure
+	 */
 	public DataStructure removeFromModel(SemSimModel model) {
 		model.removeDataStructure(this);
 		return this;
 	}
 	
+	/** Remove all inputs from this DataStructure's {@link Computation} */
 	public void clearInputs() {
 		this.computation = new Computation(computation);
 		this.computation.setInputs(new HashSet<DataStructure>());
@@ -499,17 +572,28 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		this.setStartValue(new String());
 	}
 	
+	/**
+	 * Remove an output from this DataStructure's {@link Computation}
+	 * @param dstoremove The output to remove
+	 */
 	public void removeOutput(DataStructure dstoremove) {
 		this.computation.removeOutput(dstoremove);
 	}
 
+	/** @return Whether the DataStructure's computational values will be defined at run-time
+	 * rather than within the model (used in extraction procedures)*/
 	public boolean isExternal() {
 		return external;
 	}
 
+	/**
+	 * @param external Whether the DataStructure's computational values will be defined at run-time
+	 * rather than within the model (used in extraction procedures)
+	 */
 	public void setExternal(boolean external) {
 		this.external = external;
 	}
 	
+	/** Used when flattening CellML models */
 	public void flatten() {}
 }

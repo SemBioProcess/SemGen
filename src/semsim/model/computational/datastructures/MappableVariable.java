@@ -27,6 +27,10 @@ public class MappableVariable extends Decimal {
 		super(name);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param mvtocopy The MappableVariable to copy
+	 */
 	public MappableVariable(MappableVariable mvtocopy) {
 		super(mvtocopy);
 		publicInterfaceValue = new String(mvtocopy.publicInterfaceValue);
@@ -36,6 +40,10 @@ public class MappableVariable extends Decimal {
 		mappedFrom = mvtocopy.mappedFrom;
 	}
 	
+	/**
+	 * Constructor for creating a MappableVariable from a {@link Decimal}
+	 * @param dstoconvert
+	 */
 	public MappableVariable(Decimal dstoconvert) {
 		super(dstoconvert);
 
@@ -92,7 +100,7 @@ public class MappableVariable extends Decimal {
 		this.CellMLinitialValue = initialValue;
 	}
 	
-	/** @return The intial value for the variable (in the CellML sense)*/
+	/** @return The initial value for the variable (in the CellML sense)*/
 	public String getCellMLinitialValue() {
 		return CellMLinitialValue;
 	}
@@ -115,13 +123,19 @@ public class MappableVariable extends Decimal {
 		return mappedFrom;
 	}
 	
+	/** @param to The MappableVariables that receive their values from this MappableVariable */
 	public void setMappedTo(Set<MappableVariable> to) {
 		mappedTo = to;
 	}
+	
+	/** @param from The MappableVariable that provides values for this MappableVariable */
 	public void setMappedFrom(MappableVariable from) {
 		mappedFrom = from;
 	}
 	
+	/**
+	 * @return Whether a mapping exists between this MappableVariable and another in the model
+	 */
 	public boolean isMapped() {
 		return !getMappedTo().isEmpty() || getMappedFrom()!=null; 
 	}
@@ -146,6 +160,7 @@ public class MappableVariable extends Decimal {
 		}
 	}
 	
+	@Override
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		super.replaceAllDataStructures(dsmap);
 		this.mappedFrom = (MappableVariable) dsmap.get(this.mappedFrom);
@@ -160,6 +175,12 @@ public class MappableVariable extends Decimal {
 		this.mappedTo = newmappedto;
 	}
 
+	/**
+	 * Replace a MappableVariable that is mapped either to or from this MappableVariable
+	 * with another
+	 * @param replacer The MappableVariable replacement
+	 * @param replacee The MappableVariable to replace
+	 */
 	public void replaceDataStructureReference(MappableVariable replacer, MappableVariable replacee) {
 		super.replaceDataStructureReference(replacer, replacee);
 		
@@ -172,6 +193,7 @@ public class MappableVariable extends Decimal {
 		}
 	}
 	
+	@Override
 	public DataStructure removeFromModel(SemSimModel model) {
 		// Remove mappings to the data structure
 		if (getMappedFrom()!=null) getMappedFrom().removeOutput(this);
@@ -185,6 +207,7 @@ public class MappableVariable extends Decimal {
 		return this;
 	}
 	
+	@Override
 	public void clearInputs() {
 		super.clearInputs();
 		mappedFrom = null;

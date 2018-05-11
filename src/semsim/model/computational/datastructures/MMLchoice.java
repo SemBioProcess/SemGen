@@ -20,10 +20,15 @@ public class MMLchoice extends DataStructure {
 		setComputation(computation);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param mmltocopy The MMLchoice to copy
+	 */
 	public MMLchoice(MMLchoice mmltocopy) {
 		super(mmltocopy);
 	}
 	
+	@Override
 	public boolean isReal() {
 		return true;
 	}

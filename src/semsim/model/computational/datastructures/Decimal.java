@@ -24,10 +24,15 @@ public class Decimal extends DataStructure{
 		setComputation(computation);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param dectocopy The Decimal to copy
+	 */
 	public Decimal(Decimal dectocopy) {
 		super(dectocopy);
 	}
 	
+	@Override
 	public boolean isReal() {
 		return true;
 	}

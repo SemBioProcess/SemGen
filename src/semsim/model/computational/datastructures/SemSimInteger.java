@@ -22,10 +22,15 @@ public class SemSimInteger extends DataStructure{
 		setComputation(computation);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param inttocopy The SemSimInteger to copy
+	 */
 	public SemSimInteger(SemSimInteger inttocopy) {
 		super(inttocopy);
 	}
 	
+	@Override
 	public boolean isReal() {
 		return true;
 	}
