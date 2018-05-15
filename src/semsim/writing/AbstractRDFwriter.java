@@ -253,7 +253,7 @@ public abstract class AbstractRDFwriter {
 	// Get the RDF resource for a physical model component (entity or process)
 	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
 		
-		String typeprefix = pmc.getComponentTypeasString();
+		String typeprefix = pmc.getComponentTypeAsString();
 		boolean isphysproperty = typeprefix.matches("property");
 		
 		if(PMCandResourceURImap.containsKey(pmc) && ! isphysproperty)

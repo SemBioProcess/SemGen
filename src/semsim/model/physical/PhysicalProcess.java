@@ -6,6 +6,15 @@ import java.util.Set;
 
 import semsim.definitions.SemSimTypes;
 
+/**
+ * Class for working with the physical processes simulated in a model.
+ * Analogous to 'OPB:Physics process':
+ * A physics processual entity that is the flow or exchange of matter,
+ * energy and/or information amongst dynamical entities that are 
+ * partcipants in the process.
+ * @author mneal
+ *
+ */
 public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sources = new LinkedHashMap<PhysicalEntity, Double>();
 	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
@@ -15,6 +24,10 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		super(type);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param processtocopy The PhysicalProcess to copy
+	 */
 	public PhysicalProcess(PhysicalProcess processtocopy) {
 		super(processtocopy);
 		setSources(processtocopy.getSources());
@@ -22,30 +35,60 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		setMediators(processtocopy.getMediators());
 	}
 	
+	/**
+	 * Add a thermodynamic source to the process
+	 * @param entity The {@link PhysicalEntity} that is a thermodynamic
+	 * source for the process
+	 * @param stoichiometry A Double indicating the relationship between 
+	 * the relative quantity of the source participating in the process and
+	 * the other process participants
+	 */
 	public void addSource(PhysicalEntity entity, Double stoichiometry){
 		sources.put(entity, stoichiometry);
 	}
 	
+	/**
+	 * Add a thermodynamic sink to the process
+	 * @param entity The {@link PhysicalEntity} that is a thermodynamic
+	 * sink for the process
+	 * @param stoichiometry A Double indicating the relationship between 
+	 * the relative quantity of the sink participating in the process and
+	 * the other process participants
+	 */
 	public void addSink(PhysicalEntity entity, Double stoichiometry){
 		sinks.put(entity, stoichiometry);
 	}
 	
+	/**
+	 * Add a mediator for the process. Mediators influence the process rate
+	 * without being consumed or produced by the process.
+	 * @param entity The {@link PhysicalEntity} that is a process mediator
+	 */
 	public void addMediator(PhysicalEntity entity){
 		mediators.add(entity);
 	}
 	
+	/** @return All the thermodynamic sources for the process */
 	public Set<PhysicalEntity> getSourcePhysicalEntities(){
 		return sources.keySet();
 	}
 	
+	/** @return All the thermodynamic sinks for the process */
 	public Set<PhysicalEntity> getSinkPhysicalEntities(){
 		return sinks.keySet();
 	}
 	
+	/** @return All the process mediators */
 	public Set<PhysicalEntity> getMediatorPhysicalEntities(){
 		return mediators;
 	}
 
+	/**
+	 * Specify the set of {@link PhysicalEntity}s that are thermodynamic
+	 * sources for this process
+	 * @param newsources A LinkedHashMap that provides the source physical entities
+	 * and their stoichiometry in the process
+	 */
 	public void setSources(LinkedHashMap<PhysicalEntity, Double> newsources) {
 		sources = new LinkedHashMap<PhysicalEntity, Double>();
 		for (PhysicalEntity pe : newsources.keySet()) {
@@ -53,10 +96,17 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		}
 	}
 
+	/** @return All the thermodynamic sources of the process as well as their stoichiometries */
 	public LinkedHashMap<PhysicalEntity, Double> getSources() {
 		return sources;
 	}
 
+	/**
+	 * Specify the set of {@link PhysicalEntity}s that are thermodynamic
+	 * sinks for this process
+	 * @param newsinks A LinkedHashMap that provides the sink physical entities
+	 * and their stoichiometry in the process
+	 */
 	public void setSinks(LinkedHashMap<PhysicalEntity, Double> newsinks) {
 		sinks = new LinkedHashMap<PhysicalEntity, Double>();
 		for (PhysicalEntity pe : newsinks.keySet()) {
@@ -64,10 +114,16 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		}
 	}
 
+	/** @return All the thermodynamic sinks of the process as well as
+	 * their stoichiometries */
 	public LinkedHashMap<PhysicalEntity, Double> getSinks() {
 		return sinks;
 	}
 
+	/**
+	 * Specify the set of {@link PhysicalEntity}s that are mediators for this process
+	 * @param newmediators A Set that provides the mediator physical entities
+	 */
 	public void setMediators(Set<PhysicalEntity> newmediators) {
 		mediators = new HashSet<PhysicalEntity>();
 		for (PhysicalEntity pe : newmediators) {
@@ -75,26 +131,52 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		}
 	}
 
+	/** @return All the mediators of the process */
 	public Set<PhysicalEntity> getMediators() {
 		return mediators;
 	}
 	
+	/**
+	 * @param entity A {@link PhysicalEntity} process participant
+	 * @return The stoichiometry of a particular {@link PhysicalEntity}
+	 * participating in the process
+	 */
 	public Double getStoichiometry(PhysicalEntity entity) {
 		return getParticipantswithMultipliers().get(entity);
 	}
 	
+	/**
+	 * @param entity A {@link PhysicalEntity} process participant
+	 * that is a thermodynamic source
+	 * @return The stoichiometry of a particular thermodynamic source
+	 * participating in the process
+	 */
 	public Double getSourceStoichiometry(PhysicalEntity entity) {
 		return sources.get(entity);
 	}
 	
+	/**
+	 * @param entity A {@link PhysicalEntity} process participant
+	 * that is a thermodynamic sink
+	 * @return The stoichiometry of a particular thermodynamic sink
+	 * participating in the process
+	 */
 	public Double getSinkStoichiometry(PhysicalEntity entity) {
 		return sinks.get(entity);
 	}
 	
+	/**
+	 * Set the stoichiometry for a particular {@link PhysicalEntity} process participant.
+	 * @param entity The {@link PhysicalEntity} that will have its stoichiometry set
+	 * @param stoich The stoichiometry for the {@link PhysicalEntity}
+	 */
 	public void setStoichiometry(PhysicalEntity entity, Double stoich) {
 		getParticipantswithMultipliers().put(entity,stoich);
 	}
 	
+	/** @return A LinkedHashMap listing all sources and sinks for the process as well 
+	 * as their stoichiometries
+	 */
 	public LinkedHashMap<PhysicalEntity, Double> getParticipantswithMultipliers(){
 		LinkedHashMap<PhysicalEntity, Double> allps = new LinkedHashMap<PhysicalEntity, Double>();
 		allps.putAll(getSources());
@@ -102,7 +184,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return allps;
 	}
 	
-	// Get all sources, sinks and mediators as PhysicalEntities
+	/** @return All sources, sinks and mediators in the process */
 	public Set<PhysicalEntity> getParticipants(){
 		Set<PhysicalEntity> allpents = new HashSet<PhysicalEntity>();
 		allpents.addAll(getSourcePhysicalEntities());
@@ -111,10 +193,15 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		return allpents;
 	}
 	
+	/** @return Whether any {@link PhysicalEntity} participants are specified
+	 * for the process */
 	public boolean hasParticipants(){
 		return ! getParticipants().isEmpty();
 	}
 	
+	/**
+	 * Remove a {@link PhysicalEntity} participant from the process
+	 * @param pe The {@link PhysicalEntity} to remove */
 	public void removeParticipant(PhysicalEntity pe) {
 		if (sources.keySet().contains(pe)) {
 			sources.remove(pe);
@@ -127,6 +214,11 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 		}
 	}
 	
+	/**
+	 * Replace a {@link PhysicalEntity} process participant with another
+	 * @param pe The participant to replace
+	 * @param rep The replacement
+	 */
 	public void replaceParticipant(PhysicalEntity pe, PhysicalEntity rep) {
 		if (sources.keySet().contains(pe)) {
 			Double mult = sources.get(pe);
@@ -188,7 +280,7 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	}
 
 	@Override
-	public String getComponentTypeasString() {
+	public String getComponentTypeAsString() {
 		return "process";
 	}
 }

@@ -39,7 +39,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	}
 	
 	@Override
-	public String getComponentTypeasString() {
+	public String getComponentTypeAsString() {
 		return "property";
 	}
 

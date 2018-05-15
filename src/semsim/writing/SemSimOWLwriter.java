@@ -771,7 +771,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	private void createPhysicalModelIndividual(PhysicalModelComponent pmc, String uriforind) throws OWLException{
-		String physicaltype = pmc.getComponentTypeasString();
+		String physicaltype = pmc.getComponentTypeAsString();
 		String parenturistring = null;
 		
 		if(pmc.isType(SemSimTypes.PHYSICAL_PROPERTY_IN_COMPOSITE))

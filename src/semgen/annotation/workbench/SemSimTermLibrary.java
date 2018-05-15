@@ -464,7 +464,7 @@ public class SemSimTermLibrary extends Observable {
 		
 		public void clearRelations(Integer termindex, Relation relation) {
 			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
-			pmc.removeReferenceAnnotationsofType(relation);
+			pmc.removeReferenceAnnotationsWithRelation(relation);
 			notifyTermChanged();
 		}
 		

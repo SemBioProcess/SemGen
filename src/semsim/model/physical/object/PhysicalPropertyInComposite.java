@@ -40,7 +40,7 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 	}
 	
 	@Override
-	public String getComponentTypeasString() {
+	public String getComponentTypeAsString() {
 		return "property";
 	}
 
