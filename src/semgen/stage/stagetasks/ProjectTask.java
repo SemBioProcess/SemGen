@@ -1,16 +1,10 @@
 package semgen.stage.stagetasks;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Observable;
-
-import javax.swing.JOptionPane;
-
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
-
 import org.apache.commons.io.FilenameUtils;
 import semgen.SemGen;
+import semgen.search.BioModelsSearch;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
@@ -26,6 +20,11 @@ import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelClassifier.ModelType;
+
+import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Observable;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
@@ -143,9 +142,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			closeModels(modelindex);
 		}
 
-		public void onSearch(String searchString) throws FileNotFoundException {
+		public void onSearch(String searchString) throws Exception {
 			SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
+					BioModelsSearch.bioModelsSearch(searchString),
 					// PMR results here
 			};
 

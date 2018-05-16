@@ -466,6 +466,9 @@ function makeResultSet(searchResultSet, stage) {
         if (searchResultSet.source == "Example models") {
             item.appendChild(document.createTextNode(searchResultSet.results[i]));
         }
+        else if (searchResultSet.source == "BioModels") {
+        	item.appendChild(document.createTextNode(searchResultSet.results[i]));
+		}
         else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
         }
