@@ -12,6 +12,12 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalDependency;
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class for representing physical dependencies that are defined using
+ * controlled knowledge resource terms.
+ * @author mneal
+ *
+ */
 public class ReferencePhysicalDependency extends PhysicalDependency implements ReferenceTerm {
 
 	public ReferencePhysicalDependency(URI uri, String description){
@@ -20,6 +26,7 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 		setName(description);
 	}
 	
+	@Override
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
 			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
@@ -27,13 +34,12 @@ public class ReferencePhysicalDependency extends PhysicalDependency implements R
 		return null;
 	}
 	
+	@Override
 	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
-	/**
-	 * @return The name of the knowledge base that contains the URI used as the annotation value
-	 */
+	@Override
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
 		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}

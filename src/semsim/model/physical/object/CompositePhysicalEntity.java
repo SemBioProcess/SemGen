@@ -10,6 +10,26 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class for representing physical entities that are 
+ * constructed in a post-coordinated fashion using multiple
+ * component physical entities linked by structural relations. 
+ * 
+ * Background: The existing corpus of available
+ * biomedical knowledge resources does not, and perhaps should not,
+ * provide reference terms for all physical entities that can 
+ * be represented in biosimulation models.
+ * 
+ * By linking more fundamental physical entity terms that are
+ * available in knowledge resources in a post-coordinated fashion,
+ * the SemSim architecture provides a way to precisely represent the 
+ * physical entities in a wide variety of modeled system, even if
+ * reference terms defining such entities are not available in 
+ * knowledge resources.
+ *  
+ * @author mneal
+ *
+ */
 public class CompositePhysicalEntity extends PhysicalEntity implements Comparable<CompositePhysicalEntity>{
 	
 	private ArrayList<PhysicalEntity> arrayListOfPhysicalEntities = new ArrayList<PhysicalEntity>();
@@ -32,7 +52,11 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 			setArrayListOfStructuralRelations(rels);
 		}
 	}
-	/** Copy constructor **/
+	
+	/**
+	 * Copy constructor
+	 * @param cpetocopy The CompositePhysicalEntity to copy
+	 */
 	public CompositePhysicalEntity(CompositePhysicalEntity cpetocopy) {
 		super(cpetocopy);
 		setArrayListOfEntities(cpetocopy.arrayListOfPhysicalEntities);
@@ -49,6 +73,9 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		return makeName();
 	}
 	
+	/** @return A human-readable name for the CompositePhysicalEntity
+	 * based on the names of its component entities and structural
+	 * relations */
 	public String makeName(){
 		String name = null;
 		if(getArrayListOfEntities().size()>0) name = "";
@@ -66,6 +93,11 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		return name;
 	}
 
+	/**
+	 * Set the ordered list of physical entities comprising the 
+	 * CompositePhysicalEntity
+	 * @param arrayListOfEntities An ordered list of {@link PhysicalEntity}s 
+	 */
 	public void setArrayListOfEntities(ArrayList<PhysicalEntity> arrayListOfEntities) {
 		arrayListOfPhysicalEntities.clear();
 		for (PhysicalEntity pe : arrayListOfEntities) {
@@ -73,19 +105,40 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		}
 	}
 
+	/** @return The ordered list of {@link PhysicalEntity}s 
+	 * that comprise this CompositePhysicalEntity */
 	public ArrayList<PhysicalEntity> getArrayListOfEntities() {
 		return arrayListOfPhysicalEntities;
 	}
 
+	/**
+	 * Append the ordered list of {@link PhysicalEntity}s 
+	 * with an additional entity
+	 * @param pe The {@link PhysicalEntity} to add
+	 */
 	public void addPhysicalEntity(PhysicalEntity pe) {
 		arrayListOfPhysicalEntities.add(pe);
 	}
 	
+	/**
+	 * Replace one of the {@link PhysicalEntity}s that comprises
+	 * this CompositePhysicalEntity with another
+	 * @param tobereplaced The entity to replace
+	 * @param replacer The replacement
+	 */
 	public void replacePhysicalEntity(PhysicalEntity tobereplaced, PhysicalEntity replacer) {
 		if (!arrayListOfPhysicalEntities.contains(tobereplaced)) return;
 		arrayListOfPhysicalEntities.set(arrayListOfPhysicalEntities.indexOf(tobereplaced), replacer);
 	}
 	
+	/**
+	 * Replace one of the {@link PhysicalEntity}s that comprises
+	 * this CompositePhysicalEntity with another. The entity to be replaced
+	 * is specified by its position in the ordered list of entities comprising
+	 * this CompositePhysicalEntity.
+	 * @param index The index of the entity to replace
+	 * @param pe The replacement entity
+	 */
 	public void replacePhysicalEntity(int index, PhysicalEntity pe) {
 		if (index == arrayListOfPhysicalEntities.size()) {
 			addPhysicalEntity(pe);
@@ -93,6 +146,11 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		arrayListOfPhysicalEntities.set(index, pe);
 	}
 	
+	/**
+	 * Remove a physical entity from the ordered list of
+	 * entities that comprise this CompositePhysicalEntity
+	 * @param pe The {@link PhysicalEntity} to remove
+	 */
 	public void removePhysicalEntity(PhysicalEntity pe) {
 		arrayListOfPhysicalEntities.remove(pe);
 		if (this.arrayListOfStructuralRelations.size() > 0) {
@@ -101,6 +159,13 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		
 	}
 	
+	/**
+	 * Remove a physical entity from the ordered list of
+	 * entities that comprise this CompositePhysicalEntity
+	 * @param index The index position of the {@link PhysicalEntity} to 
+	 * remove in the ordered list of entities that make up this
+	 * CompositePhysicalEntity.
+	 */
 	public void removePhysicalEntity(int index) {
 		arrayListOfPhysicalEntities.remove(index);
 		if (this.arrayListOfStructuralRelations.size() > 0) {
@@ -108,6 +173,12 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		}
 	}
 	
+	/**
+	 * Set the ordered list of {@link StructuralRelation}s that
+	 * link the component entities in this CompositePhysicalEntity
+	 * @param arrayListOfStructuralRelations The ordered list of 
+	 * {@link StructuralRelation}s
+	 */
 	public void setArrayListOfStructuralRelations(ArrayList<StructuralRelation> arrayListOfStructuralRelations) {
 		this.arrayListOfStructuralRelations.clear();
 		for (StructuralRelation sr : arrayListOfStructuralRelations) {
@@ -115,10 +186,14 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		}
 	}
 
+	/** @return The ordered list of {@link StructuralRelation}s that link the
+	 * physical entities in this CompositePhysicalEntity
+	 */
 	public ArrayList<StructuralRelation> getArrayListOfStructuralRelations() {
 		return arrayListOfStructuralRelations;
 	}
 	
+	@Override
 	public int compareTo(CompositePhysicalEntity that) {
 		if(arrayListOfPhysicalEntities.size()==that.arrayListOfPhysicalEntities.size() &&
 				arrayListOfStructuralRelations.size()==that.arrayListOfStructuralRelations.size()){
@@ -138,6 +213,14 @@ public class CompositePhysicalEntity extends PhysicalEntity implements Comparabl
 		return 1;
 	}
 	
+	/**
+	 * 
+	 * @param namespace A URI namespace
+	 * @return A URI representing this CompositePhysicalEntity
+	 * comprised of an input namespace and a concatenation of the
+	 * URI fragments of the annotated component physical entities
+	 * (or names, for unannotated entities)
+	 */
 	public URI makeURI(String namespace) {
 		String uristring = namespace;
 		for(int y=0; y<getArrayListOfEntities().size();y++){

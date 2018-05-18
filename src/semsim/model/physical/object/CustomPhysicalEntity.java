@@ -4,7 +4,11 @@ import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 
-
+/**
+ * Class for representing physical entities that are not defined 
+ * against a knowledge resource term.
+ * @author mneal
+ */
 public class CustomPhysicalEntity extends PhysicalEntity{
 	
 	public CustomPhysicalEntity(String name, String description){
@@ -14,8 +18,8 @@ public class CustomPhysicalEntity extends PhysicalEntity{
 	}
 	
 	/** 
-	 * Copy constructur
-	 * @param cupe
+	 * Copy constructor
+	 * @param cupe The CustomPhysicalEntity to copy
 	 */
 	public CustomPhysicalEntity(CustomPhysicalEntity cupe) {
 		super(cupe);

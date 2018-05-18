@@ -107,17 +107,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
 	
-	/**
-	 * Constructor without namespace
-	 */
+	/** Constructor without namespace */
 	public SemSimModel(){
 		super(SemSimTypes.MODEL);
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
-	/**
-	 * Constructor with namespace
-	 */
+	/** Constructor with namespace */
 	public SemSimModel(String namespace){
 		super(SemSimTypes.MODEL);
 		setNamespace(namespace);
@@ -165,7 +161,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new {@link Submodel} to the model. If a Submodel with the same name already exists, the new Submodels' name
 	 * is appended with a suffix until a unique name is found.
-	 * 
 	 * @param sub The Submodel to be added.
 	 * @return The new Submodel added.
 	 */
@@ -183,7 +178,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new {@link UnitOfMeasurement} to the model. If a unit with the same name already exists, it
 	 * is not added.
-	 * 
 	 * @param unit The UnitOfMeasurement to be added.
 	 */
 	public UnitOfMeasurement addUnit(UnitOfMeasurement unit){
@@ -202,7 +196,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
-	 * 
 	 * @param cpe The CompositePhysicalEntity to be added.
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
@@ -277,9 +270,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	public PhysicalPropertyInComposite addAssociatePhysicalProperty(PhysicalPropertyInComposite pp){
+	public PhysicalPropertyInComposite addPhysicalPropertyForComposite(PhysicalPropertyInComposite pp){
 		
-		if(getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getAssociatePhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
+		if(getPhysicalPropertyForCompositeByURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertyForCompositeByURI(pp.getPhysicalDefinitionURI());
 		else associatephysicalproperties.add(pp);
 		
 		return pp;
@@ -297,7 +290,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
-	public PhysicalPropertyInComposite getAssociatePhysicalPropertybyURI(URI uri) {
+	public PhysicalPropertyInComposite getPhysicalPropertyForCompositeByURI(URI uri) {
 		for (PhysicalPropertyInComposite pp : associatephysicalproperties) {
 			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
 		}

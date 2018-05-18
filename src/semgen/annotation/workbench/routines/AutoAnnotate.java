@@ -38,18 +38,18 @@ public class AutoAnnotate {
 					// If the codeword represents an OPB:Amount property (OPB_00135)
 					if(SemGen.semsimlib.OPBhasAmountProperty(roa)) {
 						candidateamounts.add(ds);
-						semsimmodel.addAssociatePhysicalProperty(pp);
+						semsimmodel.addPhysicalPropertyForComposite(pp);
 					}
 						
 					// If the codeword represents an OPB:Force property (OPB_00574)
 					else if(SemGen.semsimlib.OPBhasForceProperty(roa)) {
 						candidateforces.add(ds);
-						semsimmodel.addAssociatePhysicalProperty(pp);
+						semsimmodel.addPhysicalPropertyForComposite(pp);
 					}
 					// If the codeword represents an OPB:Flow rate property (OPB_00573)
 					else if(SemGen.semsimlib.OPBhasFlowProperty(roa)){
 						candidateflows.add(ds);
-						semsimmodel.addAssociatePhysicalProperty(pp);
+						semsimmodel.addPhysicalPropertyForComposite(pp);
 					}
 				}
 			}

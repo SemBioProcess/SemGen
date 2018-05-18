@@ -163,7 +163,7 @@ public abstract class AbstractRDFreader {
 			String description = "";
 			term = new PhysicalPropertyInComposite(description, URI.create(key));
 			ResourceURIandPMCmap.put(key, term);
-			semsimmodel.addAssociatePhysicalProperty((PhysicalPropertyInComposite) term);
+			semsimmodel.addPhysicalPropertyForComposite((PhysicalPropertyInComposite) term);
 		}
 		return (PhysicalPropertyInComposite)term;
 	}
