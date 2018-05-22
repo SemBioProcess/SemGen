@@ -13,16 +13,44 @@ public class BioModelsSearch {
         System.out.println("Searching BioModels...");
 
         List<Set<String>> compareResults = new ArrayList<Set<String>>();
+
         String queryArray[];
         queryArray = searchString.toUpperCase().split(" ");
         // Example queries - "CHEBI:15355", "CHEBI:27897"
 
         for(String keyword : queryArray) {
-            String[] biomodelResultSet = client.getModelsIdByChEBI(keyword);
-            if (biomodelResultSet != null) {
-                Set<String> searchResults = new HashSet<String>(Arrays.asList(biomodelResultSet));
-                compareResults.add(searchResults);
-            }
+            String[] biomodelResultSetByChEBI = client.getModelsIdByChEBI(keyword);
+            String[] biomodelResultSetByChEBIId = client.getModelsIdByChEBIId(keyword);
+            String[] biomodelResultSetByGO = client.getModelsIdByGO(keyword);
+            String[] biomodelResultSetByGOId = client.getModelsIdByGOId(keyword);
+            String[] biomodelResultSetByName = client.getModelsIdByName(keyword);
+            String[] biomodelResultSetByPerson = client.getModelsIdByPerson(keyword);
+            String[] biomodelResultSetByPublication = client.getModelsIdByPublication(keyword);
+            String[] biomodelResultSetByTaxonomy = client.getModelsIdByTaxonomy(keyword);
+            String[] biomodelResultSetByTaxonomyId = client.getModelsIdByTaxonomyId(keyword);
+            String[] biomodelResultSetByUniprot = client.getModelsIdByUniprot(keyword);
+            String[] biomodelResultSetByUniprotId = client.getModelsIdByUniprotId(keyword);
+
+
+            //TODO Inlclude the other BioModel queries.
+//            if (biomodelResultSet != null) {
+            Set<String> searchResults = new HashSet<String>();
+
+            addAllIfNotNull(searchResults, biomodelResultSetByChEBI);
+            addAllIfNotNull(searchResults, biomodelResultSetByChEBIId);
+            addAllIfNotNull(searchResults, biomodelResultSetByGO);
+            addAllIfNotNull(searchResults, biomodelResultSetByGOId);
+            addAllIfNotNull(searchResults, biomodelResultSetByName);
+            addAllIfNotNull(searchResults, biomodelResultSetByPerson);
+            addAllIfNotNull(searchResults, biomodelResultSetByPublication);
+            addAllIfNotNull(searchResults, biomodelResultSetByTaxonomy);
+            addAllIfNotNull(searchResults, biomodelResultSetByTaxonomyId);
+            addAllIfNotNull(searchResults, biomodelResultSetByUniprot);
+            addAllIfNotNull(searchResults, biomodelResultSetByUniprotId);
+
+            compareResults.add(searchResults);
+
+//            }
         }
 
 //        Map<String, List<SimpleModel>> biomodelResultSet = client.getModelsIdByChEBIIds(queryArray);
@@ -48,4 +76,11 @@ public class BioModelsSearch {
         }
         return new SearchResultSet(SourceName, finalResults.toArray(new String[finalResults.size()]));
     }
+
+    public static <String> void addAllIfNotNull(Set<String> list, String[] c) {
+        if (c != null) {
+            list.addAll(Arrays.asList(c));
+        }
+    }
+
 }
