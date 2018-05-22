@@ -39,12 +39,19 @@ public class BioModelsSearch {
 
 
         // Find the intersection of the results for each keyword
-        Set<String> finalResults = new HashSet<String>();
+        Set<String> intersectingResults = new HashSet<String>();
         for(Set<String> resultSet : compareResults) {
-            finalResults = compareResults.get(0);
-            finalResults.retainAll(resultSet);
+            intersectingResults = compareResults.get(0);
+            intersectingResults.retainAll(resultSet);
         }
-        return new SearchResultSet(SourceName, finalResults.toArray(new String[finalResults.size()]));
+        String [] finalResultsById = intersectingResults.toArray(new String[intersectingResults.size()]);
+        String [] finalResultsByName = new String[finalResultsById.length];
+
+        for (int i = 0; i < finalResultsById.length; i++) {
+            finalResultsByName[i] = client.getModelNameById(finalResultsById[i]); //This add a minute of search time...
+        }
+
+        return new SearchResultSet(SourceName, finalResultsByName);
     }
 
     public static <String> void addAllIfNotNull(Set<String> list, String[] c) {
