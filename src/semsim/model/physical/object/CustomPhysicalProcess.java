@@ -9,6 +9,12 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
+/**
+ * Class for representing physical processes that are not defined 
+ * against a knowledge resource term.
+ * @author mneal
+ */
+
 public class CustomPhysicalProcess extends PhysicalProcess{
 	public Set<CustomPhysicalEntity> setofinputs = new HashSet<CustomPhysicalEntity>(); // For CB output
 	public Set<CustomPhysicalEntity> setofoutputs = new HashSet<CustomPhysicalEntity>(); // For CB output
@@ -20,6 +26,10 @@ public class CustomPhysicalProcess extends PhysicalProcess{
 		setDescription(description);
 	}
 	
+	/**
+	 * Copy constructor
+	 * @param cuproc The CustomPhysicalProcess to copy
+	 */
 	public CustomPhysicalProcess(CustomPhysicalProcess cuproc) {
 		super(cuproc);
 	}

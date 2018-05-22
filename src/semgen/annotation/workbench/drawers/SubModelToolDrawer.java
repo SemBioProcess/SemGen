@@ -12,7 +12,6 @@ import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
-import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimComponentComparator;
 import semsim.writing.CaseInsensitiveComparator;
 
@@ -101,7 +100,7 @@ public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	}
 	
 	public ArrayList<String> getAssociatedSubModelDataStructureNames() {
-		Set<DataStructure> smset = SemSimOWLFactory.getCodewordsAssociatedWithNestedSubmodels(componentlist.get(currentfocus));
+		Set<DataStructure> smset = Submodel.getCodewordsAssociatedWithNestedSubmodels(componentlist.get(currentfocus));
 		
 		ArrayList<String> associated = new ArrayList<String>();
 		for (DataStructure ds : smset) {

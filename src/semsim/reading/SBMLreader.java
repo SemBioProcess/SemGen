@@ -750,7 +750,7 @@ public class SBMLreader extends ModelReader{
 			}
 
 			// Set physical property annotation
-			semsimmodel.addAssociatePhysicalProperty(prop);
+			semsimmodel.addPhysicalPropertyForComposite(prop);
 			ds.setAssociatedPhysicalProperty(prop);
 			
 			PhysicalEntity compartmentent = null;
@@ -971,7 +971,7 @@ public class SBMLreader extends ModelReader{
 			prop = new PhysicalPropertyInComposite("Material flow rate", SemSimLibrary.OPB_MATERIAL_FLOW_RATE_URI);		
 		else prop = new PhysicalPropertyInComposite(null,null);
 		
-		semsimmodel.addAssociatePhysicalProperty(prop);
+		semsimmodel.addPhysicalPropertyForComposite(prop);
 				
 		// Iterate through reactions
 		for(int r=0; r<sbmlmodel.getListOfReactions().size(); r++){

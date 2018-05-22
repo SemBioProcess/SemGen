@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HashSet;
@@ -33,7 +32,6 @@ import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
-import org.semanticweb.owlapi.model.OWLOntologyChangeException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -48,24 +46,41 @@ import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.collection.SemSimModel;
-import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Class mostly providing convenience methods for working with OWL API objects
+ * @author mneal
+ *
+ */
 public class SemSimOWLFactory {
 
 	public static OWLDataFactory factory = OWLManager.createOWLOntologyManager().getOWLDataFactory();
 
 	public SemSimOWLFactory() {}
 
+	
+	/**
+	 * @param ont An OWLOntology
+	 * @return The XML base namespace for the ontology
+	 */
 	public static String getXMLbaseFromOntology(OWLOntology ont) {
 		String base = ont.getOntologyID().toString();
 		base = base.substring(base.indexOf("<") + 1, base.indexOf(">")) + "#";
 		return base;
 	}
 
+	
+	/**
+	 * @param iri An IRI pointing to an ontology's location
+	 * @param manager The OWLOntologyManager that will be checked to see if it has already 
+	 * loaded the ontology at the input IRI
+	 * @return Whether the ontology at the input IRI has already been loaded into the 
+	 * input OWLOntologyManager
+	 */
 	public static OWLOntology getOntologyIfPreviouslyLoaded(IRI iri,OWLOntologyManager manager) {
 		OWLOntologyManager tempmanager = OWLManager.createOWLOntologyManager();
 		OWLOntology newont = null;
@@ -86,20 +101,28 @@ public class SemSimOWLFactory {
 		return returnont;
 	}
 	
+	
 	// METHODS ON CLASSES
 
-	// Add external class
+	/**
+	 * Add an external reference class to a SemSim model ontology 
+	 * @param destinationont The SemSim model ontology to which the class will be added
+	 * @param clsIRI The IRI of the class as a string
+	 * @param physicaltype The physical type of the reference class (e.g. physical entity, process, etc.)
+	 * @param humreadname A human-readable free text definition for the class
+	 * @param manager An OWLOntologyManager instance
+	 */
 	public static void addExternalReferenceClass(OWLOntology destinationont,
-			String clsuri, String physicaltype, String humreadname, OWLOntologyManager manager) {
+			String clsIRI, String physicaltype, String humreadname, OWLOntologyManager manager) {
 		String parentname = RDFNamespace.SEMSIM.getNamespaceasString() + "Reference_physical_" + physicaltype;
 		OWLClass parent = factory.getOWLClass(IRI.create(parentname));
-		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsuri));
+		OWLClass classtoadd = factory.getOWLClass(IRI.create(clsIRI));
 		OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd, parent);
 		AddAxiom addAxiom = new AddAxiom(destinationont, axiom);
 		manager.applyChange(addAxiom);
 
 		OWLDataProperty hasphysdefprop = factory.getOWLDataProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI());
-		OWLLiteral con2 = factory.getOWLLiteral(clsuri);
+		OWLLiteral con2 = factory.getOWLLiteral(clsIRI);
 		OWLClassExpression physdef = factory.getOWLDataHasValue(hasphysdefprop,con2);
 		OWLSubClassOfAxiom ax2 = factory.getOWLSubClassOfAxiom(classtoadd, physdef);
 		AddAxiom addAx2 = new AddAxiom(destinationont, ax2);
@@ -108,39 +131,64 @@ public class SemSimOWLFactory {
 		setRDFLabel(destinationont, classtoadd, humreadname, manager);
 	}
 	
-	public static void addClass(OWLOntology ont, String uri, String[] parentnames, OWLOntologyManager manager) {
+	
+	/**
+	 * Add a class to a SemSim model ontology
+	 * @param ont The SemSim model ontology to which the class will be added
+	 * @param classIRI The IRI of the class as a String
+	 * @param parentnames IRIs (as Strings) of the parent classes in the ontology
+	 * that should subsume the input class
+	 * @param manager An OWLOntologyManager instance
+	 */
+	public static void addClass(OWLOntology ont, String classIRI, String[] parentnames, OWLOntologyManager manager) {
 		for (int x = 0; x < parentnames.length; x++) {
 			OWLClass parent = factory.getOWLClass(IRI.create(parentnames[x]));
-			OWLClass classtoadd = factory.getOWLClass(IRI.create(uri));
+			OWLClass classtoadd = factory.getOWLClass(IRI.create(classIRI));
 			OWLAxiom axiom = factory.getOWLSubClassOfAxiom(classtoadd,parent);
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
 			manager.applyChange(addAxiom);
 		}
 	}
 
-	// Remove an object property value for one class (uses hasValue relation)
-		public static void removeClsDataValueRestriction(OWLOntology ont, String clsname, String propname, OWLOntologyManager manager)
-				throws OWLException {
-			OWLClass cls = factory.getOWLClass(IRI.create(clsname));
-			OWLDataPropertyExpression prop = factory.getOWLDataProperty(IRI.create(propname));
-			Set<OWLClassExpression> descs = cls.getSuperClasses(ont);
-			for (OWLClassExpression desc : descs) {
-				if (desc instanceof OWLDataHasValue) {
-					OWLDataHasValue allrest = (OWLDataHasValue) desc;
-					if (allrest.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(prop.asOWLDataProperty().getIRI().toString())) {
-						OWLSubClassOfAxiom axiom = factory.getOWLSubClassOfAxiom(cls, desc);
-						RemoveAxiom removeax = new RemoveAxiom(ont, axiom);
-						manager.applyChange(removeax);
-					}
+	
+	/**
+	 * Remove a data property value for one class (uses hasValue relation)
+	 * @param ont The ontology containing the class
+	 * @param clsIRI The IRI of the class as a String
+	 * @param propIRI The IRI of the data property as a String
+	 * @param manager An OWLOntologyManager instance
+	 * @throws OWLException
+	 */
+	public static void removeClsDataValueRestriction(OWLOntology ont, String clsIRI, String propIRI, OWLOntologyManager manager)
+			throws OWLException {
+		OWLClass cls = factory.getOWLClass(IRI.create(clsIRI));
+		OWLDataPropertyExpression prop = factory.getOWLDataProperty(IRI.create(propIRI));
+		Set<OWLClassExpression> descs = cls.getSuperClasses(ont);
+		for (OWLClassExpression desc : descs) {
+			if (desc instanceof OWLDataHasValue) {
+				OWLDataHasValue allrest = (OWLDataHasValue) desc;
+				if (allrest.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(prop.asOWLDataProperty().getIRI().toString())) {
+					OWLSubClassOfAxiom axiom = factory.getOWLSubClassOfAxiom(cls, desc);
+					RemoveAxiom removeax = new RemoveAxiom(ont, axiom);
+					manager.applyChange(removeax);
 				}
 			}
 		}
+	}
 		
 		
 	// METHODS ON INDIVIDUALS
 	
-	public static void createSemSimIndividual(OWLOntology ont, String indname, OWLClass parent, String suffix, OWLOntologyManager manager){
-		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname + suffix));
+	/**
+	 * Instantiate an OWL individual in a SemSim model
+	 * @param ont The SemSim model ontology to which the individual will be added
+	 * @param indIRI The individual's IRI as a String
+	 * @param parent The parent class for the new individual
+	 * @param suffix An optional suffix to append to the individual's IRI
+	 * @param manager An OWLOntologyManager instance
+	 */
+	public static void createSemSimIndividual(OWLOntology ont, String indIRI, OWLClass parent, String suffix, OWLOntologyManager manager){
+		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indIRI + suffix));
 		OWLIndividualAxiom axiom = factory.getOWLClassAssertionAxiom(parent, ind);
 		if(!ont.getAxioms().contains(axiom)){
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
@@ -149,15 +197,33 @@ public class SemSimOWLFactory {
 	}
 	
 	
-	// Create individuals within one parent class
-	public static void createSemSimIndividuals(OWLOntology ont, String[] indnames, String parentclassname, String suffix, OWLOntologyManager manager) throws OWLException {
-		OWLClass parent = factory.getOWLClass(IRI.create(parentclassname));
-		for (int i = 0; i < indnames.length; i++) {
-			createSemSimIndividual(ont, indnames[i], parent, suffix, manager);
+	/**
+	 * Create multiple individuals within one parent class
+	 * @param ont The SemSim model ontology to which the individuals will be added
+	 * @param indIRIs The IRIs of the individuals as Strings
+	 * @param parentIRI The IRI of the parent class that will subsume the individuals (as a String)
+	 * @param suffix An option suffix to append to each individual's IRI
+	 * @param manager An OWLOntologyManager instance
+	 * @throws OWLException
+	 */
+	public static void createSemSimIndividuals(OWLOntology ont, String[] indIRIs, String parentIRI, String suffix, OWLOntologyManager manager) throws OWLException {
+		OWLClass parent = factory.getOWLClass(IRI.create(parentIRI));
+		for (int i = 0; i < indIRIs.length; i++) {
+			createSemSimIndividual(ont, indIRIs[i], parent, suffix, manager);
 		}
 	}
 
-	// Create individuals under different parent classes
+	
+	/**
+	 * Create individuals under different parent classes
+	 * @param ont The SemSim model ontology to which the individuals will be added
+	 * @param indandparents A Hashtable containing a the list of the individuals' IRIs
+	 * (as Strings) and the IRIs of the parent classes that should subsume them (also
+	 * as Strings).
+	 * @param suffix An optional suffix to append to each individual's IRI
+	 * @param manager An OWLOntologyManager instance
+	 * @throws OWLException
+	 */
 	public static void createSemSimIndividuals(OWLOntology ont, Hashtable<String,String[]> indandparents, String suffix, OWLOntologyManager manager)
 			throws OWLException {
 
@@ -171,16 +237,32 @@ public class SemSimOWLFactory {
 	}
 
 	
-	
-	public static void subclassIndividual(OWLOntology ont, String ind, String parent, OWLOntologyManager manager){
-		OWLClass refclass = factory.getOWLClass(IRI.create(parent));
-		OWLIndividual pmcind = factory.getOWLNamedIndividual(IRI.create(ind));
+	/**
+	 * Add a class assertion axiom to an ontology to indicate that an input 
+	 * individual is a member of a certain class.
+	 * @param ont The ontology in which to make this assertion
+	 * @param indIRI The IRI of the individual to subclass (as a String)
+	 * @param parentIRI The IRI of the parent class (as a String)
+	 * @param manager An OWLOntologyManager instance
+	 */
+	public static void subclassIndividual(OWLOntology ont, String indIRI, String parentIRI, OWLOntologyManager manager){
+		OWLClass refclass = factory.getOWLClass(IRI.create(parentIRI));
+		OWLIndividual pmcind = factory.getOWLNamedIndividual(IRI.create(indIRI));
 		OWLIndividualAxiom axiom = factory.getOWLClassAssertionAxiom(refclass, pmcind);
 		AddAxiom addAxiom = new AddAxiom(ont, axiom);
 		manager.applyChange(addAxiom);
 	}
 	
-	// Add an object property restriction to use as a superclass on an individual (uses the "some" restriction type).
+	
+	/**
+	 * Add an object property restriction to use as a superclass on an individual (uses the "some" restriction type).
+	 * E.g. individual x <contains> some <reference ontology class>
+	 * @param ont Ontology that will contain the restriction
+	 * @param ind The IRI of the individual that the restriction is on (as a String)
+	 * @param property The IRI of the object property used in the restriction (as a String)
+	 * @param value The IRI of the class used in the object property restriction
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void addExistentialObjectPropertyRestrictionOnIndividual(OWLOntology ont, String ind, String property,
 			String value, OWLOntologyManager manager){
 				
@@ -194,7 +276,18 @@ public class SemSimOWLFactory {
         manager.applyChange(addAx);	
 	}
 
-	// Set an object property for one individual
+	
+	/**
+	 * Assert an object property axiom on an individual
+	 * E.g. individual x <partOf> individual y
+	 * @param ont The ontology that will contain the axiom
+	 * @param subject The IRI of the subject individual (as in subject-predicate-object statements)
+	 * @param object The IRI of the object individual
+	 * @param rel The object property used in the axiom (as a {@link Relation})
+	 * @param invrel The inverse of the object property used in the axiom (to assert inverse axiom as well)
+	 * @param manager An OWLOntologyManager
+	 * @throws OWLException
+	 */
 	public static void setIndObjectProperty(OWLOntology ont, String subject, String object, Relation rel, Relation invrel, OWLOntologyManager manager)
 			throws OWLException {
 
@@ -207,7 +300,20 @@ public class SemSimOWLFactory {
 		}
 	}
 	
-	public static OWLAxiom createIndObjectPropertyAxiom(OWLOntology ont, String subject,
+	
+	/**
+	 * Used internally to make object property assertions on individuals in 
+	 * a SemSim ontology
+	 * @param ont The SemSim ontology that will contain the axiom
+	 * @param subject IRI of the subject individual
+	 * @param object IRI of the obejct individual
+	 * @param rel The object property used in the axiom (as a {@link Relation}
+	 * @param anns A set of OWLAnnotations to add to the axiom
+	 * @param manager An OWLOntologyManager
+	 * @return The object property axiom added to the ontology
+	 * @throws OWLException
+	 */
+	private static OWLAxiom createIndObjectPropertyAxiom(OWLOntology ont, String subject,
 			String object, Relation rel, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
@@ -219,6 +325,19 @@ public class SemSimOWLFactory {
 		return axiom;
 	}
 	
+	
+	/**
+	 * Add an object property axiom to an individual along with annotations on the axiom
+	 * @param ont The ontology that will contain the axiom
+	 * @param subject IRI of the subject individual
+	 * @param object IRI of the object individual
+	 * @param rel The object property used in the axiom (as a {@link Relation}
+	 * @param invrel The inverse of the object property used in the axiom, to assert
+	 * inverse axiom if desired
+	 * @param annsforrel A set of OWLAnnotations to add to the axiom
+	 * @param manager An OWLOntologyManager
+	 * @throws OWLException
+	 */
 	public static void setIndObjectPropertyWithAnnotations(OWLOntology ont, String subject,
 		String object, Relation rel, Relation invrel, Set<OWLAnnotation> annsforrel, OWLOntologyManager manager)
 		throws OWLException{
@@ -232,7 +351,19 @@ public class SemSimOWLFactory {
 		}
 	}
 
-	public static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, Relation rel,
+	
+	/**
+	 * Used internally to assert datatype property axioms on individuals
+	 * @param ont The ontology to which the axiom will be added
+	 * @param subject IRI of the subject individual
+	 * @param rel Datatype property used in the axiom (as a {@link Relation}
+	 * @param val The datatype value used in the axiom
+	 * @param anns Annotations to add to the axiom
+	 * @param manager An OWLOntologyManager
+	 * @return The datatype property axiom added to the ontology
+	 * @throws OWLException
+	 */
+	private static OWLAxiom createIndDatatypePropertyAxiom(OWLOntology ont, String subject, Relation rel,
 			Object val, Set<OWLAnnotation> anns, OWLOntologyManager manager)
 		throws OWLException {
 		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(subject));
@@ -254,25 +385,55 @@ public class SemSimOWLFactory {
 		return axiom;
 	}
 
-	public static void setIndDatatypeProperty(OWLOntology ont, String induri, Relation rel, Object val, OWLOntologyManager manager) throws OWLException {
+	
+	/**
+	 * Assert a datatype property on an individual
+	 * @param ont The ontology to which the axiom will be added
+	 * @param indIRI IRI of the subject individual (as a String)
+	 * @param rel The datatype property used in the axiom (as a {@link Relation})
+	 * @param val The datatype value used in the axiom
+	 * @param manager An OWLOntologyManager
+	 * @throws OWLException
+	 */
+	public static void setIndDatatypeProperty(OWLOntology ont, String indIRI, Relation rel, Object val, OWLOntologyManager manager) throws OWLException {
 		if(!val.equals("")){
-			OWLAxiom axiom = createIndDatatypePropertyAxiom(ont, induri, rel, val, null, manager);
+			OWLAxiom axiom = createIndDatatypePropertyAxiom(ont, indIRI, rel, val, null, manager);
 			AddAxiom addAxiom = new AddAxiom(ont, axiom);
 			manager.applyChange(addAxiom);
 		}
 	}
 	
-	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String induri, Relation rel, Object val,
+	
+	/**
+	 * Assert a datatype property axiom and include annotations on the axiom
+	 * @param ont The ontology to which the axiom will be added
+	 * @param indIRI IRI of the subject individual (as a String)
+	 * @param rel The datatype property used in the axiom (as a {@link Relation})
+	 * @param val The datatype value used in the axiom
+	 * @param anns Annotations to add to the axiom
+	 * @param manager An OWLOntologyManager
+	 * @throws OWLException
+	 */
+	public static void setIndDatatypePropertyWithAnnotations(OWLOntology ont, String indIRI, Relation rel, Object val,
 			Set<OWLAnnotation> anns, OWLOntologyManager manager) throws OWLException{
-		AddAxiom addAxiom = new AddAxiom(ont, createIndDatatypePropertyAxiom(ont, induri, rel, val, anns, manager));
+		AddAxiom addAxiom = new AddAxiom(ont, createIndDatatypePropertyAxiom(ont, indIRI, rel, val, anns, manager));
 		manager.applyChange(addAxiom);
 	}
 
-	// Retrieve the datatype property values for one individual (returns a set)
-	public static Set<String> getIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
+	
+	/**
+	 * Retrieve the datatype property values for one individual
+	 * @param ont The ontology containing the individual
+	 * @param indIRI IRI of the individual
+	 * @param propIRI IRI of the datatype property of interest
+	 * @return The datatype values for all axioms on the individual
+	 * that use the datatype relation
+	 * @throws OWLException
+	 */
+	public static Set<String> getIndDatatypePropertyValues(OWLOntology ont, String indIRI, String propIRI) throws OWLException {
 		Set<String> values = new HashSet<String>();
-		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
-		OWLDataPropertyExpression prop = factory.getOWLDataProperty(IRI.create(propname));
+		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indIRI));
+		OWLDataPropertyExpression prop = factory.getOWLDataProperty(IRI.create(propIRI));
 		Map<OWLDataPropertyExpression, Set<OWLLiteral>> dataprops = ind.getDataPropertyValues(ont);
 		Set<OWLDataPropertyExpression> datapropskeyset = dataprops.keySet();
 		for (OWLDataPropertyExpression expression : datapropskeyset) {
@@ -287,20 +448,38 @@ public class SemSimOWLFactory {
 		return values;
 	}
 
-	// // Retrieve a functional datatype property value for one individuals (returns a single string)
-	public static String getFunctionalIndDatatypeProperty(OWLOntology ont, String indname, String propname) throws OWLException {
+	
+	/**
+	 * Retrieve a functional datatype property value for one individual
+	 * @param ont The ontology containing the individual
+	 * @param indIRI IRI of the individual
+	 * @param propIRI The IRI of the datatype property
+	 * @return The value for the datatype axiom on the individual, if present. If there are 
+	 * multiple datatype axioms on the individual that use the property, the value for the 
+	 * first axiom is returned.
+	 * @throws OWLException
+	 */
+	public static String getFunctionalIndDatatypePropertyValues(OWLOntology ont, String indIRI, String propIRI) throws OWLException {
 		// The hashtable keys are individual IRIs, values are relations (as IRIs)
-		Set<String> values = getIndDatatypeProperty(ont, indname, propname);
+		Set<String> values = getIndDatatypePropertyValues(ont, indIRI, propIRI);
 		String[] valuearray = values.toArray(new String[] {});
 		
 		return (valuearray.length == 1)  ? valuearray[0] : "";
 	}
 
-	// Retrieve the values of an object property for one individual
-	public static Set<String> getIndObjectProperty(OWLOntology ont, String indname, String propname) throws OWLException {
+	
+	/**
+	 * @param ont The ontology containing the individual
+	 * @param indIRI IRI of the individual
+	 * @param propIRI IRI of the object property
+	 * @return The objects of all object property axioms on an individual
+	 * that uses the given object property
+	 * @throws OWLException
+	 */
+	public static Set<String> getIndObjectPropertyObjects(OWLOntology ont, String indIRI, String propIRI) throws OWLException {
 		Set<String> values = new HashSet<String>();
-		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
-		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(propname));
+		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indIRI));
+		OWLObjectProperty prop = factory.getOWLObjectProperty(IRI.create(propIRI));
 		Map<OWLObjectPropertyExpression, Set<OWLIndividual>> objprops = ind.getObjectPropertyValues(ont);
 		for (OWLObjectPropertyExpression expression : objprops.keySet()) {
 			if (expression.equals(prop)) {
@@ -314,10 +493,17 @@ public class SemSimOWLFactory {
 		return values;
 	}
 	
-	// Retrieve the value of an object property for one individual
-	public static String getFunctionalIndObjectProperty(OWLOntology ont, String indname, String propname) throws OWLException {
+	
+	/**
+	 * @param ont The ontology containing the individual
+	 * @param induri IRI of the individual
+	 * @param propuri IRI of the object property
+	 * @return The value of an object property for one individual (i.e. one IRI as a String)
+	 * @throws OWLException
+	 */
+	public static String getFunctionalIndObjectPropertyObject(OWLOntology ont, String induri, String propuri) throws OWLException {
 		String value = "";
-		Set<String> values = getIndObjectProperty(ont, indname, propname);
+		Set<String> values = getIndObjectPropertyObjects(ont, induri, propuri);
 		if(!values.isEmpty()){
 			value = values.toArray(new String[]{})[0];
 		}
@@ -325,15 +511,22 @@ public class SemSimOWLFactory {
 	}
 	
 	
-	// Remove a datatype property value for one individual
-	public static void removeIndDatatypeProperty(OWLOntology ont, String indname, String propname, OWLOntologyManager manager)
+	/**
+	 * Remove a datatype property axiom on one individual
+	 * @param ont The ontology containing the axiom
+	 * @param induri IRI of the individual in the axiom
+	 * @param propuri IRI of the datatype property in the axiom
+	 * @param manager An OWLOntologyManager
+	 * @throws OWLException
+	 */
+	public static void removeIndDatatypePropertyAxiom(OWLOntology ont, String induri, String propuri, OWLOntologyManager manager)
 			throws OWLException {
-		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(indname));
+		OWLIndividual ind = factory.getOWLNamedIndividual(IRI.create(induri));
 		Set<OWLAxiom> refaxs = ind.asOWLNamedIndividual().getReferencingAxioms(ont);
 		for(OWLAxiom refax : refaxs){
 			if(refax instanceof OWLDataPropertyAssertionAxiom){
 				OWLDataPropertyAssertionAxiom axiom = (OWLDataPropertyAssertionAxiom)refax;
-				if(axiom.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(propname)){
+				if(axiom.getProperty().asOWLDataProperty().getIRI().toString().contentEquals(propuri)){
 					manager.applyChange(new RemoveAxiom(ont, axiom));
 				}
 			}
@@ -341,6 +534,11 @@ public class SemSimOWLFactory {
 	}
 	
 
+	/**
+	 * @param ont The ontology containing the class
+	 * @param parentclass IRI of the class
+	 * @return All OWL individuals subclassed under a given class in an ontology
+	 */
 	public static Set<String> getIndividualsAsStrings(OWLOntology ont, String parentclass) {
 		Set<String> indstrings = new HashSet<String>();
 		Set<OWLIndividual> existinginds = factory.getOWLClass(IRI.create(parentclass)).getIndividuals(ont);
@@ -350,6 +548,14 @@ public class SemSimOWLFactory {
 		return indstrings;
 	}
 	
+	
+	/**
+	 * @param ont The ontology containing the class
+	 * @param parentclass IRI of the class
+	 * @return All individuals subclassed under the class, or within its
+	 * subclass hierarchy
+	 * @throws OWLException
+	 */
 	public static Set<String> getIndividualsInTreeAsStrings(OWLOntology ont, String parentclass) throws OWLException {
 		Set<String> indstrings = new HashSet<String>();
 		for(String cls : SemSimOWLFactory.getAllSubclasses(ont, parentclass, true)){
@@ -361,7 +567,14 @@ public class SemSimOWLFactory {
 		return indstrings;
 	}
 	
-	// Check whether an individual with a given IRI is in an ontology
+	
+	/**
+	 * @param indtocheck
+	 * @param parent
+	 * @param ontology
+	 * @return Whether an individual with a given IRI is in an ontology
+	 * @throws OWLException
+	 */
 	public static boolean indExistsInClass(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
 		OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
 		Set<OWLIndividual> inds = parentclass.getIndividuals(ontology);
@@ -373,14 +586,21 @@ public class SemSimOWLFactory {
 		return false;
 	}
 
-	// Check whether an individual with a given IRI is in an ontology
-	public static boolean indExistsInTree(String indtocheck, String parent, OWLOntology ontology) throws OWLException {
-		Set<String> allsubclasses = SemSimOWLFactory.getAllSubclasses(ontology, parent, true);
+	
+	/**
+	 * @param indIRItocheck IRI of an OWL individual
+	 * @param parentclsIRI IRI of hierarchy root class to check for individual
+	 * @param ontology The ontology to look within
+	 * @return Whether an individual with a given IRI is an instance of a given class hierarchy in an ontology
+	 * @throws OWLException
+	 */
+	public static boolean indExistsInTree(String indIRItocheck, String parentclsIRI, OWLOntology ontology) throws OWLException {
+		Set<String> allsubclasses = SemSimOWLFactory.getAllSubclasses(ontology, parentclsIRI, true);
 		for (String oneclass : allsubclasses) {
 			OWLClass oneowlclass = factory.getOWLClass(IRI.create(oneclass));
 			Set<OWLIndividual> inds = oneowlclass.getIndividuals(ontology);
 			for (OWLIndividual ind : inds) {
-				if (ind.asOWLNamedIndividual().getIRI().toString().contentEquals(indtocheck)) {
+				if (ind.asOWLNamedIndividual().getIRI().toString().contentEquals(indIRItocheck)) {
 					return true;
 				}
 			}
@@ -389,6 +609,11 @@ public class SemSimOWLFactory {
 	}
 
 	
+	/**
+	 * @param ont The ontology containing the OWLEntity
+	 * @param ent An OWLEntity
+	 * @return The RDF:label annotations on a given OWLEntity
+	 */
 	public static String[] getRDFLabels(OWLOntology ont, OWLEntity ent) {
 		OWLLiteral val = null;
 		OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
@@ -406,10 +631,23 @@ public class SemSimOWLFactory {
 	}
 	
 	
+	/**
+	 * @param ont The ontology containing the OWLEntity
+	 * @param ent The OWLEntity to check for RDF:labels
+	 * @return The first RDF:label annotation on a given OWLEntity
+	 */
 	public static String getRDFLabel(OWLOntology ont, OWLEntity ent){
 		return getRDFLabels(ont,ent)[0];
 	}
 
+	
+	/**
+	 * Set the RDF:label annotation for a given OWL individual
+	 * @param ontology The ontology containing the individual
+	 * @param annind The individual to annotate
+	 * @param value The RDF:label value
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void setRDFLabel(OWLOntology ontology, OWLNamedIndividual annind, String value, OWLOntologyManager manager) {
 		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
@@ -427,24 +665,38 @@ public class SemSimOWLFactory {
 		}
 	}
 
-	public static void setRDFLabel(OWLOntology ontology, OWLClass ent,
-			String value, OWLOntologyManager manager) {
+	
+	/**
+	 * Set the RDF:label for a given OWL class (removes all previously applied RDF:labels)
+	 * @param ontology The ontology containing the class
+	 * @param cls The OWL class
+	 * @param value The RDF:label value
+	 * @param manager An OWLOntologyManager
+	 */
+	public static void setRDFLabel(OWLOntology ontology, OWLClass cls, String value, OWLOntologyManager manager) {
 		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
-			Set<OWLAnnotation> anns = ent.getAnnotations(ontology, label);
+			Set<OWLAnnotation> anns = cls.getAnnotations(ontology, label);
 			for (OWLAnnotation ann : anns) {
-				OWLAnnotationSubject annsub = ent.getIRI();
+				OWLAnnotationSubject annsub = cls.getIRI();
 				OWLAxiom removeax = factory.getOWLAnnotationAssertionAxiom(annsub,ann);
 				manager.applyChange(new RemoveAxiom(ontology, removeax));
 			}
 			OWLAnnotation newann = factory.getOWLAnnotation(
 					factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()), factory.getOWLLiteral(value, "en"));
-			OWLAxiom ax = factory.getOWLAnnotationAssertionAxiom(ent.getIRI(),newann);
+			OWLAxiom ax = factory.getOWLAnnotationAssertionAxiom(cls.getIRI(),newann);
 			manager.applyChange(new AddAxiom(ontology, ax));
 		}
 	}
 	
-	// This removes all existing RDF comments and creates a new comment using "value"
+	
+	/**
+	 * Set the RDF:comment for a an OWLEntity (removes all existing RDF:comment annotations)
+	 * @param ontology The ontology containing the OWLEntity
+	 * @param ent The OWLEntity
+	 * @param value The RDF:comment value
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void setRDFComment(OWLOntology ontology, OWLEntity ent, String value, OWLOntologyManager manager) {
 		if(value!=null && !value.contentEquals("")){
 			OWLAnnotationProperty label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
@@ -460,68 +712,64 @@ public class SemSimOWLFactory {
 			manager.applyChange(new AddAxiom(ontology, ax));
 		}
 	}
-
-	public static void replaceRDFcomment(String oldannotation, String newannotation, String uri, OWLOntology ontology, 
-		OWLOntologyManager manager) {
-		try {
-			OWLAnnotation targetann = null;
-			OWLNamedIndividual _real = factory.getOWLNamedIndividual(IRI.create(uri));
-			// Go through both the real and property individuals, change their
-			// comment annotation
-			OWLAnnotationProperty comment = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
-			for (OWLAnnotation ann : _real.getAnnotations(ontology,comment)) {
-				if (ann.getValue() instanceof OWLLiteral) {
-					OWLLiteral val = (OWLLiteral) ann.getValue();
-					if (val.getLiteral().contentEquals(oldannotation)) {
-						targetann = ann;
-					}
-				}
-			}
-
-			// If the individual was previously annotated, remove it so the new
-			// annotation can replace it
-			if (targetann != null) {
-				OWLAxiom removeax = factory.getOWLAnnotationAssertionAxiom(_real.getIRI(), targetann);
-				manager.applyChange(new RemoveAxiom(ontology,removeax));
-			}
-			// Add the new annotation
-			if (!newannotation.contentEquals("")) {
-				OWLAnnotation commentAnno = factory.getOWLAnnotation(
-						factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI()),
-						factory.getOWLLiteral(newannotation, "en"));
-
-				OWLAxiom ax = factory.getOWLAnnotationAssertionAxiom(_real.asOWLNamedIndividual().getIRI(), commentAnno);
-				manager.applyChange(new AddAxiom(ontology, ax));
-			}
-		} catch (OWLOntologyChangeException r) {
-			System.err.println("Could not edit ontology: " + r.getMessage());
-		}
-	}
 	
 	
+	/**
+	 * Add an ontology-level annotation that has an OWLEntity as its object
+	 * @param ont The ontology to annotate
+	 * @param property IRI of the OWLAnnotationProperty to use in the annotation
+	 * @param ent IRI of the OWLEntity that is the object in the annotation
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void addOntologyAnnotation(OWLOntology ont, String property, OWLEntity ent, OWLOntologyManager manager){
 		OWLAnnotationValue entiri = ent.getIRI();
 		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(property)), entiri);
 		manager.applyChange(new AddOntologyAnnotation(ont, anno));
 	}
 	
+	
+	/**
+	 * Add an ontology-level annotation that has a language-specific OWLLiteral as its object 
+	 * @param ont The ontology to annotate
+	 * @param property IRI of the OWLAnnotationProperty to use in the annotation
+	 * @param val The OWLLiteral value used in the annotation
+	 * @param lang The language for the OWLLiteral
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void addOntologyAnnotation(OWLOntology ont, String property, String val, String lang, OWLOntologyManager manager){
 		OWLLiteral lit = factory.getOWLLiteral(val,lang);
 		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(IRI.create(property)), lit);
 		manager.applyChange(new AddOntologyAnnotation(ont, anno));
 	}
 
+	
+	/**
+	 * Add an ontology-level annotation that has an OWLLiteral as its object (English is assumed
+	 * for the language of the OWLLiteral)
+	 * @param ont The ontology to annotate
+	 * @param property IRI of the OWLAnnotationProperty used in the annotation
+	 * @param val The OWLLiteral value used in the annotation
+	 * @param manager An OWLOntologyManager
+	 */
 	public static void addOntologyAnnotation(OWLOntology ont, IRI property, String val, OWLOntologyManager manager){
 		OWLLiteral lit = factory.getOWLLiteral(val,"en");
 		OWLAnnotation anno = factory.getOWLAnnotation(factory.getOWLAnnotationProperty(property), lit);
 		manager.applyChange(new AddOntologyAnnotation(ont, anno));
 	}
 	
-	public static Set<String> getAllSubclasses(OWLOntology ont, String parent, Boolean includeparent) throws OWLException{
+	
+	/**
+	 * @param ont The ontology containing the parent class
+	 * @param parentIRI IRI of the parent class
+	 * @param includeparent Whether to include the parent in the returned class list
+	 * @return A list of all subclasses subsumed by a given parent class
+	 * @throws OWLException
+	 */
+	public static Set<String> getAllSubclasses(OWLOntology ont, String parentIRI, Boolean includeparent) throws OWLException{
 		// traverse all nodes that belong to the parent
 		Set<String> nodes  = new HashSet<String>();
-		if(includeparent) nodes.add(parent);
-		OWLClass parentclass = factory.getOWLClass(IRI.create(parent));
+		if(includeparent) nodes.add(parentIRI);
+		OWLClass parentclass = factory.getOWLClass(IRI.create(parentIRI));
 		Set<OWLClassExpression> set = parentclass.getSubClasses(ont);
 	    for(OWLClassExpression node : set){
 		    // store node information
@@ -533,63 +781,60 @@ public class SemSimOWLFactory {
 	    return nodes;
 	}
 		
-	// Change this to return all the datastructures associated with the nested components
-	public static Set<DataStructure> getCodewordsAssociatedWithNestedSubmodels(Submodel sub) {
-		Set<Submodel> associatedcomponents = traverseNestedComponentTreeForDataStructures(sub);
-		Set<DataStructure> newcdwds = new HashSet<DataStructure>();
-		for(Submodel submod : associatedcomponents){
-			newcdwds.addAll(submod.getAssociatedDataStructures());
-		}
-		return newcdwds;
-	}
 	
 	
-	public static Set<Submodel> traverseNestedComponentTreeForDataStructures(Submodel sub) {
-	    // traverse all nodes that belong to the parent
-		Set<Submodel> nodes  = new HashSet<Submodel>();
-		ArrayList<Submodel> set = sub.getSubmodels();
-	    for(Submodel node : set){
-		    // store node information
-		    nodes.add(node);
-		    // traverse children recursively
-		    traverseNestedComponentTreeForDataStructures(node);
-	    }
-	    return nodes;
-	}
-
-	public static String getIRIfragment(String uri) {
-		String result = uri;
-		if (!uri.contentEquals("")) {
-			if (uri.contains("#")) 
-				result = uri.substring(uri.lastIndexOf("#") + 1, uri.length());
-			else if (uri.contains("/"))
-				result = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-			else if (uri.startsWith("http://identifiers.org"))
-				result = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
-			else if (uri.startsWith("urn:miriam:"))
-				result = uri.substring(uri.lastIndexOf(":") + 1, uri.length());
+	/**
+	 * @param iri An IRI as a String
+	 * @return The fragment of an input IRI
+	 */
+	public static String getIRIfragment(String iri) {
+		String result = iri;
+		if (!iri.contentEquals("")) {
+			if (iri.contains("#")) 
+				result = iri.substring(iri.lastIndexOf("#") + 1, iri.length());
+			else if (iri.contains("/"))
+				result = iri.substring(iri.lastIndexOf("/") + 1, iri.length());
+			else if (iri.startsWith("http://identifiers.org"))
+				result = iri.substring(iri.lastIndexOf("/") + 1, iri.length());
+			else if (iri.startsWith("urn:miriam:"))
+				result = iri.substring(iri.lastIndexOf(":") + 1, iri.length());
 		}
 		return result;
 	}
 	
-	public static String getURIdecodedFragmentFromIRI(String uri){
-		return URIdecoding(getIRIfragment(uri));
+	
+	/**
+	 * @param iri An IRI as a String
+	 * @return A URL-decoded version of an IRI's fragment
+	 */
+	public static String getURIdecodedFragmentFromIRI(String iri){
+		return URIdecoding(getIRIfragment(iri));
 	}
 	
-	public static String getNamespaceFromIRI(String uri) {
-		if (uri.contains("#")) {
-			return uri.substring(0, uri.indexOf("#") + 1);
+	
+	/**
+	 * @param iri An IRI as a String
+	 * @return The namespace of a given IRI
+	 */
+	public static String getNamespaceFromIRI(String iri) {
+		if (iri.contains("#")) {
+			return iri.substring(0, iri.indexOf("#") + 1);
 		} 
-		if (uri.startsWith("http://purl.obolibrary.org/obo/")) { // To deal with CHEBI and Mouse Adult Gross Anatomy Ontology
-			return uri.substring(0, uri.lastIndexOf("_"));
+		if (iri.startsWith("http://purl.obolibrary.org/obo/")) { // To deal with CHEBI and Mouse Adult Gross Anatomy Ontology
+			return iri.substring(0, iri.lastIndexOf("_"));
 		} 
-		if(uri.startsWith("urn:miriam:")){
-			return uri.substring(0, uri.lastIndexOf(":") + 1);
+		if(iri.startsWith("urn:miriam:")){
+			return iri.substring(0, iri.lastIndexOf(":") + 1);
 		}
-		return uri.substring(0, uri.lastIndexOf("/") + 1);
+		return iri.substring(0, iri.lastIndexOf("/") + 1);
 	}
 
-	// Replac special characters that shouldn't be used in an IRI
+	
+	/**
+	 * Replace special characters that shouldn't be used in an IRI
+	 * @param word An input String
+	 * @return A URL-encoded version of the String
+	 */
 	public static String URIencoding(String word) {
 		String result = word;
 		result = result.replace(" ", "_");
@@ -604,7 +849,13 @@ public class SemSimOWLFactory {
 		return result;
 	}
 	
-	public static String URIdecoding(String uri) {
+	
+	/**
+	 * Used internally to perform URL decoding on Strings
+	 * @param uri An input URI
+	 * @return A URL-decoded version of the input URI
+	 */
+	private static String URIdecoding(String uri) {
 		String result = uri;
 		try {
 			result = URLDecoder.decode(result, "UTF-8");
@@ -615,11 +866,28 @@ public class SemSimOWLFactory {
 		return result;
 	}
 	
+	
+	/**
+	 * Generate a SemSim-compliant URI for an individual representing the physical property 
+	 * simulated by a {@link DataStructure}
+	 * @param model The SemSim model containing the {@link DataStructure}
+	 * @param ds The {@link DataStructure}
+	 * @return A SemSim-compliant URI for an individual representing the physical property 
+	 * simulated by a {@link DataStructure}
+	 */
 	public static URI getURIforPhysicalProperty(SemSimModel model, DataStructure ds){
 		return URI.create(model.getNamespace() + URIencoding(ds.getName()) + "_property");
 	}
 	
 
+	/**
+	 * Retrieve the RDF:comment on an OWLEntity. Returns an empty String if there 
+	 * are no RDF:comments or if multiple RDF:comments exist.
+	 * @param ont The ontology containing the OWLEntity
+	 * @param ent The OWLEntity
+	 * @return The RDF:comment on an OWLEntity, if there is exactly one. If zero or more
+	 * than one, returns an empty String.
+	 */
 	public static String getRDFcomment(OWLOntology ont, OWLEntity ent) {
 		String commentstring = "";
 		OWLAnnotationProperty comment = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_COMMENT.getIRI());
@@ -637,6 +905,13 @@ public class SemSimOWLFactory {
 		return commentstring;
 	}
 		
+	
+	/**
+	 * If a given IRI matches an IRI in an input set of IRIs, make it unique by appending it with an integer
+	 * @param iritoappend The IRI to append with an integer until it is different from the IRIs in the input set
+	 * @param existingmembers The set of other IRIs
+	 * @return An IRI that does not match any of the IRIs in the input set
+	 */
 	public static String generateUniqueIRIwithNumber(String iritoappend, Set<String> existingmembers) {
 		int x = 0;
 		iritoappend = iritoappend + x;

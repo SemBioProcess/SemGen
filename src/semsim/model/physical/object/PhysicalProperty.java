@@ -12,6 +12,18 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class for representing the measurable or derivable characteristics that
+ * physical entities, processes and dependencies can bear.
+ * 
+ * Analogous to 'OPB:Physics property':
+ * A physics attribute that is a scalar, vector or tensor descriptor
+ * of a physics continuant, physics processural entity or physics 
+ * dependency that is observable and measureable by physical means or
+ * derived by computations on such measures.
+ * @author mneal
+ *
+ */
 public class PhysicalProperty extends PhysicalModelComponent implements ReferenceTerm{
 		
 	public PhysicalProperty(String label, URI uri) {
@@ -20,6 +32,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		setName(label);
 	}
 
+	@Override
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
 			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
@@ -27,13 +40,13 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		return null;
 	}
 	
+	@Override
 	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
-	/**
-	 * @return The name of the knowledge base that contains the URI used as the annotation value
-	 */
+	/** @return The name of the knowledge base that contains the URI used 
+	 * as the PhysicalProperty's annotation value */
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
 		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
@@ -71,6 +84,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 		
 	}
 	
+	@Override
 	public void removeFromModel(SemSimModel model) {
 		model.removePhysicalProperty(this);
 	}

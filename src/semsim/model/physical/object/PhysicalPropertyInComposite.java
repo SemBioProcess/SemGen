@@ -12,6 +12,12 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class for representing the physical property component of a composite
+ * annotation. The SemSim group recommends only using OPB physical property
+ * terms when annotating instances of this class.
+ * @author mneal
+ */
 public class PhysicalPropertyInComposite extends PhysicalModelComponent implements ReferenceTerm{
 		
 	public PhysicalPropertyInComposite(String label, URI uri) {
@@ -20,7 +26,7 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 		setName(label);
 	}
 
-	
+	@Override
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary lib){
 		if(hasPhysicalDefinitionAnnotation()){
 			return new ReferenceOntologyAnnotation(SemSimRelation.HAS_PHYSICAL_DEFINITION, referenceuri, getDescription(), lib);
@@ -28,13 +34,12 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 		return null;
 	}
 	
+	@Override
 	public URI getPhysicalDefinitionURI() {
 		return URI.create(referenceuri.toString());
 	}
 	
-	/**
-	 * @return The name of the knowledge base that contains the URI used as the annotation value
-	 */
+	@Override
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
 		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
@@ -68,9 +73,10 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 
 	@Override
 	public PhysicalPropertyInComposite addToModel(SemSimModel model) {
-		return model.addAssociatePhysicalProperty(this);
+		return model.addPhysicalPropertyForComposite(this);
 	}
 	
+	@Override
 	public void removeFromModel(SemSimModel model) {
 		model.removeAssociatePhysicalProperty(this);
 	}
