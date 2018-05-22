@@ -19,54 +19,24 @@ public class BioModelsSearch {
         // Example queries - "CHEBI:15355", "CHEBI:27897"
 
         for(String keyword : queryArray) {
-            String[] biomodelResultSetByChEBI = client.getModelsIdByChEBI(keyword);
-            String[] biomodelResultSetByChEBIId = client.getModelsIdByChEBIId(keyword);
-            String[] biomodelResultSetByGO = client.getModelsIdByGO(keyword);
-            String[] biomodelResultSetByGOId = client.getModelsIdByGOId(keyword);
-            String[] biomodelResultSetByName = client.getModelsIdByName(keyword);
-            String[] biomodelResultSetByPerson = client.getModelsIdByPerson(keyword);
-            String[] biomodelResultSetByPublication = client.getModelsIdByPublication(keyword);
-            String[] biomodelResultSetByTaxonomy = client.getModelsIdByTaxonomy(keyword);
-            String[] biomodelResultSetByTaxonomyId = client.getModelsIdByTaxonomyId(keyword);
-            String[] biomodelResultSetByUniprot = client.getModelsIdByUniprot(keyword);
-            String[] biomodelResultSetByUniprotId = client.getModelsIdByUniprotId(keyword);
-
-
-            //TODO Inlclude the other BioModel queries.
-//            if (biomodelResultSet != null) {
             Set<String> searchResults = new HashSet<String>();
 
-            addAllIfNotNull(searchResults, biomodelResultSetByChEBI);
-            addAllIfNotNull(searchResults, biomodelResultSetByChEBIId);
-            addAllIfNotNull(searchResults, biomodelResultSetByGO);
-            addAllIfNotNull(searchResults, biomodelResultSetByGOId);
-            addAllIfNotNull(searchResults, biomodelResultSetByName);
-            addAllIfNotNull(searchResults, biomodelResultSetByPerson);
-            addAllIfNotNull(searchResults, biomodelResultSetByPublication);
-            addAllIfNotNull(searchResults, biomodelResultSetByTaxonomy);
-            addAllIfNotNull(searchResults, biomodelResultSetByTaxonomyId);
-            addAllIfNotNull(searchResults, biomodelResultSetByUniprot);
-            addAllIfNotNull(searchResults, biomodelResultSetByUniprotId);
+            addAllIfNotNull(searchResults, client.getModelsIdByChEBI(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByChEBIId(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByGO(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByGOId(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByName(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByPerson(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByPublication(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByTaxonomy(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByTaxonomyId(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByUniprot(keyword));
+            addAllIfNotNull(searchResults, client.getModelsIdByUniprotId(keyword));
 
             compareResults.add(searchResults);
-
-//            }
         }
 
-//        Map<String, List<SimpleModel>> biomodelResultSet = client.getModelsIdByChEBIIds(queryArray);
-//        Iterator iter = biomodelResultSet.keySet().iterator();
-//        while (iter.hasNext()) {
-//            Set<String> searchResults = new HashSet<String>();
-//            String CHEBIId = (String) iter.next();
-//            ArrayList modelList = (ArrayList) biomodelResultSet.get(CHEBIId);
-//            Iterator modelIter = modelList.iterator();
-//            while (modelIter.hasNext()) {
-//                SimpleModel model = (SimpleModel) modelIter.next();
-//                searchResults.add(model.getName());
-//            }
-//            // Store the list of models found for each keyword
-//            compareResults.add(searchResults);
-//        }
+
 
         // Find the intersection of the results for each keyword
         Set<String> finalResults = new HashSet<String>();
