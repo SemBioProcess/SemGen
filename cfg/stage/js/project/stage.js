@@ -123,36 +123,38 @@ function Stage(graph, stagestate) {
 	});
 
 	$(".searchString").keyup(function() {
-		stage.stageSearch($(this).val());
-	});
-
-	this.stageSearch = function(searchString) {
-        if( searchString ) {
-            console.log("Showing search results");
-            $(".stageSearch .searchValueContainer .searchResults").show();
+        searchString = $(this).val();
+        if (searchString && event.keyCode === 13) {
             $(".searchResults").empty();
+            $(".stageSearch .searchValueContainer .searchResults").show();
 
-            // Check search filter
-            var modelSearchChecked = $("#checkModel").is(':checked');
-            var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
-            var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
-
-            if (modelSearchChecked) {
-                sender.search(searchString);
-            }
-
-            // Search for nodes in Project Tab
-            if (nodeNameSearchChecked) {
-                stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
-            }
-            if (nodeDescSearchChecked) {
-                stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
-            }
+            stage.stageSearch(searchString);
         }
         else {
             $(".stageSearch .searchValueContainer .searchResults").hide();
         }
-	}
+    });
+
+    this.stageSearch = function(searchString) {
+        console.log("Showing search results");
+
+        // Check search filter
+        var modelSearchChecked = $("#checkModel").is(':checked');
+        var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
+        var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
+
+        if (modelSearchChecked) {
+            sender.search(searchString);
+        }
+
+        // Search for nodes in Project Tab
+        if (nodeNameSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+        }
+        if (nodeDescSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+        }
+    }
 
 	this.nodeSearch = function(visibleNodes, searchString, filter) {
         var nodeSearchResultSet = {};
@@ -468,6 +470,7 @@ function makeResultSet(searchResultSet, stage) {
         }
         else if (searchResultSet.source == "BioModels") {
         	item.appendChild(document.createTextNode(searchResultSet.results[i]));
+        	//TODO On click, get SBML code and load into SemGen.
 		}
         else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
