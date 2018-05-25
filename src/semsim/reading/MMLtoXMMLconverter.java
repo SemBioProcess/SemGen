@@ -12,10 +12,21 @@ import JSim.data.NamedVal;
 import JSim.util.Xcept;
 import semsim.utilities.ErrorLog;
 
+/**
+ * Class for converting JSim's MML code into JSim's XMML format
+ * @author mneal
+ *
+ */
 public class MMLtoXMMLconverter {
 
 	protected static Document doc;
 
+	/**
+	 * Convert JSim MML code into JSim XMML code
+	 * @param mmlcode The raw MML code
+	 * @param modelname Name of model to convert
+	 * @return XMML representation of the model
+	 */
 	public static Document convert(String mmlcode, String modelname) {
 
 		try{

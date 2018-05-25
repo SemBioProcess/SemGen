@@ -4,15 +4,33 @@ import java.net.URI;
 
 import semsim.owl.SemSimOWLFactory;
 
+/**
+ * Class for working with annotations formatted according to 
+ * MIRIAM guidelines
+ * @author mneal
+ *
+ */
 public class MIRIAMannotation {
 	public String rdflabel;
 	public URI fulluri;
 	
+	/**
+	 * Constructor
+	 * @param uristring The URI referenced in the annotation
+	 * @param rdflabel RDF label for the annotation
+	 */
 	public MIRIAMannotation(String uristring, String rdflabel){
 		this.rdflabel = rdflabel;
 		fulluri = URI.create(uristring);
 	}
 	
+	
+	/**
+	 * Converts URIs that used older "urn:miriam..." formatting into
+	 * identifiers.org-formatted URIs
+	 * @param urn An input MIRIAM URN
+	 * @return Identifiers.org-formatted version of the URN
+	 */
 	protected static String convertOldMiriamURNtoURI(String urn){
 		String ns = null;
 		if(urn.startsWith("urn:miriam:obo.go")){

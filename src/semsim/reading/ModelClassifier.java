@@ -15,8 +15,17 @@ import org.sbml.jsbml.SBMLReader;
 
 import semsim.fileaccessors.ModelAccessor;
 
+/**
+ * Class for determining the format in which models and associated files are stored 
+ * @author mneal
+ *
+ */
 public class ModelClassifier {
 	
+	/**
+	 * Enum of the different file types supported by SemSim
+	 * @author mneal
+	 */
 	public static enum ModelType{
 		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
 		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
@@ -37,14 +46,21 @@ public class ModelClassifier {
 			filefilter = filter;
 		}
 		
+		/** @return The extension of the ModelType */
 		public String getExtension() {
 			return extension;
 		}
 		
+		/** @return The format of the ModelType (for use in OMEX manifest files)*/
 		public String getFormat() {
 			return format[0];
 		}
 		
+		/**
+		 * @param teststring An input String
+		 * @return Whether the input String matches the format of the instantiated
+		 * ModelType
+		 */
 		public boolean matchesFormat(String teststring) {
 			for (String frmt : format) {
 				if (teststring.contains(frmt)) return true;
@@ -53,10 +69,16 @@ public class ModelClassifier {
 			
 		}
 		
+		/** @return FileFilter of the ModelType */
 		public FileFilter getFileFilter() {
 			return filefilter;
 		}
 		
+		/**
+		 * @param tomatch An input FileFilter
+		 * @return Whether an input FileFilter matches the FileFilter
+		 * for the instantiated ModelType
+		 */
 		public boolean fileFilterMatches(FileFilter tomatch) {
 			if(filefilter != null)
 				return filefilter.equals(tomatch);
@@ -64,11 +86,26 @@ public class ModelClassifier {
 		}
 	}
 	
+	
+	/**
+	 * Classify the model referred to by a {@link ModelAccessor} location
+	 * @param accessor A {@link ModelAccessor}
+	 * @return The ModelType of the model referred to by the input {@link ModelAccessor}
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static ModelType classify(ModelAccessor accessor) throws JDOMException, IOException{
 		return classify(accessor.getFile());
 	}
 	
 	
+	/**
+	 * Classify a model referred to by a File
+	 * @param file An input file location
+	 * @return The ModelType of the file
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static ModelType classify(File file) throws JDOMException, IOException {
 		return classify(file.getPath());
 	}
@@ -77,7 +114,7 @@ public class ModelClassifier {
 	 * Return the type of the model based on the file extension
 	 * @throws IOException 
 	 * @throws JDOMException 
-	 **/
+	 */
 	public static ModelType classify(String file) throws JDOMException, IOException{
 		ModelType type = ModelType.UNKNOWN;
 				if (file.toLowerCase().endsWith(".omex")){
@@ -106,11 +143,10 @@ public class ModelClassifier {
 	}
 	
 	/**
-	 * Verifies the the indicated document is well-formed SBML
-	 * @param file to check
-	 * @return
+	 * Verifies whether the indicated document is well-formed SBML
+	 * @param file An input File
+	 * @return Whether the input file is well-formed SBML
 	 */
-	
 	public static Boolean isValidSBML(File file){
 		System.out.println("Testing SBML validity");
 		try{
@@ -130,9 +166,9 @@ public class ModelClassifier {
 	}
 	
 	/**
-	 * Verifies the the indicated document is well-formed CellML
-	 * @param file to check
-	 * @return
+	 * Verifies whether the indicated document is well-formed CellML
+	 * @param file An input File
+	 * @return Whether the File is a well-formed CellML model
 	 */
 	public static Boolean isValidCellMLmodel(File file) throws JDOMException, IOException{
 		SAXBuilder builder = new SAXBuilder();
@@ -149,6 +185,14 @@ public class ModelClassifier {
 		return false;
 	}
 	
+	
+	/**
+	 * Verify that a given file name ends with an extension that has a corresponding
+	 * OMEX format identifier
+	 * @param filename A filename
+	 * @param format An OMEX format (e.g. "http://identifiers.org/combine.specifications/sbml")
+	 * @return Whether the extension on the file name is associated with the input OMEX format
+	 */
 	public static boolean hasValidFileExtension(String filename, String format) {
 		for (ModelType type : ModelType.values()) {
 			if (filename.endsWith(".xml")) {
@@ -161,6 +205,11 @@ public class ModelClassifier {
 		return false;
 	}
 	
+	
+	/**
+	 * @param formatstring An OMEX file format (e.g. "http://identifiers.org/combine.specifications/sbml")
+	 * @return The ModelType associated with the input format
+	 */
 	public static ModelType getTypebyFormat(String formatstring) {
 		for (ModelType type : ModelType.values()) {
 			if (type.matchesFormat(formatstring)) return type;
@@ -168,6 +217,11 @@ public class ModelClassifier {
 		return ModelType.UNKNOWN;
 	}
 
+	
+	/**
+	 * @param filter A FileFilter
+	 * @return The ModelType associated with the input FileFilter
+	 */
 	public static ModelType getTypebyFilter(FileFilter filter) {
 		for (ModelType type : ModelType.values()) {
 			if (type.fileFilterMatches(filter)) return type;
@@ -175,6 +229,11 @@ public class ModelClassifier {
 		return ModelType.UNKNOWN;
 	}
 	
+	
+	/**
+	 * @param extension A file extension (e.g. ".sbml")
+	 * @return The ModelType associated with the input file extension
+	 */
 	public static ModelType getTypebyExtension(String extension) {
 		for (ModelType type : ModelType.values()) {
 			if (type.extension.matches(extension)) return type;
@@ -182,10 +241,20 @@ public class ModelClassifier {
 		return ModelType.UNKNOWN;
 	}
 	
+	
+	/**
+	 * @param format An OMEX file format
+	 * @return Whether the input file format is a valid OMEX computational model file format
+	 */ 
 	public static boolean hasValidOMEXmodelFileFormat(String format) {
 		return format.matches(".*/sbml.*$") || format.endsWith("cellml") || ModelType.SEMSIM_MODEL.matchesFormat(format);
 	}
 	
+	
+	/**
+	 * @param format An OMEX file format
+	 * @return Whether the input file format is a valid OMEX annotation file format
+	 */
 	public static boolean hasValidOMEXannotationFileFormat(String format) {
 		return format.endsWith("casa") || format.equals("http://identifiers.org/combine.specifications/omex-metadata");
 	}

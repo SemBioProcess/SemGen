@@ -769,7 +769,7 @@ public class SemSimOWLreader extends ModelReader {
 										}
 									}
 									
-									CellMLreader.whiteBoxFunctionalSubmodelEquations(varmathmlel, subname, semsimmodel, theds);
+									CellMLreader.whiteBoxFunctionalSubmodelEquation(varmathmlel, subname, semsimmodel, theds);
 									
 									if(ode && (theds instanceof MappableVariable)){
 										MappableVariable mv = (MappableVariable)theds;
