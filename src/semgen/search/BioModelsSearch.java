@@ -2,14 +2,15 @@ package semgen.search;
 
 import semgen.stage.serialization.SearchResultSet;
 import uk.ac.ebi.biomodels.ws.BioModelsWSClient;
+import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
 import java.util.*;
 
 public class BioModelsSearch {
+    public static BioModelsWSClient client = new BioModelsWSClient();
     public static final String SourceName = "BioModels";
 
     public static SearchResultSet bioModelsSearch(String searchString) throws Exception {
-        BioModelsWSClient client = new BioModelsWSClient();
         System.out.println("Searching BioModels...");
 
         List<Set<String>> compareResults = new ArrayList<Set<String>>();
@@ -45,19 +46,23 @@ public class BioModelsSearch {
             intersectingResults.retainAll(resultSet);
         }
         String [] finalResultsById = intersectingResults.toArray(new String[intersectingResults.size()]);
-        String [] finalResultsByName = new String[finalResultsById.length];
+//        String [] finalResultsByName = new String[finalResultsById.length];
+//
+//        for (int i = 0; i < finalResultsById.length; i++) {
+//            finalResultsByName[i] = client.getModelNameById(finalResultsById[i]); //This add a minute of search time...
+//        }
 
-        for (int i = 0; i < finalResultsById.length; i++) {
-            finalResultsByName[i] = client.getModelNameById(finalResultsById[i]); //This add a minute of search time...
-        }
-
-        return new SearchResultSet(SourceName, finalResultsByName);
+        return new SearchResultSet(SourceName, finalResultsById);
     }
 
     public static <String> void addAllIfNotNull(Set<String> list, String[] c) {
         if (c != null) {
             list.addAll(Arrays.asList(c));
         }
+    }
+
+    public static String getModelSBMLById(String id) throws BioModelsWSException {
+        return client.getModelSBMLById(id);
     }
 
 }

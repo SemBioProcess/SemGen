@@ -470,7 +470,6 @@ function makeResultSet(searchResultSet, stage) {
         }
         else if (searchResultSet.source == "BioModels") {
         	item.appendChild(document.createTextNode(searchResultSet.results[i]));
-        	//TODO On click, get SBML code and load into SemGen.
 		}
         else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
@@ -486,6 +485,9 @@ function makeResultSet(searchResultSet, stage) {
             var id = $(this).data("id");
             if (source == "Example models") {
                 sender.addModelByName(source, name);
+            }
+            else if (source == "BioModels") {
+				sender.addModelByName(source, name);
             }
             else if (source.includes("Nodes in Project")) {
                 var visibleNodes = stage.graph.getVisibleNodes();

@@ -20,9 +20,13 @@ import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelClassifier.ModelType;
+import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -82,9 +86,23 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 		
-		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
-			if(source.equals(CompositeAnnotationSearch.SourceName)) {
-				ModelAccessor file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+		public void onAddModelByName(String source, String modelName) throws IOException, BioModelsWSException {
+			ModelAccessor file = null;
+			if (source.equals(CompositeAnnotationSearch.SourceName)) {
+				file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+			}
+			else if (source.equals("BioModels")) {
+				System.out.println("Retrieving SBML file from BioModels...");
+				File tempBioModelFile = File.createTempFile(modelName, ".xml");
+				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
+				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
+				bw.write(bioModelString);
+				bw.close();
+				file = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
+				tempBioModelFile.deleteOnExit();
+			}
+
+			if (file != null) {
 				LoadSemSimModel loader = new LoadSemSimModel(file, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
@@ -96,7 +114,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				_commandSender.addModel(info.modelnode);
 			}
 		}
-		
+
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
 
 			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
