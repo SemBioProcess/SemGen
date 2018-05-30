@@ -1147,6 +1147,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.physicalproperties.remove(pp);
 	}
 	
+	@Override
 	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		for (Submodel sm : submodels) {
 			sm.replaceDataStructures(dsmap);

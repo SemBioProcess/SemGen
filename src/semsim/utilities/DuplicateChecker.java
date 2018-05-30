@@ -42,14 +42,21 @@ public class DuplicateChecker {
 		}
 	}
 	
+	
+	/**
+	 * Make sure that process participants are not duplicates of {@link CompositePhysicalEntity}s
+	 * already in the model
+	 * @param proc A {@link PhysicalProcess} object
+	 * @param model The {@link SemSimModel} containing the process
+	 */
 	private static void removeDuplicateProcessParticipants(PhysicalProcess proc, SemSimModel model) {
 		for (PhysicalEntity part : proc.getParticipants()) {
-				for (CompositePhysicalEntity proccpe : model.getCompositePhysicalEntities()) {
-					if (part.equals(proccpe)) {
-						proc.replaceParticipant(part, proccpe);
-					}
+			for (CompositePhysicalEntity proccpe : model.getCompositePhysicalEntities()) {
+				if (part.equals(proccpe)) {
+					proc.replaceParticipant(part, proccpe);
 				}
 			}
+		}
 	}
 	
 }
