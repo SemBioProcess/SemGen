@@ -28,11 +28,26 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
 
+/**
+ * Class for reading RDF-formatted SemSim annotations as stored within XML-formatted 
+ * modeling documents (CellML, SBML, or JSim project files).
+ * @author mneal
+ *
+ */
 public class SemSimRDFreader extends AbstractRDFreader{
 
 	private Map<String, Submodel> submodelURIandObjectMap = new HashMap<String, Submodel>();
 	protected ModelAccessor modelaccessor;
 
+	
+	/**
+	 * Constructor
+	 * @param accessor Location of file containing RDF-formatted annotations
+	 * @param semsimmodel The SemSimModel in which to store the annotations
+	 * @param rdfasstring Non-SemSim related metadata also stored in the RDF element
+	 * (e.g. curatorial metadata stored in a CellML model)
+	 * @param sslibrary A SemSimLibrary instance
+	 */
 	public SemSimRDFreader(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring, SemSimLibrary sslibrary) {
 		super(accessor, semsimmodel, sslibrary);
 				
@@ -44,13 +59,12 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		//If an explicit namespace is specified with the "model" prefix, use it
 		semsimmodel.setNamespace(getModelNamespaceFromRDF());
 	}
-	
-	
-	protected boolean isCASAreader(){
-		return false;
-	}
 
 	
+	/**
+	 * Create a map that links the RDF URIs representing SemSim submodels to their
+	 * corresponding {@link Submodel} objects in the SemSim model
+	 */
 	private void createSemSimSubmodelURIandObjectMap(){
 		
 		ResIterator subit = rdf.listSubjectsWithProperty(SemSimRelation.HAS_NAME.getRDFproperty());
@@ -74,6 +88,8 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		}
 	}
 	
+	
+	/** @return The namespace of the model used in the RDF-formatted SemSim model annotations */
 	public String getModelNamespaceFromRDF(){
 		String ns = rdf.getNsPrefixURI("model");
 		
@@ -135,11 +151,11 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				semsimmodel.getCurationalMetadata().setAnnotationValue(m, value);
 			}
 		}
-
 	}
 	
 	
 	// Get the annotations on a submodel
+	@Override
 	protected void getAllSemSimSubmodelAnnotations(){
 		
 		for(String suburi : submodelURIandObjectMap.keySet()){
@@ -285,7 +301,12 @@ public class SemSimRDFreader extends AbstractRDFreader{
 	}
 	
 	
-	// For looking up Metadata items in CurationalMetadata by URI
+	/**
+	 * Look up {@link Metadata} items in {@link CurationalMetadata} that use
+	 * an input URI for their relation
+	 * @param uri An input URI 
+	 * @return The {@link Metadata} object that uses the input URI as its relation
+	 */
 	private Metadata getMetadataByURI(URI uri){
 		
 		for(Metadata m : Metadata.values()){
