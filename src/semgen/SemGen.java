@@ -100,7 +100,7 @@ public class SemGen extends JFrame implements Observer{
 		OSValidation();
 		
 		semsimlib = new SemSimLibrary(cfgreadpath);
-		ModelReader.pointtoSemSimLibrary(semsimlib);
+		ModelReader.pointToSemSimLibrary(semsimlib);
 		ModelWriter.pointToSemSimLibrary(semsimlib);
 		ErrorLog.setLogFile(logfilewriter);
 		// Need this for programmatic use of jsbatch

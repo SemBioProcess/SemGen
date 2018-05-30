@@ -88,6 +88,11 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SBMLwriter;
 
+/**
+ * Class for converting an SBML document into the SemSim format
+ * @author mneal
+ *
+ */
 public class SBMLreader extends ModelReader{
 
 	private SBMLDocument sbmldoc;
@@ -278,7 +283,7 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	
-	// For SBML level 2, add the reserved units, if not already stated in listOfUnitDefinitions
+	/** For SBML level 2, add the reserved units, if not already stated in listOfUnitDefinitions */
 	private void addSBMLlevel2reservedUnits() {
 			
 		for(String resunitname : SBMLconstants.SBML_LEVEL_2_RESERVED_UNITS_MAP.keySet()){
@@ -288,7 +293,12 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	// Add one reserved unit
+	/**
+	 * Add one reserved unit
+	 * @param resunitname The reserved unit's name
+	 * @param baseunitname Base unit of the reserved unit
+	 * @return {@link UnitOfMeasurement} instance for the input reserved unit
+	 */
 	private UnitOfMeasurement addReservedUnit(String resunitname, String baseunitname){
 		
 		UnitOfMeasurement resuom = new UnitOfMeasurement(resunitname);
@@ -310,9 +320,7 @@ public class SBMLreader extends ModelReader{
 	}
 		
 		
-	/**
-	 * Get the default substance units for the model
-	 */
+	/** Get the default substance units for the model */
 	private void setSubstanceUnits(){
 		/*
 		From http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/Species.html
@@ -354,9 +362,7 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	
-	/**
-	 * Set the temporal solution domain for the SemSim model
-	 */
+	/** Set the temporal solution domain for the SemSim model  */
 	private void setTimeDomain() throws IOException{
 		
 		boolean timenamepredefined = false;
@@ -431,9 +437,7 @@ public class SBMLreader extends ModelReader{
 	}
 
 	
-	/**
-	 *  Collect the SBML model's compartment data
-	 */
+	/** Collect the SBML model's compartment data */
 	private void collectCompartments(){
 		
 		for(int c=0; c<sbmlmodel.getListOfCompartments().size(); c++){
@@ -586,9 +590,7 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	
-	/**
-	 *  Collect the SBML model's chemical species data
-	 */
+	/** Collect the SBML model's chemical species data */
 	private void collectSpecies(){
 		
 		for(int s=0; s<sbmlmodel.getListOfSpecies().size(); s++){
@@ -785,9 +787,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 *  Collect the SBML model's parameters
-	 */
+	/** Collect the SBML model's parameters */
 	private void collectParameters(){
 		for(int p=0; p<sbmlmodel.getListOfParameters().size(); p++){
 			Parameter sbmlpar = sbmlmodel.getParameter(p);
@@ -797,9 +797,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 *  Collect the SBML model's rules
-	 */
+	/** Collect the SBML model's rules */
 	private void collectRules(){
 		
 		for(int r=0; r<sbmlmodel.getListOfRules().size(); r++){
@@ -848,9 +846,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 * Collect the SBML model's constraints
-	 */
+	/** Collect the SBML model's constraints */
 	private void collectConstraints(){
 		
 		for(int c=0; c<sbmlmodel.getListOfConstraints().size(); c++){
@@ -867,9 +863,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 * Collect the SBML model's discrete events
-	 */
+	/** Collect the SBML model's discrete events */
 	private void collectEvents(){
 		
 		try{
@@ -936,9 +930,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 *  Collect the SBML model's reaction data
-	 */
+	/** Collect the SBML model's reaction data */
 	private void collectReactions(){
 		
 		// If there are no species defined in model or no reactions defined, return
@@ -1071,9 +1063,7 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
-	/**
-	 * Create the conservation equations for the species in the model
-	 */
+	/** Create the conservation equations for the species in the model */
 	private void setSpeciesConservationEquations(){
 		
 		for(String speciesid : speciesAndConservation.keySet()){
@@ -1211,7 +1201,6 @@ public class SBMLreader extends ModelReader{
 	 * @throws IOException 
 	 * @throws ZipException 
 	 */
-
 	private String collectSemSimRDF() throws ZipException, IOException{
 		Document projdoc = modelaccessor.getJDOMDocument();
 		
@@ -1246,7 +1235,7 @@ public class SBMLreader extends ModelReader{
 	
 	
 	/**
-	 *  Collect all data common to an SBase object and copy it into a specified SemSimObject
+	 * Collect all data common to an SBase object and copy it into a specified SemSimObject
 	 * @param sbmlobject
 	 * @param semsimobject
 	 */
@@ -1290,11 +1279,9 @@ public class SBMLreader extends ModelReader{
 	 * converts them into a set of ReferenceOntologyAnnotations. If more than one
 	 * identity annotation is applied (BQBiol:is), as is common in SBML models, only the first
 	 * annotation that uses a term from a SemSim preferred knowledge resource is collected.
-	 * 
 	 * @param sbmlobject
 	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
 	 */
-	// Get biological qualifier annotations
 	private Set<ReferenceOntologyAnnotation> getBiologicalQualifierAnnotations(SBase sbmlobject){
 		
 		OntologyDomain ontdomain = ReferenceOntologies.OntologyDomain.PhysicalEntity; 
@@ -1355,7 +1342,6 @@ public class SBMLreader extends ModelReader{
 	/**
 	 * Collects all model qualifier annotations for a given SBase object and 
 	 * converts them into a set of ReferenceOntologyAnnotations.
-	 * 
 	 * @param sbmlobject
 	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
 	 */	private Set<ReferenceOntologyAnnotation> getModelQualifierAnnotations(SBase sbmlobject){
@@ -1385,9 +1371,10 @@ public class SBMLreader extends ModelReader{
 	
 
 	 /**
-	 * Assign a singular semsim physical entity object to an sbml model element. Make sure that if a custom entity or process is created, that it has a unique name
+	 * Assign a singular SemSim physical entity object to an SBML model element. 
+	 * Make sure that if a custom entity or process is created, that it has a unique name.
 	 * @param sbmlobject
-	 * @return
+	 * @return The singular SemSim physical entity object assigned to 
 	 */
 	 private PhysicalModelComponent createSingularPhysicalComponentForSBMLobject(SBase sbmlobject){
 		
@@ -1437,7 +1424,6 @@ public class SBMLreader extends ModelReader{
 	
 	
 	/**
-	 * 
 	 * @param sbmlel An SBase object
 	 * @return Whether a given SBML element represents a physical entity
 	 */
@@ -1447,9 +1433,8 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	/**
-	 * 
-	 * @param sbmlobject
-	 * @return The SBML ID for the object
+	 * @param sbmlobject An SBase object
+	 * @return The SBML ID for the input object
 	 */
 	private String getIDforSBaseObject(SBase sbmlobject){
 		
@@ -1463,8 +1448,7 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	/**
-	 * 
-	 * @param sbmlobject
+	 * @param sbmlobject An SBase object
 	 * @return The SBML name for the object
 	 */
 	private String getNameforSBaseObject(SBase sbmlobject){
@@ -1479,7 +1463,7 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	/**
-	 * Add an SBML parameter to the model. This can also be used for SBML LocalParameters.
+	 * Add an SBML parameter to the SemSim model. This can also be used for SBML LocalParameters.
 	 * @param p The SBML parameter to add to the SemSim model.
 	 */	
 	private DataStructure addParameter(QuantityWithUnit qwu, String prefix){
@@ -1531,9 +1515,7 @@ public class SBMLreader extends ModelReader{
 		return val;
 	}
 	
-	/**
-	 *  Select appropriate set of base units based on SBML level/version
-	 */
+	/** Select appropriate set of base units based on SBML level/version */
 	private void setBaseUnits(){
 		baseUnits.clear();
 		
@@ -1568,7 +1550,12 @@ public class SBMLreader extends ModelReader{
 		return mathmlstring;
 	}
 	
-	
+	/**
+	 * Stores info relevant for formulating the species conservation 
+	 * equations in an SBML model. 
+	 * @author mneal
+	 *
+	 */
 	private class SpeciesConservation{
 		public boolean setWithConservationEquation;
 		public ArrayList<Pair<PhysicalProcess,Reaction>> consumedby;

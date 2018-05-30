@@ -26,12 +26,17 @@ import semsim.utilities.webservices.BioPortalSearcher;
 import semsim.utilities.webservices.KEGGsearcher;
 import semsim.utilities.webservices.UniProtSearcher;
 
+/**
+ * Class for looking up human-readable names for reference URIs
+ * @author mneal
+ */
 public class ReferenceTermNamer {
 		
 	public static final String BioPortalOBOlibraryPrefix = "http://purl.obolibrary.org/obo/";
 	
 	/**
-	 * @param model The SemSim model containing the SemSimObjects that will be processed
+	 * @param model A SemSim model containing the SemSimObjects that will be processed
+	 * @param lib A {@link SemSimLibrary} instance
 	 * @return The set of SemSimObjects annotated with reference terms that are missing names.
 	 */
 	public static Set<SemSimComponent> getModelComponentsWithUnnamedAnnotations(SemSimModel model, SemSimLibrary lib){
@@ -67,7 +72,15 @@ public class ReferenceTermNamer {
 	}
 	
 	
-	public static Map<String,String[]> getNamesForOntologyTermsInModel(SemSimModel model, Map<String, String[]> map, SemSimLibrary lib){	
+	/**
+	 * Retrieve human-readable names for reference URIs in a SemSim model
+	 * @param model The model to process
+	 * @param map An optional mapping between reference URIs and valid human-readable names
+	 * @param lib A {@link SemSimLibrary} instance
+	 * @return The input map extended to include URI-to-names mappings discovered during execution 
+	 * of this function
+	 */
+	public static Map<String,String[]> getNamesForReferenceTermsInModel(SemSimModel model, Map<String, String[]> map, SemSimLibrary lib){	
 		Map<String,String[]> URInameMap = null;
 		if(map==null)
 			URInameMap = new HashMap<String,String[]>();
@@ -130,6 +143,15 @@ public class ReferenceTermNamer {
 		return URInameMap;
 	}
 	
+	
+	/**
+	 * Internal function for looking up human-readable names for a given URI.
+	 * Determines which lookup service to use based on the URI's parent 
+	 * knowledge resource
+	 * @param uri The URI to process
+ 	 * @param lib A {@link SemSimLibrary} instance
+	 * @return The human-readable name for the input URI
+	 */
 	private static String getNameFromURI(URI uri, SemSimLibrary lib) {
 		String name = null;
 

@@ -76,6 +76,11 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.owl.SemSimOWLFactory.RestrictionVisitor;
 import semsim.utilities.SemSimUtil;
 
+/**
+ * Class for reading a SemSim .owl file and creating a SemSimModel 
+ * object containing the modeling information contained therein.
+ * @author mneal
+ */
 public class SemSimOWLreader extends ModelReader {
 	private OWLDataFactory factory;
 	private Map<String, PhysicalModelComponent> identitymap = new HashMap<String, PhysicalModelComponent>();
@@ -103,6 +108,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	//*****************************READ METHODS*************************//
 		
+	@Override
 	public SemSimModel read() throws OWLException, JDOMException, IOException{	
 		if (verifyModel()) return semsimmodel;
 		
@@ -123,9 +129,7 @@ public class SemSimOWLreader extends ModelReader {
 		return semsimmodel;
 	}
 	
-	/**
-	 * Verify the model is a valid SemSimModel
-	 */
+	/** Verify the model is a valid SemSimModel */
 	private boolean verifyModel() throws OWLException {
 		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
 		
@@ -141,6 +145,10 @@ public class SemSimOWLreader extends ModelReader {
 		return (semsimmodel.getErrors().size() > 0);
 	}
 	
+	/** Determine which qualifier should be used to read in physical definitions for physical model components.
+	 * This is needed because older SemSim models used the "refersTo" relation to link a model component
+	 * to its physical definition. More recent models use the "hasPhysicalDefinition" relation.
+	 */
 	private void setPhysicalDefinitionURI(){
 		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo")))
 			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo");
@@ -149,6 +157,12 @@ public class SemSimOWLreader extends ModelReader {
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
 	}
 	
+	
+	/**
+	 * Collect all the annotations that are at the level of the whole model.
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	private void collectModelAnnotations() throws JDOMException, IOException {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
@@ -190,6 +204,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 
+	
+	/**
+	 * Collect all classes in the OWL file that are terms from reference ontologies. 
+	 * @throws OWLException
+	 */
 	private void collectReferenceClasses() throws OWLException {
 		
 		// Collect physical properties
@@ -234,6 +253,12 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Collect all the composite physical entities in the OWL file and instantiate 
+	 * the corresponding {@link CompositePhyiscalEntity} objects
+	 * @throws OWLException
+	 */
 	private void collectCompositeEntities() throws OWLException {
 		for (String cperef : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont,  SemSimTypes.COMPOSITE_PHYSICAL_ENTITY.getURIasString())) {		
 			String ind = SemSimOWLFactory.getFunctionalIndObjectPropertyObject(ont, cperef, StructuralRelation.HAS_INDEX_ENTITY.getURIasString());
@@ -263,7 +288,10 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
-	// Deal with physical processes
+	/**
+	 * Collect the physical processes represented in the SemSim OWL file
+	 * @throws OWLException
+	 */
 	private void createProcesses() throws OWLException {
 		
 		// For each process instance in the class SemSim:Physical_process
@@ -322,7 +350,10 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 
-	
+	/**
+	 * Collect information for the data structures in the SemSim OWL file
+	 * @throws OWLException
+	 */
 	private void collectDataStructures() throws OWLException {
 		
 		// Get data structures and add them to model - Decimals, Integers, MMLchoice
@@ -441,6 +472,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Assert mappings between CellML-type variables
+	 * @throws OWLException
+	 */
 	private void mapCellMLTypeVariables() throws OWLException {
 		
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DECIMAL.getURIasString())){
@@ -461,6 +497,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Collect information about the units in the model
+	 * @throws OWLException
+	 */
 	private void collectUnits() throws OWLException {
 		// Add units to model, assign to data structures, store unit factoring
 		for(String unitind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.UNIT_OF_MEASUREMENT.getURIasString())){
@@ -548,7 +589,7 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 		
-	/** Go through existing data structures and establish the hasInput relationships */
+	/** Go through existing data structures and establish the computational relationships between data structures*/
 	private void establishIsInputRelationships() throws OWLException {
 		
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString())){
@@ -564,6 +605,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Collect info about the relational constraints in the model
+	 * @throws OWLException
+	 */
 	private void collectRelationalConstraints() throws OWLException {
 		for(String relind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.RELATIONAL_CONSTRAINT.getURIasString())){
 			String mmleq = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, relind, SemSimRelation.HAS_COMPUTATIONAL_CODE.getURIasString());
@@ -572,6 +618,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Collect info about the discrete events in the model
+	 * @throws OWLException
+	 */
 	private void collectEvents() throws OWLException{
 		
 		for(String eventind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.EVENT.getURIasString())){
@@ -620,6 +671,7 @@ public class SemSimOWLreader extends ModelReader {
 	}
 
 	
+	/** Collect annotations on custom terms used in the model (e.g. custom physical entities) */
 	private void collectCustomAnnotations() {
 		
 		// Get additional annotations on custom terms
@@ -688,6 +740,11 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 	
+	
+	/**
+	 * Collect info about the Submodels represented in the model
+	 * @throws OWLException
+	 */
 	private void collectSubModels() throws OWLException {
 		// Collect the submodels
 		Set<String> subset = SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.SUBMODEL.getURIasString());
@@ -844,7 +901,14 @@ public class SemSimOWLreader extends ModelReader {
 	//********************************************************************//
 	//*****************************HELPER METHODS*************************//
 
-	// Get the multiplier for a process participant
+	/**
+	 * Get the multiplier for a process participant
+	 * @param ont The ontology object associated with the SemSim OWL file
+	 * @param process IRI of the physical process in the ontology
+	 * @param prop IRI of a process participation relation (e.g. SemSimRelation.HAS_SOURCE or SemSimRelation.HAS_SINK)
+	 * @param ent IRI of the process participant in the ontology
+	 * @return The stoichiometry for the entity's participation in the process
+	 */
 	private Double getMultiplierForProcessParticipant(OWLOntology ont, String process, Relation prop, String ent){
 		Double val = 1.0;
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(process));
@@ -869,7 +933,14 @@ public class SemSimOWLreader extends ModelReader {
 		return val;
 	}
 	
-	// Get the relationship for a submodel subsumption
+	/**
+	 * Get the relationship for a submodel subsumption
+	 * @param ont Ontology corresponding to the SemSim OWL file
+	 * @param submodel IRI of a submodel in the ontology
+	 * @param prop IRI of a submodel subsumption relation
+	 * @param subsubmodel IRI of a submodel subsumed by another submodel
+	 * @return Set of relationship types associated with a submodel subsumption (e.g. "containment")
+	 */
 	private Set<String> getSubmodelSubsumptionRelationship(OWLOntology ont, String submodel, Relation prop, String subsubmodel){
 		Set<String> vals = new HashSet<String>();
 		OWLIndividual procind = factory.getOWLNamedIndividual(IRI.create(submodel));
@@ -896,7 +967,16 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	
-	// Get a string value from an annotation on an datatype property axiom (individual > prop > datatype)
+	/**
+	 * Get a string value from an annotation on a datatype property axiom (individual > prop > datatype)
+	 * @param ont Source ontology containing the datatype property axiom
+	 * @param subject IRI of the subject in the axiom
+	 * @param pred URI of the predicate in the axiom
+	 * @param data Object of the axiom as a String
+	 * @param annpropuri URI of the property used in an annotation on the axiom
+	 * @return The object of the annotation statement on the axiom (as an OWLLiteral > String)
+	 * If multiple annotations are present, returns the object used in the first annotation.
+	 */
 	private String getStringValueFromAnnotatedDataPropertyAxiom(OWLOntology ont, String subject, URI pred, String data, URI annpropuri){
 		OWLIndividual subjectind = factory.getOWLNamedIndividual(IRI.create(subject));
 		OWLDataProperty owlprop = factory.getOWLDataProperty(IRI.create(pred));
@@ -918,6 +998,13 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	// TODO: something is up here - looks in idpropertymap but if not found writes to identitymap
+	/**
+	 * Look up a PhysicalProperty object in the SemSimModel. If not added to the model already,
+	 * create it and add.
+	 * @param referencekey URI of a physical property class
+	 * @param description Human-readable description of the property
+	 * @return A PhysicalProperty object corresponding to the reference URI
+	 */
 	private PhysicalModelComponent getReferenceProperty(String referencekey, String description) {
 		PhysicalModelComponent term = idpropertymap.get(referencekey);
 		
@@ -929,6 +1016,14 @@ public class SemSimOWLreader extends ModelReader {
 		return term;
 	}
 	
+	
+	/**
+	 * Look up a PhysicalDependency object in the SemSimModel. If not added to the model already,
+	 * create it and add.
+	 * @param refuri Reference URI of the physical dependency
+	 * @param desc Human-readable description of the physical dependency
+	 * @return A ReferencePhysicalDependency object corresponding to the input reference URI
+	 */
 	private ReferencePhysicalDependency getReferenceDependency(String refuri, String desc){
 		ReferencePhysicalDependency rpd = iddependencymap.get(refuri);
 		
@@ -941,6 +1036,14 @@ public class SemSimOWLreader extends ModelReader {
 	}
 	
 	
+	/**
+	 * Get the physical model component class of a given individual in the model. 
+	 * This looks at the individual's URI fragment and determines its class based 
+	 * on the "_{class}_{uniqueNum}" naming convention for physical model components.
+	 * @param ind IRI of the individual
+	 * @return The PhysicalModelComponent class that the individual belongs to
+	 * @throws OWLException
+	 */
 	private PhysicalModelComponent getClassofIndividual(String ind) throws OWLException {
 		String indclass = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, ind, physicaldefinitionURI.toString());
 		
@@ -955,7 +1058,11 @@ public class SemSimOWLreader extends ModelReader {
 		return identitymap.get(indclass);
 	}
 	
-	/** Make Custom Entity **/
+	/**
+	 * Create a custom physical entity based on an individual in the SemSim OWL file
+	 * @param cuperef IRI of the individual representing a custom entity
+	 * @return CustomPhysicalEntity object corresponding to the input individual
+	 */
 	private CustomPhysicalEntity makeCustomEntity(String cuperef) {
 		
 		OWLEntity cupecls = factory.getOWLClass(IRI.create(cuperef));
@@ -982,9 +1089,13 @@ public class SemSimOWLreader extends ModelReader {
 		return semsimmodel.addCustomPhysicalEntity(cupe);
 	}
 	
-	/** 
-	 * Produces a composite for a singular term.
-	 * */
+	/**
+	 * Produces a composite entity object for a singular physical entity individual in the SemSim OWL file.
+	 * This makes some of the programmatic tasks in the SemSimAPI easier.
+	 * @param uri URI of the singular physical entity in the SemSim OWL file
+	 * @return CompositePhysicalEntity representation of the input individual
+	 * @throws OWLException
+	 */
 	private CompositePhysicalEntity createSingularComposite(String uri) throws OWLException {
 		
 		if (identitymap.containsKey(uri)) return (CompositePhysicalEntity) identitymap.get(uri);
