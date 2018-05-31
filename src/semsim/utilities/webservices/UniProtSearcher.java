@@ -16,10 +16,22 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 
-
+/**
+ * Class for sending queries to UniProt webservices
+ * @author mneal
+ *
+ */
 public class UniProtSearcher {
 	public static Namespace ns = Namespace.getNamespace("xs", "http://uniprot.org/uniprot");
 	
+	/**
+	 * Perform a String search over reviewed proteins in UniProt
+	 * @param thestring Search string
+	 * @return A map that links the names of proteins matching the search
+	 * criteria to their UniProt URI (in identifiers.org format). 
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public HashMap<String,String> search(String thestring) throws JDOMException, IOException{
 		HashMap<String,String> idnamemap = new HashMap<String,String>();
 		thestring = thestring.replace(" ", "%20");
@@ -47,6 +59,13 @@ public class UniProtSearcher {
 	}
 	
 	
+	/**
+	 * Retrieve the preferred name for a protein
+	 * @param ID UniProt ID of the protein
+	 * @return The preferred name of the protein
+	 * @throws IOException
+	 * @throws JDOMException
+	 */
 	public static String getPreferredNameForID(String ID) throws IOException, JDOMException{
 		String name = null;
 		URL url = new URL("http://www.uniprot.org/uniprot/" + ID + ".xml");
@@ -76,11 +95,17 @@ public class UniProtSearcher {
 		return name;
 	}
 	
+	
+	/**
+	 * Create an InputStream object for connecting to a URL
+	 * @param url The URL
+	 * @return The InputStream object delivering the contents of the URL
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static InputStream getInputStreamFromURL(URL url) throws JDOMException, IOException{
 		URLConnection yc = url.openConnection();
 		yc.setReadTimeout(60000); // Tiemout after a minute
 		return yc.getInputStream();
 	}
-	
-	
 }

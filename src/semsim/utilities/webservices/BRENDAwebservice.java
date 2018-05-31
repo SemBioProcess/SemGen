@@ -6,6 +6,11 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 
+/**
+ * Class for sending queries to BRENDA webservices
+ * @author mneal
+ *
+ */
 public class BRENDAwebservice {
 	
 	public static ArrayList<String> getGOxrefsFromID(String eznum){
@@ -21,6 +26,11 @@ public class BRENDAwebservice {
 	}
 	
 	
+	/**
+	 * Collect recommended names from an enzyme ID
+	 * @param eznum The enzyme ecNumber
+	 * @return An ordered list of recommended names for the enzyme
+	 */
 	public static ArrayList<String> getRecommendedNamesFromID(String eznum){
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<String> recnames = getRecommendedNameAndGOxrefFromID(eznum);
@@ -32,7 +42,11 @@ public class BRENDAwebservice {
 	}
 	
 	
-       
+    /**
+     * Get the recommended names and Gene Ontology cross-refs for an enzyme
+     * @param eznum The ecNumber of the enzyme
+     * @return Ordered list of Strings that contain recommended names and Gene Ontology cross-refs
+     */
 	public static ArrayList<String> getRecommendedNameAndGOxrefFromID(String eznum) {
 		System.out.println("Calling BRENDA webservice");
 		ArrayList<String> result = new ArrayList<String>();

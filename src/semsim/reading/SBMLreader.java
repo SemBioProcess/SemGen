@@ -365,6 +365,7 @@ public class SBMLreader extends ModelReader{
 	/** Set the temporal solution domain for the SemSim model  */
 	private void setTimeDomain() throws IOException{
 		
+		//NOTE: default time units for SBML level 2 models is seconds.
 		boolean timenamepredefined = false;
 		
 		Document doc = modelaccessor.getJDOMDocument();
