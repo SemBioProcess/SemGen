@@ -20,9 +20,6 @@ import semsim.reading.ModelClassifier.ModelType;
  * This class provides methods for importing submodels 
  * and units from other models. Motivated by need to support
  * CellML 1.1 models.
- * @throws IOException 
- * @throws JDOMException 
- * @throws CloneNotSupportedException 
  */
 public class SemSimComponentImporter {
 

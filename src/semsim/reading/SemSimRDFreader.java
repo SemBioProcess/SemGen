@@ -302,7 +302,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 	
 	
 	/**
-	 * Look up {@link Metadata} items in {@link CurationalMetadata} that use
+	 * Look up {@link Metadata} items in {@link semsim.annotation.CurationalMetadata} that use
 	 * an input URI for their relation
 	 * @param uri An input URI 
 	 * @return The {@link Metadata} object that uses the input URI as its relation

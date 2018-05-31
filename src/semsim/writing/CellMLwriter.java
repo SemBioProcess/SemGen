@@ -32,6 +32,11 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
+/**
+ * Class for writing out CellML model files from {@link SemSimModel} objects
+ * @author mneal
+ *
+ */
 public class CellMLwriter extends ModelWriter {
 	private Namespace mainNS;
 	private AbstractRDFwriter rdfwriter;
@@ -43,6 +48,8 @@ public class CellMLwriter extends ModelWriter {
 		super(model);
 	}
 	
+	
+	@Override
 	public String encodeModel() {
 		Document doc = null;
 		XMLOutputter outputter = new XMLOutputter();
@@ -93,6 +100,14 @@ public class CellMLwriter extends ModelWriter {
 	
 	//*************WRITE PROCEDURE********************************************//
 
+	
+	/**
+	 * Assign either a CASAwriter or SemSimRDFwriter for serializing the 
+	 * RDF content associated with the CellML model. The CASAwriter is used
+	 * if the CellML model is being written out as part of an OMEX archive,
+	 * and a SemSimRDFwriter is used if the model is being written out in a
+	 * standalone CellML file.
+	 */
 	private void createRDFBlock() {
 		
 		// If we're writing to an OMEX file, make the RDF writer a CASAwriter that follows COMBINE conventions
@@ -114,6 +129,9 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/** Add the root "model" element to the CellML JDOM object, declare namespaces
+	 * and set attributes such as model name and ID */
 	private void createRootElement() {		
 		root = new Element("model",mainNS);
 		root.addNamespaceDeclaration(RDFNamespace.CMETA.createJdomNamespace());
@@ -138,6 +156,7 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	
+	/** Declare all imported content in the CellML model */
 	private void declareImports() {
 		// Declare the imports
 		Set<Element> importelements = new HashSet<Element>();
@@ -186,6 +205,8 @@ public class CellMLwriter extends ModelWriter {
 		root.addContent(importelements);
 	}
 	
+	
+	/** Declare all units in the model */
 	private void declareUnits() {
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
 			
@@ -225,6 +246,8 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/** Declare all components and their variables in the model */
 	private void declareComponentsandVariables() {
 
 		// If there are no functional submodels, then create a new one that houses all the data structures
@@ -313,6 +336,8 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/** Declare groupings between components in the model */
 	private void declareGroupings() {
 		Set<CellMLGrouping> groupings = new HashSet<CellMLGrouping>();
 		for(Submodel parentsub : semsimmodel.getSubmodels()){
@@ -366,6 +391,8 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/** Declare all variable mappings in the model */
 	private void declareConnections() {
 		Set<CellMLConnection> connections = new HashSet<CellMLConnection>();
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
@@ -412,6 +439,8 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/** Declare any SemSim-style Submodels that are part of the model */
 	private void declareSemSimSubmodels(){
 		
 		for(Submodel submodel : semsimmodel.getSubmodels()){
@@ -424,6 +453,12 @@ public class CellMLwriter extends ModelWriter {
 	
 	//*************END WRITE PROCEDURE********************************************//
 	
+	/**
+	 * Add a CellML component (AKA {@link FunctionalSubmodel}) to the CellML JDOM object
+	 * @param submodel The CellML component to add
+	 * @param truncatenames Whether to shorten the name of the submodel by only taking
+	 * the part of its name that follows the first ".".
+	 */
 	private void processFunctionalSubmodel(FunctionalSubmodel submodel, boolean truncatenames){
 		if( ! submodel.isImported()){
 			Element comp = new Element("component", mainNS);
@@ -504,6 +539,12 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/**
+	 * Takes a String of XML-formatted content and collects each MathML XML element
+	 * @param xml XML text
+	 * @return A list of all MathML elements in the XML text
+	 */
 	public static List<Content> makeXMLContentFromStringForMathML(String xml){
 		
 		xml = "<temp>\n" + xml + "\n</temp>";
@@ -520,7 +561,10 @@ public class CellMLwriter extends ModelWriter {
 	}
 	
 	
-	// Nested classes
+	/**
+	 * Class for representing CellML-style variable mappings across CelLML components
+	 * @author mneal
+	 */
 	public class CellMLConnection{
 		public FunctionalSubmodel sub1;
 		public FunctionalSubmodel sub2;
@@ -532,6 +576,11 @@ public class CellMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/**
+	 * Class for representing groupings of CellML components
+	 * @author mneal
+	 */
 	public class CellMLGrouping{
 		public String rel;
 		public Map<FunctionalSubmodel, Element> submodelelementmap = new HashMap<FunctionalSubmodel, Element>();

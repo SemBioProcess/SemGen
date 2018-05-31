@@ -9,9 +9,9 @@ import semsim.model.computational.Computation;
 
 /**
  * A MappableVariable is a {@link Decimal} that has a specified 
- * input/output designation within the context of a {@link FunctionalSubmodel}.
+ * input/output designation within the context of a {@link semsim.model.collection.FunctionalSubmodel}.
  * It can be mapped to or from another MappableVariable.  This class
- * was created to correspond to the "<variable>" element in CellML models.
+ * was created to correspond to the &lt;variable&gt; element in CellML models.
  * <p>
  * http://www.cellml.org/specifications/cellml_1.1/#sec_model_structure
  */
@@ -42,7 +42,7 @@ public class MappableVariable extends Decimal {
 	
 	/**
 	 * Constructor for creating a MappableVariable from a {@link Decimal}
-	 * @param dstoconvert
+	 * @param dstoconvert A Decimal object
 	 */
 	public MappableVariable(Decimal dstoconvert) {
 		super(dstoconvert);
@@ -87,7 +87,7 @@ public class MappableVariable extends Decimal {
 
 	/**
 	 * Sets the value of the variable at the start of simulation. This property is 
-	 * included to support reading & writing of CellML models; the initial_value attribute
+	 * included to support reading and writing of CellML models; the initial_value attribute
 	 * in CellML models has a slightly different use than the "startValue" property in the SemSim DataStructure class.
 	 * In CellML models, the value of a variable that remains constant throughout 
 	 * a simulation can be set using the initial_value attribute. The attribute is also used to 

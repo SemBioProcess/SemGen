@@ -101,9 +101,7 @@ public class Computation extends ComputationalModelComponent{
 		return ! mathML.equals("") && mathML!=null;
 	}
 	
-	/**
-	 * @ return The physical dependency associated with this computation
-	 */
+	/** @return The physical dependency associated with this computation */
 	public PhysicalDependency getPhysicalDependency(){
 		return dependency;
 	}
@@ -194,9 +192,7 @@ public class Computation extends ComputationalModelComponent{
 		this.events.addAll(events);
 	}
 	
-	/**
-	 * @return Whether the computation uses any {@link Events}
-	 */
+	/** @return Whether the computation uses any {@link Event}s */
 	public boolean hasEvents(){
 		return ! events.isEmpty();
 	}

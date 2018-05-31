@@ -17,7 +17,8 @@ public class ReferenceOntologyAnnotation extends Annotation{
 	 * Constructor for annotation
 	 * @param relation The relationship between the object being annotated and the knowledge base URI
 	 * @param uri The URI annotation value
-	 * @param description A free-text description of the resource corresponding to the URI
+	 * @param valueDescription A free-text description of the resource corresponding to the URI
+	 * @param lib A SemSimLibrary instance
 	 */
 	public ReferenceOntologyAnnotation(Relation relation, URI uri, String valueDescription, SemSimLibrary lib){
 		super(relation, uri);

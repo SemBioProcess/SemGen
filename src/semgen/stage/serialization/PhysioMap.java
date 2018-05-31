@@ -44,10 +44,7 @@ public class PhysioMap {
 		/**
 		 * Get the SemSim model PhysioMap network, which defines
 		 * nodes and links that the d3.js engine will use
-		 * to create visualizations
-		 * 
-		 * @param semSimModel - SemSim model to get PhysioMap network from
-		 * @return PhysioMap network
+		 * to create visualizations 
 		 */
 		public void generatePhysioMapNetwork() {
 

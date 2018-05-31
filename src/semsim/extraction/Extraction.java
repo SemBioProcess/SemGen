@@ -254,11 +254,7 @@ public class Extraction {
 	
 	/**
 	 * Extract out a portion of a model as a new SemSim model
-	 * 
-	 *  @param srcmodel The SemSimModel to extract from
-	 *  @param extraction A list of all DataStructures to preserve in the extracted model mapped
-	 *  to the input DataStructures required to compute them (these inputs can differ from the source model)
-	 *  @return A new SemSimModel representing the extract
+	 *  @return A new SemSimModel representing the extraction
 	 */
 	public SemSimModel extractToNewModel() throws CloneNotSupportedException {
 		SemSimModel extractedmodel = new SemSimModel();
@@ -389,7 +385,6 @@ public class Extraction {
 	/**
 	 * Clones all submodels that should be preserved in the extraction.
 	 * @param extractedmodel
-	 * @throws CloneNotSupportedException
 	 */
 	private void extractSubModels(SemSimModel extractedmodel) {
 		

@@ -38,7 +38,6 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
-import semsim.writing.CaseInsensitiveComparator;
 
 /** A collection of utility methods for working with SemSim models */
 public class SemSimUtil {
@@ -582,7 +581,8 @@ public class SemSimUtil {
 	
 	/**
 	 * Given a SemSim model, recursively processes custom units and returns all of its units broken down into fundamental base units
-	 * @param SemSim model
+	 * @param semsimmodel A SemSim model
+	 * @param cfgpath Path to configuration folder
 	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
 	 */
 	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel, String cfgpath) {

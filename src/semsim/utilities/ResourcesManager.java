@@ -99,7 +99,7 @@ public class ResourcesManager {
 	
 	
 	/**
-	 * Read contents of a file into a <String,String[]> hash map structure. Semi-colon indicates separator
+	 * Read contents of a file into a HashMap. Semi-colon indicates separator
 	 * between key String and the key's values.
 	 * @param path Path to file
 	 * @param usecommaseparator Whether to use the comma character as the separator between 
@@ -114,11 +114,11 @@ public class ResourcesManager {
 	
 	
 	/**
-	 * Creates a <String,String[]> HashMap that relates String indexes to String arrays.
+	 * Creates a HashMap that relates String indexes to String arrays.
 	 * @param stringset A set of Strings to process (that use a semi-colon to separate key-value pairs)
 	 * @param usecommaseparator Whether to use the comma character to create separate the elements of the 
 	 * String[] object in a mapping. 
-	 * @return A <String,String[]> HashMap that relates a String index to a String array.
+	 * @return A HashMap that relates a String index to a String array.
 	 */
 	private static HashMap<String,String[]> buildHashMapFromStringSet(Set<String> stringset, boolean usecommaseparator){
 
@@ -166,7 +166,7 @@ public class ResourcesManager {
 	 * @param internalpath Internal path to file
 	 * @param usecommaseparator Whether to use the comma character to create separate the elements of the 
 	 * String[] object in a mapping.
-	 * @return A <String,String[]> HashMap that relates a String index to a String array.
+	 * @return A HashMap that relates a String index to a String array.
 	 * @throws IOException
 	 */
 	public static HashMap<String,String[]> createHashMapFromResource(String internalpath, boolean usecommaseparator) throws IOException{

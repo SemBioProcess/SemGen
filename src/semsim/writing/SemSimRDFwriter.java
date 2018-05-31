@@ -226,7 +226,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						}
 						// else it's a singular physical entity
 						else{
-							Resource entity = getResourceForPMCandAnnotate(rdf, cpe.getArrayListOfEntities().get(0));
+							Resource entity = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
 							Statement st = rdf.createStatement(
 									propres, 
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
@@ -239,7 +239,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					else{
 						PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 
-						Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
+						Resource processres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 						Statement st = rdf.createStatement(
 								propres, 
 								SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 

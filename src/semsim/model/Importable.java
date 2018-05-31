@@ -7,7 +7,7 @@ package semsim.model;
  */
 public interface Importable {
 
-	/** Get the imported element's local name, i.e. the name that is used within the SemSim model. */
+	/** @return The imported element's local name, i.e. the name that is used within the SemSim model. */
 	public String getLocalName();
 	
 	/**
@@ -16,7 +16,7 @@ public interface Importable {
 	 */
 	public void setLocalName(String name);
 	
-	/** Get the imported element's referenced name, i.e. its name in the model from which it was imported */
+	/** @return The imported element's referenced name, i.e. its name in the model from which it was imported */
 	public String getReferencedName();
 	
 	/** Set the imported element's referenced name, i.e. its name in the model from which it was imported */
@@ -29,7 +29,7 @@ public interface Importable {
 	public void setImported(boolean val);
 	
 	/**
-	 * Get the href value that indicates the location of the model from which this 
+	 * @return The href value that indicates the location of the model from which this 
 	 * SemSim model element was imported
 	 */
 	public String getHrefValue();
@@ -41,7 +41,7 @@ public interface Importable {
 	public void setHrefValue(String hrefVal);
 	
 	/**
-	 * If the SemSim model element is an import of an import, this returns 
+	 * @return If the SemSim model element is an import of an import, this returns 
 	 * its most direct parent import, otherwise null is returned
 	 */
 	public Importable getParentImport();

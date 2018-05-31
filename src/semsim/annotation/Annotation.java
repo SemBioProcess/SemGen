@@ -52,7 +52,7 @@ public class Annotation {
 	
 	/**
 	 * Set the free-text description for the annotation value
-	 * @param description
+	 * @param valueDescription The free-text description
 	 */
 	public void setValueDescription(String valueDescription) {
 		this.valueDescription = valueDescription;

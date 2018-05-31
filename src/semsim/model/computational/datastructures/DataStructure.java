@@ -88,7 +88,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	/**
 	 * Append the list of DataStructures that this DataStructure
 	 * is used to compute
-	 * @param ds A list of DataStructures that are computed from this DataStructure
+	 * @param dss A list of DataStructures that are computed from this DataStructure
 	 */
 	public void addUsedToCompute(Set<DataStructure> dss){
 		
@@ -285,7 +285,8 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 	}
 
 	
-	/** Specify which DataStructures in the model are computationally dependent on this DataStructure */
+	/** Specify which DataStructures in the model are computationally dependent on this DataStructure 
+	 * @param usedToCompute The DataStructures in the model that are computationally dependent on this DataStructure*/
 	public void setUsedToCompute(Set<DataStructure> usedToCompute) {
 		this.usedToCompute = usedToCompute;
 	}
@@ -365,12 +366,13 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
         return (DataStructure) super.clone();
 	}
 
-	/** Specify whether this DataStructure is included in the model via an imported {@link Submodel} */
+	/** Specify whether this DataStructure is included in the model via an imported {@link semsim.model.collection.Submodel} 
+	 * @param isImported Whether this DataStructure instance is imported from another model */
 	public void setImportedViaSubmodel(boolean isImported) {
 		this.isImported = isImported;
 	}
 
-	/** @return Whether this DataStructure instance is included in the model via an imported {@link Submodel}.*/
+	/** @return Whether this DataStructure instance is included in the model via an imported {@link semsim.model.collection.Submodel}.*/
 	public boolean isImportedViaSubmodel() {
 		return isImported;
 	}

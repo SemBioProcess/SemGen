@@ -256,7 +256,7 @@ public class SemSimOWLreader extends ModelReader {
 	
 	/**
 	 * Collect all the composite physical entities in the OWL file and instantiate 
-	 * the corresponding {@link CompositePhyiscalEntity} objects
+	 * the corresponding {@link CompositePhysicalEntity} objects
 	 * @throws OWLException
 	 */
 	private void collectCompositeEntities() throws OWLException {
@@ -968,13 +968,13 @@ public class SemSimOWLreader extends ModelReader {
 	
 	
 	/**
-	 * Get a string value from an annotation on a datatype property axiom (individual > prop > datatype)
+	 * Get a string value from an annotation on a datatype property axiom
 	 * @param ont Source ontology containing the datatype property axiom
 	 * @param subject IRI of the subject in the axiom
 	 * @param pred URI of the predicate in the axiom
 	 * @param data Object of the axiom as a String
 	 * @param annpropuri URI of the property used in an annotation on the axiom
-	 * @return The object of the annotation statement on the axiom (as an OWLLiteral > String)
+	 * @return The object of the annotation statement on the axiom (as an OWLLiteral String)
 	 * If multiple annotations are present, returns the object used in the first annotation.
 	 */
 	private String getStringValueFromAnnotatedDataPropertyAxiom(OWLOntology ont, String subject, URI pred, String data, URI annpropuri){

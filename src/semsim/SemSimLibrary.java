@@ -105,7 +105,7 @@ public class SemSimLibrary {
 	/**
 	 * Use this constructor to load library info from a locally-stored, writable
 	 * configuration directory
-	 * @param pathToConfigFolder
+	 * @param pathToConfigFolder Path to configuration folder
 	 */
 	public SemSimLibrary(String pathToConfigFolder) {
 		cfgpath = pathToConfigFolder;
@@ -114,7 +114,8 @@ public class SemSimLibrary {
 	
 	/**
 	 * Load the library from standalone files.
-	 * @param loadFromExternalDir 
+	 * @param loadFromExternalDir Whether to load from an external directory
+	 * or from within the Java package
 	 */
 	private void loadLibrary(boolean loadFromExternalDir) {
 		try {
@@ -179,7 +180,7 @@ public class SemSimLibrary {
 	
 	/**
 	 * Load textual descriptions of ontologies used for annotation
-	 * @param pathtodescriptions
+	 * @param pathtodescriptions Path to file containing ontology descriptions
 	 * @throws IOException
 	 */
 	//Map ontology namespaces to ontologies
@@ -196,7 +197,7 @@ public class SemSimLibrary {
 	
 	/**
 	 * Look up OPB terms associated with a particular unit
-	 * @param unit
+	 * @param unit A unit name
 	 * @return String array of OPB properties that could be quantified using
 	 * the given unit
 	 */
@@ -206,7 +207,7 @@ public class SemSimLibrary {
 	
 	/**
 	 * Get OPB properties associated with the units on a given {@link DataStructure}
-	 * @param ds
+	 * @param ds A data structure
 	 * @return String array of candidate OPB properties that could be quantified using
 	 * the units on the {@link DataStructure}
 	 */
@@ -234,7 +235,6 @@ public class SemSimLibrary {
 	}
 	
 	/**
-	 * 
 	 * @param unit Unit name
 	 * @return Whether the unit is prefixable within JSim
 	 */
@@ -243,8 +243,7 @@ public class SemSimLibrary {
 	}
 	
 	/**
-	 * 
-	 * @param unit
+	 * @param unit Unit name
 	 * @return Whether the unit is in the list of fundamental JSim units
 	 */
 	public boolean jsimHasUnit(String unit) {
@@ -252,10 +251,11 @@ public class SemSimLibrary {
 	}
 
 	/**
-	 * Creates a {@link PhysicalPropertyInComposite} instance with an OPB term
-	 * assigned based on the given {@link DataStructure}'s physical units.
-	 * @param ds
-	 * @return
+	 * Creates a {@link PhysicalPropertyInComposite} instance annotated against an OPB term
+	 * based on the given {@link DataStructure}'s physical units.
+	 * @param ds A data structure
+	 * @return A {@link PhysicalPropertyInComposite} instance annotated against an OPB term
+	 * based on the given {@link DataStructure}'s physical units.
 	 */
 	public PhysicalPropertyInComposite getOPBAnnotationFromPhysicalUnit(DataStructure ds){
 		String[] candidateOPBclasses = getOPBUnitRefTerm(ds.getUnit().getName());
@@ -282,7 +282,7 @@ public class SemSimLibrary {
 	
 	/** Read an OWL ontology into a new OWLOntology instance. If ontology is already loaded,
 	 * return the existing instance.
-	 * @param onturi
+	 * @param onturi URI of an OWL ontology
 	 * @return OWLOntology instance read in from specified URI
 	 * @throws OWLOntologyCreationException
 	 */
@@ -419,7 +419,7 @@ public class SemSimLibrary {
 	 * @param prop A {@link PhysicalPropertyInComposite} instance
 	 * @param pmc A {@link PhysicalModelComponent} instance
 	 * @return Whether the {@link PhysicalPropertyInComposite} is a valid property of the {@link PhysicalModelComponent}.
-	 * For example, a {@ link PhysicalModelComponent} that is a {@link PhysicalProcess} should only bear
+	 * For example, a {@link PhysicalModelComponent} that is a {@link PhysicalProcess} should only bear
 	 * OPB process properties.
 	 */
 	public boolean checkOPBpropertyValidity(PhysicalPropertyInComposite prop, PhysicalModelComponent pmc){

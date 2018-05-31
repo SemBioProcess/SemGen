@@ -23,6 +23,11 @@ import JSim.data.NamedVal;
 import JSim.util.UtilIO;
 import JSim.util.Xcept;
 
+/**
+ * Class for writing out an MML-encoded model for simulation in JSim
+ * @author mneal
+ *
+ */
 public class MMLwriter extends ModelWriter{ 
 	
 	private Map<DataStructure,String> dataStructureAndEquationMap = new HashMap<DataStructure,String>();
@@ -388,10 +393,23 @@ public class MMLwriter extends ModelWriter{
 
 	}
 	
+	
+	/**
+	 * If a data structure's name needed to be re-formatted for MML code, 
+	 * retrieve the new name
+	 * @param ds A data structure 
+	 * @return The MML-valid name of the data structure 
+	 */
 	private String getJSimFormattedName(DataStructure ds) {
 		return renamedDataStructureMap.containsKey(ds.getName()) ? renamedDataStructureMap.get(ds.getName()) : ds.getName();
 	}
 
+	
+	/**
+	 * @param code Line of MML code to check
+	 * @return If the line of MML code ends in a right curly brace, 
+	 * return an empty string. Otherwise return a semicolon.
+	 */
 	private String getLineEnd(String code){
 		
 		if (code.endsWith("}"))	return "";
@@ -399,11 +417,22 @@ public class MMLwriter extends ModelWriter{
 		return ";";
 	}
 	
+	
+	/**
+	 * @param ds A {@link DataStructure}
+	 * @return The MML-valid name of the data structure's physical unit 
+	 */
 	private String getUnitCodeForVariable(DataStructure ds){
 		UnitOfMeasurement unit = ds.getUnit();
 		return formatUnitForMML(unit, unit.getComputationalCode());
 	}
 	
+	
+	/**
+	 * @param unit A physical unit
+	 * @param stringtoformat The MML code associated with the unit declaration
+	 * @return Unit name formatted so it is MML-valid
+	 */
 	private String formatUnitForMML(UnitOfMeasurement unit, String stringtoformat){
 		String unitname = unit.getName();
 		String newname = unitname.replace(" ", "_");
@@ -411,6 +440,13 @@ public class MMLwriter extends ModelWriter{
 		return formatted.replace(unitname, newname);
 	}
 	
+	
+	/**
+	 * @param ds A data structure
+	 * @return Whether the data structure is declared, is not a solution domain and 
+	 * is not used to set the boundaries of a solution domain (i.e. doesn't end
+	 * with [solutiondomain].delta, [solutiondomain].max, or [solutiondomain].min)
+	 */
 	private boolean isDeclaredDependentVariable(DataStructure ds){
 		return ds.isDeclared() && ! ds.isSolutionDomain() && ! semsimmodel.getSolutionDomainBoundaries().contains(ds);
 	}

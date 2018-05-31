@@ -35,6 +35,13 @@ import semsim.reading.AbstractRDFreader;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
+/**
+ * Class for serializing SemSim annotations in RDF format,
+ * either within XML-based modeling files such as SBML and CellML,
+ * or in CASA files used within OMEX archives.
+ * @author mneal
+ *
+ */
 public abstract class AbstractRDFwriter {
 	protected SemSimModel semsimmodel;
 	protected Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
@@ -51,22 +58,71 @@ public abstract class AbstractRDFwriter {
 	}
 
 	// Abstract methods
+	/** Write out the RDF content for annotations on the model as a whole (curatorial metadata, e.g.) */
 	abstract protected void setRDFforModelLevelAnnotations();
+	
+	
+	/**
+	 * Write out the singular annotation on a data structure (i.e. a non-composite definition
+	 * for the property simulated by the data structure).
+	 * @param ds The data structure that is annotated
+	 * @param ares The RDF Resource representing the data structure
+	 */
 	abstract protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares);
+	
+	
+	/**
+	 * Write out a data structure's composite annotation in RDF
+	 * @param ds The annotated data structure
+	 * @param ares The RDF Resource representing the data structure
+	 */
 	abstract protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares);
-	abstract protected void setDataStructurePropertyOfAnnotation(DataStructure ds);		
+	
+	
+	/**
+	 * Write out RDF statements about a data structure's associated physical component.
+	 * That is, the physical component that bears the physical property used in the 
+	 * data structure's composite annotation.
+	 * @param ds The annotated data structure
+	 */
+	abstract protected void setDataStructurePropertyOfAnnotation(DataStructure ds);
+	
+	
+	/**
+	 * Write out RDF statements that link a physical model component to reference ontology
+	 * terms that describe it.
+	 * @param pmc The annotated physical model component
+	 * @param res The RDF Resource representing the component
+	 */
 	abstract protected void setReferenceOrCustomResourceAnnotations(PhysicalModelComponent pmc, Resource res);
+	
+	
+	/**
+	 * Write out RDF statements that capture annotations on a {@link Submodel}s
+	 * @param sub An annotated {@link Submodel}
+	 */
 	abstract protected void setRDFforSubmodelAnnotations(Submodel sub);
+	
+	
+	/** @return The RDF Property to use in "part-of" statements that link physical
+	 * entities in a composite physical entity  */
 	abstract protected Property getPartOfPropertyForComposites();
 	
 	
-	
+	/**
+	 * Set the base XML namespace for the RDF content
+	 * @param base Basee XML namespace
+	 */
 	public void setXMLbase(String base){
 		xmlbase = base;
 	}
 
 	
-	// Set free text annotation
+	/**
+	 * Write out an RDF statement that captures the free-text annotation on a SemSimObject
+	 * @param sso A SemSimObject with a free-text annotation
+	 * @param ares RDF Resource representing the object
+	 */
 	public void setFreeTextAnnotationForObject(SemSimObject sso, Resource ares){
 
 		// Set the free-text annotation
@@ -82,7 +138,7 @@ public abstract class AbstractRDFwriter {
 	}
 		
 	
-	// Add annotations for data structures
+	/** Add RDF statements that capture all annotations on all data structures in a SemSim model */
 	protected void setRDFforDataStructureAnnotations(){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
@@ -91,7 +147,10 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
-	
+	/**
+	 * Add RDF statements that capture all annotations on a data structure in the SemSim model
+	 * @param ds A {@link DataStructure}
+	 */
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 		
 		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
@@ -110,7 +169,12 @@ public abstract class AbstractRDFwriter {
 	
 	
 	
-	// Get the RDF resource for a data structure's associated physical property
+	/**
+	 * Get the RDF Resource representing a data structure's associated physical property
+	 * @param rdf The RDF Model containing a representation of the data structure
+	 * @param ds The data structure
+	 * @return The Resource in the RDF Model representing the data structure's associated physical property 
+	 */
 	protected Resource getResourceForDataStructurePropertyAndAnnotate(Model rdf, DataStructure ds){
 		
 		if(variablesAndPropertyResourceURIs.containsKey(ds)){
@@ -124,10 +188,17 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
-	// Add statements that assert the sources, sinks and mediators participating in a process as
-	// well as their stoichiometry
+	/**
+	 * Add RDF statements that captures a physical entity's participation in a process
+	 * as well as its stoichiometry
+	 * @param process A physical process
+	 * @param physent A participant in the process
+	 * @param relationship RDF Property indicating whether the entity is a source, sink,
+	 * or mediator in the process
+	 * @param multiplier Stoichiometry for the entity's participation in the process
+	 */ 
 	protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
-		Resource processres = getResourceForPMCandAnnotate(rdf, process);
+		Resource processres = getResourceForPMCandAnnotate(process);
 		
 		// Create a new participant resource
 		String type = null;
@@ -148,7 +219,7 @@ public abstract class AbstractRDFwriter {
 			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
-		else physentrefres = getResourceForPMCandAnnotate(rdf, physent);
+		else physentrefres = getResourceForPMCandAnnotate(physent);
 		
 		if(physentrefres!=null){
 			Statement st = rdf.createStatement(participantres, 
@@ -169,14 +240,18 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
-	// Add statements that describe a composite physical entity in the model
-	// Uses recursion to store all composite physical entities that make it up, too.
+	/**
+	 * Add statements that describe a composite physical entity in the model.
+	 * Uses recursion to store all composite physical entities that make it up, too.
+	 * @param cpe A CompositePhysicalEntity
+	 * @return RDF URI of the index (first) entity in the composite physical entity
+	 */
 	protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe){
 		
 		// Get the Resource corresponding to the index entity of the composite entity
 		// If we haven't added this composite entity before, log it
 		if(cpe.equals(SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, PMCandResourceURImap))){
-			PMCandResourceURImap.put(cpe, URI.create(getResourceForPMCandAnnotate(rdf, cpe).getURI()));
+			PMCandResourceURImap.put(cpe, URI.create(getResourceForPMCandAnnotate(cpe).getURI()));
 		}
 		// Otherwise use the CPE already stored
 		else cpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, PMCandResourceURImap);
@@ -185,7 +260,7 @@ public abstract class AbstractRDFwriter {
 		Resource indexresource = null;
 		
 		if(indexuri == null){
-			indexresource = getResourceForPMCandAnnotate(rdf, cpe);
+			indexresource = getResourceForPMCandAnnotate(cpe);
 			indexuri = URI.create(indexresource.getURI());
 		}
 		else indexresource = rdf.getResource(indexuri.toString());
@@ -215,7 +290,7 @@ public abstract class AbstractRDFwriter {
 			
 			// If we haven't added this composite entity before, log it
 			if(nextcpe == SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, PMCandResourceURImap)){
-				PMCandResourceURImap.put(nextcpe, URI.create(getResourceForPMCandAnnotate(rdf, nextcpe).getURI()));
+				PMCandResourceURImap.put(nextcpe, URI.create(getResourceForPMCandAnnotate(nextcpe).getURI()));
 			}
 			// Otherwise use the CPE already stored
 			else nextcpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(nextcpe, PMCandResourceURImap);
@@ -228,7 +303,7 @@ public abstract class AbstractRDFwriter {
 			
 			// If it's an entity we haven't processed yet
 			if(!PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
-				nexturi = URI.create(getResourceForPMCandAnnotate(rdf, lastent).getURI());
+				nexturi = URI.create(getResourceForPMCandAnnotate(lastent).getURI());
 				PMCandResourceURImap.put(lastent, nexturi);
 			}
 			// Otherwise get the terminal entity that we logged previously
@@ -250,8 +325,13 @@ public abstract class AbstractRDFwriter {
 		
 		
 	
-	// Get the RDF resource for a physical model component (entity or process)
-	protected Resource getResourceForPMCandAnnotate(Model rdf, PhysicalModelComponent pmc){
+	/**
+	 * Get the RDF Resource for a {@link PhysicalModelComponent} in the RDF Model.
+	 * Creates a new Resource for the component if it does not have one already.
+	 * @param pmc A physical model component
+	 * @return An RDF Resource representing the component
+	 */
+	protected Resource getResourceForPMCandAnnotate(PhysicalModelComponent pmc){
 		
 		String typeprefix = pmc.getComponentTypeAsString();
 		boolean isphysproperty = typeprefix.matches("property");
@@ -271,7 +351,11 @@ public abstract class AbstractRDFwriter {
 		return res;
 	}
 		
-	// Generate an RDF resource for a physical component
+	/**
+	 * Generate a unique RDF resource for a physical component
+	 * @param typeprefix Prefix to use in the URI fragment of the resource ("entity","process", etc.)
+	 * @return An RDF Resource with a unique URI in the RDF Model
+	 */
 	protected Resource createNewResourceForSemSimObject(String typeprefix){
 		
 		//Use relative URIs
@@ -290,6 +374,11 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
+	/**
+	 * Look up the RDF Resource that corresponds to the URI of a reference ontology term
+	 * @param uri URI of a reference ontology term
+	 * @return The Resource in the RDF Model that is synonymous with the term
+	 */
 	protected Resource findReferenceResourceFromURI(URI uri){
 		Resource refres = null;
 		
@@ -303,6 +392,12 @@ public abstract class AbstractRDFwriter {
 		return refres;
 	}
 	
+	
+	/**
+	 * Reformat a URI so it conforms to the Identifiers.org URI format
+	 * @param uri An input URI
+	 * @return Idenntifiers.org-formatted version of the URI
+	 */
 	public static URI convertURItoIdentifiersDotOrgFormat(URI uri){
 		URI newuri = uri;
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
@@ -360,10 +455,15 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
-	
+	/**
+	 * @param rdf An RDF Model object
+	 * @param rdfxmlformat The format to use when writing the Model to a String.
+	 * Use "RDF/XML-ABBREV" if writing a standalone model (CellML, SBML, JSim project file).
+     * Use "RDF/XML" for CASA files in OMEX archives.
+	 * @return A String representation of an RDF Model
+	 */
 	public static String getRDFmodelAsString(Model rdf,String rdfxmlformat){
-				// Use "RDF/XML-ABBREV" for rdfxmlformat parameter if writing a standalone model
-				// Use "RDF/XML" for CASA files in archives
+				// Use 
 				RDFWriter writer = rdf.getWriter(rdfxmlformat);
 				writer.setProperty("blockRules", "idAttr");
 				writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
@@ -379,6 +479,10 @@ public abstract class AbstractRDFwriter {
 	}
 	
 	
+	/**
+	 * Add a single statement to the RDF Model
+	 * @param st The statement to add
+	 */
 	protected void addStatement(Statement st){
 		if( ! rdf.contains(st)) rdf.add(st);
 	}

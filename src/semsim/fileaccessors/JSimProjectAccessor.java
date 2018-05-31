@@ -61,7 +61,7 @@ public class JSimProjectAccessor extends ModelAccessor {
 	
 	/**
 	 * @return If the model is in a standalone file, the name of the file is returned
-	 * otherwise a string with format [name of archive] > [name of model] is returned
+	 * otherwise a string with format [name of archive] &gt; [name of model] is returned
 	 */
 	public String getShortLocation(){
 		return fragment + '>'  + getFileName();

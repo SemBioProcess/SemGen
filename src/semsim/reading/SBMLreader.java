@@ -1465,7 +1465,8 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 * Add an SBML parameter to the SemSim model. This can also be used for SBML LocalParameters.
-	 * @param p The SBML parameter to add to the SemSim model.
+	 * @param qwu The SBML parameter to add to the SemSim model.
+	 * @param prefix Prefix to use when creating the ID for the parameter
 	 */	
 	private DataStructure addParameter(QuantityWithUnit qwu, String prefix){
 
@@ -1498,7 +1499,7 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 *  Get the base unit name for the model's "substance units"
-	 * @param modelsubstanceunits The "substance" units in the SemSim model
+	 * @param substanceunits The "substance" units in the SemSim model
 	 * @return The name of the base unit for the "substance" unit in the SemSim model
 	 */
 	private String getSubstanceBaseUnits(UnitOfMeasurement substanceunits){

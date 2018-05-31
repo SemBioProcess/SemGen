@@ -239,11 +239,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a new {@link CustomPhysicalEntity} to the model. 
-	 * 
-	 * @param name The name of the CustomPhysicalEntity to be added.
-	 * @param description A free-text description of the CustomPhysicalEntity
-	 * @return If the model already contains a CustomPhysicalEntity with the same name, it is returned.
-	 * Otherwise a new CustomPhysicalEntity with the name and description specified is returned.
+	 * @param cupe The CustomPhysicalEntity to add
+	 * @return The CustomPhysicalEntity added to the model (if the model already 
+	 * contains an equivalent CustomPhysicalEntity, that entity is returned).
 	 */
 	public CustomPhysicalEntity addCustomPhysicalEntity(CustomPhysicalEntity cupe){
 		
@@ -255,11 +253,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a new {@link CustomPhysicalProcess} to the model. 
-	 * 
-	 * @param name The name of the CustomPhysicalProcess to be added.
-	 * @param description A free-text description of the CustomPhysicalProcess
-	 * @return If the model already contains a CustomPhysicalProcess with the same name, it is returned.
-	 * Otherwise a new CustomPhysicalProcess with the name and description specified is returned.
+	 * @param custompp The CustomPhysicalProcess to add
+	 * @return If an equivalent {@link CustomPhysicalProcess} already exists in the model,
+	 * that object is returned, otherwise, the input {@link CustomPhysicalProcess} is returned.
 	 */
 	public CustomPhysicalProcess addCustomPhysicalProcess(CustomPhysicalProcess custompp){
 		
@@ -308,11 +304,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Add a new ReferencePhysicalEntity to the model. ReferencePhysicalEntities are subclasses of
 	 * PhysicalEntities that are defined by their annotation against a reference ontology URI. In
 	 * other words, a {@link PhysicalEntity} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
-	 * 
-	 * @param uri The URI of the reference ontology term that defines the entity.
-	 * @param description A free-text description of the entity. Usually taken from the reference ontology.
-	 * @return If the model already contains a ReferencePhysicalEntity with the same URI, that entity is returned.
-	 * Otherwise a new ReferencePhysicalEntity with the URI and description specified is returned.
+	 * @param rpe The ReferencePhysicalEntity to add
+	 * @return The ReferencePhysicalEntity that was added to the model
 	 */
 	public ReferencePhysicalEntity addReferencePhysicalEntity(ReferencePhysicalEntity rpe){
 		
@@ -326,11 +319,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Add a new ReferencePhysicalProcess to the model. ReferencePhysicalProcesses are subclasses of
 	 * PhysicalProcesses that are defined by their annotation against a reference ontology URI. In
 	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
-	 * 
-	 * @param uri The URI of the reference ontology term that defines the process.
-	 * @param description A free-text description of the process. Usually taken from the reference ontology.
-	 * @return If the model already contains a ReferencePhysicalProcess with the same URI, that process is returned.
-	 * Otherwise a new ReferencePhysicalProcess with the URI and description specified is returned.
+	 * @param rpp The ReferencePhysicalProcess to add
 	 */
 	public ReferencePhysicalProcess addReferencePhysicalProcess(ReferencePhysicalProcess rpp){
 		
@@ -343,11 +332,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a new ReferencePhysicalDependency to the model.
-	 * 
-	 * @param uri The URI of the reference ontology term that defines the dependency.
-	 * @param description A free-text description of the dependency. Usually taken from the reference ontology.
-	 * @return If the model already contains a ReferencePhysicalDependency with the same URI, that dependency is returned.
-	 * Otherwise a new ReferencePhysicalDependency with the URI and description specified is returned.
+	 * @param dep The ReferencePhysicalEntity to add
 	 */
 	public ReferencePhysicalDependency addReferencePhysicalDependency(ReferencePhysicalDependency dep){
 		
@@ -370,15 +355,15 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 		
 	/**
-	 * @return The set of all {@link Events} in the model
+	 * @return The set of all {@link Event}s in the model
 	 */
 	public Set<Event> getEvents(){
 		return events;
 	}
 	
 	/**
-	 * Specify the set of {@link Events} in the model
-	 * @param theevents The set of {@link Events} that will be assigned to the model
+	 * Specify the set of {@link Event}s in the model
+	 * @param theevents The set of {@link Event}s that will be assigned to the model
 	 */
 	public void setEvents(ArrayList<Event> theevents){
 		events.clear();
@@ -997,8 +982,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 
 	/**
 	 * Specify which format was used for the model's simulation source code.
-	 * See {@link ModelClassifier} constants. 
-	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link ModelClassifier} ).
+	 * See {@link semsim.reading.ModelClassifier} constants. 
+	 * @param originalModelType An integer corresponding to the format of the original model code (see {@link semsim.reading.ModelClassifier}).
 	 */
 	public void setSourceModelType(ModelType originalModelType) {
 		this.sourceModelType = originalModelType;
@@ -1006,7 +991,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 
 	
 	/**
-	 * @return An integer representing the format of the original model code (see {@link ModelClassifier} ) 
+	 * @return An integer representing the format of the original model code (see {@link semsim.reading.ModelClassifier}) 
 	 * and associated constants.
 	 */
 	public ModelType getSourceModelType() {
@@ -1041,8 +1026,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	/**
-	 * Add a SemSim {@link Annotation} to this object
-	 * @param ann The {@link Annotation} to add
+	 * Add a SemSim {@link Annotation} to the model
+	 * @param metaID The metadata property to use in the annotation
+	 * @param value The value for the annotation
 	 */
 	public void setModelAnnotation(Metadata metaID, String value) {
 		metadata.setAnnotationValue(metaID, value);
