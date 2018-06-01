@@ -71,18 +71,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
-				
-				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					continue;
-				}
-
-				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				addModeltoTask(info, true);
-				// Tell the view to add a model
-				_commandSender.addModel(info.modelnode);
+				loadAndAddModel(accessor);
 			}
 		}
 		
@@ -101,32 +90,24 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				file = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
 				tempBioModelFile.deleteOnExit();
 			}
-
 			if (file != null) {
-				LoadSemSimModel loader = new LoadSemSimModel(file, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					return;
-				}
-				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				addModeltoTask(info, true);
-				_commandSender.addModel(info.modelnode);
+				loadAndAddModel(file);
 			}
 		}
 
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
+			loadAndAddModel(accessor);
+		}
 
-			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
+		private void loadAndAddModel(ModelAccessor file) {
+			LoadSemSimModel loader = new LoadSemSimModel(file, false);
 			loader.run();
 			SemSimModel semsimmodel = loader.getLoadedModel();
 			if (SemGenError.showSemSimErrors()) {
 				return;
 			}
-
-			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+			ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
 			addModeltoTask(info, true);
-			// Tell the view to add a model
 			_commandSender.addModel(info.modelnode);
 		}
 		
