@@ -11,14 +11,14 @@ package semgen.stage.stagetasks;
  */
 public interface SemGenWebBrowserCommandSender {
 	/**
-	 * 
-	 * @param Answer query
+	 * Answer query
+	 * @param reply 
 	 */
 	void receiveReply(Object reply);
 	
 	/**
-	 * 
-	 * @param Change task
+	 * Change task
+	 * @param taskname Name of task to change to 
 	 */
 	void changeTask(String taskname);
 	

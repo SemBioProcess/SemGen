@@ -12,8 +12,8 @@ import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.utilities.CaseInsensitiveComparator;
 import semsim.utilities.SemSimComponentComparator;
-import semsim.writing.CaseInsensitiveComparator;
 
 public class SubModelToolDrawer extends AnnotatorDrawer<Submodel> {
 	public SubModelToolDrawer(SemSimTermLibrary lib, ArrayList<Submodel> modlist) {

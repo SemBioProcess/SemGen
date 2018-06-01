@@ -26,6 +26,11 @@ import org.jdom.output.XMLOutputter;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
+/**
+ * Class for writing models within OMEX archives
+ * @author mneal
+ *
+ */
 public class OMEXArchiveWriter {
 	private ModelWriter writer;
 	
@@ -38,18 +43,21 @@ public class OMEXArchiveWriter {
 	}
 
 
-	//Add a new or modify an existing file within an omex archive
+	/**
+	 * Add a new file within an omex archive or modify an existing one
+	 * @param archive Location of the archive
+	 */
 	public void appendOMEXArchive(OMEXAccessor archive) {
         
 
         	if (!archive.isLocalFile()) {
-        		 try  {
-        	        	OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archive);
-        	        	builder.build();
+        		 try{
+        	        OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archive);
+        	        builder.build();
         		 }
-        	      	catch (IOException e1) {
-        	  				e1.printStackTrace();
-        	  		}
+    	      	catch (IOException e1) {
+	  				e1.printStackTrace();
+    	  		}
         	}
         	
 	        Map<String, String> env = new HashMap<>(); 
@@ -91,7 +99,13 @@ public class OMEXArchiveWriter {
 	        
 	}
     
-	//Create a CASA file from a semsimmodel
+	/**
+	 * Create a CASA file for a {@link semsim.model.collection.SemSimModel}
+	 * @param fs A FileSystem object
+	 * @param archive Location of the OMEX archive
+	 * @throws IOException
+	 * @throws JDOMException
+	 */
     private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
         Path nf = null;
         if (Files.exists(fs.getPath("model\\"))) {
@@ -112,7 +126,15 @@ public class OMEXArchiveWriter {
         }
     }
     
-    //Create an entry in the OMEX manifest for a file
+    /**
+     * Create an entry in the OMEX manifest for a file
+     * @param fs A FileSystem object
+     * @param modelfile Path to model in archive
+     * @param type The type of file described by the entry
+     * @throws ZipException
+     * @throws IOException
+     * @throws JDOMException
+     */
 	private void createManifestEntry(FileSystem fs, Path modelfile, ModelType type) throws ZipException, IOException, JDOMException {
 		Path manifestpath = fs.getPath("manifest.xml");        
 		

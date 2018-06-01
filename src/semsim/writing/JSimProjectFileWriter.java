@@ -23,6 +23,11 @@ import semsim.reading.JSimProjectFileReader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.ModelReader;
 
+/**
+ * Class for writing SemSim models to JSim project files
+ * @author mneal
+ *
+ */
 public class JSimProjectFileWriter extends ModelWriter{
 
 	private Document projdoc = null; 
@@ -32,6 +37,10 @@ public class JSimProjectFileWriter extends ModelWriter{
 	private SemSimRDFwriter rdfwriter;
 
 
+	/**
+	 * @param semsimmodel The {@link SemSimModel} to write out
+	 * @param modelaccessor Location of the JSim project file that will be written out
+	 */
 	public JSimProjectFileWriter(SemSimModel semsimmodel, JSimProjectAccessor modelaccessor) {
 		super(semsimmodel);
 
@@ -39,13 +48,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		projaccessor = modelaccessor;
 	}
 	
-	public JSimProjectFileWriter(SemSimModel semsimmodel, JSimProjectAccessor newlocation, JSimProjectAccessor oldlocation) {
-		super(semsimmodel);
-
-		modelName = newlocation.getModelName();
-		projaccessor = newlocation;
-	}
-
+	
 	@Override
 	public String encodeModel() {
 
@@ -159,13 +162,18 @@ public class JSimProjectFileWriter extends ModelWriter{
 	}
 	
 
-
+	/**
+	 * Add the XML element to the JSim project file that stores SemSim annotations
+	 * @param modelel The model's XML element in the project file
+	 */
 	private void addNewSemSimControlElementToModel(Element modelel){
 		semsimControlElement = new Element("control");
 		semsimControlElement.setAttribute("name", SemSimLibrary.SEMSIM_IN_JSIM_CONTROL_VALUE);
 		modelel.addContent(semsimControlElement);
 	}
 	
+	
+	/** @return An empty JSim project file (as a JDOM Document) */
 	private Document createEmptyProject(){
 		Element jsimel = new Element("JSim");
 		Document doc = new Document(jsimel);
@@ -181,6 +189,12 @@ public class JSimProjectFileWriter extends ModelWriter{
 		return doc;
 	}
 	
+	
+	/**
+	 * Add a new model element to the JSim project 
+	 * @param modelname Model name
+	 * @return An XML element representing a new model added to the project file
+	 */
 	private Element createNewModelElement(String modelname){
 		Element modelel = new Element("model");
 		modelel.setAttribute("name", modelname);
@@ -205,6 +219,15 @@ public class JSimProjectFileWriter extends ModelWriter{
 		return modelel;
 	}
 	
+	
+	/**
+	 * Used when converting CellML models into MML code. "Flattens" names of data
+	 * structures by removing prefixes followed by a ".". Removes
+	 * data structures not used in the MML code that is auto-generated
+	 * using the JSim API.
+	 * @param MMLcode The MML code generated from converting the CellML model
+	 * into a JSim model.
+	 */
 	private void flattenModelForMML(String MMLcode){
 		
 		Set<String> foundnamesinMML = new HashSet<String>();

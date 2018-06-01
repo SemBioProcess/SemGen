@@ -18,19 +18,45 @@ import semsim.SemSimLibrary;
 import semsim.annotation.Ontology;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 
+/**
+ * Class for reading files either outside or inside the SemSim package and 
+ * organizing the info in lookup tables, reference sets, etc.
+ * @author mneal
+ *
+ */
+
 public class ResourcesManager {
 	
+	
+	/**
+	 * Create a String set from a file's contents
+	 * @param path Path to file
+	 * @return Set of Strings representing file's contents
+	 * @throws FileNotFoundException
+	 */
 	public static Set<String> createSetFromFile(String path) throws FileNotFoundException {
 		Scanner unitsfilescanner = new Scanner(new File(path));
 		return createSetFromScanner(unitsfilescanner);
 	}
 	
+	
+	/**
+	 * Create a String set from a file within the SemSim package
+	 * @param internalpath Internal path to file in SemSim package
+	 * @return Set of Strings representing file's contents
+	 */
 	public static Set<String> createSetFromResource(String internalpath){
 		
 		String resourcestring = getStringFromResourceStream(internalpath);
 		return createSetFromScanner(new Scanner(resourcestring));
 	}
 	
+	
+	/**
+	 * Create a String set from the contents of a Scanner object
+	 * @param scanner A Scanner object
+	 * @return String set representing contents of the Scanner object
+	 */
 	private static Set<String> createSetFromScanner(Scanner scanner){
 		if (scanner.hasNext()) {
 			Set<String> stringlist = new HashSet<String>();
@@ -52,6 +78,10 @@ public class ResourcesManager {
 	}
 	
 	
+	/**
+	 * @param internalpath Internal path to a file contained in SemSim package
+	 * @return File contents as a String
+	 */
 	private static String getStringFromResourceStream(String internalpath){
 		InputStream stream = internalpath.getClass().getResourceAsStream(internalpath);
 		StringWriter writer = new StringWriter();
@@ -68,12 +98,28 @@ public class ResourcesManager {
 	}
 	
 	
+	/**
+	 * Read contents of a file into a HashMap. Semi-colon indicates separator
+	 * between key String and the key's values.
+	 * @param path Path to file
+	 * @param usecommaseparator Whether to use the comma character as the separator between 
+	 * entries in the String[] part of the mapping
+	 * @return HashMap that relates a String key with an array of String values
+	 * @throws FileNotFoundException
+	 */
 	public static HashMap<String, String[]> createHashMapFromFile(String path, boolean usecommaseparator) throws FileNotFoundException {
 		Set<String> buffer = createSetFromFile(path);
 		return buildHashMapFromStringSet(buffer, usecommaseparator);
 	}
 	
 	
+	/**
+	 * Creates a HashMap that relates String indexes to String arrays.
+	 * @param stringset A set of Strings to process (that use a semi-colon to separate key-value pairs)
+	 * @param usecommaseparator Whether to use the comma character to create separate the elements of the 
+	 * String[] object in a mapping. 
+	 * @return A HashMap that relates a String index to a String array.
+	 */
 	private static HashMap<String,String[]> buildHashMapFromStringSet(Set<String> stringset, boolean usecommaseparator){
 
 		if (stringset == null) return null;
@@ -115,7 +161,14 @@ public class ResourcesManager {
 		return table;
 	}
 	
-	// For loading maps from resources internally stored in SemSim packages
+	/**
+	 * For loading HashMaps from resources internally stored in SemSim packages
+	 * @param internalpath Internal path to file
+	 * @param usecommaseparator Whether to use the comma character to create separate the elements of the 
+	 * String[] object in a mapping.
+	 * @return A HashMap that relates a String index to a String array.
+	 * @throws IOException
+	 */
 	public static HashMap<String,String[]> createHashMapFromResource(String internalpath, boolean usecommaseparator) throws IOException{
 		String resourcestring = getStringFromResourceStream(internalpath);
 		Set<String> stringset = createSetFromScanner(new Scanner(resourcestring));
@@ -124,7 +177,14 @@ public class ResourcesManager {
 	}
 	
 	
-	// Reader for base unit to OPB class mapping file
+	/**
+	 * Reader for base unit to OPB class mapping file
+	 * @param path Path to file that indicates valid OPB physical property classes 
+	 * for fundamental physical unit combinations
+	 * @return Table that indicates valid OPB physical property classes for certain 
+	 * combinations of fundamental physical units
+	 * @throws FileNotFoundException
+	 */
 	public static HashMap<HashMap<String, Double>, String[]> createHashMapFromBaseUnitFile(String path) throws FileNotFoundException {
 		
 		Scanner unitsfilescanner;
@@ -196,6 +256,14 @@ public class ResourcesManager {
 		return null;
 	}
 	
+	
+	/**
+	 * Get externally-stored info about reference ontologies used in annotation
+	 * @param cfgpath Path to file containing formatted ontology descriptions
+	 * @return A Set of {@link Ontology} objects corresponding to the contents of
+	 * the input file
+	 * @throws IOException
+	 */
 	public static HashSet<Ontology> loadOntologyDescriptions(String cfgpath) throws IOException {
 		HashSet<Ontology> ontologies = new HashSet<Ontology>();
 		for (ReferenceOntology ro : ReferenceOntology.values()) {

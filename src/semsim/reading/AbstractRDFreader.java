@@ -45,7 +45,12 @@ import semsim.owl.SemSimOWLFactory;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.writing.AbstractRDFwriter;
 
-
+/**
+ * Class for working with SemSim annotations that are serialized
+ * in RDF format
+ * @author mneal
+ *
+ */
 public abstract class AbstractRDFreader {
 
 	public Model rdf = ModelFactory.createDefaultModel();
@@ -67,13 +72,18 @@ public abstract class AbstractRDFreader {
 		modeltype = accessor.getModelType();
 	}
 
-	// Abstract methods
+	//Abstract methods
 	abstract protected void getModelLevelAnnotations();
 	abstract protected void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource);
 	abstract protected SemSimModel collectCompositeAnnotation(DataStructure ds, Resource resource);
 	abstract protected void getAllSemSimSubmodelAnnotations();
 	
-	// Read a string into an RDF model
+	/**
+	 * Read a String into an RDF model
+	 * @param rdf The RDF model object that will contain any statements in the input string
+	 * @param rdfasstring RDF-formatted text to read into the model
+	 * @param namespace Namespace of the RDF model
+	 */
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring, String namespace){
 		
 		try {
@@ -88,7 +98,8 @@ public abstract class AbstractRDFreader {
 		}
 	}
 	
-	// Get all the data structure annotations
+	
+	/** Collect all annotations on {@link DataStructure}s */
 	public void getAllDataStructureAnnotations(){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
@@ -96,6 +107,11 @@ public abstract class AbstractRDFreader {
 		}
 	}
 	
+	
+	/**
+	 * Get the annotations on an input {@link DataStructure}
+	 * @param ds The input {@link DataStructure}
+	 */
 	public void getDataStructureAnnotations(DataStructure ds){
 		
 		// If we're reading a CellML model use a temp namespace
@@ -129,6 +145,13 @@ public abstract class AbstractRDFreader {
 	}
 
 	
+	/**
+	 * Collect the free text annotation (stored using the 
+	 * Dublin Core Terms:description property) on a SemSimObject
+	 * @param sso The SemSimObject 
+	 * @param resource The resource in the RDF model corresponding to the
+	 * SemSimObject
+	 */
 	public void collectFreeTextAnnotation(SemSimObject sso, Resource resource){
 		Statement st = resource.getProperty(dcterms_description);		
 		if(st != null)
@@ -137,7 +160,12 @@ public abstract class AbstractRDFreader {
 	}
 
 		
-	// Assuming that this will work the same for SemSimRDFreader and CASA reader
+	/**
+	 * Add a physical property reference term to the {@link SemSimModel}. If the
+	 * property was already added, retrieve it.
+	 * @param uri Reference URI of the physical property 
+	 * @return The {@link PhysicalProperty} instance added to the model
+	 */
 	public PhysicalProperty getSingularPhysicalProperty(URI uri){
 		PhysicalModelComponent term = ResourceURIandPMCmap.get(uri.toString());
 		
@@ -150,25 +178,50 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	public boolean hasPropertyAnnotationForDataStructure(DataStructure ds){
+	/**
+	 * Determine whether a {@link DataStructure} has an associated
+	 * physical property annotation. This is only used when reading 
+	 * RDF-formatted SemSim annotations contained within fSBML models,
+	 * currently.
+	 * @param ds A {@link DataStructure}
+	 * @return Whether  {@link DataStructure} has an associated
+	 * physical property annotation.
+	 */
+	protected boolean hasPropertyAnnotationForDataStructure(DataStructure ds){
 		//Only used for reading RDF in SBML models currently, so we look up by metadata ID
 		return rdf.contains(rdf.getResource(semsimmodel.getNamespace() + ds.getMetadataID()), 
 				SemSimRelation.IS_COMPUTATIONAL_COMPONENT_FOR.getRDFproperty());
 	}
 	
 	
-	protected PhysicalPropertyInComposite getPhysicalPropertyInComposite(String key) {
-		PhysicalModelComponent term = ResourceURIandPMCmap.get(key);
+	/**
+	 * Add a {@link PhysicalPropertyInComposite} object to a {@link SemSimModel}, or
+	 * retrieve it if already added. Uses the input URI as the reference URI for the
+	 * property. 
+	 * @param resourceuri The URI of the reference physical property
+	 * @return The {@link PhysicalPropertyInComposite} object corresponding to the
+	 * input URI
+	 */
+	protected PhysicalPropertyInComposite getPhysicalPropertyInComposite(String resourceuri) {
+		PhysicalModelComponent term = ResourceURIandPMCmap.get(resourceuri);
 		if (term==null) {
-			String description = "";
-			term = new PhysicalPropertyInComposite(description, URI.create(key));
-			ResourceURIandPMCmap.put(key, term);
+			term = new PhysicalPropertyInComposite("", URI.create(resourceuri));
+			ResourceURIandPMCmap.put(resourceuri, term);
 			semsimmodel.addPhysicalPropertyForComposite((PhysicalPropertyInComposite) term);
 		}
 		return (PhysicalPropertyInComposite)term;
 	}
 	
 	
+	/**
+	 * Get the SemSim physical model component corresponding to an input RDF
+	 * resource. If a mapping exists between the resource and the component,
+	 * the mapped component is returned. Otherwise, a new physical model component
+	 * is created in the SemSim model and added to the resource-component map.
+	 * @param res An RDF resource in the SemSim-formatted RDF content associated
+	 * with the model.
+	 * @return The {@link PhysicalModelComponent} mapped to the resource
+	 */
 	protected PhysicalModelComponent getPMCfromRDFresourceAndAnnotate(Resource res){
 		// Find the Physical Model Component corresponding to the resource's URI
 		// Instantiate, if not present
@@ -196,7 +249,7 @@ public abstract class AbstractRDFreader {
 				// If a singular entity
 				else {
 					ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
-					entlist.add(getCompositeEntityComponentFromResourceAndAnnotate(res));
+					entlist.add(createCompositeEntityComponentFromResourceAndAnnotate(res));
 					pmc = semsimmodel.addCompositePhysicalEntity(entlist, new ArrayList<StructuralRelation>());
 				}
 			}
@@ -240,12 +293,20 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	protected CompositePhysicalEntity buildCompositePhysicalEntityfromRDFresource(Resource propertyofres){
-		Resource curres = propertyofres;
+	/**
+	 * Create a {@link CompositePhysicalEntity} object by traversing the structural relations
+	 * statements on the first physical entity of the composite.
+	 * @param firstentity RDF resource representing the first physical entity in the 
+	 * composite physical entity (AKA the "index" entity).
+	 * @return A {@link CompositePhysicalEntity} object that incorporates the mereotopological
+	 * graph associated with the input RDF resource
+	 */
+	protected CompositePhysicalEntity buildCompositePhysicalEntityfromRDFresource(Resource firstentity){
+		Resource curres = firstentity;
 		
 		ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-		PhysicalEntity startent = getCompositeEntityComponentFromResourceAndAnnotate(propertyofres);
+		PhysicalEntity startent = createCompositeEntityComponentFromResourceAndAnnotate(firstentity);
 		entlist.add(startent); // index physical entity
 		
 		while(true){
@@ -263,7 +324,7 @@ public abstract class AbstractRDFreader {
 			
 			// If the physical entity is linked to another as part of a composite physical entity
 			if(entityres!=null){
-				PhysicalEntity nextent = getCompositeEntityComponentFromResourceAndAnnotate(entityres);
+				PhysicalEntity nextent = createCompositeEntityComponentFromResourceAndAnnotate(entityres);
 				entlist.add(nextent);
 				if(containedinlink) rellist.add(StructuralRelation.CONTAINED_IN);
 				else rellist.add(StructuralRelation.PART_OF);
@@ -279,8 +340,14 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	
-	private PhysicalEntity getCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
+	/**
+	 * Create a physical entity component of a {@link CompositePhysicalEntity}, add
+	 * it to the model, and if it is a custom entity, add its annotations.
+	 * @param res An RDF resource corresponding to a physical entity
+	 * @return A {@link PhysicalEntity} object created within the SemSim model
+	 * that corresponds to the intput RDF resource
+	 */
+	private PhysicalEntity createCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(SemSimRelation.BQB_IS.getRDFproperty());
 		
 		if(isannres==null) isannres = res.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
@@ -299,8 +366,14 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	
-	protected CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
+	/**
+	 * Add a {@link CustomPhysicalEntity} to the SemSim model that corresponds 
+	 * to an input RDF resource. Also includes any semantic annotations on the
+	 * entity.
+	 * @param res An RDF resource
+	 * @return The {@link CustomPhysicalEntity} added to the model
+	 */
+	private CustomPhysicalEntity addCustomPhysicalEntityToModel(Resource res){
 		
 		StmtIterator isversionofann = res.listProperties(SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty());
 		//StmtIterator partofann = res.listProperties(StructuralRelation.PART_OF.getRDFproperty());
@@ -344,8 +417,15 @@ public abstract class AbstractRDFreader {
 		return returnent;
 	}
 
-	// Remove all semsim-related content from the main RDF block
-	// It gets replaced, if needed, on write out
+	
+	/**
+	 * Remove all SemSim annotation statements from an RDF model. Used to separate 
+	 * CellML-specific RDF annotations (curational metadata, e.g.) from SemSim
+	 * annotations.
+	 * @param rdf The RDF model containing the SemSim annotations
+	 * @param thesemsimmodel The SemSim model associated with the RDF model
+	 * @return The RDF model stripped of SemSim statements
+	 */
 	public static Model stripSemSimRelatedContentFromRDFblock(Model rdf, SemSimModel thesemsimmodel){
 		
 		// Currently getting rid of anything with semsim predicates
@@ -403,7 +483,12 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
-	// Replace the namespace of a URI with the OPB's preferred namespace
+	/**
+	 * Replace the namespace of a URI with the OPB's namespace
+	 * @param uri An input URI
+	 * @return The URI with the OPB's namespace in place of the
+	 * input URI's namespace
+	 */
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
 		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
@@ -412,6 +497,13 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
+	/**
+	 * Get a String representation of an RDF model
+	 * @param rdf An input RDF model
+	 * @param rdfxmlformat The format to use when writing out the String.
+	 * For example, "RDF/XML-ABBREV".
+	 * @return The String representation of the RDF model
+	 */
 	public static String getRDFmodelAsString(Model rdf, String rdfxmlformat){
 		return AbstractRDFwriter.getRDFmodelAsString(rdf, rdfxmlformat);
 	}

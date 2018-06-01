@@ -24,7 +24,14 @@ import semsim.reading.ModelClassifier.ModelType;
  **/
 public class OMEXmanifestReader {
 
-	//Get all entries in the manifest and return the paths of any valid model formats
+	/**
+	 * Get all entries in an OMEX archive's manifest and return the paths of any valid model formats
+	 * @param zarchive ZipFile instance of the archive
+	 * @param arcfile Location of the archive
+	 * @return A list of JDOM Elements corresponding to the readable models in the archive's manifest
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Element> getManifestEntries(ZipFile zarchive, File arcfile) throws JDOMException, IOException {
 			
@@ -59,7 +66,14 @@ public class OMEXmanifestReader {
         return children;
 	}
 	
-	// Return all valid model files in archive (SBML and CellML for now)
+	/**
+	 * Return all readable model files in an OMEX archive (SBML and CellML for now)
+	 * @param archive ZipFile instance of the archive
+	 * @param omexfile Location of archive
+	 * @return All readable model files in the OMEX archive
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static ArrayList<ModelAccessor> getModelsInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
 		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
 		
@@ -79,7 +93,14 @@ public class OMEXmanifestReader {
 		return accessors;
 	}
 	
-	// Return all valid annotation files in archive, including CASA files
+	/**
+	 * Return all valid annotation files in archive, including CASA files
+	 * @param archive ZipFile instance of the archive
+	 * @param omexfile Location of the archive
+	 * @return All valid annotation files in the archive, including CASA files
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static ArrayList<OMEXAccessor> getAnnotationFilesInArchive(ZipFile archive, File omexfile) throws JDOMException, IOException{
 		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
 		
@@ -98,7 +119,17 @@ public class OMEXmanifestReader {
 		return accessors;
 	}
 	
-	//Check if a file already exists with path modelfile
+	
+	/**
+	 * Check if a file within an OMEX archive already exists
+	 * @param archive ZipFile instance of an OMEX archive
+	 * @param omexfile Location of OMEX archive
+	 * @param modelfile Location of model within archive
+	 * @return Whether the archive already contains a file that matches
+	 * the input File
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
 	public static boolean archiveContainsModelFile(ZipFile archive, File omexfile, File modelfile) throws JDOMException, IOException {
 		ArrayList<Element> manifestelements = getManifestEntries(archive, omexfile);
         for (Element content : manifestelements) {

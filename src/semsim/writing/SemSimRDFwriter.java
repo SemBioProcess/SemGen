@@ -28,6 +28,12 @@ import semsim.reading.SemSimRDFreader;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
 
+/**
+ * Class for writing SemSim-related RDF content in standalone
+ * SBML, CellML and JSim project files.
+ * @author mneal
+ *
+ */
 public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	// For CompositePhysicalEntities, this relates a CPE with it's index entity Resource
@@ -42,7 +48,12 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		initialize(semsimmodel);
 	}
 	
-	// Constructor with existing RDF block
+	/**
+	 * Constructor with an existing RDF block
+	 * @param semsimmodel The SemSim model whose annotations will be written out as RDF
+	 * @param rdfasstring Existing RDF content to add to SemSim-related RDF content
+	 * @param modeltype The type of model being written out
+	 */
 	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, ModelType modeltype){	
 		super(null);
 		
@@ -58,7 +69,10 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	}
 	
 	
-	
+	/**
+	 * Set namespace prefixes, etc.
+	 * @param semsimmodel The SemSim model associated with the writer's RDF content
+	 */
 	private void initialize(SemSimModel semsimmodel){
 		this.semsimmodel = semsimmodel;
 		
@@ -81,6 +95,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	}	
 
 	
+	/** Create a map that links submodels and the URIs representing them */
 	private void createSubmodelURIandNameMap(){
 		for(Submodel sub : semsimmodel.getSubmodels()){
 			
@@ -113,7 +128,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	
 	
-	// Add annotation for submodel
+	/** Add annotations for all submodels */
 	protected void setRDFforSemSimSubmodelAnnotations(){
 		
 		for(Submodel sub : semsimmodel.getSubmodels()){
@@ -121,6 +136,8 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		}
 	}
 	
+	
+	@Override
 	protected void setRDFforSubmodelAnnotations(Submodel sub){
 
 		String subname = sub.getName();
@@ -226,7 +243,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						}
 						// else it's a singular physical entity
 						else{
-							Resource entity = getResourceForPMCandAnnotate(rdf, cpe.getArrayListOfEntities().get(0));
+							Resource entity = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
 							Statement st = rdf.createStatement(
 									propres, 
 									SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 
@@ -239,7 +256,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					else{
 						PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 
-						Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
+						Resource processres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 						Statement st = rdf.createStatement(
 								propres, 
 								SemSimRelation.PHYSICAL_PROPERTY_OF.getRDFproperty(), 

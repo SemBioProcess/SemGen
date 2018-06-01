@@ -171,7 +171,7 @@ public class LoadSemSimModel extends SemGenJob {
 			if( ! online){
 				ErrorLog.addError("Could not connect to BioPortal search service", false, false);
 			}
-				ReferenceTermNamer.getNamesForOntologyTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), SemGen.semsimlib);
+				ReferenceTermNamer.getNamesForReferenceTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), SemGen.semsimlib);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
 			}
 		}

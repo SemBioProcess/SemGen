@@ -12,8 +12,7 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	
 	/**
 	 * Sends the add model command
-	 * 
-	 * @param testString
+	 * @param modelName The {@link ModelNode} to add
 	 */
 	void addModel(ModelNode modelName);
 	

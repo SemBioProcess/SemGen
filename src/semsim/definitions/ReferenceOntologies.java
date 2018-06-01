@@ -66,7 +66,7 @@ public class ReferenceOntologies {
 	}
 	
 	/**
-	 * @param namespace The URI of a class from one of the enumerated ReferenceOntologies.
+	 * @param uri The URI of a class from one of the enumerated {@link ReferenceOntology}s.
 	 * @return A ReferenceOntology object representing the ontology asociated with the namespace of the URI.
 	 * Returns ReferenceOntology.UNKNOWN if the URI's namespace is not associated with one
 	 * of the enumerated ReferenceOntologies.

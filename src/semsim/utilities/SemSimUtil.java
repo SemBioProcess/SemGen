@@ -38,11 +38,8 @@ import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
-import semsim.writing.CaseInsensitiveComparator;
 
-/**
- * A collection of utility methods for working with SemSim models
- */
+/** A collection of utility methods for working with SemSim models */
 public class SemSimUtil {
 
 	public static final String mathMLelementStart = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">";
@@ -319,7 +316,7 @@ public class SemSimUtil {
 	 * @param semsimmodel The source SemSim model
 	 * @param mathmlstring The MathML string to process for inputs
 	 * @param nameprefix Prefix to use for inputs that are local to a submodel
-	 * @return
+	 * @return All the variables in a block of MathML that are inputs for the MathML expression
 	 */
 	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
 
@@ -450,7 +447,7 @@ public class SemSimUtil {
 	/**
 	 * Create the MathML left-hand side for a variable that is solved using an ODE
 	 * @param varname
-	 * @return
+	 * @return Left-hand side of the MathML used for a variable that is solved using an ODE
 	 */
 	public static String makeLHSforStateVariable(String varname, String timedomainname){
 		return " <apply>\n <eq/>\n  <apply>\n  <diff/>\n   <bvar>\n    <ci>" 
@@ -513,6 +510,11 @@ public class SemSimUtil {
 		return "";
 	}
 	
+	
+	/**
+	 * @param mathml Some MathML as a String
+	 * @return Whether the MathML includes a left-hand side
+	 */
 	public static boolean mathmlHasLHS(String mathml){
 		SAXBuilder saxbuilder = new SAXBuilder();
 		Document doc;
@@ -535,7 +537,14 @@ public class SemSimUtil {
 	}
 	
 
-	
+	/**
+	 * Determine if a given {@link CompositePhysicalEntity} is in the keyset of an input
+	 * map that relates {@link PhysicalModelComponent}s to associated URIs
+	 * @param cpe An input {@link CompositePhysicalEntity} 
+	 * @param map A Map that relates {@link PhysicalModelComponent}s to associated URIs
+	 * @return The Map key that is equivalent to the input {@link CompositePhysicalEntity}, if present,
+	 * otherwise the input {@link CompositePhysicalEntity}
+	 */
 	public static CompositePhysicalEntity getEquivalentCompositeEntityIfAlreadyInMap(CompositePhysicalEntity cpe, Map<? extends PhysicalModelComponent, URI> map){		
 		if(cpe == null) System.err.println("Next cpe was null");
 		// Go through the composite physical entities already processed and see if there is one that
@@ -551,9 +560,7 @@ public class SemSimUtil {
 		return cpe;
 	}	
 	
-	/** 
-	 * Take collection of DataStructures and return an ArrayList sorted alphabetically
-	 * */
+	/** Take collection of DataStructures and return an ArrayList sorted alphabetically */
 	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
 		TreeMap<String, DataStructure> dsnamemap = new TreeMap<String, DataStructure>(new CaseInsensitiveComparator());
 		for (DataStructure ds : collection) {
@@ -574,7 +581,8 @@ public class SemSimUtil {
 	
 	/**
 	 * Given a SemSim model, recursively processes custom units and returns all of its units broken down into fundamental base units
-	 * @param SemSim model
+	 * @param semsimmodel A SemSim model
+	 * @param cfgpath Path to configuration folder
 	 * @return HashMap of customUnit:(baseUnit1:exp1, baseUnit:exp2, ...)
 	 */
 	public static HashMap<String, Set<UnitFactor>> getAllUnitsAsFundamentalBaseUnits(SemSimModel semsimmodel, String cfgpath) {
@@ -590,7 +598,13 @@ public class SemSimUtil {
 		return fundamentalBaseUnits;
 	}
 	
-	// Used in tandem with getFundamentalBaseUnits
+	/**
+	 * Used in tandem with method "getFundamentalBaseUnits" to decompose a unit into its fundamental elements
+	 * @param uom Unit to decompose
+	 * @param oldExp Exponent applied to the unit from its use as a unit factor in another "parent" unit
+	 * @param sslib A SemSimLibrary instance
+	 * @return Fundamental set of {@link UnitFactor}s comprising the unit
+	 */
 	// TODO: should add a parameter here that allows the user to choose whether they want to decompose into
 	// CellML OR SBML base units
 	// TODO: This should also be rewritten so that for units with more than one
@@ -622,7 +636,13 @@ public class SemSimUtil {
 		return newUnitFactors;
 	}
 	
-	// Create map of unit names that are changed when writing out a CellML or SBML model
+	/**
+	 * Create map of unit names that needed to be changed (i.e. given a valid name)
+	 * when writing out a CellML or SBML model
+	 * @param semsimmodel The SemSimModel that was written out
+	 * @param map An old-to-new name map that will be appended by the method
+	 * @return An old-to-new name map that includes mappings between old and new unit names
+	 */
 	public static Map<String,String> createUnitNameMap(SemSimModel semsimmodel,Map<String,String> map){
 		
 		for(UnitOfMeasurement uom : semsimmodel.getUnits()){
@@ -633,7 +653,11 @@ public class SemSimUtil {
 		
 	}
 	
-	// Create a CellML- and SBML-friendly unit name
+	/**
+	 * Create a CellML- and SBML-friendly unit name from an input name
+	 * @param oldname An input unit name
+	 * @return A CellML- and SBML-friendly unit name
+	 */
 	public static String makeValidUnitNameForCellMLorSBML(String oldname){
 		String newname = oldname;
 		newname = newname.replaceAll("\\s", "_");

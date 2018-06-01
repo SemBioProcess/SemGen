@@ -113,28 +113,39 @@ public abstract class SemSimCollection extends SemSimObject{
 		return submodel;
 	}
 	
+	
+	/**
+	 * Add a set of {@link Submodel}s
+	 * @param submodel Collection of {@link Submodel}s to add
+	 */
 	public void addSubmodels(Collection<Submodel> submodel){
 		submodels.addAll(submodel);
 	}
 	
+	
+	/**
+	 * Replace the existing set of {@link Submodel}s with another
+	 * @param submodels
+	 */
 	public void setSubmodels(Collection<Submodel> submodels) {
 		this.submodels = new ArrayList<Submodel>(submodels);
 	}
 	
+	
+	/**
+	 * Remove a {@link Submodel}
+	 * @param sub The {@link Submodel} to remove
+	 */
 	public void removeSubmodel(Submodel sub){
 			submodels.remove(sub);
 	}
 	
-	/**
-	 * @return All {@link Submodel}s in the model.
-	 */
+	/** @return All {@link Submodel}s in the model. */
 	public ArrayList<Submodel> getSubmodels() {
 		return submodels;
 	}
 	
-	/**
-	 * @return All {@link Submodel}s not contained in another submodel in the collection.
-	 */
+	/** @return All {@link Submodel}s not contained in another submodel in the collection. */
 	public ArrayList<Submodel> getTopSubmodels() {
 		ArrayList<Submodel> toplevelsms = new ArrayList<Submodel>();
 		for (Submodel sm : submodels) {
@@ -202,9 +213,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		dataStructures = new ArrayList<DataStructure>(dsset);
 	}
 	
-	/**
-	 * @return The set of all {@link DataStructure}s in the model.
-	 */
+	/** @return The set of all {@link DataStructure}s in the model. */
 	public ArrayList<DataStructure> getAssociatedDataStructures(){
 		return dataStructures;
 	}

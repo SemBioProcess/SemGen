@@ -26,7 +26,7 @@ import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 /**
- * Methods for performing a deep copy the structures in a SemSim model. This does NOT
+ * Methods for performing a deep copy of the structures in a SemSim model. This does NOT
  * create an exact copy, use the 'clone' method in SemSimModel instead.
  * @author Christopher
  *
@@ -48,11 +48,7 @@ public class SemSimCopy {
 		copySemSimModelStructures();
 	}
 	
-	/**
-	 * Method for copying the physical and computational components from one model to another. 
-	 * @param modeltocopy
-	 * @param destmodel
-	 */
+	/** Copy the physical and computational components from one model to another. */
 	private void copySemSimModelStructures() {
 		copyPhysicalEntities(modeltocopy);
 		destmodel.setPhysicalEntities(new HashSet<PhysicalEntity>(entities.values()));
@@ -77,6 +73,11 @@ public class SemSimCopy {
 		
 	}
 
+	
+	/**
+	 * @param annstocopy A set of {@link Annotation} objects
+	 * @return A copy of a set of {@link Annotation} objects
+	 */
 	public static Set<Annotation> copyAnnotations(Collection<Annotation> annstocopy) {
 		Set<Annotation> annset = new HashSet<Annotation>();
 		for (Annotation ann : annstocopy) {
@@ -86,6 +87,11 @@ public class SemSimCopy {
 		return annset;
 	}
 	
+	
+	/**
+	 * Copy physical entities present in a SemSimModel
+	 * @param modeltocopy The model containing physical entities to copy
+	 */
 	private void copyPhysicalEntities(SemSimModel modeltocopy) {
 		for (ReferencePhysicalEntity rpe : modeltocopy.getReferencePhysicalEntities()) {
 			entities.put(rpe,rpe);
@@ -112,6 +118,11 @@ public class SemSimCopy {
 		}
 	}
 	
+	
+	/**
+	 * Copy physical processes present in a SemSimModel
+	 * @param modeltocopy The SemSimModel containing processes to copy
+	 */
 	private void copyPhysicalProcesses(SemSimModel modeltocopy) {		
 		for (ReferencePhysicalProcess rpp : modeltocopy.getReferencePhysicalProcesses()) {
 			procs.put(rpp,rpp);
@@ -131,6 +142,8 @@ public class SemSimCopy {
 		
 	}
 	
+	
+	/** Copy in units */
 	private void copyUnits() {		
 		HashMap<UnitFactor, UnitFactor> ufactormap = new HashMap<UnitFactor, UnitFactor>();
 		
@@ -163,6 +176,11 @@ public class SemSimCopy {
 
 	}
 	
+	
+	/**
+	 * Copy in {@link DataStructure}s from an input {@link SemSimModel}
+	 * @param modeltocopy The {@link SemSimModel} containing {@link DataStructure}s to copy
+	 */
 	private void copyDataStructures(SemSimModel modeltocopy) {
 		
 		for(DataStructure ds : modeltocopy.getAssociatedDataStructures()) {
@@ -172,6 +190,11 @@ public class SemSimCopy {
 		remapDataStructures();
 	}
 	
+	
+	/**
+	 * Establish links between the {@link DataStructure} copies and their associated physical 
+	 * model components as well as their units
+	 */
 	private void remapDataStructures() {
 		for (DataStructure ds : dsmap.values()) {
 			if (ds.hasAssociatedPhysicalComponent()) {
@@ -189,6 +212,10 @@ public class SemSimCopy {
 		}
 	}
 	
+	
+	/**
+	 * Copy in info related to the model's {@link Submodel}s
+	 */
 	private void copySubModels() {
 		for (Submodel sm : modeltocopy.getSubmodels()) {
 			Submodel newsm;
@@ -205,13 +232,15 @@ public class SemSimCopy {
 		
 	}
 	
-	private void remap() {
-		//destmodel.replaceSubmodels(smmap);
-		
+	
+	/** Replaces data structures in the destination model with those copied 
+	 * from the source model */
+	private void remap() {		
 		this.destmodel.replaceDataStructures(dsmap);
-		
 	}
 	
+	
+	/** Copy in info related to {@link Event}s */
 	private void copyEvents(){
 		
 		for(Event oldev : modeltocopy.getEvents()){
@@ -243,6 +272,7 @@ public class SemSimCopy {
 	}
 	
 
+	/** Copy in info related to relational constraints */
 	private void copyRelationalConstraints() {
 		HashMap<RelationalConstraint, RelationalConstraint> relconmap = new HashMap<RelationalConstraint, RelationalConstraint>();
 		for (RelationalConstraint recon : modeltocopy.getRelationalConstraints()) {

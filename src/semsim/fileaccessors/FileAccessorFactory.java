@@ -91,7 +91,7 @@ public class FileAccessorFactory {
 	 * Create a {@link JSimProjectAccessor} from a give file
 	 * @param file A project file
 	 * @param fragment The name of the model within the project file
-	 * @return A {@link JSIMprojectAcccessor} linked to the project/model
+	 * @return A {@link JSimProjectAccessor} linked to the project/model
 	 */
 	public static JSimProjectAccessor getJSIMprojectAccessor(File file, String fragment) {
 		return new JSimProjectAccessor(file, fragment);
@@ -125,9 +125,9 @@ public class FileAccessorFactory {
 	}
 	
 	/**
-	 * Determines whether a given file path is for an {@link OMEXArchive}
+	 * Determines whether a given file path is for an OMEXArchive
 	 * @param path File path
-	 * @return Whether the file path points to an {@link OMEXArchive}
+	 * @return Whether the file path points to an OMEXArchive
 	 */
 	private static boolean isOMEXArchive(String path) {
 		return path.contains(".omex");

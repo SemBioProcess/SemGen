@@ -7,10 +7,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
-
+/**
+ * Class for sending queries to KEGG webservices
+ * @author mneal
+ *
+ */
 public class KEGGsearcher {
 
-	// Use KEGG webservice to find a human-readable name for a KEGG ID
+	/**
+	 * Use KEGG webservice to find a human-readable name for a KEGG ID
+	 * @param ID A KEGG ID
+	 * @return The human-readable name associated with the ID
+	 * @throws IOException
+	 */
 	public static String getNameForID(String ID) throws IOException{
 		String name = null;
 		URL url = new URL("http://rest.kegg.jp/get/" + ID);

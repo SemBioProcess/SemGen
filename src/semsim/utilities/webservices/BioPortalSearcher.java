@@ -24,10 +24,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import semsim.SemSimLibrary;
 import semsim.annotation.Ontology;
 
+/**
+ * Class for connecting to the BioPortal search service
+ * and performing string searches over ontology classes.
+ * @author mneal
+ *
+ */
 public class BioPortalSearcher {
 	private static final ObjectMapper JSON_OBJECT_MAPPER = new ObjectMapper();
 	private static final String BIOPORTAL_API_KEY = "c4192e4b-88a8-4002-ad08-b4636c88df1a";
 	
+	
+	/**
+	 * Execute a string search over an ontology on BioPortal
+	 * @param lib A SemSimLibrary instance
+	 * @param text The search string
+	 * @param bioportalNickName BioPortal nickname of ontology to search
+	 * @param exactmatch Only retrieve exact matches to string
+	 * @return A map that links the human-readable name of a class that matched
+	 * the search string to its URI
+	 * @throws IOException
+	 * @throws JDOMException
+	 */
 	public HashMap<String,String> search(SemSimLibrary lib, String text, String bioportalNickName, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
@@ -86,13 +104,20 @@ public class BioPortalSearcher {
 		return rdflabelsanduris;
 	}
 	
-	public static String getRDFLabelUsingBioPortal(String id, String bioportalontID){
+	
+	/**
+	 * Look up the human-readable class name for a given URI
+	 * @param encodeduri Class URI as a URL-encoded String
+	 * @param bioportalontID BioPortal ID of the ontology containing the URI 
+	 * @return The human-readable name of the class represented by the input URI
+	 */
+	public static String getRDFLabelUsingBioPortal(String encodeduri, String bioportalontID){
 		String label = null;
 
 		try {
-			System.out.println("Looking up " + id);
+			System.out.println("Looking up " + encodeduri);
 			URL url = new URL(
-					"http://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + id);
+					"http://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + encodeduri);
 			System.out.println(url);
 	        HttpURLConnection conn;
 	        BufferedReader rd;
@@ -123,6 +148,8 @@ public class BioPortalSearcher {
 		return label;
 	}
 	
+	
+	/** @return Whether BioPortal responded to a test query */
 	public static Boolean testBioPortalWebservice(){
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;

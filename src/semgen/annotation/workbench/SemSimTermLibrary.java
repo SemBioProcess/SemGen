@@ -27,7 +27,7 @@ import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
-import semsim.writing.CaseInsensitiveComparator;
+import semsim.utilities.CaseInsensitiveComparator;
 
 /**
  * This class is the central repository for all SemSim annotations in an annotator tab. Each annotation is wrapped in an

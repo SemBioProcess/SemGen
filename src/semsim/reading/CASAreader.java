@@ -32,8 +32,26 @@ import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.writing.AbstractRDFwriter;
 import semsim.writing.SemSimRDFwriter;
 
+/**
+ * Class for working with annotations stored in Combine Archive
+ * semantic annotation (CASA) files. CASA files are standalone RDF
+ * files stored in Combine (OMEX) Archives that are used to
+ * house annotations on the SBML and CellML models stored in the 
+ * archive.
+ * @author mneal
+ *
+ */
 public class CASAreader extends AbstractRDFreader{
 
+	/**
+	 * Constructor
+	 * @param ma A {@link ModelAccessor} indicating the location of the CASA file
+	 * @param semsimmodel The {@link SemSimModel} to annotate using the contents of
+	 * the CASA file
+	 * @param lib A {@link SemSimLibrary} instance
+	 * @param rdfstring Additional RDF content to include in the model's metadata
+	 * that is not contained in the CASA file (e.g. curatorial info in a CellML model.
+	 */
 	public CASAreader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
 		super(ma, semsimmodel, lib);
 		
@@ -44,6 +62,12 @@ public class CASAreader extends AbstractRDFreader{
 		this.modelNamespaceIsSet = false;
 	}
 
+	/**
+	 * Apply annotations on the physical components of an input
+	 * SBML model (compartments, species, reactions) using 
+	 * info in the CASA file.
+	 * @param sbmlmodel The SBML model to annotate using the CASA file.
+	 */
 	public void getAnnotationsForPhysicalComponents(Model sbmlmodel) {
 		List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
 		annotablestuff.addAll(sbmlmodel.getListOfCompartments());
@@ -59,6 +83,11 @@ public class CASAreader extends AbstractRDFreader{
 	}
 
 	
+	/**
+	 * Apply annotations for a physical component from an input SBML model
+	 * (compartment, species, or reaction) using info in the CASA file. 
+	 * @param sbaseobj The SBML object to annotate
+	 */
 	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
 		
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
@@ -104,6 +133,7 @@ public class CASAreader extends AbstractRDFreader{
 	
 	
 	// Collect the reference ontology term used to describe the model component
+	@Override
 	public void collectSingularBiologicalAnnotation(DataStructure ds, Resource resource){
 		
 		Statement singannst = resource.getProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());

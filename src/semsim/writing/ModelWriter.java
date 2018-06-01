@@ -16,6 +16,11 @@ import semsim.SemSimLibrary;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 
+/**
+ * Class for translating SemSim models into different modeling formats
+ * @author mneal
+ *
+ */
 public abstract class ModelWriter {
 	protected static SemSimLibrary sslib;
 	protected SemSimModel semsimmodel;
@@ -27,14 +32,27 @@ public abstract class ModelWriter {
 		if(sslib==null) sslib = new SemSimLibrary();
 	}
 	
+	/**
+	 * Sets the {@link SemSimLibrary} instance used when writing out models
+	 * @param lib The {@link SemSimLibrary} instance to use
+	 */
 	public static void pointToSemSimLibrary(SemSimLibrary lib) {
 		sslib = lib;
 	}
 	
+	/** @return The RDF writer used to output RDF-formatted SemSim annotations.
+	 * RDF writers are only used when writing out standalone SBML or CellML models
+	 * and when writing CASA files in OMEX archives.
+	 */
 	public abstract AbstractRDFwriter getRDFwriter();
 
-	//Return whether write succeeded
 	
+	/**
+	 * Commit a model encoded as a String to an OutputStream
+	 * @param stream An OutputStream
+	 * @param outputstring Model code
+	 * @return Return whether writing succeeded
+	 */
 	protected boolean commitStringtoStream(OutputStream stream, String outputstring) {
 		OutputStreamWriter writer = new OutputStreamWriter(stream, Charset.defaultCharset());
 		
@@ -47,8 +65,15 @@ public abstract class ModelWriter {
 		return true;
 	}
 	
+	/** @return The translated model code */
 	public abstract String encodeModel();
 	
+	
+	/**
+	 * Write translated model code to an OutputStream
+	 * @param stream An OutputStream
+	 * @return False if the model translation process returned null, otherwise true
+	 */
 	public boolean writeToStream(OutputStream stream) {
 		String outputstring = encodeModel();
 		if (outputstring == null) {
@@ -58,7 +83,12 @@ public abstract class ModelWriter {
 		return true;
 	}
 
-	//Convert String to XML
+	
+	/**
+	 * Convert a String to an JDOM XML Content object 
+	 * @param xml XML code
+	 * @return JDOM Content object representation of the XML code
+	 */
 	public static Content makeXMLContentFromString(String xml){
 		try (InputStream stream = new ByteArrayInputStream(xml.getBytes("UTF-8"))) {
 			Document aDoc = new SAXBuilder().build(stream);
@@ -69,10 +99,17 @@ public abstract class ModelWriter {
 		} 
 	}
 	
+	
+	/**
+	 * Set the location for writing the translated code
+	 * @param ma Location to store the code
+	 */
 	public void setWriteLocation(ModelAccessor ma){
 		writelocation = ma;
 	}
 	
+	
+	/** @return Location where the translated code will be stored */
 	public ModelAccessor getWriteLocation(){
 		return writelocation;
 	}

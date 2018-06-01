@@ -84,7 +84,7 @@ public class SemSimRelations {
 	}
 	
 	/**
-	 * @param q A BioModels.net model qualifier
+	 * @param id A BioModels.net model qualifier ID
 	 * @return The {@link Relation} corresponding to the qualifier
 	 */
 	public static Relation getModelQualifierRelation(Qualifier id) {
@@ -242,9 +242,7 @@ public class SemSimRelations {
 		private String description;
 		private String sparqlcode;
 	
-	/** Class constructor 
-	 * @param description A free-text description of the relation
-	 * @param relationURI A URI for the relation */
+	/** Class constructor */
 		SemSimRelation(String name, String namespace, String desc, String owlid) {
 			this.name = name;
 			this.uri = namespace + name;

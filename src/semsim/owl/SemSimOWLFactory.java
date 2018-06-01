@@ -256,7 +256,7 @@ public class SemSimOWLFactory {
 	
 	/**
 	 * Add an object property restriction to use as a superclass on an individual (uses the "some" restriction type).
-	 * E.g. individual x <contains> some <reference ontology class>
+	 * E.g. individual x -contains- some reference ontology class
 	 * @param ont Ontology that will contain the restriction
 	 * @param ind The IRI of the individual that the restriction is on (as a String)
 	 * @param property The IRI of the object property used in the restriction (as a String)
@@ -279,7 +279,7 @@ public class SemSimOWLFactory {
 	
 	/**
 	 * Assert an object property axiom on an individual
-	 * E.g. individual x <partOf> individual y
+	 * E.g. individual x -partOf- individual y
 	 * @param ont The ontology that will contain the axiom
 	 * @param subject The IRI of the subject individual (as in subject-predicate-object statements)
 	 * @param object The IRI of the object individual

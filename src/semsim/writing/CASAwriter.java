@@ -28,6 +28,12 @@ import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.reading.AbstractRDFreader;
 
+/**
+ * Class for serializing RDF-formatted SemSim annotations in 
+ * Combine Archive Semantic Annotation (CASA) files.
+ * @author mneal
+ *
+ */
 public class CASAwriter extends AbstractRDFwriter{
 
 	public CASAwriter(SemSimModel model) {
@@ -35,6 +41,11 @@ public class CASAwriter extends AbstractRDFwriter{
 		initialize(model);
 	}
 
+	
+	/**
+	 * Sets some namespace prefixes for the serialized RDF
+	 * @param model An annotated SemSim model
+	 */
 	protected void initialize(SemSimModel model) {
 		// Add namespaces here
 		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
@@ -48,6 +59,11 @@ public class CASAwriter extends AbstractRDFwriter{
 	}
 	
 	
+	/**
+	 * Used to write out annotations for SBML elements that represent physical 
+	 * entities (compartments, species, and reactions).
+	 * @param pmc An annotated physical model component
+	 */
 	public void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
 		
 		String metaid = pmc.getMetadataID(); // TODO: what if no metaid assigned?
@@ -203,7 +219,13 @@ public class CASAwriter extends AbstractRDFwriter{
 	}
 	
 
-	
+	/**
+	 * Write out RDF statements about a data structure's associated physical component.
+	 * That is, the physical component that bears the physical property used in the 
+	 * data structure's composite annotation.
+	 * @param ds The annotated data structure
+	 * @param ares RDF Resource representing the data structure
+	 */
 	protected void setDataStructurePropertyOfAnnotation(DataStructure ds, Resource ares){		
 		// Collect physical model components with properties
 		if( ! ds.isImportedViaSubmodel()){
@@ -229,7 +251,7 @@ public class CASAwriter extends AbstractRDFwriter{
 					}
 					// else it's a singular physical entity
 					else{
-						Resource entity = getResourceForPMCandAnnotate(rdf, cpe.getArrayListOfEntities().get(0));
+						Resource entity = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
 						Statement st = rdf.createStatement(
 								ares, 
 								SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
@@ -242,7 +264,7 @@ public class CASAwriter extends AbstractRDFwriter{
 				else{
 					PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 
-					Resource processres = getResourceForPMCandAnnotate(rdf, ds.getAssociatedPhysicalModelComponent());
+					Resource processres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 					Statement st = rdf.createStatement(
 							ares, 
 							SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
@@ -278,7 +300,6 @@ public class CASAwriter extends AbstractRDFwriter{
 								SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
 					}
 				}
-				
 			}
 		}
 	}
@@ -300,6 +321,5 @@ public class CASAwriter extends AbstractRDFwriter{
 	protected Property getPartOfPropertyForComposites(){
 		return StructuralRelation.BQB_IS_PART_OF.getRDFproperty();
 	}
-	
 	
 }

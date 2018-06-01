@@ -32,16 +32,26 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
 
+/**
+ * Class for reading in a CellML model into a {@link SemSimModel} object.
+ * @author mneal
+ *
+ */
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
 	public AbstractRDFreader rdfreader;
 	private Element rdfreaderelement;
 	private static XMLOutputter xmloutputter = new XMLOutputter();
 
+	/**
+	 * Constructor
+	 * @param modelaccessor Location of the CellML model
+	 */
 	public CellMLreader(ModelAccessor modelaccessor){
 		super(modelaccessor);
 	}
 	
+	@Override
 	public SemSimModel read() throws IOException, JDOMException {
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
@@ -290,7 +300,7 @@ public class CellMLreader extends ModelReader {
 						}
 						
 						// Create the computational dependency network among the component variables
-						whiteBoxFunctionalSubmodelEquations(varmathmlel, compname, semsimmodel, cvar);
+						whiteBoxFunctionalSubmodelEquation(varmathmlel, compname, semsimmodel, cvar);
 					}
 				}
 				
@@ -328,7 +338,7 @@ public class CellMLreader extends ModelReader {
 			
 			while(compit.hasNext()){
 				Element topcomp = (Element) compit.next();
-				processComponentRelationships(rel, topcomp);
+				processComponentGroupings(rel, topcomp);
 			}
 		}
 		
@@ -445,19 +455,13 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	// Collect singular annotation for model components
-//	private void collectSingularBiologicalAnnotationForSubmodel(FunctionalSubmodel submodel){
-//		if(submodel.getMetadataID()!=null){
-//			URI termURI = rdfreader.collectSingularBiologicalAnnotation(submodel);
-//			if(termURI!=null){
-//				ReferencePhysicalEntity rpe = new ReferencePhysicalEntity(termURI, termURI.toString());
-//				semsimmodel.addReferencePhysicalEntity(rpe);
-//				submodel.setSingularAnnotation(rpe);
-//			}
-//		}
-//	}
-	
-	private void processComponentRelationships(String rel, Element comp){
+	/**
+	 * Recursive function to read in the relationships between CellML components
+	 * (i.e. encapsulation and containment) 
+	 * @param rel The relationship type to process ("encapsulation" or "containment")
+	 * @param comp The CellML component to process
+	 */
+	private void processComponentGroupings(String rel, Element comp){
 		Submodel parentsubmodel = semsimmodel.getSubmodel(comp.getAttributeValue("component"));
 		Iterator<?> subcompit = comp.getChildren("component_ref", mainNS).iterator();
 		while(subcompit.hasNext()){
@@ -478,11 +482,18 @@ public class CellMLreader extends ModelReader {
 				parentsubmodel.addSubmodel(childsubmodel);
 				
 				// Iterate recursively
-				processComponentRelationships(rel, subcomp);
+				processComponentGroupings(rel, subcomp);
 			}
 		}
 	}
 	
+	
+	/**
+	 * Store the model's name, ID, and the PubMed ID of its reference
+	 * publication in a SemSim model
+	 * @param doc JDOM Document representing the CellML XML
+	 * @param semsimmodel The {@link SemSimModel} representing the model
+	 */
 	private void getModelNameAndIDAndPubMedId(Document doc, SemSimModel semsimmodel){
 		String ab = "";
 		if(doc.getRootElement()!=null){
@@ -560,6 +571,12 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
+	/**
+	 * Add the contents of the CellML model's "documentation" element as 
+	 * a model-level annotation on a SemSim model
+	 * @param doc JDOM Document representation of the CellML model
+	 * @param semsimmodel The SemSim model representation of the CellML model
+	 */
 	private void getDocumentation(Document doc, SemSimModel semsimmodel){
 		Element docel = doc.getRootElement().getChild("documentation", RDFNamespace.DOC.createJdomNamespace());
 		if(docel!=null){
@@ -572,7 +589,12 @@ public class CellMLreader extends ModelReader {
 	
 	
 	
-	// Wraps a cloned version of the mathML element that solves a component variable inside a parent mathML element
+	/**
+	 * Wraps a cloned version of the mathML element that solves a CellML variable inside a parent mathML element 
+	 * @param cvarname The name of the CellMl variable
+	 * @param componentMathMLlist A list of MathML JDOM elements associated with the variable's parent component
+	 * @return A cloned version of the mathML element that solves for the input CellML variable
+	 */
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
 		
 		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceasString());
@@ -591,7 +613,13 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	// Returns the mathML Element representing the equation for the specified variable
+	/**
+	 * Get the MathML JDOM Element representing the equation for a specified CellML variable
+	 * @param cvarname The name of the CellML variable
+	 * @param compmathmlit Iterator of all MathML elements associated with the variable's
+	 * parent component in the CellML model
+	 * @return The MathML JDOM Element representing the equation for the input CellML variable
+	 */
 	public static Element getElementForOutputVariableFromComponentMathML(String cvarname, Iterator<?> compmathmlit){
 		
 		Element childel = null;
@@ -621,6 +649,13 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
+	/**
+	 * Determine whether a given CellML variable is solved using an ordinary differential equation
+	 * @param cvarname The name of the CellML variable
+	 * @param componentMathMLlist List of JDOM MathML Elements associated with
+	 * the variable's parent component
+	 * @return Whether the input CellML variable is solved using an ordinary differential equation
+	 */
 	protected static Boolean isSolvedbyODE(String cvarname, List<?> componentMathMLlist){
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
 		Element childel = null;
@@ -645,7 +680,16 @@ public class CellMLreader extends ModelReader {
 		return false;
 	}
 	
-	protected static void whiteBoxFunctionalSubmodelEquations(Element varmathmlel, String compname, SemSimModel semsimmodel, DataStructure cvar){
+	
+	/**
+	 * Examines the computational inputs required to compute a given model {@link DataStructure}
+	 * and stores that information in a SemSim model. 
+	 * @param varmathmlel JDOM Element representing the MathML used to compute the data structure
+	 * @param compname The name of the data structure's parent component (as in CellML models)
+	 * @param semsimmodel The parent model of the data structure
+	 * @param cvar The {@link DataStructure} in the SemSim model to process
+	 */
+	protected static void whiteBoxFunctionalSubmodelEquation(Element varmathmlel, String compname, SemSimModel semsimmodel, DataStructure cvar){
 		
 		Iterator<?> conit = varmathmlel.getDescendants();
 		while(conit.hasNext()){
@@ -678,7 +722,15 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	public static String getRHSofDataStructureEquation(String varmathml, String varname){
+	/**
+	 * Get the right-hand side of the equation that solves a given data structure
+	 * in the model.
+	 * @param varmathml String representation of the MathML used to compute the
+	 * data structure's values
+	 * @param varname The name of the data structure
+	 * @return String representation of the right-hand side of the equation that solves for the given data structure
+	 */
+	protected static String getRHSofDataStructureEquation(String varmathml, String varname){
 		
 		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
 		ASTNode ast_result = JSBML.readMathMLFromString(varmathmlRHS);
@@ -687,11 +739,19 @@ public class CellMLreader extends ModelReader {
 	}
 	
 	
-	public static Element getRDFmarkupForElement(Element el){
+	/**
+	 * @param el A JDOM Element in an XML-based model
+	 * @return The RDF child Element for the input Element
+	 */
+	protected static Element getRDFmarkupForElement(Element el){
 		return el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
 	}
 	
 	
+	/**
+	 * @param str An input String
+	 * @return UTF-8 formatted version of the input String
+	 */
 	protected static String getUTFformattedString(String str){
 		try {
 			return new String(str.getBytes(), "UTF-8");
