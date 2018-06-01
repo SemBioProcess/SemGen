@@ -80,6 +80,11 @@ import semsim.reading.SBMLreader;
 import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 
+/**
+ * Class for translating a SemSim model into an SBML model
+ * @author mneal
+ *
+ */
 public class SBMLwriter extends ModelWriter {
 	
 	private SBMLDocument sbmldoc;
@@ -116,6 +121,8 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
+	
+	@Override
 	public String encodeModel() {
 		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
 		String sbmlmodname = semsimmodel.getName();
@@ -198,9 +205,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	/**
-	 *  Collect units for SBML model
-	 */
+	/** Collect units for SBML model */
 	private void addUnits(){
 
 		// First rename any units that don't have SBML-compliant names and create a map
@@ -285,9 +290,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	/**
-	 *  Collect compartments for SBML model
-	 */
+	/** Collect compartments for SBML model */
 	private void addCompartments(){
 		
 		for(DataStructure ds : candidateDSsForCompartments){
@@ -353,9 +356,7 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	/**
-	 *  Collect chemical species for SBML model
-	 */
+	/** Collect chemical species for SBML model */
 	private void addSpecies(){
 		
 		for(DataStructure ds : candidateDSsForSpecies){
@@ -523,9 +524,8 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	/**
-	 *  Collect chemical reactions for SBML model
-	 */
+	
+	/** Collect chemical reactions for SBML model */
 	private void addReactions(){
 		
 		for(DataStructure ds : candidateDSsForReactions){
@@ -635,9 +635,8 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
-	/**
-	 *  Collect discrete events for SBML model
-	 */
+	
+	/** Collect discrete events for SBML model */
 	private void addEvents(){
 		for(Event e : semsimmodel.getEvents()){
 			
@@ -690,6 +689,12 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 
+	
+	/**
+	 * Update any parameter names in a MathML block that need to be changed before writing out
+	 * @param mathml MathML XML content
+	 * @return Updated MathML XML content containing replacement parameter names
+	 */
 	private String updateParameterNamesInMathML(String mathml){
 		for(String oldname : oldAndNewParameterNameMap.keySet())
 			mathml = SemSimUtil.replaceCodewordsInString(mathml, oldAndNewParameterNameMap.get(oldname), oldname);
@@ -698,9 +703,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 		
 	
-	/**
-	 *  Collect global parameters for SBML model
-	 */
+	/** Collect global parameters for SBML model */
 	private void addGlobalParameters(){
 		
 		// TODO: t.delta, etc. are getting renamed to t_delta but this change isn't being reflected in the model's MathML.
@@ -800,9 +803,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
-	/**
-	 *  Add the relational constraints to the SBML model
-	 */
+	/** Add the relational constraints to the SBML model */
 	private void addConstraints(){
 		
 		for(RelationalConstraint rc : semsimmodel.getRelationalConstraints()){
@@ -812,6 +813,11 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
+	/**
+	 * If storing the SBML model in an OMEX archive, write out all full
+	 * composite annotations in the CASA file
+	 * @return JDOM Document object representing the SBML model
+	 */
 	private Document addCASArdf(){
 		
 		writeFullCompositesInRDF();
@@ -906,13 +912,21 @@ public class SBMLwriter extends ModelWriter {
 	 *  Returns a JSBML formula representation of the RHS of a mathml expression
 	 * @param mathml The MathML expression
 	 * @param localname The name of the variable solved by the expression
-	 * @return An ASTNode representation of the right-hand-side of the expression
+	 * @return The right-hand-side of the expression
 	 */
 	private String getFormulaFromRHSofMathML(String mathml, String localname){
 		ASTNode node = getASTNodeFromRHSofMathML(mathml, localname);
 		return JSBML.formulaToString(node);	
 	}
 	
+	
+	/**
+	 * Look up an SBML component in one of the LinkedHashMaps used to 
+	 * related SemSim physical model components to SBML elements
+	 * @param pmc A SemSim {@link PhysicalModelComponent}
+	 * @param map Mapping between a SemSim {@link PhysicalModelComponent} and an SBML element
+	 * @return The SBML element corresponding to the input SemSim physical model component
+	 */
 	private SBase lookupSBaseComponentInEntityMap(PhysicalModelComponent pmc, LinkedHashMap<? extends PhysicalModelComponent, ? extends SBase> map){
 		
 		for(PhysicalModelComponent testpmc : map.keySet()){
@@ -951,6 +965,13 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/**
+	 * Assign physical units to an SBML element
+	 * @param qwu The SBML element
+	 * @param ds The data structure corresponding to the SBML element
+	 * and whose units will be applied to the element
+	 */
 	private void setUnitsForModelComponent(QuantityWithUnit qwu, DataStructure ds){
 		
 		if(ds.hasUnits()){
@@ -962,6 +983,12 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/**
+	 * Add a rule to the SBML model
+	 * @param ds The {@link DataStructure} whose values are computed by the rule
+	 * @param sbmlobj The SBML Symbol corresponding to the {@link DataStructure}
+	 */
 	private void addRuleToModel(DataStructure ds, Symbol sbmlobj){
 		ExplicitRule rule = null;
 		
@@ -980,6 +1007,11 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
+	/**
+	 * Add semantic annotations on an SBML model element encoded as RDF
+	 * @param pmc {@link PhysicalModelComponent} corresponding to the SBML element
+	 * @param sbmlobj The SBML element to annotate
+	 */
 	private void addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
 		
 		// If neither the SBML object nor the SemSim physical model component have a metadata ID, assign them both the same one
@@ -1032,6 +1064,13 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 	
+	
+	/**
+	 * For data structures that are set to constant values in the SBML code,
+	 * get the contant value as a Double
+	 * @param ds The DataStructure with constant value
+	 * @return Double representation of the value
+	 */
 	private Double getConstantValueForPropertyOfEntity(DataStructure ds){
 		Double formulaAsDouble = null;
 		
@@ -1055,13 +1094,23 @@ public class SBMLwriter extends ModelWriter {
 		return formulaAsDouble;
 	}
 	
+	
+	/**
+	 * If an SBML parameter is annotated and does not have an assigned metaID,
+	 * assign it a unique metaID
+	 * @param ds The {@link DataStructure} that will be written out as an SBML parameter
+	 */
 	private void assignMetaIDtoParameterIfAnnotated(DataStructure ds){
 		// If the parameter is annotated, and doesn't have a meta id, give it one
 		if((ds.hasDescription() || ds.hasPhysicalProperty() || ds.hasPhysicalDefinitionAnnotation()) && ! ds.hasMetadataID())
 			semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 	}
 
-	// For data structures that don't have valid IDs, rename them and also replace occurrences of the old name 
+	/**
+	 * For data structures that don't have valid IDs, rename them and store the 
+	 * old-to-new name mapping 
+	 * @param ds A {@link DataStructure}
+	 */
 	// in the MathML of dependent data structures
 	private void makeDataStructureNameValid(DataStructure ds){
 		Set<String> existingnames = semsimmodel.getDataStructureNames();
@@ -1081,6 +1130,8 @@ public class SBMLwriter extends ModelWriter {
 		return rdfwriter;
 	}
 	
+	
+	/** @return The SBML model translated into a JDOM Document object */
 	private Document makeXMLdocFromSBMLdoc(){
 		try {
 			String sbmlstring = new SBMLWriter().writeSBMLToString(sbmldoc);
@@ -1094,6 +1145,7 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 	
+	/** Write out composite annotations in the SemSim RDF associated with the model */
 	private void writeFullCompositesInRDF(){
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			

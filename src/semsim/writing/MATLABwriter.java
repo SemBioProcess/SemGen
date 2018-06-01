@@ -26,7 +26,13 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.utilities.SemSimUtil;
 
-
+/**
+ * Class for writing out MATLAB code from SemSim models.
+ * Consider this class under construction; it has not
+ * been thoroughly tested.
+ * @author mneal
+ *
+ */
 public class MATLABwriter extends ModelWriter{
 	
 	public String timevectorname;
@@ -173,8 +179,8 @@ public class MATLABwriter extends ModelWriter{
 		
 		String modelname = semsimmodel.getName();
 		modelname = modelname.replace(".", "_");
-		timevectorname = createUniqueNameForMatlabVariable("t", dsnames);
-		statevarvectorname = createUniqueNameForMatlabVariable("y", dsnames);
+		timevectorname = createUniqueNameForMATLABvariable("t", dsnames);
+		statevarvectorname = createUniqueNameForMATLABvariable("y", dsnames);
 		
 		// write out header and rest of file
 		String outstring = "";
@@ -307,7 +313,7 @@ public class MATLABwriter extends ModelWriter{
 	}
 
 	
-	public ArrayList<DataStructure> swap(DataStructure arg0, DataStructure arg1, ArrayList<DataStructure> list){
+	private ArrayList<DataStructure> swap(DataStructure arg0, DataStructure arg1, ArrayList<DataStructure> list){
 		int newindexforcdwd = list.indexOf(arg1);
 		for(int j=list.indexOf(arg0); j<list.indexOf(arg1); j++){
 			list.set(j, list.get(j+1));
@@ -317,7 +323,7 @@ public class MATLABwriter extends ModelWriter{
 	}
 	
 	
-	public String createUniqueNameForMatlabVariable(String startname, Set<String> usednames){
+	private String createUniqueNameForMATLABvariable(String startname, Set<String> usednames){
 		String newname = startname;
 		int g = 0;
 		while(usednames.contains(newname)){
@@ -326,8 +332,6 @@ public class MATLABwriter extends ModelWriter{
 		}
 		return newname;
 	}
-	
-	
 	
 	
 	// Create MATLAB-friendly conditional statement to replace piecewise formulations
@@ -383,7 +387,7 @@ public class MATLABwriter extends ModelWriter{
 	
 	// Write out standalone functions that are needed for matlab to understand formulas 
 	// that are output from libsbml formula writer
-	public String writeNeededFunctions(String outstring){
+	private String writeNeededFunctions(String outstring){
 		
 		// Exponent function
 		String thestring = outstring + "\n";
@@ -400,7 +404,6 @@ public class MATLABwriter extends ModelWriter{
 
 	@Override
 	public AbstractRDFwriter getRDFwriter() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

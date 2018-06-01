@@ -20,8 +20,12 @@ import org.jdom.output.XMLOutputter;
 
 import semsim.fileaccessors.OMEXAccessor;
 
-/**class for generating a new OMEX archive on the file system**/
 
+/**
+ * Class for generating a new OMEX archive in the file system
+ * @author mneal
+ *
+ */
 public class OMEXArchiveBuilder {
 	private OMEXAccessor archive;
 
@@ -29,7 +33,10 @@ public class OMEXArchiveBuilder {
 		this.archive = archive;
 	}
 	
-	//Construct an archive with the resources required by the standard.
+	/**
+	 * Construct an archive with the resources required by the OMEX standard.
+	 * @throws IOException
+	 */
 	public void build() throws IOException {
         Map<String, String> env = new HashMap<>(); 
 	        env.put("create", "true");
@@ -56,7 +63,11 @@ public class OMEXArchiveBuilder {
   	        fs.close(); //close and write archive to the filesystem
 	}
 	
-	//Create a basic OMEX manifest
+	
+	/**
+	 * Create a basic OMEX manifest
+	 * @return A basic OMEX manifest file as a JDOM Document object
+	 */
 	private Document buildManifest() {
 		Element root = new Element("omexManifest", "http://identifiers.org/combine.specifications/omex-manifest");
 		
@@ -68,7 +79,12 @@ public class OMEXArchiveBuilder {
 		return manifest;
 	}
 	
-	//Add an entry to the manifest
+	/**
+	 * Add an entry to the OMEX manifest
+	 * @param root Root element of the manifest
+	 * @param location Location attribute value for the entry
+	 * @param format Format attribute value for the entry
+	 */
 	private void addManifestElement(Element root, String location, String format) {
 		Element element = new Element("content");
 		element.setAttribute("location", location);
