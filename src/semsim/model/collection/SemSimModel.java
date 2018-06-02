@@ -113,7 +113,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		setNamespace(generateNamespaceFromDateAndTime());
 	}
 	
-	/** Constructor with namespace */
+	/** Constructor with namespace 
+	 * @param namespace Namespace for the model
+	 */
 	public SemSimModel(String namespace){
 		super(SemSimTypes.MODEL);
 		setNamespace(namespace);
@@ -140,13 +142,22 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		new SemSimCopy(ssmtocopy, this);
 	}
 	
+	
+	/** @return The {@link CurationalMetadata} associated with the model */
 	public CurationalMetadata getCurationalMetadata() {
 		return metadata;
 	}
 	
+	
+	/**
+	 * Copy curational metadata from one model into this model
+	 * @param toimport The model to copy info from
+	 * @param overwrite Whether to overwrite existing Metadata assignments in this model
+	 */
 	public void importCurationalMetadatafromModel(SemSimModel toimport, boolean overwrite) {
 		metadata.importMetadata(toimport.metadata, overwrite);
 	}
+	
 	
 	/**
 	 * Add an error to the model. Errors are just string notifications indicating a 
@@ -190,9 +201,15 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		//else System.err.println("Model already has units " + unit.getName() + ". Using existing unit object.");
 	}
 	
+	
+	/**
+	 * Specify the set of physical units associated with the model
+	 * @param units A set of physical units
+	 */
 	public void setUnits(HashSet<UnitOfMeasurement> units) {
 		this.units = units;
 	}
+	
 	
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
@@ -210,6 +227,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.physicalentities.add(cpe);
 		return cpe;
 	}
+	
 	
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
@@ -236,6 +254,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		return newcpe;
 	}
+	
 	
 	/**
 	 * Add a new {@link CustomPhysicalEntity} to the model. 
@@ -266,6 +285,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
+	/**
+	 * Add a {@link PhysicalPropertyInComposite} to the model
+	 * @param pp A {@link PhysicalPropertyInComposite}
+	 * @return If the model doesn't contain a synonymous physical property, the 
+	 * input property is returned, otherwise the existing synonymous property is returned.
+	 */
 	public PhysicalPropertyInComposite addPhysicalPropertyForComposite(PhysicalPropertyInComposite pp){
 		
 		if(getPhysicalPropertyForCompositeByURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertyForCompositeByURI(pp.getPhysicalDefinitionURI());
@@ -274,10 +299,22 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
+	
+	/**
+	 * Remove an associated physical property from the model
+	 * @param pp The property to remove
+	 */
 	public void removeAssociatePhysicalProperty(PhysicalPropertyInComposite pp) {
 		this.associatephysicalproperties.remove(pp);
 	}
 	
+	
+	/**
+	 * Add a physical property to the model
+	 * @param pp Property to add
+	 * @return If model contains a synonymous property, the synonymous property
+	 * is returned. Otherwise the input property is returned.
+	 */
 	public PhysicalProperty addPhysicalProperty(PhysicalProperty pp){
 		
 		if(getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI())!=null) pp = getPhysicalPropertybyURI(pp.getPhysicalDefinitionURI());
@@ -286,6 +323,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return pp;
 	}
 	
+	
+	/**
+	 * Look up a {@link PhysicalPropertyInComposite} in the model by its OPB URI
+	 * @param uri An OPB URI
+	 * @return The {@link PhysicalPropertyInComposite} with the input URI or null,
+	 * if no corresponding {@link PhysicalPropertyInComposite} was found in the model
+	 */
 	public PhysicalPropertyInComposite getPhysicalPropertyForCompositeByURI(URI uri) {
 		for (PhysicalPropertyInComposite pp : associatephysicalproperties) {
 			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
@@ -293,6 +337,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return null;
 	}
 	
+	
+	/**
+	 * Look up a {@link PhysicalProperty} in the model by its URI
+	 * @param uri A URI
+	 * @return The {@link PhysicalProperty} with the input URI or null,
+	 * if no corresponding {@link PhysicalProperty} was found in the model
+	 */
 	public PhysicalProperty getPhysicalPropertybyURI(URI uri) {
 		for (PhysicalProperty pp :physicalproperties) {
 			if (pp.getPhysicalDefinitionURI().equals(uri)) return pp;
@@ -343,20 +394,23 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return dep;
 	}
 	
+	
+	/**
+	 * Remove a reference physical dependency from the model
+	 * @param dep The dependency to remove
+	 */
 	public void removeReferencePhysicalDependency(ReferencePhysicalDependency dep) {
 		physicaldependencies.remove(dep);
 	}
 	
-	/**
-	 * @return True if the model contains a {@link UnitOfMeasurement} with the specified name, otherwise false.
-	 */
+	
+	/**  @return True if the model contains a {@link UnitOfMeasurement} with the specified name, otherwise false.*/
 	public boolean containsUnit(String name){
 		return getUnit(name)!=null;
 	}
-		
-	/**
-	 * @return The set of all {@link Event}s in the model
-	 */
+	
+	
+	/** @return The set of all {@link Event}s in the model */
 	public Set<Event> getEvents(){
 		return events;
 	}
@@ -421,6 +475,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return set;
 	}
 		
+	
 	/**@return The parent FunctionalSubmodel for a MappableVariable.*/
 	public FunctionalSubmodel getParentFunctionalSubmodelForMappableVariable(MappableVariable var){
 		
@@ -431,9 +486,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		return null;
 	}
-	/**
- 	 * @return A Map that links MatadataIDs with their associated model component.
- 	 */
+	
+	
+	/** @return A Map that links MatadataIDs with their associated model component. */
  	public Map<String, SemSimObject> getMetadataIDcomponentMap(){
  		Map<String, SemSimObject> map = new HashMap<String, SemSimObject>();
  		
@@ -444,6 +499,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  		}
  		return map;
  	}
+ 	
  	
  	/**
  	 * @param ID A metadata ID used to look up a model component.
@@ -459,6 +515,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
   		}
   		return null;
   	}
+ 	
  	
  	/**
 	 * Method for ensuring that duplicate metadata ID's don't appear
@@ -489,6 +546,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return newID;
  	}
 
+ 	
 	/**
 	 * Specify the set of {@link RelationalConstraint}s used in the model.
 	 * @param relationalConstraints The set of constraints.
@@ -497,40 +555,35 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.relationalConstraints = new HashSet<RelationalConstraint>(relationalConstraints);
 	}
 	
-	/**
-	 * @return The {@link RelationalConstraint}s used in the model.
-	 */
+	
+	/** @return The {@link RelationalConstraint}s used in the model. */
 	public Set<RelationalConstraint> getRelationalConstraints() {
 		return relationalConstraints;
 	}
 	
+	
 	/**
 	 * Add a {@link RelationalConstraint} to the model.
-	 * @return 
+	 * @return The input relational constraint
 	 */
 	public RelationalConstraint addRelationalConstraint(RelationalConstraint rel){
 		this.relationalConstraints.add(rel);
 		return rel;
 	}
 	
-	/**
-	 * 
-	 * @return The model's namespace.
-	 */
+	/** @return The model's namespace. */
 	public String getNamespace(){
 		return namespace;
 	}
 	
-	/**
-	 * @return All PhysicalEntities in the model. 
-	 */
+	
+	/** @return All PhysicalEntities in the model.  */
 	public Set<PhysicalEntity> getPhysicalEntities() {
 		return physicalentities;
 	}
 	
-	/**
-	 * @return All PhysicalEntities in the model, except those that either are, or use, a specifically excluded entity 
-	 */
+	
+	/** @return All PhysicalEntities in the model, except those that either are, or use, a specifically excluded entity  */
 	public Set<PhysicalEntity> getPhysicalEntitiesAndExclude(PhysicalEntity entityToExclude) {
 		Set<PhysicalEntity> includedents = new HashSet<PhysicalEntity>();
 		
@@ -550,8 +603,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/**
-	 * Specify the set of PhysicalEntities in the model. 
+	/** Specify the set of PhysicalEntities in the model.  
+	 * @param physicalentities Set of {@link PhysicalEntity}s
 	 */
 	public void setPhysicalEntities(Set<PhysicalEntity> physicalentities) {
 		this.physicalentities.clear();
@@ -559,9 +612,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 
 	
-	/**
-	 * @return All the CompositePhysicalEntities in the model. 
-	 */
+	/** @return All the CompositePhysicalEntities in the model.  */
 	public Set<CompositePhysicalEntity> getCompositePhysicalEntities(){
 		Set<CompositePhysicalEntity> set = new HashSet<CompositePhysicalEntity>();
 		for(PhysicalEntity ent : getPhysicalEntities()){
@@ -574,9 +625,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 
 	
-	/**
-	 * @return All ReferencePhysicalEntities in the model.
-	 */
+	/** @return All ReferencePhysicalEntities in the model. */
 	public Set<ReferencePhysicalEntity> getReferencePhysicalEntities(){
 		Set<ReferencePhysicalEntity> refents = new HashSet<ReferencePhysicalEntity>();
 		for(PhysicalEntity ent : getPhysicalEntities()){
@@ -586,23 +635,19 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/**
-	 * @return All PhysicalProperties which can be associated with a composite in the model.
-	 */
+	/** @return All PhysicalProperties which can be associated with a composite in the model. */
 	public Set<PhysicalPropertyInComposite> getAssociatePhysicalProperties() {
 		return associatephysicalproperties;
 	}
 	
-	/**
-	 * @return All PhysicalProperties which cannot be associated with a composite in the model.
-	 */
+	
+	/** @return All PhysicalProperties which cannot be associated with a composite in the model. */
 	public Set<PhysicalProperty> getPhysicalProperties() {
 		return physicalproperties;
 	}
 	
-	/**
-	 * @return Retrieves all PhysicalEntities, PhysicalProperties, PhsicalProcesses and PhysicalDependencies in the model
-	 */
+	
+	/** @return Retrieves all PhysicalEntities, PhysicalProperties, PhsicalProcesses and PhysicalDependencies in the model */
 	public Set<PhysicalModelComponent> getPhysicalModelComponents(){
 		Set<PhysicalModelComponent> set = new HashSet<PhysicalModelComponent>();
 		set.addAll(getAssociatePhysicalProperties());
@@ -611,6 +656,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getPhysicalProcesses());
 		return set;
 	}
+	
 	
 	/**
 	 * @param uri A reference term URI
@@ -646,6 +692,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return null;
 	}
 	
+	
 	/**
 	 * @param uri A reference term URI
 	 * @return The {@link ReferencePhysicalDependency} that is annotated against the URI using the HAS_PHYSICAL_DEFINITION_RELATION.
@@ -664,9 +711,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/**
-	 * @return The set of all CustomPhysicalEntities in the model.
-	 */
+	/** @return The set of all CustomPhysicalEntities in the model. */
 	public Set<CustomPhysicalEntity> getCustomPhysicalEntities(){
 		Set<CustomPhysicalEntity> custs = new HashSet<CustomPhysicalEntity>();
 		
@@ -694,9 +739,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/**
-	 * @return The set of all CustomPhysicalProcesses in the model.
-	 */
+	/** @return The set of all CustomPhysicalProcesses in the model. */
 	public Set<CustomPhysicalProcess> getCustomPhysicalProcesses(){
 		Set<CustomPhysicalProcess> custs = new HashSet<CustomPhysicalProcess>();
 		
@@ -738,6 +781,10 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return null;
 	}
 	
+	
+	/** @return {@link DataStructure}s that set the boundaries of the models'
+	 * solution domain (as in JSim models)
+	 */
 	public HashSet<DataStructure> getSolutionDomainBoundaries() {
 		Set<String> soldomname = getSolutionDomainNames();
 		
@@ -751,6 +798,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return boundaries;
 	}
 
+	
 	/**
 	 * @param name The name of a {@link UnitOfMeasurement} to retrieve
 	 * @return The UnitOfMeasurement with the specified name or null if no UnitOfMeasurement found with that name. 
@@ -764,13 +812,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return null;
 	}
 	
-	/**
-	 * @return All UnitsOfMeasurement in the model.
-	 */
+	/** @return All UnitsOfMeasurement in the model.  */
 	public Set<UnitOfMeasurement> getUnits(){
 		return units;
 	}
 
+	
 	/**
 	 * @param nametomatch The name to look up
 	 * @return True if the model contains a solution domain with the name specified, otherwise false.
@@ -785,9 +832,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return test;
 	}
 	
-	/**
-	 * @return The names of all the solution domains in the model.
-	 */
+	/** @return The names of all the solution domains in the model. */
 	public Set<String> getSolutionDomainNames(){
 		Set<String> sdnames = new HashSet<String>();
 		
@@ -797,6 +842,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return sdnames;
 	}
 	
+	
 	/**
 	 * Set the namespace of the model.
 	 * @param namespace The namespace to use.
@@ -805,17 +851,15 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.namespace = namespace;
 	}
 
-	/**
-	 * @return A new SemSim model namespace from the current date and time
-	 */
+	
+	/** @return A new SemSim model namespace from the current date and time */
 	public String generateNamespaceFromDateAndTime(){
 		namespace = RDFNamespace.SEMSIM.getNamespaceasString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
 		return namespace;
 	}
 
-	/**
-	 * @return All ReferenceOntologyAnnotations in the model.
-	 */
+	
+	/** @return All ReferenceOntologyAnnotations in the model. */
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations() {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		
@@ -835,9 +879,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.physicalprocesses.addAll(physicalprocess);
 	}
 	
-	/**
-	 * @return All {@link PhysicalProcess}es in the model.
-	 */
+	/** @return All {@link PhysicalProcess}es in the model. */
 	public Set<PhysicalProcess> getPhysicalProcesses() {
 		return physicalprocesses;
 	}
@@ -856,17 +898,21 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return refprocs;
 	}
 	
-	/**
-	 * @return The location of the raw computer source code associated with this model.
-	 */
+	/** @return The location of the raw computer source code associated with this model. */
 	
 	public ModelAccessor getLegacyCodeLocation() {
 		return sourcefilelocation;
 	}
 
+	
+	/**
+	 * Set the location of the model code from which the model originated
+	 * @param sourcefilelocation Model code location
+	 */
 	public void setSourceFileLocation(ModelAccessor sourcefilelocation) {
 		this.sourcefilelocation = sourcefilelocation;
 	}
+	
 	
 	/**
 	 * Set the errors associated with the model.
@@ -876,19 +922,18 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.errors = errors;
 	}
 	
-	/**
-	 * @return All errors associated with the model.
-	 */
+	
+	/** @return All errors associated with the model. */
 	public Set<String> getErrors() {
 		return errors;
 	}
 	
-	/**
-	 * @return The number of errors associated with the model.
-	 */
+	
+	/** @return The number of errors associated with the model. */
 	public int getNumErrors(){
 		return errors.size();
 	}
+	
 	
 	/**
 	 * Print all the errors associated with the model to System.err.
@@ -897,6 +942,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		for(String err : getErrors()) System.err.println("***************\n" + err + "\n");
 	}
 
+	
+	/**
+	 * Remove a data structure that has a particular name
+	 * @param dsname An input name
+	 */
 	public void removeDataStructurebyName(String dsname) {
 		if (this.containsDataStructure(dsname)) {
 			getAssociatedDataStructure(dsname).removeFromModel(this);
@@ -936,12 +986,18 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		dataStructures.remove(ds);
 	}
 	
+	
+	/**
+	 * Remove a {@link MappableVariable} from the model
+	 * @param mapv The variable to remove
+	 */
 	public void removeDataStructure(MappableVariable mapv) {
 		FunctionalSubmodel fs = getParentFunctionalSubmodelForMappableVariable(mapv);
 		if(fs != null) fs.removeVariableEquationFromMathML(mapv);
 		
 		removeDataStructure((DataStructure)mapv);
 	}
+	
 	
 	/**
 	 * Remove a physical entity from the model cache
@@ -952,6 +1008,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 			physicalentities.remove(ent);
 	}
 	
+	
 	/**
 	 * Remove a physical process from the model cache
 	 * @param ent The physical process to remove
@@ -960,6 +1017,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		if(physicalprocesses.contains(ent))
 			physicalprocesses.remove(ent);
 	}
+	
 	
 	/**
 	 * Delete a {@link Submodel} from the model (does not remove the Submodel's associated DataStructures, 
@@ -973,13 +1031,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		for(Submodel sub : getSubmodels()) sub.removeSubmodel(submodel);
 	}
 	
-	/**
-	 * @return A clone of the model.
-	 */
+	
+	/** @return A clone of the model. */
 	public SemSimModel clone() {
         return new SemSimModel(this);
 	}
 
+	
 	/**
 	 * Specify which format was used for the model's simulation source code.
 	 * See {@link semsim.reading.ModelClassifier} constants. 
@@ -999,28 +1057,20 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	// Required by annotable interface:
-	/**
-	 * @return All SemSim Annotations applied to an object
-	 */
+	@Override
 	public Set<Annotation> getAnnotations() {
 		return annotations;
 	}
 	
 	
-	/**
-	 * Set the SemSim Annotations for an object
-	 * @param annset The set of annotations to apply
-	 */
+	@Override
 	public void setAnnotations(Set<Annotation> annset){
 		annotations.clear();
 		annotations.addAll(annset);
 	}
 
 	
-	/**
-	 * Add a SemSim {@link Annotation} to this object
-	 * @param ann The {@link Annotation} to add
-	 */
+	@Override
 	public void addAnnotation(Annotation ann) {
 		annotations.add(ann);
 	}
@@ -1034,6 +1084,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		metadata.setAnnotationValue(metaID, value);
 	}
 	
+	@Override
 	/**
 	 * Add a SemSim {@link ReferenceOntologyAnnotation} to an object
 	 * 
@@ -1048,7 +1099,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	
+	@Override
 	/**
 	 * Get all SemSim {@link ReferenceOntologyAnnotation}s applied to an object
 	 * that have a specific {@link SemSimRelation}.
@@ -1067,13 +1118,14 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return raos;
 	}
 
-	/**
-	 * @return True if an object has at least one {@link Annotation}, otherwise false.
-	 */
+	
+	@Override
+	/** @return True if an object has at least one {@link Annotation}, otherwise false. */
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
 	}
 
+	@Override
 	/**
 	 * Delete all {@link ReferenceOntologyAnnotation}s applied to this object
 	 */
@@ -1085,6 +1137,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		annotations.clear();
 		annotations.addAll(newset);
 	}
+	
+	//Required by Annotatable
+	@Override
+	public Boolean hasPhysicalDefinitionAnnotation() {
+		return false;
+	}
+		
 	// End of methods required by Annotatable interface	
 
 	@Override
@@ -1096,18 +1155,36 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		metadata.setAnnotationValue(Metadata.description, value);
 	}
 	
+	
+	/** @return Version of SemSim package used to create this model */
 	public double getSemSimVersion() {
 		return semsimversion;
 	}
 
+	
+	/**
+	 * Set the SemSim package version used to create the model
+	 * @param semsimversion SemSim package version
+	 */
 	public void setSemSimVersion(double semsimversion) {
 		this.semsimversion = semsimversion;
 	}
 	
+	
+	/**
+	 * Set the SemSim package version used to create the model
+	 * @param semsimversion SemSim package version
+	 */
 	public void setSemSimVersion(String semsimversion) {
 		this.semsimversion = Double.valueOf(semsimversion);
 	}
 		
+	
+	/**
+	 * Replace a physical property in the model
+	 * @param tobereplaced The property to replace
+	 * @param toreplace The replacement
+	 */
 	public void replacePhysicalProperty(PhysicalPropertyInComposite tobereplaced, PhysicalPropertyInComposite toreplace) {
 		Set<PhysicalPropertyInComposite> pps = new HashSet<PhysicalPropertyInComposite>();
 		pps.addAll(associatephysicalproperties);
@@ -1129,6 +1206,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 	}
 	
+	
+	/**
+	 * Remove a physical property from the model
+	 * @param pp Property to remove
+	 */
 	public void removePhysicalProperty(PhysicalProperty pp) {
 		this.physicalproperties.remove(pp);
 	}
@@ -1143,9 +1225,4 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 	}
 
-	//Required by Annotatable
-	@Override
-	public Boolean hasPhysicalDefinitionAnnotation() {
-		return false;
-	}
 }

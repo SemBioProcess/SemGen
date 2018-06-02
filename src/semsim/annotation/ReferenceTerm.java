@@ -12,7 +12,9 @@ import semsim.SemSimLibrary;
  */
 public interface ReferenceTerm {
 	
-	/** @return The first {@link ReferenceOntologyAnnotation} found applied to this object
+	/** 
+	 * @param semsimlib A SemSimLibrary instance
+	 * @return The first {@link ReferenceOntologyAnnotation} found applied to this object
 	 * that uses an identity relation (e.g., SemSimConstants.HAS_PHYSICAL_DEFINITION_RELATION). */
 	public ReferenceOntologyAnnotation getPhysicalDefinitionReferenceOntologyAnnotation(SemSimLibrary semsimlib);
 	
@@ -25,10 +27,13 @@ public interface ReferenceTerm {
 	/** @return The ReferenceTerm's name */
 	public String getName();
 	
-	/** @return The ReferenceTerm's name suffixed with an abbreviation for the ontology containing it */
+	/** 
+	 * @param semsimlib A SemSimLibrary instance
+	 * @return The ReferenceTerm's name suffixed with an abbreviation for the ontology containing it */
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib);
 	
-	/** @return The name of the ontology containing the ReferenceTerm */
+	/** @param semsimlib A SemSimLibrary instance
+	 * @return The name of the ontology containing the ReferenceTerm */
 	public String getOntologyName(SemSimLibrary semsimlib);
 	
 	/** @return The URI of the ReferenceTerm as a string */

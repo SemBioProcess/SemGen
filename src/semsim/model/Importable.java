@@ -19,13 +19,17 @@ public interface Importable {
 	/** @return The imported element's referenced name, i.e. its name in the model from which it was imported */
 	public String getReferencedName();
 	
-	/** Set the imported element's referenced name, i.e. its name in the model from which it was imported */
+	/** Set the imported element's referenced name, i.e. its name in the model from which it was imported 
+	 * @param name Imported element's referenced name
+	 */
 	public void setReferencedName(String name);
 	
 	/** True if the SemSim model element is imported from another model, otherwise false */
 	public boolean isImported();
 	
-	/** Set whether the SemSim model element is imported from another model */
+	/** Set whether the SemSim model element is imported from another model 
+	 * @param val whether the SemSim model element is imported from another model 
+	 */
 	public void setImported(boolean val);
 	
 	/**
@@ -36,6 +40,8 @@ public interface Importable {
 	
 	/**
 	 * Set the href value that indicates the location of the model from which this 
+	 * SemSim model element was imported
+	 * @param hrefVal Href value indicating the location of the model from which this 
 	 * SemSim model element was imported
 	 */
 	public void setHrefValue(String hrefVal);
@@ -49,6 +55,7 @@ public interface Importable {
 	/**
 	 * Use this to set the direct parent import of a SemSim model element that 
 	 * is imported by virtue of another import.
+	 * @param parent The parent import
 	 */
 	public void setParentImport(Importable parent);
 }

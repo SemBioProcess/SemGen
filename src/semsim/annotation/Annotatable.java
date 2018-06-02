@@ -41,16 +41,18 @@ public interface Annotatable {
 	 * annotation
 	 * @param description A free-text description of the reference
 	 * ontology term (obtained from the ontology itself whenever possible). 
+	 * @param lib A SemSimLibrary instance
 	 */
 	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib);
 
 	
 	/**
 	 * Get all SemSim {@link ReferenceOntologyAnnotation}s applied to an object
-	 * that have a specific {@link SemSimRelation}.
-	 * 
+	 * that use a specific {@link SemSimRelation}.
 	 * @param relation The {@link SemSimRelation} that filters the annotations 
 	 * to return  
+	 * @return All SemSim {@link ReferenceOntologyAnnotation}s applied to an object
+	 * that use the specified {@link SemSimRelation}.
 	 */
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation);
 	

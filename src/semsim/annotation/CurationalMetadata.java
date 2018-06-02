@@ -54,6 +54,8 @@ public class CurationalMetadata {
 	
 	/**
 	 * Copy curational metadata from one {@link CurationalMetadata} object to another
+	 * @param toimport The CurationalMetadata object containing the info we want to copy
+	 * @param overwrite Whether to overwrite existing {@link Metadata} annotations
 	 */
 	public void importMetadata(CurationalMetadata toimport, boolean overwrite) {
 		for (Metadata m : Metadata.values()) {
@@ -176,7 +178,7 @@ public class CurationalMetadata {
 
 	/**
 	 * @param list A set of OWLAnnotation objects
-	 * @param removelist
+	 * @param removelist List of OWLAnnotation objects to remove
 	 */
 	public void setCurationalMetadata(Set<OWLAnnotation> list, Set<OWLAnnotation> removelist) {
 		for (Metadata m : Metadata.values()) {

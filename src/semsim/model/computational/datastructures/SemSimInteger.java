@@ -7,7 +7,8 @@ import semsim.model.computational.Computation;
 public class SemSimInteger extends DataStructure{
 
 	/** Constructor where only the name of the data structure is specified.
-	 * Automatically associates this SemSimInteger with a new {@link Computation} class.*/
+	 * Automatically associates this SemSimInteger with a new {@link Computation} class.
+	 * @param name Name of data structure*/
 	public SemSimInteger(String name){
 		super(SemSimTypes.INTEGER);
 		setName(name);
@@ -15,7 +16,10 @@ public class SemSimInteger extends DataStructure{
 	}
 	
 	/** Constructor where the name of the data structure is specified along with the 
-	 * associated {@link Computation} that specifies how the SemSimInteger is solved.*/
+	 * associated {@link Computation} that specifies how the SemSimInteger is solved.
+	 * @param name Name of the data structure
+	 * @param computation Computation determining the SemSimInteger's value
+	 */
 	public SemSimInteger(String name, Computation computation){
 		super(SemSimTypes.INTEGER);
 		setName(name);

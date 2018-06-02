@@ -35,7 +35,7 @@ public abstract class PhysicalDependency extends PhysicalModelComponent{
 	
 	/**
 	 * Copy constructor
-	 * @param pdtocopy
+	 * @param pdtocopy Object to copy
 	 */
 	public PhysicalDependency(PhysicalDependency pdtocopy) {
 		super(pdtocopy);

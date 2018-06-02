@@ -267,7 +267,8 @@ public class ReferenceOntologies {
 			return namespaces;
 		}
 		
-		/** Cast the ReferenceOntology as an {@link Ontology} */
+		/** Cast the ReferenceOntology as an {@link Ontology} 
+		 * @return The ReferenceOntology cast as an {@link Ontology}*/
 		public Ontology getAsOntology() {
 			return ontology;
 		}

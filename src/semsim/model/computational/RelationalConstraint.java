@@ -68,24 +68,28 @@ public class RelationalConstraint extends ComputationalModelComponent{
 		return errorMsg;
 	}
 	
-	/** Sets the human-readable string representation of the relation.*/
+	/** Sets the human-readable string representation of the relation.
+	 * @param code String representation of the relation*/
 	public void setComputationalCode(String code){
 		computationalCode = code;
 	}
 	
-	/** Sets the DataStructures that participate in the relation.*/
+	/** Sets the DataStructures that participate in the relation.
+	 * @param inputs The {@link DataStructure}s participating in the relation*/
 	public void setInputs(Set<DataStructure> inputs){
 		this.inputs.clear();
 		this.inputs.addAll(inputs);
 	}
 	
-	/** Sets the MathML representation of the relation.*/
+	/** Sets the MathML representation of the relation.
+	 * @param mathml The MathML*/
 	public void setMathML(String mathml){
 		mathML = mathml;
 	}
 	
 	/** Sets the error message to display when the constraint evaluates as false 
-	 * (method provided in adherence to SBML best practices). */
+	 * (method provided in adherence to SBML best practices). 
+	 * @param msg Error message to display*/
 	public void setErrorMessage(String msg){
 		errorMsg = msg;
 	}

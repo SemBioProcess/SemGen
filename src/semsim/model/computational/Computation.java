@@ -109,7 +109,7 @@ public class Computation extends ComputationalModelComponent{
 	/**
 	 * Set the string representation of the computational code used to solve
 	 * the output(s)
-	 * @param code
+	 * @param code Computational code used to solve the output(s)
 	 */
 	public void setComputationalCode(String code){
 		if (code == null) code = new String("");
@@ -153,7 +153,7 @@ public class Computation extends ComputationalModelComponent{
 	
 	/**
 	 * Add an output for the computation
-	 * @param output
+	 * @param output The output {@link DataStructure}
 	 */
 	public void addOutput(DataStructure output){
 		this.outputs.add(output);
