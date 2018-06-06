@@ -118,7 +118,9 @@ function Stage(graph, stagestate) {
 
     $("#checkAll").click(function () {
         $(".searchDropDownMenu input:checkbox").not(this).prop('checked', this.checked);
-        stage.stageSearch($(".searchString").val());
+        if($(".searchString".val())) {
+            stage.stageSearch($(".searchString").val());
+        }
     });
     $(".searchDropDownMenu input:checkbox:not(#checkAll)").change(function () {
         if ($(".searchDropDownMenu input:checkbox:not(#checkAll):checked").length ==
@@ -129,12 +131,9 @@ function Stage(graph, stagestate) {
 	});
 
     $(".searchDropDownMenu input:checkbox").change(function () {
-    	stage.stageSearch($(".searchString").val());
-	});
-
-	// When you mouseout of the search element hide the search box and results
-	$(".stageSearch").mouseout(function (){
-		$(".stageSearch .searchValueContainer").hide();
+        if($(".searchString".val())) {
+            stage.stageSearch($(".searchString").val());
+        }
 	});
 
 	$(".searchString").keyup(function() {
@@ -155,11 +154,16 @@ function Stage(graph, stagestate) {
 
         // Check search filter
         var modelSearchChecked = $("#checkModel").is(':checked');
+        var bioModelSearchChecked = $("#checkBioModels").is(':checked');
         var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
         var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
 
         if (modelSearchChecked) {
             sender.search(searchString);
+        }
+
+        if (bioModelSearchChecked) {
+			sender.bioModelsSearch(searchString);
         }
 
         // Search for nodes in Project Tab
