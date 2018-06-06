@@ -89,10 +89,25 @@ function Stage(graph, stagestate) {
 		sender.addModel();
 	});
 
+    var timer;
+    $(".stageSearch").on("mouseover", function() {
+        clearTimeout(timer);
+        openSearch();
+    }).on("mouseleave", function() {
+        timer = setTimeout(
+            closeSearch
+            , 500);
+    });
+
 	// When you mouseover the search element show the search box and results
-	$(".stageSearch").mouseover(function (){
+	function openSearch() {
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
-	});
+    }
+
+    // When you mouseout of the search element hide the search box and results
+	function closeSearch() {
+		$(".stageSearch .searchValueContainer").hide();
+    }
 
 	// Filter stuff for searching
     $(".dropdown-toggle").click(function(e) {
