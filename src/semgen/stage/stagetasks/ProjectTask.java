@@ -23,10 +23,7 @@ import semsim.reading.ModelClassifier.ModelType;
 import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
 import javax.swing.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -71,7 +68,15 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
-				loadAndAddModel(accessor);
+				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					return;
+				}
+				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
+				addModeltoTask(info, true);
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 		
@@ -82,7 +87,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 			else if (source.equals("BioModels")) {
 				System.out.println("Retrieving SBML file from BioModels...");
-				File tempBioModelFile = File.createTempFile(modelName, ".xml");
+
+				String tempPath = System.getProperty("java.io.tmpdir") + File.separator + modelName + ".xml";
+				File tempBioModelFile = new File(tempPath);
 				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
 				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
 				bw.write(bioModelString);
@@ -91,26 +98,29 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				tempBioModelFile.deleteOnExit();
 			}
 			if (file != null) {
-				loadAndAddModel(file);
+				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				loader.run();
+				SemSimModel semsimmodel = loader.getLoadedModel();
+				if (SemGenError.showSemSimErrors()) {
+					return;
+				}
+				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
+				addModeltoTask(info, true);
+				_commandSender.addModel(info.modelnode);
 			}
 		}
 
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
-			loadAndAddModel(accessor);
-		}
-
-		private void loadAndAddModel(ModelAccessor file) {
-			LoadSemSimModel loader = new LoadSemSimModel(file, false);
+			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
 			loader.run();
 			SemSimModel semsimmodel = loader.getLoadedModel();
 			if (SemGenError.showSemSimErrors()) {
 				return;
 			}
-			ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
+			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
 			addModeltoTask(info, true);
-			_commandSender.addModel(info.modelnode);
-		}
-		
+			_commandSender.addModel(info.modelnode);		}
+
 		public void onTaskClicked(JSArray modelindex, String task) {
 			// Execute the proper task
 			switch(task) {
@@ -144,10 +154,15 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		public void onSearch(String searchString) throws Exception {
 			SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
-					BioModelsSearch.bioModelsSearch(searchString),
-					// PMR results here
 			};
 
+			_commandSender.search(resultSets);
+		}
+
+		public void onBioModelsSearch(String searchString) throws Exception {
+			SearchResultSet[] resultSets = {
+					BioModelsSearch.bioModelsSearch(searchString)
+			};
 			_commandSender.search(resultSets);
 		}
 		
