@@ -58,6 +58,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
 import semsim.model.computational.datastructures.MappableVariable;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -129,7 +130,9 @@ public class SemSimOWLreader extends ModelReader {
 		return semsimmodel;
 	}
 	
-	/** Verify the model is a valid SemSimModel */
+	/** Verify the model is a valid SemSimModel 
+	 * @return Whether the SemSimModel is valid
+	 * @throws OWLException*/
 	private boolean verifyModel() throws OWLException {
 		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
 		
@@ -367,6 +370,8 @@ public class SemSimOWLreader extends ModelReader {
 			
 			DataStructure ds = null;
 			
+			System.out.println(dsind + " " + name);
+			
 			// If the data structure is a decimal
 			if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.DECIMAL.getURIasString(), ont)){
 				
@@ -381,13 +386,20 @@ public class SemSimOWLreader extends ModelReader {
 				}
 				else ds = new MappableVariable(name);
 			}
+			
+			// If the data structure is an SBML function output
+			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.SBML_FUNCTION_OUTPUT.getURIasString(), ont))
+					ds = new SBMLFunctionOutput(name);
+			
 			// If an integer
-			if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.INTEGER.getURIasString(), ont))
+			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.INTEGER.getURIasString(), ont))
 				ds = new SemSimInteger(name);
 			
 			// If an MML choice variable
-			if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.MMLCHOICE.getURIasString(), ont))
+			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.MMLCHOICE.getURIasString(), ont))
 				ds = new MMLchoice(name);
+			
+			System.out.println(ds);
 			
 			semsimmodel.addDataStructure(ds);
 			
@@ -589,7 +601,8 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 		
-	/** Go through existing data structures and establish the computational relationships between data structures*/
+	/** Go through existing data structures and establish the computational relationships between data structures
+	 * @throws OWLException*/
 	private void establishIsInputRelationships() throws OWLException {
 		
 		for(String dsind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString())){
@@ -597,7 +610,9 @@ public class SemSimOWLreader extends ModelReader {
 			
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(name);
 			
-			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, null);
+			String prefix = ds instanceof SBMLFunctionOutput ? SBMLreader.FUNCTION_PREFIX + ds.getName() : null;
+			
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
 			
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectPropertyObject(ont, dsind, SemSimRelation.HAS_SOLUTION_DOMAIN.getURIasString());

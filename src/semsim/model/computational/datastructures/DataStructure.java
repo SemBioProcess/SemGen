@@ -237,9 +237,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		this.unit = unit;
 	}
 
-	/** Get a string representation of the composite annotation applied to 
-	 * the DataStructure.
+	/** Get a string representation of the composite annotation applied to the DataStructure.
 	 * @param appendcodeword Whether to add the DataStructure's name in parentheses at the end of the string 
+	 * @return A String representation of the DataStructure's composite annotation
 	 */
 	public String getCompositeAnnotationAsString(Boolean appendcodeword) {
 		String compann = "[unspecified]";

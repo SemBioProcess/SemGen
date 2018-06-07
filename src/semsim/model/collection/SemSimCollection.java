@@ -9,6 +9,7 @@ import java.util.Set;
 import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -98,6 +99,35 @@ public abstract class SemSimCollection extends SemSimObject{
 		
 		return ds;
 	}
+	
+	
+	/**
+	 * Add an SBMLFunctionOutput to the model
+	 * @param fd The SBMLFunctionOutput to add
+	 */
+	public void addSBMLFunctionOutput(SBMLFunctionOutput fd){
+		addDataStructure(fd);
+	}
+	
+	
+	/** @return The SBMLFunctionOutputs in the model */
+	public Set<SBMLFunctionOutput> getSBMLFunctionOutputs(){
+		Set<SBMLFunctionOutput> fdset = new HashSet<SBMLFunctionOutput>();
+		
+		for(DataStructure ds : getAssociatedDataStructures()){
+			
+			if(ds instanceof SBMLFunctionOutput)
+				fdset.add((SBMLFunctionOutput)ds);
+		}
+		return fdset;
+	}
+	
+	
+	/** @return Whether the collection contains any {@link SBMLFunctionOutput}s */
+	public boolean containsSBMLFunctionOutputs(){
+		return ! getSBMLFunctionOutputs().isEmpty();
+	}
+	
 	
 	/**
 	 * Add a {@link Submodel} to the collection

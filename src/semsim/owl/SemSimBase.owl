@@ -47,6 +47,11 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://www.w3.org/2000/01/rdf-schema#comment -->
+
     <owl:AnnotationProperty rdf:about="&rdfs;comment"/>
     
 
@@ -178,8 +183,8 @@
     <!-- http://www.bhi.washington.edu/SemSim#hasSolutionDomain -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasSolutionDomain">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
     </owl:ObjectProperty>
     
 
@@ -289,8 +294,8 @@
     <!-- http://www.bhi.washington.edu/SemSim#solutionDomainFor -->
 
     <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#solutionDomainFor">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
         <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasSolutionDomain"/>
     </owl:ObjectProperty>
     
@@ -310,8 +315,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;contained_in">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:inverseOf rdf:resource="&ro;contains"/>
     </owl:ObjectProperty>
     
@@ -321,8 +326,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;contains">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
     </owl:ObjectProperty>
     
 
@@ -331,8 +336,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;has_part">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
     </owl:ObjectProperty>
     
 
@@ -341,8 +346,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;part_of">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
         <owl:inverseOf rdf:resource="&ro;has_part"/>
     </owl:ObjectProperty>
     
@@ -550,6 +555,7 @@
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Event">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+        <rdfs:comment>A discrete occurence in a simulation</rdfs:comment>
     </owl:Class>
     
 
@@ -558,6 +564,7 @@
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#EventAssignment">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+        <rdfs:comment>A computational assignment triggered by an Event</rdfs:comment>
     </owl:Class>
     
 
@@ -575,7 +582,7 @@
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#MMLchoice">
         <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
-        <rdfs:comment rdf:datatype="&xsd;string">A data structure unique to  JSim&#39;s Mathematical Modeling Language (MML) used to set one or more model input values at runtime.</rdfs:comment>
+        <rdfs:comment rdf:datatype="&xsd;string">A data structure unique to  JSim&apos;s Mathematical Modeling Language (MML) used to set one or more model input values at runtime.</rdfs:comment>
     </owl:Class>
     
 
@@ -685,6 +692,15 @@
     
 
 
+    <!-- http://www.bhi.washington.edu/SemSim#SBML_function_output -->
+
+    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SBML_function_output">
+        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
+        <rdfs:comment>The output of an SBML-style Function Definition</rdfs:comment>
+    </owl:Class>
+    
+
+
     <!-- http://www.bhi.washington.edu/SemSim#SemSim_component -->
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SemSim_component">
@@ -712,5 +728,5 @@
 
 
 
-<!-- Generated by the OWL API (version 3.1.0.20069) http://owlapi.sourceforge.net -->
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
 

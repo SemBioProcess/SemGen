@@ -43,6 +43,8 @@ public class CellMLwriter extends ModelWriter {
 	private Element root;
 	private static String timedomainname = "time";
 	private Map<String,String> oldAndNewUnitNameMap = new HashMap<String,String>();
+	private XMLOutputter outputter = new XMLOutputter();
+
 	
 	public CellMLwriter(SemSimModel model) {
 		super(model);
@@ -52,19 +54,17 @@ public class CellMLwriter extends ModelWriter {
 	@Override
 	public String encodeModel() {
 		Document doc = null;
-		XMLOutputter outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
 		
 			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
 			
 			// Check for events, if present write out error msg
-			if(semsimmodel.getEvents().size()>0){
-				Element eventerror = new Element("error");
-				eventerror.setAttribute("msg", "SemSim-to-CellML translation not supported for models with discrete events.");
-				outputter.outputString(new Document(eventerror));
-				return null; 
-			}
-						
+			if(semsimmodel.getEvents().size()>0)
+				return addErrorToModel("Cannot convert models with discrete events into CellML."); 
+			
+			if(semsimmodel.getSBMLFunctionOutputs().size()>0)
+				return addErrorToModel("Cannot convert models with SBML-style Function Definitions into CellML.");
+			
 			createRDFBlock();
 			createRootElement();
 			SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);
@@ -558,6 +558,13 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
+	}
+	
+	
+	private String addErrorToModel(String msg){
+		Element eventerror = new Element("error");
+		eventerror.setAttribute("message", msg);
+		return outputter.outputString(new Document(eventerror));
 	}
 	
 	

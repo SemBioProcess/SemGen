@@ -24,7 +24,7 @@ public interface Importable {
 	 */
 	public void setReferencedName(String name);
 	
-	/** True if the SemSim model element is imported from another model, otherwise false */
+	/** @return True if the SemSim model element is imported from another model, otherwise false */
 	public boolean isImported();
 	
 	/** Set whether the SemSim model element is imported from another model 

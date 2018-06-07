@@ -21,7 +21,7 @@ import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.ASTNode;
-import org.sbml.jsbml.AbstractNamedSBase;
+import org.sbml.jsbml.AbstractSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -65,6 +65,7 @@ import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.Event.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -152,6 +153,7 @@ public class SBMLwriter extends ModelWriter {
 		addCompartments();
 		addSpecies();
 		addReactions();
+		addFunctionDefinitions();
 		addGlobalParameters();
 		addEvents();
 		addConstraints();
@@ -196,7 +198,8 @@ public class SBMLwriter extends ModelWriter {
 				else globalParameters.add(ds);
 				
 			}
-			else if ( ! ds.isSolutionDomain()) globalParameters.add(ds);
+			else if ( ! ds.isSolutionDomain() && ! (ds instanceof SBMLFunctionOutput) && ds.isDeclared()) 
+				globalParameters.add(ds);
 			
 			if(ds.getName().contains(".")){
 				makeDataStructureNameValid(ds);
@@ -606,9 +609,9 @@ public class SBMLwriter extends ModelWriter {
 					
 					String fullnm = gp.getName();
 					
-					if(fullnm.startsWith(SBMLreader.reactionprefix + ds.getName() + ".")){
+					if(fullnm.startsWith(SBMLreader.REACTION_PREFIX + ds.getName() + ".")){
 						globalParameters.remove(gp);
-						String localnm = fullnm.replace(SBMLreader.reactionprefix + ds.getName() + ".", "");
+						String localnm = fullnm.replace(SBMLreader.REACTION_PREFIX + ds.getName() + ".", "");
 						mathml = mathml.replaceAll("<ci>\\s*" + gp.getName() + "\\s*</ci>", "<ci>" + localnm + "</ci>");
 
 						LocalParameter lp = kl.createLocalParameter(localnm);
@@ -702,6 +705,17 @@ public class SBMLwriter extends ModelWriter {
 		return mathml;
 	}
 		
+	
+	/** Add function definitions to SBML model */
+	private void addFunctionDefinitions(){
+		
+		for(SBMLFunctionOutput fd : semsimmodel.getSBMLFunctionOutputs()){
+			org.sbml.jsbml.FunctionDefinition sbmlfd = sbmlmodel.createFunctionDefinition(fd.getName());
+			sbmlfd.setMath(getASTNodeFromRHSofMathML(fd.getComputation().getMathML(), ""));
+			addNotesAndMetadataID(fd, sbmlfd);
+		}
+	}
+	
 	
 	/** Collect global parameters for SBML model */
 	private void addGlobalParameters(){
@@ -942,7 +956,7 @@ public class SBMLwriter extends ModelWriter {
 	 * @param sso The SemSimObject that contains the name and metadataID to be copied
 	 * @param sbo The AbstractNamedSBase object that the name and metadataID will be copied to
 	 */
-	private void addNotesAndMetadataID(SemSimObject sso, AbstractNamedSBase sbo){
+	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
 		//TODO: When the jsbml folks fix the issue with redeclaring xml namespaces in notes, uncomment block below
 //		if(sso.hasDescription()){

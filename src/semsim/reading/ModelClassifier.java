@@ -112,6 +112,8 @@ public class ModelClassifier {
 	
 	/**
 	 * Return the type of the model based on the file extension
+	 * @param file A file path
+	 * @return Model type based on file extension
 	 * @throws IOException 
 	 * @throws JDOMException 
 	 */
@@ -169,6 +171,8 @@ public class ModelClassifier {
 	 * Verifies whether the indicated document is well-formed CellML
 	 * @param file An input File
 	 * @return Whether the File is a well-formed CellML model
+	 * @throws JDOMException
+	 * @throws IOException
 	 */
 	public static Boolean isValidCellMLmodel(File file) throws JDOMException, IOException{
 		SAXBuilder builder = new SAXBuilder();

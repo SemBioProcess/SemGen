@@ -190,6 +190,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Add a new {@link UnitOfMeasurement} to the model. If a unit with the same name already exists, it
 	 * is not added.
 	 * @param unit The UnitOfMeasurement to be added.
+	 * @return If the model already contains a unit with the same name, the existing
+	 * unit is returned, otherwise the input unit is returned
 	 */
 	public UnitOfMeasurement addUnit(UnitOfMeasurement unit){
 		
@@ -214,6 +216,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new {@link CompositePhysicalEntity} to the model. 
 	 * @param cpe The CompositePhysicalEntity to be added.
+	 * @return If there is already an equivalent entity in the model,
+	 * it is returned. Otherwise the input entity is returned.
 	 */
 	public CompositePhysicalEntity addCompositePhysicalEntity(CompositePhysicalEntity cpe){
 		for(CompositePhysicalEntity existingcpe : getCompositePhysicalEntities()){
@@ -371,6 +375,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * PhysicalProcesses that are defined by their annotation against a reference ontology URI. In
 	 * other words, a {@link PhysicalProcess} that is annotated using the SemSimConstants:HAS_PHYSICAL_DEFINITION_RELATION.
 	 * @param rpp The ReferencePhysicalProcess to add
+	 * @return If there is already an equivalent process in the model, it is returned.
+	 * Otherwise the input process is returned.
 	 */
 	public ReferencePhysicalProcess addReferencePhysicalProcess(ReferencePhysicalProcess rpp){
 		
@@ -384,6 +390,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add a new ReferencePhysicalDependency to the model.
 	 * @param dep The ReferencePhysicalEntity to add
+	 * @return If an equivalent dependency is already in the model, it is returned.
+	 * Otherwise the input dependency is returned.
 	 */
 	public ReferencePhysicalDependency addReferencePhysicalDependency(ReferencePhysicalDependency dep){
 		
@@ -404,7 +412,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/**  @return True if the model contains a {@link UnitOfMeasurement} with the specified name, otherwise false.*/
+	/** 
+	 * @param name A unit name
+	 * @return True if the model contains a {@link UnitOfMeasurement} with the specified name, otherwise false.*/
 	public boolean containsUnit(String name){
 		return getUnit(name)!=null;
 	}
@@ -428,11 +438,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	/**
 	 * Add an {@link Event} to the model
 	 * @param theevent The {@link Event} to add
+	 * @return The input {@link Event}
 	 */
 	public Event addEvent(Event theevent){
 		events.add(theevent);
 		return theevent;
 	}
+	
 	
 	/**
 	 * @return The set of all computational and physical elements in the model.
@@ -445,6 +457,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getPhysicalModelComponents());
 		return set;
 	}
+	
 	
 	/**
 	 * @return The set of all computational and physical elements in the model.
@@ -476,7 +489,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 		
 	
-	/**@return The parent FunctionalSubmodel for a MappableVariable.*/
+	/**
+	 * @param var A MappableVariable
+	 * @return The parent FunctionalSubmodel for a MappableVariable.*/
 	public FunctionalSubmodel getParentFunctionalSubmodelForMappableVariable(MappableVariable var){
 		
 		if(var.getName().contains(".")){
@@ -522,6 +537,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  	 * in the same model. Called when reading in models.
  	 * @param ID A proposed metadata ID to assign to a SemSimObject in the model
  	 * @param theobject The SemSimObject that the ID is assigned to
+ 	 * @return The metadata ID assigned to the object
  	 */
  	public String assignValidMetadataIDtoSemSimObject(String ID, SemSimObject theobject){
 		
@@ -564,6 +580,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/**
 	 * Add a {@link RelationalConstraint} to the model.
+	 * @param rel The relational constraint to add
 	 * @return The input relational constraint
 	 */
 	public RelationalConstraint addRelationalConstraint(RelationalConstraint rel){
@@ -583,7 +600,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	/** @return All PhysicalEntities in the model, except those that either are, or use, a specifically excluded entity  */
+	/** 
+	 * @param entityToExclude Entity to exclude from the returned set
+	 * @return All PhysicalEntities in the model, except those that either are, or use, a specifically excluded entity  */
 	public Set<PhysicalEntity> getPhysicalEntitiesAndExclude(PhysicalEntity entityToExclude) {
 		Set<PhysicalEntity> includedents = new HashSet<PhysicalEntity>();
 		
