@@ -92,6 +92,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				File tempBioModelFile = new File(tempPath);
 				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
 				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
+
+				String bioModelAbstract = BioModelsSearch.findPubmedAbstract(modelName);
+				System.out.println(bioModelAbstract);
+
 				bw.write(bioModelString);
 				bw.close();
 				file = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());

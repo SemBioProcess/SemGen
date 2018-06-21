@@ -4,6 +4,11 @@ import semgen.stage.serialization.SearchResultSet;
 import uk.ac.ebi.biomodels.ws.BioModelsWSClient;
 import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 public class BioModelsSearch {
@@ -65,4 +70,25 @@ public class BioModelsSearch {
         return client.getModelSBMLById(id);
     }
 
+    public static String findPubmedAbstract(String modelId) throws BioModelsWSException {
+        String pubmedId = client.getPublicationByModelId(modelId);
+        String abstr = "";
+        if (!pubmedId.equals("") && pubmedId.matches("[0-9]+")) {
+            try {
+                URL url = new URL("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" + pubmedId + "&retmode=text&rettype=abstract");
+                System.out.println(url);
+                URLConnection yc = url.openConnection();
+                yc.setReadTimeout(60000); // Tiemout after a minute
+                StringBuilder stringBuilder = new StringBuilder();
+                BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null)
+                    stringBuilder.append(inputLine + '\n');
+                abstr = stringBuilder.toString();
+                in.close();
+            } catch (IOException e) {
+            }
+        }
+        return abstr;
+    }
 }
