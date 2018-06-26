@@ -41,6 +41,12 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	void search(SearchResultSet[] resultSets);
 
 	/**
+	 * Retrieves model abstract based on Pubmed ID
+	 * @param bioModelAbstract String of the model abstract from Pubmed
+	 */
+	void getModelAbstract(String bioModelAbstract);
+
+	/**
 	 * Tell the browser to render the PhysioMap
 	 * 
 	 * @param modelName name of model
@@ -53,4 +59,5 @@ public interface ProjectWebBrowserCommandSender extends SemGenWebBrowserCommandS
 	public void loadExtractions(ArrayList<ArrayList<ExtractionNode>> extractions);
 
 	public void modifyExtraction(Integer infoindex, Integer extractionindex, ExtractionNode extraction);
+
 }

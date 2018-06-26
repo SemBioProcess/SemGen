@@ -498,6 +498,23 @@ function makeResultSet(searchResultSet, stage) {
         $(item).data("source", searchResultSet.source);
         $(item).data("name", searchResultSet.results[i]);
         $(item).data("id", searchResultSet.results[i][2]);
+
+        var delay = 1000, setTimeoutConst;
+        $(item).hover(function() {
+            var source = $(this).data("source");
+            var name = $(this).data("name");
+            if (source == "BioModels") {
+                setTimeoutConst = setTimeout(function () {
+                    sender.getModelAbstract(name);
+                    receiver.onGetModelAbstract(function (bioModelAbstract) {
+                        window.alert(bioModelAbstract);
+                    });
+                }, delay);
+			}
+		}, function() {
+        	clearTimeout(setTimeoutConst);
+		});
+
         $(item).click(function() {
             var source = $(this).data("source");
             var name = $(this).data("name");

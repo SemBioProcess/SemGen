@@ -93,9 +93,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
 				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
 
-				String bioModelAbstract = BioModelsSearch.findPubmedAbstract(modelName);
-				System.out.println(bioModelAbstract);
-
 				bw.write(bioModelString);
 				bw.close();
 				file = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
@@ -159,7 +156,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			SearchResultSet[] resultSets = {
 					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
 			};
-
 			_commandSender.search(resultSets);
 		}
 
@@ -168,6 +164,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					BioModelsSearch.bioModelsSearch(searchString)
 			};
 			_commandSender.search(resultSets);
+		}
+
+		public void onGetModelAbstract(String modelName) throws BioModelsWSException {
+			String bioModelAbstract = BioModelsSearch.findPubmedAbstract(modelName);
+			_commandSender.getModelAbstract(bioModelAbstract);
 		}
 		
 		public void onMerge(JSArray model1, JSArray model2) {

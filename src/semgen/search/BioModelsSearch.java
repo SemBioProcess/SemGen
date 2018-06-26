@@ -51,11 +51,6 @@ public class BioModelsSearch {
             intersectingResults.retainAll(resultSet);
         }
         String [] finalResultsById = intersectingResults.toArray(new String[intersectingResults.size()]);
-//        String [] finalResultsByName = new String[finalResultsById.length];
-//
-//        for (int i = 0; i < finalResultsById.length; i++) {
-//            finalResultsByName[i] = client.getModelNameById(finalResultsById[i]); //This add a minute of search time...
-//        }
 
         return new SearchResultSet(SourceName, finalResultsById);
     }
@@ -73,10 +68,10 @@ public class BioModelsSearch {
     public static String findPubmedAbstract(String modelId) throws BioModelsWSException {
         String pubmedId = client.getPublicationByModelId(modelId);
         String abstr = "";
+        // Sometimes BioModelsWS will return non-PubmedIDs
         if (!pubmedId.equals("") && pubmedId.matches("[0-9]+")) {
             try {
                 URL url = new URL("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=" + pubmedId + "&retmode=text&rettype=abstract");
-                System.out.println(url);
                 URLConnection yc = url.openConnection();
                 yc.setReadTimeout(60000); // Tiemout after a minute
                 StringBuilder stringBuilder = new StringBuilder();
