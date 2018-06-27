@@ -54,6 +54,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.Event;
 import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MMLchoice;
@@ -123,6 +124,7 @@ public class SemSimOWLreader extends ModelReader {
 		collectUnits();
 		collectRelationalConstraints();	
 		collectEvents();
+		collectSBMLinitialAssignments();
 		establishIsInputRelationships();
 		collectCustomAnnotations();		
 		collectSubModels();
@@ -369,9 +371,7 @@ public class SemSimOWLreader extends ModelReader {
 			String description = SemSimOWLFactory.getRDFcomment(ont, factory.getOWLNamedIndividual(IRI.create(dsind)));
 			
 			DataStructure ds = null;
-			
-			System.out.println(dsind + " " + name);
-			
+						
 			// If the data structure is a decimal
 			if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.DECIMAL.getURIasString(), ont)){
 				
@@ -398,9 +398,7 @@ public class SemSimOWLreader extends ModelReader {
 			// If an MML choice variable
 			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.MMLCHOICE.getURIasString(), ont))
 				ds = new MMLchoice(name);
-			
-			System.out.println(ds);
-			
+						
 			semsimmodel.addDataStructure(ds);
 			
 			if( ! compcode.isEmpty()) ds.getComputation().setComputationalCode(compcode);
@@ -685,6 +683,24 @@ public class SemSimOWLreader extends ModelReader {
 		}
 	}
 
+	
+	/** Collect the SBML-style initial assignments
+	 * @throws OWLException */
+	private void collectSBMLinitialAssignments() throws OWLException{
+		
+		for(String iaind : SemSimOWLFactory.getIndividualsAsStrings(ont, SemSimTypes.SBML_INITIAL_ASSIGNMENT.getURIasString())){
+			SBMLInitialAssignment ssia = new SBMLInitialAssignment();
+			String iamathml = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, iaind, SemSimRelation.HAS_MATHML.getURIasString());
+			ssia.setMathML(iamathml);
+			String outputuri = SemSimOWLFactory.getFunctionalIndObjectPropertyObject(ont, iaind, SemSimRelation.HAS_OUTPUT.getURIasString());
+			String outputname = SemSimOWLFactory.getIRIfragment(outputuri);
+			DataStructure outputds = semsimmodel.getAssociatedDataStructure(outputname);
+			ssia.setOutput(outputds);
+			
+			outputds.getComputation().addSBMLinitialAssignment(ssia);
+		}
+	}
+	
 	
 	/** Collect annotations on custom terms used in the model (e.g. custom physical entities) */
 	private void collectCustomAnnotations() {

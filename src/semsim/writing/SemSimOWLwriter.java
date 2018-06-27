@@ -40,6 +40,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.Event;
 import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -116,6 +117,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		getLocalDataStuctures();
 		addUnits();	
 		addEvents();
+		addSBMLinitialAssignments();
 		addDataStructures();
 		setRelations();
 		addSubModels();
@@ -246,7 +248,28 @@ public class SemSimOWLwriter extends ModelWriter {
 				// Associate the assignment with the data structure's computation that it effects
 				SemSimOWLFactory.setIndObjectProperty(ont, outputdsuristring + "_computation", 
 						eventuristring, SemSimRelation.HAS_EVENT, null, manager);
-			}
+			}			
+		}
+	}
+	
+	
+	/**
+	 *  Add the SBML-style initial assignments to the ontology
+	 * @throws OWLException 
+	 */
+	private void addSBMLinitialAssignments() throws OWLException{
+		for(SBMLInitialAssignment ssia : semsimmodel.getSBMLInitialAssignments()){
+			String eaname = ssia.getOutput().getName() + "_SBML_initial_assignment"; 
+			OWLClass iaparentclass = factory.getOWLClass(IRI.create(ssia.getSemSimClassURI()));
+			String iauristring = namespace + eaname;
+			String outputdsuristring = namespace + ssia.getOutput().getName();
+			
+			// Create event assignment individual and attach properties
+			SemSimOWLFactory.createSemSimIndividual(ont, iauristring, iaparentclass, "", manager);
+			SemSimOWLFactory.setIndObjectProperty(ont, iauristring, outputdsuristring,
+					SemSimRelation.HAS_OUTPUT, null, manager);
+			SemSimOWLFactory.setIndDatatypeProperty(ont, iauristring, SemSimRelation.HAS_MATHML,
+					ssia.getMathML(), manager);
 		}
 	}
 	

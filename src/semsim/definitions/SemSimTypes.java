@@ -42,6 +42,7 @@ public enum SemSimTypes {
 	RELATIONAL_CONSTRAINT("Relational Constraint", RDFNamespace.SEMSIM.getNamespaceasString() + "Relational_constraint", "", "semsim:Relational_constraint"),
 	EVENT("Event", RDFNamespace.SEMSIM.getNamespaceasString() + "Event", "", "semsim:Event"),
 	EVENT_ASSIGNMENT("Event Assignment", RDFNamespace.SEMSIM.getNamespaceasString() + "EventAssignment", "", "semsim:EventAssignment"),
+	SBML_INITIAL_ASSIGNMENT("SBML Initial Assignment", RDFNamespace.SEMSIM.getNamespaceasString() + "SBML_initial_assignment","","sesmsim:SBML_initial_assignment"),
 	UNIT_OF_MEASUREMENT("Unit of Measurement", RDFNamespace.SEMSIM.getNamespaceasString() + "Unit_of_measurement", "", "semsim:Unit_of_measurement");
 	
 	private String name;

@@ -700,6 +700,7 @@ public class SBMLwriter extends ModelWriter {
 	private void addSBMLinitialAssignments(){
 		
 		for(SBMLInitialAssignment ssia : semsimmodel.getSBMLInitialAssignments()){
+			
 			InitialAssignment sbmlia = sbmlmodel.createInitialAssignment();
 			
 			DataStructure outputds = ssia.getOutput();
@@ -708,10 +709,8 @@ public class SBMLwriter extends ModelWriter {
 			String newassignmathml = updateParameterNamesInMathML(origassignmathml);
 			
 			sbmlia.setMath(getASTNodeFromRHSofMathML(newassignmathml, variableID));
-
 			sbmlia.setVariable(variableID);
 			
-			sbmlmodel.addInitialAssignment(sbmlia);
 			addNotesAndMetadataID(ssia, sbmlia);
 		}
 	}

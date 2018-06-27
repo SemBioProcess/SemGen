@@ -18,6 +18,11 @@ public class EventAssignment extends ComputationalModelComponent{
 		super(SemSimTypes.EVENT_ASSIGNMENT);
 	}
 	
+	// Constructor for subclasses such as SBMLInitialAssignment
+	public EventAssignment(SemSimTypes type){
+		super(type);
+	}
+	
 	/**
 	 * Copy constructor
 	 * @param eatocopy The EventAssignment to copy
