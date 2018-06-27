@@ -491,9 +491,6 @@ public class CellMLwriter extends ModelWriter {
 					publicintval = cellmlvar.getPublicInterfaceValue();
 					privateintval = cellmlvar.getPrivateInterfaceValue();
 				}
-				// Otherwise, if the variable has a start value, store it as the CellML initial_value
-				else if(ds.hasStartValue())
-					initialval = ds.getStartValue();
 				
 				// Add the RDF block for any annotations
 				rdfwriter.setRDFforDataStructureAnnotations(ds);

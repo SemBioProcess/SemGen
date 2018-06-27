@@ -25,7 +25,7 @@ import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.utilities.SemSimCopy;
 
 /**
- * This class represents a named element in a simulation model that
+ * This class represents a symbolic element in a simulation model that
  * is assigned some computational value during simulation.
  */
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	

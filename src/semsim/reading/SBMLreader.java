@@ -34,6 +34,7 @@ import org.sbml.jsbml.Priority;
 import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.ExplicitRule;
+import org.sbml.jsbml.InitialAssignment;
 import org.sbml.jsbml.Rule;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -67,8 +68,9 @@ import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
-import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -152,15 +154,6 @@ public class SBMLreader extends ModelReader{
 		//collectSpeciesTypes();  // Ignore these for now, too. This class is not available in JSBML.
 		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/SpeciesType.html
 		
-		// collectInitialAssignments();
-		// Sets the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
-		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
-		
-		
-		if (sbmlmodel.getListOfInitialAssignments().size()>0)
-			addErrorToModel(modelaccessor.getShortLocation() + " cannot be converted into a SemSim model because it contains initial assignments.");
-
-		
 				
 		// if any errors at this point, return model
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
@@ -212,6 +205,8 @@ public class SBMLreader extends ModelReader{
 		collectRules();
 		collectConstraints();
 		collectEvents();
+		collectInitialAssignments();
+				
 		setComputationalDependencyNetwork();
 	
 		return semsimmodel;
@@ -885,7 +880,7 @@ public class SBMLreader extends ModelReader{
 				for(int a=0; a<sbmlevent.getListOfEventAssignments().size(); a++){
 					org.sbml.jsbml.EventAssignment ea = sbmlevent.getEventAssignment(a);
 					String varname = ea.getVariable();
-					EventAssignment ssea = ssevent.new EventAssignment();
+					EventAssignment ssea = new EventAssignment();
 					
 					String assignmentmathmlstring = JSBML.writeMathMLToString(ea.getMath());
 					assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
@@ -931,6 +926,31 @@ public class SBMLreader extends ModelReader{
 		}
 	}
 	
+	/** Collect specific assignments made at the beginning of the simulation  */
+	private void collectInitialAssignments(){
+		// Sets the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
+		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
+		for(int i=0; i<sbmlmodel.getListOfInitialAssignments().size();i++){
+			InitialAssignment sbmlia = sbmlmodel.getInitialAssignment(i);
+			SBMLInitialAssignment semsimia = new SBMLInitialAssignment();
+			
+			semsimia.setMetadataID(sbmlia.getMetaId());
+			
+			String variableID = sbmlia.getVariable();
+			DataStructure output = semsimmodel.getAssociatedDataStructure(variableID);
+			semsimia.setOutput(output);
+			output.getComputation().addSBMLinitialAssignment(semsimia);
+			
+			try {
+				String assignmentmathmlstring = JSBML.writeMathMLToString(sbmlia.getMath());
+				assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
+				assignmentmathmlstring = SemSimUtil.addLHStoMathML(assignmentmathmlstring, variableID, false, timedomainname);
+				semsimia.setMathML(assignmentmathmlstring);
+			} catch (SBMLException | XMLStreamException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	/** Collect the SBML model's FunctionDefinitions */
 	private void collectFunctionDefinitions(){

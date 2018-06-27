@@ -31,6 +31,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -424,6 +425,13 @@ public class SemSimUtil {
 			String assignmentmathml = event.getEventAssignmentForOutput(outputds).getMathML();
 			Set<DataStructure> assignmentinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
 			allinputs.addAll(assignmentinputs);
+		}
+		
+		// set inputs based on the SBML initial assignments that set the data structure's values
+		for(SBMLInitialAssignment sia : outputds.getComputation().getSBMLintialAssignments()){
+			String assignmentmathml = sia.getMathML();
+			Set<DataStructure> inputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
+			allinputs.addAll(inputs);
 		}
 		
 		// If the DataStructure is a mapped variable, include the mappings

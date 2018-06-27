@@ -29,6 +29,7 @@ import semsim.model.SemSimComponent;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
@@ -425,6 +426,21 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return events;
 	}
 	
+	
+	/** @return The SBMLInitialAssignments in the model */
+	public Set<SBMLInitialAssignment> getSBMLInitialAssignments(){
+		Set<SBMLInitialAssignment> ias = new HashSet<SBMLInitialAssignment>();
+		
+		for(DataStructure ds : getAssociatedDataStructures()){
+			
+			if(ds.getComputation().hasSBMLinitialAssignments()){
+				ias.addAll(ds.getComputation().getSBMLintialAssignments());
+			}
+		}
+		return ias;
+	}
+	
+	
 	/**
 	 * Specify the set of {@link Event}s in the model
 	 * @param theevents The set of {@link Event}s that will be assigned to the model
@@ -485,6 +501,9 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 		set.addAll(getRelationalConstraints());
 		set.addAll(getUnits());
+		set.addAll(getEvents());
+		set.addAll(getSBMLInitialAssignments());
+		
 		return set;
 	}
 		

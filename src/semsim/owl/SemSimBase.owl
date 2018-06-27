@@ -701,6 +701,14 @@
     
 
 
+    <!-- http://www.bhi.washington.edu/SemSim#SBML_initial_assignment -->
+
+    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SBML_initial_assignment">
+        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#EventAssignment"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.bhi.washington.edu/SemSim#SemSim_component -->
 
     <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SemSim_component">

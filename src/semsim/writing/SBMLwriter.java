@@ -27,6 +27,7 @@ import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.Constraint;
 import org.sbml.jsbml.ExplicitRule;
+import org.sbml.jsbml.InitialAssignment;
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.LocalParameter;
@@ -63,7 +64,8 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
 import semsim.model.computational.RelationalConstraint;
-import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.SBMLInitialAssignment;
+import semsim.model.computational.EventAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -156,6 +158,7 @@ public class SBMLwriter extends ModelWriter {
 		addFunctionDefinitions();
 		addGlobalParameters();
 		addEvents();
+		addSBMLinitialAssignments();
 		addConstraints();
 		
 		
@@ -689,6 +692,27 @@ public class SBMLwriter extends ModelWriter {
 			}
 			
 			addNotesAndMetadataID(e, sbmle);
+		}
+	}
+	
+	
+	/** Add in the SBML-style initial assignments  */
+	private void addSBMLinitialAssignments(){
+		
+		for(SBMLInitialAssignment ssia : semsimmodel.getSBMLInitialAssignments()){
+			InitialAssignment sbmlia = sbmlmodel.createInitialAssignment();
+			
+			DataStructure outputds = ssia.getOutput();
+			String variableID = outputds.getName();
+			String origassignmathml = ssia.getMathML();
+			String newassignmathml = updateParameterNamesInMathML(origassignmathml);
+			
+			sbmlia.setMath(getASTNodeFromRHSofMathML(newassignmathml, variableID));
+
+			sbmlia.setVariable(variableID);
+			
+			sbmlmodel.addInitialAssignment(sbmlia);
+			addNotesAndMetadataID(ssia, sbmlia);
 		}
 	}
 
