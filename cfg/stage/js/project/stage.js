@@ -506,7 +506,7 @@ function makeResultSet(searchResultSet, stage) {
             if (source == "BioModels") {
                 setTimeoutConst = setTimeout(function () {
                     sender.getModelAbstract(name);
-                    receiver.onGetModelAbstract(function (bioModelAbstract) {
+                    receiver.onShowModelAbstract(function (bioModelAbstract) {
                         window.alert(bioModelAbstract);
                     });
                 }, delay);
@@ -527,7 +527,7 @@ function makeResultSet(searchResultSet, stage) {
             }
             else if (source.includes("Nodes in Project")) {
                 var visibleNodes = stage.graph.getVisibleNodes();
-                var node = visibleNodes.filter(function ( node ) {
+                var node = visibleNodes.filter(function (node) {
                     return node.id === id;
                 })[0];
 				node.onClick();
