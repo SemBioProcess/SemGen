@@ -569,10 +569,10 @@ public class SemSimOWLFactory {
 	
 	
 	/**
-	 * @param indtocheck
-	 * @param parent
-	 * @param ontology
-	 * @return Whether an individual with a given IRI is in an ontology
+	 * @param indtocheck An OWL individual's IRI
+	 * @param parent Parent OWL class to check
+	 * @param ontology Ontology containing the parent class
+	 * @return Whether an individual with a given IRI is subclassed under a specified parent 
 	 * @throws OWLException
 	 */
 	public static boolean indExistsInClass(String indtocheck, String parent, OWLOntology ontology) throws OWLException {

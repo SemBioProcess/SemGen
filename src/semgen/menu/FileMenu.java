@@ -14,7 +14,9 @@ import semgen.GlobalActions;
 import semgen.OSValidator;
 import semgen.PreferenceDialog;
 import semgen.SemGenSettings;
+import semgen.stage.StageTab;
 import semgen.utilities.uicomponent.SemGenMenu;
+import semgen.utilities.uicomponent.SemGenTab;
 
 public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +29,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private JMenuItem fileitemexport;
 	private JMenuItem fileitempreferences;
 	private JMenuItem fileitemexit;
+	private JSeparator writeseparator = new JSeparator();
 	
 	public FileMenu(SemGenSettings sets, GlobalActions acts) {
 		super("File", sets, acts);
@@ -58,7 +61,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		fileitemexport.setToolTipText("Write out model in a specified format");
 		add(fileitemexport);
 		
-		add(new JSeparator());
+		add(writeseparator);
 		
 		fileitempreferences = formatMenuItem(fileitempreferences,"Preferences", KeyEvent.VK_P,true,true);
 		add(fileitempreferences);
@@ -115,20 +118,31 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		
 	}
 
-		@Override
-		public void update(Observable o, Object arg) {
-			if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
-				fileitemsave.setEnabled(!globalactions.getCurrentTab().isSaved());	
-			}
-			if (arg==GlobalActions.appactions.TABCLOSED || arg==GlobalActions.appactions.TABOPENED) {
-					fileitemclose.setEnabled(globalactions.getNumOpenTabs()!=0);
-			}
-			if (globalactions.getNumOpenTabs()!=0) {
-				canSaveOut(this.globalactions.isModelLoaded());
-			}
-			else {
-				fileitemsave.setEnabled(false);
-			}
-		}	
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		SemGenTab currenttab = globalactions.getCurrentTab();
+		
+		if (arg==GlobalActions.appactions.SAVED || arg==GlobalActions.appactions.TABCHANGED) {
+			fileitemsave.setEnabled(! currenttab.isSaved());	
+		}
+		if (arg==GlobalActions.appactions.TABCLOSED || arg==GlobalActions.appactions.TABOPENED) {
+				fileitemclose.setEnabled(globalactions.getNumOpenTabs()!=0);
+		}
+		if (globalactions.getNumOpenTabs()!=0) {
+			canSaveOut(this.globalactions.isModelLoaded());
+			
+			// Make the "Save", "Save As" and "Export" file items visible only 
+			// we're not on a Project Tab
+			boolean currtabisproject = currenttab instanceof StageTab;
+			fileitemsave.setVisible( ! currtabisproject);
+			fileitemsaveas.setVisible( ! currtabisproject);
+			fileitemexport.setVisible( ! currtabisproject);
+			writeseparator.setVisible( ! currtabisproject);
+		}
+		else {
+			fileitemsave.setEnabled(false);
+		}
+	}	
 
 }

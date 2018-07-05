@@ -25,7 +25,7 @@ import semsim.model.physical.object.PhysicalPropertyInComposite;
 import semsim.utilities.SemSimCopy;
 
 /**
- * This class represents a named element in a simulation model that
+ * This class represents a symbolic element in a simulation model that
  * is assigned some computational value during simulation.
  */
 public abstract class DataStructure extends ComputationalModelComponent implements Annotatable, Cloneable {	
@@ -213,29 +213,33 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		physicalProperty = pp;
 	}
 	
-	/** Set whether this DataStructure is explicitly declared in the model or not */
+	/** Set whether this DataStructure is explicitly declared in the model or not 
+	 * @param isDeclared Whether this DataStructure is explicitly declared in the model*/
 	public void setDeclared(boolean isDeclared) {
 		this.isDeclared = isDeclared;
 	}
 	
-	/** Set whether this DataStructure is a solution domain in the model or not */
+	/** Set whether this DataStructure is a solution domain in the model or not 
+	 * @param issoldom Whether this DataStructure is a solution domain in the model */
 	public void setIsSolutionDomain(boolean issoldom){
 		isSolutionDomain = issoldom;
 	}
 	
-	/** Set the solution domain in which this DataStructure is solved */
+	/** Set the solution domain in which this DataStructure is solved 
+	 * @param soldom The solution domain in which this DataStructure is solved */
 	public void setSolutionDomain(DataStructure soldom){
 		solutionDomain = soldom;
 	}
 
-	/** Set the unit of measurement assigned to the DataStructure */
+	/** Set the unit of measurement assigned to the DataStructure 
+	 * @param unit Unit of measurement to assign */
 	public void setUnit(UnitOfMeasurement unit) {
 		this.unit = unit;
 	}
 
-	/** Get a string representation of the composite annotation applied to 
-	 * the DataStructure.
+	/** Get a string representation of the composite annotation applied to the DataStructure.
 	 * @param appendcodeword Whether to add the DataStructure's name in parentheses at the end of the string 
+	 * @return A String representation of the DataStructure's composite annotation
 	 */
 	public String getCompositeAnnotationAsString(Boolean appendcodeword) {
 		String compann = "[unspecified]";
@@ -301,28 +305,28 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return computation!=null;
 	}
 	
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public Set<Annotation> getAnnotations() {
 		return annotations;
 	}
 	
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public void setAnnotations(Set<Annotation> annset){
 		annotations.clear();
 		annotations.addAll(annset);
 	}
 
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public void addAnnotation(Annotation ann) {
 		annotations.add(ann);
 	}
 	
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public void addReferenceOntologyAnnotation(Relation relation, URI uri, String description, SemSimLibrary lib){
 		addAnnotation(new ReferenceOntologyAnnotation(relation, uri, description, lib));
 	}
 
-	/** Required by {@link Annotatable} interface */
+	/** @return All {@link ReferenceOntologyAnnotation}s on the DataStructure  */
 	public Set<ReferenceOntologyAnnotation> getAllReferenceOntologyAnnotations(){
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(Annotation ann : getAnnotations()){
@@ -333,7 +337,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public Set<ReferenceOntologyAnnotation> getReferenceOntologyAnnotations(Relation relation) {
 		Set<ReferenceOntologyAnnotation> raos = new HashSet<ReferenceOntologyAnnotation>();
 		for(ReferenceOntologyAnnotation ann : getAllReferenceOntologyAnnotations()){
@@ -344,12 +348,12 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		return raos;
 	}
 	
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public Boolean isAnnotated(){
 		return !getAnnotations().isEmpty();
 	}
 
-	/** Required by {@link Annotatable} interface */
+	@Override
 	public void removeAllReferenceAnnotations() {
 		Set<Annotation> newset = new HashSet<Annotation>();
 		for(Annotation ann : this.getAnnotations()){
@@ -361,7 +365,7 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 		annotations.addAll(newset);
 	}
 	
-	/** Clone this DataStructure */
+	/** Clone the DataStructure */
 	public DataStructure clone() throws CloneNotSupportedException {
         return (DataStructure) super.clone();
 	}

@@ -18,6 +18,7 @@ public class Computation extends ComputationalModelComponent{
 	private String computationalCode = new String("");
 	private String mathML = new String("");
 	private Set<Event> events = new HashSet<Event>();
+	private Set<SBMLInitialAssignment> SBMLintialassignments = new HashSet<SBMLInitialAssignment>();
 	private PhysicalDependency dependency = null;
 	
 	/**
@@ -81,9 +82,7 @@ public class Computation extends ComputationalModelComponent{
 		return computationalCode;
 	}
 	
-	/**
-	 * @return The list of {@link DataStructure} inputs used in the Computation
-	 */
+	/** @return The list of {@link DataStructure} inputs used in the Computation */
 	public Set<DataStructure> getInputs(){
 		return inputs;
 	}
@@ -109,7 +108,7 @@ public class Computation extends ComputationalModelComponent{
 	/**
 	 * Set the string representation of the computational code used to solve
 	 * the output(s)
-	 * @param code
+	 * @param code Computational code used to solve the output(s)
 	 */
 	public void setComputationalCode(String code){
 		if (code == null) code = new String("");
@@ -153,22 +152,18 @@ public class Computation extends ComputationalModelComponent{
 	
 	/**
 	 * Add an output for the computation
-	 * @param output
+	 * @param output The output {@link DataStructure}
 	 */
 	public void addOutput(DataStructure output){
 		this.outputs.add(output);
 	}
 
-	/**
-	 * @return The DataStructures solved by the computation
-	 */
+	/** @return The DataStructures solved by the computation */
 	public Set<DataStructure> getOutputs() {
 		return outputs;
 	}
 	
-	/**
-	 * @return The all DataStructures involved in the computation
-	 */
+	/** @return The all DataStructures involved in the computation */
 	public Set<DataStructure> getOutputsandInputs() {
 		Set<DataStructure> alllinks = new HashSet<DataStructure>(outputs);
 		alllinks.addAll(inputs);
@@ -176,13 +171,12 @@ public class Computation extends ComputationalModelComponent{
 	}
 	
 	
-	/**	
-	 * @return The set of discrete events that are part of this computation
-	 */
+	/**	 @return The set of discrete events that are part of this computation */
 	public Set<Event> getEvents() {
 		return events;
 	}
 
+	
 	/**
 	 * Assign the set of discrete events associated with this computation
 	 * @param events The events associated with this computation
@@ -213,22 +207,66 @@ public class Computation extends ComputationalModelComponent{
 		this.getEvents().remove(event);
 	}
 	
+	
+	/** @return The set of SBML initial assignments associated with the computation */
+	public Set<SBMLInitialAssignment> getSBMLintialAssignments() {
+		return SBMLintialassignments;
+	}
+	
+	
+	/**
+	 * Specify the set of SBML initial assignments associated with the computation
+	 * @param sBMLintialassignments A set of SBML initial assignments
+	 */
+	public void setSBMLintialAssignments(Set<SBMLInitialAssignment> sBMLintialassignments) {
+		SBMLintialassignments = sBMLintialassignments;
+	}
+	
+	
+	/** @return Whether the Computation includes any SBMLInitialAssignments */
+	public boolean hasSBMLinitialAssignments(){
+		return ! getSBMLintialAssignments().isEmpty();
+	}
+	
+	
+	/**
+	 * Add an SBML initial assignment to the computation
+	 * @param sia The intial assignment to add
+	 */
+	public void addSBMLinitialAssignment(SBMLInitialAssignment sia){
+		SBMLintialassignments.add(sia);
+	}
+	
+	
+	/**
+	 * Remove an output of the computation
+	 * @param dstoremove The {@link DataStructure} to remove
+	 */
 	public void removeOutput(DataStructure dstoremove) {
 		outputs.remove(dstoremove);
 	}
 	
-	/**
-	 * @return Whether there is a {@link PhysicalDependency} associated with the computation 
-	 */
+	
+	/** @return Whether there is a {@link PhysicalDependency} associated with the computation  */
 	public boolean hasPhysicalDependency(){
 		return dependency != null;
 	}
 	
+	
+	/**
+	 * Replace all data structures associated with the Computation
+	 * @param dsmap HashMap associating the data structures to replace and their replacements
+	 */
 	public void replaceAllDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		replaceOutputs(dsmap);
 		replaceInputs(dsmap);
 	}
 	
+	
+	/**
+	 * Replace output data structures
+	 * @param dsmap HashMap that links the data structures to replace and their replacements
+	 */
 	public void replaceOutputs(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newoutputs = new HashSet<DataStructure>();
 		for (DataStructure output : getOutputs()) {
@@ -240,6 +278,11 @@ public class Computation extends ComputationalModelComponent{
 		setOutputs(newoutputs);
 	}
 	
+	
+	/**
+	 * Replace input data structures
+	 * @param dsmap HashMap that links the data structures to replace and their replacements
+	 */
 	public void replaceInputs(HashMap<DataStructure, DataStructure> dsmap) {
 		Set<DataStructure> newinputs = new HashSet<DataStructure>();
 		for (DataStructure input : getInputs()) {
@@ -256,4 +299,5 @@ public class Computation extends ComputationalModelComponent{
 	public Computation addToModel(SemSimModel model) {
 		return this;
 	}
+	
 }

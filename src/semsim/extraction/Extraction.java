@@ -164,7 +164,7 @@ public class Extraction {
 	
 	/**
 	 * Add a {@link DataStructure}'s computational inputs to the extraction
-	 * @param ds
+	 * @param ds The data structure with inputs to add
 	 */
 	public void addInputsToExtract(DataStructure ds){
 		
@@ -213,7 +213,7 @@ public class Extraction {
 	
 	/**
 	 * 
-	 * @param ds
+	 * @param ds A data structure
 	 * @return Whether a particular data structure is a user-defined 
 	 * input for the extraction
 	 */
@@ -231,8 +231,8 @@ public class Extraction {
 	}
 	
 	/**
-	 * @param ds
-	 * @return Whether a particular data structure is converted from
+	 * @param ds A data structure
+	 * @return Whether the data structure is converted from
 	 * a dependent variable to a user-defined input for the extraction
 	 */
 	public boolean isVariableConvertedToInput(DataStructure ds){
@@ -255,6 +255,7 @@ public class Extraction {
 	/**
 	 * Extract out a portion of a model as a new SemSim model
 	 *  @return A new SemSimModel representing the extraction
+	 *  @throws CloneNotSupportedException
 	 */
 	public SemSimModel extractToNewModel() throws CloneNotSupportedException {
 		SemSimModel extractedmodel = new SemSimModel();
@@ -384,7 +385,7 @@ public class Extraction {
 	
 	/**
 	 * Clones all submodels that should be preserved in the extraction.
-	 * @param extractedmodel
+	 * @param extractedmodel The SemSimModel representing the extraction
 	 */
 	private void extractSubModels(SemSimModel extractedmodel) {
 		

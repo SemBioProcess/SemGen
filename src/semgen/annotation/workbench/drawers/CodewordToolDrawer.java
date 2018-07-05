@@ -15,6 +15,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.definitions.PropertyType;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -63,7 +64,10 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		
 		int i = 0;
 		for (DataStructure ds : componentlist) {
-			if (!ds.isImportedViaSubmodel() || options[0]) cws.add(i);
+			
+			if( ! (ds instanceof SBMLFunctionOutput) && ds.isDeclared()){
+				if ( ! ds.isImportedViaSubmodel() || options[0]) cws.add(i);
+			}
 			i++;
 		}
 		

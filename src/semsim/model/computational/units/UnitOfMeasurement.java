@@ -42,7 +42,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 	
 	/**
 	 * Copy constructor
-	 * @param uomtocopy
+	 * @param uomtocopy Object to copy
 	 */
 	public UnitOfMeasurement(UnitOfMeasurement uomtocopy) {
 		super(uomtocopy);
@@ -275,7 +275,7 @@ public class UnitOfMeasurement extends ComputationalModelComponent implements An
 
 	/**
 	 * Set the UnitOfMeasurement's type (used in JSim models)
-	 * @param unitType
+	 * @param unitType The unit type
 	 */
 	public void setUnitType(String unitType) {
 		this.unitType = unitType;

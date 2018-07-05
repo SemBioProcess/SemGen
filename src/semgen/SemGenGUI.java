@@ -91,7 +91,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public void startNewMergerTask(){}
 	public void startNewMergerTask(Set<ModelAccessor> existingobjs){}
 	
-	public void startNewStageTask(){
+	public void startNewProjectTask(){
 		StageWorkbenchFactory factory = new StageWorkbenchFactory();
 		StageTabFactory tabfactory = new StageTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, false);
@@ -241,7 +241,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			startNewMergerTask(globalactions.getSeeds());
 		}
 		if (arg == GlobalActions.appactions.STAGE) {
-			startNewStageTask();
+			startNewProjectTask();
 		}
 		if (arg == GlobalActions.appactions.STAGEEXISTING) {
 			startNewStageTask(globalactions.getSeed());

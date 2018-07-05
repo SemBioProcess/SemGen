@@ -6,11 +6,25 @@ import semsim.model.computational.Computation;
 /** A {@link DataStructure} that is assigned a decimal value during simulation.*/
 public class Decimal extends DataStructure{
 	
+	
 	/** Constructor where only name of the data structure is specified. Automatically associates this Decimal with 
 	 * a new {@link Computation} instance.
 	 * @param name The name of the Decimal data structure. */
 	public Decimal(String name){
 		super(SemSimTypes.DECIMAL);
+		setName(name);
+		setComputation(new Computation(this));
+	}
+	
+	/**
+	 * Constructor with type argument and boolean indicating whether to 
+	 * create a {@link Computation} associated with the Decimal
+	 * @param type A SemSimType
+	 * @param initializeComputation Indicates whether to create a {@link Computation}
+	 * associated with the Decimal
+	 */
+	public Decimal(String name, SemSimTypes type){
+		super(type);
 		setName(name);
 		setComputation(new Computation(this));
 	}

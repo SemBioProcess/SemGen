@@ -41,6 +41,7 @@ public class Annotation {
 	}
 	/**
 	 * Constructor for copying an Annotation
+	 * @param tocopy The Annotation to copy
 	 */
 	public Annotation(Annotation tocopy) {
 		if (tocopy.valueDescription!=null) {
@@ -67,15 +68,13 @@ public class Annotation {
 
 	/**
 	 * Set the relationship between the object being annotated and the annotation value
-	 * @param relation
+	 * @param relation The relation (AKA predicate, qualifier) between the object being annotated and the annotation value
 	 */
 	public void setRelation(Relation relation) {
 		this.relation = relation;
 	}
 
-	/**
-	 * @return The relationship between the object being annotated and the annotation value
-	 */
+	/** @return The relationship between the object being annotated and the annotation value */
 	public Relation getRelation() {
 		return relation;
 	}

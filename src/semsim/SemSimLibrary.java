@@ -191,6 +191,7 @@ public class SemSimLibrary {
 		}
 	}
 	
+	/** @return The set of OPB properties commonly used in annotation */
 	public Set<PhysicalPropertyInComposite> getCommonProperties() {
 		return new HashSet<PhysicalPropertyInComposite>(commonproperties.values());
 	}
@@ -275,7 +276,10 @@ public class SemSimLibrary {
 		return pp;
 	}
 	
-	/** Returns a {@link PhysicalPropertyInComposite} instance based on an input OPB class URI*/
+	/** Returns a {@link PhysicalPropertyInComposite} instance corresponding to an input OPB class URI
+	 * @param id OPB class URI
+	 * @return A {@link PhysicalPropertyInComposite} instance corresponding to the input OPB class URI
+	 */
 	public PhysicalPropertyInComposite getOPBAnnotationFromReferenceID(String id){
 		return commonproperties.get(id);
 	}
@@ -304,7 +308,7 @@ public class SemSimLibrary {
 		return subclassset;
 	}
 	
-	/** Create an instance of an OWLDataFactory */
+	/** @return A new OWLDataFactory object */
 	public OWLDataFactory makeOWLFactory() {
 		return manager.getOWLDataFactory() ;
 	}
@@ -462,8 +466,12 @@ public class SemSimLibrary {
 		return cellMLUnitsTable.contains(unit);
 	}
 	
-	/** Remove any OPB terms that are not physical properties from a HashMap that links 
-	 * OPB RDF labels to URI strings*/
+	/**
+	 * Remove any OPB terms that are not physical properties from a HashMap that links 
+	 * OPB RDF labels to URI strings
+	 * @param table HashMap linking OPB RDF labels to URI Strings
+	 * @return HashMap with non-physical properties removed
+	 */
 	public HashMap<String,String> removeNonPropertiesFromOPB(HashMap<String, String> table){
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -473,19 +481,14 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
-	/** Remove any OPB terms that are physical properties from a HashMap that links 
-	 * OPB RDF labels to URI strings*/
-	public HashMap<String,String> removeOPBAttributeProperties(HashMap<String, String> table){
-		HashMap<String,String> newtable = new HashMap<String,String>();
-		for(String key : table.keySet()){
-			if(!OPBhasProperty(table.get(key)))
-				newtable.put(key, table.get(key));
-		}
-		return newtable;
-	}
+	
 
-	/** Remove any OPB terms that are not physical process properties from a HashMap that links 
-	 * OPB RDF labels to URI strings*/
+	/**
+	 * Remove any OPB terms that are not physical process properties from a HashMap that links 
+	 * OPB RDF labels to URI strings
+	 * @param table HashMap linking OPB RDF labels to their URI Strings
+	 * @return HashMap with non-process properties removed
+	 */
 	public HashMap<String, String> removeNonProcessProperties(HashMap<String, String> table) {
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){
@@ -495,8 +498,12 @@ public class SemSimLibrary {
 		return newtable;
 	}
 	
-	/** Remove any OPB terms that are not physical entity properties from a HashMap that links 
-	 * OPB RDF labels to URI strings*/
+	/**
+	 * Remove any OPB terms that are not physical entity properties from a HashMap that links 
+	 * OPB RDF labels to URI strings
+	 * @param table HashMap linking OPB RDF labels and URI Strings
+	 * @return HashMap with non-properties of entities removed
+	 */
 	public HashMap<String, String> removeNonPropertiesofEntities(HashMap<String, String> table) {
 		HashMap<String,String> newtable = new HashMap<String,String>();
 		for(String key : table.keySet()){

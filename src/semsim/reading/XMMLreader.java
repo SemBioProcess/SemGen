@@ -28,7 +28,7 @@ import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
-import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
@@ -366,7 +366,7 @@ public class XMMLreader extends ModelReader {
 			
 			while (stateactionsiterator.hasNext()) {
 				Element action = (Element) stateactionsiterator.next();
-				EventAssignment ssea = ssevent.new EventAssignment();
+				EventAssignment ssea = new EventAssignment();
 				String assignmentmathml = xmloutputter.outputString(action.getChild("expression").getChild("math",mathmlns));
 				ssea.setMathML(assignmentmathml);
 				String varstring = action.getAttributeValue("variableID");

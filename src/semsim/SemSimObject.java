@@ -21,7 +21,7 @@ public abstract class SemSimObject {
 	
 	/**
 	 * Copy constructor
-	 * @param objtocopy
+	 * @param objtocopy The object to copy
 	 */
 	public SemSimObject(SemSimObject objtocopy) {
 		semsimtype = objtocopy.semsimtype;
@@ -34,12 +34,12 @@ public abstract class SemSimObject {
 			metadataID = new String(objtocopy.metadataID);
 	}
 	
-	/** Get the object's free-text description */
+	/** @return The object's free-text description */
 	public String getDescription() {
 		return description;
 	}
 
-	/** Get the object's name */
+	/** @return The object's name */
 	public String getName(){
 		return name;
 	}
@@ -78,7 +78,7 @@ public abstract class SemSimObject {
 
 	/**
 	 * Copy this object's description to another SemSimObject
-	 * @param srcds
+	 * @param srcds The object with the description we want to copy
 	 */
 	public void copyDescription(SemSimObject srcds){
 		// Copy free-text description
@@ -100,7 +100,7 @@ public abstract class SemSimObject {
 	}
 
 	/**
-	 * Get the component's metadata ID. These ID's are often used
+	 * @return The component's metadata ID. These ID's are used
 	 * by XML-based modeling languages such as SBML and CellML
 	 * to link XML elements to RDF statements that describe
 	 * the elements.
@@ -121,9 +121,8 @@ public abstract class SemSimObject {
 	}
 	
 	/**
-	 * Tests whether this object is a specified SemSimType
 	 * @param type A specified SemSimType
-	 * @return
+	 * @return Whether this object is a specified SemSimType
 	 */
 	public boolean isType(SemSimTypes type) {
 		return type == semsimtype;

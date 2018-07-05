@@ -38,9 +38,11 @@ public enum SemSimTypes {
 	MMLCHOICE("MML Model Choice", RDFNamespace.SEMSIM.getNamespaceasString() + "MMLchoice", "", "semsim:MMLchoice"),
 	INTEGER("SemSim Integer", RDFNamespace.SEMSIM.getNamespaceasString() + "Integer", "", "semsim:Integer"),
 	COMPUTATION("Computation", RDFNamespace.SEMSIM.getNamespaceasString() + "Computation", "", "semsim:Computation"),
+	SBML_FUNCTION_OUTPUT("SBML Function Output", RDFNamespace.SEMSIM.getNamespaceasString() + "SBML_function_output", "", "semsim:SBML_function_output"),
 	RELATIONAL_CONSTRAINT("Relational Constraint", RDFNamespace.SEMSIM.getNamespaceasString() + "Relational_constraint", "", "semsim:Relational_constraint"),
 	EVENT("Event", RDFNamespace.SEMSIM.getNamespaceasString() + "Event", "", "semsim:Event"),
 	EVENT_ASSIGNMENT("Event Assignment", RDFNamespace.SEMSIM.getNamespaceasString() + "EventAssignment", "", "semsim:EventAssignment"),
+	SBML_INITIAL_ASSIGNMENT("SBML Initial Assignment", RDFNamespace.SEMSIM.getNamespaceasString() + "SBML_initial_assignment","","sesmsim:SBML_initial_assignment"),
 	UNIT_OF_MEASUREMENT("Unit of Measurement", RDFNamespace.SEMSIM.getNamespaceasString() + "Unit_of_measurement", "", "semsim:Unit_of_measurement");
 	
 	private String name;

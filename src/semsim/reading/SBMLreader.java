@@ -34,6 +34,7 @@ import org.sbml.jsbml.Priority;
 import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.ExplicitRule;
+import org.sbml.jsbml.InitialAssignment;
 import org.sbml.jsbml.Rule;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -58,6 +59,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
+import semsim.definitions.SemSimTypes;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.fileaccessors.ModelAccessor;
@@ -66,11 +68,13 @@ import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
-import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.Decimal;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
@@ -105,7 +109,8 @@ public class SBMLreader extends ModelReader{
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
 	private String timedomainname = "t";
-	public static final String reactionprefix = "Reaction_";
+	public static final String REACTION_PREFIX = "Reaction_";
+	public static final String FUNCTION_PREFIX = "Function_";
 	private UnitOfMeasurement modeltimeunits;
 	private UnitOfMeasurement modelsubstanceunits;
 	private AbstractRDFreader rdfreader;
@@ -143,25 +148,11 @@ public class SBMLreader extends ModelReader{
 		semsimmodel.setSemSimVersion(SemSimLibrary.SEMSIM_VERSION);		
 		semsimmodel.setSourceFileLocation(modelaccessor);
 		
-		// Collect function definitions. Not used in SBML level 1.
-		// collectFunctionDefinitions();
-		if (sbmlmodel.getListOfFunctionDefinitions().size()>0)
-			addErrorToModel(modelaccessor.getShortLocation() + " cannot be converted into a SemSim model because it contains function definitions.");
-
 		//collectCompartmentTypes();  // We ignore compartment types for now. This class is not available in JSBML.
 		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/CompartmentType.html
 
 		//collectSpeciesTypes();  // Ignore these for now, too. This class is not available in JSBML.
 		// See http://sbml.org/Software/libSBML/5.11.4/docs/formatted/java-api/org/sbml/libsbml/SpeciesType.html
-		
-		// collectInitialAssignments();
-		// Sets the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
-		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
-		
-		
-		if (sbmlmodel.getListOfInitialAssignments().size()>0)
-			addErrorToModel(modelaccessor.getShortLocation() + " cannot be converted into a SemSim model because it contains initial assignments.");
-
 		
 				
 		// if any errors at this point, return model
@@ -208,11 +199,14 @@ public class SBMLreader extends ModelReader{
 		collectCompartments();
 		collectSpecies();
 		collectParameters();
+		collectFunctionDefinitions(); // NOTE: Function definitions not used in SBML Level 1
 		collectReactions();
 		setSpeciesConservationEquations();
 		collectRules();
 		collectConstraints();
 		collectEvents();
+		collectInitialAssignments();
+				
 		setComputationalDependencyNetwork();
 	
 		return semsimmodel;
@@ -362,7 +356,8 @@ public class SBMLreader extends ModelReader{
 	}
 	
 	
-	/** Set the temporal solution domain for the SemSim model  */
+	/** Set the temporal solution domain for the SemSim model  
+	 * @throws IOException*/
 	private void setTimeDomain() throws IOException{
 		
 		//NOTE: default time units for SBML level 2 models is seconds.
@@ -885,7 +880,7 @@ public class SBMLreader extends ModelReader{
 				for(int a=0; a<sbmlevent.getListOfEventAssignments().size(); a++){
 					org.sbml.jsbml.EventAssignment ea = sbmlevent.getEventAssignment(a);
 					String varname = ea.getVariable();
-					EventAssignment ssea = ssevent.new EventAssignment();
+					EventAssignment ssea = new EventAssignment();
 					
 					String assignmentmathmlstring = JSBML.writeMathMLToString(ea.getMath());
 					assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
@@ -930,6 +925,57 @@ public class SBMLreader extends ModelReader{
 			e.printStackTrace();
 		}
 	}
+	
+	/** Collect specific assignments made at the beginning of the simulation  */
+	private void collectInitialAssignments(){
+		// Sets the t=0 value for a compartment, species or parameter. The symbol field refers to the ID of the SBML element.
+		// If one of these elements already has an initial value stated in its construct, the initialAssignment overwrites it.
+		for(int i=0; i<sbmlmodel.getListOfInitialAssignments().size();i++){
+			InitialAssignment sbmlia = sbmlmodel.getInitialAssignment(i);
+			SBMLInitialAssignment semsimia = new SBMLInitialAssignment();
+			
+			semsimia.setMetadataID(sbmlia.getMetaId());
+			
+			String variableID = sbmlia.getVariable();
+			DataStructure output = semsimmodel.getAssociatedDataStructure(variableID);
+			semsimia.setOutput(output);
+			output.getComputation().addSBMLinitialAssignment(semsimia);
+			
+			try {
+				String assignmentmathmlstring = JSBML.writeMathMLToString(sbmlia.getMath());
+				assignmentmathmlstring = stripXMLheader(assignmentmathmlstring);
+				assignmentmathmlstring = SemSimUtil.addLHStoMathML(assignmentmathmlstring, variableID, false, timedomainname);
+				semsimia.setMathML(assignmentmathmlstring);
+			} catch (SBMLException | XMLStreamException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/** Collect the SBML model's FunctionDefinitions */
+	private void collectFunctionDefinitions(){
+		
+		for(int i=0; i<sbmlmodel.getListOfFunctionDefinitions().size(); i++){
+			org.sbml.jsbml.FunctionDefinition sbmlfd = sbmlmodel.getFunctionDefinition(i);
+			semsim.model.computational.datastructures.SBMLFunctionOutput fd = new SBMLFunctionOutput(sbmlfd.getId());
+			
+			semsimmodel.addSBMLFunctionOutput(fd);
+			collectSBaseData(sbmlfd, fd);
+			
+			String mathml = sbmlfd.getMathMLString();
+			fd.getComputation().setMathML(mathml);
+			
+			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
+			
+			for(String input : inputs.keySet()){
+				String internalparname = inputs.get(input);
+				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
+				internalpar.setDeclared(false);
+				semsimmodel.addDataStructure(internalpar); // Use prefixed name to create unique Decimal in SemSim model
+			}
+		}
+	}
+	
 	
 	/** Collect the SBML model's reaction data */
 	private void collectReactions(){
@@ -976,7 +1022,7 @@ public class SBMLreader extends ModelReader{
 			rateds.setAssociatedPhysicalProperty(prop);
 
 			rateds.setDeclared(true);
-			String thereactionprefix = reactionprefix + reactionID;
+			String thereactionprefix = REACTION_PREFIX + reactionID;
 			
 			Submodel rxnsubmodel = new Submodel(thereactionprefix);
 			semsimmodel.addSubmodel(rxnsubmodel);
@@ -1190,7 +1236,9 @@ public class SBMLreader extends ModelReader{
 			// If we are looking at a reaction rate data structure, use reaction
 			// prefix so we can ID local parameters as inputs
 			if(sbmlmodel.getReaction(ds.getName())!=null)
-				prefix = reactionprefix + ds.getName();
+				prefix = REACTION_PREFIX + ds.getName();
+			else if(sbmlmodel.getFunctionDefinition(ds.getName())!=null)
+				prefix = FUNCTION_PREFIX + ds.getName();
 			
 			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
 		}
@@ -1199,6 +1247,7 @@ public class SBMLreader extends ModelReader{
 	/**
 	 * Collect the SemSim annotations for data structures in the model.
 	 * This excludes data structures corresponding to species and reactions in the model.
+	 * @return RDF content as a String
 	 * @throws IOException 
 	 * @throws ZipException 
 	 */
@@ -1237,8 +1286,8 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 * Collect all data common to an SBase object and copy it into a specified SemSimObject
-	 * @param sbmlobject
-	 * @param semsimobject
+	 * @param sbmlobject An SBase SBML object
+	 * @param semsimobject A SemSimObject representing the SBML object
 	 */
 	private void collectSBaseData(SBase sbmlobject, SemSimObject semsimobject){
 		
@@ -1250,8 +1299,8 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 *  Copy the notes attached to an SBML element and into the Description field of a SemSimObject 
-	 * @param sbmlobject
-	 * @param semsimobject
+	 * @param sbmlobject An SBase SBML object
+	 * @param semsimobject The SemSimObject representing the SBase object
 	 */
 	private void addNotes(SBase sbmlobject, SemSimObject semsimobject){
 				
@@ -1267,8 +1316,8 @@ public class SBMLreader extends ModelReader{
 	
 	/**
 	 * Copy the metadataID from an SBase object to a SemSimObject
-	 * @param sbmlobject
-	 * @param semsimobject
+	 * @param sbmlobject An SBase SBML object
+	 * @param semsimobject A SemSimObject representing the SBase object
 	 */
 	private void addMetadataID(SBase sbmlobject, SemSimObject semsimobject){
 		semsimmodel.assignValidMetadataIDtoSemSimObject(sbmlobject.getMetaId(),semsimobject);
@@ -1280,7 +1329,7 @@ public class SBMLreader extends ModelReader{
 	 * converts them into a set of ReferenceOntologyAnnotations. If more than one
 	 * identity annotation is applied (BQBiol:is), as is common in SBML models, only the first
 	 * annotation that uses a term from a SemSim preferred knowledge resource is collected.
-	 * @param sbmlobject
+	 * @param sbmlobject An SBase SBML object
 	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
 	 */
 	private Set<ReferenceOntologyAnnotation> getBiologicalQualifierAnnotations(SBase sbmlobject){
@@ -1343,7 +1392,7 @@ public class SBMLreader extends ModelReader{
 	/**
 	 * Collects all model qualifier annotations for a given SBase object and 
 	 * converts them into a set of ReferenceOntologyAnnotations.
-	 * @param sbmlobject
+	 * @param sbmlobject An SBase SBML object
 	 * @return The set of ReferenceOntologyAnnotations associated with the SBase object
 	 */	private Set<ReferenceOntologyAnnotation> getModelQualifierAnnotations(SBase sbmlobject){
 		
@@ -1374,7 +1423,7 @@ public class SBMLreader extends ModelReader{
 	 /**
 	 * Assign a singular SemSim physical entity object to an SBML model element. 
 	 * Make sure that if a custom entity or process is created, that it has a unique name.
-	 * @param sbmlobject
+	 * @param sbmlobject An SBase SBML object
 	 * @return The singular SemSim physical entity object assigned to 
 	 */
 	 private PhysicalModelComponent createSingularPhysicalComponentForSBMLobject(SBase sbmlobject){
@@ -1467,6 +1516,7 @@ public class SBMLreader extends ModelReader{
 	 * Add an SBML parameter to the SemSim model. This can also be used for SBML LocalParameters.
 	 * @param qwu The SBML parameter to add to the SemSim model.
 	 * @param prefix Prefix to use when creating the ID for the parameter
+	 * @return {@link DataStructure} representing the SBML parameter
 	 */	
 	private DataStructure addParameter(QuantityWithUnit qwu, String prefix){
 

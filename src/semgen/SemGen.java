@@ -176,7 +176,7 @@ public class SemGen extends JFrame implements Observer{
 		if(OSValidator.isMac())
 			OSXAdapter.setQuitHandler(this, getClass().getMethod("quit", (Class<?>[])null));
 		
-		contentpane.startNewStageTask();
+		contentpane.startNewProjectTask();
 	}
 	
 	//Check which OS SemGen is being run under

@@ -13,7 +13,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
-import semsim.model.computational.Event.EventAssignment;
+import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;

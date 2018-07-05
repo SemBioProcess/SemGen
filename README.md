@@ -30,11 +30,11 @@ java -version
 
 Simply download the appropriate build for your operating system from the [releases page](https://github.com/SemBioProcess/SemGen/releases).
 
-Windows: Double-click the ```SemGen.exe``` file in the main SemGen directory.
+Windows: Download and run the Windows installer. You will then be able to run SemGen from the location where you installed it by double-clicking the ```SemGen.exe``` file, or if using installation defaults, from the Windows Start menu.
 
-Mac: Open ```SemGen_macosx_4_0_0.dmg```, and drag ```SemGen.app``` to Applications folder. Double-click ```SemGen.app``` to start SemGen.
+Mac: Open the SemGen .dmg file, and drag ```SemGen.app``` to Applications folder. Double-click ```SemGen.app``` to start the program.
 
-Linux: Unarchive ```SemGen_linux_4_0_0.tar.gz```. Double-click the "SemGen.jar" file in the main SemGen directory. 
+Linux: Unarchive the SemGen .tar.gz file. Double-click the ```SemGen.jar``` file in the main SemGen directory to start the program
 
 ## Running SemGen
 

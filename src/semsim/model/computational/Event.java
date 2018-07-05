@@ -8,6 +8,12 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitOfMeasurement;
 
+/**
+ * Class for representing discrete occurrences in a simulation
+ * that alter the value of one or more data structures.
+ * @author mneal
+ *
+ */
 public class Event extends ComputationalModelComponent{
 
 	private String eventTriggerMathML;
@@ -21,7 +27,10 @@ public class Event extends ComputationalModelComponent{
 		super(SemSimTypes.EVENT);
 	}
 	
-	// Constructor for copying
+	/**
+	 * Copy constructor
+	 * @param eventtocopy The Event to copy
+	 */
 	public Event(Event eventtocopy) {
 		super(eventtocopy);
 				
@@ -41,41 +50,79 @@ public class Event extends ComputationalModelComponent{
 	}
 	
 	
-	
+	/**
+	 * @return The MathML statement that triggers the Event
+	 */
 	public String getTriggerMathML() {
 		return eventTriggerMathML;
 	}
 
+	/**
+	 * Specify the MathML that triggers the Event
+	 * @param trigger The MathML trigger
+	 */
 	public void setTriggerMathML(String trigger) {
 		this.eventTriggerMathML = trigger;
 	}
 
+	
+	/**
+	 * @return The set of EventAssignments that accompany the Event
+	 */
 	public Set<EventAssignment> getEventAssignments() {
 		return eventAssignments;
 	}
 
+	
+	/**
+	 * @return Whether there is a MathML statement indicating an Event delay
+	 */
 	public boolean hasDelayMathML(){
 		return (delayMathML != null && ! delayMathML.equals(""));
 	}
 
+	
+	/**
+	 * @return Whether there is a MathML statement indicating Event priority
+	 */
 	public boolean hasPriorityMathML(){
 		return (priorityMathML !=null && ! priorityMathML.equals(""));
 	}
 
+	
+	/**
+	 * Specify the set of EventAssignments that accompany the Event
+	 * @param eventAssignments A set of EventAssignments
+	 */
 	public void setEventAssignments(Set<EventAssignment> eventAssignments) {
 		this.eventAssignments.clear();
 		this.eventAssignments.addAll(eventAssignments);
 	}
 
+	
+	/**
+	 * Add an EventAssignment to accompany the Event
+	 * @param ea An EventAssignment
+	 */
 	public void addEventAssignment(EventAssignment ea){
 		this.getEventAssignments().add(ea);
 	}
 	
 	
+	/**
+	 * Remove an EventAssignment that accompanies the Event
+	 * @param ea The EventAssignment to remove
+	 */
 	public void removeEventAssignment(EventAssignment ea){
 		this.getEventAssignments().remove(ea);
 	}
 	
+	
+	/**
+	 * @param outputds A data structure
+	 * @return The EventAssignment accompanying the Event that alters the
+	 * value of the input data structure.
+	 */
 	public EventAssignment getEventAssignmentForOutput(DataStructure outputds){
 		
 		for(EventAssignment ea : this.getEventAssignments()){
@@ -87,81 +134,48 @@ public class Event extends ComputationalModelComponent{
 	}
 	
 	
-	
+	/** @return The MathML indicating the Event's delay*/
 	public String getDelayMathML() {
 		return delayMathML;
 	}
 
 
-
+	/**
+	 * Set the MathML indicating the Event's delay
+	 * @param delayMathML MathML statement
+	 */
 	public void setDelayMathML(String delayMathML) {
 		this.delayMathML = delayMathML;
 	}
 
 
-
+	/** @return The priority MathML statement associated with the Event  */
 	public String getPriorityMathML() {
 		return priorityMathML;
 	}
 
 
-
+	/**
+	 * Set the MathML statement indicating the Event's priority
+	 * @param priorityMathML A MathML statement
+	 */
 	public void setPriorityMathML(String priorityMathML) {
 		this.priorityMathML = priorityMathML;
 	}
 
 
-
+	/** @return The temporal unit used when triggering the Event */
 	public UnitOfMeasurement getTimeUnit() {
 		return timeUnit;
 	}
 
 
-
+	/**
+	 * Specify the temporal unit used when triggering the Event
+	 * @param timeUnit The temporal unit
+	 */
 	public void setTimeUnit(UnitOfMeasurement timeUnit) {
 		this.timeUnit = timeUnit;
-	}
-
-	
-	// Nested subclass for event assignments
-	public class EventAssignment extends ComputationalModelComponent{
-		private String mathML;
-		private DataStructure output;
-		
-		// Constructor
-		public EventAssignment(){
-			super(SemSimTypes.EVENT_ASSIGNMENT);
-		}
-		
-		// Constructor for copying
-		public EventAssignment(EventAssignment eatocopy){
-			super(eatocopy);
-			
-			if (eatocopy.mathML != null)
-				mathML = new String(eatocopy.mathML);
-			
-			output = eatocopy.output;
-		}
-
-		public String getMathML() {
-			return mathML;
-		}
-
-		public void setMathML(String mathML) {
-			this.mathML = mathML;
-		}
-
-		public DataStructure getOutput() {
-			return output;
-		}
-
-		public void setOutput(DataStructure output) {
-			this.output = output;
-		}
-		@Override
-		public EventAssignment addToModel(SemSimModel model) {
-			return this;
-		}
 	}
 
 

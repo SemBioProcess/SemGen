@@ -31,6 +31,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Event;
+import semsim.model.computational.SBMLInitialAssignment;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
@@ -52,6 +53,8 @@ public class SemSimUtil {
 	 * Removes the FunctionalSubmodel structures within a model. Creates a "flattened"
 	 * model where there are no MappableVariables. For merging a model that has a CellML component
 	 * structure with one that does not.
+	 * @param model The model to flatten
+	 * @return Map of the changed data structure names
 	 */
 	public static Map<String,String> flattenModel(SemSimModel model){
 		
@@ -321,37 +324,10 @@ public class SemSimUtil {
 	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
 
 		Set<DataStructure> inputs = new HashSet<DataStructure>();
-		Map<String,String> inputnames = new HashMap<String,String>();
 
 		if(semsimmodel!=null && mathmlstring!=null){
 			
-			Pattern p1 = Pattern.compile("<ci>.+</ci>");
-			Matcher m1 = p1.matcher(mathmlstring);
-			boolean result1 = m1.find();
-			
-			while(result1){
-				String inputname = mathmlstring.substring(m1.start()+4, m1.end()-5).trim();
-				inputnames.put(inputname, nameprefix + "." + inputname);
-				result1 = m1.find();
-			}	
-			
-			// Look for instances where csymbols are used for controlled symbols
-			// as in SBML's use of the 't' symbol for time
-			Pattern p2 = Pattern.compile("<csymbol.+</csymbol>");
-			Matcher m2 = p2.matcher(mathmlstring);
-			boolean result2 = m2.find();
-			
-			while(result2){
-				String matchedstring = mathmlstring.substring(m2.start(), m2.end());
-				
-				// Store csymbol text as an input only if it's not the "delay" csymbol used in SBML
-				if( ! matchedstring.contains("definitionURL=\"http://www.sbml.org/sbml/symbols/delay\"")){
-					String inputname = matchedstring.substring(matchedstring.indexOf(">")+1, matchedstring.lastIndexOf("<")-1).trim();
-					inputnames.put(inputname, nameprefix + "." + inputname);
-				}
-				
-				result2 = m2.find();
-			}
+			Map<String,String> inputnames = getInputNamesFromMathML(mathmlstring, nameprefix);
 			
 			// Go through all the input names we found, make sure they are in the model
 			// and if so, add them to the returned list of inputs
@@ -377,6 +353,46 @@ public class SemSimUtil {
 			}
 		}
 		return inputs;
+	}
+	
+	
+	/**
+	 * Get names of terms used in a MathML string
+	 * @param mathmlstring A MathML string
+	 * @param nameprefix Optional prefix for mapping an input name to a SemSim-formatted name
+	 * @return Names of inputs used in MathML mapped to option prefixed names
+	 */
+	public static Map<String,String> getInputNamesFromMathML(String mathmlstring, String nameprefix){
+		Map<String,String> inputnames = new HashMap<String,String>();
+		
+		Pattern p1 = Pattern.compile("<ci>.+</ci>");
+		Matcher m1 = p1.matcher(mathmlstring);
+		boolean result1 = m1.find();
+		
+		while(result1){
+			String inputname = mathmlstring.substring(m1.start()+4, m1.end()-5).trim();
+			inputnames.put(inputname, nameprefix + "." + inputname);
+			result1 = m1.find();
+		}	
+		
+		// Look for instances where csymbols are used for controlled symbols
+		// as in SBML's use of the 't' symbol for time
+		Pattern p2 = Pattern.compile("<csymbol.+</csymbol>");
+		Matcher m2 = p2.matcher(mathmlstring);
+		boolean result2 = m2.find();
+		
+		while(result2){
+			String matchedstring = mathmlstring.substring(m2.start(), m2.end());
+			
+			// Store csymbol text as an input only if it's not the "delay" csymbol used in SBML
+			if( ! matchedstring.contains("definitionURL=\"http://www.sbml.org/sbml/symbols/delay\"")){
+				String inputname = matchedstring.substring(matchedstring.indexOf(">")+1, matchedstring.lastIndexOf("<")-1).trim();
+				inputnames.put(inputname, nameprefix + "." + inputname);
+			}
+			
+			result2 = m2.find();
+		}
+		return inputnames;
 	}
 	
 	/**
@@ -411,6 +427,13 @@ public class SemSimUtil {
 			allinputs.addAll(assignmentinputs);
 		}
 		
+		// set inputs based on the SBML initial assignments that set the data structure's values
+		for(SBMLInitialAssignment sia : outputds.getComputation().getSBMLintialAssignments()){
+			String assignmentmathml = sia.getMathML();
+			Set<DataStructure> inputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
+			allinputs.addAll(inputs);
+		}
+		
 		// If the DataStructure is a mapped variable, include the mappings
 		if(outputds instanceof MappableVariable){
 			MappableVariable mv = (MappableVariable)outputds;
@@ -431,6 +454,7 @@ public class SemSimUtil {
 	 * @param mathmlstring The right-hand side of a MathML equation
 	 * @param varname The name of the solved variable
 	 * @param isODE Whether the variable is solved with an ODE
+	 * @param timedomainname Name of time domain to use in MathML
 	 * @return The MathML equation containing both the left- and right-hand side
 	 */
 	public static String addLHStoMathML(String mathmlstring, String varname, boolean isODE, String timedomainname){
@@ -446,7 +470,8 @@ public class SemSimUtil {
 	
 	/**
 	 * Create the MathML left-hand side for a variable that is solved using an ODE
-	 * @param varname
+	 * @param varname Name of the variable
+	 * @param timedomainname Name of the time domain to use when formulating the MathML
 	 * @return Left-hand side of the MathML used for a variable that is solved using an ODE
 	 */
 	public static String makeLHSforStateVariable(String varname, String timedomainname){
@@ -560,7 +585,11 @@ public class SemSimUtil {
 		return cpe;
 	}	
 	
-	/** Take collection of DataStructures and return an ArrayList sorted alphabetically */
+	
+	/** Take collection of DataStructures and return an ArrayList sorted alphabetically 
+	 * @param collection A set of data structures
+	 * @return Alphabetized list of data structures based on their names
+	 */
 	public static ArrayList<DataStructure> alphebetizeSemSimObjects(Collection<DataStructure>  collection) {
 		TreeMap<String, DataStructure> dsnamemap = new TreeMap<String, DataStructure>(new CaseInsensitiveComparator());
 		for (DataStructure ds : collection) {
@@ -569,9 +598,12 @@ public class SemSimUtil {
 		return new ArrayList<DataStructure>(dsnamemap.values());
 	}
 	
+	
 	/** 
-	 * Replace all OPB physical properties with their equivalent in the list contained in the SemSimLibrary; therebye 
+	 * Replace all OPB physical properties with their equivalent in the list contained in the SemSimLibrary; thereby 
 	 * maintaining a single set of unique property instances
+	 * @param model The model containing the properties to regularize
+	 * @param lib A SemSimLibrary instance
 	 * */
 	public static void regularizePhysicalProperties(SemSimModel model, SemSimLibrary lib) {
 		for (PhysicalPropertyInComposite pp : lib.getCommonProperties()) {

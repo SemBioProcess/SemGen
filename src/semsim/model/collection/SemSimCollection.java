@@ -9,6 +9,7 @@ import java.util.Set;
 import semsim.SemSimObject;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.SBMLFunctionOutput;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
@@ -60,9 +61,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		super(coltocopy);
 	}
 	
-	/**
-	 * @return All Decimals contained in the model.
-	 */
+	/** @return All Decimals contained in the model. */
 	public ArrayList<DataStructure> getDecimals(){
 		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
 		
@@ -72,9 +71,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return list;
 	}
 	
-	/**
-	 * @return The MMLchoiceVariables in the model. 
-	 */
+	/** @return The MMLchoiceVariables in the model.  */
 	public ArrayList<DataStructure> getMMLchoiceVars(){
 		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
 		
@@ -103,6 +100,35 @@ public abstract class SemSimCollection extends SemSimObject{
 		return ds;
 	}
 	
+	
+	/**
+	 * Add an SBMLFunctionOutput to the model
+	 * @param fd The SBMLFunctionOutput to add
+	 */
+	public void addSBMLFunctionOutput(SBMLFunctionOutput fd){
+		addDataStructure(fd);
+	}
+	
+	
+	/** @return The SBMLFunctionOutputs in the model */
+	public Set<SBMLFunctionOutput> getSBMLFunctionOutputs(){
+		Set<SBMLFunctionOutput> fdset = new HashSet<SBMLFunctionOutput>();
+		
+		for(DataStructure ds : getAssociatedDataStructures()){
+			
+			if(ds instanceof SBMLFunctionOutput)
+				fdset.add((SBMLFunctionOutput)ds);
+		}
+		return fdset;
+	}
+	
+	
+	/** @return Whether the collection contains any {@link SBMLFunctionOutput}s */
+	public boolean containsSBMLFunctionOutputs(){
+		return ! getSBMLFunctionOutputs().isEmpty();
+	}
+	
+	
 	/**
 	 * Add a {@link Submodel} to the collection
 	 * @param submodel The {@link Submodel} to add
@@ -125,7 +151,7 @@ public abstract class SemSimCollection extends SemSimObject{
 	
 	/**
 	 * Replace the existing set of {@link Submodel}s with another
-	 * @param submodels
+	 * @param submodels The submodels to assign to the collection
 	 */
 	public void setSubmodels(Collection<Submodel> submodels) {
 		this.submodels = new ArrayList<Submodel>(submodels);
@@ -162,6 +188,9 @@ public abstract class SemSimCollection extends SemSimObject{
 		return toplevelsms;
 	}
 	
+	/** @return List of FunctionalSubmodels that are not grouped under any
+	 * other FunctionalSubmodel
+	 */
 	public ArrayList<FunctionalSubmodel> getTopFunctionalSubmodels(){
 		ArrayList<FunctionalSubmodel> toplevelfsms = new ArrayList<FunctionalSubmodel>();
 		for(Submodel sub : getTopSubmodels()){
@@ -170,10 +199,18 @@ public abstract class SemSimCollection extends SemSimObject{
 		return toplevelfsms;
 	}
 	
+	
+	/**
+	 * Returns whether this collection contains a specified {@link Submodel}
+	 * @param sm A {@link Submodel}
+	 * @return Whether this collection contains the {@link Submodel}
+	 */
 	public boolean containsSubmodel(Submodel sm) {
 		return submodels.contains(sm);
 	}
 	
+	
+	/** @return Whether this collection contains any {@link Submodel} */
 	public boolean containsSubmodels() {
 		return !submodels.isEmpty();
 	}
@@ -209,6 +246,11 @@ public abstract class SemSimCollection extends SemSimObject{
 		return null;
 	}
 	
+	
+	/**
+	 * Set the {@link DataStructure}s associated with this collection
+	 * @param dsset A set of {@link DataStructure}s
+	 */
 	public void setAssociatedDataStructures(Collection<DataStructure> dsset) {
 		dataStructures = new ArrayList<DataStructure>(dsset);
 	}
@@ -218,9 +260,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dataStructures;
 	}
 	
-	/**
-	 * @return A set of all the names of DataStructures contained in the model.
-	 */
+	/** @return A set of all the names of DataStructures contained in the model. */
 	public Set<String> getDataStructureNames(){
 		Set<String> set = new HashSet<String>();
 		
@@ -247,9 +287,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dsset;
 	}
 	
-	/**
-	 * @return The set of DataStructures that are not included in any Submodel.
-	 */
+	/** @return The set of DataStructures that are not included in any Submodel. */
 	public ArrayList<DataStructure> getUngroupedDataStructures(){
 		ArrayList<DataStructure> returnset = new ArrayList<DataStructure>();
 		ArrayList<DataStructure> allds = getAssociatedDataStructures();		returnset.addAll(allds);
@@ -264,16 +302,17 @@ public abstract class SemSimCollection extends SemSimObject{
 		
 	}
 		
+	
 	/**
+	 * @param name A name
 	 * @return True if the model contains a DataStructure with the specified name, otherwise false.
 	 */
 	public boolean containsDataStructure(String name){
 		return getAssociatedDataStructure(name)!=null;
 	}
 	
-	/**
-	 * @return All DataStructures that are associated with {@link FunctionalSubmodel}s.
-	 */
+	
+	/** @return All DataStructures that are associated with {@link FunctionalSubmodel}s. */
 	public Set<DataStructure> getDataStructuresFromFunctionalSubmodels(){
 		Set<DataStructure> dss = new HashSet<DataStructure>();
 		
@@ -284,9 +323,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dss;
 	}
 	
-	/**
-	 * @return All {@link FunctionalSubmodel}s in the model.
-	 */
+	
+	/** @return All {@link FunctionalSubmodel}s in the model. */
 	public Set<FunctionalSubmodel> getFunctionalSubmodels(){
 		Set<FunctionalSubmodel> fxnalsubs = new HashSet<FunctionalSubmodel>();
 		
@@ -297,6 +335,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return fxnalsubs;
 	}
 	
+	
+	/** @return Whether the collection contains an {@link FunctionalSubmodel}s */
 	public boolean containsFunctionalSubmodels() {
 		for (Submodel sub : submodels) {
 			if (sub.isFunctional()) return true;
@@ -304,9 +344,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return false;
 	}
 	
-	/**
-	 * @return All {@link SemSimInteger}s in the model.
-	 */
+	
+	/** @return All {@link SemSimInteger}s in the model. */
 	public ArrayList<DataStructure> getIntegers(){
 		ArrayList<DataStructure> list = new ArrayList<DataStructure>();
 		
@@ -317,9 +356,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return list;
 	}
 	
-	/**
-	 * @return All Decimals, Integers and MMLchoiceVariables in the model.
-	 */
+	
+	/** @return All Decimals, Integers and MMLchoiceVariables in the model. */
 	public Set<DataStructure> getReals(){
 		Set<DataStructure> reals = new HashSet<DataStructure>();		reals.addAll(getDecimals());
 		reals.addAll(getIntegers());
@@ -327,9 +365,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return reals;
 	}
 	
-	/**
-	 * @return The set of {@link DataStructure}s with composite entities in the model.
-	 */
+	
+	/** @return The set of {@link DataStructure}s with composite entities in the model. */
 	public Set<DataStructure> getDataStructuresWithCompositesEntities(){
 		Set<DataStructure> dswcpes = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
@@ -342,9 +379,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dswcpes;
 	}
 	
-	/**
-	 * @return The set of {@link DataStructure}s with physical properties in the model.
-	 */
+	
+	/** @return The set of {@link DataStructure}s with physical properties in the model. */
 	public Set<DataStructure> getDataStructuresWithPhysicalProcesses(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
@@ -358,6 +394,11 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dswprocs;
 	}
 	
+	
+	/**
+	 * @return {@link DataStructure}s in this collection that have associated
+	 * physical processes with specified participants
+	 */
 	public Set<DataStructure> getDataStructuresWithProcessesandParticipants() {
 		Set<DataStructure> dsphysio = getDataStructuresWithPhysicalProcesses();
 		
@@ -373,6 +414,12 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dsphysio;
 	}
 	
+	
+	/**
+	 * Collect data structures that have a specific associated physical model component
+	 * @param pmc A {@link PhysicalModelComponent}
+	 * @return Set of data structures associated with the component
+	 */
 	public HashSet<DataStructure> gatherDatastructuresWithPhysicalComponent(PhysicalModelComponent pmc) {
 		HashSet<DataStructure> dsswithpmc = new HashSet<DataStructure>();
 		
@@ -386,9 +433,8 @@ public abstract class SemSimCollection extends SemSimObject{
 		return dsswithpmc;
 	}
 	
-	/**
-	 * @return The set of {@link DataStructure}s with physical properties in the model.
-	 */
+	
+	/** @return The set of {@link DataStructure}s with physical properties in the model. */
 	public Set<DataStructure> getDataStructuresWithoutAssociatedPhysicalComponents(){
 		Set<DataStructure> dswprocs = new HashSet<DataStructure>();
 		for (DataStructure ds : dataStructures) {
@@ -398,6 +444,7 @@ public abstract class SemSimCollection extends SemSimObject{
 		}
 		return dswprocs;
 	}
+	
 	
 	/**
 	 * @return The solution domain DataStructures used in the model.
@@ -412,6 +459,12 @@ public abstract class SemSimCollection extends SemSimObject{
 		return sdset;
 	}
 	
+	
+	/**
+	 * Replace submodels in this collection
+	 * @param smmap A Submodel-Submodel HashMap. Any Submodel in the keyset
+	 * of the HashMap will be replaced by the key's value.
+	 */
 	public void replaceSubmodels(HashMap<Submodel, Submodel> smmap) {
 		ArrayList<Submodel> replacements = new ArrayList<Submodel>();
 		for (Submodel original : submodels) {
@@ -423,6 +476,12 @@ public abstract class SemSimCollection extends SemSimObject{
 		submodels = replacements;
 	}
 	
+	
+	/**
+	 * Replace data structures in this collection
+	 * @param dsmap A {@link DataStructure}-{@link DataStructure} HashMap. Any {@link DataStructure}
+	 * in the keyset of the HashMap will be replaced by the key's value.
+	 */
 	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		ArrayList<DataStructure> replacements = new ArrayList<DataStructure>();
 		for (DataStructure original : dataStructures) {
@@ -435,18 +494,25 @@ public abstract class SemSimCollection extends SemSimObject{
 		
 	}
 
-	public void replaceDataStructure(DataStructure replacee, DataStructure replacer) {
-		if (dataStructures.contains(replacee)) {
-			dataStructures.set(dataStructures.indexOf(replacee), replacer);
+	
+	/**
+	 * Replace a {@link DataStructure} in this collection with another
+	 * @param toreplace {@link DataStructure} to replace
+	 * @param replacement Replacement {@link DataStructure} 
+	 */
+	public void replaceDataStructure(DataStructure toreplace, DataStructure replacement) {
+		if (dataStructures.contains(toreplace)) {
+			dataStructures.set(dataStructures.indexOf(toreplace), replacement);
 		}
 		for (DataStructure original : dataStructures) {
-			original.replaceDataStructureReference(replacer, replacee);
+			original.replaceDataStructureReference(replacement, toreplace);
 		}
 		for (Submodel sm : submodels) {
-			sm.replaceDataStructure(replacee, replacer);
+			sm.replaceDataStructure(toreplace, replacement);
 		}
 		
 	}
 	
+	/** Clone the collection */
 	public abstract SemSimCollection clone();
 }
