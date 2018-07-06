@@ -37,7 +37,12 @@ function Stage(graph, stagestate) {
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
 		var modelnode = stage.addModelNode(model, [DragToMerge]);
-		stage.extractions[modelnode.modelindex] = {modextractions: []};
+
+        if (modelnode.getAllChildNodes().length > 100) {
+            window.alert("This model contains over 100 elements. Visualizations may take longer to load.");
+        }
+
+        stage.extractions[modelnode.modelindex] = {modextractions: []};
 		stage.leftsidebar.addModeltoList(model);
 	});
 
