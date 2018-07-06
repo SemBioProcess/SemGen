@@ -7,7 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import semgen.utilities.WorkbenchFactory;
-import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
@@ -33,7 +33,7 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	protected void makeWorkbench(ModelAccessor modelaccessor) {	
     	System.out.println("Loading " + modelaccessor.getShortLocation());
     	
-    	LoadSemSimModel loader = new LoadSemSimModel(modelaccessor, autoannotate, this);
+    	LoadModelJob loader = new LoadModelJob(modelaccessor, autoannotate, this);
     	loader.run();
     	SemSimModel semsimmodel = loader.getLoadedModel();
 

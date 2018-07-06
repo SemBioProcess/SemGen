@@ -18,7 +18,7 @@ import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.SemGenError;
-import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
@@ -69,7 +69,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				}
 				if (alreadyopen) continue;
 				
-				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
+				LoadModelJob loader = new LoadModelJob(accessor, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
@@ -86,7 +86,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
 				ModelAccessor file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
-				LoadSemSimModel loader = new LoadSemSimModel(file, false);
+				LoadModelJob loader = new LoadModelJob(file, false);
 				loader.run();
 				SemSimModel semsimmodel = loader.getLoadedModel();
 				if (SemGenError.showSemSimErrors()) {
@@ -100,7 +100,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
 
-			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
+			LoadModelJob loader = new LoadModelJob(accessor, false);
 			loader.run();
 			SemSimModel semsimmodel = loader.getLoadedModel();
 			if (SemGenError.showSemSimErrors()) {

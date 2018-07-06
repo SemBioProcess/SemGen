@@ -122,6 +122,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	 * Pass an existing model and use the model's name
 	 **/
 	public ModelAccessor SaveAsAction(SemSimModel semsimmodel){
+		currentdirectory = getCurrentDirectory();
+		
+		// TODO: Replace return nulls with errors
 		ModelAccessor ma = null;
 		
 		while(true) {
@@ -134,12 +137,22 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				ModelType modeltype = ModelClassifier.getTypebyFilter(savefilter);
 				if (filetosave.getName().endsWith(".omex")) modeltype = ModelType.OMEX_ARCHIVE;
 				
-				// If we're attempting to write a CellML model with discrete events, show error
+				// If we're attempting to write a CellML model with discrete events, SBML-style functions or SBML-style 
+				// intiial assignmetns, show error
 				if (modeltype == ModelType.CELLML_MODEL && semsimmodel != null) {
-					if( ! semsimmodel.getEvents().isEmpty()){
-						JOptionPane.showMessageDialog(this, 
-								"Cannot save as CellML because model contains discrete events", 
-								"Cannot write to CellML", JOptionPane.WARNING_MESSAGE);
+					String errs = "";
+					if( ! semsimmodel.getEvents().isEmpty())
+						errs = errs + "   - model contains discrete events\n";
+					
+					if( ! semsimmodel.getSBMLFunctionOutputs().isEmpty())
+						errs = errs + "   - model contains SBML-style functions\n";
+					
+					if( ! semsimmodel.getSBMLInitialAssignments().isEmpty())
+						errs = errs + "   - model contains SBML-style initial assignments\n";
+					
+					if(errs != ""){
+						JOptionPane.showMessageDialog(this, "Cannot save model in CellML format because...\n\n" + errs, 
+								"Cannot write to CellML", JOptionPane.ERROR_MESSAGE);
 						continue;
 					}
 				}
@@ -204,9 +217,8 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			}
 		}
 
-		currentdirectory = getCurrentDirectory();
+		return ma;	
 
-		return ma;
 	}
 	
 	/**

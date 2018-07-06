@@ -25,26 +25,26 @@ import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.BioPortalSearcher;
 
-public class LoadSemSimModel extends SemGenJob {
+public class LoadModelJob extends SemGenJob {
 	private ModelAccessor modelaccessor;
 	private boolean autoannotate = false;
 	private SemSimModel semsimmodel;
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor) {
+	public LoadModelJob(ModelAccessor modelaccessor) {
 		this.modelaccessor = modelaccessor;
 	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate) {
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate) {
 		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
 	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, SemGenJob sga) {
+	public LoadModelJob(ModelAccessor modelaccessor, SemGenJob sga) {
 		super(sga);
 		this.modelaccessor = modelaccessor;
 	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
 		super(sga);
 		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;

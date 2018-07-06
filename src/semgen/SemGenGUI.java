@@ -18,6 +18,7 @@ import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.utilities.uicomponent.TabFactory;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.model.collection.SemSimModel;
 
 import java.net.URI;
 import java.awt.Color;
@@ -164,6 +165,31 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void onError() {
 		}
+	}
+	
+	
+	// Task to 
+	public static class saveTask extends SemGenTask {
+		Workbench workbench;
+		ModelAccessor modelaccessor;
+		SemSimModel semsimmodel;
+
+		public saveTask(ModelAccessor ma, SemSimModel ssm, Workbench wb){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			workbench = wb;
+			progframe = new SemGenProgressBar("Saving model...", true, true);
+		}
+		@Override
+		protected Void doInBackground() throws Exception {
+			modelaccessor.writetoFile(semsimmodel);
+			return null;
+		}
+		
+		public void endTask(){
+			workbench.setModelSaved(true);
+		}
+		
 	}
 	
 	/** Runs through the annotator tabs and checks if the requested file is already open for annotation.

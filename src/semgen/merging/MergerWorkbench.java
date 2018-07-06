@@ -13,7 +13,7 @@ import semgen.merging.Merger.ResolutionChoice;
 import semgen.merging.ModelOverlapMap.MapType;
 import semgen.utilities.SemGenError;
 import semgen.utilities.Workbench;
-import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semsim.fileaccessors.ModelAccessor;
@@ -58,7 +58,7 @@ public class MergerWorkbench extends Workbench {
 	public void initialize() {}
 	
 	private SemSimModel loadModel(ModelAccessor modelaccessor, boolean autoannotate) {
-		LoadSemSimModel loader = new LoadSemSimModel(modelaccessor, autoannotate);
+		LoadModelJob loader = new LoadModelJob(modelaccessor, autoannotate);
 		loader.run();
 		SemSimModel modeltoload = loader.getLoadedModel();
 		return modeltoload;
@@ -340,7 +340,7 @@ public class MergerWorkbench extends Workbench {
 				
 				target.writetoFile(mergedmodel);
 				
-				LoadSemSimModel loader = new LoadSemSimModel(target, false);
+				LoadModelJob loader = new LoadModelJob(target, false);
 				loader.run();
 				mergedmodel = loader.getLoadedModel();
 								

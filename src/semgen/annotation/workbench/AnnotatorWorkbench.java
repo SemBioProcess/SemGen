@@ -12,6 +12,8 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.io.FilenameUtils;
 
 import semgen.GlobalActions;
+import semgen.SemGenGUI;
+import semgen.SemGenGUI.saveTask;
 import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
@@ -138,8 +140,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 				
 		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
 			validateModelComposites();
-			modelaccessor.writetoFile(semsimmodel);			
-			setModelSaved(true);
+			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this);	
+			savetask.execute();
 			return modelaccessor;
 		}
 		return saveModelAs(index);			
