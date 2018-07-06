@@ -165,7 +165,7 @@ public class LoadModelJob extends SemGenJob {
 	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel, SemGen.semsimlib).size()>0){
 
-			setStatus("Annotating with web services");
+			setStatus("Retrieving names for reference terms");
 			boolean online = BioPortalSearcher.testBioPortalWebservice();
 			
 			if( ! online){
@@ -185,6 +185,7 @@ public class LoadModelJob extends SemGenJob {
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
+				
 		if (semsimmodel == null || ErrorLog.errorsAreFatal()) {
 			abort();
 			return;

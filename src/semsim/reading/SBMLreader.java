@@ -217,11 +217,9 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void collectModelLevelData(){
 		
-		sbmlmodel.getVersion();
 		collectSBaseData(sbmlmodel, semsimmodel);
 		semsimmodel.setName(sbmlmodel.getId());
 		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
-		
 		rdfreader.getModelLevelAnnotations();	
 	}
 	
@@ -872,8 +870,6 @@ public class SBMLreader extends ModelReader{
 				
 				Event ssevent = new Event();
 				ssevent.setName(sbmlevent.getId());
-				ssevent.setMetadataID(sbmlevent.getMetaId());
-				
 				ssevent.setTriggerMathML(triggermathml);			
 				
 				// Process event assignments
@@ -919,6 +915,7 @@ public class SBMLreader extends ModelReader{
 					ssevent.setTimeUnit(semsimmodel.getUnit(timeunitsname));
 				}
 				
+				collectSBaseData(sbmlevent, ssevent);
 				semsimmodel.addEvent(ssevent);
 			}
 		} catch(SBMLException | XMLStreamException e){
@@ -934,7 +931,6 @@ public class SBMLreader extends ModelReader{
 			InitialAssignment sbmlia = sbmlmodel.getInitialAssignment(i);
 			SBMLInitialAssignment semsimia = new SBMLInitialAssignment();
 			
-			semsimia.setMetadataID(sbmlia.getMetaId());
 			
 			String variableID = sbmlia.getVariable();
 			DataStructure output = semsimmodel.getAssociatedDataStructure(variableID);
@@ -949,6 +945,8 @@ public class SBMLreader extends ModelReader{
 			} catch (SBMLException | XMLStreamException e) {
 				e.printStackTrace();
 			}
+			
+			collectSBaseData(sbmlia, semsimia);
 		}
 	}
 	
@@ -1255,9 +1253,7 @@ public class SBMLreader extends ModelReader{
 		Document projdoc = modelaccessor.getJDOMDocument();
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
-		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();
-	
-		Namespace semsimns = RDFNamespace.SEMSIM.createJdomNamespace();
+		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();	
 		String rdfstring = null;
 		
 		//TODO: should change this so that it only reads in the semsim annotation into the JDOM document (saves time)
@@ -1269,12 +1265,15 @@ public class SBMLreader extends ModelReader{
 				Element modelannel = modelel.getChild("annotation", sbmlmodelns);
 						
 				if(modelannel != null){	
-					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, semsimns);
+					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, sbmlmodelns);
 								
 					if(modelannssel != null){
 						Element rdfel = modelannssel.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
-						XMLOutputter xmloutputter = new XMLOutputter();
-						rdfstring = xmloutputter.outputString(rdfel);
+						
+						if(rdfel != null){
+							XMLOutputter xmloutputter = new XMLOutputter();
+							rdfstring = xmloutputter.outputString(rdfel);
+						}
 					}
 				}
 			}

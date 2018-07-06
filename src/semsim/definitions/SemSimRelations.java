@@ -209,7 +209,7 @@ public class SemSimRelations {
 		HREF_VALUE_OF_IMPORT("hrefValueOfImport", RDFNamespace.SEMSIM.getNamespaceasString(), "", RDFNamespace.SEMSIM.getOWLid()),
 		IMPORTED_FROM("importedFrom", RDFNamespace.SEMSIM.getNamespaceasString(), "a unit or submodel is imported from a local file or remote location", RDFNamespace.SEMSIM.getOWLid()),
 		REFERENCE_NAME_OF_IMPORT("referenceNameOfImport", RDFNamespace.SEMSIM.getNamespaceasString(), "", RDFNamespace.SEMSIM.getOWLid()),
-		METADATA_ID("metadataID", RDFNamespace.SEMSIM.getNamespaceasString(), "a semsim model component has some metadata id (to support SBML and CellML metadata IDind)", RDFNamespace.SEMSIM.getOWLid()),
+		METADATA_ID("metadataID", RDFNamespace.SEMSIM.getNamespaceasString(), "a semsim model component has some metadata id (to support SBML and CellML metadata IDs)", RDFNamespace.SEMSIM.getOWLid()),
 		
 		HAS_PHYSICAL_DEFINITION("hasPhysicalDefinition", RDFNamespace.SEMSIM.getNamespaceasString(), "Refers to ontology term", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_PHYSICAL_ENTITY_REFERENCE("hasPhysicalEntityReference", RDFNamespace.SEMSIM.getNamespaceasString(), "", RDFNamespace.SEMSIM.getOWLid()),

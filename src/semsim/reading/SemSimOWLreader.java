@@ -171,14 +171,17 @@ public class SemSimOWLreader extends ModelReader {
 	private void collectModelAnnotations() throws JDOMException, IOException {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
-		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();
+		
+		// Annotations with values that are read into object fields are removed from the 
+		// OWLAnnotation set and not stored as Annotations on the model
+		Set<OWLAnnotation> annstoremove = new HashSet<OWLAnnotation>();  
 		
 		for (OWLAnnotation named : anns) {
 			
 			if (named.getProperty().getIRI().equals(SemSimLibrary.SEMSIM_VERSION_IRI)) {
 				semsimmodel.setSemSimVersion(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
-			};
+			}
 			
 			if (named.getProperty().getIRI().equals(SemSimModel.LEGACY_CODE_LOCATION_IRI)) {
 				String location = ((OWLLiteral)named.getValue()).getLiteral();
@@ -188,8 +191,14 @@ public class SemSimOWLreader extends ModelReader {
 					semsimmodel.setSourceFileLocation(ma);
 					annstoremove.add(named);
 				}
-			};
+			}
+			
+			if(named.getProperty().getIRI().equals(SemSimRelation.METADATA_ID.getIRI())){
+				semsimmodel.setMetadataID(((OWLLiteral)named.getValue()).getLiteral());
+				annstoremove.add(named);
+			}	
 		}
+		
 		semsimmodel.getCurationalMetadata().setCurationalMetadata(anns, annstoremove);
 		anns.removeAll(annstoremove);
 		

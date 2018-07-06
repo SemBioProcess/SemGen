@@ -135,6 +135,9 @@ public class SBMLwriter extends ModelWriter {
 		
 		sbmlmodel = sbmldoc.createModel(sbmlmodname);
 		
+		if(semsimmodel.hasMetadataID())
+			sbmlmodel.setMetaId(semsimmodel.getMetadataID());
+		
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
 			SemSimUtil.flattenModel(semsimmodel);
@@ -900,10 +903,10 @@ public class SBMLwriter extends ModelWriter {
 				modelel.addContent(modelannel);
 			}
 			
-			Element ssannel = modelannel.getChild(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace());
+			Element ssannel = modelannel.getChild(semsimAnnotationElementName, sbmlNS);
 			
 			if(ssannel == null){
-				ssannel = new Element(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace()); 
+				ssannel = new Element(semsimAnnotationElementName, sbmlNS); 
 				modelannel.addContent(ssannel);
 			}
 			// Remove old RDF if present

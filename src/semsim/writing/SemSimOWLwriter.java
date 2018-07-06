@@ -659,6 +659,10 @@ public class SemSimOWLwriter extends ModelWriter {
 		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
 		anns.addAll(semsimmodel.getAnnotations());
 		
+		if(semsimmodel.hasMetadataID()) //TODO: change the property here to one that is custom for model level metadata
+			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.METADATA_ID.getIRI(), semsimmodel.getMetadataID(), manager);
+
+		
 		for(Annotation ann : anns){
 				String str = (String)ann.getValue();
 				SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);

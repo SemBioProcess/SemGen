@@ -105,6 +105,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 	@Override
 	public void getModelLevelAnnotations(){
 		
+		
 		Resource modelres = null;
 		
 		switch(modeltype){
@@ -124,17 +125,19 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		case SBML_MODEL: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getMetadataID());
 			 break;
 		
-		default: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getName());
+		default: modelres = rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getMetadataID());
 			break;
 				
 		}
-				
+		
 		StmtIterator stit = modelres.listProperties();
-				
+
 		while(stit.hasNext()){
 			
 			Statement st = stit.next();
 			URI predicateURI = URI.create(st.getPredicate().getURI());
+			System.out.println(predicateURI);
+
 			
 			if (predicateURI.equals(SemSimLibrary.SEMSIM_VERSION_IRI.toURI())) {
 				semsimmodel.setSemSimVersion(st.getObject().asLiteral().toString());
@@ -146,9 +149,15 @@ public class SemSimRDFreader extends AbstractRDFreader{
 			}
 			
 			else{
+				System.out.println("HERE:");
 				Metadata m = getMetadataByURI(predicateURI);
+				System.out.println(m.toString());
+
 				String value = st.getObject().toString();
+				System.out.println("VAL: " + value);
+
 				semsimmodel.getCurationalMetadata().setAnnotationValue(m, value);
+				System.out.println("ADDED ann");
 			}
 		}
 	}
