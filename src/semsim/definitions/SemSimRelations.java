@@ -147,6 +147,11 @@ public class SemSimRelations {
 	
 	public enum SemSimRelation implements Relation {
 		//Model level Relations
+		
+		// Separate relation for model-level metadata ID needed b/c OWL Annotation properties used to annotate the ontology as a whole are disjoint 
+		// from Datatype properties used to annotate, say, a data structure in a model
+		MODEL_METADATA_ID("modelMetadataID", RDFNamespace.SEMSIM.getNamespaceasString(), "a semsim model has some metadata id (to support SBML and CellML metadata IDs)", RDFNamespace.SEMSIM.getOWLid()),
+		
 		HAS_NAME("name", RDFNamespace.SEMSIM.getNamespaceasString(), "semsim component has name", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_NOTES("hasNotes", RDFNamespace.SEMSIM.getNamespaceasString(), "Model has notes", RDFNamespace.SEMSIM.getOWLid()),
 		KEY_TERM("keyTerm", RDFNamespace.SEMSIM.getNamespaceasString(), "semsim model represents", RDFNamespace.SEMSIM.getOWLid()),

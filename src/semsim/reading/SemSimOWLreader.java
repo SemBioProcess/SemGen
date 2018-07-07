@@ -193,7 +193,7 @@ public class SemSimOWLreader extends ModelReader {
 				}
 			}
 			
-			if(named.getProperty().getIRI().equals(SemSimRelation.METADATA_ID.getIRI())){
+			if(named.getProperty().getIRI().equals(SemSimRelation.MODEL_METADATA_ID.getIRI())){
 				semsimmodel.setMetadataID(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			}	

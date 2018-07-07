@@ -9,6 +9,7 @@
     <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
     <!ENTITY p1 "http://www.w3.org/1998/Math/MathML" >
     <!ENTITY ro "http://www.obofoundry.org/ro/ro.owl#" >
+    <!ENTITY semsim "http://www.bhi.washington.edu/SemSim#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY CHEBI "http://chebiplaceholder.edu/chebiFAKE#" >
     <!ENTITY FMA "http://sig.biostr.washington.edu/fma3.0#" >
@@ -34,18 +35,10 @@
      xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:CHEBI="http://chebiplaceholder.edu/chebiFAKE#"
+     xmlns:semsim="http://www.bhi.washington.edu/SemSim#"
      xmlns:OPB="http://www.owl-ontologies.com/unnamed.owl#">
-    <owl:Ontology rdf:about="http://www.bhi.washington.edu/SemSim"/>
+    <owl:Ontology rdf:about="&semsim;noID"/>
     
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
 
     
 
@@ -69,37 +62,37 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#component_in -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#component_in"/>
+    <owl:ObjectProperty rdf:about="&semsim;component_in"/>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#composed_of -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#composed_of">
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#component_in"/>
+    <owl:ObjectProperty rdf:about="&semsim;composed_of">
+        <owl:inverseOf rdf:resource="&semsim;component_in"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#determines -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#determines">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:ObjectProperty rdf:about="&semsim;determines">
+        <rdfs:domain rdf:resource="&semsim;Physical_dependency"/>
+        <rdfs:range rdf:resource="&semsim;Physical_property"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasComputationalComponent -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasComputationalComponent">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#isComputationalComponentFor"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasComputationalComponent">
+        <rdfs:range rdf:resource="&semsim;Computational_model_component"/>
+        <owl:inverseOf rdf:resource="&semsim;isComputationalComponentFor"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+                    <rdf:Description rdf:about="&semsim;Physical_dependency"/>
+                    <rdf:Description rdf:about="&semsim;Physical_property"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -109,16 +102,16 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasIndexEntity -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasIndexEntity">
+    <owl:ObjectProperty rdf:about="&semsim;hasIndexEntity">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
         <rdf:type rdf:resource="&owl;InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Composite_physical_entity"/>
         <rdfs:range>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_entity"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_process"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Custom_physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Custom_physical_process"/>
+                    <rdf:Description rdf:about="&semsim;Reference_physical_entity"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:range>
@@ -128,42 +121,42 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasInput -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasInput">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasInput">
+        <rdfs:domain rdf:resource="&semsim;Computation"/>
+        <rdfs:range rdf:resource="&semsim;Data_structure"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasOutput -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasOutput">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasOutput">
+        <rdfs:domain rdf:resource="&semsim;Computation"/>
+        <rdfs:range rdf:resource="&semsim;Data_structure"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasParticipant -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasParticipant">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasParticipant">
+        <rdfs:range rdf:resource="&semsim;Physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_process"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasPhysicalProperty -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasPhysicalProperty">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#physicalPropertyOf"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasPhysicalProperty">
+        <rdfs:range rdf:resource="&semsim;Physical_property"/>
+        <owl:inverseOf rdf:resource="&semsim;physicalPropertyOf"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_process"/>
+                    <rdf:Description rdf:about="&semsim;Physical_dependency"/>
+                    <rdf:Description rdf:about="&semsim;Physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Physical_process"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -173,41 +166,41 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasRolePlayer -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasRolePlayer">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasRolePlayer">
+        <rdfs:domain rdf:resource="&semsim;Physical_dependency"/>
+        <rdfs:range rdf:resource="&semsim;Physical_property"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasSolutionDomain -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasSolutionDomain">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+    <owl:ObjectProperty rdf:about="&semsim;hasSolutionDomain">
+        <rdfs:range rdf:resource="&semsim;Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#hasUnit -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasUnit">
+    <owl:ObjectProperty rdf:about="&semsim;hasUnit">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
+        <rdfs:range rdf:resource="&semsim;Unit_of_measurement"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isComputationalComponentFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#isComputationalComponentFor">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:ObjectProperty rdf:about="&semsim;isComputationalComponentFor">
+        <rdfs:domain rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:range>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+                    <rdf:Description rdf:about="&semsim;Physical_dependency"/>
+                    <rdf:Description rdf:about="&semsim;Physical_property"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:range>
@@ -217,26 +210,26 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isDeterminedBy -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#isDeterminedBy">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#determines"/>
+    <owl:ObjectProperty rdf:about="&semsim;isDeterminedBy">
+        <rdfs:range rdf:resource="&semsim;Physical_dependency"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_property"/>
+        <owl:inverseOf rdf:resource="&semsim;determines"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isIndexEntityFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#isIndexEntityFor">
+    <owl:ObjectProperty rdf:about="&semsim;isIndexEntityFor">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasIndexEntity"/>
+        <rdfs:range rdf:resource="&semsim;Composite_physical_entity"/>
+        <owl:inverseOf rdf:resource="&semsim;hasIndexEntity"/>
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_entity"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_process"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Custom_physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Custom_physical_process"/>
+                    <rdf:Description rdf:about="&semsim;Reference_physical_entity"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -246,34 +239,34 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isInputFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#isInputFor">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasInput"/>
+    <owl:ObjectProperty rdf:about="&semsim;isInputFor">
+        <rdfs:range rdf:resource="&semsim;Computation"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
+        <owl:inverseOf rdf:resource="&semsim;hasInput"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#isOutputFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#isOutputFor">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasOutput"/>
+    <owl:ObjectProperty rdf:about="&semsim;isOutputFor">
+        <rdfs:range rdf:resource="&semsim;Computation"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
+        <owl:inverseOf rdf:resource="&semsim;hasOutput"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#physicalPropertyOf -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#physicalPropertyOf">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:ObjectProperty rdf:about="&semsim;physicalPropertyOf">
+        <rdfs:domain rdf:resource="&semsim;Physical_property"/>
         <rdfs:range>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim#Physical_process"/>
+                    <rdf:Description rdf:about="&semsim;Physical_dependency"/>
+                    <rdf:Description rdf:about="&semsim;Physical_entity"/>
+                    <rdf:Description rdf:about="&semsim;Physical_process"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:range>
@@ -283,30 +276,30 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#rolePlayerIn -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#rolePlayerIn">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasRolePlayer"/>
+    <owl:ObjectProperty rdf:about="&semsim;rolePlayerIn">
+        <rdfs:range rdf:resource="&semsim;Physical_dependency"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_property"/>
+        <owl:inverseOf rdf:resource="&semsim;hasRolePlayer"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#solutionDomainFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#solutionDomainFor">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasSolutionDomain"/>
+    <owl:ObjectProperty rdf:about="&semsim;solutionDomainFor">
+        <rdfs:range rdf:resource="&semsim;Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
+        <owl:inverseOf rdf:resource="&semsim;hasSolutionDomain"/>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#unitFor -->
 
-    <owl:ObjectProperty rdf:about="http://www.bhi.washington.edu/SemSim#unitFor">
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
-        <owl:inverseOf rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnit"/>
+    <owl:ObjectProperty rdf:about="&semsim;unitFor">
+        <rdfs:range rdf:resource="&semsim;Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Unit_of_measurement"/>
+        <owl:inverseOf rdf:resource="&semsim;hasUnit"/>
     </owl:ObjectProperty>
     
 
@@ -315,8 +308,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;contained_in">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:range rdf:resource="&semsim;Physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_entity"/>
         <owl:inverseOf rdf:resource="&ro;contains"/>
     </owl:ObjectProperty>
     
@@ -326,8 +319,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;contains">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_entity"/>
+        <rdfs:range rdf:resource="&semsim;Physical_entity"/>
     </owl:ObjectProperty>
     
 
@@ -336,8 +329,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;has_part">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_entity"/>
+        <rdfs:range rdf:resource="&semsim;Physical_entity"/>
     </owl:ObjectProperty>
     
 
@@ -346,8 +339,8 @@
 
     <owl:ObjectProperty rdf:about="&ro;part_of">
         <rdf:type rdf:resource="&owl;TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <rdfs:range rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+        <rdfs:domain rdf:resource="&semsim;Physical_entity"/>
+        <rdfs:range rdf:resource="&semsim;Physical_entity"/>
         <owl:inverseOf rdf:resource="&ro;has_part"/>
     </owl:ObjectProperty>
     
@@ -366,9 +359,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasComputationalCode -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasComputationalCode">
+    <owl:DatatypeProperty rdf:about="&semsim;hasComputationalCode">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+        <rdfs:domain rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -376,9 +369,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasCustomDeclaration -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasCustomDeclaration">
+    <owl:DatatypeProperty rdf:about="&semsim;hasCustomDeclaration">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
+        <rdfs:domain rdf:resource="&semsim;Unit_of_measurement"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -386,7 +379,7 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition">
+    <owl:DatatypeProperty rdf:about="&semsim;hasPhysicalDefinition">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
@@ -395,9 +388,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#hasStartValue -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#hasStartValue">
+    <owl:DatatypeProperty rdf:about="&semsim;hasStartValue">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -405,9 +398,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#importedFrom -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#importedFrom">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Submodel"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
+    <owl:DatatypeProperty rdf:about="&semsim;importedFrom">
+        <rdfs:domain rdf:resource="&semsim;Submodel"/>
+        <rdfs:domain rdf:resource="&semsim;Unit_of_measurement"/>
         <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
@@ -415,9 +408,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isDeclared -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#isDeclared">
+    <owl:DatatypeProperty rdf:about="&semsim;isDeclared">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
     </owl:DatatypeProperty>
     
@@ -425,9 +418,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isDiscrete -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#isDiscrete">
+    <owl:DatatypeProperty rdf:about="&semsim;isDiscrete">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
     </owl:DatatypeProperty>
     
@@ -435,8 +428,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isFundamentalUnit -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#isFundamentalUnit">
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
+    <owl:DatatypeProperty rdf:about="&semsim;isFundamentalUnit">
+        <rdfs:domain rdf:resource="&semsim;Unit_of_measurement"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
     </owl:DatatypeProperty>
     
@@ -444,9 +437,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#isSolutionDomain -->
 
-    <owl:DatatypeProperty rdf:about="http://www.bhi.washington.edu/SemSim#isSolutionDomain">
+    <owl:DatatypeProperty rdf:about="&semsim;isSolutionDomain">
         <rdf:type rdf:resource="&owl;FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+        <rdfs:domain rdf:resource="&semsim;Data_structure"/>
         <rdfs:range rdf:resource="&xsd;boolean"/>
     </owl:DatatypeProperty>
     
@@ -465,10 +458,10 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Composite_physical_entity -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Composite_physical_entity">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Custom_physical_entity"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_entity"/>
+    <owl:Class rdf:about="&semsim;Composite_physical_entity">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_entity"/>
+        <owl:disjointWith rdf:resource="&semsim;Custom_physical_entity"/>
+        <owl:disjointWith rdf:resource="&semsim;Reference_physical_entity"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical entity that is defined by linking multiple physical entity terms with structural relations.</rdfs:comment>
     </owl:Class>
     
@@ -476,9 +469,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Computation -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Computation">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+    <owl:Class rdf:about="&semsim;Computation">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
+        <owl:disjointWith rdf:resource="&semsim;Data_structure"/>
         <rdfs:comment rdf:datatype="&xsd;string">A mathematical and/or logical expression that determines the value of a data structure.</rdfs:comment>
     </owl:Class>
     
@@ -486,9 +479,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Computational_model_component -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Computational_model_component">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#SemSim_component"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
+    <owl:Class rdf:about="&semsim;Computational_model_component">
+        <rdfs:subClassOf rdf:resource="&semsim;SemSim_component"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">An element of a SemSim model that relates to the mathematical or logical representation of physical quantities or qualities.</rdfs:comment>
     </owl:Class>
     
@@ -496,9 +489,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_dependency -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_dependency">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_dependency"/>
+    <owl:Class rdf:about="&semsim;Custom_physical_dependency">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_dependency"/>
+        <owl:disjointWith rdf:resource="&semsim;Reference_physical_dependency"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical dependency defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -506,8 +499,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_entity -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_entity">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+    <owl:Class rdf:about="&semsim;Custom_physical_entity">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_entity"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical entity defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -515,8 +508,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_process -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_process">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
+    <owl:Class rdf:about="&semsim;Custom_physical_process">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_process"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical process defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -524,9 +517,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Custom_physical_property -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Custom_physical_property">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Reference_physical_property"/>
+    <owl:Class rdf:about="&semsim;Custom_physical_property">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_property"/>
+        <owl:disjointWith rdf:resource="&semsim;Reference_physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical property defined in a specific SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -534,8 +527,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Data_structure -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Data_structure">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:Class rdf:about="&semsim;Data_structure">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A computational element that stores numerical and/or logical information related to the model.</rdfs:comment>
     </owl:Class>
     
@@ -543,9 +536,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Decimal -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Decimal">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Integer"/>
+    <owl:Class rdf:about="&semsim;Decimal">
+        <rdfs:subClassOf rdf:resource="&semsim;Real"/>
+        <owl:disjointWith rdf:resource="&semsim;Integer"/>
         <rdfs:comment rdf:datatype="&xsd;string">A data structure whose value is limited to decimals.</rdfs:comment>
     </owl:Class>
     
@@ -553,8 +546,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Event -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Event">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:Class rdf:about="&semsim;Event">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:comment>A discrete occurence in a simulation</rdfs:comment>
     </owl:Class>
     
@@ -562,8 +555,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#EventAssignment -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#EventAssignment">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:Class rdf:about="&semsim;EventAssignment">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:comment>A computational assignment triggered by an Event</rdfs:comment>
     </owl:Class>
     
@@ -571,8 +564,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Integer -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Integer">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
+    <owl:Class rdf:about="&semsim;Integer">
+        <rdfs:subClassOf rdf:resource="&semsim;Real"/>
         <rdfs:comment rdf:datatype="&xsd;string">A data structure whose value is limited to the whole numbers.</rdfs:comment>
     </owl:Class>
     
@@ -580,8 +573,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#MMLchoice -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#MMLchoice">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Real"/>
+    <owl:Class rdf:about="&semsim;MMLchoice">
+        <rdfs:subClassOf rdf:resource="&semsim;Real"/>
         <rdfs:comment rdf:datatype="&xsd;string">A data structure unique to  JSim&apos;s Mathematical Modeling Language (MML) used to set one or more model input values at runtime.</rdfs:comment>
     </owl:Class>
     
@@ -589,11 +582,11 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_dependency -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_dependency">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:Class rdf:about="&semsim;Physical_dependency">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_entity"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_process"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A quantitative relation between values of physical properties that occurs over a span of time and that determines the time-course of a physical process.</rdfs:comment>
     </owl:Class>
     
@@ -601,10 +594,10 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_entity -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_entity">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:Class rdf:about="&semsim;Physical_entity">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_process"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physics analytical entity that represents the material, energy, and/or information content of material or immaterial, space-occupying continuants.</rdfs:comment>
     </owl:Class>
     
@@ -612,8 +605,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_model_component -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_model_component">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#SemSim_component"/>
+    <owl:Class rdf:about="&semsim;Physical_model_component">
+        <rdfs:subClassOf rdf:resource="&semsim;SemSim_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A SemSim model element used to represent, in whole or in part, the physical meaning of a computational element.  </rdfs:comment>
     </owl:Class>
     
@@ -621,9 +614,9 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_process -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_process">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
-        <owl:disjointWith rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:Class rdf:about="&semsim;Physical_process">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
+        <owl:disjointWith rdf:resource="&semsim;Physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical processural entity that is a flow, or the control of a flow, of energy and/or information amongst physical continuants that are participants in the physical process.</rdfs:comment>
     </owl:Class>
     
@@ -631,8 +624,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Physical_property -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Physical_property">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
+    <owl:Class rdf:about="&semsim;Physical_property">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical attribute of an instance of a physical entity, an occurrence of a physical process, or a physical dependency that has a quantitative value that is measurable by a physical device or method, or is computable from such values.</rdfs:comment>
     </owl:Class>
     
@@ -640,8 +633,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Real -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Real">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Data_structure"/>
+    <owl:Class rdf:about="&semsim;Real">
+        <rdfs:subClassOf rdf:resource="&semsim;Data_structure"/>
         <rdfs:comment rdf:datatype="&xsd;string">A data structure whose value is limited to the real numbers.</rdfs:comment>
     </owl:Class>
     
@@ -649,8 +642,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_dependency -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_dependency">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_dependency"/>
+    <owl:Class rdf:about="&semsim;Reference_physical_dependency">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_dependency"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical dependency that is defined using a term in an external knowledge resource.</rdfs:comment>
     </owl:Class>
     
@@ -658,8 +651,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_entity -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_entity">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_entity"/>
+    <owl:Class rdf:about="&semsim;Reference_physical_entity">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_entity"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical entity that is defined using a term from an external knowledge resource.</rdfs:comment>
     </owl:Class>
     
@@ -667,8 +660,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_process -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_process">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_process"/>
+    <owl:Class rdf:about="&semsim;Reference_physical_process">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_process"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical process that is defined using a term in an external knowledge resource.</rdfs:comment>
     </owl:Class>
     
@@ -676,8 +669,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Reference_physical_property -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Reference_physical_property">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_property"/>
+    <owl:Class rdf:about="&semsim;Reference_physical_property">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical property that is defined using a term in an external knowledge resource.</rdfs:comment>
     </owl:Class>
     
@@ -685,8 +678,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Relational_constraint -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Relational_constraint">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:Class rdf:about="&semsim;Relational_constraint">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A logical expression that constrains, but does not define, the value of a data structure. Example: x &gt; 0.</rdfs:comment>
     </owl:Class>
     
@@ -694,8 +687,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#SBML_function_output -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SBML_function_output">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
+    <owl:Class rdf:about="&semsim;SBML_function_output">
+        <rdfs:subClassOf rdf:resource="&semsim;Decimal"/>
         <rdfs:comment>The output of an SBML-style Function Definition</rdfs:comment>
     </owl:Class>
     
@@ -703,15 +696,15 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#SBML_initial_assignment -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SBML_initial_assignment">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#EventAssignment"/>
+    <owl:Class rdf:about="&semsim;SBML_initial_assignment">
+        <rdfs:subClassOf rdf:resource="&semsim;EventAssignment"/>
     </owl:Class>
     
 
 
     <!-- http://www.bhi.washington.edu/SemSim#SemSim_component -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#SemSim_component">
+    <owl:Class rdf:about="&semsim;SemSim_component">
         <rdfs:comment rdf:datatype="&xsd;string">A computational or physical element of a SemSim model.</rdfs:comment>
     </owl:Class>
     
@@ -719,8 +712,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Submodel -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Submodel">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Physical_model_component"/>
+    <owl:Class rdf:about="&semsim;Submodel">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A grouping of one or more data structures that comprise a computationally or physically distinct part of a model or submodel.</rdfs:comment>
     </owl:Class>
     
@@ -728,8 +721,8 @@
 
     <!-- http://www.bhi.washington.edu/SemSim#Unit_of_measurement -->
 
-    <owl:Class rdf:about="http://www.bhi.washington.edu/SemSim#Unit_of_measurement">
-        <rdfs:subClassOf rdf:resource="http://www.bhi.washington.edu/SemSim#Computational_model_component"/>
+    <owl:Class rdf:about="&semsim;Unit_of_measurement">
+        <rdfs:subClassOf rdf:resource="&semsim;Computational_model_component"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physical quantity chosen as a standard in terms of which other physical quantities may be expressed.</rdfs:comment>
     </owl:Class>
 </rdf:RDF>
