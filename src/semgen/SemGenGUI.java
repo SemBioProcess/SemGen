@@ -183,7 +183,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		String savingstatus;
 		boolean setstatussaved = false;
 
-		// Constructor for AnnotatorWorkbench
+		// Constructor for saving out from Annotator
 		public saveTask(ModelAccessor ma, SemSimModel ssm, AnnotatorWorkbench wb, boolean setstatussaved){
 			modelaccessor = ma;
 			semsimmodel = ssm;
@@ -193,7 +193,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			progframe = new SemGenProgressBar(savingstatus, true, true);
 		}
 		
-		// Constructor for ProjectTask
+		// Constructor for ProjectTask save-outs (non-extractions)
 		public saveTask(ModelAccessor ma, SemSimModel ssm, ProjectTask pt){
 			modelaccessor = ma;
 			semsimmodel = ssm;
@@ -229,7 +229,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	
-	// Task for saving out a model and showing progress indicator
+	// Task for loading a model and showing progress indicator
 	public static class loadTask extends SemGenTask {
 		Workbench workbench;
 		ProjectTask projecttask;
