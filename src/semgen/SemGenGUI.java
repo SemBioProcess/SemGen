@@ -8,12 +8,17 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotationTabFactory;
 import semgen.annotation.workbench.AnnotatorFactory;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.menu.SemGenMenuBar;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
+import semgen.stage.stagetasks.ModelInfo;
+import semgen.stage.stagetasks.ProjectTask;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
+import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.utilities.uicomponent.TabFactory;
@@ -146,6 +151,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void endTask() {	
 			for (T workbench : workbenchfactory.getWorkbenches()) {
+				progressUpdated("Preparing tab...");
 				tab = tabfactory.makeTab(workbench);
 				addTab(tab.getName(), tab);
 				opentabs.add(tab);
@@ -168,29 +174,91 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	}
 	
 	
-	// Task to 
+	// Task for saving out a model and showing progress indicator
 	public static class saveTask extends SemGenTask {
-		Workbench workbench;
+		AnnotatorWorkbench annworkbench;
+		ProjectTask projecttask;
 		ModelAccessor modelaccessor;
 		SemSimModel semsimmodel;
+		String savingstatus;
+		boolean setstatussaved = false;
 
-		public saveTask(ModelAccessor ma, SemSimModel ssm, Workbench wb){
+		// Constructor for AnnotatorWorkbench
+		public saveTask(ModelAccessor ma, SemSimModel ssm, AnnotatorWorkbench wb, boolean setstatussaved){
 			modelaccessor = ma;
 			semsimmodel = ssm;
-			workbench = wb;
-			progframe = new SemGenProgressBar("Saving model...", true, true);
+			annworkbench = wb;
+			this.setstatussaved = setstatussaved;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
 		}
+		
+		// Constructor for ProjectTask
+		public saveTask(ModelAccessor ma, SemSimModel ssm, ProjectTask pt){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			projecttask = pt;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
+		}
+				
 		@Override
 		protected Void doInBackground() throws Exception {
+			if(annworkbench != null){
+				progressUpdated("Prepping model for save...");
+				annworkbench.validateModelComposites();
+				progressUpdated(savingstatus);
+			}
 			modelaccessor.writetoFile(semsimmodel);
 			return null;
 		}
 		
 		public void endTask(){
-			workbench.setModelSaved(true);
+			if(annworkbench != null && setstatussaved)
+				annworkbench.setModelSaved(true);
 		}
 		
 	}
+	
+	
+	// Task for saving out a model and showing progress indicator
+	public static class loadTask extends SemGenTask {
+		Workbench workbench;
+		ProjectTask projecttask;
+		ModelAccessor modelaccessor;
+		SemSimModel semsimmodel;
+		LoadModelJob lmj;
+		String loadingstatus;
+
+		// Constructor for ProjectTask load operations
+		public loadTask(ModelAccessor ma, ProjectTask pt){
+			modelaccessor = ma;
+			projecttask = pt;
+			lmj = new LoadModelJob(modelaccessor, false);
+			progframe = new SemGenProgressBar("Reading " + modelaccessor.getShortLocation(), true, true);
+		}
+				
+		@Override
+		protected Void doInBackground() throws Exception {
+			lmj.run();
+			return null;
+		}
+		
+		public void endTask(){
+			SemSimModel semsimmodel = lmj.getLoadedModel();
+			if (SemGenError.showSemSimErrors()) return;
+
+			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._models.size());
+			projecttask.addModeltoTask(info, true);
+			
+			// When loading from the Annotator, _commandSender is null, 
+			//but this doesn't appear to prevent the model from being loaded onto the ProjectTab
+			if(projecttask._commandSender != null) 
+				projecttask._commandSender.addModel(info.modelnode);
+		}
+	}
+		
+		
 	
 	/** Runs through the annotator tabs and checks if the requested file is already open for annotation.
 	* Only one instance of a file can be annotated at a time. */

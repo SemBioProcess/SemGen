@@ -137,10 +137,12 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				ModelType modeltype = ModelClassifier.getTypebyFilter(savefilter);
 				if (filetosave.getName().endsWith(".omex")) modeltype = ModelType.OMEX_ARCHIVE;
 				
+				String errs = "";
+
 				// If we're attempting to write a CellML model with discrete events, SBML-style functions or SBML-style 
 				// intiial assignmetns, show error
-				if (modeltype == ModelType.CELLML_MODEL && semsimmodel != null) {
-					String errs = "";
+				if ((modeltype == ModelType.MML_MODEL_IN_PROJ || modeltype == ModelType.MML_MODEL ||
+						modeltype == ModelType.CELLML_MODEL) && semsimmodel != null) {
 					if( ! semsimmodel.getEvents().isEmpty())
 						errs = errs + "   - model contains discrete events\n";
 					
@@ -151,8 +153,8 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 						errs = errs + "   - model contains SBML-style initial assignments\n";
 					
 					if(errs != ""){
-						JOptionPane.showMessageDialog(this, "Cannot save model in CellML format because...\n\n" + errs, 
-								"Cannot write to CellML", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(this, "Cannot save model in selected format because\n\n" + errs, 
+								"Cannot write model", JOptionPane.ERROR_MESSAGE);
 						continue;
 					}
 				}

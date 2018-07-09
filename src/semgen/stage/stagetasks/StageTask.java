@@ -13,11 +13,11 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 
 public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> extends Observable implements Observer {
 	// Maps semsim model name to a semsim model
-	protected TSender _commandSender;
+	public TSender _commandSender;
 	protected CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	
 	protected StageState state;
-	protected ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
+	public ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
 	private ArrayList<ModelInfo> stagemodelqueue = new ArrayList<ModelInfo>();
 	protected JSObject jstask;
 	protected StageTaskConf newtaskconf = null;

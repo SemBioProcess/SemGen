@@ -11,6 +11,9 @@ import com.teamdev.jxbrowser.chromium.JSObject;
 
 import org.apache.commons.io.FilenameUtils;
 import semgen.SemGen;
+import semgen.SemGenGUI;
+import semgen.SemGenGUI.loadTask;
+import semgen.SemGenGUI.saveTask;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
@@ -18,13 +21,11 @@ import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.SemGenError;
-import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
-import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelClassifier.ModelType;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
@@ -63,54 +64,30 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 						if (info.accessor != null) {
 							alreadyopen = info.accessor.equals(accessor);
 						}
-						
 					}
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
 				
-				LoadModelJob loader = new LoadModelJob(accessor, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					continue;
-				}
-
-				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				addModeltoTask(info, true);
-				// Tell the view to add a model
-				_commandSender.addModel(info.modelnode);
+				loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+				loadtask.execute();
 			}
 		}
 		
+		// For loading models in the examples folder
 		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
+			
 			if(source.equals(CompositeAnnotationSearch.SourceName)) {
-				ModelAccessor file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
-				LoadModelJob loader = new LoadModelJob(file, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					return;
-				}
-				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				addModeltoTask(info, true);
-				_commandSender.addModel(info.modelnode);
+				ModelAccessor accessor = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+				loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+				loadtask.execute();
 			}
 		}
 		
+		// For loading models from within the Annotator
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
-
-			LoadModelJob loader = new LoadModelJob(accessor, false);
-			loader.run();
-			SemSimModel semsimmodel = loader.getLoadedModel();
-			if (SemGenError.showSemSimErrors()) {
-				return;
-			}
-
-			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-			addModeltoTask(info, true);
-			// Tell the view to add a model
-			_commandSender.addModel(info.modelnode);
+			loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+			loadtask.execute();
 		}
 		
 		public void onTaskClicked(JSArray modelindex, String task) {
@@ -296,8 +273,9 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
-				if (ma != null)	{			
-					ma.writetoFile(modelinfo.Model);	
+				if (ma != null)	{
+					saveTask savetask = new SemGenGUI.saveTask(ma, modelinfo.Model, this);	
+					savetask.execute();
 				}
 			}
 			else {
@@ -305,10 +283,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
 					this.extractnodeworkbenchmap.get(indexedtomodel).exportExtraction(modelindex);
 				}
-
 			}
-			
-
 		}			
 	}
 	

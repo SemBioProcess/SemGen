@@ -131,7 +131,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return semsimmodel.getLegacyCodeLocation();
 	}
 	
-	private void validateModelComposites() {
+	public void validateModelComposites() {
 		new ModelComponentValidator(this, semsimmodel);
 	}
 
@@ -139,8 +139,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public ModelAccessor saveModel(Integer index) {
 				
 		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
-			validateModelComposites();
-			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this);	
+			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this, true);	
 			savetask.execute();
 			return modelaccessor;
 		}
@@ -192,8 +191,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
 		if (ma != null) {
-			validateModelComposites();
-			ma.writetoFile(semsimmodel);
+			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this, false);	
+			savetask.execute();
 		}
 	}
 	

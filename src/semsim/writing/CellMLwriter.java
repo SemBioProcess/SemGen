@@ -58,13 +58,6 @@ public class CellMLwriter extends ModelWriter {
 		
 			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
 			
-			// Check for events, if present write out error msg
-			if(semsimmodel.getEvents().size()>0)
-				return addErrorToModel("Cannot convert models with discrete events into CellML."); 
-			
-			if(semsimmodel.getSBMLFunctionOutputs().size()>0)
-				return addErrorToModel("Cannot convert models with SBML-style Function Definitions into CellML.");
-			
 			createRDFBlock();
 			createRootElement();
 			SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);

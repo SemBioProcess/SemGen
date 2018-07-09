@@ -41,9 +41,9 @@ public class ModelComponentValidator {
 	
 	private void validateProcess(Integer index) {
 		procs.add(library.getPhysicalProcess(index));
-				for (Integer i : library.getAllProcessParticipantIndicies(index)) {
-					validateComposite(i);
-				}
+		for (Integer i : library.getAllProcessParticipantIndicies(index)) {
+			validateComposite(i);
+		}
 	}
 	
 	private void validateComposite(Integer index) {
