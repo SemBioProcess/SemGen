@@ -201,6 +201,14 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			savingstatus = "Saving " + modelaccessor.getShortLocation();
 			progframe = new SemGenProgressBar(savingstatus, true, true);
 		}
+		
+		// Constructor for saving out extractions
+		public saveTask(ModelAccessor ma, SemSimModel ssm){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
+		}
 				
 		@Override
 		protected Void doInBackground() throws Exception {
