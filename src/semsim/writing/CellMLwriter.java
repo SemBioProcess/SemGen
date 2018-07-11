@@ -30,6 +30,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
 /**
@@ -281,11 +282,7 @@ public class CellMLwriter extends ModelWriter {
 
 			for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
 				
-				if(ds.getComputation().getEvents().size()>0){
-					System.err.println("Error: Cannot convert models with discrete events into CellML");
-					break;
-				}
-				else if(ds.getComputation().hasMathML()){
+				if(ds.getComputation().hasMathML()){
 					
 					// Make sure the MathML contains a left-hand side
 					String dsmathml = ds.getComputation().getMathML();
@@ -408,9 +405,8 @@ public class CellMLwriter extends ModelWriter {
 							con.varmap.put(var1, mappedvar);
 						}
 					}
-					else{
-						System.err.println("Couldn't retrieve submodels from variable mapping " + var1.getName() + " > " + mappedvar.getName());
-					}
+					else ErrorLog.addError("Problem generating CellML: Couldn't retrieve submodels from variable mapping " + var1.getName() + " > " + mappedvar.getName(), true, false);
+					
 				}
 			}
 		}
@@ -548,13 +544,6 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
-	}
-	
-	
-	private String addErrorToModel(String msg){
-		Element eventerror = new Element("error");
-		eventerror.setAttribute("message", msg);
-		return outputter.outputString(new Document(eventerror));
 	}
 	
 	

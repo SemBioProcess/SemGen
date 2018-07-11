@@ -31,7 +31,6 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 	}
 	
 	protected void makeWorkbench(ModelAccessor modelaccessor) {	
-    	System.out.println("Loading " + modelaccessor.getShortLocation());
     	
     	LoadModelJob loader = new LoadModelJob(modelaccessor, autoannotate, this);
     	loader.run();

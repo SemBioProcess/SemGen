@@ -1,7 +1,7 @@
-startDirectory; C:\Users\thomp\OneDrive\Documents\SemGen Test
+startDirectory; C:\Users\mneal\Google Drive\temp\FDtest
 maximize; false
-screensize; 900x700
-screenpos; 0x0
+screensize; 1064x843
+screenpos; 355x86
 autoAnnotate; true
 showImports; true
 displayMarkers; true

@@ -14,7 +14,6 @@ import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.ProjectTask;
-import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -168,9 +167,6 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				globalactions.incTabCount();
 			}
 		}
-		
-		public void onError() {
-		}
 	}
 	
 	
@@ -222,8 +218,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		}
 		
 		public void endTask(){
-			if(annworkbench != null && setstatussaved)
-				annworkbench.setModelSaved(true);
+			if(annworkbench != null && setstatussaved) annworkbench.setModelSaved(true);
 		}
 		
 	}
@@ -254,12 +249,10 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void endTask(){
 			SemSimModel semsimmodel = lmj.getLoadedModel();
-			if (SemGenError.showSemSimErrors()) return;
-
 			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._models.size());
 			projecttask.addModeltoTask(info, true);
 			
-			// When loading from the Annotator, _commandSender is null, 
+			//NOTE: When loading from the Annotator, _commandSender is null, 
 			//but this doesn't appear to prevent the model from being loaded onto the ProjectTab
 			if(projecttask._commandSender != null) 
 				projecttask._commandSender.addModel(info.modelnode);

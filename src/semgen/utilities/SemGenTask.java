@@ -25,11 +25,11 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
 			onError();
 		}
     	if (isCancelled() || fatalerror) {
-    		if (progframe!=null) progframe.dispose();
+    		closeProgressFrame();
     		return;
     	}
     	endTask();
-    	if (progframe!=null) progframe.dispose();
+    	closeProgressFrame();
     }
 
     public void onError() {}
@@ -52,5 +52,9 @@ public abstract class SemGenTask extends SwingWorker<Void, String> implements Pr
 		if (!isDone()) {
 			publish(evt.getNewValue().toString());
 		}
+	}
+	
+	private void closeProgressFrame(){
+    	if (progframe!=null) progframe.dispose();
 	}
 }

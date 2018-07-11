@@ -81,6 +81,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
 /**
@@ -171,8 +172,11 @@ public class SBMLwriter extends ModelWriter {
 		// First catch errors
 		if(sbmldoc.getErrorCount() > 0){
 			
-			for(int i = 0; i< sbmldoc.getErrorCount(); i++)
-				System.err.println(sbmldoc.getError(i));
+			String errors = "";
+			for(int i = 0; i< sbmldoc.getErrorCount(); i++){
+				errors = errors + "\n\n" + sbmldoc.getError(i);
+			}
+			ErrorLog.addError("The resulting SBML model had the following errors:\n\n" + errors, true, false);
 			return null;
 		}
 		return new XMLOutputter().outputString(doc);
@@ -259,12 +263,6 @@ public class SBMLwriter extends ModelWriter {
 				
 				for(UnitFactor uf : ufset){
 					
-					//if(uf.getBaseUnit()==null){
-					//	System.err.println("Found a null base unit for a unit factor in unit " + uom.getName());
-					//	continue;
-					//}
-					//else System.out.println(uom.getName() + " has unit factor " + uf.getBaseUnit().getName());
-					
 					String factorbasename = uf.getBaseUnit().getName();
 					
 					Unit sbmluf = new Unit(sbmllevel, sbmlversion);
@@ -291,8 +289,7 @@ public class SBMLwriter extends ModelWriter {
 						
 						ud.addUnit(sbmluf);
 					}
-					else System.err.println("Error adding unit factor " + uf.getBaseUnit().getName()
-							+ " to declaration for " + uom.getName() + ": " + uf.getBaseUnit().getName() + " is not a valid SBML unit Kind");
+					else ErrorLog.addError("Error adding unit factor " + uf.getBaseUnit().getName() + " to declaration for " + uom.getName() + ": " + uf.getBaseUnit().getName() + " is not a valid SBML unit Kind", true, false);
 				}
 			}
 		}
@@ -892,7 +889,7 @@ public class SBMLwriter extends ModelWriter {
 			Element modelel = doc.getRootElement().getChild("model", sbmlNS);
 			
 			if(modelel == null){
-				System.err.println("SBML writer error - no 'model' element found in XML doc");
+				ErrorLog.addError("SBML writer error - no 'model' element found in XML doc", true, false);
 				return doc;
 			}
 			
