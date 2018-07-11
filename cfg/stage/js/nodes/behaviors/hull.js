@@ -36,6 +36,7 @@ function Hull(node) {
 	$(node).on('childrenSet', function (e, newChildren) {
 		// If there are children show the hull. Otherwise, show the node
 		this.rootElement.select(".hull").style("display", node.showchildren ? "inherit" : "none");
+		this.rootElement.classed("hullOpen", true);
 	});
 	
 	$(node).on('preTick', function () {
