@@ -17,6 +17,9 @@ import javax.swing.JTextField;
 import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.model.collection.SemSimModel;
+import semsim.reading.ModelClassifier;
+import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
@@ -26,11 +29,14 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 	private JTextField modelnamefield = new JTextField();
 	private String modelname = "";
 	private Integer formatselection = -1;
+	private SemSimModel semsimmodel;
+	protected boolean approvedtowrite = false;
 	
 	private static String[] ALL_WRITABLE_TYPES = new String[]{".cellml", ".sbml"};
 	
-	public OMEXSaveDialog() {
+	public OMEXSaveDialog(SemSimModel ssm) {
 		super("Save to OMEX Archive As");
+		semsimmodel = ssm;
 		
 		layoutDialog();
 	}
@@ -86,14 +92,34 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
+		
 		String propertyfired = e.getPropertyName();
+		
 		if (propertyfired.equals("value")) {
-				String value = optionPane.getValue().toString();
-				if (value == "OK") {
-					formatselection = typechooser.getSelectedIndex();
-					modelname = this.modelnamefield.getText();
+			String value = optionPane.getValue().toString();
+			
+			if (value == "OK") {
+				formatselection = typechooser.getSelectedIndex();
+				modelname = this.modelnamefield.getText();
+				ModelType modeltype = ModelClassifier.getTypebyExtension(getFormat());
+				
+				if(modelNameIsValid()){
+					
+					if(SemGenSaveFileChooser.outputTypeIsCompatibile(modeltype, semsimmodel, this)){
+						approvedtowrite = true;
+						dispose();
+					}
+					else optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+
 				}
-				dispose();
+				else{
+					JOptionPane.showMessageDialog(this, "Please enter valid model name");
+					optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+					return;
+				}
+			}
+			else if(value == "Cancel") dispose();
+			
 		}
 	}
 	
@@ -103,5 +129,12 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
  
  public String getModelName() {
 	 return modelname;
+ }
+ 
+ private boolean modelNameIsValid(){
+	 if(modelname == null) return false;
+	 else if(modelname.isEmpty()) return false;
+	 else if(modelname.trim().isEmpty()) return false;
+	 else return true;
  }
 }

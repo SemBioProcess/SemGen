@@ -136,28 +136,18 @@ public class SemSimRDFreader extends AbstractRDFreader{
 			
 			Statement st = stit.next();
 			URI predicateURI = URI.create(st.getPredicate().getURI());
-			System.out.println(predicateURI);
-
 			
 			if (predicateURI.equals(SemSimLibrary.SEMSIM_VERSION_IRI.toURI())) {
 				semsimmodel.setSemSimVersion(st.getObject().asLiteral().toString());
 			}
-			
 			else if (predicateURI.equals(SemSimModel.LEGACY_CODE_LOCATION_IRI.toURI())) {
 				ModelAccessor ma = FileAccessorFactory.getModelAccessor(st.getObject().asLiteral().toString());
 				semsimmodel.setSourceFileLocation(ma);
 			}
-			
 			else{
-				System.out.println("HERE:");
 				Metadata m = getMetadataByURI(predicateURI);
-				System.out.println(m.toString());
-
 				String value = st.getObject().toString();
-				System.out.println("VAL: " + value);
-
 				semsimmodel.getCurationalMetadata().setAnnotationValue(m, value);
-				System.out.println("ADDED ann");
 			}
 		}
 	}

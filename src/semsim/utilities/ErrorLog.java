@@ -20,9 +20,9 @@ public class ErrorLog {
 	 * @param isfatal Whether the error is fatal
 	 * @param addtolog Whether to add to this object's PrintWriter 
 	 */
-	public static void addError(String e, Boolean isfatal, boolean addtolog) {
+	public static void addError(String e, Boolean isfatal, boolean addtologfilewriter) {
 		errorqueue.add(new ErrorEntry(e, isfatal));
-		if (addtolog) logfilewriter.println(e);
+		if (addtologfilewriter) logfilewriter.println(e);
 	}
 	
 	/** @return The first error in the log */

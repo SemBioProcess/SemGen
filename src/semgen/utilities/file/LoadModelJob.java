@@ -51,7 +51,8 @@ public class LoadModelJob extends SemGenJob {
 	}
 	
 	private void loadSemSimModelFromFile() throws JDOMException, IOException {
-		
+    	System.out.println("Reading " + modelaccessor.getShortLocation());
+
     	setStatus("Reading " + modelaccessor.getShortLocation());
 
     	ModelType modeltype = modelaccessor.getModelType();
@@ -120,7 +121,7 @@ public class LoadModelJob extends SemGenJob {
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else
-			ErrorLog.addError(modelaccessor.getFileName() + " was an invalid model.", true, false);
+			ErrorLog.addError("Could not load " + modelaccessor.getFileName() + "\nCheck that model encoding is valid.", true, false);
 		
 	}
 
