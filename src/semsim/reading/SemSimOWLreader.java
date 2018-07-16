@@ -139,13 +139,13 @@ public class SemSimOWLreader extends ModelReader {
 		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
 		
 		if( ! ont.getClassesInSignature().contains(topclass))
-			semsimmodel.addError("Source file does not appear to be a valid SemSim model");
+			semsimmodel.addError("Could not find root class 'SemSim_component'. Source file does not appear to be a valid SemSim model");
 		
 		
 		// Test if the model actually has data structures
 		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString()).isEmpty()
 				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROPERTY.getURIasString()).isEmpty())
-			semsimmodel.addError("No data structures or physical properties in model");
+			semsimmodel.addError("Model contains no data structures or physical properties");
 		
 		return (semsimmodel.getErrors().size() > 0);
 	}

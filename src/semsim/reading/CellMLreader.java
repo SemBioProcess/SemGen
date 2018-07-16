@@ -58,7 +58,7 @@ public class CellMLreader extends ModelReader {
 		Document doc = modelaccessor.getJDOMDocument();
 		
 		if(doc.getRootElement()==null){
-			semsimmodel.addError("Could not parse original model: Root element of XML document was null");
+			semsimmodel.addError("Could not parse original model: Could not find root element of XML document");
 			return semsimmodel;
 		}
 
