@@ -19,6 +19,7 @@ import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
+import semgen.stage.stagetasks.extractor.ExtractionInfo;
 import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.SemGenError;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -30,7 +31,7 @@ import semsim.reading.ModelClassifier.ModelType;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
-	private ArrayList<ModelExtractionGroup> extractnodeworkbenchmap = new ArrayList<ModelExtractionGroup>(); 
+	public ArrayList<ModelExtractionGroup> extractnodeworkbenchmap = new ArrayList<ModelExtractionGroup>(); 
 	
 	public ProjectTask() {
 		super(0);
@@ -95,7 +96,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			switch(task) {
 				case "annotate":
 					annotateModels(modelindex);
-
 					break;
 				case "save":
 					saveModels(modelindex);
@@ -105,7 +105,6 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					break;
 				case "close":
 					closeModels(modelindex);					
-					
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -303,30 +302,58 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		}
 	}
 	
-	protected void closeModels(JSArray indicies) {
+	
+	// For closing from the Javascript side
+	public void closeModels(JSArray indicies) {
+		
 		for (int i=0; i < indicies.length(); i++) {
 			JSArray address = indicies.get(i).asArray();
-			int indexedtomodel = address.get(0).asNumber().getInteger();
+			int parentmodelindex = address.get(0).asNumber().getInteger();
 			int modelindex = address.get(1).asNumber().getInteger();
-			
-			if (indexedtomodel==-1) {
-				removeModel(modelindex);
-				//Only remove the extraction group if it doesn't contain any extractions
-				if (this.extractnodeworkbenchmap.get(modelindex).isEmpty()) {
-					this.extractnodeworkbenchmap.set(modelindex, null);
-				}
-
-			}
-			else {
-				boolean empty = this.extractnodeworkbenchmap.get(indexedtomodel).removeExtraction(modelindex);
-				//If the parent model has been removed and the extraction group is empty, remove the extraction group
-				if (empty && this._models==null) {
-					this.extractnodeworkbenchmap.set(modelindex, null);
-				}
-				
-			}
-			_commandSender.removeModel(new Integer[]{indexedtomodel, modelindex});
+			closeModels(parentmodelindex, modelindex);
 		}
+	}
+	
+	// Overloaded method so that we can call the close command from the Java side and the Javascript side
+	// Returns whether the close was cancelled
+	public boolean closeModels(int parentmodelindex, int modelindex) {
+		
+		if (parentmodelindex==-1) { // if it's not an extraction
+			removeModel(modelindex);
+			//Only remove the extraction group if it doesn't contain any extractions
+			if (this.extractnodeworkbenchmap.get(modelindex).isEmpty()) {
+				this.extractnodeworkbenchmap.set(modelindex, null);
+			}
+		}
+		else {
+			ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(parentmodelindex);
+			ExtractionInfo exinfo = meg.getExtractionInfo(modelindex);
+			if(exinfo==null) return false; // Skips extractions that were already created, saved and closed
+			
+			String name = exinfo.getModelName();
+			
+			if( ! exinfo.getChangesSaved()){
+				int returnval = JOptionPane.showConfirmDialog(null, 
+						"Save extraction " + name + "?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
+				if(returnval==JOptionPane.YES_OPTION){
+					meg.saveExtraction(modelindex);
+				}
+				else if(returnval==JOptionPane.NO_OPTION){
+				}
+				else if(returnval==JOptionPane.CANCEL_OPTION){
+					return true;
+				}
+			}
+			
+			boolean empty = meg.removeExtraction(modelindex);
+			//If the parent model has been removed and the extraction group is empty, remove the extraction group
+			if (empty && this._models==null) {
+				this.extractnodeworkbenchmap.set(modelindex, null);
+			}
+		}
+		_commandSender.removeModel(new Integer[]{parentmodelindex, modelindex});
+		return false;
+		
 	}
 	
 	@Override

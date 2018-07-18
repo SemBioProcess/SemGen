@@ -6,7 +6,8 @@ import semsim.model.collection.SemSimModel;
 
 public class ExtractionInfo extends StageRootInfo<ExtractionNode>  {
 	protected SemSimModel sourcemodel;
-	
+	private boolean changesSaved = false; // Whether the extraction has been saved in its current form
+
 	public ExtractionInfo(SemSimModel source, SemSimModel model, Integer modindex) {
 		super(model, null, modindex);
 		sourcemodel = source;
@@ -26,5 +27,14 @@ public class ExtractionInfo extends StageRootInfo<ExtractionNode>  {
 	
 	public String getModelName() {
 		return Model.getName();
+	}
+	
+	public void setChangesSaved(boolean saved){
+		changesSaved = saved;
+	}
+	
+	/** @return Whether the extraction has been saved in its current form*/
+	public boolean getChangesSaved(){
+		return changesSaved;
 	}
 }

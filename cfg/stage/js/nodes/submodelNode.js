@@ -33,7 +33,7 @@ SubmodelNode.prototype.getContextMenu = function() {
 		menu = [{text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];;
 	}
 	else {
-		menu = [{text : "Remove Selected", action : "removeselected"}];
+		//menu = [{text : "Remove Selected", action : "removeselected"}];
 	}
 
 	return menu;	
