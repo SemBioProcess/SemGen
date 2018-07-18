@@ -24,51 +24,87 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 
 ModelNode.prototype.createVisualization = function (modeid, expand) {
 	modelnode = this;
-	
-	for (x in DisplayModes) {
-		$('#' + DisplayModes[x].btnid).removeClass("active");
-	}
-	$('#' + modeid.btnid).addClass("active");
-	
-	if (modelnode.displaymode==modeid) { 
-			if (!modelnode.showchildren && expand) {
-				modelnode.showChildren();
-			}
-			return;
-		}
-	this.children = {};
 
-	
+    if (modelnode.displaymode==modeid) {
+        if (!modelnode.showchildren && expand) {
+            modelnode.showChildren();
+        }
+        return;
+    }
+
+
 	if (modeid == DisplayModes.SHOWSUBMODELS) {
+        for (x in DisplayModes) {
+        	$('#' + DisplayModes[x].btnid).removeClass("active");
+        }
+        $('#' + modeid.btnid).addClass("active");
+
+        this.children = {};
 		this.createChildren();
 	}
-	//Show physiomap
-	else if (modeid == DisplayModes.SHOWPHYSIOMAP) {
-		var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
-		physionodes.forEach(function (d) {
-			modelnode.createChild(d);
-		}, this);
-		console.log("Showing PhysioMap for model " + this.name);
-	}
-	//Show all dependencies
-	else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
-		this.createChildren();
-		var dependencies = {};
-			
-		this.globalApply(function(node){
-			if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE) {
-				dependencies[node.name] = node;
-				node.parent = modelnode;
-			}
-		});
-		this.children = dependencies;
-	}
-	else {
-		throw "Display mode not recognized";
-		return;
-	}
-	this.displaymode = modeid;
-	this.showchildren = expand;
+    //Show physiomap
+    else if (modeid == DisplayModes.SHOWPHYSIOMAP) {
+        var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
+        var vizSize = physionodes.length;
+        if (vizSize >= 200) {
+            var cont = confirm("This visualization contains " + vizSize + " nodes. Visualization may take longer to load.");
+            if (!cont) {
+                return;
+            }
+        }
+        for (x in DisplayModes) {
+        	$('#' + DisplayModes[x].btnid).removeClass("active");
+        }
+        $('#' + modeid.btnid).addClass("active");
+
+        this.children = {};
+
+        physionodes.forEach(function (d) {
+            modelnode.createChild(d);
+        }, this);
+        console.log("Showing PhysioMap for model " + this.name);
+    }
+    //Show all dependencies
+    else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
+        this.children = {};
+        this.createChildren();
+        var dependencies = {};
+
+        this.globalApply(function (node) {
+            if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE) {
+                dependencies[node.name] = node;
+                node.parent = modelnode;
+            }
+        });
+        var vizSize = Object.keys(dependencies).length;
+        if (vizSize >= 200) {
+            var cont = confirm("This visualization contains "+ vizSize + " nodes. Visualization may take longer to load.");
+            if (!cont) {
+                dependencies = null;
+                this.children = {};
+                this.createChildren();
+                this.displaymode = DisplayModes.SHOWSUBMODELS;
+                this.showchildren = false;
+                for (x in DisplayModes) {
+                    $('#' + DisplayModes[x].btnid).removeClass("active");
+                }
+                $('#' + this.displaymode.btnid).addClass("active");
+                return;
+            }
+        }
+        for (x in DisplayModes) {
+        	$('#' + DisplayModes[x].btnid).removeClass("active");
+        }
+        $('#' + modeid.btnid).addClass("active");
+
+        this.children = dependencies;
+    }
+    else {
+        throw "Display mode not recognized";
+        return;
+    }
+    this.displaymode = modeid;
+    this.showchildren = expand;
 }
 
 ModelNode.prototype.showChildren = function() {
