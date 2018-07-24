@@ -230,8 +230,6 @@ public class AnnotatorTreeModel implements TreeModel, Observer {
 
 		@Override
 		public void onSelection() {
-			changeButtonFocus(this);
-			workbench.openModelAnnotationsWorkbench().notifyOberserversofMetadataSelection(0);
 		}
 	}
 	

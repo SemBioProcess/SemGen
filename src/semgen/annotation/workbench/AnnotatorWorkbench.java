@@ -191,7 +191,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
 		if (ma != null) {
-			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this, false);	
+			saveTask savetask = new SemGenGUI.saveTask(ma, semsimmodel, this, false);	
 			savetask.execute();
 		}
 	}
@@ -360,7 +360,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
-		if ((arg1==WBEvent.SMSELECTION) || (arg1==WBEvent.CWSELECTION) || arg1==ModelChangeEnum.METADATASELECTED){
+		if ((arg1==WBEvent.SMSELECTION) || (arg1==WBEvent.CWSELECTION)){
 			setChanged();
 			notifyObservers(arg1);
 		}

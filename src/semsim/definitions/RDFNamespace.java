@@ -36,7 +36,7 @@ public enum RDFNamespace  {
 	/**
 	 * @return The RDF namespace as a string (e.g. http://www.w3.org/1998/Math/MathML)
 	 */
-	public String getNamespaceasString() {
+	public String getNamespaceAsString() {
 		return namespace;
 	}
 	
@@ -51,6 +51,6 @@ public enum RDFNamespace  {
 	 * @return The namespace as a JDom Namespace object
 	 */
 	public Namespace createJdomNamespace() {
-		return Namespace.getNamespace(getOWLid(), getNamespaceasString());
+		return Namespace.getNamespace(getOWLid(), getNamespaceAsString());
 	}
 }

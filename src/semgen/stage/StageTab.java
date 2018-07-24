@@ -115,6 +115,10 @@ public class StageTab extends SemGenTab implements Observer {
 	public void requestExport() {
 		_workbench.exportModel(0);
 	}
+	
+	@Override
+	public void requestEditModelLevelMetadata() {
+	}
 
 	public boolean closeTab() {
 

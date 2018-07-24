@@ -87,11 +87,11 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 	}	
 
 	
@@ -116,7 +116,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
 		
-		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
+		for(Annotation ann : semsimmodel.getAnnotations()){
 						
 			Property prop = ann.getRelation().getRDFproperty();
 			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
