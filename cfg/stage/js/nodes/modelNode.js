@@ -13,6 +13,8 @@ function ModelNode (graph, srcobj) {
 	this.canlink = false;
 	if (this.displaymode == null) this.createChildren();
 	this.displaymode = DisplayModes.SHOWSUBMODELS;
+    this.submodelVizSize = srcobj.childsubmodels.length;
+    this.dependencyVizSize = this.getAllChildNodes().length - this.submodelVizSize;
 
     this.addBehavior(Hull);
     this.addBehavior(parentDrag);
@@ -34,6 +36,13 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 
 
 	if (modeid == DisplayModes.SHOWSUBMODELS) {
+        if (this.submodelVizSize >= 200) {
+            var cont = confirm("This Submodel visualization contains " + this.submodelVizSize + " nodes. Visualization may take longer to load.");
+            if (!cont) {
+                return;
+            }
+        }
+
         for (x in DisplayModes) {
         	$('#' + DisplayModes[x].btnid).removeClass("active");
         }
@@ -45,9 +54,9 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
     //Show physiomap
     else if (modeid == DisplayModes.SHOWPHYSIOMAP) {
         var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
-        var vizSize = physionodes.length;
-        if (vizSize >= 200) {
-            var cont = confirm("This visualization contains " + vizSize + " nodes. Visualization may take longer to load.");
+        var physiomapVizSize = physionodes.length;
+        if (physiomapVizSize >= 200) {
+            var cont = confirm("This PhysioMap visualization contains " + physiomapVizSize + " nodes. Visualization may take longer to load.");
             if (!cont) {
                 return;
             }
@@ -66,6 +75,13 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
     }
     //Show all dependencies
     else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
+        if (this.dependencyVizSize >= 200) {
+            var cont = confirm("This Dependency visualization contains "+ this.dependencyVizSize + " nodes. Visualization may take longer to load.");
+            if (!cont) {
+                return;
+            }
+        }
+
         this.children = {};
         this.createChildren();
         var dependencies = {};
@@ -76,22 +92,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
                 node.parent = modelnode;
             }
         });
-        var vizSize = Object.keys(dependencies).length;
-        if (vizSize >= 200) {
-            var cont = confirm("This visualization contains "+ vizSize + " nodes. Visualization may take longer to load.");
-            if (!cont) {
-                dependencies = null;
-                this.children = {};
-                this.createChildren();
-                this.displaymode = DisplayModes.SHOWSUBMODELS;
-                this.showchildren = false;
-                for (x in DisplayModes) {
-                    $('#' + DisplayModes[x].btnid).removeClass("active");
-                }
-                $('#' + this.displaymode.btnid).addClass("active");
-                return;
-            }
-        }
+
         for (x in DisplayModes) {
         	$('#' + DisplayModes[x].btnid).removeClass("active");
         }
