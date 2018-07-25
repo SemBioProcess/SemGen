@@ -387,6 +387,7 @@ function Stage(graph, stagestate) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
 		extractionnode.createVisualization(basenode.displaymode, false);
+        stage.graph.delayfixonupdate = true;
 		stage.graph.update();
 		stage.selectNode(extractionnode);
 	}
@@ -400,7 +401,8 @@ function Stage(graph, stagestate) {
 			extractionnode.setLocation(droploc[0], droploc[1]);
 		}
 		extractionnode.createVisualization(DisplayModes.SHOWSUBMODELS, true);
-		stage.graph.update();
+		stage.graph.delayfixonupdate = true;
+        stage.graph.update();
 		stage.selectNode(extractionnode);
 	}
 	
