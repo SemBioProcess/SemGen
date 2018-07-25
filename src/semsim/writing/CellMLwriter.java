@@ -16,7 +16,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.OMEXAccessor;
@@ -57,7 +56,7 @@ public class CellMLwriter extends ModelWriter {
 		Document doc = null;
 		outputter.setFormat(Format.getPrettyFormat());
 		
-			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
+			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
 			
 			createRDFBlock();
 			createRootElement();
@@ -136,17 +135,12 @@ public class CellMLwriter extends ModelWriter {
 		root.addNamespaceDeclaration(RDFNamespace.DCTERMS.createJdomNamespace());
 		root.addNamespaceDeclaration(RDFNamespace.VCARD.createJdomNamespace());
 		
-		String namestring = semsimmodel.getName();
-		
-		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
-			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
+		String namestring = semsimmodel.hasName() ? semsimmodel.getName() : "model0";
 		
 		root.setAttribute("name", namestring);
 		
-		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.sourcemodelid)) {
-			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.sourcemodelid);
-			root.setAttribute("id", namestring, RDFNamespace.CMETA.createJdomNamespace());
-		}
+		if(semsimmodel.hasMetadataID())
+			root.setAttribute("id", semsimmodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());
 	}
 	
 	

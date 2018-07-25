@@ -103,6 +103,11 @@ public class GlobalActions extends Observable {
 		setChanged();
 	}
 	
+	public void requestEditModelLevelMetadata(){
+		getCurrentTab().requestEditModelLevelMetadata();
+		setChanged();
+	}
+	
 	public void incTabCount() {
 		tabsopen++;
 		setChanged();

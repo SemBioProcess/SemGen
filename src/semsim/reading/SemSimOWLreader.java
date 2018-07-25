@@ -37,6 +37,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
@@ -136,7 +137,7 @@ public class SemSimOWLreader extends ModelReader {
 	 * @return Whether the SemSimModel is valid
 	 * @throws OWLException*/
 	private boolean verifyModel() throws OWLException {
-		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSim_component"));
+		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_component"));
 		
 		if( ! ont.getClassesInSignature().contains(topclass))
 			semsimmodel.addError("Could not find root class 'SemSim_component'. Source file does not appear to be a valid SemSim model");
@@ -155,8 +156,8 @@ public class SemSimOWLreader extends ModelReader {
 	 * to its physical definition. More recent models use the "hasPhysicalDefinition" relation.
 	 */
 	private void setPhysicalDefinitionURI(){
-		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo")))
-			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "refersTo");
+		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo")))
+			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo");
 		
 		else if(ont.containsDataPropertyInSignature(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI()))
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
@@ -197,9 +198,13 @@ public class SemSimOWLreader extends ModelReader {
 				semsimmodel.setMetadataID(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
 			}	
+			
+			if(named.getProperty().getIRI().equals(OWLRDFVocabulary.RDFS_COMMENT.getIRI())){
+				semsimmodel.setDescription(((OWLLiteral)named.getValue()).getLiteral());
+				annstoremove.add(named);
+			}	
 		}
 		
-		semsimmodel.getCurationalMetadata().setCurationalMetadata(anns, annstoremove);
 		anns.removeAll(annstoremove);
 		
 		//Add remaining annotations
@@ -207,12 +212,15 @@ public class SemSimOWLreader extends ModelReader {
 			URI propertyuri = ann.getProperty().getIRI().toURI();
 			Relation rel = SemSimRelations.getRelationFromURI(propertyuri);
 			
-			if(rel != SemSimRelation.UNKNOWN){
+			if(rel != SemSimRelation.UNKNOWN ){
 				
 				if(ann.getValue() instanceof OWLLiteral){
 					OWLLiteral val = (OWLLiteral) ann.getValue();
 					
-					semsimmodel.addAnnotation(new Annotation(rel, val.getLiteral()));
+					if(val.getLiteral().startsWith("http"))
+						semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(val.getLiteral()), "", sslib);
+					else
+						semsimmodel.addAnnotation(new Annotation(rel, val.getLiteral()));
 				}
 			}
 		}

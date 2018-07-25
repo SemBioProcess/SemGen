@@ -21,15 +21,15 @@ public class ModelAnnotationsBench extends Observable {
 	Set<Annotation> annotations;
 	int focusindex = -1;
 		
-	public static enum ModelChangeEnum {SOURCECHANGED, METADATACHANGED, METADATASELECTED, METADATAIMPORTED};
+	public static enum ModelChangeEnum {SOURCECHANGED, METADATACHANGED, METADATAIMPORTED};
 	
 	public ModelAnnotationsBench(SemSimModel ssm) {
 		model = ssm;
 		annotations = ssm.getAnnotations();
-		for (Metadata m : Metadata.values()) {
-			metadatalist.add(m);
-		}
-		metadata = ssm.getCurationalMetadata();
+//		for (Metadata m : Metadata.values()) {
+//			metadatalist.add(m);
+//		}
+		//metadata = ssm.getCurationalMetadata();
 	}
 	
 	public String getFullModelName() {
@@ -97,11 +97,6 @@ public class ModelAnnotationsBench extends Observable {
 		return list;
 	}
 	
-	public void notifyOberserversofMetadataSelection(int index) {
-		focusindex = index;
-		setChanged();
-		notifyObservers(ModelChangeEnum.METADATASELECTED);
-	}
 	
 	public void setMetadataSelectionIndex(int index) {
 		focusindex = index;

@@ -27,6 +27,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	private JMenuItem fileitemsave;
 	private JMenuItem fileitemsaveas;
 	private JMenuItem fileitemexport;
+	private JMenuItem fileitemeditmetadata;
 	private JMenuItem fileitempreferences;
 	private JMenuItem fileitemexit;
 	private JSeparator writeseparator = new JSeparator();
@@ -60,6 +61,10 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 		fileitemexport = formatMenuItem(fileitemexport,"Export...",KeyEvent.VK_E,true,true);
 		fileitemexport.setToolTipText("Write out model in a specified format");
 		add(fileitemexport);
+		
+		fileitemeditmetadata = formatMenuItem(fileitemeditmetadata,"Edit Model-level Annotations",KeyEvent.VK_M,true,true);
+		fileitemeditmetadata.setToolTipText("Edit the model-level annotations");
+		add(fileitemeditmetadata);
 		
 		add(writeseparator);
 		
@@ -99,6 +104,10 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			globalactions.requestExport();
 		}
 		
+		if (o == fileitemeditmetadata){
+			globalactions.requestEditModelLevelMetadata();
+		}
+		
 		if( o == fileitemclose){
 			globalactions.closeTab();
 		}
@@ -115,6 +124,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 	public void canSaveOut(boolean enable) {
 		fileitemsaveas.setEnabled(enable);
 		fileitemexport.setEnabled(enable);
+		fileitemeditmetadata.setEnabled(enable);
 		
 	}
 
@@ -139,6 +149,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			fileitemsaveas.setVisible( ! currtabisproject);
 			fileitemexport.setVisible( ! currtabisproject);
 			writeseparator.setVisible( ! currtabisproject);
+			fileitemeditmetadata.setVisible( ! currtabisproject);
 		}
 		else {
 			fileitemsave.setEnabled(false);

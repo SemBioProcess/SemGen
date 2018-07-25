@@ -53,7 +53,7 @@ public class AnnotationImporter extends SemGenJob {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
 		if (options[0]) {
-			importingmodel.importCurationalMetadatafromModel(importedmodel, true);
+			//importingmodel.importCurationalMetadatafromModel(importedmodel, true);
 			changed = true;
 		}
 		if (options[1]) {

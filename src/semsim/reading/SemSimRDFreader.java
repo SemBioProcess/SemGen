@@ -13,8 +13,9 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
-import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.annotation.Annotation;
 import semsim.definitions.RDFNamespace;
+import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
@@ -145,9 +146,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				semsimmodel.setSourceFileLocation(ma);
 			}
 			else{
-				Metadata m = getMetadataByURI(predicateURI);
-				String value = st.getObject().toString();
-				semsimmodel.getCurationalMetadata().setAnnotationValue(m, value);
+				semsimmodel.addAnnotation(new Annotation(SemSimRelations.getRelationFromURI(predicateURI), st.getObject().toString()));
 			}
 		}
 	}
@@ -221,7 +220,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				URI uri = URI.create(isannres.getURI());
 
 				// If an identifiers.org OPB namespace was used, replace it with the OPB's
-				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
+				if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceAsString()))
 					uri = swapInOPBnamespace(uri);
 				
 				PhysicalPropertyInComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -297,23 +296,5 @@ public class SemSimRDFreader extends AbstractRDFreader{
 			PhysicalProperty prop = getSingularPhysicalProperty(singularannURI);
 			ds.setSingularAnnotation(prop);
 		}
-	}
-	
-	
-	/**
-	 * Look up {@link Metadata} items in {@link semsim.annotation.CurationalMetadata} that use
-	 * an input URI for their relation
-	 * @param uri An input URI 
-	 * @return The {@link Metadata} object that uses the input URI as its relation
-	 */
-	private Metadata getMetadataByURI(URI uri){
-		
-		for(Metadata m : Metadata.values()){
-			if(m.getURI().equals(uri)){
-				return m;
-			}
-		}
-		
-		return null;
 	}
 }

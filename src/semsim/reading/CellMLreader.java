@@ -18,7 +18,6 @@ import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.JSBML;
 
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -500,15 +499,11 @@ public class CellMLreader extends ModelReader {
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
 			if(name!=null && !name.equals("")){
-				semsimmodel.setModelAnnotation(Metadata.fullname, name);
+				semsimmodel.addAnnotation(new Annotation(SemSimRelation.MODEL_NAME, name));
 				semsimmodel.setName(name);
 			}
-			if(id!=null && !id.equals("")){
-				
-				//TODO: this is duplicating information, maybe cut one?
+			if(id!=null && !id.equals(""))
 				semsimmodel.setMetadataID(id);
-				semsimmodel.setModelAnnotation(Metadata.sourcemodelid, id);
-			}
 			
 			// Try to get pubmed ID from RDF tags
 			if(doc.getRootElement().getChild("RDF", RDFNamespace.RDF.createJdomNamespace())!=null){
@@ -567,7 +562,7 @@ public class CellMLreader extends ModelReader {
 			// end documentation processing
 		}
 		if(ab!=null && !ab.equals(""))
-			semsimmodel.setModelAnnotation(Metadata.pubmedid, ab);
+			semsimmodel.addAnnotation(new Annotation(SemSimRelation.BQM_IS_DESCRIBED_BY,ab));
 	}
 	
 	
@@ -597,14 +592,14 @@ public class CellMLreader extends ModelReader {
 	 */
 	public static Element getMathMLforOutputVariable(String cvarname, List<?> componentMathMLlist){
 		
-		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceasString());
+		Element mathmlheadel = new Element("math", RDFNamespace.MATHML.getNamespaceAsString());
 		Iterator<?> compmathmlit = componentMathMLlist.iterator();
 		Element childel = getElementForOutputVariableFromComponentMathML(cvarname, compmathmlit);
 				
 		if(childel!=null){
 			
 			Element childelclone = (Element)childel.clone();
-			childelclone.removeNamespaceDeclaration(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString()));
+			childelclone.removeNamespaceDeclaration(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString()));
 			mathmlheadel.addContent(childelclone);
 			
 			return mathmlheadel;

@@ -147,13 +147,14 @@ public class SBMLwriter extends ModelWriter {
 		if(getWriteLocation() instanceof OMEXAccessor){
 			rdfwriter = new CASAwriter(semsimmodel);
 			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
+			rdfwriter.setRDFforModelLevelAnnotations();
 		}
+		else addModelLevelCVTerms();
 		
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
 		
 		addNotesAndMetadataID(semsimmodel, sbmlmodel);
-		
 		sortDataStructuresIntoSBMLgroups();
 		addUnits();
 		addCompartments();
@@ -183,6 +184,34 @@ public class SBMLwriter extends ModelWriter {
 	}
 	
 
+	/**
+	 * Add model-level annotations as CVTerms within the SBML code. This should not be used 
+	 * when writing to an OMEX file.
+	 */
+	private void addModelLevelCVTerms(){
+		
+		for(ReferenceOntologyAnnotation ann : semsimmodel.getReferenceOntologyAnnotations()){
+			
+			CVTerm cv = new CVTerm();
+			
+			Relation rel = ann.getRelation();
+			
+			Qualifier qual = SemSimRelations.getBiologicalQualifierFromRelation(rel);
+			if(qual==null) qual = SemSimRelations.getModelQualifierFromRelation(rel);
+			if(qual==null) continue;
+			
+			cv.setQualifier(qual);
+			cv.addResource(ann.getReferenceURI().toString());
+			
+			sbmlmodel.addCVTerm(cv);
+//			try {
+//				sbmlmodel.setNotes(semsimmodel.getDescription());
+//			} catch (XMLStreamException e) {
+//				e.printStackTrace();
+//			}
+		}
+	}
+	
 	
 	/**
 	 *  Determine which data structures potentially simulate properties of SBML compartments,
@@ -932,8 +961,8 @@ public class SBMLwriter extends ModelWriter {
 		
 		// Deal with unit declarations on <cn> elements in MathML 
 		if(RHS.contains("cellml:units")){
-			RHS = RHS.replaceFirst("xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"",
-					"xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"" + " "
+			RHS = RHS.replaceFirst("xmlns=\"" + RDFNamespace.MATHML.getNamespaceAsString() + "\"",
+					"xmlns=\"" + RDFNamespace.MATHML.getNamespaceAsString() + "\"" + " "
 							+ "xmlns:sbml3_1=\"" + SBMLDocument.URI_NAMESPACE_L3V1Core + "\"");
 			RHS = RHS.replace(cellmlInlineUnitsNSdeclaration, "");
 			RHS = RHS.replace("cellml:units", "sbml3_1:units");
@@ -981,14 +1010,14 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		//TODO: When the jsbml folks fix the issue with redeclaring xml namespaces in notes, uncomment block below
-//		if(sso.hasDescription()){
-//			try {
-//				sbo.setNotes(sso.getDescription());
-//			} catch (XMLStreamException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		//TODO: Is this fixed?
+		if(sso.hasDescription()){
+			try {
+				sbo.setNotes(sso.getDescription());
+			} catch (XMLStreamException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if(sso.hasMetadataID()){
 			

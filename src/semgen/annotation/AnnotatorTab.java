@@ -6,18 +6,17 @@ import semgen.SemGenSettings;
 import semgen.SemGenSettings.SettingChange;
 import semgen.annotation.annotatorpane.AnnotationPanel;
 import semgen.annotation.annotatorpane.CodewordAnnotationPanel;
-import semgen.annotation.annotatorpane.ModelAnnotationEditor;
 import semgen.annotation.annotatorpane.SubmodelAnnotationPanel;
 import semgen.annotation.componentlistpanes.AnnotatorButtonTree;
 import semgen.annotation.componentlistpanes.CodewordListPane;
-import semgen.annotation.componentlistpanes.ModelAnnotationsListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
+import semgen.annotation.dialog.modelanns.ModelLevelMetadataDialog;
 import semgen.annotation.termlibrarydialog.ReferenceLibraryDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
-import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
+import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -28,11 +27,12 @@ import java.net.URI;
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.awt.BorderLayout;
+import java.math.BigDecimal;
 
 public class AnnotatorTab extends SemGenTab implements Observer {
 
@@ -49,7 +49,6 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	private JSplitPane westsplitpane;
 	private SemGenScrollPane annotatorscrollpane = new SemGenScrollPane();
 	
-	private JSplitPane swsplitpane;
 	private SemGenScrollPane treeviewscrollpane;
 	
 	private AnnotatorButtonTree tree;
@@ -57,8 +56,6 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	private CodewordListPane cwpane;
 	
 	private AnnotationPanel<? extends AnnotatorDrawer<? extends SemSimObject>> annotatorpane;
-
-	private ModelAnnotationsListPane modelannspane;
 	
 	private AnnotatorTabCodePanel codearea;
 	private ReferenceLibraryDialog libdialog;
@@ -81,14 +78,15 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		setLayout(new BorderLayout());
 		
 		codearea = new AnnotatorTabCodePanel(workbench);
-		modelannspane = new ModelAnnotationsListPane(workbench, settings);
 		
 		SemGenScrollPane legacycodescrollpane = new SemGenScrollPane(codearea);
+		legacycodescrollpane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.gray), 
+				"Model source code", TitledBorder.CENTER, TitledBorder.TOP, SemGenFont.defaultBold(2)));
 
 		annotatorscrollpane.setBackground(SemGenSettings.lightblue);
 		annotatorscrollpane.getViewport().setBackground(SemGenSettings.lightblue);
 
-		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, modelannspane, null); 
+		westsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, null, null); 
 		westsplitpane.setOneTouchExpandable(true);
 
 		eastsplitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, annotatorscrollpane, legacycodescrollpane);
@@ -112,7 +110,7 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		setVisible(true);
 		
 		int iniwloc = settings.scaleWidthforScreen(360);
-		int inihloc = settings.scaleWidthforScreen(initheight-150);
+		int inihloc = settings.scaleHeightforScreen(initheight-150);
 		
 		tree = new AnnotatorButtonTree(workbench, settings);
 		treeviewscrollpane = new SemGenScrollPane(tree);
@@ -120,13 +118,11 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		cwpane = new CodewordListPane(workbench, settings);
 		smpane = new SubmodelListPane(workbench, settings);
 		
-		swsplitpane  = new JSplitPane(JSplitPane.VERTICAL_SPLIT, cwpane, smpane);
-		swsplitpane.setDividerLocation((int)(inihloc)/2);
-		swsplitpane.setOneTouchExpandable(true);
-		
 		splitpane.setDividerLocation(iniwloc);
-		eastsplitpane.setDividerLocation((int)(inihloc)/2);	
-		westsplitpane.setDividerLocation((int)(inihloc)/6);
+		
+		BigDecimal locbd = new BigDecimal(inihloc/1.75);
+		eastsplitpane.setDividerLocation(locbd.intValue());	
+		westsplitpane.setDividerLocation(locbd.intValue());
 		
 		// If we are hiding the imported codewords, select the first one that is editable
 		changeComponentView();
@@ -146,21 +142,19 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		codearea.HighlightOccurances(true);
 	}
 
-	public void showModelAnnotator() {
-		ModelAnnotationEditor modelmetadataeditor = new ModelAnnotationEditor(workbench);
-		annotatorscrollpane.setViewportView(modelmetadataeditor);
-	}
 	
 	private void changeComponentView() {
 		if (settings.useTreeView()) {
 			toolbar.enableSort(false);
-			westsplitpane.setBottomComponent(treeviewscrollpane);
+			westsplitpane.setTopComponent(treeviewscrollpane);
+			westsplitpane.setBottomComponent(null);
 		}
 		else {
 			cwpane.update();
 			smpane.update();
 			toolbar.enableSort(true);
-			westsplitpane.setBottomComponent(swsplitpane);
+			westsplitpane.setTopComponent(cwpane);
+			westsplitpane.setBottomComponent(smpane);
 		}
 	}
 	
@@ -236,13 +230,14 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
+	public void requestEditModelLevelMetadata() {
+		new ModelLevelMetadataDialog(workbench);
+	}
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg0==workbench) {
-			if (arg1 == ModelAnnotationsBench.ModelChangeEnum.METADATASELECTED) {
-				showModelAnnotator();
-				return;
-			}
+			
 			if (arg1 == WBEvent.IMPORT_FREETEXT) {
 				if (annotatorpane!=null) {
 					annotatorpane.setFreeText(codearea.getHighlightedText());

@@ -14,8 +14,6 @@ import org.semanticweb.owlapi.model.IRI;
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -83,7 +81,7 @@ import semsim.utilities.SemSimCopy;
  */
 
 public class SemSimModel extends SemSimCollection implements Annotatable  {
-	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "legacyCodeURI");
+	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "legacyCodeURI");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
 	
 	private String namespace;
@@ -93,7 +91,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	// Model-specific data
 	private Set<Annotation> annotations = new HashSet<Annotation>();
-	private CurationalMetadata metadata = new CurationalMetadata();
 	private Set<String> errors = new HashSet<String>();
 	
 	// Computational model components
@@ -135,28 +132,11 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		
 		sourceModelType = ssmtocopy.sourceModelType;
 		semsimversion = ssmtocopy.semsimversion;
-		importCurationalMetadatafromModel(ssmtocopy, true);
 		annotations = SemSimCopy.copyAnnotations(ssmtocopy.annotations);
 		physicalproperties.addAll(ssmtocopy.physicalproperties);
 		associatephysicalproperties.addAll(ssmtocopy.associatephysicalproperties);
 		
 		new SemSimCopy(ssmtocopy, this);
-	}
-	
-	
-	/** @return The {@link CurationalMetadata} associated with the model */
-	public CurationalMetadata getCurationalMetadata() {
-		return metadata;
-	}
-	
-	
-	/**
-	 * Copy curational metadata from one model into this model
-	 * @param toimport The model to copy info from
-	 * @param overwrite Whether to overwrite existing Metadata assignments in this model
-	 */
-	public void importCurationalMetadatafromModel(SemSimModel toimport, boolean overwrite) {
-		metadata.importMetadata(toimport.metadata, overwrite);
 	}
 	
 	
@@ -894,7 +874,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/** @return A new SemSim model namespace from the current date and time */
 	public String generateNamespaceFromDateAndTime(){
-		namespace = RDFNamespace.SEMSIM.getNamespaceasString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
+		namespace = RDFNamespace.SEMSIM.getNamespaceAsString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
 		return namespace;
 	}
 
@@ -1115,14 +1095,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		annotations.add(ann);
 	}
 	
-	/**
-	 * Add a SemSim {@link Annotation} to the model
-	 * @param metaID The metadata property to use in the annotation
-	 * @param value The value for the annotation
-	 */
-	public void setModelAnnotation(Metadata metaID, String value) {
-		metadata.setAnnotationValue(metaID, value);
-	}
 	
 	@Override
 	/**
@@ -1165,6 +1137,14 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return !getAnnotations().isEmpty();
 	}
 
+	
+	/**
+	 * Delete all {@link Annotation}s applied to this object
+	 */
+	public void removeAllAnnotations() {
+		annotations.clear();
+	}
+	
 	@Override
 	/**
 	 * Delete all {@link ReferenceOntologyAnnotation}s applied to this object
@@ -1178,6 +1158,16 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		annotations.addAll(newset);
 	}
 	
+	
+	/**
+	 * Remove a model-level annotation
+	 * @param ann The annotation to remove
+	 */
+	public void removeAnnotation(Annotation ann){
+		this.getAnnotations().remove(ann);
+	}
+	
+	
 	//Required by Annotatable
 	@Override
 	public Boolean hasPhysicalDefinitionAnnotation() {
@@ -1185,14 +1175,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 		
 	// End of methods required by Annotatable interface	
-
-	@Override
-	public String getDescription() {
-		return metadata.getAnnotationValue(Metadata.description);
-	}
-	@Override
-	public void setDescription(String value) {
-		metadata.setAnnotationValue(Metadata.description, value);
+	
+	public String getFirstAnnotationObjectForRelationAsString(Relation rel){
+		for(Annotation ann : getAnnotations()){
+			if(ann.getRelation()==rel) return ann.getValue().toString();
+		}
+		return "";
 	}
 	
 	

@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.jdom.JDOMException;
 import org.junit.Test;
 
-import semsim.annotation.CurationalMetadata.Metadata;
+import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.CellMLreader;
@@ -46,7 +46,7 @@ public class CellMLReaderUnitTests extends UnitTestBase {
 		try {
 			model = reader.read();	
 			// Look for the pubmed id
-			String pubmedid = model.getCurationalMetadata().getAnnotationValue(Metadata.pubmedid);
+			String pubmedid = model.getFirstAnnotationObjectForRelationAsString(SemSimRelation.BQM_IS_DESCRIBED_BY);
 			assertTrue("Verify the expected annotation is present", pubmedid.equals("11865019"));
 		} catch (IOException | JDOMException e) {
 			// TODO Auto-generated catch block

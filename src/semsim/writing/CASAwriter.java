@@ -48,14 +48,41 @@ public class CASAwriter extends AbstractRDFwriter{
 	 */
 	protected void initialize(SemSimModel model) {
 		// Add namespaces here
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
 	}
 	
 	@Override
 	protected void setRDFforModelLevelAnnotations() {
-		//TODO:
+		
+		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
+			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+		Resource modelresource = rdf.createResource(xmlbase + metaid);
+
+		// Save model description
+		if(semsimmodel.hasDescription()){
+			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
+			Statement st = rdf.createStatement(modelresource, prop, semsimmodel.getDescription());
+			addStatement(st);
+		}
+		
+		
+		// Add the other annotations
+		for(Annotation ann : semsimmodel.getAnnotations()){
+			
+			Statement st;
+			
+			if(ann instanceof ReferenceOntologyAnnotation){
+				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), rdf.createResource(refann.getReferenceURI().toString()));
+			}
+			else st = rdf.createStatement(modelresource, ann.getRelation().getRDFproperty(), ann.getValue().toString());
+			
+			if(st!=null) addStatement(st);
+		}
 	}
 	
 	

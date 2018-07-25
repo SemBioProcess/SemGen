@@ -53,7 +53,6 @@ import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;
@@ -219,8 +218,20 @@ public class SBMLreader extends ModelReader{
 		
 		collectSBaseData(sbmlmodel, semsimmodel);
 		semsimmodel.setName(sbmlmodel.getId());
-		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
-		rdfreader.getModelLevelAnnotations();	
+		rdfreader.getModelLevelAnnotations();	// This retrieves any model-level info in SemGen-generated RDF within the SBML file
+		
+		// Retrieve model-level annotations not encoded in the SemGen-generated RDF (e.g. curational annotations from BioModels)
+		for(int m=0;m<sbmlmodel.getNumCVTerms();m++){
+			CVTerm cv = sbmlmodel.getCVTerm(m);
+			
+			for(int i=0; i<cv.getNumResources(); i++){
+				String obj = cv.getResourceURI(i);
+				Qualifier qual = cv.getQualifier();
+				Relation rel = qual.isBiologicalQualifier() ? SemSimRelations.getRelationFromBiologicalQualifier(qual) :
+					SemSimRelations.getRelationFromModelQualifier(qual);
+				semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj), "", sslib);
+			}
+		}
 	}
 	
 	
@@ -1404,11 +1415,11 @@ public class SBMLreader extends ModelReader{
 			if(term.getQualifierType()==CVTerm.Type.MODEL_QUALIFIER){
 				Qualifier q = term.getModelQualifierType();
 
-				if(SemSimRelations.getModelQualifierRelation(q)!= SemSimRelation.UNKNOWN){
+				if(SemSimRelations.getRelationFromModelQualifier(q)!= SemSimRelation.UNKNOWN){
 					
 					for(int h=0; h<term.getNumResources(); h++){
 						String uri = term.getResourceURI(h);
-						Relation relation = (q==Qualifier.BQM_IS) ? SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getModelQualifierRelation(q);
+						Relation relation = (q==Qualifier.BQM_IS) ? SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getRelationFromModelQualifier(q);
 						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri, sslib));
 
 					}
