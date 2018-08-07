@@ -39,6 +39,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
         if (this.submodelVizSize >= 200) {
             var cont = confirm("This Submodel visualization contains " + this.submodelVizSize + " nodes. Visualization may take longer to load.");
             if (!cont) {
+                graph.delayfixonupdate = false;
                 return;
             }
         }
@@ -58,6 +59,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
         if (physiomapVizSize >= 200) {
             var cont = confirm("This PhysioMap visualization contains " + physiomapVizSize + " nodes. Visualization may take longer to load.");
             if (!cont) {
+                graph.delayfixonupdate = false;
                 return;
             }
         }
@@ -78,6 +80,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
         if (this.dependencyVizSize >= 200) {
             var cont = confirm("This Dependency visualization contains "+ this.dependencyVizSize + " nodes. Visualization may take longer to load.");
             if (!cont) {
+                graph.delayfixonupdate = false;
                 return;
             }
         }
