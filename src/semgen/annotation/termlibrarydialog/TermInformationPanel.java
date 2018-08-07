@@ -138,7 +138,7 @@ public class TermInformationPanel extends JPanel {
 	}
 	
 	private String describeProcess() {
-		return library.listParticipants(selection);
+		return library.listProcessParticipants(selection);
 	}
 	
 	private String describeCompositeEntity() {

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Observable;
+import java.util.Set;
 
 import semgen.SemGen;
 import semsim.annotation.ReferenceOntologyAnnotation;
@@ -18,6 +19,7 @@ import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -363,6 +365,10 @@ public class SemSimTermLibrary extends Observable {
 		public PhysicalProcess getPhysicalProcess(Integer index) {
 			return (PhysicalProcess)masterlist.get(index).getObject();
 		}
+		
+		public PhysicalForce getPhysicalForce(Integer index) {
+			return (PhysicalForce)masterlist.get(index).getObject();
+		}
 			
 		public Integer getPhysicalProcessIndexByName(PhysicalProcess process) {
 			for (Integer i : procindexer) {
@@ -562,6 +568,28 @@ public class SemSimTermLibrary extends Observable {
 		return getIndexMultiplierMap(process.getSinks());
 	}
 	
+	public Set<Integer> getIndiciesOfForceSources(Integer forceindex){
+		PhysicalForce force = getPhysicalForce(forceindex);
+		
+		Set<Integer> tempset = new HashSet<Integer>();
+		
+		for(PhysicalEntity source : force.getSources()) 
+			tempset.add(this.getComponentIndex(source, false));
+		
+		return tempset;
+	}
+	
+	public Set<Integer> getIndiciesOfForceSinks(Integer forceindex){
+		PhysicalForce force = getPhysicalForce(forceindex);
+		
+		Set<Integer> tempset = new HashSet<Integer>();
+		
+		for(PhysicalEntity source : force.getSinks()) 
+			tempset.add(this.getComponentIndex(source, false));
+		
+		return tempset;
+	}
+	
 	public ArrayList<Integer> getProcessMediatorIndicies(Integer index) {
 		PhysicalProcess process = getPhysicalProcess(index);
 		ArrayList<Integer> mediators = new ArrayList<Integer>();
@@ -589,7 +617,7 @@ public class SemSimTermLibrary extends Observable {
 		return map.get(partindex);
 	}
 	
-	public String listParticipants(Integer proc) {		
+	public String listProcessParticipants(Integer proc) {		
 		if (proc==-1) return "";
 		String pstring = "<html><body>";
 		
@@ -605,6 +633,21 @@ public class SemSimTermLibrary extends Observable {
 		}
 		for(int mediator : getProcessMediatorIndicies(proc)){
 			pstring = pstring + "<b>Mediator:</b> " + getComponentName(mediator) + "<br>";
+		}
+		
+		return pstring + "</body></html>";
+	}
+	
+	
+	public String listForceParticipants(Integer force) {		
+		if (force==-1) return "";
+		String pstring = "<html><body>";
+		
+		for(int source : getIndiciesOfForceSources(force)){
+			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
+		}
+		for(int sink : getIndiciesOfForceSinks(force)) {
+			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
 		}
 		
 		return pstring + "</body></html>";

@@ -89,6 +89,16 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		addEraseButton();
 	}
 	
+	
+	// TODO: make an anonymous force? or disable combobox?
+	// Then link to source/sink selector
+	public void makeForceSelector(){
+		combobox.setFont(SemGenFont.defaultItalic());
+		addCustomButtons();
+		createlabel.setVisible(false);
+		addEraseButton();
+	}
+	
 	public void constructSelector() {
 		for (JComponent btn : lbllist) {
 			itempanel.add(btn);

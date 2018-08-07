@@ -33,10 +33,12 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalForce;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -103,6 +105,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
 	private Set<PhysicalPropertyInComposite> associatephysicalproperties = new HashSet<PhysicalPropertyInComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
+	private Set<PhysicalForce> physicalforces = new HashSet<PhysicalForce>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
 	
 	/** Constructor without namespace */
@@ -268,6 +271,23 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		
 		return custompp;
 	}
+	
+	
+	/**
+	 * Add a new {@link CustomPhysicalForce} to the model. 
+	 * @param custompf The CustomPhysicalForce to add
+	 * @return If an equivalent {@link CustomPhysicalForce} already exists in the model,
+	 * that object is returned, otherwise, the input {@link CustomPhysicalForce} is returned.
+	 */
+	public CustomPhysicalForce addCustomPhysicalForce(CustomPhysicalForce custompf){
+		
+		if(getCustomPhysicalForceByName(custompf.getName())!=null) custompf = getCustomPhysicalForceByName(custompf.getName());
+		else physicalforces.add(custompf);
+		
+		return custompf;
+	}
+	
+	
 	
 	
 	/**
@@ -787,6 +807,24 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
+	
+	/**
+	 * @param name The name of CustomPhysicalForce to return
+	 * @return The CustomPhysicalForce with the specified name or null if no match was found.
+	 */
+	public CustomPhysicalForce getCustomPhysicalForceByName(String name){
+		
+		for(PhysicalForce force : getPhysicalForces()){
+			
+			if(!force.hasPhysicalDefinitionAnnotation()){
+				if(force.getName().equals(name)) return (CustomPhysicalForce)force;
+			}
+		}
+		return null;
+	}
+	
+	
+	
 	/**
 	 * @param nametomatch The name of the DataStructure to return
 	 * @return The solution domain DataStructure with the specified name or null if no DataStructure that 
@@ -918,6 +956,25 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		return refprocs;
 	}
 	
+	
+	/**
+	 * Specify the set of PhysicalForces in the model.
+	 * @param physicalforces The new set of PhysicalForces to include
+	 */
+	public void setPhysicalForces(Set<PhysicalForce> physicalforces) {
+		this.physicalforces.clear();
+		this.physicalforces.addAll(physicalforces);
+	}
+	
+	/** @return All {@link PhysicalForce}s in the model. */
+	public Set<PhysicalForce> getPhysicalForces() {
+		return physicalforces;
+	}
+	
+	
+	
+	
+	
 	/** @return The location of the raw computer source code associated with this model. */
 	
 	public ModelAccessor getLegacyCodeLocation() {
@@ -1037,6 +1094,17 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		if(physicalprocesses.contains(ent))
 			physicalprocesses.remove(ent);
 	}
+
+	
+	/**
+	 * Remove a physical force from the model cache
+	 * @param force The physical force to remove
+	 */
+	public void removePhysicalForceFromCache(PhysicalForce force){
+		if(physicalforces.contains(force))
+			physicalforces.remove(force);
+	}
+	
 	
 	
 	/**

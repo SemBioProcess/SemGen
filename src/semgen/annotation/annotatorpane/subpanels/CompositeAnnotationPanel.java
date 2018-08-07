@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -35,12 +36,14 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private int indent = 15;
 	private JButton addentbutton = new JButton("Add entity");
 	private JButton addprocbutton = new JButton("Add process");
+	private JButton addforcebutton = new JButton("Add force");
 	private JEditorPane ptextpane;
 
 	private PropertySelectorPanel propsel;
 	private EntitySelectorGroup esg;
 	private Box pmcpanel;
-	private ProcessSelectorPanel pcp;
+	private ProcessSelectorPanel psp;
+	private ForceSelectorPanel fsp;
 	
 	public CompositeAnnotationPanel(SemSimTermLibrary lib, CodewordToolDrawer bench, SemGenSettings sets, int orientation){
 		super(orientation);
@@ -55,6 +58,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		addentbutton.addActionListener(this);
 		addprocbutton.addActionListener(this);
+		addforcebutton.addActionListener(this);
 		
 		validate();
 	}
@@ -90,9 +94,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		addentbutton.setEnabled(drawer.isEditable());
 		addprocbutton.setEnabled(drawer.isEditable());
+		addforcebutton.setEnabled(drawer.isEditable());
 		
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
+		btnbox.add(addforcebutton);
 		btnbox.add(Box.createHorizontalGlue());
 		pmcpanel = btnbox;
 		btnbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
@@ -104,30 +110,64 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		if (esg!=null) esg = null;
 		Box procbox = new Box(BoxLayout.Y_AXIS);
 		procbox.setAlignmentX(Box.LEFT_ALIGNMENT);
-		pcp = new ProcessSelectorPanel(!drawer.isEditable());
+		psp = new ProcessSelectorPanel(!drawer.isEditable());
 
-		pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
+		psp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
 		
-		ptextpane = new JEditorPane("text/html",listParticipants());
+		ptextpane = new JEditorPane("text/html",listProcessParticipants());
 		ptextpane.setEditable(false);
 		ptextpane.setOpaque(false);
 		ptextpane.setBackground(new Color(0,0,0,0));
 		ptextpane.setFont(SemGenFont.defaultPlain(-2));
 		ptextpane.setBorder(BorderFactory.createEmptyBorder(3, 30, 3, 0));
 		
-		procbox.add(pcp);
+		procbox.add(psp);
 		procbox.add(ptextpane, BorderLayout.SOUTH);
 		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
 		pmcpanel = procbox;
 		add(pmcpanel);
 	}
 	
-	private void showProcessParticipants() {
-		ptextpane.setText(listParticipants());
+	
+	private void setForceSelector() {
+		if (pmcpanel!=null) remove(pmcpanel);
+		if (esg!=null) esg = null;
+		Box procbox = new Box(BoxLayout.Y_AXIS);
+		procbox.setAlignmentX(Box.LEFT_ALIGNMENT);
+		fsp = new ForceSelectorPanel(!drawer.isEditable());
+
+		ArrayList<Integer> templist = new ArrayList<Integer>();
+		fsp.setComboList(templist, -1);
+		
+		ptextpane = new JEditorPane("text/html",listForceParticipants());
+		ptextpane.setEditable(false);
+		ptextpane.setOpaque(false);
+		ptextpane.setBackground(new Color(0,0,0,0));
+		ptextpane.setFont(SemGenFont.defaultPlain(-2));
+		ptextpane.setBorder(BorderFactory.createEmptyBorder(3, 30, 3, 0));
+		
+		procbox.add(fsp);
+		procbox.add(ptextpane, BorderLayout.SOUTH);
+		procbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
+		pmcpanel = procbox;
+		add(pmcpanel);
 	}
 	
-	private String listParticipants() {
-		return termlib.listParticipants(drawer.getIndexofModelComponent());
+	
+	private void showProcessParticipants() {
+		ptextpane.setText(listProcessParticipants());
+	}
+	
+	private void showForceParticipants(){
+		ptextpane.setText(listForceParticipants());
+	}
+	
+	private String listProcessParticipants() {
+		return termlib.listProcessParticipants(drawer.getIndexofModelComponent());
+	}
+	
+	private String listForceParticipants(){
+		return termlib.listForceParticipants(drawer.getIndexofModelComponent());
 	}
 	
 	private void setCompositeSelector() {
@@ -166,6 +206,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		if (obj==addprocbutton) {
 			setProcessSelector();
 		}
+		if (obj==addforcebutton) {
+			setForceSelector();
+		}
 	}
 	
 	public void onTermUpdate(Object evt) {
@@ -178,9 +221,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		else if (evt.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) && esg!=null) {
 			esg.drawBox(true);
 		}
-		else if (pcp!=null && evt.equals(LibraryEvent.PROCESS_CHANGE)|| evt.equals(LibraryEvent.TERM_CHANGE)) {
-			pcp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
-			listParticipants();
+		else if (psp!=null && evt.equals(LibraryEvent.PROCESS_CHANGE)|| evt.equals(LibraryEvent.TERM_CHANGE)) {
+			psp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexofModelComponent());
+			listProcessParticipants();
 		}
 	}
 	
@@ -284,6 +327,57 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			}
 		}
 	}
+	
+	
+	
+	@SuppressWarnings("serial")
+	private class ForceSelectorPanel extends AnnotationChooserPanel {
+		protected ForceSelectorPanel(boolean isstatic) {
+			super(termlib);
+			if (isstatic) {
+				makeStaticPanel(drawer.getIndexofModelComponent());
+			}
+			else makeForceSelector();
+			constructSelector();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource()==combobox) {
+				drawer.setDataStructureComposite(getSelection());
+				toggleNoneSelected(getSelection() == -1);
+				showForceParticipants();
+				if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
+			}
+		}
+
+		@Override
+		public void searchButtonClicked() {}
+
+		@Override
+		public void createButtonClicked() {
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeProcessTerm(termlib);
+			createTerm(ctd.getSelection());
+		}
+
+		@Override
+		public void modifyButtonClicked() {
+			CustomTermDialog ctd = new CustomTermDialog();
+			ctd.makeProcessTerm(termlib, getSelection());
+			showProcessParticipants();
+		}
+			
+		private void createTerm(int procindex) {
+			if (procindex != -1) {
+				setSelection(procindex);
+			}
+		}
+	}
+	
+	
+	
+	
 	
 	private class CodewordCompositeSelectors extends EntitySelectorGroup {
 		private static final long serialVersionUID = 1L;

@@ -32,6 +32,8 @@ public enum SemSimTypes {
 			"A physical process which is not defined against a reference term, but instead created and defined in an ad hoc manner within the model.", ""),
 	REFERENCE_PHYSICAL_PROCESS("Reference Physical Process", RDFNamespace.SEMSIM.getNamespaceAsString() + "Reference_physical_process",
 			"A reference term that defines a physical process simulated by the model.", "semsim:Reference_physical_process"),
+	CUSTOM_PHYSICAL_FORCE("Custom Physical Force", RDFNamespace.SEMSIM.getNamespaceAsString() + "Custom_physical_force",
+			"A physical force which is not defined against a reference term, but instead created and defined in an ad hoc manner within the model.", ""),	
 	PHYSICAL_PROCESS("Physical Process", RDFNamespace.SEMSIM.getNamespaceAsString() + "Physical_process","", ""),
 	DATASTRUCTURE("Data Structure", RDFNamespace.SEMSIM.getNamespaceAsString() + "Data_structure", "", ""),
 	DECIMAL("Decimal", RDFNamespace.SEMSIM.getNamespaceAsString() + "Decimal", "", "semsim:Decimal"),
