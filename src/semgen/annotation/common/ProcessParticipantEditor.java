@@ -30,7 +30,7 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 	private JButton createbutton = new JButton("Create");
 	private ProcessParticipantTableModel tablemodel;
 	private JTable table = new JTable(tablemodel);
-	private SemSimTermLibrary library;
+	protected SemSimTermLibrary library;
 	protected ArrayList<Integer> participants;
 	
 	public ProcessParticipantEditor(String name, SemSimTermLibrary lib) {

@@ -19,6 +19,7 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 	private Color constitutivecolor = new Color(255, 127, 14, 255);
 	private Color entitycolor = new Color(31, 119, 180);
 	private Color processcolor = new Color(63, 196, 63);
+	private Color forcecolor = Color.PINK;
 	
 	public CodewordButton(String name, boolean canedit, boolean showmarkers) {
 		super(name, canedit);
@@ -69,6 +70,10 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		else if(ptype == PropertyType.PropertyOfPhysicalProcess){
 			col = processcolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
+		}
+		else if(ptype == PropertyType.PropertyOfPhysicalForce){
+			col = forcecolor;
+			tooltip = "<html>Codeword identified as a property of a physical <i>force</i></html>";
 		}
 		else{
 			tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";

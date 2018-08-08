@@ -369,10 +369,10 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		}
 		if (arg1==ModelEdit.FREE_TEXT_CHANGED || arg1==ModelEdit.CODEWORD_CHANGED || arg1==ModelEdit.SUBMODEL_CHANGED
 				|| arg1==LibraryEvent.SINGULAR_TERM_CHANGE || arg1.equals(LibraryEvent.COMPOSITE_ENTITY_CHANGE) 
-				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(ModelChangeEnum.METADATACHANGED) 
-				|| arg1.equals(ModelChangeEnum.METADATAIMPORTED) || arg1.equals(ModelChangeEnum.SOURCECHANGED)
-				|| arg1.equals(ModelEdit.SMNAMECHANGED) || arg1.equals(ModelEdit.SM_DATASTRUCTURES_CHANGED)
-				|| arg1.equals(ModelEdit.SM_SUBMODELS_CHANGED)) {
+				|| arg1.equals(LibraryEvent.PROCESS_CHANGE) || arg1.equals(LibraryEvent.FORCE_CHANGE) 
+				|| arg1.equals(ModelChangeEnum.METADATACHANGED)	|| arg1.equals(ModelChangeEnum.METADATAIMPORTED) 
+				|| arg1.equals(ModelChangeEnum.SOURCECHANGED)
+				|| arg1.equals(ModelEdit.SMNAMECHANGED) || arg1.equals(ModelEdit.SM_DATASTRUCTURES_CHANGED) || arg1.equals(ModelEdit.SM_SUBMODELS_CHANGED)) {
 			setModelSaved(false);
 		}
 	}

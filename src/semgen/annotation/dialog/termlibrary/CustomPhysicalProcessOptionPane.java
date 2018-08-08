@@ -8,21 +8,20 @@ import javax.swing.event.TableModelListener;
 
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.ObjectPropertyEditor;
-import semgen.annotation.common.ProcessParticipantEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 
-public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane implements TableModelListener {
+public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPane implements TableModelListener {
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<ParticipantEditor> editors;
 	
-	public CustomPhysicalProcessPanel(SemSimTermLibrary lib) {
+	public CustomPhysicalProcessOptionPane(SemSimTermLibrary lib) {
 		super(lib);
 	}
 	
-	public CustomPhysicalProcessPanel(SemSimTermLibrary lib, int processindex) {
+	public CustomPhysicalProcessOptionPane(SemSimTermLibrary lib, int processindex) {
 		super(lib, processindex);
 		
 	}
@@ -32,15 +31,15 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 		editors = new ArrayList<ParticipantEditor>();
 		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimRelation.BQB_IS_VERSION_OF);
 		objecteditors.add(new ProcessEditor(library, SemSimRelation.BQB_IS_VERSION_OF, versionrels));
-		editors.add(new ParticipantEditor("Source Participants", library));
-		editors.add(new ParticipantEditor("Sink Participants", library));
-		editors.add(new ParticipantEditor("Mediator Participants", library));
+		editors.add(new ParticipantEditor("Source Participants", library, this));
+		editors.add(new ParticipantEditor("Sink Participants", library, this));
+		editors.add(new ParticipantEditor("Mediator Participants", library, this));
 		
 		
-		setParticipants();
+		setParticipantTableData();
 	}
 	
-	protected void setParticipants() {
+	protected void setParticipantTableData() {
 		if (termindex!=-1) {
 			editors.get(0).setTableData(library.getProcessSourcesIndexMultiplierMap(termindex));
 			editors.get(1).setTableData(library.getProcessSinksIndexMultiplierMap(termindex));
@@ -57,6 +56,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 		}
 	}
 	
+	@Override
 	public String getTitle() {
 		if (termindex==-1) return "Create Custom Physical Process";
 		return "Edit " + library.getComponentName(termindex);
@@ -94,7 +94,7 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 		}
 	}
 	
-	private class ProcessEditor extends ObjectPropertyEditor {
+	public class ProcessEditor extends ObjectPropertyEditor {
 		private static final long serialVersionUID = 1L;
 
 		public ProcessEditor(SemSimTermLibrary lib, SemSimRelation rel, ArrayList<Integer> complist) {
@@ -118,53 +118,12 @@ public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane im
 		}
 	}
 	
-	private class ParticipantEditor extends ProcessParticipantEditor {
-		private static final long serialVersionUID = 1L;
-
-		public ParticipantEditor(String name, SemSimTermLibrary lib) {
-			super(name, lib);
-			
-		}
-
-		@Override
-		public void addParticipant() {
-			ArrayList<Integer> cpes = library.getSortedCompositePhysicalEntityIndicies();
-			ArrayList<Integer> preselect = new ArrayList<Integer>();
-			
-			for (Integer i : getParticipants()) {
-				preselect.add(cpes.indexOf(i));
-			}
-			
-			String dialogname = "Add participants to " + mantextfield.getText();
-			SemSimComponentSelectionDialog seldialog = new SemSimComponentSelectionDialog(dialogname, library.getComponentNames(cpes), preselect);
-			if (seldialog.isConfirmed()) {
-				preselect = seldialog.getSelections();
-				ArrayList<Integer> newsels = new ArrayList<Integer>();
-				for (Integer i : preselect) {
-					newsels.add(cpes.get(i));
-				}
-				//Remove components that are no longer selected
-				for (Integer p : new ArrayList<Integer>(participants)) {
-					if (!newsels.contains(p)) {
-						removeParticipant(p);
-					}
-				}
-				//Add new participants
-				for (Integer p : newsels) {
-					if (!participants.contains(p)) {
-						addParticipant(p);
-					}
-				}
-			}
-
-		}	
-	}
 	
-		@Override
-		public void tableChanged(TableModelEvent arg0) {
-			if (termindex!=-1) {
-				createbtn.setEnabled(true);
-			}
+	@Override
+	public void tableChanged(TableModelEvent arg0) {
+		if (termindex!=-1) {
+			createbtn.setEnabled(true);
 		}
+	}
 		
 }

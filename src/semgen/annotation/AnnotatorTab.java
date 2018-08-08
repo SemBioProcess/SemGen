@@ -120,9 +120,11 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		
 		splitpane.setDividerLocation(iniwloc);
 		
-		BigDecimal locbd = new BigDecimal(inihloc/1.75);
-		eastsplitpane.setDividerLocation(locbd.intValue());	
-		westsplitpane.setDividerLocation(locbd.intValue());
+		BigDecimal locbdeast = new BigDecimal(inihloc/2);
+		BigDecimal locbdwest = new BigDecimal(inihloc/1.5);
+
+		eastsplitpane.setDividerLocation(locbdeast.intValue());	
+		westsplitpane.setDividerLocation(locbdwest.intValue());
 		
 		// If we are hiding the imported codewords, select the first one that is editable
 		changeComponentView();

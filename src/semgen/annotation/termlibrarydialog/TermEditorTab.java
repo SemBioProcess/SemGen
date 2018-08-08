@@ -151,7 +151,7 @@ public class TermEditorTab extends JPanel implements ListSelectionListener, Obse
 		
 		String[] names = new String[types.length];
 		for (int i = 0; i<types.length; i++) {
-			names[i] = types[i].getName() + " (" + library.countObjectofType(types[i]) + ")";
+			names[i] = types[i].getName() + " (" + library.countObjectOfType(types[i]) + ")";
 		}
 		typechooser.setListData(names);
 		if (seli!=-1) typechooser.setSelectedIndex(seli);

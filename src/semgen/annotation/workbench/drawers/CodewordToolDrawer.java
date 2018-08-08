@@ -203,7 +203,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	
 	public boolean isProcess() {
 		PhysicalPropertyInComposite pp = getFocusAssociatedProperty();
-		if (pp == null && !hasPhysicalModelComponent()) return false; 
+		if (pp == null && ! hasPhysicalModelComponent()) return false; 
 		if (pp==null) {
 			return getPhysicalCompositeType().equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) || 
 					getPhysicalCompositeType().equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS);
@@ -211,7 +211,19 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		
 		return SemGen.semsimlib.isOPBprocessProperty(pp.getPhysicalDefinitionURI());
 	}
+	
+	
+	public boolean isForce() {
+		PhysicalPropertyInComposite pp = getFocusAssociatedProperty();
+		if (pp == null && ! hasPhysicalModelComponent()) return false; 
+		if (pp==null) {
+			return getPhysicalCompositeType().equals(SemSimTypes.CUSTOM_PHYSICAL_FORCE);
+		}
+		
+		return SemGen.semsimlib.isOPBforceProperty(pp.getPhysicalDefinitionURI());
+	}
 
+	
 	public void copyToMappedVariables() {
 		MappableVariable thevar = (MappableVariable)getFocus();
 		
@@ -252,12 +264,12 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		changeNotification(ModelEdit.PROPERTY_CHANGED);
 	}
 	
-	public void setDatastructurePhysicalProperty(Integer index) {
+	public void setDataStructurePhysicalProperty(Integer index) {
 		setDataStructurePhysicalProperty(currentfocus, index);
 		changeNotification(ModelEdit.PROPERTY_CHANGED);
 	}
 	
-	private void setDataStructureComposite(Integer cwindex, Integer compindex) {
+	private void setDataStructureAssociatedPhysicalComponent(Integer cwindex, Integer compindex) {
 		DataStructure ds = componentlist.get(cwindex);
 		//If the new selection is equivalent to the old, do nothing
 		if ((termlib.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true)==compindex)) {
@@ -272,16 +284,16 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		changeset.add(cwindex);
 	}
 	
-	public void setDataStructureComposite(Integer index) {
-		if (currentfocus==-1) return; 
-		setDataStructureComposite(currentfocus, index);
+	public void setDataStructureAssociatedPhysicalComponent(Integer index) {
+		if (currentfocus == -1) return; 
+		setDataStructureAssociatedPhysicalComponent(currentfocus, index);
 		
 		changeNotification(ModelEdit.COMPOSITE_CHANGED);
 	}
 	
-	public void batchSetAssociatedComposite(ArrayList<Integer> cws, int selectedIndex) {
+	public void batchSetAssociatedPhysicalComponent(ArrayList<Integer> cws, int selectedIndex) {
 		for (Integer i : cws) {
-			this.setDataStructureComposite(i, selectedIndex);
+			setDataStructureAssociatedPhysicalComponent(i, selectedIndex);
 		}
 		changeNotification();
 	}
@@ -332,7 +344,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		return getFocus().isImportedViaSubmodel();
 	}
 	
-	public int getIndexofModelComponent() {
+	public int getIndexOfAssociatedPhysicalModelComponent() {
 		return termlib.getComponentIndex(getFocus().getAssociatedPhysicalModelComponent(), true);
 	}
 	
@@ -388,11 +400,16 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	public boolean checkPropertyPMCCompatibility(Integer index) {
-		if (index==-1) return true;
-		boolean isproc = SemGen.semsimlib.isOPBprocessProperty(termlib.getReferenceComponentURI(index));
+		if (index == -1) return true;
+		boolean isprocess = SemGen.semsimlib.isOPBprocessProperty(termlib.getReferenceComponentURI(index));
+		boolean isforce = SemGen.semsimlib.isOPBforceProperty(termlib.getReferenceComponentURI(index));
+		boolean issomethingelse = ! isprocess && ! isforce;
 		SemSimTypes type = getPhysicalCompositeType();
-		if (!hasPhysicalModelComponent() || (isproc && type.equals(SemSimTypes.PHYSICAL_PROCESS) || 
-				(!isproc && type.equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)))) {
+		
+		if ( ! hasPhysicalModelComponent() || 
+				(isprocess && type.equals(SemSimTypes.PHYSICAL_PROCESS) || 
+				(isforce && type.equals(SemSimTypes.CUSTOM_PHYSICAL_FORCE)) ||
+				( issomethingelse && type.equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)))) {
 			return true;
 		}
 		return false;

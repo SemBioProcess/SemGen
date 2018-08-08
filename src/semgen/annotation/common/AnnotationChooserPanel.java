@@ -55,6 +55,11 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		setMaximumSize(choosedim);
 	}
 	
+	
+	public JComboBox<String> getComboBox(){
+		return combobox;
+	}
+	
 	public void makeStaticPanel(int selection) {
 		combobox.setEnabled(false);
 		String ppname;
@@ -90,12 +95,11 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	
-	// TODO: make an anonymous force? or disable combobox?
-	// Then link to source/sink selector
 	public void makeForceSelector(){
 		combobox.setFont(SemGenFont.defaultItalic());
 		addCustomButtons();
 		createlabel.setVisible(false);
+		combobox.setEnabled(false);
 		addEraseButton();
 	}
 	
@@ -201,13 +205,13 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		setSelection(selection);
 		
 		toggleNoneSelected(selection == -1);
-		if (modifylabel!=null && selection != -1) toggleCustom(!library.isReferenceTerm(selection));
+		if (modifylabel != null && selection != -1) toggleCustom( ! library.isReferenceTerm(selection));
 		combobox.addActionListener(this);
 		
 		combobox.repaint();
 	}
 	
-	private void setLibraryIndicies(ArrayList<Integer> peidlist) {
+	public void setLibraryIndicies(ArrayList<Integer> peidlist) {
 		comboindicies = new ArrayList<Integer>();
 		comboindicies.add(-1);
 		comboindicies.addAll(peidlist);

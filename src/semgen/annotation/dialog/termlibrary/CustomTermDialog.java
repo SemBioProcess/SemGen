@@ -14,25 +14,32 @@ public class CustomTermDialog extends SemGenDialog {
 		
 	}
 
-	public void makeEntityTerm(SemSimTermLibrary lib) {
+	public void setAsEntityTermDialog(SemSimTermLibrary lib) {
 		custompane = new CustomEntityPane(lib);
 		makeDialog();
 	}
 	
-	public void makeEntityTerm(SemSimTermLibrary lib, int termindex) {
+	public void setAsEntityTermDialog(SemSimTermLibrary lib, int termindex) {
 		custompane = new CustomEntityPane(lib, termindex);
 		makeDialog();
 	}
 
-	public void makeProcessTerm(SemSimTermLibrary lib) {
+	public void setAsProcessTermDialog(SemSimTermLibrary lib) {
 		custompane = new CustomProcessPane(lib);
 		makeDialog();
 	}
 	
-	public void makeProcessTerm(SemSimTermLibrary lib, int termindex) {
+	public void setAsProcessTermDialog(SemSimTermLibrary lib, int termindex) {
 		custompane = new CustomProcessPane(lib, termindex);
 		makeDialog();
 	}
+	
+	public void setAsForceTermDialog(SemSimTermLibrary lib, int termindex) {
+		custompane = new CustomForcePane(lib, termindex);
+		makeDialog();
+	}
+	
+	
 	
 	private void makeDialog() {
 		setTitle(custompane.getTitle());
@@ -44,6 +51,7 @@ public class CustomTermDialog extends SemGenDialog {
 		return custompane.getSelection();
 	}
 	
+	// If dealing with an entity
 	private class CustomEntityPane extends CustomTermOptionPane {
 		private static final long serialVersionUID = 1L;
 
@@ -70,7 +78,9 @@ public class CustomTermDialog extends SemGenDialog {
 		}
 	}
 	
-	private class CustomProcessPane extends CustomPhysicalProcessPanel {
+	
+	// If dealing with a process
+	private class CustomProcessPane extends CustomPhysicalProcessOptionPane {
 		private static final long serialVersionUID = 1L;
 
 		public CustomProcessPane(SemSimTermLibrary lib) {
@@ -92,6 +102,34 @@ public class CustomTermDialog extends SemGenDialog {
 			if (obj.equals(createbtn)) {
 				if (termindex!=-1) modifyTerm();
 				else createTerm();
+				dispose();
+			}
+		}
+	}
+	
+	
+	// If dealing with a force
+	private class CustomForcePane extends CustomPhysicalForceOptionPane {
+		private static final long serialVersionUID = 1L;
+
+//		public CustomForcePane(SemSimTermLibrary lib) {
+//			super(lib);
+//		}
+		
+		public CustomForcePane(SemSimTermLibrary lib, Integer libindex) {
+			super(lib, libindex);
+		}
+		
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			Object obj = arg0.getSource();
+			if (obj.equals(cancelbtn)) {
+				termindex = -1;
+				dispose();
+			}
+			if (obj.equals(createbtn)) {
+				modifyTerm();
 				dispose();
 			}
 		}

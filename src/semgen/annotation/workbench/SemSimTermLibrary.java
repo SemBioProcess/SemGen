@@ -24,6 +24,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalForce;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -48,10 +49,14 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<Integer> custpeindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> cpeindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
+	private ArrayList<Integer> forceindexer = new ArrayList<Integer>();
 	
 	private int refsearchtype = 0;
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
-	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE, PROCESS_CHANGE, TERM_CHANGE};
+	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE,
+		PROCESS_CHANGE,
+		FORCE_CHANGE,
+		TERM_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model) {
 		for (PhysicalPropertyInComposite pp : SemGen.semsimlib.getCommonProperties()) {
@@ -221,6 +226,18 @@ public class SemSimTermLibrary extends Observable {
 		return i;
 	}
 	
+	private int addPhysicalForce(PhysicalForce force) {
+		int i = getComponentIndex(force, false);
+		if (i != -1) return i; // do not add if already in master list
+		
+		IndexCard<PhysicalForce> ic = new IndexCard<PhysicalForce>(force);
+		masterlist.add(ic);
+		
+		i = masterlist.indexOf(ic);
+		forceindexer.add(i);
+		return i;
+	}
+	
 	public void modifyCustomPhysicalEntity(int index, String name, String description) {
 		CustomPhysicalEntity cpe = getCustomPhysicalEntity(index);
 		cpe.setName(name);
@@ -256,269 +273,272 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	// Retrieving physical properties
-		public PhysicalPropertyInComposite getAssociatePhysicalProperty(Integer index) {
-			return (PhysicalPropertyInComposite)masterlist.get(index).getObject();
+	public PhysicalPropertyInComposite getAssociatePhysicalProperty(Integer index) {
+		return (PhysicalPropertyInComposite)masterlist.get(index).getObject();
+	}
+	
+	public Integer getPhysicalPropertyIndex(PhysicalPropertyInComposite pp) {
+		for (Integer i : ppccompindexer) {
+			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
 		}
-		
-		public Integer getPhysicalPropertyIndex(PhysicalPropertyInComposite pp) {
+		return -1;
+	}
+	
+	public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
+		for (Integer i : singppindexer) {
+			if (masterlist.get(i).isTermEquivalent(pp)) return i; 
+		}
+		return -1;
+	}
+	
+	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
+		return sortComponentIndicesbyName(ppccompindexer);
+	}
+	
+	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(PropertyType type) {
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		switch (type) {
+		case PropertyOfPhysicalEntity:
 			for (Integer i : ppccompindexer) {
-				if (masterlist.get(i).isTermEquivalent(pp)) return i; 
+				URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
+				if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
+					results.add(i);
+				}
 			}
-			return -1;
-		}
-		
-		public Integer getPhysicalPropertyIndex(PhysicalProperty pp) {
-			for (Integer i : singppindexer) {
-				if (masterlist.get(i).isTermEquivalent(pp)) return i; 
+			break;
+		case PropertyOfPhysicalProcess:
+			for (Integer i : ppccompindexer) {
+				PhysicalPropertyInComposite ppc = (PhysicalPropertyInComposite)masterlist.get(i).getObject();
+				if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
+					results.add(i);
+				}
 			}
-			return -1;
+			break;
+		case Unknown:
+			break;
+		default:
+			break;
 		}
-		
-		public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
-			return sortComponentIndiciesbyName(ppccompindexer);
+		return sortComponentIndicesbyName(results);
+	}
+	
+	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
+		return sortComponentIndicesbyName(singppindexer);
+	}
+
+	public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
+		return (ReferencePhysicalEntity)masterlist.get(index).getObject();
+	}
+	
+	public ArrayList<Integer> getSortedReferencePhysicalEntityIndicies() {
+		return sortComponentIndicesbyName(rpeindexer);
+	}
+	
+	public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
+		for (Integer i : rpeindexer) {
+			if (masterlist.get(i).isTermEquivalent(rpe)) return i; 
 		}
+		return -1;
+	}
+
+	public CustomPhysicalEntity getCustomPhysicalEntity(Integer index) {
+		return (CustomPhysicalEntity)masterlist.get(index).getObject();
+	}
+
+	public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
+		for (Integer i : custpeindexer) {
+			if (masterlist.get(i).isTermEquivalent(cupe)) {
+				return i; 
+			}
+		}
+		return -1;
+	}
+	
+	public CompositePhysicalEntity getCompositePhysicalEntity(Integer index) {
+		return (CompositePhysicalEntity)masterlist.get(index).getObject();
+	}
+
+	public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
+		for (Integer i : cpeindexer) {
+			if (masterlist.get(i).isTermEquivalent(cpe)) return i; 
+		}
+		return -1;
+	}
+	
+	public ArrayList<Integer> getSortedSingularPhysicalEntityIndicies() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.addAll(custpeindexer);
+		list.addAll(rpeindexer);
 		
-		public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(PropertyType type) {
-			ArrayList<Integer> results = new ArrayList<Integer>();
+		return sortComponentIndicesbyName(list);
+	}
+	
+	public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
+		return sortComponentIndicesbyName(cpeindexer);
+	}
+	
+	// Retrieving physical processes
+	
+	public PhysicalProcess getPhysicalProcess(Integer index) {
+		return (PhysicalProcess)masterlist.get(index).getObject();
+	}
+	
+	public PhysicalForce getPhysicalForce(Integer index) {
+		return (PhysicalForce)masterlist.get(index).getObject();
+	}
+		
+	public Integer getPhysicalProcessIndexByName(PhysicalProcess process) {
+		for (Integer i : procindexer) {
+			if (masterlist.get(i).getName().equals(process.getName())) return i; 
+		}
+		return -1;
+	}
+	
+	public ArrayList<Integer> getSortedPhysicalProcessIndicies() {
+		return sortComponentIndicesbyName(procindexer);
+	}	
+	
+	public ArrayList<Integer> getSortedReferencePhysicalProcessIndicies() {
+		ArrayList<Integer> refprocs = new ArrayList<Integer>();
+		for (Integer i : procindexer) {
+			if (masterlist.get(i).isReferenceTerm()) refprocs.add(i);
+		}
+		return sortComponentIndicesbyName(refprocs);
+	}	
+	
+	public ArrayList<Integer> getAllReferenceTerms() {
+		ArrayList<Integer> refterms = new ArrayList<Integer>();
+		for (IndexCard<?> card : masterlist) {
+			if (card.isReferenceTerm()) {
+				refterms.add(masterlist.indexOf(card));
+			}
+		}
+		return refterms;
+	}
+	
+	public ArrayList<Integer> getRequestedTypes(SemSimTypes[] types) {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		for (SemSimTypes type : types) {
 			switch (type) {
-			case PropertyOfPhysicalEntity:
-				for (Integer i : ppccompindexer) {
-					URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
-					if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
-						results.add(i);
-					}
-				}
+			case COMPOSITE_PHYSICAL_ENTITY:
+				list.addAll(cpeindexer);
 				break;
-			case PropertyOfPhysicalProcess:
-				for (Integer i : ppccompindexer) {
-					PhysicalPropertyInComposite ppc = (PhysicalPropertyInComposite)masterlist.get(i).getObject();
-					if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
-						results.add(i);
-					}
-				}
+			case CUSTOM_PHYSICAL_ENTITY:
+				list.addAll(custpeindexer);
 				break;
-			case Unknown:
+			case PHYSICAL_PROCESS:
+				list.addAll(procindexer);
+				break;
+			case CUSTOM_PHYSICAL_FORCE:
+				list.addAll(forceindexer);
+				break;
+			case PHYSICAL_PROPERTY:
+				list.addAll(singppindexer);
+				break;
+			case PHYSICAL_PROPERTY_IN_COMPOSITE:
+				list.addAll(ppccompindexer);
+				break;
+			case REFERENCE_PHYSICAL_ENTITY:
+				list.addAll(rpeindexer);
 				break;
 			default:
 				break;
 			}
-			return sortComponentIndiciesbyName(results);
 		}
-		
-		public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
-			return sortComponentIndiciesbyName(singppindexer);
-		}
-
-		public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
-			return (ReferencePhysicalEntity)masterlist.get(index).getObject();
-		}
-		
-		public ArrayList<Integer> getSortedReferencePhysicalEntityIndicies() {
-			return sortComponentIndiciesbyName(rpeindexer);
-		}
-		
-		public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
-			for (Integer i : rpeindexer) {
-				if (masterlist.get(i).isTermEquivalent(rpe)) return i; 
-			}
-			return -1;
-		}
-
-		public CustomPhysicalEntity getCustomPhysicalEntity(Integer index) {
-			return (CustomPhysicalEntity)masterlist.get(index).getObject();
-		}
-
-		public int getIndexofCustomPhysicalEntity(CustomPhysicalEntity cupe) {
-			for (Integer i : custpeindexer) {
-				if (masterlist.get(i).isTermEquivalent(cupe)) {
-					return i; 
-				}
-			}
-			return -1;
-		}
-		
-		public CompositePhysicalEntity getCompositePhysicalEntity(Integer index) {
-			return (CompositePhysicalEntity)masterlist.get(index).getObject();
-		}
-
-		public int getIndexofCompositePhysicalEntity(CompositePhysicalEntity cpe) {
-			for (Integer i : cpeindexer) {
-				if (masterlist.get(i).isTermEquivalent(cpe)) return i; 
-			}
-			return -1;
-		}
-		
-		public ArrayList<Integer> getSortedSingularPhysicalEntityIndicies() {
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			list.addAll(custpeindexer);
-			list.addAll(rpeindexer);
-			
-			return sortComponentIndiciesbyName(list);
-		}
-		
-		public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
-			return sortComponentIndiciesbyName(cpeindexer);
-		}
-		
-		// Retrieving physical processes
-		
-		public PhysicalProcess getPhysicalProcess(Integer index) {
-			return (PhysicalProcess)masterlist.get(index).getObject();
-		}
-		
-		public PhysicalForce getPhysicalForce(Integer index) {
-			return (PhysicalForce)masterlist.get(index).getObject();
-		}
-			
-		public Integer getPhysicalProcessIndexByName(PhysicalProcess process) {
-			for (Integer i : procindexer) {
-				if (masterlist.get(i).getName().equals(process.getName())) return i; 
-			}
-			return -1;
-		}
-		
-		public ArrayList<Integer> getSortedPhysicalProcessIndicies() {
-			return sortComponentIndiciesbyName(procindexer);
-		}	
-		
-		public ArrayList<Integer> getSortedReferencePhysicalProcessIndicies() {
-			ArrayList<Integer> refprocs = new ArrayList<Integer>();
-			for (Integer i : procindexer) {
-				if (masterlist.get(i).isReferenceTerm()) refprocs.add(i);
-			}
-			return sortComponentIndiciesbyName(refprocs);
-		}	
-		
-		public ArrayList<Integer> getAllReferenceTerms() {
-			ArrayList<Integer> refterms = new ArrayList<Integer>();
-			for (IndexCard<?> card : masterlist) {
-				if (card.isReferenceTerm()) {
-					refterms.add(masterlist.indexOf(card));
-				}
-			}
-			return refterms;
-		}
-		
-		public ArrayList<Integer> getRequestedTypes(SemSimTypes[] types) {
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			for (SemSimTypes type : types) {
-				switch (type) {
-				case COMPOSITE_PHYSICAL_ENTITY:
-					list.addAll(cpeindexer);
-					break;
-				case CUSTOM_PHYSICAL_ENTITY:
-					list.addAll(custpeindexer);
-					break;
-				case PHYSICAL_PROCESS:
-					list.addAll(procindexer);
-					break;
-				case PHYSICAL_PROPERTY:
-					list.addAll(singppindexer);
-					break;
-				case PHYSICAL_PROPERTY_IN_COMPOSITE:
-					list.addAll(ppccompindexer);
-					break;
-				case REFERENCE_PHYSICAL_ENTITY:
-					list.addAll(rpeindexer);
-					break;
-				default:
-					break;
-				}
-			}
-			return sortComponentIndiciesbyName(list);
-		}
+		return sortComponentIndicesbyName(list);
+	}
 
 	
 //******************************************SHARED PROPERTY METHODS***************************//
 		
-		public ArrayList<String> getComponentNames(ArrayList<Integer> list) {
-			ArrayList<String> namelist = new ArrayList<String>();
-			for (Integer index : list) {
-				namelist.add(masterlist.get(index).getName());
-			}
-			
-			return namelist;
+	public ArrayList<String> getComponentNames(ArrayList<Integer> list) {
+		ArrayList<String> namelist = new ArrayList<String>();
+		for (Integer index : list) {
+			namelist.add(masterlist.get(index).getName());
 		}
 		
-		public String getComponentName(Integer index) {
-			return masterlist.get(index).getName();
+		return namelist;
+	}
+	
+	public String getComponentName(Integer index) {
+		return masterlist.get(index).getName();
+	}
+	
+	public String getComponentDescription(Integer index) {
+		String desc = masterlist.get(index).getDescription();
+		if (desc==null) desc="";
+		return desc;
+	}
+	
+	/** Check if a component in the library already has a given name
+	 * 
+	 * @param nametocheck
+	 * @return
+	 */
+	public int libraryHasName(String nametocheck) {
+		for (IndexCard<?> card : masterlist) {
+			if (nametocheck.equalsIgnoreCase(card.getName().trim())) return masterlist.indexOf(card);
 		}
+		return -1;
+	}
+	
+	public void setName(Integer index, String name) {
+		masterlist.get(index).getObject().setName(name);
+		notifyTermChanged();
 		
-		public String getComponentDescription(Integer index) {
-			String desc = masterlist.get(index).getDescription();
-			if (desc==null) desc="";
-			return desc;
-		}
-		
-		/** Check if a component in the library already has a given name
-		 * 
-		 * @param nametocheck
-		 * @return
-		 */
-		public int libraryHasName(String nametocheck) {
-			for (IndexCard<?> card : masterlist) {
-				if (nametocheck.equalsIgnoreCase(card.getName().trim())) return masterlist.indexOf(card);
-			}
-			return -1;
-		}
-		
-		public void setName(Integer index, String name) {
-			masterlist.get(index).getObject().setName(name);
-			notifyTermChanged();
-			
-		}
-		
-		public void clearRelations(Integer termindex, Relation relation) {
-			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
-			pmc.removeReferenceAnnotationsWithRelation(relation);
-			notifyTermChanged();
-		}
-		
-		public void addRelationship(Integer termindex, Relation relation, Integer reftermindex) {
-			PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
-			ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
-			pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), SemGen.semsimlib);
-			notifyTermChanged();
-		}
-		
-		public SemSimTypes getSemSimType(Integer index) {
-			return masterlist.get(index).getType();
-		}
+	}
+	
+	public void clearRelations(Integer termindex, Relation relation) {
+		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
+		pmc.removeReferenceAnnotationsWithRelation(relation);
+		notifyTermChanged();
+	}
+	
+	public void addRelationship(Integer termindex, Relation relation, Integer reftermindex) {
+		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
+		ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
+		pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), SemGen.semsimlib);
+		notifyTermChanged();
+	}
+	
+	public SemSimTypes getSemSimType(Integer index) {
+		return masterlist.get(index).getType();
+	}
 		
 //**************************************REFERENCE TERM DATA RETRIEVAL METHODS *********************//
-		public String getOntologyName(Integer index) {
-			return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName(SemGen.semsimlib);
-		}
-		
-		public String getReferenceID(Integer index) {
-			return ((ReferenceTerm)masterlist.get(index).getObject()).getTermID();
-		}
+	public String getOntologyName(Integer index) {
+		return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName(SemGen.semsimlib);
+	}
+	
+	public String getReferenceID(Integer index) {
+		return ((ReferenceTerm)masterlist.get(index).getObject()).getTermID();
+	}
 		
 //**************************************COMPOSITE ENTITY DATA RETRIEVAL METHODS *********************//
-		public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
-			return getCompositeEntityIndicies(getIndexofCompositePhysicalEntity(cpe));
-		}
+	public ArrayList<Integer> getCompositeEntityIndicies(CompositePhysicalEntity cpe) {
+		return getCompositeEntityIndicies(getIndexofCompositePhysicalEntity(cpe));
+	}
+	
+	public ArrayList<Integer> getCompositeEntityIndicies(Integer index) {
+		ArrayList<Integer> indexlist = new ArrayList<Integer>();
+		CompositePhysicalEntity cpe = getCompositePhysicalEntity(index);
 		
-		public ArrayList<Integer> getCompositeEntityIndicies(Integer index) {
-			ArrayList<Integer> indexlist = new ArrayList<Integer>();
-			CompositePhysicalEntity cpe = getCompositePhysicalEntity(index);
-			
-			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
-				int i;
-				if (pe.hasPhysicalDefinitionAnnotation()) {
-					i = getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
-				}
-				else {
-					i = getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
-				}
-				indexlist.add(i);
+		for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
+			int i;
+			if (pe.hasPhysicalDefinitionAnnotation()) {
+				i = getIndexofReferencePhysicalEntity((ReferencePhysicalEntity)pe);
 			}
-			return indexlist;
+			else {
+				i = getIndexofCustomPhysicalEntity((CustomPhysicalEntity)pe);
+			}
+			indexlist.add(i);
 		}
-		
-		public boolean compositeEntityContainsSingular(int compindex, int singindex) {
-			return getCompositeEntityIndicies(compindex).contains(singindex);
-		}
+		return indexlist;
+	}
+	
+	public boolean compositeEntityContainsSingular(int compindex, int singindex) {
+		return getCompositeEntityIndicies(compindex).contains(singindex);
+	}
 		
 //**************************************COMPOSITE ENTITY MODIFICATION METHODS *********************//
 		
@@ -596,7 +616,7 @@ public class SemSimTermLibrary extends Observable {
 		for (PhysicalEntity entity : process.getMediators()) {
 			mediators.add(getComponentIndex(entity, false));
 		}
-		return sortComponentIndiciesbyName(mediators);
+		return sortComponentIndicesbyName(mediators);
 	}
 	
 	public ArrayList<Integer> getAllProcessParticipantIndicies(Integer index) {
@@ -662,6 +682,8 @@ public class SemSimTermLibrary extends Observable {
 		notifyProcessChanged();
 	}
 	
+	
+	// Store participant info for processes
 	public void setProcessSources(Integer procindex, ArrayList<Integer> sources, ArrayList<Double> mults) {
 		LinkedHashMap<PhysicalEntity, Double> map = new LinkedHashMap<PhysicalEntity, Double>();
 		for (int i=0; i<sources.size(); i++) {
@@ -685,6 +707,37 @@ public class SemSimTermLibrary extends Observable {
 		}
 		getPhysicalProcess(procindex).setMediators(map);
 	}
+	
+	
+	
+	// Store info for forces
+	public int createForce() {
+		int in = addPhysicalForce(new CustomPhysicalForce());
+		notifyForceChanged();
+		return in;
+	}
+	
+	public void editForce(Integer forceindex) {
+		notifyForceChanged();
+	}
+	
+	public void setForceSources(Integer forceindex, ArrayList<Integer> sources) {
+		System.out.println("Setting sources");
+		Set<PhysicalEntity> entset = new HashSet<PhysicalEntity>();
+		for (int i=0; i<sources.size(); i++) {
+			entset.add(getCompositePhysicalEntity(sources.get(i)));
+		}
+		getPhysicalForce(forceindex).setSources(entset);
+	}
+	
+	public void setForceSinks(Integer forceindex, ArrayList<Integer> sinks) {
+		Set<PhysicalEntity> entset = new HashSet<PhysicalEntity>();
+		for (int i=0; i<sinks.size(); i++) {
+			entset.add(getCompositePhysicalEntity(sinks.get(i)));
+		}
+		getPhysicalForce(forceindex).setSinks(entset);
+	}
+	
 
 	public PropertyType getPropertyinCompositeType(int index) {
 		return SemGen.semsimlib.getPropertyinCompositeType(getAssociatePhysicalProperty(index));
@@ -760,7 +813,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 //*************************************HELPER METHODS*************************************//
-	private ArrayList<Integer> sortComponentIndiciesbyName(ArrayList<Integer> indicies) {
+	private ArrayList<Integer> sortComponentIndicesbyName(ArrayList<Integer> indicies) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		for (Integer i : indicies) {
 			map.put(masterlist.get(i).getName(), i);
@@ -808,6 +861,11 @@ public class SemSimTermLibrary extends Observable {
 		notifyObservers(LibraryEvent.PROCESS_CHANGE);
 	}
 	
+	private void notifyForceChanged(){
+		setChanged();
+		notifyObservers(LibraryEvent.FORCE_CHANGE);
+	}
+	
 	private void notifyCompositeEntityChanged() {
 		setChanged();
 		notifyObservers(LibraryEvent.COMPOSITE_ENTITY_CHANGE);
@@ -818,7 +876,7 @@ public class SemSimTermLibrary extends Observable {
 		notifyObservers(LibraryEvent.TERM_CHANGE);
 	}
 	
-	public int countObjectofType(SemSimTypes type) {
+	public int countObjectOfType(SemSimTypes type) {
 		int cnt = 0;
 		switch (type) {
 		case COMPOSITE_PHYSICAL_ENTITY:
@@ -829,6 +887,9 @@ public class SemSimTermLibrary extends Observable {
 			break;
 		case PHYSICAL_PROCESS:
 			cnt = procindexer.size();
+			break;
+		case CUSTOM_PHYSICAL_FORCE:
+			cnt = forceindexer.size();
 			break;
 		case PHYSICAL_PROPERTY:
 			cnt = singppindexer.size();

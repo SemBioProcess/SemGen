@@ -85,7 +85,7 @@ public class TermModifier {
 	}
 	
 	private void removeCompositeEntity() {
-		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), -1);
+		drawer.batchSetAssociatedPhysicalComponent(termaffiliates.getCodewordAffiliates(), -1);
 		for (Integer procindex : termaffiliates.getCompositeAffiliates()) {
 			PhysicalProcess proc = (PhysicalProcess) library.getComponent(procindex);
 			proc.removeParticipant((PhysicalEntity) library.getComponent(termindex));
@@ -98,7 +98,7 @@ public class TermModifier {
 	}
 	
 	private void removeProcess() {
-		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), -1);
+		drawer.batchSetAssociatedPhysicalComponent(termaffiliates.getCodewordAffiliates(), -1);
 		library.removePhysicalProcesses(termindex);
 	}
 	
@@ -155,7 +155,7 @@ public class TermModifier {
 	}
 	
 	private void replaceCompositeEntity(int replacement, boolean remove) {
-		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), replacement);
+		drawer.batchSetAssociatedPhysicalComponent(termaffiliates.getCodewordAffiliates(), replacement);
 		for (Integer procindex : termaffiliates.getCompositeAffiliates()) {
 			PhysicalProcess proc = (PhysicalProcess) library.getComponent(procindex);
 			proc.removeParticipant((PhysicalEntity) library.getComponent(termindex));
@@ -164,7 +164,7 @@ public class TermModifier {
 	}
 	
 	private void replaceProcess(int replacement, boolean remove) {
-		drawer.batchSetAssociatedComposite(termaffiliates.getCodewordAffiliates(), replacement);
+		drawer.batchSetAssociatedPhysicalComponent(termaffiliates.getCodewordAffiliates(), replacement);
 		if (remove) {
 			library.removePhysicalProcesses(termindex);
 		

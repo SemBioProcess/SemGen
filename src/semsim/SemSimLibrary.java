@@ -419,6 +419,17 @@ public class SemSimLibrary {
 		return (OPBhasFlowProperty(u) || OPBhasProcessProperty(u));
 	}
 	
+	
+	/**
+	 * @param u A URI
+	 * @return Whether the URI matches an OPB property that is applicable 
+	 * for use in annotating a dynamical force variable
+	 */
+	public boolean isOPBforceProperty(URI u){
+		return OPBhasForceProperty(u);
+	}
+	
+	
 	/**
 	 * @param prop A {@link PhysicalPropertyInComposite} instance
 	 * @param pmc A {@link PhysicalModelComponent} instance

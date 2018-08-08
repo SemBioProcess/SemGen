@@ -29,7 +29,7 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected SemSimTermLibrary library;
 	protected Integer termindex = -1;
 	
-	protected JTextField mantextfield;
+	public JTextField mantextfield;
 	protected JTextArea descriptionarea;
 	protected ArrayList<ObjectPropertyEditor> objecteditors = new ArrayList<ObjectPropertyEditor>();
 	
@@ -37,6 +37,8 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 	protected JButton cancelbtn = new JButton("Cancel");
 	protected JLabel msgbox = new JLabel("Please enter a valid name");
 	protected JPanel confirmpan = new JPanel();
+	protected JPanel namepanel = new JPanel();
+	protected JPanel descriptionpanel = new JPanel();
 	
 	public CustomTermOptionPane(SemSimTermLibrary lib) {
 		library = lib;
@@ -70,14 +72,12 @@ public abstract class CustomTermOptionPane extends JPanel implements ActionListe
 		JScrollPane descscroller = new JScrollPane(descriptionarea);
 		descscroller.setPreferredSize(new Dimension(450,75));
 		
-		JPanel namepanel = new JPanel();
 		namepanel.add(new JLabel("*Name: "));
 		namepanel.add(mantextfield);
 		namepanel.setAlignmentY(TOP_ALIGNMENT);
 		namepanel.setMaximumSize(new Dimension(9999, 150));
 		namepanel.setBackground(SemGenSettings.lightblue);
 		
-		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.add(new JLabel("Description: "));
 		descriptionpanel.add(descscroller);
 		descriptionpanel.setAlignmentY(TOP_ALIGNMENT);

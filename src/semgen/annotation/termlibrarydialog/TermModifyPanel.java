@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import semgen.SemGenSettings;
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.EntitySelectorGroup;
-import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessPanel;
+import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessOptionPane;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
@@ -89,7 +89,7 @@ public class TermModifyPanel extends JPanel implements ActionListener {
 		public void editTerm();
 	}
 	
-	private class CustomProcessPane extends CustomPhysicalProcessPanel implements TermEditor {
+	private class CustomProcessPane extends CustomPhysicalProcessOptionPane implements TermEditor {
 		private static final long serialVersionUID = 1L;
 
 		public CustomProcessPane(SemSimTermLibrary lib) {

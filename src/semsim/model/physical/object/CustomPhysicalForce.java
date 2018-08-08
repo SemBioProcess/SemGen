@@ -18,10 +18,8 @@ import semsim.model.physical.PhysicalModelComponent;
 public class CustomPhysicalForce extends PhysicalForce{
 
 
-	public CustomPhysicalForce(String name, String description){
+	public CustomPhysicalForce(){
 		super(SemSimTypes.CUSTOM_PHYSICAL_FORCE);
-		setName(name);
-		setDescription(description);
 	}
 	
 	/**

@@ -202,14 +202,14 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 		@Override
 		public void createButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
-			ctd.makeEntityTerm(termlib);
+			ctd.setAsEntityTermDialog(termlib);
 			onNewTerm(ctd.getSelection());
 		}
 
 		@Override
 		public void modifyButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
-			ctd.makeEntityTerm(termlib, getSelection());
+			ctd.setAsEntityTermDialog(termlib, getSelection());
 			onNewTerm(ctd.getSelection());
 		}
 		

@@ -20,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import semgen.SemGenSettings;
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.EntitySelectorGroup;
-import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessPanel;
+import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessOptionPane;
 import semgen.annotation.dialog.termlibrary.ReferenceClassFinderPanel;
 import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
@@ -250,7 +250,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		
 	}
 	
-	private class CustomProcessPane extends CustomPhysicalProcessPanel implements TermMaker{
+	private class CustomProcessPane extends CustomPhysicalProcessOptionPane implements TermMaker{
 		private static final long serialVersionUID = 1L;
 
 		public CustomProcessPane(SemSimTermLibrary lib) {
