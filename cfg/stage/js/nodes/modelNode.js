@@ -37,7 +37,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
 
 	if (modeid == DisplayModes.SHOWSUBMODELS) {
         if (this.submodelVizSize >= 200) {
-            var cont = confirm("This Submodel network contains " + this.submodelVizSize + " nodes. Loading the full visualization may take longer to load.");
+            var cont = confirm("This Submodel network contains " + this.submodelVizSize + " nodes. Loading the full visualization may take longer.");
             if (!cont) {
                 graph.delayfixonupdate = false;
                 return;
@@ -57,7 +57,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
         var physionodes = this.srcobj.physionetwork.processes.concat(this.srcobj.physionetwork.entities);
         var physiomapVizSize = physionodes.length;
         if (physiomapVizSize >= 200) {
-            var cont = confirm("This PhysioMap network contains " + physiomapVizSize + " nodes. Loading the full visualization may take longer to load.");
+            var cont = confirm("This PhysioMap network contains " + physiomapVizSize + " nodes. Loading the full visualization may take longer.");
             if (!cont) {
                 graph.delayfixonupdate = false;
                 return;
@@ -78,7 +78,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
     //Show all dependencies
     else if (modeid == DisplayModes.SHOWDEPENDENCIES) {
         if (this.dependencyVizSize >= 200) {
-            var cont = confirm("The Dependency network contains "+ this.dependencyVizSize + " nodes. Loading the full visualization may take longer to load.");
+            var cont = confirm("The Dependency network contains "+ this.dependencyVizSize + " nodes. Loading the full visualization may take longer.");
             if (!cont) {
                 graph.delayfixonupdate = false;
                 return;
