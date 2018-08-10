@@ -40,6 +40,15 @@
     <owl:Ontology rdf:about="&semsim;noID"/>
     
 
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
     
 
 
@@ -599,6 +608,14 @@
         <owl:disjointWith rdf:resource="&semsim;Physical_process"/>
         <owl:disjointWith rdf:resource="&semsim;Physical_property"/>
         <rdfs:comment rdf:datatype="&xsd;string">A physics analytical entity that represents the material, energy, and/or information content of material or immaterial, space-occupying continuants.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.bhi.washington.edu/SemSim#Physical_force -->
+
+    <owl:Class rdf:about="&semsim;Physical_force">
+        <rdfs:subClassOf rdf:resource="&semsim;Physical_model_component"/>
     </owl:Class>
     
 

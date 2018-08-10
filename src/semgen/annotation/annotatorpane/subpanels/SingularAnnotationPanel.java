@@ -64,6 +64,11 @@ public class SingularAnnotationPanel extends AnnotationChooserPanel {
 		}
 		
 	}
+	
+	@Override
+	public void eraseButtonClicked(){
+		setSelection(-1);
+	}
 
 	@Override
 	public void createButtonClicked() {	}

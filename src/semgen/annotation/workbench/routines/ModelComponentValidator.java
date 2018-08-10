@@ -8,6 +8,7 @@ import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalProcess;
 
 public class ModelComponentValidator {
@@ -17,6 +18,7 @@ public class ModelComponentValidator {
 	
 	private HashSet<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 	private HashSet<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
+	private HashSet<PhysicalForce> forces = new HashSet<PhysicalForce>();
 	
 	public ModelComponentValidator(AnnotatorWorkbench wb, SemSimModel mod) {
 		library = wb.openTermLibrary();
@@ -31,22 +33,18 @@ public class ModelComponentValidator {
 		for (Integer index : drawer.getAllAssociatedComposites()) {
 			SemSimTypes type = library.getSemSimType(index);
 			if (type==SemSimTypes.COMPOSITE_PHYSICAL_ENTITY) {
-				validateComposite(index);
+				validateCompositeEntity(index);
 			}
-			else {
-				validateProcess(index);
+			else if(type==SemSimTypes.CUSTOM_PHYSICAL_FORCE){
+				validateForce(index);
 			}
+			else validateProcess(index);
 		}
 	}
 	
-	private void validateProcess(Integer index) {
-		procs.add(library.getPhysicalProcess(index));
-		for (Integer i : library.getAllProcessParticipantIndicies(index)) {
-			validateComposite(i);
-		}
-	}
 	
-	private void validateComposite(Integer index) {
+	
+	private void validateCompositeEntity(Integer index) {
 		ents.add(library.getCompositePhysicalEntity(index));
 		for (Integer i : library.getCompositeEntityIndicies(index)) {
 			if (library.getSemSimType(i)==SemSimTypes.CUSTOM_PHYSICAL_ENTITY) {
@@ -57,6 +55,21 @@ public class ModelComponentValidator {
 			}
 		}
 	}
+	
+	private void validateProcess(Integer index) {
+		procs.add(library.getPhysicalProcess(index));
+		for (Integer i : library.getAllProcessParticipantIndicies(index)) {
+			validateCompositeEntity(i);
+		}
+	}
+	
+	private void validateForce(Integer index){
+		forces.add(library.getPhysicalForce(index));
+		for(Integer i : library.getAllForceParticipantIndicies(index)){
+			validateCompositeEntity(i);
+		}
+	}
+	
 	
 	private void setModelComponents() {
 		semsimmodel.setPhysicalEntities(ents);

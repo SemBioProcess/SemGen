@@ -68,9 +68,9 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 		table.setModel(tablemodel);
 	}
 	
-	public void setTableData(ArrayList<Integer> map) {
-		participants = map;
-		tablemodel = new ProcessParticipantTableModel(map);
+	public void setTableData(ArrayList<Integer> list) {
+		participants = list;
+		tablemodel = new ProcessParticipantTableModel(list);
 		table.setModel(tablemodel);
 	}
 	

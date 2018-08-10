@@ -15,7 +15,7 @@ import semsim.model.computational.datastructures.DataStructure;
 public abstract class ParentNode<T extends SemSimCollection> extends Node<T> {
 	@Expose public ArrayList<SubModelNode> childsubmodels = new ArrayList<SubModelNode>();
 	@Expose public ArrayList<DependencyNode> dependencies = new ArrayList<DependencyNode>();
-	@Expose public int[] deptypecounts = {0, 0 ,0};
+	@Expose public int[] deptypecounts = {0, 0, 0, 0};
 	@Expose public Boolean expanded = false;
 
 	

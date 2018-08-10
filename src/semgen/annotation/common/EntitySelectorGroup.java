@@ -213,20 +213,20 @@ public abstract class EntitySelectorGroup extends Box implements ActionListener 
 			onNewTerm(ctd.getSelection());
 		}
 		
-		protected void onNewTerm(Integer selection) {
-			if (selection!=-1) {
-				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), selection);
-				onChange();
-			}
-		}
-		
 		@Override
-		protected void onEraseButtonClick() {
+		public void eraseButtonClicked(){
 			if (selectors.size()>1) {
 				removeEntity(this);
 			}
 			else {
 				setSelection(-1);
+			}
+		}
+		
+		protected void onNewTerm(Integer selection) {
+			if (selection!=-1) {
+				setComboList(termlib.getSortedSingularPhysicalEntityIndicies(), selection);
+				onChange();
 			}
 		}
 		

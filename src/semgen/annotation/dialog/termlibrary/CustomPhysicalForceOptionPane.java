@@ -2,7 +2,6 @@ package semgen.annotation.dialog.termlibrary;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -12,15 +11,16 @@ import javax.swing.event.TableModelListener;
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.workbench.SemSimTermLibrary;
 
+/**
+ * CustomTermOptionPane subclass for specifying the sources and sinks for a physical force
+ * @author Christopher Thompson
+ *
+ */
 public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implements TableModelListener{
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<ParticipantEditor> editors;
 
-//	public CustomPhysicalForceOptionPane(SemSimTermLibrary lib) {
-//		super(lib);
-//	}
-	
 	public CustomPhysicalForceOptionPane(SemSimTermLibrary lib, int forceindex) {
 		super(lib, forceindex);
 	}
@@ -45,14 +45,14 @@ public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implemen
 	
 	
 	protected void setParticipantTableData() {
-		LinkedHashMap<Integer,Double> tempsrc = new LinkedHashMap<Integer,Double>();
-		LinkedHashMap<Integer,Double> tempsink = new LinkedHashMap<Integer,Double>();
+		ArrayList<Integer> tempsrc = new ArrayList<Integer>();
+		ArrayList<Integer> tempsink = new ArrayList<Integer>();
 
 		for(Integer sourceint : library.getIndiciesOfForceSources(termindex)){
-			tempsrc.put(sourceint, Double.valueOf(-1));
+			tempsrc.add(sourceint);
 		}
 		for(Integer sinkint : library.getIndiciesOfForceSinks(termindex)){
-			tempsink.put(sinkint, Double.valueOf(-1));
+			tempsink.add(sinkint);
 		}
 		editors.get(0).setTableData(tempsrc); 
 		editors.get(1).setTableData(tempsink);
@@ -90,13 +90,11 @@ public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implemen
 	
 	@Override
 	protected void modifyTerm() {
-		System.out.println("Modifying existing force");
 		library.editForce(termindex);
 		setForceParticipants();
 	}
 	
 	private void setForceParticipants() {
-		System.out.println("Setting participants");
 		library.setForceSources(termindex, editors.get(0).getParticipants());
 		library.setForceSinks(termindex, editors.get(1).getParticipants());
 	}

@@ -79,6 +79,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	private void setCodewordsbyMarker(ArrayList<Integer> displaylist){
 		ArrayList<Integer> entset = new ArrayList<Integer>();
 		ArrayList<Integer> procset = new ArrayList<Integer>();
+		ArrayList<Integer> forceset = new ArrayList<Integer>();
 		ArrayList<Integer> depset = new ArrayList<Integer>();
 
 		for (Integer index : displaylist) {
@@ -89,12 +90,15 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 				entset.add(index);
 			else if(type == PropertyType.PropertyOfPhysicalProcess)
 				procset.add(index);
+			else if(type == PropertyType.PropertyOfPhysicalForce)
+				forceset.add(index);
 			else depset.add(index);
 		}
 		
 		displaylist.clear();
 		displaylist.addAll(entset);
 		displaylist.addAll(procset);
+		displaylist.addAll(forceset);
 		displaylist.addAll(depset);
 	}
 	

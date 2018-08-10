@@ -18,6 +18,7 @@ import semsim.model.computational.Computation;
 import semsim.model.computational.ComputationalModelComponent;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
@@ -406,6 +407,9 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
 				return PropertyType.PropertyOfPhysicalProcess;
+			}
+			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalForce){
+				return PropertyType.PropertyOfPhysicalForce;
 			}
 			else return PropertyType.Unknown;
 		}

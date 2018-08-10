@@ -89,6 +89,9 @@ public class SemSimTermLibrary extends Observable {
 		for (PhysicalProcess proc : model.getPhysicalProcesses()) {
 			addPhysicalProcess(proc);
 		}
+		for (PhysicalForce force : model.getPhysicalForces()) {
+			addPhysicalForce(force);
+		}
 	}
 	
 //**************************************TERM ADDITION METHODS***************************//
@@ -384,7 +387,9 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public PhysicalForce getPhysicalForce(Integer index) {
-		return (PhysicalForce)masterlist.get(index).getObject();
+		if(masterlist.get(index).getObject() instanceof PhysicalForce)
+			return (PhysicalForce)masterlist.get(index).getObject();
+		else return null;
 	}
 		
 	public Integer getPhysicalProcessIndexByName(PhysicalProcess process) {
@@ -591,10 +596,13 @@ public class SemSimTermLibrary extends Observable {
 	public Set<Integer> getIndiciesOfForceSources(Integer forceindex){
 		PhysicalForce force = getPhysicalForce(forceindex);
 		
+		
 		Set<Integer> tempset = new HashSet<Integer>();
 		
-		for(PhysicalEntity source : force.getSources()) 
-			tempset.add(this.getComponentIndex(source, false));
+		if(force != null){  // This is here to make it easier to update force property annotations in previously annotated models
+			for(PhysicalEntity source : force.getSources()) 
+				tempset.add(this.getComponentIndex(source, false));
+		}
 		
 		return tempset;
 	}
@@ -604,8 +612,10 @@ public class SemSimTermLibrary extends Observable {
 		
 		Set<Integer> tempset = new HashSet<Integer>();
 		
-		for(PhysicalEntity source : force.getSinks()) 
-			tempset.add(this.getComponentIndex(source, false));
+		if(force != null){  // This is here to make it easier to update force property annotations in previously annotated models
+			for(PhysicalEntity source : force.getSinks()) 
+				tempset.add(this.getComponentIndex(source, false));
+		}
 		
 		return tempset;
 	}
@@ -622,6 +632,14 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getAllProcessParticipantIndicies(Integer index) {
 		ArrayList<Integer> parts = new ArrayList<Integer>();
 		for (PhysicalEntity entity : getPhysicalProcess(index).getParticipants()) {
+			parts.add(getComponentIndex(entity, false));
+		}
+		return parts;
+	}
+	
+	public ArrayList<Integer> getAllForceParticipantIndicies(Integer forceindex){
+		ArrayList<Integer> parts = new ArrayList<Integer>();
+		for (PhysicalEntity entity : getPhysicalForce(forceindex).getParticipants()) {
 			parts.add(getComponentIndex(entity, false));
 		}
 		return parts;
@@ -713,7 +731,6 @@ public class SemSimTermLibrary extends Observable {
 	// Store info for forces
 	public int createForce() {
 		int in = addPhysicalForce(new CustomPhysicalForce());
-		notifyForceChanged();
 		return in;
 	}
 	
@@ -722,7 +739,6 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public void setForceSources(Integer forceindex, ArrayList<Integer> sources) {
-		System.out.println("Setting sources");
 		Set<PhysicalEntity> entset = new HashSet<PhysicalEntity>();
 		for (int i=0; i<sources.size(); i++) {
 			entset.add(getCompositePhysicalEntity(sources.get(i)));

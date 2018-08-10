@@ -27,6 +27,7 @@ public class DependencyNode extends LinkableNode<DataStructure> {
 		super(dataStructure, parent);
 		String nodeType = dataStructure.getPropertyType(SemGen.semsimlib).toString();
 		this.typeIndex = nodetypes.indexOf(nodeType);
+
 		if (dataStructure.getUnit()!=null) {
 			this.unit = dataStructure.getUnit().getComputationalCode();
 		}

@@ -154,7 +154,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	protected void addEraseButton() {
 		eraselabel = new ComponentPanelLabel(SemGenIcon.eraseicon, "Remove annotation component"){
 			public void onClick() {
-				onEraseButtonClick();
+				eraseButtonClicked();
 			}
 		};
 		JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
@@ -164,9 +164,6 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		lbllist.add(eraselabel);
 	}
 	
-	protected void onEraseButtonClick() {
-		setSelection(-1);
-	}
 	
 	public void toggleNoneSelected(boolean noselection) {
 		if(eraselabel !=null) eraselabel.setEnabled(!noselection);
@@ -220,7 +217,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	public abstract void searchButtonClicked();
 	public abstract void createButtonClicked();
 	public abstract void modifyButtonClicked();
-	
+	public abstract void eraseButtonClicked();
 	
 
 	class WebMouseAdapter extends MouseAdapter {

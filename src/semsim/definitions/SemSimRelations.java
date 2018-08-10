@@ -260,8 +260,8 @@ public class SemSimRelations {
 		UNIT_FACTOR_MULTIPLIER("hasUnitFactorMultiplier", RDFNamespace.SEMSIM.getNamespaceAsString(), "", RDFNamespace.SEMSIM.getOWLid()),
 		
 		//Process participant relations0
-		HAS_SOURCE("hasSource", RDFNamespace.SEMSIM.getNamespaceAsString(), "physical process has thermodynamic source entity", RDFNamespace.SEMSIM.getOWLid()),
-		HAS_SINK("hasSink", RDFNamespace.SEMSIM.getNamespaceAsString(), "physical process has thermodynamic sink entity", RDFNamespace.SEMSIM.getOWLid()),
+		HAS_SOURCE("hasSource", RDFNamespace.SEMSIM.getNamespaceAsString(), "physical process or force has thermodynamic source entity", RDFNamespace.SEMSIM.getOWLid()),
+		HAS_SINK("hasSink", RDFNamespace.SEMSIM.getNamespaceAsString(), "physical process or force has thermodynamic sink entity", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_MEDIATOR("hasMediator", RDFNamespace.SEMSIM.getNamespaceAsString(), "physical process has thermodynamic mediator entity", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_SOURCE_PARTICIPANT("hasSourceParticipant", RDFNamespace.SEMSIM.getNamespaceAsString(), "", RDFNamespace.SEMSIM.getOWLid()),
 		HAS_SINK_PARTICIPANT("hasSinkParticipant", RDFNamespace.SEMSIM.getNamespaceAsString(), "", RDFNamespace.SEMSIM.getOWLid()),

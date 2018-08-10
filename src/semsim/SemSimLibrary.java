@@ -460,11 +460,14 @@ public class SemSimLibrary {
 	public PropertyType getPropertyinCompositeType(PhysicalPropertyInComposite pp) {
 		URI roa = (pp.getPhysicalDefinitionURI());
 		
-		if(OPBhasStateProperty(roa) || OPBhasForceProperty(roa) || OPBhasAmountProperty(roa)){
+		if(OPBhasStateProperty(roa) || OPBhasAmountProperty(roa)){
 			return PropertyType.PropertyOfPhysicalEntity;
 		}
 		else if(OPBhasFlowProperty(roa) || OPBhasProcessProperty(roa)){
 			return PropertyType.PropertyOfPhysicalProcess;
+		}
+		else if(OPBhasForceProperty(roa)){
+			return PropertyType.PropertyOfPhysicalForce;
 		}
 		else return PropertyType.Unknown;
 	}

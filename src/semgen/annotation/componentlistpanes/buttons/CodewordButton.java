@@ -19,7 +19,7 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 	private Color constitutivecolor = new Color(255, 127, 14, 255);
 	private Color entitycolor = new Color(31, 119, 180);
 	private Color processcolor = new Color(63, 196, 63);
-	private Color forcecolor = Color.PINK;
+	private Color forcecolor = new Color(255,168,255);
 	
 	public CodewordButton(String name, boolean canedit, boolean showmarkers) {
 		super(name, canedit);

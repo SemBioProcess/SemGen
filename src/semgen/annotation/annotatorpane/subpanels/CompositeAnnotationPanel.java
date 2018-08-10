@@ -312,6 +312,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		}
 
 		@Override
+		public void eraseButtonClicked() {
+			setSelection(-1);
+		}
+		
+		@Override
 		public void createButtonClicked() {}
 
 		@Override
@@ -356,6 +361,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			ctd.setAsProcessTermDialog(termlib, getSelection());
 			showProcessParticipants();
 		}
+		
+		@Override
+		public void eraseButtonClicked(){
+			setSelection(-1);
+		}
 			
 		private void createTerm(int procindex) {
 			if (procindex != -1) {
@@ -393,6 +403,13 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			Integer termindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
 			ctd.setAsForceTermDialog(termlib, termindex);
 			showForceParticipants();
+		}
+		
+		@Override
+		public void eraseButtonClicked(){
+			drawer.setDataStructureAssociatedPhysicalComponent(-1);
+			showProcessParticipants();
+			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
 	}
 	

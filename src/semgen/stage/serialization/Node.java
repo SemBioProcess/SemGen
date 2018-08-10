@@ -100,6 +100,7 @@ public abstract class Node<T extends SemSimObject> {
 		dtarray.add("Submodel");
 		dtarray.add("State");
 		dtarray.add("Rate");
+		dtarray.add("Force");
 		dtarray.add("Constitutive");
 		dtarray.add("Entity");
 		dtarray.add("Process");
@@ -115,13 +116,14 @@ public abstract class Node<T extends SemSimObject> {
 	static Number SUBMODEL = 1;
 	static Number STATE = 2;
 	static Number RATE = 3;
-	static Number CONSTITUTIVE = 4;
-	static Number ENTITY = 5;
-	static Number PROCESS = 6;
-	static Number MEDIATOR = 7;
-	static Number NULL = 8;
-	static Number EXTRACTION = 9;
-	static Number UNSPECIFIED = 10;
+	static Number FORCE = 4;
+	static Number CONSTITUTIVE = 5;
+	static Number ENTITY = 6;
+	static Number PROCESS = 7;
+	static Number MEDIATOR = 8;
+	static Number NULL = 9;
+	static Number EXTRACTION = 10;
+	static Number UNSPECIFIED = 11;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;
