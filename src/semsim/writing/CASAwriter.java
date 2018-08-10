@@ -23,6 +23,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -287,8 +288,8 @@ public class CASAwriter extends AbstractRDFwriter{
 						addStatement(st);
 					}
 				}
-				// Otherwise it's a property of a process
-				else{
+				// Of it's a property of a process
+				else if(propof instanceof PhysicalProcess){
 					PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 
 					Resource processres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
@@ -313,18 +314,49 @@ public class CASAwriter extends AbstractRDFwriter{
 					
 					// Set the sources
 					for(PhysicalEntity source : process.getSourcePhysicalEntities()){
-						setProcessParticipationRDFstatements(process, source, 
+						setRDFstatementsForEntityParticipation(process, source, 
 								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), process.getSourceStoichiometry(source));
 					}
 					// Set the sinks
 					for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
-						setProcessParticipationRDFstatements(process, sink,
+						setRDFstatementsForEntityParticipation(process, sink,
 								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), process.getSinkStoichiometry(sink));
 					}
 					// Set the mediators
 					for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
-						setProcessParticipationRDFstatements(process, mediator,
+						setRDFstatementsForEntityParticipation(process, mediator,
 								SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
+					}
+				}
+				else{  // Otherwise we assume it's a property of a physical force
+					PhysicalForce force = (PhysicalForce)ds.getAssociatedPhysicalModelComponent();
+
+					Resource forcres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
+					Statement st = rdf.createStatement(ares, SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), forcres);
+					
+					addStatement(st);
+					
+					// If the participants for the process have already been set, do not duplicate
+					// statements (in CellML models mapped codewords may be annotated against the
+					// same process, and because each process participant is created anew here, duplicate
+					// participant statements would appear in CellML RDF block).
+					
+					if(rdf.contains(forcres, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty())
+							|| rdf.contains(forcres, SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty())
+							|| rdf.contains(forcres, SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty()))
+						return;
+					
+					// If we're here, the process hasn't been assigned its participants yet
+					
+					// Set the sources
+					for(PhysicalEntity source : force.getSources()){
+						setRDFstatementsForEntityParticipation(force, source, 
+								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), null);
+					}
+					// Set the sinks
+					for(PhysicalEntity sink : force.getSinks()){
+						setRDFstatementsForEntityParticipation(force, sink,
+								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), null);
 					}
 				}
 			}

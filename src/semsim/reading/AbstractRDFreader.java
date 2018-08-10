@@ -36,6 +36,7 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalForce;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -235,6 +236,7 @@ public abstract class AbstractRDFreader {
 			
 			boolean isentity = res.getLocalName().startsWith("entity_");
 			boolean isprocess = res.getLocalName().startsWith("process_");
+			boolean isforce = res.getLocalName().startsWith("force_");
 			
 			// If a physical entity
 			if(isentity){
@@ -272,6 +274,9 @@ public abstract class AbstractRDFreader {
 					
 					pmc = semsimmodel.addCustomPhysicalProcess(new CustomPhysicalProcess(name, description));
 				}
+			}
+			else if(isforce){
+				pmc = semsimmodel.addCustomPhysicalForce(new CustomPhysicalForce());
 			}
 			
 			Resource isversionofann = res.getPropertyResourceValue(SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty());

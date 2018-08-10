@@ -28,6 +28,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
@@ -265,6 +266,28 @@ public class CASAreader extends AbstractRDFreader{
 						Resource physentres = mediatorres.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty());
 						PhysicalModelComponent mediatorpmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						process.addMediator((PhysicalEntity) mediatorpmc);
+					}
+				}
+				else if(pmc instanceof PhysicalForce){
+					PhysicalForce force = (PhysicalForce)pmc;
+					NodeIterator sourceit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty());
+					
+					// Read in the source participants
+					while(sourceit.hasNext()){
+						Resource sourceres = (Resource) sourceit.next();
+						Resource physentres = sourceres.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty());
+						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
+						
+						force.addSource((PhysicalEntity) sourcepmc);
+					}
+					// Read in the sink participants
+					NodeIterator sinkit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty());
+					while(sinkit.hasNext()){
+						Resource sinkres = (Resource) sinkit.next();
+						Resource physentres = sinkres.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty());
+						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
+						
+						force.addSink((PhysicalEntity) sinkpmc);
 					}
 				}
 			}

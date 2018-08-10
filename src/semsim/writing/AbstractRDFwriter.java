@@ -28,7 +28,6 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
-import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.AbstractRDFreader;
@@ -191,14 +190,15 @@ public abstract class AbstractRDFwriter {
 	/**
 	 * Add RDF statements that captures a physical entity's participation in a process
 	 * as well as its stoichiometry
-	 * @param process A physical process
+	 * @param pmc A physical process
 	 * @param physent A participant in the process
 	 * @param relationship RDF Property indicating whether the entity is a source, sink,
 	 * or mediator in the process
 	 * @param multiplier Stoichiometry for the entity's participation in the process
 	 */ 
-	protected void setProcessParticipationRDFstatements(PhysicalProcess process, PhysicalEntity physent, Property relationship, Double multiplier){
-		Resource processres = getResourceForPMCandAnnotate(process);
+	protected void setRDFstatementsForEntityParticipation(PhysicalModelComponent pmc, PhysicalEntity physent, Property relationship, Double multiplier){
+		
+		Resource pmcres = getResourceForPMCandAnnotate(pmc);
 		
 		// Create a new participant resource
 		String type = null;
@@ -209,12 +209,12 @@ public abstract class AbstractRDFwriter {
 		else return;
 		
 		Resource participantres = createNewResourceForSemSimObject(type);
-		Statement partst = rdf.createStatement(processres, relationship, participantres);
+		Statement partst = rdf.createStatement(pmcres, relationship, participantres);
 		addStatement(partst);
 		
 		Resource physentrefres = null;
 		
-		// Create link between process participant and the physical entity it references
+		// Create link between participant and the physical entity it references
 		if(physent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
 			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
 			physentrefres = rdf.getResource(physentrefuri.toString());
