@@ -69,7 +69,7 @@ public class Ontology {
 	 */
 	public boolean hasNamespace(String nspace) {
 		for (String ns : namespaces) {
-			if (nspace.startsWith(ns)) return true; 
+			if (nspace.equals(ns)) return true; 
 		}
 		return false;
 	}

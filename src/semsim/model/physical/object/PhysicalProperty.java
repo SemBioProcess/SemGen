@@ -48,6 +48,10 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	/** @return The name of the knowledge base that contains the URI used 
 	 * as the PhysicalProperty's annotation value */
 	public String getNamewithOntologyAbreviation(SemSimLibrary semsimlib) {
+		
+		if( ! hasName()) 
+			return getTermFragment() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
+		
 		return getName() + " (" + semsimlib.getReferenceOntologyAbbreviation(referenceuri) + ")";
 	}
 	
@@ -61,7 +65,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	protected boolean isEquivalent(Object obj) {
 		URI physdefuri = ((PhysicalProperty)obj).getPhysicalDefinitionURI();
 		
-		String physdefID = getTermID().replace(":", "_");
+		String physdefID = getTermFragment().replace(":", "_");
 		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
 		
 		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
@@ -74,7 +78,7 @@ public class PhysicalProperty extends PhysicalModelComponent implements Referenc
 	}
 
 	@Override
-	public String getTermID() {
+	public String getTermFragment() {
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 
