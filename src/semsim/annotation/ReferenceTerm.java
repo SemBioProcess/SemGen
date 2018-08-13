@@ -37,7 +37,7 @@ public interface ReferenceTerm {
 	public String getOntologyName(SemSimLibrary semsimlib);
 	
 	/** @return The URI of the ReferenceTerm as a string */
-	public String getTermID();
+	public String getTermFragment();
 	
 	/** @return The description of the ReferenceTerm */
 	public String getDescription();

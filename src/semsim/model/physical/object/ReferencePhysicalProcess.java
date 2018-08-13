@@ -53,7 +53,7 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	protected boolean isEquivalent(Object obj) {
 		URI physdefuri = ((ReferencePhysicalProcess)obj).getPhysicalDefinitionURI();
 		
-		String physdefID = getTermID().replace(":", "_");
+		String physdefID = getTermFragment().replace(":", "_");
 		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
 		
 		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
@@ -61,7 +61,7 @@ public class ReferencePhysicalProcess extends PhysicalProcess implements Referen
 	}
 	
 	@Override
-	public String getTermID() {
+	public String getTermFragment() {
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 	

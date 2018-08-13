@@ -250,9 +250,9 @@ function Graph() {
 
         $(this).triggerHandler("postupdate");
         if (graph.fixedMode) {
-            var delay = 7000;
+            var delay = 5000;
             if (!graph.delayfixonupdate) {
-                delay = 0;
+                delay = 10;
             }
             setTimeout(function() {
                 graph.pause();

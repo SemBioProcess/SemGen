@@ -552,14 +552,15 @@ public class SemSimLibrary {
 	 */
 	private Ontology getOntologyByNamespace(String namespace) {
 		Ontology ont = ReferenceOntologies.getOntologyByNamespace(namespace);
+		
 		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
 			for (Ontology o : ontologies) {
-				if (o.hasNamespace(namespace)) {
+				if (o.hasNamespace(namespace))
 					return o;
-				}
 			}
 		}
 		if (ont == null) ont = ReferenceOntology.UNKNOWN.getAsOntology();
+		
 		return ont;
 	}
 	
