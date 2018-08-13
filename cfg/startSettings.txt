@@ -1,7 +1,7 @@
-startDirectory; C:\Users\mneal\Google Drive
-maximize; true
-screensize; 1920x1048
-screenpos; -9x-9
+startDirectory; C:\Users\thomp\OneDrive\Documents\SemGen Test
+maximize; false
+screensize; 900x700
+screenpos; 0x0
 autoAnnotate; true
 showImports; true
 displayMarkers; true
