@@ -485,7 +485,7 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public String getReferenceID(Integer index) {
-			return ((ReferenceTerm)masterlist.get(index).getObject()).getTermID();
+			return ((ReferenceTerm)masterlist.get(index).getObject()).getTermFragment();
 		}
 		
 //**************************************COMPOSITE ENTITY DATA RETRIEVAL METHODS *********************//
