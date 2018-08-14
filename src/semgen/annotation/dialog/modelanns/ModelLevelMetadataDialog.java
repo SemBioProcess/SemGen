@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 
 import org.sbml.jsbml.CVTerm.Qualifier;
@@ -29,6 +28,7 @@ import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
+import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
@@ -43,10 +43,12 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	private JOptionPane optionPane;
 	private SemSimModel semsimmodel;
 	private JTextArea descriptionarea;
-	private SemGenScrollPane scroller;
-	private JPanel outerannpanel;
+	private JTextArea cellmldocumentationarea;
+	private SemGenScrollPane refannscroller;
+	private JPanel outerrefannpanel;
 	private JPanel annlistpanel;
 	private JButton addbutton;
+	private int panelwidth = 950;
 	
 	public ModelLevelMetadataDialog(AnnotatorWorkbench wb) {
 		super("Model-level annotations");
@@ -55,14 +57,14 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		this.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
 		
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		setPreferredSize(new Dimension(1000, 850));
+		setPreferredSize(new Dimension(1000, 900));
 		setMaximumSize(getPreferredSize());
 		setMinimumSize(getPreferredSize());
 		setResizable(true);
 		
-		outerannpanel = new JPanel();
-		outerannpanel.setBorder(BorderFactory.createTitledBorder("Knowledge resource annotations"));
-		outerannpanel.setLayout(new BoxLayout(outerannpanel, BoxLayout.Y_AXIS));
+		outerrefannpanel = new JPanel();
+		outerrefannpanel.setBorder(BorderFactory.createTitledBorder("Knowledge resource annotations"));
+		outerrefannpanel.setLayout(new BoxLayout(outerrefannpanel, BoxLayout.Y_AXIS));
 		
 		JPanel addbuttonpanel = new JPanel();
 		addbuttonpanel.setLayout(new BoxLayout(addbuttonpanel,BoxLayout.X_AXIS));
@@ -73,7 +75,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		addbuttonpanel.add(addbutton);
 		
 		addbuttonpanel.add(Box.createHorizontalGlue());
-		addbuttonpanel.setPreferredSize(new Dimension(900,40));
+		addbuttonpanel.setPreferredSize(new Dimension(panelwidth,40));
 		addbuttonpanel.setMaximumSize(addbuttonpanel.getPreferredSize());
 		addbuttonpanel.setMinimumSize(addbuttonpanel.getPreferredSize());
 		
@@ -86,14 +88,36 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		descriptionarea.setLineWrap(true);
 
 		SemGenScrollPane descriptionscroller = new SemGenScrollPane(descriptionarea);
-		descriptionscroller.setPreferredSize(new Dimension(900,200));
-		descriptionscroller.setMinimumSize(descriptionscroller.getPreferredSize());
-		descriptionscroller.setMaximumSize(descriptionscroller.getPreferredSize());
-		
+		descriptionpanel.setPreferredSize(new Dimension(panelwidth,175));
+		descriptionscroller.setPreferredSize(new Dimension(panelwidth,175));
+
+		descriptionpanel.setMinimumSize(descriptionscroller.getPreferredSize());
+		descriptionpanel.setMaximumSize(descriptionscroller.getPreferredSize());
 		descriptionpanel.add(descriptionscroller);
 		descriptionpanel.add(Box.createGlue());
 				
 		descriptionarea.setText(semsimmodel.getDescription());
+		
+		JPanel cellmldocumentationpanel = new JPanel();
+		cellmldocumentationpanel.setBorder(BorderFactory.createTitledBorder("CellML documentation"));
+		
+		cellmldocumentationpanel.setLayout(new BoxLayout(cellmldocumentationpanel,BoxLayout.X_AXIS));
+		cellmldocumentationarea = new JTextArea();
+		cellmldocumentationarea.setWrapStyleWord(true);
+		cellmldocumentationarea.setLineWrap(true);
+
+		SemGenScrollPane cellmldocumentationscroller = new SemGenScrollPane(cellmldocumentationarea);
+		cellmldocumentationpanel.setPreferredSize(new Dimension(panelwidth,175));
+		cellmldocumentationscroller.setPreferredSize(new Dimension(panelwidth,175));
+
+		cellmldocumentationpanel.setMinimumSize(cellmldocumentationscroller.getPreferredSize());
+		cellmldocumentationpanel.setMaximumSize(cellmldocumentationscroller.getPreferredSize());
+		cellmldocumentationpanel.add(cellmldocumentationscroller);
+		cellmldocumentationpanel.add(Box.createGlue());
+				
+		String cellmldoctext = semsimmodel.getFirstAnnotationObjectForRelationAsString(SemSimRelation.CELLML_DOCUMENTATION);
+		cellmldocumentationarea.setText(cellmldoctext);
+		
 		
 		annlistpanel = new JPanel();
 		annlistpanel.setLayout(new BoxLayout(annlistpanel, BoxLayout.Y_AXIS));
@@ -112,18 +136,23 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		
 		annlistpanel.add(Box.createVerticalGlue());
 		
-		scroller = new SemGenScrollPane(annlistpanel);
-		scroller.setPreferredSize(new Dimension(900,400));
-		scroller.setMaximumSize(scroller.getPreferredSize());
-		scroller.setMinimumSize(scroller.getPreferredSize());
+		refannscroller = new SemGenScrollPane(annlistpanel);
+		outerrefannpanel.setPreferredSize(new Dimension(panelwidth,400));
+		outerrefannpanel.setMaximumSize(refannscroller.getPreferredSize());
+		outerrefannpanel.setMinimumSize(refannscroller.getPreferredSize());
 		
-		outerannpanel.add(addbuttonpanel);
-		outerannpanel.add(scroller);
+		outerrefannpanel.add(addbuttonpanel);
+		outerrefannpanel.add(refannscroller);
 		
 		descriptionscroller.scrollToTop();
-		scroller.scrollToTop();
+		cellmldocumentationscroller.scrollToTop();
+		refannscroller.scrollToTop();
 
-		Object[] array = { descriptionpanel, new JSeparator(), outerannpanel, Box.createVerticalGlue()};
+		if(cellmldoctext.isEmpty())
+			cellmldocumentationpanel.setVisible(false);
+		
+		
+		Object[] array = { descriptionpanel, cellmldocumentationpanel, outerrefannpanel, Box.createVerticalGlue()};
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -148,6 +177,14 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			if (value.equals("Apply")) {
 				// save changes here
 				semsimmodel.setDescription(descriptionarea.getText());
+				
+				// store cellml documentation edits
+				for(Annotation ann : semsimmodel.getAnnotations()){
+					if(ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION){
+						ann.setValue(cellmldocumentationarea.getText());
+					}
+				}
+				
 				semsimmodel.removeAllReferenceAnnotations();
 				// store annotations
 				for(Component c : annlistpanel.getComponents()){
@@ -185,9 +222,9 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		Object o = arg0.getSource();
 		if (o == addbutton) {
 			this.annlistpanel.add(new AnnPanel(new ReferenceOntologyAnnotation(SemSimRelation.UNKNOWN,URI.create(""),"",SemGen.semsimlib)));
-			scroller.scrollToBottom();
-			scroller.validate();
-			scroller.repaint();
+			refannscroller.scrollToBottom();
+			refannscroller.validate();
+			refannscroller.repaint();
 		}
 	}
 	
