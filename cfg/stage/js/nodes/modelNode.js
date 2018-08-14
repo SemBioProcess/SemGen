@@ -12,7 +12,7 @@ function ModelNode (graph, srcobj) {
 	this.addClassName("modelNode");
 	this.canlink = false;
 	if (this.displaymode == null) this.createChildren();
-	this.displaymode = DisplayModes.SHOWSUBMODELS;
+	this.displaymode = DisplayModes.SHOWMODEL;
     this.submodelVizSize = srcobj.childsubmodels.length;
     this.dependencyVizSize = this.getAllChildNodes().length - this.submodelVizSize;
 
@@ -27,7 +27,7 @@ ModelNode.prototype.createVisualElement = function (element, graph) {
 ModelNode.prototype.createVisualization = function (modeid, expand) {
 	modelnode = this;
 
-    if (modelnode.displaymode==modeid) {
+    if (modelnode.displaymode == modeid) {
         if (!modelnode.showchildren && expand) {
             modelnode.showChildren();
         }

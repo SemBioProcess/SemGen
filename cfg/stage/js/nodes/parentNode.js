@@ -170,13 +170,20 @@ ParentNode.prototype.visibleGlobalApply = function(funct) {
 }
 
 ParentNode.prototype.onDoubleClick = function () {
-    this.showChildren();
-    if(this.graph.fixedMode) {
+
+	if(this.displaymode == DisplayModes.SHOWMODEL) {
+        this.createVisualization(DisplayModes.SHOWSUBMODELS, true);
+	}
+    else {
+        this.showChildren();
+    }
+    if (this.graph.fixedMode) {
         var nodesToUpdate = this.getRootParent().getAllChildNodes();
         nodesToUpdate.push(this.getRootParent());
         this.graph.update(nodesToUpdate);
     }
     else {
-    	this.graph.update();
-	}
+        this.graph.update();
+    }
+
 }

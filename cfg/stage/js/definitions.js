@@ -58,7 +58,8 @@ var defaultchargedistance = 300;
 var DisplayModes = {
 	SHOWSUBMODELS: { id: 0, btnid: "showSubmodels", keys: [NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
 	SHOWDEPENDENCIES: { id: 1, btnid: "showDependencies", keys: [NodeType.STATE, NodeType.RATE, NodeType.CONSTITUTIVE]},
-	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.ENTITY, NodeType.PROCESS, NodeType.UNSPECIFIED]}
+	SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.ENTITY, NodeType.PROCESS, NodeType.UNSPECIFIED]},
+	SHOWMODEL: { id: 3, btnid: "showModel", keys: [NodeType.MODEL]}
 };
 
 

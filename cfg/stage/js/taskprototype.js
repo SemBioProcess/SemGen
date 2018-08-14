@@ -18,7 +18,7 @@ function Task(graph, stagestate) {
 	this.addModelNode = function(model, optbehaviors) {
 		
 		var modelNode = new ModelNode(this.graph, model);
-		modelNode.createVisualization(DisplayModes.SHOWSUBMODELS, false);
+		modelNode.createVisualization(DisplayModes.SHOWMODEL, false);
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
