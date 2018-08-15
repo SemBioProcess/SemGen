@@ -75,7 +75,7 @@ public class AutoAnnotate {
 				// Copy OPB annotation to mapped variables
 				if(camount.isMapped()){
 					Set<MappableVariable> mappedset = 
-						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) camount);
+						AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) camount);
 					confirmedamounts.addAll(mappedset);
 				}
 				
@@ -96,7 +96,7 @@ public class AutoAnnotate {
 					
 					// Copy OPB annotation to mapped variables
 					if(newcamount.isMapped()) 
-						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcamount);
+						AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) newcamount);
 				}
 			}
 		}
@@ -127,7 +127,7 @@ public class AutoAnnotate {
 				// Copy OPB annotation to mapped variables
 				if(cforce.isMapped()){
 					Set<MappableVariable> mappedset = 
-							AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) cforce);
+							AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) cforce);
 					confirmedforces.addAll(mappedset);
 				}
 			}
@@ -147,7 +147,7 @@ public class AutoAnnotate {
 					
 					// Copy OPB annotation to mapped variables
 					if(newcforce.isMapped()) 
-						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcforce);
+						AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) newcforce);
 				}
 			}
 		}
@@ -176,7 +176,7 @@ public class AutoAnnotate {
 				// Copy OPB annotation to mapped variables
 				if(cflow.isMapped()){ 
 					Set<MappableVariable> mappedset = 
-						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) cflow);
+						AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) cflow);
 					confirmedflows.addAll(mappedset);
 				}
 			}
@@ -195,7 +195,7 @@ public class AutoAnnotate {
 					
 					// Copy OPB annotation to mapped variables
 					if(newcflow.isMapped()) 
-						AnnotationCopier.copyAllAnnotationsToMappedVariables((MappableVariable) newcflow);
+						AnnotationCopier.copyCompositeAnnotationsToMappedVariables((MappableVariable) newcflow);
 				}
 			}
 		}
