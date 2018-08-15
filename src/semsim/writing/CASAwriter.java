@@ -79,6 +79,8 @@ public class CASAwriter extends AbstractRDFwriter{
 				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
 				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), rdf.createResource(refann.getReferenceURI().toString()));
 			}
+			//TODO: Need to decide how to handle annotations already in RDF block. Skip them all for now (some are read into SemSim object model and will be preserved in CASA file)
+			else if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
 			else st = rdf.createStatement(modelresource, ann.getRelation().getRDFproperty(), ann.getValue().toString());
 			
 			if(st!=null) addStatement(st);
@@ -160,7 +162,7 @@ public class CASAwriter extends AbstractRDFwriter{
 				
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it
-			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+			if(refres!=null) addStatement(annagainstst);
 		}
 		
 		// If it's a custom resource
@@ -189,7 +191,7 @@ public class CASAwriter extends AbstractRDFwriter{
 						
 						// If we have a reference resource and the annotation statement hasn't already 
 						// been added to the RDF block, add it
-						if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+						if(refres!=null) addStatement(annagainstst);
 					}
 				}
 			}
@@ -201,7 +203,7 @@ public class CASAwriter extends AbstractRDFwriter{
 					Statement namest = rdf.createStatement(res, 
 							SemSimRelation.HAS_NAME.getRDFproperty(), pmc.getName());
 					
-					if(!rdf.contains(namest)) rdf.add(namest);
+					addStatement(namest);
 				}
 				
 				if(pmc.hasDescription()){
@@ -214,23 +216,7 @@ public class CASAwriter extends AbstractRDFwriter{
 		}
 	}
 	
-	
-	// Add singular annotation
-	@Override
-	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
-		
-		if(ds.hasPhysicalDefinitionAnnotation()){
-			URI uri = ds.getPhysicalDefinitionURI();
-			Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
-			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-			Resource refres = rdf.createResource(furi.toString());
-			Statement st = rdf.createStatement(ares, isprop, refres);
-			
-			addStatement(st);
-		}
-		
-	}
-	
+
 	
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
