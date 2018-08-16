@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -62,7 +61,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		initialize(semsimmodel);
 		
 		if(rdfasstring!=null){
-			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring, SemSimRDFreader.TEMP_NAMESPACE);
+			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring, "");
 			
 			if(modeltype.equals(ModelType.CELLML_MODEL))
 				rdf.removeNsPrefix("model"); // In case old RDF with a declared namespace is present (older CellML models)
@@ -118,7 +117,10 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
 		
 		for(Annotation ann : semsimmodel.getAnnotations()){
-						
+			
+			//TODO: Need to work on preserving all annotations in CellML RDF block.
+			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
+			
 			Property prop = ann.getRelation().getRDFproperty();
 			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
 			
@@ -185,22 +187,6 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		}
 	}
 	
-	
-	// Add singular annotation
-	@Override
-	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
-		
-		if(ds.hasPhysicalDefinitionAnnotation()){
-			URI uri = ds.getPhysicalDefinitionURI();
-			Property isprop = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getURIasString());
-			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-			Resource refres = rdf.createResource(furi.toString());
-			Statement st = rdf.createStatement(ares, isprop, refres);
-			
-			addStatement(st);
-		}
-		
-	}
 		
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
@@ -352,7 +338,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 				
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it
-			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+			if(refres!=null) addStatement(annagainstst);
 		}
 		
 		// If it's a custom resource
@@ -378,7 +364,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						
 						// If we have a reference resource and the annotation statement hasn't already 
 						// been added to the RDF block, add it
-						if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+						if(refres!=null) addStatement(annagainstst);
 					}
 				}
 			}
@@ -390,7 +376,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					Statement namest = rdf.createStatement(res, 
 							SemSimRelation.HAS_NAME.getRDFproperty(), pmc.getName());
 					
-					if(!rdf.contains(namest)) rdf.add(namest);
+					addStatement(namest);
 				}
 				
 				if(pmc.hasDescription()){
