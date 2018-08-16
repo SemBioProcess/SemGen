@@ -69,6 +69,8 @@ Once a model is loaded in SemGen, there are several ways to visualize and explor
 
 Select the model you want to visualize by clicking the model node (selected node will have a yellow ring around it). Then click one of the visualizations from the **Project Actions** menu on the lefthand side.
 
+NOTE: Occassionally, the layout algorithm may push a model's nodes drastically outside the viewing range. Re-clicking one of the visualization buttons in the **Project Actions** menu usual repositions the nodes inside the viewing range. See [issue #214](https://github.com/SemBioProcess/SemGen/issues/214)
+
 #### Submodels
 
 The submodel visualization shows the hierarchical and/or compartmental organization of the model:
@@ -141,7 +143,8 @@ Below is an step-by-step example of an extraction:
 1. Load a model and select one or more nodes you would like to extract by left-clicking. Multiple nodes can be selected by control+click (command+click on Mac), or by toggling *selection* in the top right corner.
 2. Right-click one of the selected nodes and click *Extract Selected*. In case you want to extract the majority of the model, it may be more convenient to select the nodes you do not wish to save in the extraction, and click *Extract Unselected*. ![](https://i.imgur.com/vEywONu.png)
 3. Enter a new name for the extracted nodes, and the newly extracted nodes will appear in SemGen. ![](https://i.imgur.com/Be6RSn8.png) ![](https://i.imgur.com/zSZzVqE.png)
-4. Extraction can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
+4. Extractions can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
+5. Extractions can be saved out to various modeling formats by clicking the *Export* button under the **Project Actions** menu. If an unsaved extraction is closed either by selecting the *Close* button or by closing the parent Project Tab, a prompt appears for saving the extraction. 
 
 
 ### Merger

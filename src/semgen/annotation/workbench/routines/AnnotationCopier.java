@@ -61,6 +61,19 @@ public class AnnotationCopier {
 		return allmappedvars;
 	}
 	
+	public static Set<MappableVariable> copyCompositeAnnotationsToMappedVariables(MappableVariable ds){
+		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
+		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
+		
+		for(MappableVariable otherds : allmappedvars){
+			
+			if( ! otherds.isImportedViaSubmodel())
+				copyCompositeAnnotation(ds, otherds);
+			
+		}
+		return allmappedvars;
+	}
+	
 	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllLocallyMappedVariables(ds, ds, new HashSet<MappableVariable>()));

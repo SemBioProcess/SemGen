@@ -14,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimObject;
@@ -60,15 +61,6 @@ public abstract class AbstractRDFwriter {
 	// Abstract methods
 	/** Write out the RDF content for annotations on the model as a whole (curatorial metadata, e.g.) */
 	abstract protected void setRDFforModelLevelAnnotations();
-	
-	
-	/**
-	 * Write out the singular annotation on a data structure (i.e. a non-composite definition
-	 * for the property simulated by the data structure).
-	 * @param ds The data structure that is annotated
-	 * @param ares The RDF Resource representing the data structure
-	 */
-	abstract protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares);
 	
 	
 	/**
@@ -136,7 +128,27 @@ public abstract class AbstractRDFwriter {
 				sso.setMetadataID(ares.getURI().replace("#", ""));
 		}
 	}
+	
+
+	/**
+	 * Write out the singular annotation on a data structure (i.e. a non-composite definition
+	 * for the property simulated by the data structure).
+	 * @param ds The data structure that is annotated
+	 * @param ares The RDF Resource representing the data structure
+	 */
+	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
 		
+		if(ds.hasPhysicalDefinitionAnnotation()){
+			URI uri = ds.getPhysicalDefinitionURI();
+			Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
+			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
+			Resource refres = rdf.createResource(furi.toString());
+			Statement st = rdf.createStatement(ares, isprop, refres);
+			
+			addStatement(st);
+		}
+	}	
+	
 	
 	/** Add RDF statements that capture all annotations on all data structures in a SemSim model */
 	protected void setRDFforDataStructureAnnotations(){
