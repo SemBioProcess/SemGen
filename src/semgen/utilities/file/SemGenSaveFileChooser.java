@@ -223,14 +223,15 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 
 		if ((modeltype == ModelType.MML_MODEL_IN_PROJ || modeltype == ModelType.MML_MODEL ||
 				modeltype == ModelType.CELLML_MODEL) && semsimmodel != null) {
-			if( ! semsimmodel.getEvents().isEmpty())
-				errs = errs + "   - model contains discrete events\n";
-			
 			if( ! semsimmodel.getSBMLFunctionOutputs().isEmpty())
 				errs = errs + "   - model contains SBML-style functions\n";
 			
 			if( ! semsimmodel.getSBMLInitialAssignments().isEmpty())
 				errs = errs + "   - model contains SBML-style initial assignments\n";
+		}
+		if ((modeltype == ModelType.CELLML_MODEL) && semsimmodel != null){
+			if( ! semsimmodel.getEvents().isEmpty())
+				errs = errs + "   - model contains discrete events\n";
 		}
 			
 		if(errs != ""){
