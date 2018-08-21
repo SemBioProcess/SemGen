@@ -256,6 +256,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			if (e.getSource()==combobox) {
 				drawer.setDataStructureComposite(getSelection());
 				toggleNoneSelected(getSelection() == -1);
+				toggleCustom( ! termlib.isReferenceTerm(getSelection()));
 				showProcessParticipants();
 				if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 			}
