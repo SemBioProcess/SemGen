@@ -86,8 +86,8 @@ public class ModelExtractionGroup {
 	}
 	
 	public ModelAccessor saveExtraction(Integer tosave) {
-			ModelAccessor ma = workbench.saveModel(tosave);	
-			extractionnodes.get(tosave).setChangesSaved(true);
+			ModelAccessor ma = workbench.saveModel(tosave);
+			if(ma!=null) extractionnodes.get(tosave).setChangesSaved(true);
 			return ma;
 	}
 	

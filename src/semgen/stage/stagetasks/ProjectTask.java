@@ -336,7 +336,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				int returnval = JOptionPane.showConfirmDialog(null, 
 						"Save extraction " + name + "?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
 				if(returnval==JOptionPane.YES_OPTION){
-					meg.saveExtraction(modelindex);
+					ModelAccessor returnma = meg.saveExtraction(modelindex);
+					if(returnma==null) return true; // Return true to indicate the save operation, and thus the close operation, was cancelled
 				}
 				else if(returnval==JOptionPane.NO_OPTION){
 				}
