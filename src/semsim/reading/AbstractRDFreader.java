@@ -34,6 +34,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalForce;
@@ -409,6 +410,8 @@ public abstract class AbstractRDFreader {
 		CustomPhysicalEntity returnent = new CustomPhysicalEntity(name, description);
 		semsimmodel.addCustomPhysicalEntity(returnent);
 		
+		returnent.setMetadataID(res.getLocalName());
+		
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
 			URI propuri = URI.create(st.getPredicate().getURI());
@@ -474,7 +477,8 @@ public abstract class AbstractRDFreader {
 					if (sso!=null){
 						
 						// Remove dc:description statements (do not need to preserve these)
-						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
+						if((sso instanceof DataStructure || sso instanceof Submodel || sso instanceof PhysicalEntity || sso instanceof PhysicalProcess)
+								&& rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
 							listofremovedstatements.add(st);
 					}
 				}

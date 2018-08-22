@@ -69,6 +69,12 @@ Once a model is loaded in SemGen, there are several ways to visualize and explor
 
 Select the model you want to visualize by clicking the model node (selected node will have a yellow ring around it). Then click one of the visualizations from the **Project Actions** menu on the lefthand side.
 
+An entire model or submodel can be moved by clicking and dragging the *hull* surrounding the group of nodes. You can also adjust the view by clicking and dragging the whitespace around the model or zooming in and out using the mouse wheel.
+
+![](https://i.imgur.com/AApjSgt.gif)
+
+![](https://i.imgur.com/4WS8jFF.gif)
+
 NOTE: Occassionally, the layout algorithm may push a model's nodes drastically outside the viewing range. Re-clicking one of the visualization buttons in the **Project Actions** menu usual repositions the nodes inside the viewing range. See [issue #214](https://github.com/SemBioProcess/SemGen/issues/214)
 
 #### Submodels

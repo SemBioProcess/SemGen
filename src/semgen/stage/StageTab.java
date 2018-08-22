@@ -130,11 +130,16 @@ public class StageTab extends SemGenTab implements Observer {
 			// Prompt to save any unsaved extractions
 			for(int m=0; m<projtask.extractnodeworkbenchmap.size(); m++){
 				ModelExtractionGroup meg = projtask.extractnodeworkbenchmap.get(m);
-				int sourcemodelindx = meg.sourcemodelindex.intValue();
 				
-				for(int j=0; j<meg.extractionnodes.size();j++){
-					boolean cancelled = projtask.closeModels(sourcemodelindx,j);
-					if(cancelled) return false;
+				if(meg!=null){
+					if(meg.sourcemodelindex!=null){
+						int sourcemodelindx = meg.sourcemodelindex.intValue();
+						
+						for(int j=0; j<meg.extractionnodes.size();j++){
+							boolean cancelled = projtask.closeModels(sourcemodelindx,j);
+							if(cancelled) return false;
+						}
+					}
 				}
 			}
 		}

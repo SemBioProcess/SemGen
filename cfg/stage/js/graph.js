@@ -569,19 +569,24 @@ function Graph() {
 	//Bind keyboard events
 	$(document).keyup(function(event){
 		if(graph.isMac) {
-            if(event.which=="91")
+            if (event.which == "91" || event.which == "93") {
                 graph.cntrlIsPressed = false;
-		}
-        if(event.which=="17") {
-            graph.cntrlIsPressed = false;
-            graph.cntrlIsPressedOnMac = false;
-		}
-		if(event.which=="16") {
-			graph.shiftIsPressed = false;
-			$('#stage').css('cursor', graph.defaultcursor);
-		}
+            }
+            if (event.which == "17") {
+                graph.cntrlIsPressedOnMac = false;
+            }
+        }
+		else {
+            if (event.which == "17") {
+                graph.cntrlIsPressed = false;
+            }
+        }
+        if (event.which == "16") {
+            graph.shiftIsPressed = false;
+            $('#stage').css('cursor', graph.defaultcursor);
+        }
 
-		if(event.which=="32") {
+        if (event.which == "32") {
             if (!$(event.target).closest(".searchString").length) {
                 graph.fixedMode = !graph.fixedMode;
                 $("#fixedNodes").attr('checked', graph.fixedMode);
@@ -590,13 +595,14 @@ function Graph() {
                 else graph.resume();
             }
         }
-	});
+    });
 
 
 	$(document).keydown(function(event){
         if(graph.isMac) {
-            if(event.metaKey)
+            if(event.which == "91" || event.which == "93") {
                 graph.cntrlIsPressed = true;
+            }
             if(event.which=="17") {
                 graph.cntrlIsPressedOnMac = true;
             }

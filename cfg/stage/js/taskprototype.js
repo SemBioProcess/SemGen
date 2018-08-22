@@ -161,12 +161,12 @@ function Task(graph, stagestate) {
 	$('#stage').off('selectinputs').on('selectinputs', function(e, caller) {
 		if (!caller.selected) task.selectNode(caller);
 		var inputs = caller.getInputs(),
-		cnrlstate = task.graph.cntrlIsPressed;
+            cntrlstate = task.graph.cntrlIsPressed;
 		task.graph.cntrlIsPressed = true;
 		for (x in inputs) {
 			if (!inputs[x].selected) task.selectNode(inputs[x]);
 		}
-		graph.cntrlIsPressed = cnrlstate;
+		graph.cntrlIsPressed = cntrlstate;
 	});
 	
 	this.selectNodes = function(selections) {
