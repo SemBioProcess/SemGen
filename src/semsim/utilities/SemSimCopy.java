@@ -19,9 +19,12 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
+import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
+import semsim.model.physical.object.CustomPhysicalForce;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -32,12 +35,13 @@ import semsim.model.physical.object.ReferencePhysicalProcess;
  *
  */
 public class SemSimCopy {
-	HashMap<PhysicalEntity, PhysicalEntity> entities = new HashMap<PhysicalEntity, PhysicalEntity>();
-	HashMap<PhysicalProcess, PhysicalProcess> procs = new HashMap<PhysicalProcess, PhysicalProcess>();
-	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
+	HashMap<PhysicalEntity, PhysicalEntity> entitiesmap = new HashMap<PhysicalEntity, PhysicalEntity>();
+	HashMap<PhysicalProcess, PhysicalProcess> processesmap = new HashMap<PhysicalProcess, PhysicalProcess>();
+	HashMap<PhysicalForce, PhysicalForce> forcesmap = new HashMap<PhysicalForce,PhysicalForce>();
+	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	LinkedHashMap<DataStructure, DataStructure> dsmap = new LinkedHashMap<DataStructure, DataStructure>();
-	HashMap<Event, Event> eventmap = new HashMap<Event, Event>();
-	LinkedHashMap<Submodel, Submodel> smmap = new LinkedHashMap<Submodel, Submodel>();
+	HashMap<Event, Event> eventsmap = new HashMap<Event, Event>();
+	LinkedHashMap<Submodel, Submodel> submodelsmap = new LinkedHashMap<Submodel, Submodel>();
 	
 	SemSimModel modeltocopy;
 	SemSimModel destmodel;
@@ -51,23 +55,26 @@ public class SemSimCopy {
 	/** Copy the physical and computational components from one model to another. */
 	private void copySemSimModelStructures() {
 		copyPhysicalEntities(modeltocopy);
-		destmodel.setPhysicalEntities(new HashSet<PhysicalEntity>(entities.values()));
+		destmodel.setPhysicalEntities(new HashSet<PhysicalEntity>(entitiesmap.values()));
 		
 		copyPhysicalProcesses(modeltocopy);
-		destmodel.setPhysicalProcesses(new HashSet<PhysicalProcess>(procs.values()));
+		destmodel.setPhysicalProcesses(new HashSet<PhysicalProcess>(processesmap.values()));
+		
+		copyPhysicalForces(modeltocopy);
+		destmodel.setPhysicalForces(new HashSet<PhysicalForce>(forcesmap.values()));
 		
 		copyUnits();
-		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitmap.values()));
+		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitsmap.values()));
 		
 		copyDataStructures(modeltocopy);
 		destmodel.setAssociatedDataStructures(new ArrayList<DataStructure>(dsmap.values()));
 		
 		copySubModels();
-		destmodel.setSubmodels(smmap.values());
+		destmodel.setSubmodels(submodelsmap.values());
 		remap();
 		
 		copyEvents();
-		destmodel.setEvents(new ArrayList<Event>(eventmap.values()));
+		destmodel.setEvents(new ArrayList<Event>(eventsmap.values()));
 				
 		copyRelationalConstraints();
 		
@@ -93,28 +100,29 @@ public class SemSimCopy {
 	 * @param modeltocopy The model containing physical entities to copy
 	 */
 	private void copyPhysicalEntities(SemSimModel modeltocopy) {
-		for (ReferencePhysicalEntity rpe : modeltocopy.getReferencePhysicalEntities()) {
-			entities.put(rpe,rpe);
-		}
-		for (CustomPhysicalEntity cupe : modeltocopy.getCustomPhysicalEntities()) {
-			entities.put(cupe, new CustomPhysicalEntity(cupe));
-		}
+		for (ReferencePhysicalEntity rpe : modeltocopy.getReferencePhysicalEntities())
+			entitiesmap.put(rpe,rpe);
+		
+		for (CustomPhysicalEntity cupe : modeltocopy.getCustomPhysicalEntities())
+			entitiesmap.put(cupe, new CustomPhysicalEntity(cupe));
+		
 		for (CompositePhysicalEntity cpe : modeltocopy.getCompositePhysicalEntities()) {
 			CompositePhysicalEntity newcpe = new CompositePhysicalEntity(cpe);
 			ArrayList<PhysicalEntity> pes = new ArrayList<PhysicalEntity>();
+			
 			for (PhysicalEntity pe : cpe.getArrayListOfEntities()) {
-				if (!entities.containsKey(pe)) {
-					if (pe.hasPhysicalDefinitionAnnotation()) {
-						entities.put(pe, pe);
-					}
-					else {
-						entities.put(pe, new CustomPhysicalEntity((CustomPhysicalEntity) pe));
-					}
+				
+				if (!entitiesmap.containsKey(pe)) {
+					
+					if (pe.hasPhysicalDefinitionAnnotation())
+						entitiesmap.put(pe, pe);
+					else
+						entitiesmap.put(pe, new CustomPhysicalEntity((CustomPhysicalEntity) pe));
 				}
-				pes.add(entities.get(pe));
+				pes.add(entitiesmap.get(pe));
 			}
 			newcpe.setArrayListOfEntities(pes);
-			entities.put(cpe, newcpe);
+			entitiesmap.put(cpe, newcpe);
 		}
 	}
 	
@@ -125,21 +133,41 @@ public class SemSimCopy {
 	 */
 	private void copyPhysicalProcesses(SemSimModel modeltocopy) {		
 		for (ReferencePhysicalProcess rpp : modeltocopy.getReferencePhysicalProcesses()) {
-			procs.put(rpp,rpp);
+			processesmap.put(rpp,rpp);
 		}
 		for (CustomPhysicalProcess cpp : modeltocopy.getCustomPhysicalProcesses()) {
 			CustomPhysicalProcess newcpp = new CustomPhysicalProcess(cpp);
 			for (PhysicalEntity part : cpp.getParticipants()) {
-				PhysicalEntity newpart = entities.get(part);
+				PhysicalEntity newpart = entitiesmap.get(part);
 				if (newpart==null) {
 					
 				}
 				
 				newcpp.replaceParticipant(part, newpart);
 			}
-			procs.put(cpp, newcpp);
+			processesmap.put(cpp, newcpp);
 		}
-		
+	}
+	
+	
+	/**
+	 * Copy physical forces present in a SemSimModel
+	 * @param modeltocopy The SemSimModel containing processes to copy
+	 */
+	private void copyPhysicalForces(SemSimModel modeltocopy){
+		for (CustomPhysicalForce cpf : modeltocopy.getCustomPhysicalForces()) { 
+
+			CustomPhysicalForce newcpf = new CustomPhysicalForce(cpf);
+			for (PhysicalEntity part : cpf.getParticipants()) {
+				
+				PhysicalEntity newpart = entitiesmap.get(part);
+				
+				if (newpart==null) {}
+				
+				newcpf.replaceParticipant(part, newpart);
+			}
+			forcesmap.put(cpf, newcpf);
+		}
 	}
 	
 	
@@ -149,7 +177,7 @@ public class SemSimCopy {
 		
 		for (UnitOfMeasurement old : modeltocopy.getUnits()) {
 			UnitOfMeasurement newunit = new UnitOfMeasurement(old);
-			unitmap.put(old, newunit);
+			unitsmap.put(old, newunit);
 			
 			HashSet<UnitFactor> ufset = new HashSet<UnitFactor>();
 			
@@ -171,7 +199,7 @@ public class SemSimCopy {
 		}
 		//Set unit factor base units using the new units
 		for (UnitFactor uf : ufactormap.values()) {
-			uf.setBaseUnit(unitmap.get(uf.getBaseUnit()));
+			uf.setBaseUnit(unitsmap.get(uf.getBaseUnit()));
 		}
 
 	}
@@ -198,17 +226,22 @@ public class SemSimCopy {
 	private void remapDataStructures() {
 		for (DataStructure ds : dsmap.values()) {
 			if (ds.hasAssociatedPhysicalComponent()) {
-				if (entities.containsKey(ds.getAssociatedPhysicalModelComponent())) {
-					ds.setAssociatedPhysicalModelComponent(entities.get(ds.getAssociatedPhysicalModelComponent()));
+				
+				PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
+				
+				if (pmc instanceof PhysicalEntity && entitiesmap.containsKey(pmc)) {
+					ds.setAssociatedPhysicalModelComponent(entitiesmap.get(pmc));
 				}
-				else {
-					ds.setAssociatedPhysicalModelComponent(procs.get(ds.getAssociatedPhysicalModelComponent()));
+				else if(pmc instanceof PhysicalProcess){
+					ds.setAssociatedPhysicalModelComponent(processesmap.get(pmc));
+				}
+				else{ // Assume it's a physical force
+					ds.setAssociatedPhysicalModelComponent(forcesmap.get(pmc));
 				}
 			}
 			if (ds.hasUnits()) {
-				ds.setUnit(unitmap.get(ds.getUnit()));
+				ds.setUnit(unitsmap.get(ds.getUnit()));
 			}
-			
 		}
 	}
 	
@@ -226,9 +259,9 @@ public class SemSimCopy {
 			}
 			else newsm = new Submodel(sm);
 			
-			smmap.put(sm, newsm);
+			submodelsmap.put(sm, newsm);
 		}
-		for (Submodel sm : smmap.values()) sm.replaceSubmodels(smmap);
+		for (Submodel sm : submodelsmap.values()) sm.replaceSubmodels(submodelsmap);
 		
 	}
 	
@@ -245,10 +278,10 @@ public class SemSimCopy {
 		
 		for(Event oldev : modeltocopy.getEvents()){
 			Event newev = new Event(oldev);
-			eventmap.put(oldev, newev);
+			eventsmap.put(oldev, newev);
 			
 			if(oldev.getTimeUnit() != null)
-				newev.setTimeUnit(unitmap.get(oldev.getTimeUnit()));
+				newev.setTimeUnit(unitsmap.get(oldev.getTimeUnit()));
 			
 			// Reassign the new data structure output instances to the event assignments
 			for(EventAssignment newea : newev.getEventAssignments()){
@@ -265,7 +298,7 @@ public class SemSimCopy {
 			
 			// The new Computation instances refer to the old Events here. Replace with new Events.
 			for(Event oldevent : newcomp.getEvents())
-				neweventset.add(eventmap.get(oldevent));
+				neweventset.add(eventsmap.get(oldevent));
 			
 			newcomp.setEvents(neweventset);
 		}

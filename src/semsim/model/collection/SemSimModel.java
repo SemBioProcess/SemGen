@@ -266,7 +266,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CustomPhysicalProcess addCustomPhysicalProcess(CustomPhysicalProcess custompp){
 		
-		if(getCustomPhysicalProcessByName(custompp.getName())!=null) custompp = getCustomPhysicalProcessByName(custompp.getName());
+		if(getCustomPhysicalProcessByName(custompp.getName())!=null) 
+			custompp = getCustomPhysicalProcessByName(custompp.getName());
 		else physicalprocesses.add(custompp);
 		
 		return custompp;
@@ -281,8 +282,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CustomPhysicalForce addCustomPhysicalForce(CustomPhysicalForce custompf){
 		
-		if(getCustomPhysicalForceByName(custompf.getName())!=null) custompf = getCustomPhysicalForceByName(custompf.getName());
-		else physicalforces.add(custompf);
+		if(getCustomPhysicalForceByParticipants(custompf)!=null)
+			custompf = getCustomPhysicalForceByParticipants(custompf);
+		else{
+			assignValidMetadataIDtoSemSimObject("metaid0", custompf);
+			physicalforces.add(custompf);
+		}
 		
 		return custompf;
 	}
@@ -694,6 +699,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getPhysicalEntities());
 		set.addAll(getPhysicalProperties());
 		set.addAll(getPhysicalProcesses());
+		set.addAll(getPhysicalForces());
 		return set;
 	}
 	
@@ -807,17 +813,30 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 	
 	
-	
-	/**
-	 * @param name The name of CustomPhysicalForce to return
-	 * @return The CustomPhysicalForce with the specified name or null if no match was found.
-	 */
-	public CustomPhysicalForce getCustomPhysicalForceByName(String name){
+	/** @return The set of all CustomPhysicalForces in the model. */
+	public Set<CustomPhysicalForce> getCustomPhysicalForces(){
+		Set<CustomPhysicalForce> custs = new HashSet<CustomPhysicalForce>();
 		
 		for(PhysicalForce force : getPhysicalForces()){
 			
-			if(!force.hasPhysicalDefinitionAnnotation()){
-				if(force.getName().equals(name)) return (CustomPhysicalForce)force;
+			if(! force.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalForce) force);
+		}
+		return custs;
+	}
+	
+	
+	/**
+	 * @param forcepar A CustomPhysicalForce 
+	 * @return The CustomPhysicalForce already in the model that is equivalent to 
+	 * the input force. If no equivalent found, null.
+	 */
+	public CustomPhysicalForce getCustomPhysicalForceByParticipants(CustomPhysicalForce forcepar){
+		
+		for(PhysicalForce force : getPhysicalForces()){
+			
+			if( ! force.hasPhysicalDefinitionAnnotation()){
+				if(((CustomPhysicalForce)force).isEquivalent(forcepar))
+					return (CustomPhysicalForce)force;
 			}
 		}
 		return null;

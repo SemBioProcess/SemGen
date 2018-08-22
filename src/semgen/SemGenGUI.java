@@ -249,7 +249,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void endTask(){
 			SemSimModel semsimmodel = lmj.getLoadedModel();
-			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._models.size());
+			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._modelinfos.size());
 			projecttask.addModeltoTask(info, true);
 			
 			//NOTE: When loading from the Annotator, _commandSender is null, 

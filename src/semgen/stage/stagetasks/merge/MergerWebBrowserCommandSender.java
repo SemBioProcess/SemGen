@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import semgen.stage.serialization.ModelNode;
 import semgen.stage.stagetasks.SemGenWebBrowserCommandSender;
-import semgen.stage.stagetasks.merge.MergerTask.MappingCandidate;
-import semgen.stage.stagetasks.merge.MergerTask.MergeConflicts;
-import semgen.stage.stagetasks.merge.MergerTask.Overlap;
+import semgen.stage.stagetasks.merge.StageMergerTask.MappingCandidate;
+import semgen.stage.stagetasks.merge.StageMergerTask.MergeConflicts;
+import semgen.stage.stagetasks.merge.StageMergerTask.Overlap;
 
 public interface MergerWebBrowserCommandSender extends SemGenWebBrowserCommandSender{
 	

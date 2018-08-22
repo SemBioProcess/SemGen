@@ -25,7 +25,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import javax.swing.*;
 import java.util.*;
 
-public class MergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
+public class StageMergerTask extends StageTask<MergerWebBrowserCommandSender> implements Observer {
 	private MergerWorkbench workbench = new MergerWorkbench();
 	private ArrayList<Pair<DataStructureDescriptor, DataStructureDescriptor>> jsoverlaps;
 	
@@ -34,7 +34,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	private ArrayList<UnitConflict> unitpairs = new ArrayList<UnitConflict>();
 	private ArrayList<Integer> choices = new ArrayList<Integer>();
 		
-	public MergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
+	public StageMergerTask(ArrayList<StageRootInfo<?>> modelinfo, int index) {
 		super(index);
 		workbench.addObserver(this);
 		_commandReceiver = new MergerCommandReceiver();
@@ -42,8 +42,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		ArrayList<SemSimModel> models = new ArrayList<SemSimModel>();
 		
 		for (StageRootInfo<?> model : modelinfo) {
-			ModelInfo info = new ModelInfo(model, _models.size());
-			_models.add(info);
+			ModelInfo info = new ModelInfo(model, _modelinfos.size());
+			_modelinfos.add(info);
 			files.add(info.accessor);
 			models.add(info.Model);
 		}
@@ -52,7 +52,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		for (int i=0; i< workbench.getMappingCount(); i++) {
 			choices.add(-1);
 		}
-		state = new StageState(Task.MERGER, _models, index);
+		state = new StageState(Task.MERGER, _modelinfos, index);
 
 	}
 
@@ -93,8 +93,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		int n = workbench.getSolutionDomainCount();
 		for (int i = n; i < (workbench.getMappingCount()); i++) {
 			Pair<DataStructure,DataStructure> overlap = dsoverlaps.get(i);
-			DependencyNode left = _models.get(0).modelnode.getDependencyNode(overlap.getLeft());
-			DependencyNode right = _models.get(1).modelnode.getDependencyNode(overlap.getRight());
+			DependencyNode left = _modelinfos.get(0).modelnode.getDependencyNode(overlap.getLeft());
+			DependencyNode right = _modelinfos.get(1).modelnode.getDependencyNode(overlap.getRight());
 			
 			overlaps.add(Pair.of(left, right));
 			//Add a link to the graph
@@ -168,8 +168,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
 		if (arg == MergeEvent.mergecompleted) {
-			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), workbench.getMergedFileAddress(), _models.size());
-			_models.add(mergedmodel);
+			ModelInfo mergedmodel = new ModelInfo(workbench.getMergedModel(), workbench.getMergedFileAddress(), _modelinfos.size());
+			_modelinfos.add(mergedmodel);
 			_commandSender.mergeCompleted(mergedmodel.modelnode, workbench.getModelSaved());
 		}
 		if (arg == MergeEvent.mappingevent) {
@@ -195,7 +195,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 	
 	//Return all dependency nodes eligible for manual mapping
 	private ArrayList<MappingCandidate> getMappingCandidates(int modelindex) {
-		HashSet<DependencyNode> depnodes = this._models.get(modelindex).modelnode.requestAllChildDependencies();
+		HashSet<DependencyNode> depnodes = _modelinfos.get(modelindex).modelnode.requestAllChildDependencies();
 		
 		ArrayList<MappingCandidate> candidates = new ArrayList<MappingCandidate>();
 		for (DependencyNode dnode : depnodes) {
@@ -258,8 +258,8 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		//Model id has to be included because we don't know the which model's node is being passed in
 		public void onCreateCustomOverlap(String nodes) {
 			String[] nodestolink = nodes.split(",");
-			String firstnodeid = _models.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
-			String secondnodeid = _models.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
+			String firstnodeid = _modelinfos.get(0).modelnode.getNodebyId(nodestolink[0]).getSourceObjectName();
+			String secondnodeid = _modelinfos.get(1).modelnode.getNodebyId(nodestolink[1]).getSourceObjectName();
 			
 			choices.add(-1);
 			workbench.addManualCodewordMapping(firstnodeid, secondnodeid);
@@ -345,7 +345,7 @@ public class MergerTask extends StageTask<MergerWebBrowserCommandSender> impleme
 		}
 
 		public void onSendModeltoStage() {
-			queueModel(_models.get(2));
+			queueModel(_modelinfos.get(2));
 		}
 		
 		public void onSave() {

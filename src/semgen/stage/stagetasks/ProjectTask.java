@@ -60,7 +60,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			for (ModelAccessor accessor : sgc.getSelectedFilesAsModelAccessors()) {
 				boolean alreadyopen = false;
 								
-				for (ModelInfo info : _models) {
+				for (ModelInfo info : _modelinfos) {
 					if (info != null) {
 						if (info.accessor != null) {
 							alreadyopen = info.accessor.equals(accessor);
@@ -134,7 +134,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		
 		
 		public void onQueryModel(Integer modelindex, String query) {
-			ModelInfo modelInfo = _models.get(modelindex);
+			ModelInfo modelInfo = _modelinfos.get(modelindex);
 			switch (query) {
 			case "hassubmodels":
 				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
@@ -236,7 +236,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			
 			ModelAccessor accessor = null;	
 			if (indexedtomodel==-1) {
-				accessor = _models.get(modelindex).accessor;
+				accessor = _modelinfos.get(modelindex).accessor;
 			}
 			else {
 				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
@@ -347,7 +347,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			
 			boolean empty = meg.removeExtraction(modelindex);
 			//If the parent model has been removed and the extraction group is empty, remove the extraction group
-			if (empty && this._models==null) {
+			if (empty && this._modelinfos==null) {
 				this.extractnodeworkbenchmap.set(modelindex, null);
 			}
 		}
@@ -447,7 +447,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	//Get a node by its model index and hash number
 	protected StageRootInfo<?> getInfobyAddress(JSArray address) {
 		if (address.get(0).asNumber().getInteger()==-1) {
-			return _models.get(address.get(1).asNumber().getInteger());
+			return _modelinfos.get(address.get(1).asNumber().getInteger());
 		}
 		else {
 			return this.extractnodeworkbenchmap.get(address.get(0).asNumber().getInteger()).getExtractionInfo(address.get(1).asNumber().getInteger());

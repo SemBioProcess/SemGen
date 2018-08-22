@@ -131,7 +131,7 @@ public class SemSimOWLreader extends ModelReader {
 		establishIsInputRelationships();
 		collectCustomAnnotations();		
 		collectSubModels();
-				
+		
 		return semsimmodel;
 	}
 	
@@ -380,14 +380,18 @@ public class SemSimOWLreader extends ModelReader {
 	 */
 	private void collectForces() throws OWLException {
 		
-		// For each process instance in the class SemSim:Physical_process
+		// For each force instance in the class SemSim:Physical_force
 		for(String forceind : SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_FORCE.getURIasString())){
+			
+			Set<String> srcs = SemSimOWLFactory.getIndObjectPropertyObjects(ont, forceind, SemSimRelation.HAS_SOURCE.getURIasString());
+			Set<String> sinks = SemSimOWLFactory.getIndObjectPropertyObjects(ont, forceind, SemSimRelation.HAS_SINK.getURIasString());
+
+			if(srcs.size()==0 && sinks.size()==0) continue;
 			
 			CustomPhysicalForce cpf = semsimmodel.addCustomPhysicalForce(new CustomPhysicalForce());
 			
 			// Capture the physical entity participants
 			// Enter source information first
-			Set<String> srcs = SemSimOWLFactory.getIndObjectPropertyObjects(ont, forceind, SemSimRelation.HAS_SOURCE.getURIasString());
 			for(String src : srcs){
 				CompositePhysicalEntity srcent = (CompositePhysicalEntity)identitymap.get(src);
 				
@@ -396,7 +400,6 @@ public class SemSimOWLreader extends ModelReader {
 				cpf.addSource(srcent);
 			}
 			// Enter sink info
-			Set<String> sinks = SemSimOWLFactory.getIndObjectPropertyObjects(ont, forceind, SemSimRelation.HAS_SINK.getURIasString());
 			for(String sink : sinks){
 				CompositePhysicalEntity sinkent = (CompositePhysicalEntity)identitymap.get(sink);
 				if (sinkent==null) sinkent = createSingularComposite(sink);

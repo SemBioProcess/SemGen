@@ -53,6 +53,23 @@ public abstract class PhysicalForce extends PhysicalModelComponent {
 	}
 	
 	
+	/**
+	 * Replace a {@link PhysicalEntity} force participant with another
+	 * @param pe The participant to replace
+	 * @param rep The replacement
+	 */
+	public void replaceParticipant(PhysicalEntity pe, PhysicalEntity rep) {
+		if (sources.contains(pe)) {
+			sources.remove(pe);
+			sources.add(rep);
+		}
+		if (sinks.contains(pe)) {
+			sinks.remove(pe);
+			sinks.add(rep);
+		}
+	}
+	
+	
 	public Set<PhysicalEntity> getSources(){
 		return sources;
 	}
@@ -70,9 +87,6 @@ public abstract class PhysicalForce extends PhysicalModelComponent {
 		return allpents;
 	}
 	
-	
-	
-	
 
 	@Override
 	public String getComponentTypeAsString() {
@@ -80,7 +94,7 @@ public abstract class PhysicalForce extends PhysicalModelComponent {
 	}
 
 	@Override
-	protected boolean isEquivalent(Object obj) {
+	public boolean isEquivalent(Object obj) {
 		PhysicalForce force = (PhysicalForce)obj;
 		if (	(getParticipants().isEmpty() || force.getParticipants().isEmpty()) ||
 				(sources.size()!=force.getSources().size()) || 

@@ -141,14 +141,14 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		fsp = new ForceSelectorPanel( ! drawer.isEditable());
 	    
-		Integer forceindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
+//		Integer forceindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
 		
 		// If no force associated with the data structure, immediately create one (this is different 
 		// than what we do with processes).
-		if(forceindex == -1){
-			int newforceindex = termlib.createForce();
-			drawer.setDataStructureAssociatedPhysicalComponent(newforceindex);
-		}
+//		if(forceindex == -1){
+//			int newforceindex = termlib.createForce();
+//			drawer.setDataStructureAssociatedPhysicalComponent(newforceindex);
+//		}
 
 		fsp.getComboBox().setModel(new DefaultComboBoxModel<String>(new String[]{"anonymous force"}));
 		fsp.setLibraryIndicies(new ArrayList<Integer>());
@@ -401,6 +401,12 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		public void modifyButtonClicked() {
 			CustomTermDialog ctd = new CustomTermDialog();
 			Integer termindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
+			
+			if(termindex==-1){
+				termindex = library.createForce();
+				drawer.setDataStructureAssociatedPhysicalComponent(termindex);
+			}
+			
 			ctd.setAsForceTermDialog(termlib, termindex);
 			showForceParticipants();
 		}
@@ -408,7 +414,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		@Override
 		public void eraseButtonClicked(){
 			drawer.setDataStructureAssociatedPhysicalComponent(-1);
-			showProcessParticipants();
+			showForceParticipants();
 			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
 	}

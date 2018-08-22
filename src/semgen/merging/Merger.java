@@ -20,6 +20,7 @@ import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.model.physical.PhysicalForce;
 import semsim.model.physical.PhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import JSim.util.Xcept;
@@ -88,12 +89,10 @@ public class Merger {
 			if (choicelist.get(i).equals(ResolutionChoice.first)) {
 				//Flip the conversion operator
 				Pair<Double, String> factor = conversionfactors.get(i);
-				if (factor.getRight()=="*") {
+				if (factor.getRight()=="*")
 					conversionfactors.set(i, Pair.of(factor.getLeft(), "/"));
-				}
-				else {
+				else
 					conversionfactors.set(i, Pair.of(factor.getLeft(), "*"));
-				}
 				
 				String keptname = oldnewdsnamemap.get(dsp.getLeft().getName());
 				
@@ -180,11 +179,10 @@ public class Merger {
 		}
 			
 		// Remove the computational dependency information for the discarded/receiverized codewords
-		for(DataStructure onediscardedds : discardeddsset){
+		for(DataStructure onediscardedds : discardeddsset)
 			onediscardedds.getComputationInputs().clear();
-		}
 	
-		// What if both models have a custom physical component with the same name?
+		// TODO: What if both models have a custom physical component with the same name?
 		SemSimModel mergedmodel = ssm1clone;
 		
 		// Find any metadata ID's that are identical and create unique ones
@@ -194,7 +192,6 @@ public class Merger {
 		for(String ssm2metaid : intersection){
 			
 			SemSimObject ssm2object = ssm2clone.getModelComponentByMetadataID(ssm2metaid);
-
 			System.err.println("Duplicate metadata ID " + ssm2metaid + ": The ID for " + ssm2object.getSemSimType().getName() + 
 					" " + ssm2object.getName() + " in model " + ssm2clone.getName() + " will be renamed for merging.");
 			ssm1clone.assignValidMetadataIDtoSemSimObject(ssm2metaid, ssm2object);
@@ -208,6 +205,9 @@ public class Merger {
 		//Add processes to the merged model
 		for (PhysicalProcess pp : ssm2clone.getPhysicalProcesses())
 			pp.addToModel(mergedmodel);
+		
+		for (PhysicalForce pf : ssm2clone.getPhysicalForces())
+			pf.addToModel(mergedmodel);
 		
 		//Create map with units from the cloned model
 		Map<UnitOfMeasurement,UnitOfMeasurement> equnitsmap = new HashMap<UnitOfMeasurement,UnitOfMeasurement>();

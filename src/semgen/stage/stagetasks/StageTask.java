@@ -17,7 +17,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	protected CommunicatingWebBrowserCommandReceiver _commandReceiver;
 	
 	protected StageState state;
-	public ArrayList<ModelInfo> _models  = new ArrayList<ModelInfo>();
+	public ArrayList<ModelInfo> _modelinfos  = new ArrayList<ModelInfo>();
 	private ArrayList<ModelInfo> stagemodelqueue = new ArrayList<ModelInfo>();
 	protected JSObject jstask;
 	protected StageTaskConf newtaskconf = null;
@@ -50,7 +50,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	}
 	
 	public ModelInfo getModel(int index) {
-		return _models.get(index);
+		return _modelinfos.get(index);
 	}
 	
 	public StageTaskConf getNewTaskConfiguration() {
@@ -77,26 +77,26 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	}
 	
 	public void addModeltoTask(ModelInfo newmodel, boolean updatestage) {
-		_models.add(newmodel);
-		if (updatestage) state.updateModelNodes(_models);
+		_modelinfos.add(newmodel);
+		if (updatestage) state.updateModelNodes(_modelinfos);
 	}
 	
 	public void addModelstoTask(ArrayList<ModelInfo> newmodels) {
 		for (ModelInfo infotoadd : newmodels) {
-			addModeltoTask(new ModelInfo(infotoadd, _models.size()),false);
+			addModeltoTask(new ModelInfo(infotoadd, _modelinfos.size()),false);
 		}
-		state.updateModelNodes(_models);
+		state.updateModelNodes(_modelinfos);
 	}
 	
 	protected void removeModel(Integer index) {
-		_models.set(index, null);
-		state.updateModelNodes(_models);
+		_modelinfos.set(index, null);
+		state.updateModelNodes(_modelinfos);
 	}
 	
 	public ArrayList<ModelNode> getModelNodes() {
 		ArrayList<ModelNode> modelnodes = new ArrayList<ModelNode>();
 		
-		for (ModelInfo info : _models) {
+		for (ModelInfo info : _modelinfos) {
 			if (info != null) {
 				modelnodes.add(info.modelnode);
 			}
@@ -153,7 +153,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	//Find node by saved hash and verify with id - should be faster than straight id
 	public Node<?> getNodebyHash(int nodehash, String nodeid) {
-		for (ModelInfo mni : _models) {
+		for (ModelInfo mni : _modelinfos) {
 			if (mni==null) continue;
 			Node<?> returnnode = mni.modelnode.getNodebyHash(nodehash, nodeid);
 			if (returnnode!=null) return returnnode; 
@@ -163,7 +163,7 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	
 	//Find node by saved hash and verify with id - should be faster than straight id
 	public Node<?> getPhysioMapNodebyHash(int nodehash, String nodeid) {
-		for (ModelInfo mni : _models) {
+		for (ModelInfo mni : _modelinfos) {
 			if (mni==null) continue;
 			Node<?> returnnode = mni.modelnode.getPhysioMapNodebyHash(nodehash, nodeid);
 			if (returnnode!=null) return returnnode; 
@@ -199,6 +199,6 @@ public abstract class StageTask<TSender extends SemGenWebBrowserCommandSender> e
 	}
 	
 	protected StageRootInfo<?> getInfobyAddress(JSArray address) {
-			return _models.get(address.get(1).asNumber().getInteger());
+			return _modelinfos.get(address.get(1).asNumber().getInteger());
 	}
 }
