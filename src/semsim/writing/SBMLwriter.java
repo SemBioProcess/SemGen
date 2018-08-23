@@ -3,6 +3,7 @@ package semsim.writing;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +119,7 @@ public class SBMLwriter extends ModelWriter {
 	private Set<DataStructure> candidateDSsForCompartments = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForSpecies = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForReactions = new HashSet<DataStructure>();
-	private Set<DataStructure> globalParameters = new HashSet<DataStructure>(); // Boolean indicates whether to write out assignment for parameter
+	private ArrayList<String> globalParameters = new ArrayList<String>();
 	
 	private AbstractRDFwriter rdfwriter;
 	private Set<String> metaIDsUsed = new HashSet<String>();
@@ -168,8 +169,7 @@ public class SBMLwriter extends ModelWriter {
 		addEvents();
 		addSBMLinitialAssignments();
 		addConstraints();
-		
-		
+
 		Document doc = getWriteLocation() instanceof OMEXAccessor ? addCASArdf() : addSemSimRDF();
 
 		// If no errors, write out the model. (Converted to XML doc in addSemSimRDF()).		
@@ -207,11 +207,6 @@ public class SBMLwriter extends ModelWriter {
 			cv.addResource(ann.getReferenceURI().toString());
 			
 			sbmlmodel.addCVTerm(cv);
-//			try {
-//				sbmlmodel.setNotes(semsimmodel.getDescription());
-//			} catch (XMLStreamException e) {
-//				e.printStackTrace();
-//			}
 		}
 	}
 	
@@ -221,6 +216,8 @@ public class SBMLwriter extends ModelWriter {
 	 *  species, and reactions
 	 */
 	private void sortDataStructuresIntoSBMLgroups(){
+
+		Set<String> existingnames = semsimmodel.getDataStructureNames();
 
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
@@ -237,15 +234,14 @@ public class SBMLwriter extends ModelWriter {
 				else if(SBMLconstants.OPB_PROPERTIES_FOR_REACTIONS.contains(propphysdefuri))
 					candidateDSsForReactions.add(ds);
 				
-				else globalParameters.add(ds);
+				else globalParameters.add(ds.getName());
 				
 			}
 			else if ( ! ds.isSolutionDomain() && ! (ds instanceof SBMLFunctionOutput) && ds.isDeclared()) 
-				globalParameters.add(ds);
+				globalParameters.add(ds.getName());
 			
-			if(ds.getName().contains(".")){
-				makeDataStructureNameValid(ds);
-			}
+			if(ds.getName().contains("."))
+				makeDataStructureNameValid(ds, existingnames);
 		}
 	}
 	
@@ -558,7 +554,7 @@ public class SBMLwriter extends ModelWriter {
 			
 			// Otherwise the data structure is not associated with a physical entity and we 
 			// treat it as a global parameter
-			else globalParameters.add(ds);
+			else globalParameters.add(ds.getName());
 		}
 	}
 	
@@ -575,7 +571,7 @@ public class SBMLwriter extends ModelWriter {
 				CustomPhysicalProcess process = (CustomPhysicalProcess)pmc;
 				
 				if( ! entitySpeciesMap.keySet().containsAll(process.getParticipants())){ // Make sure that all participants in reaction were asserted successfully as SBML species
-					globalParameters.add(ds);
+					globalParameters.add(ds.getName());
 					continue;
 				}
 				
@@ -637,27 +633,26 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				// Find any local parameters associated with reaction and add them to kinetic law
-				Set<DataStructure> tempgpset = new HashSet<DataStructure>();
-				tempgpset.addAll(globalParameters);
 				
-				for(DataStructure gp : tempgpset){
+				for(int s=0; s<globalParameters.size();s++){
 					
-					String fullnm = gp.getName();
+					String fullnm = globalParameters.get(s);
 					
 					if(fullnm.startsWith(SBMLreader.REACTION_PREFIX + ds.getName() + ".")){
-						globalParameters.remove(gp);
+						globalParameters.set(s, "");
 						String localnm = fullnm.replace(SBMLreader.REACTION_PREFIX + ds.getName() + ".", "");
-						mathml = mathml.replaceAll("<ci>\\s*" + gp.getName() + "\\s*</ci>", "<ci>" + localnm + "</ci>");
+						mathml = mathml.replaceAll("<ci>\\s*" + fullnm + "\\s*</ci>", "<ci>" + localnm + "</ci>");
 
 						LocalParameter lp = kl.createLocalParameter(localnm);
-						String formula = getFormulaFromRHSofMathML(gp.getComputation().getMathML(), fullnm);
+						DataStructure assocds = semsimmodel.getAssociatedDataStructure(fullnm);
+						String formula = getFormulaFromRHSofMathML(assocds.getComputation().getMathML(), fullnm);
 						lp.setValue(Double.parseDouble(formula));
 						
 						// Add units, if needed
 						// Deal with units on compartments if needed
-						setUnitsForModelComponent(lp, gp);
-						assignMetaIDtoParameterIfAnnotated(gp);
-						addNotesAndMetadataID(gp, lp);	
+						setUnitsForModelComponent(lp, assocds);
+						assignMetaIDtoParameterIfAnnotated(assocds);
+						addNotesAndMetadataID(assocds, lp);	
 					}
 				}
 				
@@ -668,7 +663,7 @@ public class SBMLwriter extends ModelWriter {
 			}
 			
 			// Otherwise the data structure is not associated with a process
-			else globalParameters.add(ds);
+			else globalParameters.add(ds.getName());
 
 		}
 	}
@@ -777,12 +772,15 @@ public class SBMLwriter extends ModelWriter {
 		
 		// TODO: t.delta, etc. are getting renamed to t_delta but this change isn't being reflected in the model's MathML.
 		// e.g. t.delta is used to compute EDVLV but doesn't look like EDVLV's MathML is being updated
-		for(DataStructure ds : globalParameters){
+		for(String dsname : globalParameters){
+			
+			if(dsname.equals("")) continue;
+			
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
 			
 			// Don't add parameter if it's not a declared element
 			if( ! ds.isDeclared())	continue;
 			
-			String dsname = ds.getName();
 			String mathml = ds.getComputation().getMathML();
 
 			if(oldAndNewParameterNameMap.containsKey(dsname)){
@@ -865,9 +863,7 @@ public class SBMLwriter extends ModelWriter {
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 
 			addNotesAndMetadataID(ds, par);
-			
 			setUnitsForModelComponent(par, ds);
-			
 		}
 	}
 	
@@ -1013,11 +1009,15 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		//TODO: Is this fixed?
 		if(sso.hasDescription()){
 			try {
-				sbo.setNotes(sso.getDescription());
+				String desc = sso.getDescription();
+				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novère problem)
+				sbo.setNotes(new String(chars));
+				
 			} catch (XMLStreamException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		}
@@ -1181,8 +1181,7 @@ public class SBMLwriter extends ModelWriter {
 	 * @param ds A {@link DataStructure}
 	 */
 	// in the MathML of dependent data structures
-	private void makeDataStructureNameValid(DataStructure ds){
-		Set<String> existingnames = semsimmodel.getDataStructureNames();
+	private void makeDataStructureNameValid(DataStructure ds, Set<String> existingnames){
 		String oldname = ds.getName();
 		String newname = oldname.replaceAll("\\.", "_");
 			
@@ -1216,16 +1215,34 @@ public class SBMLwriter extends ModelWriter {
 	
 	/** Write out composite annotations in the SemSim RDF associated with the model */
 	private void writeFullCompositesInRDF(){
+		
+		Map<String,SemSimObject> metamap = semsimmodel.getMetadataIDcomponentMap();
+		Set<String> usedmetaids = new HashSet<String>(); 
+		usedmetaids.addAll(metamap.keySet());
+		
+		if(semsimmodel.hasMetadataID()) usedmetaids.add(semsimmodel.getMetadataID());
+		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			
 			// Only the info for parameters are stored (i.e. not compartments, species or reactions)
 			// because the <species> and <reaction> elements already contain the needed info, and 
 			// the <compartments> refer to physical entities (which can be composite), not properties of entities
 			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
 			else{
+				
+				String metadataID = null;
+				
+				// We use custom code here to make this function go faster (previously used the AbstractRDFwriter.assignMetaIDandCreateResourceForDataStructure()) routine
+				// but it can be time-consuming for larger models
+				if(ds.hasMetadataID()) metadataID = ds.getMetadataID();
+				else{
+					metadataID = semsimmodel.generateUniqueMetadataID("metaid0", usedmetaids);
+					usedmetaids.add(metadataID);
+				}
+				
+				Resource ares = rdfwriter.rdf.createResource(rdfwriter.xmlbase + metadataID);
+				
 				// Don't set the free-text description of the data structure. That should be preserved in
 				// SBML <notes>
-				Resource ares = rdfwriter.assignMetaIDandCreateResourceForDataStructure(ds);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
 				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
 			}

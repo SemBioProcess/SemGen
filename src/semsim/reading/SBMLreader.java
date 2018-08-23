@@ -189,7 +189,6 @@ public class SBMLreader extends ModelReader{
 			e.printStackTrace();
 		}
 		
-		
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
@@ -205,7 +204,6 @@ public class SBMLreader extends ModelReader{
 		collectConstraints();
 		collectEvents();
 		collectInitialAssignments();
-				
 		setComputationalDependencyNetwork();
 	
 		return semsimmodel;
@@ -613,16 +611,16 @@ public class SBMLreader extends ModelReader{
 			boolean isBoundaryCondition = species.getBoundaryCondition();
 			boolean isSetWithRuleAssignment = sbmlmodel.getRule(speciesid) != null;
 			
-			if(isConstant){
-				
-				if(isBoundaryCondition){
-					// don't apply conservation eq. set initial condition only. CAN be a reactant or product
-				}
-				else{
-					// don't apply conservation eq. set IC only. CANNOT be a reactant or product
-				}
-			}
-			else{
+//			if(isConstant){
+//				
+//				if(isBoundaryCondition){
+//					// don't apply conservation eq. set initial condition only. CAN be a reactant or product
+//				}
+//				else{
+//					// don't apply conservation eq. set IC only. CANNOT be a reactant or product
+//				}
+//			}
+			if( ! isConstant){
 				
 				SpeciesConservation nsc = new SpeciesConservation();
 				speciesAndConservation.put(speciesid, nsc);
@@ -661,16 +659,15 @@ public class SBMLreader extends ModelReader{
 			UnitOfMeasurement compartmentunits = semsimmodel.getAssociatedDataStructure(compartmentname).getUnit();	
 			
 			if(hasonlysub && speciessubstanceunits!=null) unitforspecies = speciessubstanceunits;
-			
 			else if(speciessubstanceunits != null && compartmentunits != null){
 				
 				// Make unit for concentration of species
 				String unitname = speciessubstanceunits.getName() + "_per_" + compartmentunits.getName();
 				
 				// If the substance/compartment unit was already added to the model, use it, otherwise create anew
-				if(semsimmodel.containsUnit(unitname)) unitforspecies = semsimmodel.getUnit(unitname);
+				unitforspecies = semsimmodel.getUnit(unitname);
 				
-				else{
+				if(unitforspecies==null){
 					unitforspecies = new UnitOfMeasurement(unitname);
 					UnitFactor substancefactor = new UnitFactor(speciessubstanceunits, 1.0, null);
 					unitforspecies.addUnitFactor(substancefactor);
@@ -769,7 +766,6 @@ public class SBMLreader extends ModelReader{
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-			
 
 			PhysicalEntity speciesent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
@@ -1319,8 +1315,9 @@ public class SBMLreader extends ModelReader{
 			try {
 				String desc = sbmlobject.getNotesString();
 				if( ! desc.contains("<div")){ // For notes on other elements
-					desc = desc.replaceAll("<notes>(?s).*<p>","");
-					desc = desc.replaceAll("</p>(?s).*</notes>","");
+					
+					desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">\\s*<p>","");
+					desc = desc.replaceAll("</p>\\s*</body>\\s*</notes>","");
 				}
 				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {

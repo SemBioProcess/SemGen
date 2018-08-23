@@ -546,20 +546,32 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
  		
  		if(hasMetadataID()) momap.put(getMetadataID(), this); // add the metaid for the model itself so it remains unique
 		
- 		int num = 0;
-		String newID = ID;
-		
-		// If the metadata ID is already used, create a new, unique ID
-		while(momap.containsKey(newID)){
-			newID = "metaid" + num;
-			num = num + 1;
-		}
-				
-		if( ! newID.equals(ID))
+ 		String newID = generateUniqueMetadataID(ID,momap.keySet());
+ 		
+ 		if( ! newID.equals(ID))
 			System.err.println("MetaID on " + theobject.getSemSimType() + " " + theobject.getName()
 				+ " changed to " + newID + " because the model already contains a SemSim component with metaID " + ID + ".");
 		
 		theobject.setMetadataID(newID);
+		return newID;
+ 	}
+ 	
+ 	
+ 	/**
+ 	 * @param candidateid A candidate metadata ID
+ 	 * @param existingids A list of existing metadata ID's in the model
+ 	 * @return If the candidate ID is unique in the model, it is returned, otherwise a new unique ID is returned 
+ 	 */
+ 	public String generateUniqueMetadataID(String candidateid, Set<String> existingids){
+ 		int num = 0;
+		String newID = candidateid;
+		
+		// If the metadata ID is already used, create a new, unique ID
+		while(existingids.contains(newID)){
+			newID = "metaid" + num;
+			num = num + 1;
+		}
+				
 		return newID;
  	}
 
