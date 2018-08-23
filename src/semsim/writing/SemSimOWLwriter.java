@@ -82,6 +82,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		Set<OWLAxiom> allbaseaxioms = manager.loadOntologyFromOntologyDocument(in).getAxioms();
 		IRI ontiri = IRI.create(namespace.substring(0, namespace.length()-1));  // Gets rid of '#' at end of namespace
 		ont = manager.createOntology(allbaseaxioms, ontiri);
+		
 	}
 	
 	@Override 
@@ -679,12 +680,9 @@ public class SemSimOWLwriter extends ModelWriter {
 			if(ann instanceof ReferenceOntologyAnnotation){
 				Relation rel = ann.getRelation();
 				
-				// We don't write out annotations that use qualifiers that can also be used
-				// on physical entities and processes
-				if(rel==SemSimRelation.BQB_IS_VERSION_OF || rel==SemSimRelation.BQB_ENCODES || rel==SemSimRelation.BQB_IS_ENCODED_BY){
-					continue;
-				}
-				else str = ((ReferenceOntologyAnnotation)ann).getReferenceURI().toString();
+				rel = SemSimRelations.getSynonymousModelLevelRelationForSemSimOWLwriting(rel);// Make sure to use any necessary synonymous relations for ontology-level annotations
+				
+				str = ((ReferenceOntologyAnnotation)ann).getReferenceURI().toString();
 			}
 			else str = ann.getValue().toString();
 

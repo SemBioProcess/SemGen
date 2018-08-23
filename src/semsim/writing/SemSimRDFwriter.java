@@ -126,19 +126,19 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			addStatement(st);
 		}
 		
-		
-		for(Annotation ann : semsimmodel.getAnnotations()){
-			
-			//TODO: Need to work on preserving all annotations in CellML RDF block.
-			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP 
-					|| ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION) continue;
-			
-			Property prop = ann.getRelation().getRDFproperty();
-			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
-			
-			addStatement(st);
+		if(modeltype==ModelType.CELLML_MODEL || modeltype==ModelType.MML_MODEL_IN_PROJ){
+			for(Annotation ann : semsimmodel.getAnnotations()){
+				
+				//TODO: Need to work on preserving all annotations in CellML RDF block.
+				if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP 
+						|| ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION) continue;
+				
+				Property prop = ann.getRelation().getRDFproperty();
+				Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
+				
+				addStatement(st);
+			}
 		}
-		
 	}
 	
 	

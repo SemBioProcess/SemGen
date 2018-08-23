@@ -900,7 +900,7 @@ public class SBMLwriter extends ModelWriter {
 		
 		rdfwriter = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
 		
-		rdfwriter.setRDFforModelLevelAnnotations();
+		rdfwriter.setRDFforModelLevelAnnotations(); // This just makes an RDF resource for the model. Model-level info is stored within SBML <model> element, not SemSim RDF block.
 		
 		// NOTE: SemSim-style submodels are not currently preserved on SBML export
 		
