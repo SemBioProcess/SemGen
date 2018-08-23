@@ -1317,7 +1317,10 @@ public class SBMLreader extends ModelReader{
 		if(sbmlobject.isSetNotes()){
 				
 			try {
-				semsimobject.setDescription(sbmlobject.getNotesString());
+				String desc = sbmlobject.getNotesString();
+				desc = desc.replaceAll("<notes>(?s).*<p>", "");//(?s). activates DOTALL so . matches \n, too.
+				desc = desc.replaceAll("</p>(?s).*</notes>","");
+				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
 //				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 
 			}

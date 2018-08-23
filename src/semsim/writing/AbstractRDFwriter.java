@@ -165,9 +165,7 @@ public abstract class AbstractRDFwriter {
 	 */
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 		
-		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
-		String resuri = xmlbase + metaid;
-		Resource ares = rdf.createResource(resuri);
+		Resource ares = assignMetaIDandCreateResourceForDataStructure(ds);
 		
 		// Set free-text annotation
 		setFreeTextAnnotationForObject(ds, ares);
@@ -177,6 +175,19 @@ public abstract class AbstractRDFwriter {
 		
 		// Include the necessary composite annotation info
 		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+	}
+	
+	
+	/**
+	 * @param ds A data structure
+	 * @return An RDF resource corresponding to the data structure that uses its
+	 * metadata id as the URI fragment
+	 */
+	protected Resource assignMetaIDandCreateResourceForDataStructure(DataStructure ds){
+		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+		String resuri = xmlbase + metaid;
+		Resource ares = rdf.createResource(resuri);
+		return ares;
 	}
 	
 	
