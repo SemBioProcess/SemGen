@@ -1009,7 +1009,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		if(sso.hasDescription()){
+		if(sso.hasDescription() && ! (getWriteLocation() instanceof OMEXAccessor)){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
 			try {
 				String desc = sso.getDescription();
 				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novère problem)

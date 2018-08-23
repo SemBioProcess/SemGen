@@ -88,6 +88,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
 		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
@@ -111,14 +112,26 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	@Override
 	protected void setRDFforModelLevelAnnotations(){
 		
-		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
+		String modelmetaid = semsimmodel.hasMetadataID() ?  semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
 		
 		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
+				
+		// Add model description to RDF if we're writing to a CellML model or a JSim project file
+		// In SemSim OWL files, descriptions are stored as RDF:comments on the ontology
+		// In SBML files (non-OMEX), the description is stored in the model element's <notes> block
+		// In CellML and SBML files within OMEX archives, the description is stored in the CASA file
+		if(semsimmodel.hasDescription() && (modeltype==ModelType.CELLML_MODEL || modeltype==ModelType.MML_MODEL_IN_PROJ)){
+			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
+			Statement st = rdf.createStatement(modelres, prop, semsimmodel.getDescription());
+			addStatement(st);
+		}
+		
 		
 		for(Annotation ann : semsimmodel.getAnnotations()){
 			
 			//TODO: Need to work on preserving all annotations in CellML RDF block.
-			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
+			if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP 
+					|| ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION) continue;
 			
 			Property prop = ann.getRelation().getRDFproperty();
 			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
