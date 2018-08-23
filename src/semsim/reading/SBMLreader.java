@@ -1318,8 +1318,10 @@ public class SBMLreader extends ModelReader{
 				
 			try {
 				String desc = sbmlobject.getNotesString();
-				desc = desc.replaceAll("<notes>(?s).*<p>", "");//(?s). activates DOTALL so . matches \n, too.
-				desc = desc.replaceAll("</p>(?s).*</notes>","");
+				if( ! desc.contains("<div")){ // For notes on other elements
+					desc = desc.replaceAll("<notes>(?s).*<p>","");
+					desc = desc.replaceAll("</p>(?s).*</notes>","");
+				}
 				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
 //				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 
