@@ -48,6 +48,9 @@ import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.validator.SyntaxChecker;
+
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -1219,7 +1222,13 @@ public class SBMLwriter extends ModelWriter {
 			// because the <species> and <reaction> elements already contain the needed info, and 
 			// the <compartments> refer to physical entities (which can be composite), not properties of entities
 			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
-			else rdfwriter.setRDFforDataStructureAnnotations(ds);
+			else{
+				// Don't set the free-text description of the data structure. That should be preserved in
+				// SBML <notes>
+				Resource ares = rdfwriter.assignMetaIDandCreateResourceForDataStructure(ds);
+				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
+				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+			}
 		}		
 	}
 
