@@ -139,8 +139,10 @@ public class CellMLwriter extends ModelWriter {
 		
 		root.setAttribute("name", namestring);
 		
-		if(semsimmodel.hasMetadataID())
-			root.setAttribute("id", semsimmodel.getMetadataID(), RDFNamespace.CMETA.createJdomNamespace());
+		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
+			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+		
+		root.setAttribute("id", metaid, RDFNamespace.CMETA.createJdomNamespace());
 	}
 	
 	
