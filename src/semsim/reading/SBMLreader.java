@@ -107,7 +107,7 @@ public class SBMLreader extends ModelReader{
 	private Submodel parametersubmodel;
 	private Submodel speciessubmodel;
 	private Submodel compartmentsubmodel;
-	private String timedomainname = "t";
+	private String timedomainname = "time";
 	public static final String REACTION_PREFIX = "Reaction_";
 	public static final String FUNCTION_PREFIX = "Function_";
 	private UnitOfMeasurement modeltimeunits;
