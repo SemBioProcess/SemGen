@@ -7,8 +7,8 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.annotation.workbench.routines.AutoAnnotate;
 import semgen.utilities.SemGenJob;
+import semsim.annotation.AutoAnnotate;
 import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;

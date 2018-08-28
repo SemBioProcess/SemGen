@@ -1,10 +1,11 @@
-package semgen.annotation.workbench.routines;
+package semsim.annotation;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import semgen.annotation.workbench.routines.AnnotationCopier;
 import semsim.SemSimLibrary;
 //import semgen.SemGen;
 import semsim.model.collection.SemSimModel;
