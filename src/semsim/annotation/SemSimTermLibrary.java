@@ -1,4 +1,4 @@
-package semgen.annotation.workbench;
+package semsim.annotation;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Set;
 
-import semgen.SemGen;
+import semsim.SemSimLibrary;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
@@ -51,6 +51,8 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<Integer> procindexer = new ArrayList<Integer>();
 	private ArrayList<Integer> forceindexer = new ArrayList<Integer>();
 	
+	private SemSimLibrary semsimlib;
+	
 	private int refsearchtype = 0;
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE,
@@ -58,8 +60,11 @@ public class SemSimTermLibrary extends Observable {
 		FORCE_CHANGE,
 		TERM_CHANGE};
 	
-	public SemSimTermLibrary(SemSimModel model) {
-		for (PhysicalPropertyInComposite pp : SemGen.semsimlib.getCommonProperties()) {
+	public SemSimTermLibrary(SemSimModel model, SemSimLibrary semsimlib) {
+		
+		this.semsimlib = semsimlib;
+		
+		for (PhysicalPropertyInComposite pp : semsimlib.getCommonProperties()) {
 			addAssociatePhysicalProperty(pp);
 		}
 		addTermsinModel(model);
@@ -304,7 +309,7 @@ public class SemSimTermLibrary extends Observable {
 		case PropertyOfPhysicalEntity:
 			for (Integer i : ppccompindexer) {
 				URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
-				if (SemGen.semsimlib.OPBhasAmountProperty(ppc) || SemGen.semsimlib.OPBhasForceProperty(ppc)) {
+				if (semsimlib.OPBhasAmountProperty(ppc) || semsimlib.OPBhasForceProperty(ppc)) {
 					results.add(i);
 				}
 			}
@@ -312,7 +317,7 @@ public class SemSimTermLibrary extends Observable {
 		case PropertyOfPhysicalProcess:
 			for (Integer i : ppccompindexer) {
 				PhysicalPropertyInComposite ppc = (PhysicalPropertyInComposite)masterlist.get(i).getObject();
-				if (SemGen.semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
+				if (semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
 					results.add(i);
 				}
 			}
@@ -502,7 +507,7 @@ public class SemSimTermLibrary extends Observable {
 	public void addRelationship(Integer termindex, Relation relation, Integer reftermindex) {
 		PhysicalModelComponent pmc = masterlist.get(termindex).getObject();
 		ReferenceTerm refterm = (ReferenceTerm) masterlist.get(reftermindex).getObject();
-		pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), SemGen.semsimlib);
+		pmc.addReferenceOntologyAnnotation(relation, refterm.getPhysicalDefinitionURI(), refterm.getName(), semsimlib);
 		notifyTermChanged();
 	}
 	
@@ -512,7 +517,7 @@ public class SemSimTermLibrary extends Observable {
 		
 //**************************************REFERENCE TERM DATA RETRIEVAL METHODS *********************//
 	public String getOntologyName(Integer index) {
-		return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName(SemGen.semsimlib);
+		return ((ReferenceTerm)masterlist.get(index).getObject()).getOntologyName(semsimlib);
 	}
 	
 	public String getReferenceID(Integer index) {
@@ -756,7 +761,7 @@ public class SemSimTermLibrary extends Observable {
 	
 
 	public PropertyType getPropertyinCompositeType(int index) {
-		return SemGen.semsimlib.getPropertyinCompositeType(getAssociatePhysicalProperty(index));
+		return semsimlib.getPropertyinCompositeType(getAssociatePhysicalProperty(index));
 	}
 	
 	public boolean isReferenceTerm(Integer index) {
@@ -949,7 +954,7 @@ public class SemSimTermLibrary extends Observable {
 		}
 		
 		public String getName() {
-			if (reference) return ((ReferenceTerm)component).getNamewithOntologyAbreviation(SemGen.semsimlib);
+			if (reference) return ((ReferenceTerm)component).getNamewithOntologyAbreviation(semsimlib);
 			return component.getName();
 		}
 		

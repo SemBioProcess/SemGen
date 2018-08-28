@@ -9,7 +9,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import semgen.annotation.common.CustomTermOptionPane;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary;
 
 /**
  * CustomTermOptionPane subclass for specifying the sources and sinks for a physical force

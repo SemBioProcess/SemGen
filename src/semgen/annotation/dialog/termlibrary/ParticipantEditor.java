@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.ProcessParticipantEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary;
 
 public class ParticipantEditor extends ProcessParticipantEditor {
 	private static final long serialVersionUID = 1L;

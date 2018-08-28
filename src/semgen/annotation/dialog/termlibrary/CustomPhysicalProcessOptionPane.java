@@ -9,7 +9,7 @@ import javax.swing.event.TableModelListener;
 import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.ObjectPropertyEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 
 public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPane implements TableModelListener {
