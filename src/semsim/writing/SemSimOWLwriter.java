@@ -34,6 +34,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
@@ -661,9 +662,13 @@ public class SemSimOWLwriter extends ModelWriter {
 	private void addModelAnnotations() {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
 
-		if(semsimmodel.getLegacyCodeLocation()!=null)
+		if(semsimmodel.getLegacyCodeLocation()!=null){
+			ModelAccessor legacyma = semsimmodel.getLegacyCodeLocation();
+			String fileloc = legacyma.getFullPath();
+			
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
-					semsimmodel.getLegacyCodeLocation().getFilePath().toString(), manager);
+					fileloc, manager);
+		}
 
 		if(semsimmodel.hasMetadataID()) 
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_METADATA_ID.getIRI(), semsimmodel.getMetadataID(), manager);
