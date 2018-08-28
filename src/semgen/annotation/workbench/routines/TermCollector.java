@@ -3,8 +3,8 @@ package semgen.annotation.workbench.routines;
 import java.util.ArrayList;
 
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
 

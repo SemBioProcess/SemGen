@@ -12,9 +12,9 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.io.FilenameUtils;
 
 import semgen.GlobalActions;
+import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.saveTask;
-import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
@@ -26,6 +26,8 @@ import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
+import semsim.annotation.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary.LibraryEvent;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
@@ -56,7 +58,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	@Override
 	public void initialize() {
-		termlib = new SemSimTermLibrary(semsimmodel);
+		termlib = new SemSimTermLibrary(semsimmodel, SemGen.semsimlib);
 		termlib.addObserver(this);
 		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);

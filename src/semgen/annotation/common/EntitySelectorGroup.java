@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 
 public abstract class EntitySelectorGroup extends Box implements ActionListener {

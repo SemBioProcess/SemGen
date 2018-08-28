@@ -18,11 +18,11 @@ import semgen.annotation.annotatorpane.subpanels.CompositeAnnotationPanel;
 import semgen.annotation.annotatorpane.subpanels.SingularAnnotationPanel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
-import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenSeparator;
+import semsim.annotation.SemSimTermLibrary.LibraryEvent;
 
 public class CodewordAnnotationPanel extends AnnotationPanel<CodewordToolDrawer> {
 	private static final long serialVersionUID = 1L;

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.SemSimObject;
+import semsim.annotation.SemSimTermLibrary;
 
 public abstract class AnnotatorDrawer<T extends SemSimObject> extends Observable {
 	protected SemSimTermLibrary termlib;

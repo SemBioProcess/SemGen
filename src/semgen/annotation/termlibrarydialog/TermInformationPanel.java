@@ -18,10 +18,10 @@ import javax.swing.border.TitledBorder;
 
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.routines.TermCollector;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenScrollPane;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimTypes;
 
 public class TermInformationPanel extends JPanel {

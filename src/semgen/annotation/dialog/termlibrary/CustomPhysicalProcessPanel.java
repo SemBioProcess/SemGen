@@ -10,7 +10,7 @@ import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.ObjectPropertyEditor;
 import semgen.annotation.common.ProcessParticipantEditor;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 
 public abstract class CustomPhysicalProcessPanel extends CustomTermOptionPane implements TableModelListener {

@@ -7,8 +7,8 @@ import javax.swing.BorderFactory;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 
 public class SingularAnnotationPanel extends AnnotationChooserPanel {

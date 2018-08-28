@@ -18,10 +18,10 @@ import javax.swing.table.AbstractTableModel;
 
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.CreateCompositeDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
+import semsim.annotation.SemSimTermLibrary;
 
 public abstract class ProcessParticipantEditor extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;

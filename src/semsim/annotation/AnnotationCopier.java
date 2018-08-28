@@ -1,11 +1,10 @@
-package semgen.annotation.workbench.routines;
+package semsim.annotation;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-import semgen.SemGen;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.SemSimLibrary;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalProperty;
@@ -54,10 +53,10 @@ public class AnnotationCopier {
 		else targetds.setSingularAnnotation(null);
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
+	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds, SemSimLibrary semsimlib){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
-		copyAllAnnotations(ds, allmappedvars);
+		copyAllAnnotations(ds, allmappedvars, semsimlib);
 		return allmappedvars;
 	}
 	
@@ -74,18 +73,18 @@ public class AnnotationCopier {
 		return allmappedvars;
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds){
+	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds, SemSimLibrary semsimlib){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllLocallyMappedVariables(ds, ds, new HashSet<MappableVariable>()));
-		copyAllAnnotations(ds, allmappedvars);
+		copyAllAnnotations(ds, allmappedvars, semsimlib);
 		return allmappedvars;
 	}
 	
-	private static void copyAllAnnotations(MappableVariable sourceds, Set<MappableVariable> targetdsset){
+	private static void copyAllAnnotations(MappableVariable sourceds, Set<MappableVariable> targetdsset, SemSimLibrary semsimlib){
 		for(MappableVariable otherds : targetdsset){
 			if(!otherds.isImportedViaSubmodel()){
 				otherds.copyDescription(sourceds);
-				otherds.copySingularAnnotations(sourceds, SemGen.semsimlib);
+				otherds.copySingularAnnotations(sourceds, semsimlib);
 				copyCompositeAnnotation(sourceds, otherds);
 			}
 		}

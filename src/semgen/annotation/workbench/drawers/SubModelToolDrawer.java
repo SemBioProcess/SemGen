@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.Computation;

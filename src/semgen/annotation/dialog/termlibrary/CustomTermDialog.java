@@ -2,8 +2,8 @@ package semgen.annotation.dialog.termlibrary;
 
 import java.awt.event.ActionEvent;
 import semgen.annotation.common.CustomTermOptionPane;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.annotation.SemSimTermLibrary;
 
 public class CustomTermDialog extends SemGenDialog {
 	private static final long serialVersionUID = 1L;

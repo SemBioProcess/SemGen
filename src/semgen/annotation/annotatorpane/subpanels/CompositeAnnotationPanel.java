@@ -21,10 +21,10 @@ import semgen.annotation.common.AnnotationChooserPanel;
 import semgen.annotation.common.EntitySelectorGroup;
 import semgen.annotation.dialog.termlibrary.AddReferenceClassDialog;
 import semgen.annotation.dialog.termlibrary.CustomTermDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
-import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
+import semsim.annotation.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary.LibraryEvent;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 
 public class CompositeAnnotationPanel extends Box implements ActionListener {
