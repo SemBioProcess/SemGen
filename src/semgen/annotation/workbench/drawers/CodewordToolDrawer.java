@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import semgen.SemGen;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
-import semgen.annotation.workbench.routines.AnnotationCopier;
+import semsim.annotation.AnnotationCopier;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.PropertyType;
 import semsim.definitions.SemSimTypes;
 import semsim.model.computational.datastructures.DataStructure;
@@ -231,7 +231,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public void copyToMappedVariables() {
 		MappableVariable thevar = (MappableVariable)getFocus();
 		
-		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToMappedVariables(thevar);
+		Set<MappableVariable> mapped = AnnotationCopier.copyAllAnnotationsToMappedVariables(thevar, SemGen.semsimlib);
 		addComponentstoChangeSet(mapped);
 		changeNotification();
 	}

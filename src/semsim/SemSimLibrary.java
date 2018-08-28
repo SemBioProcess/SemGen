@@ -19,7 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semgen.annotation.workbench.routines.AutoAnnotate;
+import semsim.annotation.AutoAnnotate;
 import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.PropertyType;

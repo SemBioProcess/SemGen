@@ -14,8 +14,8 @@ import semgen.annotation.common.CustomTermOptionPane;
 import semgen.annotation.common.EntitySelectorGroup;
 import semgen.annotation.dialog.termlibrary.CustomPhysicalProcessOptionPane;
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
+import semsim.annotation.SemSimTermLibrary;
 
 public class TermModifyPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;

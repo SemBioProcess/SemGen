@@ -6,9 +6,10 @@ import java.io.IOException;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenJob;
 import semgen.utilities.file.LoadModelJob;
+import semsim.annotation.AnnotationCopier;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;

@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 
 import semgen.SemGenSettings;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semsim.annotation.Relation;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 

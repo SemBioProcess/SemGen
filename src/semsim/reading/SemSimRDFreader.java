@@ -14,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
+import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -146,8 +147,19 @@ public class SemSimRDFreader extends AbstractRDFreader{
 				ModelAccessor ma = FileAccessorFactory.getModelAccessor(st.getObject().asLiteral().toString());
 				semsimmodel.setSourceFileLocation(ma);
 			}
+			else if (predicateURI.toString().equals(AbstractRDFreader.dcterms_description.getURI().toString())){
+				String desc = st.getObject().asLiteral().toString();
+				semsimmodel.setDescription(desc);
+			}
 			else{
-				semsimmodel.addAnnotation(new Annotation(SemSimRelations.getRelationFromURI(predicateURI), st.getObject().toString()));
+				if(st.getObject().isLiteral()){
+					if(st.getObject().asLiteral().toString().startsWith("http")){
+						Relation rel = SemSimRelations.getRelationFromURI(predicateURI);
+						semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(st.getObject().asLiteral().toString()), "", sslib);
+					}
+					else
+						semsimmodel.addAnnotation(new Annotation(SemSimRelations.getRelationFromURI(predicateURI), st.getObject().toString()));
+				}
 			}
 		}
 	}

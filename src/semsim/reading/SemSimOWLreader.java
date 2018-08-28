@@ -216,6 +216,8 @@ public class SemSimOWLreader extends ModelReader {
 			
 			if(rel != SemSimRelation.UNKNOWN ){
 				
+				rel = SemSimRelations.getSynonymousModelLevelRelationForSemSimOWLreading(rel);
+				
 				if(ann.getValue() instanceof OWLLiteral){
 					OWLLiteral val = (OWLLiteral) ann.getValue();
 					

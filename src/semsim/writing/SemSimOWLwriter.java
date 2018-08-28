@@ -34,6 +34,7 @@ import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
@@ -84,6 +85,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		Set<OWLAxiom> allbaseaxioms = manager.loadOntologyFromOntologyDocument(in).getAxioms();
 		IRI ontiri = IRI.create(namespace.substring(0, namespace.length()-1));  // Gets rid of '#' at end of namespace
 		ont = manager.createOntology(allbaseaxioms, ontiri);
+		
 	}
 	
 	@Override 
@@ -673,9 +675,13 @@ public class SemSimOWLwriter extends ModelWriter {
 	private void addModelAnnotations() {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
 
-		if(semsimmodel.getLegacyCodeLocation()!=null)
+		if(semsimmodel.getLegacyCodeLocation()!=null){
+			ModelAccessor legacyma = semsimmodel.getLegacyCodeLocation();
+			String fileloc = legacyma.getFullPath();
+			
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
-					semsimmodel.getLegacyCodeLocation().getFilePath().toString(), manager);
+					fileloc, manager);
+		}
 
 		if(semsimmodel.hasMetadataID()) 
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_METADATA_ID.getIRI(), semsimmodel.getMetadataID(), manager);
@@ -692,12 +698,9 @@ public class SemSimOWLwriter extends ModelWriter {
 			if(ann instanceof ReferenceOntologyAnnotation){
 				Relation rel = ann.getRelation();
 				
-				// We don't write out annotations that use qualifiers that can also be used
-				// on physical entities and processes
-				if(rel==SemSimRelation.BQB_IS_VERSION_OF || rel==SemSimRelation.BQB_ENCODES || rel==SemSimRelation.BQB_IS_ENCODED_BY){
-					continue;
-				}
-				else str = ((ReferenceOntologyAnnotation)ann).getReferenceURI().toString();
+				rel = SemSimRelations.getSynonymousModelLevelRelationForSemSimOWLwriting(rel);// Make sure to use any necessary synonymous relations for ontology-level annotations
+				
+				str = ((ReferenceOntologyAnnotation)ann).getReferenceURI().toString();
 			}
 			else str = ann.getValue().toString();
 

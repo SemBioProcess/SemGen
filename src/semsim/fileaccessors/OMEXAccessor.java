@@ -46,6 +46,7 @@ public class OMEXAccessor extends ModelAccessor {
 		super(omexarchive, ModelType.OMEX_ARCHIVE);
 		this.file = omexarchive;
 		archivedfile = new ModelAccessor(file, type);
+		fragment = file.getPath();
 	}
 	
 	/**

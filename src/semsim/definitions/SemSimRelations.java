@@ -182,10 +182,45 @@ public class SemSimRelations {
 			return StructuralRelation.BQB_HAS_PART;
 		case BQB_HAS_PART:
 			return StructuralRelation.BQB_IS_PART_OF;
+		case MODEL_HAS_PART:
+			return StructuralRelation.PART_OF;
 	}
 
 		return null;
 	}
+	
+	
+	/**
+	 * Look up which relation to use for an ontology-level annotation in a SemSim OWL file.
+	 * This is needed because the same OWL property can't be used in statements on classes
+	 * and in ontology-level annotations.
+	 * @param rel The Relation that we'd like to use for the ontology-level annotation
+	 * @return The synonymous relation to use for the ontology-level annotation
+	 */
+	public static Relation getSynonymousModelLevelRelationForSemSimOWLwriting(Relation rel){
+		if(rel==SemSimRelation.BQB_IS_VERSION_OF) return SemSimRelation.MODEL_IS_VERSION_OF;
+		else if(rel==SemSimRelation.BQB_ENCODES) return SemSimRelation.MODEL_ENCODES;
+		else if(rel==SemSimRelation.BQB_IS_ENCODED_BY) return SemSimRelation.MODEL_IS_ENCODED_BY;
+		else if(rel==StructuralRelation.BQB_HAS_PART || rel==StructuralRelation.HAS_PART) return StructuralRelation.MODEL_HAS_PART;
+		else return rel;
+	}
+	
+	
+	/**
+	 * Look up which relation to use for a model-level annotation in a SemSim model.
+	 * This is needed because the same OWL property can't be used in statements on classes
+	 * and in ontology-level annotations.
+	 * @param rel The Relation that we'd like to use for the model-level annotation that comes from a SemSim OWL file
+	 * @return The synonymous relation to use for the model-level annotation
+	 */
+	public static Relation getSynonymousModelLevelRelationForSemSimOWLreading(Relation rel){
+		if(rel==SemSimRelation.MODEL_IS_VERSION_OF) return SemSimRelation.BQB_IS_VERSION_OF; 
+		else if(rel==SemSimRelation.MODEL_ENCODES) return SemSimRelation.BQB_ENCODES;
+		else if(rel==SemSimRelation.MODEL_IS_ENCODED_BY) return SemSimRelation.BQB_IS_ENCODED_BY;
+		else if(rel==StructuralRelation.MODEL_HAS_PART) return StructuralRelation.HAS_PART;
+		else return rel;
+	}
+	
 	
 	/**
 	 * Look up a URI's corresponding {@link SemSimRelation}
@@ -211,6 +246,9 @@ public class SemSimRelations {
 		MODEL_METADATA_ID("modelMetadataID", RDFNamespace.SEMSIM.getNamespaceAsString(), "a semsim model has some metadata id (to support SBML and CellML metadata IDs)", RDFNamespace.SEMSIM.getOWLid()),
 		MODEL_NAME("modelName", RDFNamespace.SEMSIM.getNamespaceAsString(), "a semsim model has some name", RDFNamespace.SEMSIM.getOWLid()),
 		MODEL_DESCRIPTION("modelDescription", RDFNamespace.SEMSIM.getNamespaceAsString(), "a semsim model has some description", RDFNamespace.SEMSIM.getOWLid()),
+		MODEL_IS_VERSION_OF("modelIsVersionOf", RDFNamespace.SEMSIM.getNamespaceAsString(), "the model simulates some subclass of phenomena", RDFNamespace.SEMSIM.getOWLid()), // needed b/c BQB:isVersionOf can be used on class statements but not for ontology-level annotation
+		MODEL_ENCODES("modelEncodes", RDFNamespace.SEMSIM.getNamespaceAsString(), "the model simulates some encoding", RDFNamespace.SEMSIM.getOWLid()), // needed b/c BQB:encodes could potentially be used on class statements but not for ontology-level annotation
+		MODEL_IS_ENCODED_BY("modelIsEncodedBy", RDFNamespace.SEMSIM.getNamespaceAsString(), "something encodes what the model simulates", RDFNamespace.SEMSIM.getOWLid()), // needed b/c BQB:isEncodedBy could potentially be used on class statements but not for ontology-level annotation
 		
 		HAS_NAME("name", RDFNamespace.SEMSIM.getNamespaceAsString(), "semsim component has name", RDFNamespace.SEMSIM.getOWLid()),
 		KEY_TERM("keyTerm", RDFNamespace.SEMSIM.getNamespaceAsString(), "semsim model represents", RDFNamespace.SEMSIM.getOWLid()),
@@ -375,7 +413,10 @@ public class SemSimRelations {
 		BQB_HAS_PART("has part", "physical entity has part other another physical entity",
 				RDFNamespace.BQB.getNamespaceAsString() + "hasPart", "bqbiol:hasPart"),
 		BQB_IS_PART_OF("part of", "physical entity is part of another physical entity",
-				RDFNamespace.BQB.getNamespaceAsString() + "isPartOf", "bqbiol:isPartOf");
+				RDFNamespace.BQB.getNamespaceAsString() + "isPartOf", "bqbiol:isPartOf"),
+		MODEL_HAS_PART("model has part", "the phenomena simulated by the model includes some component phenomena",
+				RDFNamespace.SEMSIM.getNamespaceAsString() + "modelHasPart", "semsim:modelHasPart"); // needed b/c BQB:hasPart can be used on class statements but not for ontology-level annotation
+		
 		
 		
 		String description;

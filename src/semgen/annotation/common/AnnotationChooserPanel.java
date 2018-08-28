@@ -17,10 +17,10 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
+import semsim.annotation.SemSimTermLibrary;
 
 public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
