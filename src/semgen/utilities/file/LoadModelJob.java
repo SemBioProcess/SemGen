@@ -76,7 +76,7 @@ public class LoadModelJob extends SemGenJob {
 				// perform auto-annotation
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate && ! previouslyannotated) {
 					setStatus("Annotating Physical Properties");
-					AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					AutoAnnotate.autoAnnotateWithOPB(semsimmodel, SemGen.semsimlib, SemGen.cfgreadpath);
 				}
 				// Otherwise collect any needed reference term names from BioPortal
 				else{
@@ -160,7 +160,7 @@ public class LoadModelJob extends SemGenJob {
 	
 	private void annotateModel() {
 		setStatus("Annotating physical properties");
-		AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+		AutoAnnotate.autoAnnotateWithOPB(semsimmodel, SemGen.semsimlib, SemGen.cfgreadpath);
 	}
 	
 	private void nameOntologyTerms(){
