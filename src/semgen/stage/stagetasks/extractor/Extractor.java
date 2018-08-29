@@ -72,6 +72,9 @@ public abstract class Extractor {
 		}
 	}
 	
+	/**
+	 * Adds data structures and submodels to the newly constructed model extraction
+	 */
 	protected void buildExtraction() {
 		for (DataStructure dstoadd : datastructures.values()) {
 			dstoadd.addToModel(extraction);

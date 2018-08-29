@@ -62,8 +62,6 @@ public class CASAwriter extends AbstractRDFwriter{
 			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
 		Resource modelresource = rdf.createResource(xmlbase + metaid);
 
-		System.out.println("HERE: " + metaid + " : " + semsimmodel.getDescription());
-		
 		// Save model description
 		if(semsimmodel.hasDescription()){
 			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());

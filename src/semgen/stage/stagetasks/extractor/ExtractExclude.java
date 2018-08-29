@@ -11,45 +11,40 @@ import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
 public class ExtractExclude extends Extractor {
-	protected Set<DataStructure> dsstoremove = new HashSet<DataStructure>();
-	protected Set<Submodel> smstoremove = new HashSet<Submodel>();
+	protected Set<DataStructure> dsstoexclude = new HashSet<DataStructure>();
+	protected Set<Submodel> smstoexclude = new HashSet<Submodel>();
 
 	public ExtractExclude(SemSimModel source, SemSimModel extractionmodel) {
 		super(source, extractionmodel);
 	}
 	
-
-	public void addDataStructuretoRemove(DataStructure dstoremove) {
-		dsstoremove.add(dstoremove);
-	}
-	
-	public void addSubmodeltoRemove(Submodel smtoremove) {
-		smstoremove.add(smtoremove);
-		for (DataStructure smds : smtoremove.getAssociatedDataStructures()) {
-			dsstoremove.add(smds);
-		}
-	}
-	
 	private void collectElementstoKeep() {
 		Set<Submodel> smstokeep = new HashSet<Submodel>(sourcemodel.getSubmodels());
 		
-		for (Submodel smtoremove : smstoremove) {
-			smstokeep.remove(smtoremove);
-			for (DataStructure smds : smtoremove.getAssociatedDataStructures()) {
-				dsstoremove.add(smds);
+		for (Submodel smtoexclude : smstoexclude) {
+			smstokeep.remove(smtoexclude);
+			
+			for (DataStructure smds : smtoexclude.getAssociatedDataStructures()) {
+				dsstoexclude.add(smds);
 			}
 		}
 		
-		for (Submodel smtokeep : smstokeep) {
-			this.includeSubModel(smtokeep);
+		// If no submodels were explicitly selected for inclusion or exclusion, exclude them all. 
+		// Otherwise we end up keeping a bunch of data structures we don't need because of their
+		// associatioin with submodels. If some submodels were explicitly excluded, retain the 
+		// correct ones.
+		if(smstoexclude.size() > 0){ 
+			for (Submodel smtokeep : smstokeep) {
+				includeSubModel(smtokeep);
+			}
 		}
 		
 		Set<DataStructure> dsstokeep = sourcemodel.getDataStructuresWithProcessesandParticipants();	
-		for (DataStructure dstoremove : dsstoremove) {
-			dsstokeep.remove(dstoremove);
+		for (DataStructure dstoexclude : dsstoexclude) {
+			dsstokeep.remove(dstoexclude);
 		
 			for (DataStructure dstokeep : dsstokeep) {
-				dstokeep.removeOutput(dstoremove);
+				dstokeep.removeOutput(dstoexclude);
 			}
 		}
 		
@@ -72,7 +67,7 @@ public class ExtractExclude extends Extractor {
 
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		smstoremove.add(sourceobj);
+		smstoexclude.add(sourceobj);
 	}
 
 	@Override
@@ -82,7 +77,7 @@ public class ExtractExclude extends Extractor {
 					sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
 				}
 			}
-		dsstoremove.add(sourceobj);
+		dsstoexclude.add(sourceobj);
 	}
 
 	@Override

@@ -104,9 +104,6 @@ public class SBMLreader extends ModelReader{
 	private Map<String, CompositePhysicalEntity> speciesAndEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
 	private Set<String> baseUnits = new HashSet<String>();
-	private Submodel parametersubmodel;
-	private Submodel speciessubmodel;
-	private Submodel compartmentsubmodel;
 	private String timedomainname = "time";
 	public static final String REACTION_PREFIX = "Reaction_";
 	public static final String FUNCTION_PREFIX = "Function_";
@@ -156,16 +153,6 @@ public class SBMLreader extends ModelReader{
 				
 		// if any errors at this point, return model
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
-		
-		// Create submodels for compartments and species. Each reaction gets its own submodel later.
-		if(sbmlmodel.getListOfParameters().size()>0) 
-			parametersubmodel = semsimmodel.addSubmodel(new Submodel("Parameters"));
-		
-		if(sbmlmodel.getListOfCompartments().size()>0) 
-			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("Compartments"));
-		
-		if(sbmlmodel.getListOfSpecies().size()>0)
-			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
 		
 		// If model is from an archive, read in the annotations on the SBML physical components using
 		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
@@ -435,8 +422,6 @@ public class SBMLreader extends ModelReader{
 		timeds.setSingularAnnotation(timeprop);
 		
 		semsimmodel.addDataStructure(timeds);
-		
-		if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);
 	}
 
 	
@@ -451,7 +436,6 @@ public class SBMLreader extends ModelReader{
 			
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
 			ds.setDeclared(true);
-			compartmentsubmodel.addDataStructure(ds);
 			
 			String mathml = SemSimUtil.mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
 					+ sbmlc.getSize() + "</cn>\n </apply>\n" + SemSimUtil.mathMLelementEnd;
@@ -605,7 +589,6 @@ public class SBMLreader extends ModelReader{
 			
 			ds.setDeclared(true);
 			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
-			speciessubmodel.addDataStructure(ds);
 			
 			boolean isConstant = species.getConstant();
 			boolean isBoundaryCondition = species.getBoundaryCondition();
@@ -792,9 +775,7 @@ public class SBMLreader extends ModelReader{
 	private void collectParameters(){
 		for(int p=0; p<sbmlmodel.getListOfParameters().size(); p++){
 			Parameter sbmlpar = sbmlmodel.getParameter(p);
-
-			DataStructure pards = addParameter(sbmlpar, null);
-			parametersubmodel.addDataStructure(pards);
+			addParameter(sbmlpar, null);
 		}
 	}
 	
