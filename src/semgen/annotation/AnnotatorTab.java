@@ -110,7 +110,6 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		setVisible(true);
 		
 		int iniwloc = settings.scaleWidthforScreen(360);
-		int inihloc = settings.scaleHeightforScreen(initheight-150);
 		
 		tree = new AnnotatorButtonTree(workbench, settings);
 		treeviewscrollpane = new SemGenScrollPane(tree);
@@ -120,11 +119,9 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		
 		splitpane.setDividerLocation(iniwloc);
 		
-		BigDecimal locbdeast = new BigDecimal(inihloc/2);
-		BigDecimal locbdwest = new BigDecimal(inihloc/1.5);
-
-		eastsplitpane.setDividerLocation(locbdeast.intValue());	
-		westsplitpane.setDividerLocation(locbdwest.intValue());
+		int horseppos = getHorizontalSeparatorPosition();
+		eastsplitpane.setDividerLocation(horseppos);	
+		westsplitpane.setDividerLocation(horseppos);
 		
 		// If we are hiding the imported codewords, select the first one that is editable
 		changeComponentView();
@@ -157,6 +154,8 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 			toolbar.enableSort(true);
 			westsplitpane.setTopComponent(cwpane);
 			westsplitpane.setBottomComponent(smpane);
+			int loc = getHorizontalSeparatorPosition();
+			westsplitpane.setDividerLocation(loc);
 		}
 	}
 	
@@ -234,6 +233,13 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 	
 	public void requestEditModelLevelMetadata() {
 		new ModelLevelMetadataDialog(workbench);
+	}
+	
+	
+	public int getHorizontalSeparatorPosition(){
+		initheight = settings.getAppHeight();
+		int inihloc = settings.scaleHeightforScreen(initheight-150);
+		return new BigDecimal(inihloc/1.75).intValue();
 	}
 	
 	@Override

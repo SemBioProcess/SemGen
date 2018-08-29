@@ -698,6 +698,8 @@ public class SemSimUtil {
 		newname = newname.replace("^", "_exp_");
 		newname = newname.replace("(", "_");
 		newname = newname.replace(")", "_");
+		newname = newname.replace("-", "minus");
+
 				
 		if(Character.isDigit(newname.charAt(0))) newname = "x" + newname;
 		

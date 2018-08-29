@@ -1241,8 +1241,7 @@ public class SBMLwriter extends ModelWriter {
 				
 				Resource ares = rdfwriter.rdf.createResource(rdfwriter.xmlbase + metadataID);
 				
-				// Don't set the free-text description of the data structure. That should be preserved in
-				// SBML <notes>
+				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
 				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
 			}
