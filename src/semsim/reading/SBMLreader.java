@@ -953,7 +953,11 @@ public class SBMLreader extends ModelReader{
 			
 			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
 			
+			// Add parameters local to function
 			for(String input : inputs.keySet()){
+				
+				if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
+				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
@@ -1010,10 +1014,6 @@ public class SBMLreader extends ModelReader{
 			rateds.setDeclared(true);
 			String thereactionprefix = REACTION_PREFIX + reactionID;
 			
-			Submodel rxnsubmodel = new Submodel(thereactionprefix);
-			semsimmodel.addSubmodel(rxnsubmodel);
-			rxnsubmodel.addDataStructure(rateds);
-			
 			if(reaction.isSetKineticLaw()){
 				KineticLaw kineticlaw = reaction.getKineticLaw();
 				
@@ -1034,7 +1034,6 @@ public class SBMLreader extends ModelReader{
 							LocalParameter lp = kineticlaw.getLocalParameter(l);
 							DataStructure localds = addParameter(lp, thereactionprefix);
 							mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
-							rxnsubmodel.addDataStructure(localds);
 						}
 			
 						rateds.getComputation().setMathML(mathmlstring);
