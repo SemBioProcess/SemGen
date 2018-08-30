@@ -953,7 +953,11 @@ public class SBMLreader extends ModelReader{
 			
 			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
 			
+			// Add parameters local to function
 			for(String input : inputs.keySet()){
+				
+				if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
+				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
