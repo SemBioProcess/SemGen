@@ -7,11 +7,14 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
+import semgen.stage.stagetasks.ProjectTask;
 import semgen.utilities.SemGenJob;
 import semsim.annotation.AutoAnnotate;
 import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.CASAreader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
@@ -28,6 +31,7 @@ import semsim.utilities.webservices.BioPortalSearcher;
 public class LoadModelJob extends SemGenJob {
 	private ModelAccessor modelaccessor;
 	private boolean autoannotate = false;
+	public boolean onStage;
 	private SemSimModel semsimmodel;
 	
 	public LoadModelJob(ModelAccessor modelaccessor) {
@@ -37,6 +41,12 @@ public class LoadModelJob extends SemGenJob {
 	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate) {
 		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
+	}
+
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate, boolean loadOnStage) {
+		this.modelaccessor = modelaccessor;
+		this.autoannotate = autoannotate;
+		this.onStage = loadOnStage;
 	}
 	
 	public LoadModelJob(ModelAccessor modelaccessor, SemGenJob sga) {
@@ -66,6 +76,22 @@ public class LoadModelJob extends SemGenJob {
 			case CELLML_MODEL:
 				CellMLreader cellmlreader = new CellMLreader(modelaccessor);
 				semsimmodel = cellmlreader.read();
+
+				// Check for imported components before opening
+				if (onStage) {
+					boolean importedComponent = false;
+					for (Submodel submodel : semsimmodel.getSubmodels()) {
+						importedComponent = submodel.isImported();
+						if (importedComponent) break;
+					}
+					if (!importedComponent) {
+						for (UnitOfMeasurement unit : semsimmodel.getUnits()) {
+							importedComponent = unit.isImported();
+							if (importedComponent) break;
+						}
+					}
+					semsimmodel.hasImportedComponents = importedComponent;
+				}
 				
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
@@ -114,6 +140,10 @@ public class LoadModelJob extends SemGenJob {
 				for (String e : semsimmodel.getErrors()) {
 					ErrorLog.addError(e,true, true);
 				}
+				return;
+			}
+			else if (semsimmodel.hasImportedComponents) {
+				System.out.println("This model has imported components, which are not yet supported in SemGen.");
 				return;
 			}
 			semsimmodel.setName(modelaccessor.getModelName());

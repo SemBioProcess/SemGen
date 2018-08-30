@@ -83,10 +83,11 @@ import semsim.utilities.SemSimCopy;
 public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public static final IRI LEGACY_CODE_LOCATION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "legacyCodeURI");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmssSSSZ");
-	
+
 	private String namespace;
 	private ModelType sourceModelType;
 	private ModelAccessor sourcefilelocation;
+	public boolean hasImportedComponents;
 	private double semsimversion;
 	
 	// Model-specific data
