@@ -1010,10 +1010,6 @@ public class SBMLreader extends ModelReader{
 			rateds.setDeclared(true);
 			String thereactionprefix = REACTION_PREFIX + reactionID;
 			
-			Submodel rxnsubmodel = new Submodel(thereactionprefix);
-			semsimmodel.addSubmodel(rxnsubmodel);
-			rxnsubmodel.addDataStructure(rateds);
-			
 			if(reaction.isSetKineticLaw()){
 				KineticLaw kineticlaw = reaction.getKineticLaw();
 				
@@ -1034,7 +1030,6 @@ public class SBMLreader extends ModelReader{
 							LocalParameter lp = kineticlaw.getLocalParameter(l);
 							DataStructure localds = addParameter(lp, thereactionprefix);
 							mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
-							rxnsubmodel.addDataStructure(localds);
 						}
 			
 						rateds.getComputation().setMathML(mathmlstring);
