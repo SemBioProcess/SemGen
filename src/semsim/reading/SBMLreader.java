@@ -13,6 +13,7 @@ import java.util.zip.ZipException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import org.jdom.Document;
@@ -1299,6 +1300,7 @@ public class SBMLreader extends ModelReader{
 					desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">\\s*<p>","");
 					desc = desc.replaceAll("</p>\\s*</body>\\s*</notes>","");
 				}
+				desc = StringEscapeUtils.unescapeXml(desc);				
 				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
 //				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 

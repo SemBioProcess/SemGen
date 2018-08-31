@@ -1013,7 +1013,9 @@ public class SBMLwriter extends ModelWriter {
 			try {
 				String desc = sso.getDescription();
 				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novère problem)
-				sbo.setNotes(new String(chars));
+				String tempstring = new String(chars);
+				tempstring = new XMLOutputter().escapeElementEntities(tempstring);
+				sbo.setNotes(tempstring);
 				
 			} catch (XMLStreamException e) {
 				e.printStackTrace();
