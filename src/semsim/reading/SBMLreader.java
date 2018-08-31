@@ -1295,12 +1295,9 @@ public class SBMLreader extends ModelReader{
 				
 			try {
 				String desc = sbmlobject.getNotesString();
-				if( ! desc.contains("<div")){ // For notes on other elements
-					
-					desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">\\s*<p>","");
-					desc = desc.replaceAll("</p>\\s*</body>\\s*</notes>","");
-				}
-				desc = StringEscapeUtils.unescapeXml(desc);				
+				desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">","");
+				desc = desc.replaceAll("</body>\\s*</notes>","");
+				desc = StringEscapeUtils.unescapeXml(desc.trim());				
 				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
 //				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 
