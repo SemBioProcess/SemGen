@@ -88,8 +88,8 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		descriptionarea.setLineWrap(true);
 
 		SemGenScrollPane descriptionscroller = new SemGenScrollPane(descriptionarea);
-		descriptionpanel.setPreferredSize(new Dimension(panelwidth,175));
-		descriptionscroller.setPreferredSize(new Dimension(panelwidth,175));
+		descriptionpanel.setPreferredSize(new Dimension(panelwidth,150));
+		descriptionscroller.setPreferredSize(new Dimension(panelwidth,150));
 
 		descriptionpanel.setMinimumSize(descriptionscroller.getPreferredSize());
 		descriptionpanel.setMaximumSize(descriptionscroller.getPreferredSize());
@@ -107,8 +107,8 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		cellmldocumentationarea.setLineWrap(true);
 
 		SemGenScrollPane cellmldocumentationscroller = new SemGenScrollPane(cellmldocumentationarea);
-		cellmldocumentationpanel.setPreferredSize(new Dimension(panelwidth,175));
-		cellmldocumentationscroller.setPreferredSize(new Dimension(panelwidth,175));
+		cellmldocumentationpanel.setPreferredSize(new Dimension(panelwidth,150));
+		cellmldocumentationscroller.setPreferredSize(new Dimension(panelwidth,150));
 
 		cellmldocumentationpanel.setMinimumSize(cellmldocumentationscroller.getPreferredSize());
 		cellmldocumentationpanel.setMaximumSize(cellmldocumentationscroller.getPreferredSize());
@@ -137,7 +137,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		annlistpanel.add(Box.createVerticalGlue());
 		
 		refannscroller = new SemGenScrollPane(annlistpanel);
-		outerrefannpanel.setPreferredSize(new Dimension(panelwidth,400));
+		outerrefannpanel.setPreferredSize(new Dimension(panelwidth,300));
 		outerrefannpanel.setMaximumSize(refannscroller.getPreferredSize());
 		outerrefannpanel.setMinimumSize(refannscroller.getPreferredSize());
 		
