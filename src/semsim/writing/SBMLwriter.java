@@ -351,22 +351,31 @@ public class SBMLwriter extends ModelWriter {
 				comp.setSpatialDimensions(1);
 			}
 			
-			 // A Compartment object must have the required attributes 
+			// Go to next data structure if we didn't find an appropriate OPB property
+			// or if the associated physical entity is NOT a composite physical entity
+			if(comp == null || ! (pmc instanceof CompositePhysicalEntity)) 
+				continue;
+			
+			// A Compartment object must have the required attributes 
 			// 'id' and 'constant', and may have the optional attributes 
 			// 'metaid', 'sboTerm', 'name', 'spatialDimensions', 'size' and 'units'. 
 			comp.setConstant(ds.getComputationInputs().size()==0);
-			
-			// Go to next data structure if we didn't find an appropriate OPB property
-			// or if the associated physical entity is NOT a composite physical entity
-			if(comp == null || ! (pmc instanceof CompositePhysicalEntity)) continue;
 						
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
 
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
-			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();			
+			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);
+			boolean onerefentity = oneentity && indexent.hasPhysicalDefinitionAnnotation();			
 			
-			// Store annotation for compartment.
+			// Store annotation for compartment
+			// If it's a singular entity and writing to standalone, annotate with CVTerm
+			// If it's a singular entity and writing to OMEX, annotate in CASA. Link metaid's
+			// of compartment and the entity with the annotations (the singular entity in the
+			// composite entity)
+			
+			// If it's a composite entity then we capture the semantics using a full composite in
+			// the RDF block or CASA file when adding parameter info
 			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
 				DSsToOmitFromCompositesRDF.add(ds);
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);
@@ -585,9 +594,8 @@ public class SBMLwriter extends ModelWriter {
 				rxn.setReversible(true); // TODO: extend SemSim object model to include this "reversible" attribute somewhere
 				rxn.setFast(false); // TODO: extend SemSim object model to include this "fast" attribute somewhere
 				
-				// Do not store the annotation for this data structure in the SemSim RDF.
-				// Preserve semantics in <reaction> element.
 				DSsToOmitFromCompositesRDF.add(ds);
+				addRDFannotationForPhysicalSBMLelement(process, rxn);
 				
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
@@ -1078,7 +1086,7 @@ public class SBMLwriter extends ModelWriter {
 	
 	
 	/**
-	 * Add semantic annotations on an SBML model element encoded as RDF
+	 * Add semantic annotations on an SBML compartment, species or reaction element encoded as RDF
 	 * @param pmc {@link PhysicalModelComponent} corresponding to the SBML element
 	 * @param sbmlobj The SBML element to annotate
 	 */
@@ -1090,11 +1098,28 @@ public class SBMLwriter extends ModelWriter {
 			sbmlobj.setMetaId(metaid);
 		}
 		
+		// Check if the physical model component is a composite physical entity
+		// containing only one physical entity component
+		boolean oneent = false;
+		
+		if(pmc instanceof CompositePhysicalEntity)
+			oneent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1;
+		
 		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
 		if(getWriteLocation() instanceof OMEXAccessor){
-			((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
+			
+			// When the pmc is a one-entity composite physical entity, use the
+			// metadata ID on the pmc to link it to the SBML entity (this is used for compartments)
+			if(oneent){
+				String metaidtouse = pmc.getMetadataID();
+				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
+				((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc);
+			}
+			else ((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
 			return;
 		}
+		
+		if(oneent) pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 		
 		// This is used when writing RDF-based semantic annotations within a standalone SBML file
 		if(pmc instanceof ReferenceTerm){
