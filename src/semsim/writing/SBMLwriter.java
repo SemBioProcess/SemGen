@@ -334,27 +334,37 @@ public class SBMLwriter extends ModelWriter {
 			URI propphysdefuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
 			
 			// Go to next data structure if there isn't a physical property associated with the current one
-			if(propphysdefuri == null) continue;
+			// or if there is a multi-entity composite physical entity used in the data structure's
+			// composite annotation (even if there's a valid physical property, the full composite
+			// needs to be stored in either the SemSim RDF block or the CASA file)
+			if(propphysdefuri == null || ! (pmc instanceof CompositePhysicalEntity))
+				continue; // TODO: add to global parameters?
+			
+			int compdim = -1;
 			
 			Compartment comp = null;
 			
 			if(propphysdefuri.equals(SemSimLibrary.OPB_FLUID_VOLUME_URI))
-				comp = sbmlmodel.createCompartment(ds.getName());
+				compdim = 3;
 			
 			// Only write out spatialDimensions attribute if compartment is not 3D
-			else if(propphysdefuri.equals(SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI)){
-				comp = sbmlmodel.createCompartment(ds.getName());
-				comp.setSpatialDimensions(2);
-			}
-			else if(propphysdefuri.equals(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI)){
-				comp = sbmlmodel.createCompartment(ds.getName());
-				comp.setSpatialDimensions(1);
-			}
+			else if(propphysdefuri.equals(SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI))
+				compdim = 2;
 			
+			else if(propphysdefuri.equals(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI))
+				compdim = 1;
+			
+			
+			if(compdim!=-1 && ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1){
+				comp = sbmlmodel.createCompartment(ds.getName());
+				comp.setSpatialDimensions(compdim);
+			}
 			// Go to next data structure if we didn't find an appropriate OPB property
-			// or if the associated physical entity is NOT a composite physical entity
-			if(comp == null || ! (pmc instanceof CompositePhysicalEntity)) 
+			// or if there's a composite physical entity
+			else{
+				globalParameters.add(ds.getName());
 				continue;
+			}
 			
 			// A Compartment object must have the required attributes 
 			// 'id' and 'constant', and may have the optional attributes 
@@ -1252,9 +1262,9 @@ public class SBMLwriter extends ModelWriter {
 			// Only the info for parameters are stored (i.e. not compartments, species or reactions)
 			// because the <species> and <reaction> elements already contain the needed info, and 
 			// the <compartments> refer to physical entities (which can be composite), not properties of entities
+			
 			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
 			else{
-				
 				String metadataID = null;
 				
 				// We use custom code here to make this function go faster (previously used the AbstractRDFwriter.assignMetaIDandCreateResourceForDataStructure()) routine
