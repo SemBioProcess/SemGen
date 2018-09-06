@@ -20,8 +20,7 @@ public class Decimal extends DataStructure{
 	 * Constructor with type argument and boolean indicating whether to 
 	 * create a {@link Computation} associated with the Decimal
 	 * @param type A SemSimType
-	 * @param initializeComputation Indicates whether to create a {@link Computation}
-	 * associated with the Decimal
+	 * @param name Name for the Decimal
 	 */
 	public Decimal(String name, SemSimTypes type){
 		super(type);

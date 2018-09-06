@@ -364,8 +364,8 @@ public class SBMLwriter extends ModelWriter {
 
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
-			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();
-						
+			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();			
+			
 			// Store annotation for compartment.
 			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
 				DSsToOmitFromCompositesRDF.add(ds);
@@ -1012,7 +1012,7 @@ public class SBMLwriter extends ModelWriter {
 		if(sso.hasDescription() && ! (getWriteLocation() instanceof OMEXAccessor)){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
 			try {
 				String desc = sso.getDescription();
-				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novère problem)
+				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novere problem)
 				String temp = "<notes>\n  <body xmlns=\"http://www.w3.org/1999/xhtml\">\n    " + new String(chars) + "\n  </body>\n</notes>";
 				temp = temp.replace("&", "&amp;");
 				sbo.setNotes(temp);

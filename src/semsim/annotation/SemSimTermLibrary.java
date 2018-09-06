@@ -63,7 +63,7 @@ public class SemSimTermLibrary extends Observable {
 	
 	/**
 	 * Takes a semsimmodel and extracts all physical model components and adds them to the library if they're missing.
-	 * @param model
+	 * @param model A {@link SemSimModel}
 	 */
 	public void addTermsinModel(SemSimModel model) {
 		for (PhysicalPropertyInComposite pp : model.getAssociatePhysicalProperties()) {
@@ -446,10 +446,9 @@ public class SemSimTermLibrary extends Observable {
 			return desc;
 		}
 		
-		/** Check if a component in the library already has a given name
-		 * 
-		 * @param nametocheck
-		 * @return
+		/**
+		 * @param nametocheck A component name
+		 * @return Whether a component in the library already has a given name
 		 */
 		public int libraryHasName(String nametocheck) {
 			for (IndexCard<?> card : masterlist) {
