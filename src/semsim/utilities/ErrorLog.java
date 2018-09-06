@@ -18,7 +18,7 @@ public class ErrorLog {
 	 * Add an error to the error log
 	 * @param e An error message
 	 * @param isfatal Whether the error is fatal
-	 * @param addtolog Whether to add to this object's PrintWriter 
+	 * @param addtologfilewriter Whether to add to this object's PrintWriter 
 	 */
 	public static void addError(String e, Boolean isfatal, boolean addtologfilewriter) {
 		errorqueue.add(new ErrorEntry(e, isfatal));

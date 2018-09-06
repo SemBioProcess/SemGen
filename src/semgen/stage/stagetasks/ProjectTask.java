@@ -69,8 +69,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
-				
-				loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+
+				loadTask loadtask = new loadTask(accessor, ProjectTask.this, true);
 				loadtask.execute();
 			}
 		}

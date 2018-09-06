@@ -11,9 +11,11 @@ import semsim.model.physical.object.PhysicalProperty;
 
 public class AnnotationCopier {
 	
-	/** 
-	 * Intra-model datastructure copy
-	 * */
+	/**
+	 * Composite annotation copy between data structures
+	 * @param sourceds The {@link DataStructure} containing the composite annotation to copy
+	 * @param targetds The {@link DataStructure} to which the composite annotation will be copied
+	 */
 	public static void copyCompositeAnnotation(DataStructure sourceds, DataStructure targetds) {
 		if (sourceds.hasPhysicalProperty()) {
 			targetds.setAssociatedPhysicalProperty(sourceds.getPhysicalProperty());
@@ -26,9 +28,12 @@ public class AnnotationCopier {
 		else targetds.setAssociatedPhysicalModelComponent(null);
 	}
 	
-	/** 
-	 * Inter-model datastructure copy 
-	 * */
+	/**
+	 * Composite annotation copy using a SemSimTermLibrary instance
+	 * @param lib A SemSimTermLibrary
+	 * @param sourceds The {@link DataStructure} containing the composite annotation to copy
+	 * @param targetds The {@link DataStructure} to which the composite annotation will be copied
+	 */
 	public static void copyCompositeAnnotation(SemSimTermLibrary lib, DataStructure targetds, DataStructure sourceds) {		
 		
 		// Copy over physical property, physical model component, and singular annotations.

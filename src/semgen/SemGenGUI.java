@@ -240,6 +240,13 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			lmj = new LoadModelJob(modelaccessor, false);
 			progframe = new SemGenProgressBar("Reading " + modelaccessor.getShortLocation(), true, true);
 		}
+
+		public loadTask(ModelAccessor ma, ProjectTask pt, boolean loadOnStage){
+			modelaccessor = ma;
+			projecttask = pt;
+			lmj = new LoadModelJob(modelaccessor, false, loadOnStage);
+			progframe = new SemGenProgressBar("Reading " + modelaccessor.getShortLocation(), true, true);
+		}
 				
 		@Override
 		protected Void doInBackground() throws Exception {
@@ -249,6 +256,12 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void endTask(){
 			SemSimModel semsimmodel = lmj.getLoadedModel();
+
+			if (lmj.onStage && semsimmodel.hasImportedComponents) {
+				JOptionPane.showMessageDialog(null, "SemGen cannot load models with imported components into a Project Tab yet. Please try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
 			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._modelinfos.size());
 			projecttask.addModeltoTask(info, true);
 			

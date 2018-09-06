@@ -63,8 +63,6 @@ public class CASAwriter extends AbstractRDFwriter{
 			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
 		Resource modelresource = rdf.createResource(xmlbase + metaid);
 
-		System.out.println("HERE: " + metaid + " : " + semsimmodel.getDescription());
-		
 		// Save model description
 		if(semsimmodel.hasDescription()){
 			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
@@ -96,9 +94,13 @@ public class CASAwriter extends AbstractRDFwriter{
 	 * entities (compartments, species, and reactions).
 	 * @param pmc An annotated physical model component
 	 */
-	public void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
-		
-		String metaid = pmc.getMetadataID(); // TODO: what if no metaid assigned?
+	protected void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
+		setAnnotationsForPhysicalComponent(pmc.getMetadataID(), pmc);
+	}
+	
+	
+	protected void setAnnotationsForPhysicalComponent(String metaid, PhysicalModelComponent pmc){
+		// TODO: what if no metaid assigned?
 		Resource res = rdf.createResource(xmlbase + metaid);
 		
 		Set<Annotation> anns = pmc.getAnnotations();
@@ -110,7 +112,7 @@ public class CASAwriter extends AbstractRDFwriter{
 			addStatement(st);
 		}
 		
-		// If it's a singular physical entity, write out the singular annotation(s)
+		// If it's a singular physical component, write out the singular annotation(s)
 		else{
 
 			// If the physical component has a physical identity annotation (is a ReferenceTerm), write the identity annotation
