@@ -6,7 +6,7 @@
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <target name="create_jar">
         <jar destfile="${dir.jarfile}/SemSimAPI.jar" filesetmanifest="mergewithoutmain" manifest="/Users/graham_kim/IdeaProjects/SemSim-Java-API/META-INF/MANIFEST.MF">
-			<fileset dir="/Users/graham_kim/IdeaProjects/SemGen/bin" casesensitive="yes">
+			<fileset dir="/Users/graham_kim/IdeaProjects/SemGen/out/production/SemGen" casesensitive="yes">
 				<include name="semsim/**"/>
 			</fileset>
             <zipfileset excludes="META-INF/*.SF" src="/Users/graham_kim/IdeaProjects/SemGen/thirdParty/arq-2.8.7.jar"/>
