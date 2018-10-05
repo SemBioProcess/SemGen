@@ -45,3 +45,8 @@ out/
 .idea/
 *.iml
 /jsbml.log
+
+# build files written by Ant
+/SemSimAPI.jar
+/build
+javadoc.xml
