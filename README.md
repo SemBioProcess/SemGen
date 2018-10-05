@@ -12,6 +12,15 @@ With SemGen, users can:
 - Semi-automatically merge models into more complex systems, and
 - Encode models in executable simulation formats.
 
+## Table of Contents
+
+* [Getting Started](#getting-started)
+
+  * [Prerequisites](#prerequisites)
+
+  * [Installing Pre-built Binaries](#installing-pre-built-binaries)
+  * [Building from Source](#building-from-source)
+
 ## Getting Started
 
 These instructions will help you use SemGen to visualize, annotate, extract, and merge models.
@@ -26,7 +35,7 @@ To check your Java version, go to a command prompt and enter:
 java -version
 ```
 
-### Installing
+### Installing Pre-built Binaries
 
 Simply download the appropriate build for your operating system from the [releases page](https://github.com/SemBioProcess/SemGen/releases).
 
@@ -35,6 +44,21 @@ Windows: Download and run the Windows installer. You will then be able to run Se
 Mac: Open the SemGen .dmg file, and drag ```SemGen.app``` to Applications folder. Double-click ```SemGen.app``` to start the program.
 
 Linux: Unarchive the SemGen .tar.gz file. Double-click the ```SemGen.jar``` file in the main SemGen directory to start the program
+
+### Building from Source
+
+SemGen can be built from source using [Apache Ant](https://ant.apache.org/). From the root of the source directory, run the following two commands:
+
+```
+ant -buildfile build.xml build # compile the Java sources to .class files
+ant -buildfile build.xml create_jar # bundle the .class files and third-part dependencies into a .jar
+```
+
+This will create the file `SemSimAPI.jar` in the root directory. You can run this file as follows to start the Py4J server:
+
+```
+java -classpath ./SemSimAPI.jar semsim.Py4J
+```
 
 ## Running SemGen
 
