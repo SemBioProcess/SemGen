@@ -15,11 +15,21 @@ With SemGen, users can:
 ## Table of Contents
 
 * [Getting Started](#getting-started)
-
   * [Prerequisites](#prerequisites)
-
   * [Installing Pre-built Binaries](#installing-pre-built-binaries)
   * [Building from Source](#building-from-source)
+* [Running SemGen](#running-semgen)
+  * [Loading a model](#loading-a-model)
+  * [Visualizing a model](#visualizing-a-model)
+    * [Submodels](#submodels)
+    * [Dependencies](#dependencies)
+    * [PhysioMap](#physiomap)
+    * [Annotator](#annotator)
+    * [Composite annotations](#composite-annotations)
+  * [Extractor](#extractor)
+  * [Merger](#merger)
+* [Authors](#authors)
+* [License](#license)
 
 ## Getting Started
 
