@@ -122,7 +122,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 					String srcfilename = srccodema.getFile().getName();
 					
 					if(workbench.getModelAccessor().sharesDirectory(srcfilename))
-						workbench.setModelAccessor(FileAccessorFactory.getModelAccessor(workbench.getModelAccessor().getDirectoryPath() + "/" + srcfilename));
+						srccodema = FileAccessorFactory.getModelAccessor(workbench.getModelAccessor().getDirectoryPath() + "/" + srcfilename);
 				}
 				
 				String modelcode = srccodema.getModelasString();

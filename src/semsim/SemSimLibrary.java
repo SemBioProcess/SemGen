@@ -42,7 +42,7 @@ public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSimVersion");
 
-	public static final String DEFAULT_CFG_PATH = "/semsim/cfg_default/";
+	public static final String DEFAULT_CFG_PATH = "semsim/cfg_default/";
 	public static final String SEMSIM_IN_JSIM_CONTROL_VALUE = "semSimAnnotate";
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -56,7 +56,7 @@ public class SemSimLibrary {
 	// Hashtable for mapping CellML base units to OPB classes.
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
     private HashMap<HashMap<String, Double>, String[]> OPBClassesForBaseUnitsTable;
-	
+
 	private Map<String, Integer> unitPrefixesAndPowersTable;
 	private Set<String> cellMLUnitsTable;
 	
@@ -119,9 +119,8 @@ public class SemSimLibrary {
 	 */
 	private void loadLibrary(boolean loadFromExternalDir) {
 		try {
-			loadCommonProperties();
-			
 			if(loadFromExternalDir){
+				loadCommonProperties(cfgpath + "CommonProperties.txt");
 				jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
 				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
 	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(cfgpath + "OPBClassesForBaseUnits.txt");
@@ -130,6 +129,7 @@ public class SemSimLibrary {
 				loadOntologyDescriptions(cfgpath);
 			}
 			else{
+				loadCommonProperties();
 				jsimUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "jsimUnits", true);
 				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "OPBClassesForUnits.txt", true);
 	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(DEFAULT_CFG_PATH + "OPBClassesForBaseUnits.txt");
@@ -171,8 +171,16 @@ public class SemSimLibrary {
 	 * Load OPB properties that are commonly represented in models
 	 * @throws IOException
 	 */
+
 	private void loadCommonProperties() throws IOException {
-		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource("/semsim/cfg_default/CommonProperties.txt", true);
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "CommonProperties.txt", true);
+		for (String s : ptable.keySet()) {
+			this.commonproperties.put(s, new PhysicalPropertyInComposite(ptable.get(s)[0], URI.create(s)));
+		}
+	}
+
+	private void loadCommonProperties(String internalpath) throws IOException {
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile(internalpath, true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyInComposite(ptable.get(s)[0], URI.create(s)));
 		}
