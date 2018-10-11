@@ -18,10 +18,20 @@
 
   <target name="build">
     <mkdir dir = "${build.dir}"/>
-    <javac destdir = "${build.dir}" failonerror = "true">
+    <javac destdir = "${build.dir}" failonerror = "true" debug="true" debuglevel="lines,vars,source">
       <src path = "${src.dir}"/>
       <classpath refid = "master-classpath"/>
     </javac>
+    <copy todir="${build.dir}">
+      <fileset dir="${src.dir}">
+        <include name="**/*.owl"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.dir}/semsim/cfg_default">
+      <fileset dir="${src.dir}/semsim/cfg_default">
+        <include name="*"/>
+      </fileset>
+    </copy>
   </target>
 
   <target name="create_jar">
