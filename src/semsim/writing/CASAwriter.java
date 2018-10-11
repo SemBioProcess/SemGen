@@ -56,7 +56,7 @@ public class CASAwriter extends AbstractRDFwriter{
 	}
 	
 	@Override
-	protected void setRDFforModelLevelAnnotations() {
+	public void setRDFforModelLevelAnnotations() {
 		
 		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
 			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);

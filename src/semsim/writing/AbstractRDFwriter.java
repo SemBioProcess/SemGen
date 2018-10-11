@@ -60,7 +60,7 @@ public abstract class AbstractRDFwriter {
 
 	// Abstract methods
 	/** Write out the RDF content for annotations on the model as a whole (curatorial metadata, e.g.) */
-	abstract protected void setRDFforModelLevelAnnotations();
+	abstract public void setRDFforModelLevelAnnotations();
 	
 	
 	/**
@@ -151,7 +151,7 @@ public abstract class AbstractRDFwriter {
 	
 	
 	/** Add RDF statements that capture all annotations on all data structures in a SemSim model */
-	protected void setRDFforDataStructureAnnotations(){
+	public void setRDFforDataStructureAnnotations(){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			setRDFforDataStructureAnnotations(ds);
@@ -475,6 +475,31 @@ public abstract class AbstractRDFwriter {
 			}
 		}
 		return newuri;
+	}
+
+	/**
+		* Accessor for the rdf model.
+		* @return The Jena rdf model stored in this object.
+		*/
+	public Model getRDFModel() {
+		return rdf;
+	}
+
+	/**
+	 * Instsance-level method for getting the RDF content as a string.
+	 * @return A string containing the RDF content.
+	 */
+	public String getRDFString(String rdfxmlformat) {
+		return getRDFmodelAsString(rdf, rdfxmlformat);
+	}
+
+	/**
+	 * Instsance-level method for getting the RDF content as a string
+	 * (overload uses default format "RDF/XML-ABBREV").
+	 * @return A string containing the RDF content.
+	 */
+	public String getRDFString() {
+		return getRDFString("RDF/XML-ABBREV");
 	}
 	
 	
