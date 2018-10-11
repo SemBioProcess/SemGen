@@ -41,6 +41,9 @@
       </manifest>
       <fileset dir="${build.dir}" casesensitive="yes">
         <include name="semsim/**/*.class"/>
+        <include name="semsim/**/*.txt"/>
+        <include name="semsim/**/*.owl"/>
+        <include name="semsim/cfg_default/jsimUnits"/>
       </fileset>
       <zipfileset excludes="META-INF/*.SF" src="thirdParty/arq-2.8.7.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="thirdParty/axis.jar"/>
