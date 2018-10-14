@@ -129,35 +129,38 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
-	
-	@Override
-	public String encodeModel() {
+	public SBMLwriter(SemSimModel model, boolean CASA) {
+		super(model, CASA);
+	}
+
+	// JKM: generates and returns an XML document based on the SBML
+	private Document writerSBMLtoXML(String xmlbase) {
 		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
 		String sbmlmodname = semsimmodel.getName();
-		
+
 		// Create a valid model name if current name is invalid
 		if( ! SyntaxChecker.isValidId(sbmlmodname, sbmllevel, sbmlversion)) sbmlmodname = "default_name";
-		
+
 		sbmlmodel = sbmldoc.createModel(sbmlmodname);
-		
+
 		if(semsimmodel.hasMetadataID())
 			sbmlmodel.setMetaId(semsimmodel.getMetadataID());
-		
+
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
 			SemSimUtil.flattenModel(semsimmodel);
-		
+
 		// Initialize a CASA writer, if we're writing to an OMEX file
-		if(getWriteLocation() instanceof OMEXAccessor){
+		if(CASAEnabled()){
 			rdfwriter = new CASAwriter(semsimmodel);
-			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
+			rdfwriter.setXMLbase("./" + xmlbase + "#");
 			rdfwriter.setRDFforModelLevelAnnotations();
 		}
 		else addModelLevelCVTerms();
-		
+
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
-		
+
 		addNotesAndMetadataID(semsimmodel, sbmlmodel);
 		sortDataStructuresIntoSBMLgroups();
 		addUnits();
@@ -170,20 +173,44 @@ public class SBMLwriter extends ModelWriter {
 		addSBMLinitialAssignments();
 		addConstraints();
 
-		Document doc = getWriteLocation() instanceof OMEXAccessor ? addCASArdf() : addSemSimRDF();
+		Document doc = CASAEnabled() ? addCASArdf() : addSemSimRDF();
 
-		// If no errors, write out the model. (Converted to XML doc in addSemSimRDF()).		
+		// If no errors, return the model.
 		// First catch errors
 		if(sbmldoc.getErrorCount() > 0){
-			
+
 			String errors = "";
 			for(int i = 0; i< sbmldoc.getErrorCount(); i++){
 				errors = errors + "\n\n" + sbmldoc.getError(i);
 			}
 			ErrorLog.addError("The resulting SBML model had the following errors:\n\n" + errors, true, false);
 			return null;
+		} else {
+			return doc;
 		}
-		return new XMLOutputter().outputString(doc);
+	}
+
+	@Override
+	public String encodeModel() {
+		// populate the SBML model, use CASA if output is OMEX
+		if (useCASA)
+			return new XMLOutputter().outputString(writerSBMLtoXML(getWriteLocation().getFileName()));
+		else
+			return new XMLOutputter().outputString(writerSBMLtoXML(""));
+	}
+
+	/**
+	 * Like encodeModel but forces use of CASA.
+	 */
+	public String encodeModelWithXMLBase(String xmlbase) {
+		return new XMLOutputter().outputString(writerSBMLtoXML(xmlbase));
+	}
+
+	/**
+	 * Gets the RDF writer used by this SBMLwriter.
+	 */
+	public AbstractRDFwriter getRDFWriter() {
+		return rdfwriter;
 	}
 	
 
@@ -386,7 +413,7 @@ public class SBMLwriter extends ModelWriter {
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
 			// the RDF block or CASA file when adding parameter info
-			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
+			if(onerefentity || CASAEnabled()){
 				DSsToOmitFromCompositesRDF.add(ds);
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);
 			}
@@ -1027,7 +1054,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		if(sso.hasDescription() && ! (getWriteLocation() instanceof OMEXAccessor)){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
+		if(sso.hasDescription() && !CASAEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
 			try {
 				String desc = sso.getDescription();
 				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novere problem)
@@ -1116,7 +1143,7 @@ public class SBMLwriter extends ModelWriter {
 			oneent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1;
 		
 		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
-		if(getWriteLocation() instanceof OMEXAccessor){
+		if(CASAEnabled()){
 			
 			// When the pmc is a one-entity composite physical entity, use the
 			// metadata ID on the pmc to link it to the SBML entity (this is used for compartments)
