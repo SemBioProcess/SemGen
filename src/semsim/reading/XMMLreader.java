@@ -416,7 +416,7 @@ public class XMMLreader extends ModelReader {
 		}
 		
 		// Set the semsimmodel name field
-		semsimmodel.setName(modelaccessor.getFileName());
+		semsimmodel.setName(modelaccessor.getModelName());
 		
 		return semsimmodel;
 	}

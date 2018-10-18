@@ -10,7 +10,9 @@ import semgen.GlobalActions;
 import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.stage.StageWorkbench.StageEvent;
+import semgen.stage.stagetasks.ProjectTask;
 import semgen.stage.stagetasks.StageTask.StageTaskEvent;
+import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.BrowserLauncher;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenTab;
@@ -113,11 +115,38 @@ public class StageTab extends SemGenTab implements Observer {
 	public void requestExport() {
 		_workbench.exportModel(0);
 	}
+	
+	@Override
+	public void requestEditModelLevelMetadata() {
+	}
 
 	public boolean closeTab() {
-		browser.dispose();
+
+		//TODO: freeze visualizations until end of function
+		ProjectTask projtask = _workbench.getProjectTask();
+		
+		if( ! _workbench.isProjectEmpty()){
+			
+			// Prompt to save any unsaved extractions
+			for(int m=0; m<projtask.extractnodeworkbenchmap.size(); m++){
+				ModelExtractionGroup meg = projtask.extractnodeworkbenchmap.get(m);
+				
+				if(meg!=null){
+					if(meg.sourcemodelindex!=null){
+						int sourcemodelindx = meg.sourcemodelindex.intValue();
+						
+						for(int j=0; j<meg.extractionnodes.size();j++){
+							boolean cancelled = projtask.closeModels(sourcemodelindx,j);
+							if(cancelled) return false;
+						}
+					}
+				}
+			}
+		}
+		browser.dispose(); // close the tab
 		return true;
 	}
+	
 	
 	@Override
 	public void update(Observable o, Object arg) {

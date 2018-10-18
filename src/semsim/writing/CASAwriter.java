@@ -48,14 +48,43 @@ public class CASAwriter extends AbstractRDFwriter{
 	 */
 	protected void initialize(SemSimModel model) {
 		// Add namespaces here
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
 	}
 	
 	@Override
-	protected void setRDFforModelLevelAnnotations() {
-		//TODO:
+	public void setRDFforModelLevelAnnotations() {
+		
+		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
+			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+		Resource modelresource = rdf.createResource(xmlbase + metaid);
+
+		// Save model description
+		if(semsimmodel.hasDescription()){
+			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
+			Statement st = rdf.createStatement(modelresource, prop, semsimmodel.getDescription());
+			addStatement(st);
+		}
+		
+		
+		// Add the other annotations
+		for(Annotation ann : semsimmodel.getAnnotations()){
+			
+			Statement st;
+			
+			if(ann instanceof ReferenceOntologyAnnotation){
+				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), rdf.createResource(refann.getReferenceURI().toString()));
+			}
+			//TODO: Need to decide how to handle annotations already in RDF block. Skip them all for now (some are read into SemSim object model and will be preserved in CASA file)
+			else if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
+			else st = rdf.createStatement(modelresource, ann.getRelation().getRDFproperty(), ann.getValue().toString());
+			
+			if(st!=null) addStatement(st);
+		}
 	}
 	
 	
@@ -64,9 +93,13 @@ public class CASAwriter extends AbstractRDFwriter{
 	 * entities (compartments, species, and reactions).
 	 * @param pmc An annotated physical model component
 	 */
-	public void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
-		
-		String metaid = pmc.getMetadataID(); // TODO: what if no metaid assigned?
+	protected void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
+		setAnnotationsForPhysicalComponent(pmc.getMetadataID(), pmc);
+	}
+	
+	
+	protected void setAnnotationsForPhysicalComponent(String metaid, PhysicalModelComponent pmc){
+		// TODO: what if no metaid assigned?
 		Resource res = rdf.createResource(xmlbase + metaid);
 		
 		Set<Annotation> anns = pmc.getAnnotations();
@@ -78,7 +111,7 @@ public class CASAwriter extends AbstractRDFwriter{
 			addStatement(st);
 		}
 		
-		// If it's a singular physical entity, write out the singular annotation(s)
+		// If it's a singular physical component, write out the singular annotation(s)
 		else{
 
 			// If the physical component has a physical identity annotation (is a ReferenceTerm), write the identity annotation
@@ -133,7 +166,7 @@ public class CASAwriter extends AbstractRDFwriter{
 				
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it
-			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+			if(refres!=null) addStatement(annagainstst);
 		}
 		
 		// If it's a custom resource
@@ -162,7 +195,7 @@ public class CASAwriter extends AbstractRDFwriter{
 						
 						// If we have a reference resource and the annotation statement hasn't already 
 						// been added to the RDF block, add it
-						if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+						if(refres!=null) addStatement(annagainstst);
 					}
 				}
 			}
@@ -174,7 +207,7 @@ public class CASAwriter extends AbstractRDFwriter{
 					Statement namest = rdf.createStatement(res, 
 							SemSimRelation.HAS_NAME.getRDFproperty(), pmc.getName());
 					
-					if(!rdf.contains(namest)) rdf.add(namest);
+					addStatement(namest);
 				}
 				
 				if(pmc.hasDescription()){
@@ -187,23 +220,7 @@ public class CASAwriter extends AbstractRDFwriter{
 		}
 	}
 	
-	
-	// Add singular annotation
-	@Override
-	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
-		
-		if(ds.hasPhysicalDefinitionAnnotation()){
-			URI uri = ds.getPhysicalDefinitionURI();
-			Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
-			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-			Resource refres = rdf.createResource(furi.toString());
-			Statement st = rdf.createStatement(ares, isprop, refres);
-			
-			addStatement(st);
-		}
-		
-	}
-	
+
 	
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {

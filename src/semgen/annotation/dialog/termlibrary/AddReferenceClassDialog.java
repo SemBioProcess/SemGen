@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 
 public class AddReferenceClassDialog extends SemGenDialog implements

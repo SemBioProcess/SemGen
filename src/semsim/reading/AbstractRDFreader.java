@@ -34,6 +34,7 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
+import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
@@ -54,7 +55,7 @@ import semsim.writing.AbstractRDFwriter;
 public abstract class AbstractRDFreader {
 
 	public Model rdf = ModelFactory.createDefaultModel();
-	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceasString(), "description");
+	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	protected Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	protected ModelType modeltype;
 	public static String TEMP_NAMESPACE = "http://tempns.net/temp";
@@ -404,6 +405,8 @@ public abstract class AbstractRDFreader {
 		CustomPhysicalEntity returnent = new CustomPhysicalEntity(name, description);
 		semsimmodel.addCustomPhysicalEntity(returnent);
 		
+		returnent.setMetadataID(res.getLocalName());
+		
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
 			URI propuri = URI.create(st.getPredicate().getURI());
@@ -447,7 +450,7 @@ public abstract class AbstractRDFreader {
 			String rdfprop = st.getPredicate().getURI();
 			
 			// Flag any statement that uses a predicate with a semsim namespace for removal
-			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceasString())
+			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceAsString())
 					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
 					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
 					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
@@ -469,7 +472,8 @@ public abstract class AbstractRDFreader {
 					if (sso!=null){
 						
 						// Remove dc:description statements (do not need to preserve these)
-						if((sso instanceof DataStructure || sso instanceof Submodel) && rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
+						if((sso instanceof DataStructure || sso instanceof Submodel || sso instanceof PhysicalEntity || sso instanceof PhysicalProcess)
+								&& rdfprop.equals(AbstractRDFreader.dcterms_description.getURI()))
 							listofremovedstatements.add(st);
 					}
 				}
@@ -491,7 +495,7 @@ public abstract class AbstractRDFreader {
 	 */
 	public URI swapInOPBnamespace(URI uri){
 		String frag = SemSimOWLFactory.getIRIfragment(uri.toString());
-		String uristring = RDFNamespace.OPB.getNamespaceasString() + frag;
+		String uristring = RDFNamespace.OPB.getNamespaceAsString() + frag;
 		
 		return URI.create(uristring);
 	}

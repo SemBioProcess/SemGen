@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.definitions.SemSimRelations.SemSimRelation;
@@ -61,7 +60,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		initialize(semsimmodel);
 		
 		if(rdfasstring!=null){
-			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring, SemSimRDFreader.TEMP_NAMESPACE);
+			SemSimRDFreader.readStringToRDFmodel(rdf, rdfasstring, "");
 			
 			if(modeltype.equals(ModelType.CELLML_MODEL))
 				rdf.removeNsPrefix("model"); // In case old RDF with a declared namespace is present (older CellML models)
@@ -87,11 +86,12 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 		localids.addAll(semsimmodel.getMetadataIDcomponentMap().keySet());
 
-		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceasString());
-		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceasString());
-		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceasString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceasString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceasString());
+		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
+		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
+		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
+		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
+		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 	}	
 
 	
@@ -110,20 +110,35 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	// Add model-level annotations 
 	@Override
-	protected void setRDFforModelLevelAnnotations(){
+	public void setRDFforModelLevelAnnotations(){
 		
-		String modelmetaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
+		String modelmetaid = semsimmodel.hasMetadataID() ?  semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
 		
 		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
-		
-		for(Annotation ann : semsimmodel.getCurationalMetadata().getAnnotationList()){
-						
-			Property prop = ann.getRelation().getRDFproperty();
-			Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
-			
+				
+		// Add model description to RDF if we're writing to a CellML model or a JSim project file
+		// In SemSim OWL files, descriptions are stored as RDF:comments on the ontology
+		// In SBML files (non-OMEX), the description is stored in the model element's <notes> block
+		// In CellML and SBML files within OMEX archives, the description is stored in the CASA file
+		if(semsimmodel.hasDescription() && (modeltype==ModelType.CELLML_MODEL || modeltype==ModelType.MML_MODEL_IN_PROJ)){
+			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
+			Statement st = rdf.createStatement(modelres, prop, semsimmodel.getDescription());
 			addStatement(st);
 		}
 		
+		if(modeltype==ModelType.CELLML_MODEL || modeltype==ModelType.MML_MODEL_IN_PROJ){
+			for(Annotation ann : semsimmodel.getAnnotations()){
+				
+				//TODO: Need to work on preserving all annotations in CellML RDF block.
+				if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP 
+						|| ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION) continue;
+				
+				Property prop = ann.getRelation().getRDFproperty();
+				Statement st = rdf.createStatement(modelres, prop, ann.getValue().toString());
+				
+				addStatement(st);
+			}
+		}
 	}
 	
 	
@@ -184,22 +199,6 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		}
 	}
 	
-	
-	// Add singular annotation
-	@Override
-	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
-		
-		if(ds.hasPhysicalDefinitionAnnotation()){
-			URI uri = ds.getPhysicalDefinitionURI();
-			Property isprop = ResourceFactory.createProperty(SemSimRelation.HAS_PHYSICAL_DEFINITION.getURIasString());
-			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
-			Resource refres = rdf.createResource(furi.toString());
-			Statement st = rdf.createStatement(ares, isprop, refres);
-			
-			addStatement(st);
-		}
-		
-	}
 		
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
@@ -316,7 +315,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 				
 			// If we have a reference resource and the annotation statement hasn't already 
 			// been added to the RDF block, add it
-			if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+			if(refres!=null) addStatement(annagainstst);
 		}
 		
 		// If it's a custom resource
@@ -342,7 +341,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						
 						// If we have a reference resource and the annotation statement hasn't already 
 						// been added to the RDF block, add it
-						if(refres!=null && !rdf.contains(annagainstst)) rdf.add(annagainstst);
+						if(refres!=null) addStatement(annagainstst);
 					}
 				}
 			}
@@ -354,7 +353,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					Statement namest = rdf.createStatement(res, 
 							SemSimRelation.HAS_NAME.getRDFproperty(), pmc.getName());
 					
-					if(!rdf.contains(namest)) rdf.add(namest);
+					addStatement(namest);
 				}
 				
 				if(pmc.getDescription()!=null){

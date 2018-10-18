@@ -1,24 +1,32 @@
 package semgen.stage.stagetasks;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Observable;
+
+import javax.swing.JOptionPane;
+
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import org.apache.commons.io.FilenameUtils;
 import semgen.SemGen;
+import semgen.SemGenGUI;
+import semgen.SemGenGUI.loadTask;
+import semgen.SemGenGUI.saveTask;
 import semgen.search.BioModelsSearch;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
+import semgen.stage.stagetasks.extractor.ExtractionInfo;
 import semgen.stage.stagetasks.extractor.ModelExtractionGroup;
 import semgen.utilities.SemGenError;
-import semgen.utilities.file.LoadSemSimModel;
 import semgen.utilities.file.SemGenOpenFileChooser;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
-import semsim.model.collection.SemSimModel;
 import semsim.reading.ModelClassifier.ModelType;
 import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
@@ -28,9 +36,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
-
-	private ArrayList<ModelExtractionGroup> extractnodeworkbenchmap = new ArrayList<ModelExtractionGroup>();
-
+	
+	public ArrayList<ModelExtractionGroup> extractnodeworkbenchmap = new ArrayList<ModelExtractionGroup>(); 
+	
 	public ProjectTask() {
 		super(0);
 		_commandReceiver = new ProjectCommandReceiver();
@@ -63,27 +71,20 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 						if (info.accessor != null) {
 							alreadyopen = info.accessor.equals(accessor);
 						}
-
 					}
 					if (alreadyopen) break;
 				}
 				if (alreadyopen) continue;
-				LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					return;
-				}
-				ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-				addModeltoTask(info, true);
-				_commandSender.addModel(info.modelnode);
+
+				loadTask loadtask = new loadTask(accessor, ProjectTask.this, true);
+				loadtask.execute();
 			}
 		}
 
 		public void onAddModelByName(String source, String modelName) throws IOException, BioModelsWSException {
-			ModelAccessor file = null;
+			ModelAccessor accessor = null;
 			if (source.equals(CompositeAnnotationSearch.SourceName)) {
-				file = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+				accessor = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
 			}
 			else if (source.equals("BioModels")) {
 				System.out.println("Retrieving SBML file from BioModels...");
@@ -95,39 +96,26 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 				bw.write(bioModelString);
 				bw.close();
-				file = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
+				accessor = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
 				tempBioModelFile.deleteOnExit();
 			}
-			if (file != null) {
-				LoadSemSimModel loader = new LoadSemSimModel(file, false);
-				loader.run();
-				SemSimModel semsimmodel = loader.getLoadedModel();
-				if (SemGenError.showSemSimErrors()) {
-					return;
-				}
-				ModelInfo info = new ModelInfo(semsimmodel, file, _models.size());
-				addModeltoTask(info, true);
-				_commandSender.addModel(info.modelnode);
+			if (accessor != null) {
+				loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+				loadtask.execute();
 			}
 		}
-
+		
+		// For loading models from within the Annotator
 		public void onAddModelFromAnnotator(ModelAccessor accessor){
-			LoadSemSimModel loader = new LoadSemSimModel(accessor, false);
-			loader.run();
-			SemSimModel semsimmodel = loader.getLoadedModel();
-			if (SemGenError.showSemSimErrors()) {
-				return;
-			}
-			ModelInfo info = new ModelInfo(semsimmodel, accessor, _models.size());
-			addModeltoTask(info, true);
-			_commandSender.addModel(info.modelnode);		}
-
+			loadTask loadtask = new loadTask(accessor, ProjectTask.this);
+			loadtask.execute();
+		}
+		
 		public void onTaskClicked(JSArray modelindex, String task) {
 			// Execute the proper task
 			switch(task) {
 				case "annotate":
 					annotateModels(modelindex);
-
 					break;
 				case "save":
 					saveModels(modelindex);
@@ -136,8 +124,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					exportModels(modelindex);
 					break;
 				case "close":
-					closeModels(modelindex);
-
+					closeModels(modelindex);					
 					break;
 				default:
 					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
@@ -314,9 +301,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
-
+			
 				if (ma != null)	{
-					ma.writetoFile(modelinfo.Model);
+					saveTask savetask = new SemGenGUI.saveTask(ma, modelinfo.Model, this);	
+					savetask.execute();
 				}
 			}
 			else {
@@ -324,11 +312,8 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					modelinfo =  this.extractnodeworkbenchmap.get(indexedtomodel).getExtractionInfo(modelindex);
 					this.extractnodeworkbenchmap.get(indexedtomodel).exportExtraction(modelindex);
 				}
-
 			}
-
-
-		}
+		}			
 	}
 
 	protected void saveModels(JSArray indicies) {
@@ -346,31 +331,60 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 	}
-
-	protected void closeModels(JSArray indicies) {
+	
+	
+	// For closing from the Javascript side
+	public void closeModels(JSArray indicies) {
+		
 		for (int i=0; i < indicies.length(); i++) {
 			JSArray address = indicies.get(i).asArray();
-			int indexedtomodel = address.get(0).asNumber().getInteger();
+			int parentmodelindex = address.get(0).asNumber().getInteger();
 			int modelindex = address.get(1).asNumber().getInteger();
-
-			if (indexedtomodel==-1) {
-				removeModel(modelindex);
-				//Only remove the extraction group if it doesn't contain any extractions
-				if (this.extractnodeworkbenchmap.get(modelindex).isEmpty()) {
-					this.extractnodeworkbenchmap.set(modelindex, null);
-				}
-
-			}
-			else {
-				boolean empty = this.extractnodeworkbenchmap.get(indexedtomodel).removeExtraction(modelindex);
-				//If the parent model has been removed and the extraction group is empty, remove the extraction group
-				if (empty && this._models==null) {
-					this.extractnodeworkbenchmap.set(modelindex, null);
-				}
-
-			}
-			_commandSender.removeModel(new Integer[]{indexedtomodel, modelindex});
+			closeModels(parentmodelindex, modelindex);
 		}
+	}
+	
+	// Overloaded method so that we can call the close command from the Java side and the Javascript side
+	// Returns whether the close was cancelled
+	public boolean closeModels(int parentmodelindex, int modelindex) {
+		
+		if (parentmodelindex==-1) { // if it's not an extraction
+			removeModel(modelindex);
+			//Only remove the extraction group if it doesn't contain any extractions
+			if (this.extractnodeworkbenchmap.get(modelindex).isEmpty()) {
+				this.extractnodeworkbenchmap.set(modelindex, null);
+			}
+		}
+		else {
+			ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(parentmodelindex);
+			ExtractionInfo exinfo = meg.getExtractionInfo(modelindex);
+			if(exinfo==null) return false; // Skips extractions that were already created, saved and closed
+			
+			String name = exinfo.getModelName();
+			
+			if( ! exinfo.getChangesSaved()){
+				int returnval = JOptionPane.showConfirmDialog(null, 
+						"Save extraction " + name + "?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
+				if(returnval==JOptionPane.YES_OPTION){
+					ModelAccessor returnma = meg.saveExtraction(modelindex);
+					if(returnma==null) return true; // Return true to indicate the save operation, and thus the close operation, was cancelled
+				}
+				else if(returnval==JOptionPane.NO_OPTION){
+				}
+				else if(returnval==JOptionPane.CANCEL_OPTION){
+					return true;
+				}
+			}
+			
+			boolean empty = meg.removeExtraction(modelindex);
+			//If the parent model has been removed and the extraction group is empty, remove the extraction group
+			if (empty && this._models==null) {
+				this.extractnodeworkbenchmap.set(modelindex, null);
+			}
+		}
+		_commandSender.removeModel(new Integer[]{parentmodelindex, modelindex});
+		return false;
+		
 	}
 
 	@Override

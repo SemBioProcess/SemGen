@@ -83,9 +83,9 @@ public class ResourcesManager {
 	 * @return File contents as a String
 	 */
 	private static String getStringFromResourceStream(String internalpath){
-		InputStream stream = internalpath.getClass().getResourceAsStream(internalpath);
+		InputStream stream = ResourcesManager.class.getClassLoader().getResourceAsStream(internalpath);
 		StringWriter writer = new StringWriter();
-		
+
 		if(stream != null){
 			try {
 				IOUtils.copy(stream, writer, StandardCharsets.UTF_8);
@@ -270,10 +270,10 @@ public class ResourcesManager {
 			ontologies.add(new Ontology(ro));
 		}
 		
-		Set<String> buffer = cfgpath.startsWith(SemSimLibrary.DEFAULT_CFG_PATH) ? 
-				createSetFromResource(SemSimLibrary.DEFAULT_CFG_PATH + "local_ontologies.txt") : 
+		Set<String> buffer = cfgpath.startsWith(SemSimLibrary.DEFAULT_CFG_PATH) ?
+				createSetFromResource(SemSimLibrary.DEFAULT_CFG_PATH + "local_ontologies.txt") :
 					createSetFromFile(cfgpath + "local_ontologies.txt");
-		
+
 		for (String rawont : buffer) {
 			rawont.trim();
 			rawont.replace(".", "");

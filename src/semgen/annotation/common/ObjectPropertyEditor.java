@@ -17,10 +17,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
 import semsim.annotation.Relation;
+import semsim.annotation.SemSimTermLibrary;
 
 public abstract class ObjectPropertyEditor extends JPanel implements ActionListener, ListDataListener, ListSelectionListener {
 	private static final long serialVersionUID = 1L;

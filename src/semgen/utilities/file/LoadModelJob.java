@@ -7,11 +7,14 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.annotation.workbench.routines.AutoAnnotate;
+import semgen.stage.stagetasks.ProjectTask;
 import semgen.utilities.SemGenJob;
+import semsim.annotation.AutoAnnotate;
 import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
+import semsim.model.collection.Submodel;
+import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.CASAreader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
@@ -25,33 +28,41 @@ import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import semsim.utilities.webservices.BioPortalSearcher;
 
-public class LoadSemSimModel extends SemGenJob {
+public class LoadModelJob extends SemGenJob {
 	private ModelAccessor modelaccessor;
 	private boolean autoannotate = false;
+	public boolean onStage;
 	private SemSimModel semsimmodel;
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor) {
+	public LoadModelJob(ModelAccessor modelaccessor) {
 		this.modelaccessor = modelaccessor;
 	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate) {
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate) {
 		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
 	}
+
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate, boolean loadOnStage) {
+		this.modelaccessor = modelaccessor;
+		this.autoannotate = autoannotate;
+		this.onStage = loadOnStage;
+	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, SemGenJob sga) {
+	public LoadModelJob(ModelAccessor modelaccessor, SemGenJob sga) {
 		super(sga);
 		this.modelaccessor = modelaccessor;
 	}
 	
-	public LoadSemSimModel(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
+	public LoadModelJob(ModelAccessor modelaccessor, boolean autoannotate, SemGenJob sga) {
 		super(sga);
 		this.modelaccessor = modelaccessor;
 		this.autoannotate = autoannotate;
 	}
 	
 	private void loadSemSimModelFromFile() throws JDOMException, IOException {
-		
+    	System.out.println("Reading " + modelaccessor.getShortLocation());
+
     	setStatus("Reading " + modelaccessor.getShortLocation());
 
     	ModelType modeltype = modelaccessor.getModelType();
@@ -65,6 +76,22 @@ public class LoadSemSimModel extends SemGenJob {
 			case CELLML_MODEL:
 				CellMLreader cellmlreader = new CellMLreader(modelaccessor);
 				semsimmodel = cellmlreader.read();
+
+				// Check for imported components before opening
+				if (onStage) {
+					boolean importedComponent = false;
+					for (Submodel submodel : semsimmodel.getSubmodels()) {
+						importedComponent = submodel.isImported();
+						if (importedComponent) break;
+					}
+					if (!importedComponent) {
+						for (UnitOfMeasurement unit : semsimmodel.getUnits()) {
+							importedComponent = unit.isImported();
+							if (importedComponent) break;
+						}
+					}
+					semsimmodel.hasImportedComponents = importedComponent;
+				}
 				
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
@@ -75,7 +102,7 @@ public class LoadSemSimModel extends SemGenJob {
 				// perform auto-annotation
 				if((semsimmodel!=null) && semsimmodel.getErrors().isEmpty() && autoannotate && ! previouslyannotated) {
 					setStatus("Annotating Physical Properties");
-					AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+					AutoAnnotate.autoAnnotateWithOPB(semsimmodel, SemGen.semsimlib, SemGen.cfgreadpath);
 				}
 				// Otherwise collect any needed reference term names from BioPortal
 				else{
@@ -115,12 +142,16 @@ public class LoadSemSimModel extends SemGenJob {
 				}
 				return;
 			}
+			else if (semsimmodel.hasImportedComponents) {
+				System.out.println("This model has imported components, which are not yet supported in SemGen.");
+				return;
+			}
 			semsimmodel.setName(modelaccessor.getModelName());
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else
-			ErrorLog.addError(modelaccessor.getFileName() + " was an invalid model.", true, false);
+			ErrorLog.addError("Could not load " + modelaccessor.getFileName() + "\nCheck that model encoding is valid.", true, false);
 		
 	}
 
@@ -159,13 +190,13 @@ public class LoadSemSimModel extends SemGenJob {
 	
 	private void annotateModel() {
 		setStatus("Annotating physical properties");
-		AutoAnnotate.autoAnnotateWithOPB(semsimmodel);
+		AutoAnnotate.autoAnnotateWithOPB(semsimmodel, SemGen.semsimlib, SemGen.cfgreadpath);
 	}
 	
 	private void nameOntologyTerms(){
 		if(semsimmodel.getErrors().isEmpty() && ReferenceTermNamer.getModelComponentsWithUnnamedAnnotations(semsimmodel, SemGen.semsimlib).size()>0){
 
-			setStatus("Annotating with web services");
+			setStatus("Retrieving names for reference terms");
 			boolean online = BioPortalSearcher.testBioPortalWebservice();
 			
 			if( ! online){
@@ -185,6 +216,7 @@ public class LoadSemSimModel extends SemGenJob {
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
+				
 		if (semsimmodel == null || ErrorLog.errorsAreFatal()) {
 			abort();
 			return;

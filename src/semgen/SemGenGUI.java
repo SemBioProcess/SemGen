@@ -8,16 +8,21 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import semgen.annotation.AnnotationTabFactory;
 import semgen.annotation.workbench.AnnotatorFactory;
+import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.menu.SemGenMenuBar;
 import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
+import semgen.stage.stagetasks.ModelInfo;
+import semgen.stage.stagetasks.ProjectTask;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
+import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.uicomponent.SemGenProgressBar;
 import semgen.utilities.uicomponent.SemGenTab;
 import semgen.utilities.uicomponent.TabFactory;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.model.collection.SemSimModel;
 
 import java.net.URI;
 import java.awt.Color;
@@ -145,6 +150,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		
 		public void endTask() {	
 			for (T workbench : workbenchfactory.getWorkbenches()) {
+				progressUpdated("Preparing tab...");
 				tab = tabfactory.makeTab(workbench);
 				addTab(tab.getName(), tab);
 				opentabs.add(tab);
@@ -161,10 +167,112 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 				globalactions.incTabCount();
 			}
 		}
+	}
+	
+	
+	// Task for saving out a model and showing progress indicator
+	public static class saveTask extends SemGenTask {
+		AnnotatorWorkbench annworkbench;
+		ProjectTask projecttask;
+		ModelAccessor modelaccessor;
+		SemSimModel semsimmodel;
+		String savingstatus;
+		boolean setstatussaved = false;
+
+		// Constructor for saving out from Annotator
+		public saveTask(ModelAccessor ma, SemSimModel ssm, AnnotatorWorkbench wb, boolean setstatussaved){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			annworkbench = wb;
+			this.setstatussaved = setstatussaved;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
+		}
 		
-		public void onError() {
+		// Constructor for ProjectTask save-outs (non-extractions)
+		public saveTask(ModelAccessor ma, SemSimModel ssm, ProjectTask pt){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			projecttask = pt;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
+		}
+		
+		// Constructor for saving out extractions
+		public saveTask(ModelAccessor ma, SemSimModel ssm){
+			modelaccessor = ma;
+			semsimmodel = ssm;
+			savingstatus = "Saving " + modelaccessor.getShortLocation();
+			progframe = new SemGenProgressBar(savingstatus, true, true);
+		}
+				
+		@Override
+		protected Void doInBackground() throws Exception {
+			if(annworkbench != null){
+				progressUpdated("Prepping model for save...");
+				annworkbench.validateModelComposites();
+				progressUpdated(savingstatus);
+			}
+			modelaccessor.writetoFile(semsimmodel);
+			return null;
+		}
+		
+		public void endTask(){
+			if(annworkbench != null && setstatussaved) annworkbench.setModelSaved(true);
+		}
+		
+	}
+	
+	
+	// Task for loading a model and showing progress indicator
+	public static class loadTask extends SemGenTask {
+		Workbench workbench;
+		ProjectTask projecttask;
+		ModelAccessor modelaccessor;
+		SemSimModel semsimmodel;
+		LoadModelJob lmj;
+		String loadingstatus;
+
+		// Constructor for ProjectTask load operations
+		public loadTask(ModelAccessor ma, ProjectTask pt){
+			modelaccessor = ma;
+			projecttask = pt;
+			lmj = new LoadModelJob(modelaccessor, false);
+			progframe = new SemGenProgressBar("Reading " + modelaccessor.getShortLocation(), true, true);
+		}
+
+		public loadTask(ModelAccessor ma, ProjectTask pt, boolean loadOnStage){
+			modelaccessor = ma;
+			projecttask = pt;
+			lmj = new LoadModelJob(modelaccessor, false, loadOnStage);
+			progframe = new SemGenProgressBar("Reading " + modelaccessor.getShortLocation(), true, true);
+		}
+				
+		@Override
+		protected Void doInBackground() throws Exception {
+			lmj.run();
+			return null;
+		}
+		
+		public void endTask(){
+			SemSimModel semsimmodel = lmj.getLoadedModel();
+
+			if (lmj.onStage && semsimmodel.hasImportedComponents) {
+				JOptionPane.showMessageDialog(null, "SemGen cannot load models with imported components into a Project Tab yet. Please try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			ModelInfo info = new ModelInfo(semsimmodel, modelaccessor, projecttask._models.size());
+			projecttask.addModeltoTask(info, true);
+			
+			//NOTE: When loading from the Annotator, _commandSender is null, 
+			//but this doesn't appear to prevent the model from being loaded onto the ProjectTab
+			if(projecttask._commandSender != null) 
+				projecttask._commandSender.addModel(info.modelnode);
 		}
 	}
+		
+		
 	
 	/** Runs through the annotator tabs and checks if the requested file is already open for annotation.
 	* Only one instance of a file can be annotated at a time. */

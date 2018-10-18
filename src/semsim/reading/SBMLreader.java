@@ -13,6 +13,7 @@ import java.util.zip.ZipException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import org.jdom.Document;
@@ -53,7 +54,6 @@ import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.ReferenceOntologies;
@@ -105,10 +105,7 @@ public class SBMLreader extends ModelReader{
 	private Map<String, CompositePhysicalEntity> speciesAndEntitiesMap = new HashMap<String, CompositePhysicalEntity>();
 	private Map<String, SpeciesConservation> speciesAndConservation = new HashMap<String, SpeciesConservation>();  // associates species with the reactions they participate in
 	private Set<String> baseUnits = new HashSet<String>();
-	private Submodel parametersubmodel;
-	private Submodel speciessubmodel;
-	private Submodel compartmentsubmodel;
-	private String timedomainname = "t";
+	private String timedomainname = "time";
 	public static final String REACTION_PREFIX = "Reaction_";
 	public static final String FUNCTION_PREFIX = "Function_";
 	private UnitOfMeasurement modeltimeunits;
@@ -158,16 +155,6 @@ public class SBMLreader extends ModelReader{
 		// if any errors at this point, return model
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
 		
-		// Create submodels for compartments and species. Each reaction gets its own submodel later.
-		if(sbmlmodel.getListOfParameters().size()>0) 
-			parametersubmodel = semsimmodel.addSubmodel(new Submodel("Parameters"));
-		
-		if(sbmlmodel.getListOfCompartments().size()>0) 
-			compartmentsubmodel = semsimmodel.addSubmodel(new Submodel("Compartments"));
-		
-		if(sbmlmodel.getListOfSpecies().size()>0)
-			speciessubmodel = semsimmodel.addSubmodel(new Submodel("Species"));
-		
 		// If model is from an archive, read in the annotations on the SBML physical components using
 		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
 		// in the collectReactions (for local reaction-specific parameters) and collectParameters functions.
@@ -190,7 +177,6 @@ public class SBMLreader extends ModelReader{
 			e.printStackTrace();
 		}
 		
-		
 		collectModelLevelData();
 		setBaseUnits();
 		collectUnits();
@@ -206,7 +192,6 @@ public class SBMLreader extends ModelReader{
 		collectConstraints();
 		collectEvents();
 		collectInitialAssignments();
-				
 		setComputationalDependencyNetwork();
 	
 		return semsimmodel;
@@ -217,12 +202,22 @@ public class SBMLreader extends ModelReader{
 	 */
 	private void collectModelLevelData(){
 		
-		sbmlmodel.getVersion();
 		collectSBaseData(sbmlmodel, semsimmodel);
 		semsimmodel.setName(sbmlmodel.getId());
-		semsimmodel.setModelAnnotation(Metadata.fullname, sbmlmodel.getName());
+		rdfreader.getModelLevelAnnotations();	// This retrieves any model-level info in SemGen-generated RDF within the SBML file
 		
-		rdfreader.getModelLevelAnnotations();	
+		// Retrieve model-level annotations not encoded in the SemGen-generated RDF (e.g. curational annotations from BioModels)
+		for(int m=0;m<sbmlmodel.getNumCVTerms();m++){
+			CVTerm cv = sbmlmodel.getCVTerm(m);
+			
+			for(int i=0; i<cv.getNumResources(); i++){
+				String obj = cv.getResourceURI(i);
+				Qualifier qual = cv.getQualifier();
+				Relation rel = qual.isBiologicalQualifier() ? SemSimRelations.getRelationFromBiologicalQualifier(qual) :
+					SemSimRelations.getRelationFromModelQualifier(qual);
+				semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj), "", sslib);
+			}
+		}
 	}
 	
 	
@@ -428,8 +423,6 @@ public class SBMLreader extends ModelReader{
 		timeds.setSingularAnnotation(timeprop);
 		
 		semsimmodel.addDataStructure(timeds);
-		
-		if(speciessubmodel!=null) speciessubmodel.addDataStructure(timeds);
 	}
 
 	
@@ -444,7 +437,6 @@ public class SBMLreader extends ModelReader{
 			
 			DataStructure ds = semsimmodel.addDataStructure(new Decimal(compid));
 			ds.setDeclared(true);
-			compartmentsubmodel.addDataStructure(ds);
 			
 			String mathml = SemSimUtil.mathMLelementStart + " <apply>\n  <eq />\n  <ci>" + compid + "</ci>\n  <cn>" 
 					+ sbmlc.getSize() + "</cn>\n </apply>\n" + SemSimUtil.mathMLelementEnd;
@@ -598,22 +590,21 @@ public class SBMLreader extends ModelReader{
 			
 			ds.setDeclared(true);
 			ds.setSolutionDomain(semsimmodel.getAssociatedDataStructure(timedomainname));
-			speciessubmodel.addDataStructure(ds);
 			
 			boolean isConstant = species.getConstant();
 			boolean isBoundaryCondition = species.getBoundaryCondition();
 			boolean isSetWithRuleAssignment = sbmlmodel.getRule(speciesid) != null;
 			
-			if(isConstant){
-				
-				if(isBoundaryCondition){
-					// don't apply conservation eq. set initial condition only. CAN be a reactant or product
-				}
-				else{
-					// don't apply conservation eq. set IC only. CANNOT be a reactant or product
-				}
-			}
-			else{
+//			if(isConstant){
+//				
+//				if(isBoundaryCondition){
+//					// don't apply conservation eq. set initial condition only. CAN be a reactant or product
+//				}
+//				else{
+//					// don't apply conservation eq. set IC only. CANNOT be a reactant or product
+//				}
+//			}
+			if( ! isConstant){
 				
 				SpeciesConservation nsc = new SpeciesConservation();
 				speciesAndConservation.put(speciesid, nsc);
@@ -652,16 +643,15 @@ public class SBMLreader extends ModelReader{
 			UnitOfMeasurement compartmentunits = semsimmodel.getAssociatedDataStructure(compartmentname).getUnit();	
 			
 			if(hasonlysub && speciessubstanceunits!=null) unitforspecies = speciessubstanceunits;
-			
 			else if(speciessubstanceunits != null && compartmentunits != null){
 				
 				// Make unit for concentration of species
 				String unitname = speciessubstanceunits.getName() + "_per_" + compartmentunits.getName();
 				
 				// If the substance/compartment unit was already added to the model, use it, otherwise create anew
-				if(semsimmodel.containsUnit(unitname)) unitforspecies = semsimmodel.getUnit(unitname);
+				unitforspecies = semsimmodel.getUnit(unitname);
 				
-				else{
+				if(unitforspecies==null){
 					unitforspecies = new UnitOfMeasurement(unitname);
 					UnitFactor substancefactor = new UnitFactor(speciessubstanceunits, 1.0, null);
 					unitforspecies.addUnitFactor(substancefactor);
@@ -760,7 +750,6 @@ public class SBMLreader extends ModelReader{
 			
 			ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
 			ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
-			
 
 			PhysicalEntity speciesent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(species);
 			entlist.add(speciesent);
@@ -787,9 +776,7 @@ public class SBMLreader extends ModelReader{
 	private void collectParameters(){
 		for(int p=0; p<sbmlmodel.getListOfParameters().size(); p++){
 			Parameter sbmlpar = sbmlmodel.getParameter(p);
-
-			DataStructure pards = addParameter(sbmlpar, null);
-			parametersubmodel.addDataStructure(pards);
+			addParameter(sbmlpar, null);
 		}
 	}
 	
@@ -872,8 +859,6 @@ public class SBMLreader extends ModelReader{
 				
 				Event ssevent = new Event();
 				ssevent.setName(sbmlevent.getId());
-				ssevent.setMetadataID(sbmlevent.getMetaId());
-				
 				ssevent.setTriggerMathML(triggermathml);			
 				
 				// Process event assignments
@@ -919,6 +904,7 @@ public class SBMLreader extends ModelReader{
 					ssevent.setTimeUnit(semsimmodel.getUnit(timeunitsname));
 				}
 				
+				collectSBaseData(sbmlevent, ssevent);
 				semsimmodel.addEvent(ssevent);
 			}
 		} catch(SBMLException | XMLStreamException e){
@@ -934,7 +920,6 @@ public class SBMLreader extends ModelReader{
 			InitialAssignment sbmlia = sbmlmodel.getInitialAssignment(i);
 			SBMLInitialAssignment semsimia = new SBMLInitialAssignment();
 			
-			semsimia.setMetadataID(sbmlia.getMetaId());
 			
 			String variableID = sbmlia.getVariable();
 			DataStructure output = semsimmodel.getAssociatedDataStructure(variableID);
@@ -949,6 +934,8 @@ public class SBMLreader extends ModelReader{
 			} catch (SBMLException | XMLStreamException e) {
 				e.printStackTrace();
 			}
+			
+			collectSBaseData(sbmlia, semsimia);
 		}
 	}
 	
@@ -967,7 +954,11 @@ public class SBMLreader extends ModelReader{
 			
 			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
 			
+			// Add parameters local to function
 			for(String input : inputs.keySet()){
+				
+				if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
+				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
@@ -1024,10 +1015,6 @@ public class SBMLreader extends ModelReader{
 			rateds.setDeclared(true);
 			String thereactionprefix = REACTION_PREFIX + reactionID;
 			
-			Submodel rxnsubmodel = new Submodel(thereactionprefix);
-			semsimmodel.addSubmodel(rxnsubmodel);
-			rxnsubmodel.addDataStructure(rateds);
-			
 			if(reaction.isSetKineticLaw()){
 				KineticLaw kineticlaw = reaction.getKineticLaw();
 				
@@ -1048,7 +1035,6 @@ public class SBMLreader extends ModelReader{
 							LocalParameter lp = kineticlaw.getLocalParameter(l);
 							DataStructure localds = addParameter(lp, thereactionprefix);
 							mathmlstring = mathmlstring.replaceAll("<ci>\\s*" + lp.getId() + "\\s*</ci>", "<ci>" + localds.getName() + "</ci>");
-							rxnsubmodel.addDataStructure(localds);
 						}
 			
 						rateds.getComputation().setMathML(mathmlstring);
@@ -1255,9 +1241,7 @@ public class SBMLreader extends ModelReader{
 		Document projdoc = modelaccessor.getJDOMDocument();
 		
 		// Collect namespace b/c JSBML always seems to reutrn null for getNamespace() fxns in Model and SBMLDocument 
-		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();
-	
-		Namespace semsimns = RDFNamespace.SEMSIM.createJdomNamespace();
+		Namespace sbmlmodelns = projdoc.getRootElement().getNamespace();	
 		String rdfstring = null;
 		
 		//TODO: should change this so that it only reads in the semsim annotation into the JDOM document (saves time)
@@ -1269,12 +1253,15 @@ public class SBMLreader extends ModelReader{
 				Element modelannel = modelel.getChild("annotation", sbmlmodelns);
 						
 				if(modelannel != null){	
-					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, semsimns);
+					Element modelannssel = modelannel.getChild(SBMLwriter.semsimAnnotationElementName, sbmlmodelns);
 								
 					if(modelannssel != null){
 						Element rdfel = modelannssel.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
-						XMLOutputter xmloutputter = new XMLOutputter();
-						rdfstring = xmloutputter.outputString(rdfel);
+						
+						if(rdfel != null){
+							XMLOutputter xmloutputter = new XMLOutputter();
+							rdfstring = xmloutputter.outputString(rdfel);
+						}
 					}
 				}
 			}
@@ -1307,7 +1294,11 @@ public class SBMLreader extends ModelReader{
 		if(sbmlobject.isSetNotes()){
 				
 			try {
-				semsimobject.setDescription(sbmlobject.getNotesString());
+				String desc = sbmlobject.getNotesString();
+				desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">","");
+				desc = desc.replaceAll("</body>\\s*</notes>","");
+				desc = StringEscapeUtils.unescapeXml(desc.trim());				
+				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
 //				e.printStackTrace();  // commented out b/c JSBML keeps throwing exceptions in stack trace 
 			}
@@ -1405,11 +1396,11 @@ public class SBMLreader extends ModelReader{
 			if(term.getQualifierType()==CVTerm.Type.MODEL_QUALIFIER){
 				Qualifier q = term.getModelQualifierType();
 
-				if(SemSimRelations.getModelQualifierRelation(q)!= SemSimRelation.UNKNOWN){
+				if(SemSimRelations.getRelationFromModelQualifier(q)!= SemSimRelation.UNKNOWN){
 					
 					for(int h=0; h<term.getNumResources(); h++){
 						String uri = term.getResourceURI(h);
-						Relation relation = (q==Qualifier.BQM_IS) ? SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getModelQualifierRelation(q);
+						Relation relation = (q==Qualifier.BQM_IS) ? SemSimRelation.HAS_PHYSICAL_DEFINITION : SemSimRelations.getRelationFromModelQualifier(q);
 						anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uri), uri, sslib));
 
 					}

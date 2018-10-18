@@ -1,8 +1,6 @@
 package semgen.annotation.common;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -10,22 +8,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
+import semsim.annotation.SemSimTermLibrary;
 
 public abstract class AnnotationChooserPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -212,44 +207,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	public abstract void createButtonClicked();
 	public abstract void modifyButtonClicked();
 	
-	protected class ComponentPanelLabel extends JLabel {
-		private static final long serialVersionUID = 1L;
-
-		public ComponentPanelLabel(Icon icon, String tooltip) {
-			super(icon);
-			setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-			setBackground(Color.white);
-			addMouseListener(new LabelMouseBehavior());
-			setToolTipText(tooltip);
-		}
-		
-		public void onClick() {}
-		
-		class LabelMouseBehavior extends MouseAdapter {
-			public void mouseClicked(MouseEvent arg0) {
-				if (arg0.getComponent().isEnabled()) {
-					onClick();
-				}
-			}
-			
-			public void mouseEntered(MouseEvent e) {
-				setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
 	
-			public void mouseExited(MouseEvent e) {
-				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent arg0) {
-				if (arg0.getComponent().isEnabled()) {
-					setBorder(BorderFactory.createLineBorder(Color.blue,1));
-				}
-			}
-	
-			public void mouseReleased(MouseEvent arg0) {
-				setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-			}
-		}
-	}
 
 	class WebMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent arg0) {

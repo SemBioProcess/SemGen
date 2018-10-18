@@ -12,7 +12,9 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.io.FilenameUtils;
 
 import semgen.GlobalActions;
-import semgen.annotation.workbench.SemSimTermLibrary.LibraryEvent;
+import semgen.SemGen;
+import semgen.SemGenGUI;
+import semgen.SemGenGUI.saveTask;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
@@ -24,6 +26,8 @@ import semgen.annotation.workbench.routines.TermModifier;
 import semgen.utilities.CSVExporter;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
+import semsim.annotation.SemSimTermLibrary;
+import semsim.annotation.SemSimTermLibrary.LibraryEvent;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
@@ -54,7 +58,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	@Override
 	public void initialize() {
-		termlib = new SemSimTermLibrary(semsimmodel);
+		termlib = new SemSimTermLibrary(semsimmodel, SemGen.semsimlib);
 		termlib.addObserver(this);
 		modanns = new ModelAnnotationsBench(semsimmodel);
 		modanns.addObserver(this);
@@ -129,7 +133,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		return semsimmodel.getLegacyCodeLocation();
 	}
 	
-	private void validateModelComposites() {
+	public void validateModelComposites() {
 		new ModelComponentValidator(this, semsimmodel);
 	}
 
@@ -137,9 +141,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	public ModelAccessor saveModel(Integer index) {
 				
 		if(modelaccessor != null && lastSavedAsTypeCanStoreSemSimAnnotations()){
-			validateModelComposites();
-			modelaccessor.writetoFile(semsimmodel);			
-			setModelSaved(true);
+			saveTask savetask = new SemGenGUI.saveTask(modelaccessor, semsimmodel, this, true);	
+			savetask.execute();
 			return modelaccessor;
 		}
 		return saveModelAs(index);			
@@ -190,8 +193,8 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);
 
 		if (ma != null) {
-			validateModelComposites();
-			ma.writetoFile(semsimmodel);
+			saveTask savetask = new SemGenGUI.saveTask(ma, semsimmodel, this, false);	
+			savetask.execute();
 		}
 	}
 	
@@ -359,7 +362,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		//Event forwarding
-		if ((arg1==WBEvent.SMSELECTION) || (arg1==WBEvent.CWSELECTION) || arg1==ModelChangeEnum.METADATASELECTED){
+		if ((arg1==WBEvent.SMSELECTION) || (arg1==WBEvent.CWSELECTION)){
 			setChanged();
 			notifyObservers(arg1);
 		}

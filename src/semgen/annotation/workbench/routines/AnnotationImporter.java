@@ -6,9 +6,10 @@ import java.io.IOException;
 import org.jdom.JDOMException;
 
 import semgen.SemGen;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenJob;
-import semgen.utilities.file.LoadSemSimModel;
+import semgen.utilities.file.LoadModelJob;
+import semsim.annotation.AnnotationCopier;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
@@ -40,7 +41,7 @@ public class AnnotationImporter extends SemGenJob {
 	}
 	
 	private void loadSourceModel() throws JDOMException, IOException {
-		LoadSemSimModel loader = new LoadSemSimModel(FileAccessorFactory.getModelAccessor(sourcefile), this);
+		LoadModelJob loader = new LoadModelJob(FileAccessorFactory.getModelAccessor(sourcefile), this);
 		loader.run();
 		if (!loader.isValid()) {
 			abort();
@@ -53,7 +54,7 @@ public class AnnotationImporter extends SemGenJob {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
 		if (options[0]) {
-			importingmodel.importCurationalMetadatafromModel(importedmodel, true);
+			//importingmodel.importCurationalMetadatafromModel(importedmodel, true);
 			changed = true;
 		}
 		if (options[1]) {

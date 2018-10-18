@@ -14,13 +14,14 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 import semsim.definitions.RDFNamespace;
 
+@Deprecated
 /**
  * Constants and methods for working with annotations at the level of 
  * the whole model. These types of annotations include model name, description
  * keywords, annotator name, etc. 
  */
 public class CurationalMetadata {
-	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceasString();
+	private static String SEMSIM_NAMESPACE = RDFNamespace.SEMSIM.getNamespaceAsString();
 	
 	public static final URI MODEL_NAME_URI = URI.create(SEMSIM_NAMESPACE + "modelName");
 	public static final URI MODEL_DESCRIPTION_URI = URI.create(SEMSIM_NAMESPACE + "ModelDescription");

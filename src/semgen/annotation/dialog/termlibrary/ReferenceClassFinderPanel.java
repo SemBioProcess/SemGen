@@ -36,12 +36,12 @@ import org.jdom.JDOMException;
 
 import semgen.SemGen;
 import semgen.SemGenSettings;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.GenericThread;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.ExternalURLButton;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.utilities.webservices.BioPortalSearcher;

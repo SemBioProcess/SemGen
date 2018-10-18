@@ -1,20 +1,21 @@
-package semgen.annotation.workbench.routines;
+package semsim.annotation;
 
 
 import java.util.HashSet;
 import java.util.Set;
 
-import semgen.SemGen;
-import semgen.annotation.workbench.SemSimTermLibrary;
+import semsim.SemSimLibrary;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.object.PhysicalProperty;
 
 public class AnnotationCopier {
 	
-	/** 
-	 * Intra-model datastructure copy
-	 * */
+	/**
+	 * Composite annotation copy between data structures
+	 * @param sourceds The {@link DataStructure} containing the composite annotation to copy
+	 * @param targetds The {@link DataStructure} to which the composite annotation will be copied
+	 */
 	public static void copyCompositeAnnotation(DataStructure sourceds, DataStructure targetds) {
 		if (sourceds.hasPhysicalProperty()) {
 			targetds.setAssociatedPhysicalProperty(sourceds.getPhysicalProperty());
@@ -27,9 +28,12 @@ public class AnnotationCopier {
 		else targetds.setAssociatedPhysicalModelComponent(null);
 	}
 	
-	/** 
-	 * Inter-model datastructure copy 
-	 * */
+	/**
+	 * Composite annotation copy using a SemSimTermLibrary instance
+	 * @param lib A SemSimTermLibrary
+	 * @param sourceds The {@link DataStructure} containing the composite annotation to copy
+	 * @param targetds The {@link DataStructure} to which the composite annotation will be copied
+	 */
 	public static void copyCompositeAnnotation(SemSimTermLibrary lib, DataStructure targetds, DataStructure sourceds) {		
 		
 		// Copy over physical property, physical model component, and singular annotations.
@@ -54,25 +58,38 @@ public class AnnotationCopier {
 		else targetds.setSingularAnnotation(null);
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds){
+	public static Set<MappableVariable> copyAllAnnotationsToMappedVariables(MappableVariable ds, SemSimLibrary semsimlib){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
-		copyAllAnnotations(ds, allmappedvars);
+		copyAllAnnotations(ds, allmappedvars, semsimlib);
 		return allmappedvars;
 	}
 	
-	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds){
+	public static Set<MappableVariable> copyCompositeAnnotationsToMappedVariables(MappableVariable ds){
+		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
+		allmappedvars.addAll(getAllMappedVariables(ds, ds, new HashSet<MappableVariable>()));
+		
+		for(MappableVariable otherds : allmappedvars){
+			
+			if( ! otherds.isImportedViaSubmodel())
+				copyCompositeAnnotation(ds, otherds);
+			
+		}
+		return allmappedvars;
+	}
+	
+	public static Set<MappableVariable> copyAllAnnotationsToLocallyMappedVariables(MappableVariable ds, SemSimLibrary semsimlib){
 		Set<MappableVariable> allmappedvars = new HashSet<MappableVariable>();
 		allmappedvars.addAll(getAllLocallyMappedVariables(ds, ds, new HashSet<MappableVariable>()));
-		copyAllAnnotations(ds, allmappedvars);
+		copyAllAnnotations(ds, allmappedvars, semsimlib);
 		return allmappedvars;
 	}
 	
-	private static void copyAllAnnotations(MappableVariable sourceds, Set<MappableVariable> targetdsset){
+	private static void copyAllAnnotations(MappableVariable sourceds, Set<MappableVariable> targetdsset, SemSimLibrary semsimlib){
 		for(MappableVariable otherds : targetdsset){
 			if(!otherds.isImportedViaSubmodel()){
 				otherds.copyDescription(sourceds);
-				otherds.copySingularAnnotations(sourceds, SemGen.semsimlib);
+				otherds.copySingularAnnotations(sourceds, semsimlib);
 				copyCompositeAnnotation(sourceds, otherds);
 			}
 		}

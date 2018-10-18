@@ -1,5 +1,6 @@
 package semgen.utilities.file;
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -122,6 +123,9 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	 * Pass an existing model and use the model's name
 	 **/
 	public ModelAccessor SaveAsAction(SemSimModel semsimmodel){
+		currentdirectory = getCurrentDirectory();
+		
+		// TODO: Replace return nulls with errors
 		ModelAccessor ma = null;
 		
 		while(true) {
@@ -134,16 +138,8 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				ModelType modeltype = ModelClassifier.getTypebyFilter(savefilter);
 				if (filetosave.getName().endsWith(".omex")) modeltype = ModelType.OMEX_ARCHIVE;
 				
-				// If we're attempting to write a CellML model with discrete events, show error
-				if (modeltype == ModelType.CELLML_MODEL && semsimmodel != null) {
-					if( ! semsimmodel.getEvents().isEmpty()){
-						JOptionPane.showMessageDialog(this, 
-								"Cannot save as CellML because model contains discrete events", 
-								"Cannot write to CellML", JOptionPane.WARNING_MESSAGE);
-						continue;
-					}
-				}
-
+				if( ! outputTypeIsCompatibile(modeltype, semsimmodel, this)) continue;
+				
 				boolean overwriting = false;
 
 				// If we're saving to a JSim project file
@@ -171,14 +167,17 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 				
 				// Otherwise we're saving to a standalone file
 				else if (modeltype==ModelType.OMEX_ARCHIVE) {
-					OMEXSaveDialog omexdialog = new OMEXSaveDialog();
-					String name = omexdialog.getModelName();
-					if (name.isEmpty()) return null;
 					
-					ModelType archivedmodeltype = ModelClassifier.getTypebyExtension(omexdialog.getFormat());
-					File modelfile = new File("model/" + name + archivedmodeltype.getExtension());
-
-					ma = FileAccessorFactory.getOMEXArchive(filetosave, modelfile, archivedmodeltype);
+					OMEXSaveDialog omexdialog = new OMEXSaveDialog(semsimmodel);
+					
+					if(omexdialog.approvedtowrite){
+						String name = omexdialog.getModelName();
+						ModelType archivedmodeltype = ModelClassifier.getTypebyExtension(omexdialog.getFormat());
+						File modelfile = new File("model/" + name + archivedmodeltype.getExtension());
+						ma = FileAccessorFactory.getOMEXArchive(filetosave, modelfile, archivedmodeltype);
+						//TODO: need to deal with overwriting here 
+					}
+					else return null;
 				}
 				else{
 					ma = FileAccessorFactory.getModelAccessor(filetosave, modeltype);
@@ -204,9 +203,8 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 			}
 		}
 
-		currentdirectory = getCurrentDirectory();
+		return ma;	
 
-		return ma;
 	}
 	
 	/**
@@ -215,6 +213,33 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 	 */
 	public ModelAccessor SaveAsAction(){	
 		return SaveAsAction(null);
+	}
+	
+	
+	protected static boolean outputTypeIsCompatibile(ModelType modeltype, SemSimModel semsimmodel, Component parentcomponent){
+		// If we're attempting to write a CellML model with discrete events, SBML-style functions or SBML-style 
+		// initial assignments, show error
+		String errs = "";
+
+		if ((modeltype == ModelType.MML_MODEL_IN_PROJ || modeltype == ModelType.MML_MODEL ||
+				modeltype == ModelType.CELLML_MODEL) && semsimmodel != null) {
+			if( ! semsimmodel.getSBMLFunctionOutputs().isEmpty())
+				errs = errs + "   - model contains SBML-style functions\n";
+			
+			if( ! semsimmodel.getSBMLInitialAssignments().isEmpty())
+				errs = errs + "   - model contains SBML-style initial assignments\n";
+		}
+		if ((modeltype == ModelType.CELLML_MODEL) && semsimmodel != null){
+			if( ! semsimmodel.getEvents().isEmpty())
+				errs = errs + "   - model contains discrete events\n";
+		}
+			
+		if(errs != ""){
+			JOptionPane.showMessageDialog(parentcomponent, "Cannot save model in selected format because\n\n" + errs, 
+					"Cannot write model", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		else return true;
 	}
 	
 

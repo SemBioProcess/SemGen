@@ -11,11 +11,14 @@ import org.sbml.jsbml.Model;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimLibrary;
+import semsim.annotation.Annotation;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
@@ -127,8 +130,28 @@ public class CASAreader extends AbstractRDFreader{
 
 	@Override
 	public void getModelLevelAnnotations() {
-		// TODO Auto-generated method stub
+		String modeluri = semsimmodel.getLegacyCodeLocation().getFileName() + "#" + semsimmodel.getMetadataID();
+		Resource modelresource = rdf.getResource(modeluri);
+		StmtIterator stmts = modelresource.listProperties();
 		
+		while(stmts.hasNext()){
+			Statement stmt = stmts.next();
+			Property prop = stmt.getPredicate();
+			
+			// If it's the model description, store it and move on to next annotation
+			if(prop.getURI().equals(AbstractRDFreader.dcterms_description.getURI())){
+				semsimmodel.setDescription(stmt.getObject().asLiteral().getString());
+				continue;
+			}
+			
+			Relation rel = SemSimRelations.getRelationFromURI(URI.create(stmt.getPredicate().getURI()));
+			RDFNode obj = stmt.getObject();
+			
+			if(obj.isResource() && rel!=null)
+				semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj.asResource().getURI()), "", sslib);
+			else if(rel!=null)
+				semsimmodel.addAnnotation(new Annotation(rel,obj.asLiteral().getString()));
+		}
 	}
 	
 	
@@ -189,7 +212,7 @@ public class CASAreader extends AbstractRDFreader{
 			URI uri = URI.create(physpropres.getURI());
 
 			// If an identifiers.org OPB namespace was used, replace it with the OPB's
-			if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceasString()))
+			if(! uri.toString().startsWith(RDFNamespace.OPB.getNamespaceAsString()))
 				uri = swapInOPBnamespace(uri);
 			
 			PhysicalPropertyInComposite pp = getPhysicalPropertyInComposite(uri.toString());
@@ -252,7 +275,8 @@ public class CASAreader extends AbstractRDFreader{
 	
 	
 	@Override
-	protected void getAllSemSimSubmodelAnnotations() {		
+	protected void getAllSemSimSubmodelAnnotations() {	
+		//TODO:
 	}
 
 }

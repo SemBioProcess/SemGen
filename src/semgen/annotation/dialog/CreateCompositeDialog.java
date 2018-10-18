@@ -16,9 +16,9 @@ import javax.swing.JSeparator;
 
 import semgen.SemGenSettings;
 import semgen.annotation.common.EntitySelectorGroup;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
+import semsim.annotation.SemSimTermLibrary;
 
 public class CreateCompositeDialog extends SemGenDialog implements ActionListener, ComponentListener {
 	private static final long serialVersionUID = 1L;

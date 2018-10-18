@@ -3,6 +3,7 @@ package semsim.writing;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,9 @@ import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.validator.SyntaxChecker;
+
+import com.hp.hpl.jena.rdf.model.Resource;
+
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
@@ -81,6 +85,7 @@ import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
 /**
@@ -114,7 +119,7 @@ public class SBMLwriter extends ModelWriter {
 	private Set<DataStructure> candidateDSsForCompartments = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForSpecies = new HashSet<DataStructure>();
 	private Set<DataStructure> candidateDSsForReactions = new HashSet<DataStructure>();
-	private Set<DataStructure> globalParameters = new HashSet<DataStructure>(); // Boolean indicates whether to write out assignment for parameter
+	private ArrayList<String> globalParameters = new ArrayList<String>();
 	
 	private AbstractRDFwriter rdfwriter;
 	private Set<String> metaIDsUsed = new HashSet<String>();
@@ -124,32 +129,39 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
-	
-	@Override
-	public String encodeModel() {
+	public SBMLwriter(SemSimModel model, boolean CASA) {
+		super(model, CASA);
+	}
+
+	// JKM: generates and returns an XML document based on the SBML
+	private Document writerSBMLtoXML(String xmlbase) {
 		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
 		String sbmlmodname = semsimmodel.getName();
-		
+
 		// Create a valid model name if current name is invalid
 		if( ! SyntaxChecker.isValidId(sbmlmodname, sbmllevel, sbmlversion)) sbmlmodname = "default_name";
-		
+
 		sbmlmodel = sbmldoc.createModel(sbmlmodname);
-		
+
+		if(semsimmodel.hasMetadataID())
+			sbmlmodel.setMetaId(semsimmodel.getMetadataID());
+
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
 		if(semsimmodel.getFunctionalSubmodels().size() > 0)
 			SemSimUtil.flattenModel(semsimmodel);
-		
+
 		// Initialize a CASA writer, if we're writing to an OMEX file
-		if(getWriteLocation() instanceof OMEXAccessor){
+		if(CASAEnabled()){
 			rdfwriter = new CASAwriter(semsimmodel);
-			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
+			rdfwriter.setXMLbase("./" + xmlbase + "#");
+			rdfwriter.setRDFforModelLevelAnnotations();
 		}
-		
+		else addModelLevelCVTerms();
+
 		// TODO: Need to work out how to store SBase names and notes in SemSim objects
 		// Currently notes are set in description field and names are ignored
-		
+
 		addNotesAndMetadataID(semsimmodel, sbmlmodel);
-		
 		sortDataStructuresIntoSBMLgroups();
 		addUnits();
 		addCompartments();
@@ -160,28 +172,79 @@ public class SBMLwriter extends ModelWriter {
 		addEvents();
 		addSBMLinitialAssignments();
 		addConstraints();
-		
-		
-		Document doc = getWriteLocation() instanceof OMEXAccessor ? addCASArdf() : addSemSimRDF();
 
-		// If no errors, write out the model. (Converted to XML doc in addSemSimRDF()).		
+		Document doc = CASAEnabled() ? addCASArdf() : addSemSimRDF();
+
+		// If no errors, return the model.
 		// First catch errors
 		if(sbmldoc.getErrorCount() > 0){
-			
-			for(int i = 0; i< sbmldoc.getErrorCount(); i++)
-				System.err.println(sbmldoc.getError(i));
+
+			String errors = "";
+			for(int i = 0; i< sbmldoc.getErrorCount(); i++){
+				errors = errors + "\n\n" + sbmldoc.getError(i);
+			}
+			ErrorLog.addError("The resulting SBML model had the following errors:\n\n" + errors, true, false);
 			return null;
+		} else {
+			return doc;
 		}
-		return new XMLOutputter().outputString(doc);
+	}
+
+	@Override
+	public String encodeModel() {
+		// populate the SBML model, use CASA if output is OMEX
+		if (useCASA)
+			return new XMLOutputter().outputString(writerSBMLtoXML(getWriteLocation().getFileName()));
+		else
+			return new XMLOutputter().outputString(writerSBMLtoXML(""));
+	}
+
+	/**
+	 * Like encodeModel but forces use of CASA.
+	 */
+	public String encodeModelWithXMLBase(String xmlbase) {
+		return new XMLOutputter().outputString(writerSBMLtoXML(xmlbase));
+	}
+
+	/**
+	 * Gets the RDF writer used by this SBMLwriter.
+	 */
+	public AbstractRDFwriter getRDFWriter() {
+		return rdfwriter;
 	}
 	
 
+	/**
+	 * Add model-level annotations as CVTerms within the SBML code. This should not be used 
+	 * when writing to an OMEX file.
+	 */
+	private void addModelLevelCVTerms(){
+		
+		for(ReferenceOntologyAnnotation ann : semsimmodel.getReferenceOntologyAnnotations()){
+			
+			CVTerm cv = new CVTerm();
+			
+			Relation rel = ann.getRelation();
+			
+			Qualifier qual = SemSimRelations.getBiologicalQualifierFromRelation(rel);
+			if(qual==null) qual = SemSimRelations.getModelQualifierFromRelation(rel);
+			if(qual==null) continue;
+			
+			cv.setQualifier(qual);
+			cv.addResource(ann.getReferenceURI().toString());
+			
+			sbmlmodel.addCVTerm(cv);
+		}
+	}
+	
 	
 	/**
 	 *  Determine which data structures potentially simulate properties of SBML compartments,
 	 *  species, and reactions
 	 */
 	private void sortDataStructuresIntoSBMLgroups(){
+
+		Set<String> existingnames = semsimmodel.getDataStructureNames();
 
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
@@ -198,15 +261,14 @@ public class SBMLwriter extends ModelWriter {
 				else if(SBMLconstants.OPB_PROPERTIES_FOR_REACTIONS.contains(propphysdefuri))
 					candidateDSsForReactions.add(ds);
 				
-				else globalParameters.add(ds);
+				else globalParameters.add(ds.getName());
 				
 			}
 			else if ( ! ds.isSolutionDomain() && ! (ds instanceof SBMLFunctionOutput) && ds.isDeclared()) 
-				globalParameters.add(ds);
+				globalParameters.add(ds.getName());
 			
-			if(ds.getName().contains(".")){
-				makeDataStructureNameValid(ds);
-			}
+			if(ds.getName().contains("."))
+				makeDataStructureNameValid(ds, existingnames);
 		}
 	}
 	
@@ -256,12 +318,6 @@ public class SBMLwriter extends ModelWriter {
 				
 				for(UnitFactor uf : ufset){
 					
-					//if(uf.getBaseUnit()==null){
-					//	System.err.println("Found a null base unit for a unit factor in unit " + uom.getName());
-					//	continue;
-					//}
-					//else System.out.println(uom.getName() + " has unit factor " + uf.getBaseUnit().getName());
-					
 					String factorbasename = uf.getBaseUnit().getName();
 					
 					Unit sbmluf = new Unit(sbmllevel, sbmlversion);
@@ -288,8 +344,7 @@ public class SBMLwriter extends ModelWriter {
 						
 						ud.addUnit(sbmluf);
 					}
-					else System.err.println("Error adding unit factor " + uf.getBaseUnit().getName()
-							+ " to declaration for " + uom.getName() + ": " + uf.getBaseUnit().getName() + " is not a valid SBML unit Kind");
+					else ErrorLog.addError("Error adding unit factor " + uf.getBaseUnit().getName() + " to declaration for " + uom.getName() + ": " + uf.getBaseUnit().getName() + " is not a valid SBML unit Kind", true, false);
 				}
 			}
 		}
@@ -306,40 +361,59 @@ public class SBMLwriter extends ModelWriter {
 			URI propphysdefuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
 			
 			// Go to next data structure if there isn't a physical property associated with the current one
-			if(propphysdefuri == null) continue;
+			// or if there is a multi-entity composite physical entity used in the data structure's
+			// composite annotation (even if there's a valid physical property, the full composite
+			// needs to be stored in either the SemSim RDF block or the CASA file)
+			if(propphysdefuri == null || ! (pmc instanceof CompositePhysicalEntity))
+				continue; // TODO: add to global parameters?
+			
+			int compdim = -1;
 			
 			Compartment comp = null;
 			
 			if(propphysdefuri.equals(SemSimLibrary.OPB_FLUID_VOLUME_URI))
-				comp = sbmlmodel.createCompartment(ds.getName());
+				compdim = 3;
 			
 			// Only write out spatialDimensions attribute if compartment is not 3D
-			else if(propphysdefuri.equals(SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI)){
+			else if(propphysdefuri.equals(SemSimLibrary.OPB_AREA_OF_SPATIAL_ENTITY_URI))
+				compdim = 2;
+			
+			else if(propphysdefuri.equals(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI))
+				compdim = 1;
+			
+			
+			if(compdim!=-1 && ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1){
 				comp = sbmlmodel.createCompartment(ds.getName());
-				comp.setSpatialDimensions(2);
+				comp.setSpatialDimensions(compdim);
 			}
-			else if(propphysdefuri.equals(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI)){
-				comp = sbmlmodel.createCompartment(ds.getName());
-				comp.setSpatialDimensions(1);
+			// Go to next data structure if we didn't find an appropriate OPB property
+			// or if there's a composite physical entity
+			else{
+				globalParameters.add(ds.getName());
+				continue;
 			}
 			
-			 // A Compartment object must have the required attributes 
+			// A Compartment object must have the required attributes 
 			// 'id' and 'constant', and may have the optional attributes 
 			// 'metaid', 'sboTerm', 'name', 'spatialDimensions', 'size' and 'units'. 
 			comp.setConstant(ds.getComputationInputs().size()==0);
-			
-			// Go to next data structure if we didn't find an appropriate OPB property
-			// or if the associated physical entity is NOT a composite physical entity
-			if(comp == null || ! (pmc instanceof CompositePhysicalEntity)) continue;
 						
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
 
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
-			boolean onerefentity = oneentity && pmcAsCPE.getArrayListOfEntities().get(0).isAnnotated();
-						
-			// Store annotation for compartment.
-			if(onerefentity || getWriteLocation() instanceof OMEXAccessor){
+			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);
+			boolean onerefentity = oneentity && indexent.hasPhysicalDefinitionAnnotation();			
+			
+			// Store annotation for compartment
+			// If it's a singular entity and writing to standalone, annotate with CVTerm
+			// If it's a singular entity and writing to OMEX, annotate in CASA. Link metaid's
+			// of compartment and the entity with the annotations (the singular entity in the
+			// composite entity)
+			
+			// If it's a composite entity then we capture the semantics using a full composite in
+			// the RDF block or CASA file when adding parameter info
+			if(onerefentity || CASAEnabled()){
 				DSsToOmitFromCompositesRDF.add(ds);
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);
 			}
@@ -526,7 +600,7 @@ public class SBMLwriter extends ModelWriter {
 			
 			// Otherwise the data structure is not associated with a physical entity and we 
 			// treat it as a global parameter
-			else globalParameters.add(ds);
+			else globalParameters.add(ds.getName());
 		}
 	}
 	
@@ -543,7 +617,7 @@ public class SBMLwriter extends ModelWriter {
 				CustomPhysicalProcess process = (CustomPhysicalProcess)pmc;
 				
 				if( ! entitySpeciesMap.keySet().containsAll(process.getParticipants())){ // Make sure that all participants in reaction were asserted successfully as SBML species
-					globalParameters.add(ds);
+					globalParameters.add(ds.getName());
 					continue;
 				}
 				
@@ -557,9 +631,8 @@ public class SBMLwriter extends ModelWriter {
 				rxn.setReversible(true); // TODO: extend SemSim object model to include this "reversible" attribute somewhere
 				rxn.setFast(false); // TODO: extend SemSim object model to include this "fast" attribute somewhere
 				
-				// Do not store the annotation for this data structure in the SemSim RDF.
-				// Preserve semantics in <reaction> element.
 				DSsToOmitFromCompositesRDF.add(ds);
+				addRDFannotationForPhysicalSBMLelement(process, rxn);
 				
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
@@ -605,27 +678,26 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				// Find any local parameters associated with reaction and add them to kinetic law
-				Set<DataStructure> tempgpset = new HashSet<DataStructure>();
-				tempgpset.addAll(globalParameters);
 				
-				for(DataStructure gp : tempgpset){
+				for(int s=0; s<globalParameters.size();s++){
 					
-					String fullnm = gp.getName();
+					String fullnm = globalParameters.get(s);
 					
 					if(fullnm.startsWith(SBMLreader.REACTION_PREFIX + ds.getName() + ".")){
-						globalParameters.remove(gp);
+						globalParameters.set(s, "");
 						String localnm = fullnm.replace(SBMLreader.REACTION_PREFIX + ds.getName() + ".", "");
-						mathml = mathml.replaceAll("<ci>\\s*" + gp.getName() + "\\s*</ci>", "<ci>" + localnm + "</ci>");
+						mathml = mathml.replaceAll("<ci>\\s*" + fullnm + "\\s*</ci>", "<ci>" + localnm + "</ci>");
 
 						LocalParameter lp = kl.createLocalParameter(localnm);
-						String formula = getFormulaFromRHSofMathML(gp.getComputation().getMathML(), fullnm);
+						DataStructure assocds = semsimmodel.getAssociatedDataStructure(fullnm);
+						String formula = getFormulaFromRHSofMathML(assocds.getComputation().getMathML(), fullnm);
 						lp.setValue(Double.parseDouble(formula));
 						
 						// Add units, if needed
 						// Deal with units on compartments if needed
-						setUnitsForModelComponent(lp, gp);
-						assignMetaIDtoParameterIfAnnotated(gp);
-						addNotesAndMetadataID(gp, lp);	
+						setUnitsForModelComponent(lp, assocds);
+						assignMetaIDtoParameterIfAnnotated(assocds);
+						addNotesAndMetadataID(assocds, lp);	
 					}
 				}
 				
@@ -636,7 +708,7 @@ public class SBMLwriter extends ModelWriter {
 			}
 			
 			// Otherwise the data structure is not associated with a process
-			else globalParameters.add(ds);
+			else globalParameters.add(ds.getName());
 
 		}
 	}
@@ -745,12 +817,15 @@ public class SBMLwriter extends ModelWriter {
 		
 		// TODO: t.delta, etc. are getting renamed to t_delta but this change isn't being reflected in the model's MathML.
 		// e.g. t.delta is used to compute EDVLV but doesn't look like EDVLV's MathML is being updated
-		for(DataStructure ds : globalParameters){
+		for(String dsname : globalParameters){
+			
+			if(dsname.equals("")) continue;
+			
+			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
 			
 			// Don't add parameter if it's not a declared element
 			if( ! ds.isDeclared())	continue;
 			
-			String dsname = ds.getName();
 			String mathml = ds.getComputation().getMathML();
 
 			if(oldAndNewParameterNameMap.containsKey(dsname)){
@@ -833,9 +908,7 @@ public class SBMLwriter extends ModelWriter {
 			// TODO: we assume no 0 = f(p) type rules (i.e. SBML algebraic rules). Need to eventually account for them
 
 			addNotesAndMetadataID(ds, par);
-			
 			setUnitsForModelComponent(par, ds);
-			
 		}
 	}
 	
@@ -872,7 +945,7 @@ public class SBMLwriter extends ModelWriter {
 		
 		rdfwriter = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
 		
-		rdfwriter.setRDFforModelLevelAnnotations();
+		rdfwriter.setRDFforModelLevelAnnotations(); // This just makes an RDF resource for the model. Model-level info is stored within SBML <model> element, not SemSim RDF block.
 		
 		// NOTE: SemSim-style submodels are not currently preserved on SBML export
 		
@@ -889,7 +962,7 @@ public class SBMLwriter extends ModelWriter {
 			Element modelel = doc.getRootElement().getChild("model", sbmlNS);
 			
 			if(modelel == null){
-				System.err.println("SBML writer error - no 'model' element found in XML doc");
+				ErrorLog.addError("SBML writer error - no 'model' element found in XML doc", true, false);
 				return doc;
 			}
 			
@@ -900,10 +973,10 @@ public class SBMLwriter extends ModelWriter {
 				modelel.addContent(modelannel);
 			}
 			
-			Element ssannel = modelannel.getChild(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace());
+			Element ssannel = modelannel.getChild(semsimAnnotationElementName, sbmlNS);
 			
 			if(ssannel == null){
-				ssannel = new Element(semsimAnnotationElementName, RDFNamespace.SEMSIM.createJdomNamespace()); 
+				ssannel = new Element(semsimAnnotationElementName, sbmlNS); 
 				modelannel.addContent(ssannel);
 			}
 			// Remove old RDF if present
@@ -932,8 +1005,8 @@ public class SBMLwriter extends ModelWriter {
 		
 		// Deal with unit declarations on <cn> elements in MathML 
 		if(RHS.contains("cellml:units")){
-			RHS = RHS.replaceFirst("xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"",
-					"xmlns=\"" + RDFNamespace.MATHML.getNamespaceasString() + "\"" + " "
+			RHS = RHS.replaceFirst("xmlns=\"" + RDFNamespace.MATHML.getNamespaceAsString() + "\"",
+					"xmlns=\"" + RDFNamespace.MATHML.getNamespaceAsString() + "\"" + " "
 							+ "xmlns:sbml3_1=\"" + SBMLDocument.URI_NAMESPACE_L3V1Core + "\"");
 			RHS = RHS.replace(cellmlInlineUnitsNSdeclaration, "");
 			RHS = RHS.replace("cellml:units", "sbml3_1:units");
@@ -981,14 +1054,19 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		//TODO: When the jsbml folks fix the issue with redeclaring xml namespaces in notes, uncomment block below
-//		if(sso.hasDescription()){
-//			try {
-//				sbo.setNotes(sso.getDescription());
-//			} catch (XMLStreamException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		if(sso.hasDescription() && !CASAEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
+			try {
+				String desc = sso.getDescription();
+				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novere problem)
+				String temp = "<notes>\n  <body xmlns=\"http://www.w3.org/1999/xhtml\">\n    " + new String(chars) + "\n  </body>\n</notes>";
+				temp = temp.replace("&", "&amp;");
+				sbo.setNotes(temp);
+			} catch (XMLStreamException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		if(sso.hasMetadataID()){
 			
@@ -1045,7 +1123,7 @@ public class SBMLwriter extends ModelWriter {
 	
 	
 	/**
-	 * Add semantic annotations on an SBML model element encoded as RDF
+	 * Add semantic annotations on an SBML compartment, species or reaction element encoded as RDF
 	 * @param pmc {@link PhysicalModelComponent} corresponding to the SBML element
 	 * @param sbmlobj The SBML element to annotate
 	 */
@@ -1057,11 +1135,28 @@ public class SBMLwriter extends ModelWriter {
 			sbmlobj.setMetaId(metaid);
 		}
 		
+		// Check if the physical model component is a composite physical entity
+		// containing only one physical entity component
+		boolean oneent = false;
+		
+		if(pmc instanceof CompositePhysicalEntity)
+			oneent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1;
+		
 		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
-		if(getWriteLocation() instanceof OMEXAccessor){
-			((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
+		if(CASAEnabled()){
+			
+			// When the pmc is a one-entity composite physical entity, use the
+			// metadata ID on the pmc to link it to the SBML entity (this is used for compartments)
+			if(oneent){
+				String metaidtouse = pmc.getMetadataID();
+				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
+				((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc);
+			}
+			else ((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
 			return;
 		}
+		
+		if(oneent) pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 		
 		// This is used when writing RDF-based semantic annotations within a standalone SBML file
 		if(pmc instanceof ReferenceTerm){
@@ -1149,8 +1244,7 @@ public class SBMLwriter extends ModelWriter {
 	 * @param ds A {@link DataStructure}
 	 */
 	// in the MathML of dependent data structures
-	private void makeDataStructureNameValid(DataStructure ds){
-		Set<String> existingnames = semsimmodel.getDataStructureNames();
+	private void makeDataStructureNameValid(DataStructure ds, Set<String> existingnames){
 		String oldname = ds.getName();
 		String newname = oldname.replaceAll("\\.", "_");
 			
@@ -1184,13 +1278,36 @@ public class SBMLwriter extends ModelWriter {
 	
 	/** Write out composite annotations in the SemSim RDF associated with the model */
 	private void writeFullCompositesInRDF(){
+		
+		Map<String,SemSimObject> metamap = semsimmodel.getMetadataIDcomponentMap();
+		Set<String> usedmetaids = new HashSet<String>(); 
+		usedmetaids.addAll(metamap.keySet());
+		
+		if(semsimmodel.hasMetadataID()) usedmetaids.add(semsimmodel.getMetadataID());
+		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			
 			// Only the info for parameters are stored (i.e. not compartments, species or reactions)
 			// because the <species> and <reaction> elements already contain the needed info, and 
 			// the <compartments> refer to physical entities (which can be composite), not properties of entities
+			
 			if(DSsToOmitFromCompositesRDF.contains(ds) || ds.isSolutionDomain()) continue;
-			else rdfwriter.setRDFforDataStructureAnnotations(ds);
+			else{
+				String metadataID = null;
+				
+				// We use custom code here to make this function go faster (previously used the AbstractRDFwriter.assignMetaIDandCreateResourceForDataStructure()) routine
+				// but it can be time-consuming for larger models
+				if(ds.hasMetadataID()) metadataID = ds.getMetadataID();
+				else{
+					metadataID = semsimmodel.generateUniqueMetadataID("metaid0", usedmetaids);
+					usedmetaids.add(metadataID);
+				}
+				
+				Resource ares = rdfwriter.rdf.createResource(rdfwriter.xmlbase + metadataID);
+				
+				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
+				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
+				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+			}
 		}		
 	}
 

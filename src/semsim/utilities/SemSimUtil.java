@@ -495,7 +495,7 @@ public class SemSimUtil {
 			if(mathmlHasLHS(mathmlstring)){
 				
 				SAXBuilder saxbuilder = new SAXBuilder();
-				Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
+				Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString());
 				Document doc = saxbuilder.build(new StringReader(mathmlstring));
 				
 				Element eqel = doc.getRootElement().getChild("apply",mmlns).getChild("eq",mmlns);
@@ -519,7 +519,7 @@ public class SemSimUtil {
 						XMLOutputter outputter = new XMLOutputter();
 						outputter.setFormat(Format.getPrettyFormat());
 						Element newtopel = new Element("math");
-						newtopel.setNamespace(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString()));
+						newtopel.setNamespace(Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString()));
 						newtopel.addContent(nextel.detach());
 						return outputter.outputString(newtopel);
 					}
@@ -545,7 +545,7 @@ public class SemSimUtil {
 		Document doc;
 		try {
 			doc = saxbuilder.build(new StringReader(mathml));
-			Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceasString());
+			Namespace mmlns = Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString());
 
 			// Get the <eq> element if there is one...
 			if(doc.getRootElement().getChild("apply",mmlns)!=null){
@@ -698,6 +698,8 @@ public class SemSimUtil {
 		newname = newname.replace("^", "_exp_");
 		newname = newname.replace("(", "_");
 		newname = newname.replace(")", "_");
+		newname = newname.replace("-", "minus");
+
 				
 		if(Character.isDigit(newname.charAt(0))) newname = "x" + newname;
 		

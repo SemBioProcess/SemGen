@@ -19,7 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import semgen.annotation.workbench.routines.AutoAnnotate;
+import semsim.annotation.AutoAnnotate;
 import semsim.annotation.Ontology;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.definitions.PropertyType;
@@ -40,9 +40,9 @@ import semsim.utilities.ResourcesManager;
  *  for reading and writing models**/
 public class SemSimLibrary {
 	public static final double SEMSIM_VERSION = 0.2;
-	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceasString() + "SemSimVersion");
+	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSimVersion");
 
-	public static final String DEFAULT_CFG_PATH = "/semsim/cfg_default/";
+	public static final String DEFAULT_CFG_PATH = "semsim/cfg_default/";
 	public static final String SEMSIM_IN_JSIM_CONTROL_VALUE = "semSimAnnotate";
 	
 	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -56,7 +56,7 @@ public class SemSimLibrary {
 	// Hashtable for mapping CellML base units to OPB classes.
 	// Similar to OPBClassesForUnitsTable, but instead maps Hashtable of {baseunit:exponent} to OPB class.
     private HashMap<HashMap<String, Double>, String[]> OPBClassesForBaseUnitsTable;
-	
+
 	private Map<String, Integer> unitPrefixesAndPowersTable;
 	private Set<String> cellMLUnitsTable;
 	
@@ -68,29 +68,29 @@ public class SemSimLibrary {
 	private Set<String> OPBforceProperties = new HashSet<String>();
 	private Set<String> OPBstateProperties = new HashSet<String>();
 	
-	public static URI OPB_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00147");
-	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00135"); // TODO: this ID changed in in OPB version 1.05, on
-	public static URI OPB_FORCE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00574");
-	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00569");
-	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00573");
-	public static URI OPB_TEMPORAL_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01151");
- 	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00154");
-	public static URI OPB_AREA_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00295");
-	public static URI OPB_SPAN_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01064");
-	public static URI OPB_CHEMICAL_MOLAR_AMOUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00425");
-	public static URI OPB_CHEMICAL_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00340");
-	public static URI OPB_PARTICLE_COUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01001");
-	public static URI OPB_PARTICLE_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01000");
-	public static URI OPB_MASS_OF_SOLID_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01226");
-	public static URI OPB_MASS_LINEAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00190");
-	public static URI OPB_MASS_AREAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00258");
-	public static URI OPB_MASS_VOLUMETRIC_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00101");
-	public static URI OPB_STATE_FRACTION_OF_CHEMICAL_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01298");
-	public static URI OPB_CHEMICAL_MOLAR_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00592");
-	public static URI OPB_PARTICLE_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_00544");
-	public static URI OPB_MATERIAL_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01220");
-	public static URI OPB_TIME_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01023");
-	public static URI OPB_DERIVATIVE_CONSTRAINT_URI = URI.create(RDFNamespace.OPB.getNamespaceasString() + "OPB_01180");
+	public static URI OPB_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00147");
+	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00135"); // TODO: this ID changed in in OPB version 1.05, on
+	public static URI OPB_FORCE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00574");
+	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00569");
+	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00573");
+	public static URI OPB_TEMPORAL_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01151");
+ 	public static URI OPB_FLUID_VOLUME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00154");
+	public static URI OPB_AREA_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00295");
+	public static URI OPB_SPAN_OF_SPATIAL_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01064");
+	public static URI OPB_CHEMICAL_MOLAR_AMOUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00425");
+	public static URI OPB_CHEMICAL_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00340");
+	public static URI OPB_PARTICLE_COUNT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01001");
+	public static URI OPB_PARTICLE_CONCENTRATION_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01000");
+	public static URI OPB_MASS_OF_SOLID_ENTITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01226");
+	public static URI OPB_MASS_LINEAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00190");
+	public static URI OPB_MASS_AREAL_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00258");
+	public static URI OPB_MASS_VOLUMETRIC_DENSITY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00101");
+	public static URI OPB_STATE_FRACTION_OF_CHEMICAL_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01298");
+	public static URI OPB_CHEMICAL_MOLAR_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00592");
+	public static URI OPB_PARTICLE_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00544");
+	public static URI OPB_MATERIAL_FLOW_RATE_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01220");
+	public static URI OPB_TIME_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01023");
+	public static URI OPB_DERIVATIVE_CONSTRAINT_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01180");
 	
 	private String cfgpath;
 	
@@ -119,9 +119,8 @@ public class SemSimLibrary {
 	 */
 	private void loadLibrary(boolean loadFromExternalDir) {
 		try {
-			loadCommonProperties();
-			
 			if(loadFromExternalDir){
+				loadCommonProperties(cfgpath + "CommonProperties.txt");
 				jsimUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "jsimUnits", true);
 				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromFile(cfgpath + "OPBClassesForUnits.txt", true);
 	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(cfgpath + "OPBClassesForBaseUnits.txt");
@@ -130,6 +129,7 @@ public class SemSimLibrary {
 				loadOntologyDescriptions(cfgpath);
 			}
 			else{
+				loadCommonProperties();
 				jsimUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "jsimUnits", true);
 				OPBClassesForUnitsTable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "OPBClassesForUnits.txt", true);
 	            OPBClassesForBaseUnitsTable = ResourcesManager.createHashMapFromBaseUnitFile(DEFAULT_CFG_PATH + "OPBClassesForBaseUnits.txt");
@@ -171,8 +171,16 @@ public class SemSimLibrary {
 	 * Load OPB properties that are commonly represented in models
 	 * @throws IOException
 	 */
+
 	private void loadCommonProperties() throws IOException {
-		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource("/semsim/cfg_default/CommonProperties.txt", true);
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromResource(DEFAULT_CFG_PATH + "CommonProperties.txt", true);
+		for (String s : ptable.keySet()) {
+			this.commonproperties.put(s, new PhysicalPropertyInComposite(ptable.get(s)[0], URI.create(s)));
+		}
+	}
+
+	private void loadCommonProperties(String internalpath) throws IOException {
+		HashMap<String, String[]> ptable = ResourcesManager.createHashMapFromFile(internalpath, true);
 		for (String s : ptable.keySet()) {
 			this.commonproperties.put(s, new PhysicalPropertyInComposite(ptable.get(s)[0], URI.create(s)));
 		}
@@ -266,7 +274,7 @@ public class SemSimLibrary {
 		}
 		PhysicalPropertyInComposite pp = null;
 		if (candidateOPBclasses != null && candidateOPBclasses.length == 1) {
-			String term = RDFNamespace.OPB.getNamespaceasString() + candidateOPBclasses[0];
+			String term = RDFNamespace.OPB.getNamespaceAsString() + candidateOPBclasses[0];
 			pp = commonproperties.get(term);
 			if (pp==null) {
 				OWLClass cls = SemSimOWLFactory.factory.getOWLClass(IRI.create(term));
@@ -304,7 +312,7 @@ public class SemSimLibrary {
 	 * @throws OWLException
 	 */
 	public Set<String> getOPBsubclasses(String parentclass) throws OWLException {
-		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceasString() + parentclass, false);
+		Set<String> subclassset = SemSimOWLFactory.getAllSubclasses(OPB, RDFNamespace.OPB.getNamespaceAsString() + parentclass, false);
 		return subclassset;
 	}
 	
@@ -538,14 +546,15 @@ public class SemSimLibrary {
 	 */
 	private Ontology getOntologyByNamespace(String namespace) {
 		Ontology ont = ReferenceOntologies.getOntologyByNamespace(namespace);
+		
 		if (ont == ReferenceOntology.UNKNOWN.getAsOntology()) {
 			for (Ontology o : ontologies) {
-				if (o.hasNamespace(namespace)) {
+				if (o.hasNamespace(namespace))
 					return o;
-				}
 			}
 		}
 		if (ont == null) ont = ReferenceOntology.UNKNOWN.getAsOntology();
+		
 		return ont;
 	}
 	

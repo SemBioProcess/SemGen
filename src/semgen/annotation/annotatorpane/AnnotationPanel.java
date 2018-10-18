@@ -24,11 +24,11 @@ import semgen.annotation.dialog.TextChangeDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.AnnotatorWorkbench.ModelEdit;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semsim.SemSimObject;
+import semsim.annotation.SemSimTermLibrary;
 
 /**
  * Parent class for the main annotation panel. Defines functions and UI components for shared elements of the submodel and codeword

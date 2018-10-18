@@ -148,7 +148,7 @@ DependencyNode.prototype.getContextMenu = function() {
 			menu = [{text: 'Select Node Inputs', action : 'selectinputs'}, {text : "Extract Selected", action : "extract"}, {text : "Extract Unselected", action : "extractexclude"}];
 		}
 		else {
-			menu = [{text: 'Select Node Inputs', action : 'selectinputs'}, {text : "Remove Selected", action : "removeselected"}];
+			menu = [{text: 'Select Node Inputs', action : 'selectinputs'}]; //, {text : "Remove Selected", action : "removeselected"}];
 		}
 	
 	return menu;

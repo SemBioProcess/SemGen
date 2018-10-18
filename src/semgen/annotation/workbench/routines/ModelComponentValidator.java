@@ -3,8 +3,8 @@ package semgen.annotation.workbench.routines;
 import java.util.HashSet;
 
 import semgen.annotation.workbench.AnnotatorWorkbench;
-import semgen.annotation.workbench.SemSimTermLibrary;
 import semgen.annotation.workbench.drawers.CodewordToolDrawer;
+import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
@@ -41,9 +41,9 @@ public class ModelComponentValidator {
 	
 	private void validateProcess(Integer index) {
 		procs.add(library.getPhysicalProcess(index));
-				for (Integer i : library.getAllProcessParticipantIndicies(index)) {
-					validateComposite(i);
-				}
+		for (Integer i : library.getAllProcessParticipantIndicies(index)) {
+			validateComposite(i);
+		}
 	}
 	
 	private void validateComposite(Integer index) {

@@ -12,6 +12,25 @@ With SemGen, users can:
 - Semi-automatically merge models into more complex systems, and
 - Encode models in executable simulation formats.
 
+## Table of Contents
+
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installing Pre-built Binaries](#installing-pre-built-binaries)
+  * [Building from Source](#building-from-source)
+* [Running SemGen](#running-semgen)
+  * [Loading a model](#loading-a-model)
+  * [Visualizing a model](#visualizing-a-model)
+    * [Submodels](#submodels)
+    * [Dependencies](#dependencies)
+    * [PhysioMap](#physiomap)
+    * [Annotator](#annotator)
+    * [Composite annotations](#composite-annotations)
+  * [Extractor](#extractor)
+  * [Merger](#merger)
+* [Authors](#authors)
+* [License](#license)
+
 ## Getting Started
 
 These instructions will help you use SemGen to visualize, annotate, extract, and merge models.
@@ -26,7 +45,7 @@ To check your Java version, go to a command prompt and enter:
 java -version
 ```
 
-### Installing
+### Installing Pre-built Binaries
 
 Simply download the appropriate build for your operating system from the [releases page](https://github.com/SemBioProcess/SemGen/releases).
 
@@ -35,6 +54,21 @@ Windows: Download and run the Windows installer. You will then be able to run Se
 Mac: Open the SemGen .dmg file, and drag ```SemGen.app``` to Applications folder. Double-click ```SemGen.app``` to start the program.
 
 Linux: Unarchive the SemGen .tar.gz file. Double-click the ```SemGen.jar``` file in the main SemGen directory to start the program
+
+### Building from Source
+
+SemGen can be built from source using [Apache Ant](https://ant.apache.org/). From the root of the source directory, run the following two commands:
+
+```
+ant -buildfile build.xml build # compile the Java sources to .class files
+ant -buildfile build.xml create_jar # bundle the .class files and third-part dependencies into a .jar
+```
+
+This will create the file `SemSimAPI.jar` in the root directory. You can run this file as follows to start the Py4J server:
+
+```
+java -classpath ./SemSimAPI.jar semsim.Py4J
+```
 
 ## Running SemGen
 
@@ -68,6 +102,14 @@ Alternatively, SemGen comes with a library of example models. These can be acces
 Once a model is loaded in SemGen, there are several ways to visualize and explore the model.
 
 Select the model you want to visualize by clicking the model node (selected node will have a yellow ring around it). Then click one of the visualizations from the **Project Actions** menu on the lefthand side.
+
+An entire model or submodel can be moved by clicking and dragging the *hull* surrounding the group of nodes. You can also adjust the view by clicking and dragging the whitespace around the model or zooming in and out using the mouse wheel.
+
+![](https://i.imgur.com/AApjSgt.gif)
+
+![](https://i.imgur.com/4WS8jFF.gif)
+
+NOTE: Occassionally, the layout algorithm may push a model's nodes drastically outside the viewing range. Re-clicking one of the visualization buttons in the **Project Actions** menu usual repositions the nodes inside the viewing range. See [issue #214](https://github.com/SemBioProcess/SemGen/issues/214)
 
 #### Submodels
 
@@ -141,7 +183,8 @@ Below is an step-by-step example of an extraction:
 1. Load a model and select one or more nodes you would like to extract by left-clicking. Multiple nodes can be selected by control+click (command+click on Mac), or by toggling *selection* in the top right corner.
 2. Right-click one of the selected nodes and click *Extract Selected*. In case you want to extract the majority of the model, it may be more convenient to select the nodes you do not wish to save in the extraction, and click *Extract Unselected*. ![](https://i.imgur.com/vEywONu.png)
 3. Enter a new name for the extracted nodes, and the newly extracted nodes will appear in SemGen. ![](https://i.imgur.com/Be6RSn8.png) ![](https://i.imgur.com/zSZzVqE.png)
-4. Extraction can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
+4. Extractions can also be performed on submodel and PhysioMap nodes. ![](https://i.imgur.com/J5nd49p.png) ![](https://i.imgur.com/pLFiGNc.png)
+5. Extractions can be saved out to various modeling formats by clicking the *Export* button under the **Project Actions** menu. If an unsaved extraction is closed either by selecting the *Close* button or by closing the parent Project Tab, a prompt appears for saving the extraction. 
 
 
 ### Merger

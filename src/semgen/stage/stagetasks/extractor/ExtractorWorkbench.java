@@ -2,6 +2,9 @@ package semgen.stage.stagetasks.extractor;
 
 import java.util.ArrayList;
 import java.util.Observable;
+
+import semgen.SemGenGUI;
+import semgen.SemGenGUI.saveTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.fileaccessors.ModelAccessor;
@@ -79,10 +82,9 @@ public class ExtractorWorkbench extends Workbench {
 		
 		if (ma != null) {
 			model.setName(ma.getModelName());
-			
-			ma.writetoFile(model);
-
 			model.setSourceFileLocation(ma);
+			saveTask savetask = new SemGenGUI.saveTask(ma, model);
+			savetask.execute();
 		}
 
 		return ma;

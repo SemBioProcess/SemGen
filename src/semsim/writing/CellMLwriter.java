@@ -16,7 +16,6 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import semsim.annotation.Annotation;
-import semsim.annotation.CurationalMetadata.Metadata;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.OMEXAccessor;
@@ -30,6 +29,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.ModelClassifier.ModelType;
+import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
 /**
@@ -56,14 +56,7 @@ public class CellMLwriter extends ModelWriter {
 		Document doc = null;
 		outputter.setFormat(Format.getPrettyFormat());
 		
-			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceasString());
-			
-			// Check for events, if present write out error msg
-			if(semsimmodel.getEvents().size()>0)
-				return addErrorToModel("Cannot convert models with discrete events into CellML."); 
-			
-			if(semsimmodel.getSBMLFunctionOutputs().size()>0)
-				return addErrorToModel("Cannot convert models with SBML-style Function Definitions into CellML.");
+			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
 			
 			createRDFBlock();
 			createRootElement();
@@ -142,17 +135,14 @@ public class CellMLwriter extends ModelWriter {
 		root.addNamespaceDeclaration(RDFNamespace.DCTERMS.createJdomNamespace());
 		root.addNamespaceDeclaration(RDFNamespace.VCARD.createJdomNamespace());
 		
-		String namestring = semsimmodel.getName();
-		
-		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.fullname))
-			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.fullname);
+		String namestring = semsimmodel.hasName() ? semsimmodel.getName() : "model0";
 		
 		root.setAttribute("name", namestring);
 		
-		if(semsimmodel.getCurationalMetadata().hasAnnotationValue(Metadata.sourcemodelid)) {
-			namestring = semsimmodel.getCurationalMetadata().getAnnotationValue(Metadata.sourcemodelid);
-			root.setAttribute("id", namestring, RDFNamespace.CMETA.createJdomNamespace());
-		}
+		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
+			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+		
+		root.setAttribute("id", metaid, RDFNamespace.CMETA.createJdomNamespace());
 	}
 	
 	
@@ -288,11 +278,7 @@ public class CellMLwriter extends ModelWriter {
 
 			for(DataStructure ds : maincomponent.getAssociatedDataStructures()){
 				
-				if(ds.getComputation().getEvents().size()>0){
-					System.err.println("Error: Cannot convert models with discrete events into CellML");
-					break;
-				}
-				else if(ds.getComputation().hasMathML()){
+				if(ds.getComputation().hasMathML()){
 					
 					// Make sure the MathML contains a left-hand side
 					String dsmathml = ds.getComputation().getMathML();
@@ -415,9 +401,8 @@ public class CellMLwriter extends ModelWriter {
 							con.varmap.put(var1, mappedvar);
 						}
 					}
-					else{
-						System.err.println("Couldn't retrieve submodels from variable mapping " + var1.getName() + " > " + mappedvar.getName());
-					}
+					else ErrorLog.addError("Problem generating CellML: Couldn't retrieve submodels from variable mapping " + var1.getName() + " > " + mappedvar.getName(), true, false);
+					
 				}
 			}
 		}
@@ -555,13 +540,6 @@ public class CellMLwriter extends ModelWriter {
 			listofmathmlels.add(clone.detach());
 		}
 		return listofmathmlels;
-	}
-	
-	
-	private String addErrorToModel(String msg){
-		Element eventerror = new Element("error");
-		eventerror.setAttribute("message", msg);
-		return outputter.outputString(new Document(eventerror));
 	}
 	
 	

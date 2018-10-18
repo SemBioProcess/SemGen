@@ -53,7 +53,7 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 	protected boolean isEquivalent(Object obj) {
 		URI physdefuri = ((PhysicalPropertyInComposite)obj).getPhysicalDefinitionURI();
 		
-		String physdefID = getTermID().replace(":", "_");
+		String physdefID = getTermFragment().replace(":", "_");
 		String thisID = SemSimOWLFactory.getIRIfragment(physdefuri.toString()).replace(":", "_");
 		
 		return (ReferenceOntologies.URIsAreFromSameReferenceOntology(physdefuri, referenceuri) 
@@ -66,7 +66,7 @@ public class PhysicalPropertyInComposite extends PhysicalModelComponent implemen
 	}
 
 	@Override
-	public String getTermID() {
+	public String getTermFragment() {
 		return SemSimOWLFactory.getIRIfragment(referenceuri.toString());
 	}
 

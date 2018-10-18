@@ -14,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 import semsim.SemSimObject;
@@ -59,16 +60,7 @@ public abstract class AbstractRDFwriter {
 
 	// Abstract methods
 	/** Write out the RDF content for annotations on the model as a whole (curatorial metadata, e.g.) */
-	abstract protected void setRDFforModelLevelAnnotations();
-	
-	
-	/**
-	 * Write out the singular annotation on a data structure (i.e. a non-composite definition
-	 * for the property simulated by the data structure).
-	 * @param ds The data structure that is annotated
-	 * @param ares The RDF Resource representing the data structure
-	 */
-	abstract protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares);
+	abstract public void setRDFforModelLevelAnnotations();
 	
 	
 	/**
@@ -136,10 +128,30 @@ public abstract class AbstractRDFwriter {
 				sso.setMetadataID(ares.getURI().replace("#", ""));
 		}
 	}
+	
+
+	/**
+	 * Write out the singular annotation on a data structure (i.e. a non-composite definition
+	 * for the property simulated by the data structure).
+	 * @param ds The data structure that is annotated
+	 * @param ares The RDF Resource representing the data structure
+	 */
+	protected void setSingularAnnotationForDataStructure(DataStructure ds, Resource ares){
 		
+		if(ds.hasPhysicalDefinitionAnnotation()){
+			URI uri = ds.getPhysicalDefinitionURI();
+			Property isprop = ResourceFactory.createProperty(SemSimRelation.BQB_IS.getURIasString());
+			URI furi = convertURItoIdentifiersDotOrgFormat(uri);
+			Resource refres = rdf.createResource(furi.toString());
+			Statement st = rdf.createStatement(ares, isprop, refres);
+			
+			addStatement(st);
+		}
+	}	
+	
 	
 	/** Add RDF statements that capture all annotations on all data structures in a SemSim model */
-	protected void setRDFforDataStructureAnnotations(){
+	public void setRDFforDataStructureAnnotations(){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			setRDFforDataStructureAnnotations(ds);
@@ -153,9 +165,7 @@ public abstract class AbstractRDFwriter {
 	 */
 	protected void setRDFforDataStructureAnnotations(DataStructure ds){
 		
-		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
-		String resuri = xmlbase + metaid;
-		Resource ares = rdf.createResource(resuri);
+		Resource ares = assignMetaIDandCreateResourceForDataStructure(ds);
 		
 		// Set free-text annotation
 		setFreeTextAnnotationForObject(ds, ares);
@@ -165,6 +175,19 @@ public abstract class AbstractRDFwriter {
 		
 		// Include the necessary composite annotation info
 		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+	}
+	
+	
+	/**
+	 * @param ds A data structure
+	 * @return An RDF resource corresponding to the data structure that uses its
+	 * metadata id as the URI fragment
+	 */
+	protected Resource assignMetaIDandCreateResourceForDataStructure(DataStructure ds){
+		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
+		String resuri = xmlbase + metaid;
+		Resource ares = rdf.createResource(resuri);
+		return ares;
 	}
 	
 	
@@ -452,6 +475,31 @@ public abstract class AbstractRDFwriter {
 			}
 		}
 		return newuri;
+	}
+
+	/**
+		* Accessor for the rdf model.
+		* @return The Jena rdf model stored in this object.
+		*/
+	public Model getRDFModel() {
+		return rdf;
+	}
+
+	/**
+	 * Instsance-level method for getting the RDF content as a string.
+	 * @return A string containing the RDF content.
+	 */
+	public String getRDFString(String rdfxmlformat) {
+		return getRDFmodelAsString(rdf, rdfxmlformat);
+	}
+
+	/**
+	 * Instsance-level method for getting the RDF content as a string
+	 * (overload uses default format "RDF/XML-ABBREV").
+	 * @return A string containing the RDF content.
+	 */
+	public String getRDFString() {
+		return getRDFString("RDF/XML-ABBREV");
 	}
 	
 	

@@ -50,15 +50,13 @@ public class ModelExtractionGroup {
 
 		extractionnodes.get(extractionindex).Model = extractedmodel;
 		ExtractionNode extraction = new ExtractionNode(extractedmodel, extractionindex);
-		
-		
+
 		return extraction;
 	}
 	
 	public ExtractionNode removeNodesfromExtraction(Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
 		Extractor extractor = workbench.makeRemoveExtractor(extractionindex);
 		extractionnodes.get(extractionindex).setModel(doExtraction(extractor, nodestoadd));
-		
 		return extractionnodes.get(extractionindex).modelnode;
 	}
 	
@@ -88,11 +86,15 @@ public class ModelExtractionGroup {
 	}
 	
 	public ModelAccessor saveExtraction(Integer tosave) {
-			return workbench.saveModel(tosave);	
+			ModelAccessor ma = workbench.saveModel(tosave);
+			if(ma!=null) extractionnodes.get(tosave).setChangesSaved(true);
+			return ma;
 	}
 	
 	public ModelAccessor exportExtraction(Integer tosave) {
-		return workbench.saveModelAs(tosave);	
+		ModelAccessor ma = workbench.saveModelAs(tosave);	
+		extractionnodes.get(tosave).setChangesSaved(true);
+		return ma;	
 	}
 	
 	private SemSimModel doExtraction(Extractor extractor, ArrayList<Node<?>> nodestoextract) {

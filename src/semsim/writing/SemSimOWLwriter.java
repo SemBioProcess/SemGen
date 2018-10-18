@@ -25,12 +25,16 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
+import semsim.annotation.Relation;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.model.Importable;
@@ -79,6 +83,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		Set<OWLAxiom> allbaseaxioms = manager.loadOntologyFromOntologyDocument(in).getAxioms();
 		IRI ontiri = IRI.create(namespace.substring(0, namespace.length()-1));  // Gets rid of '#' at end of namespace
 		ont = manager.createOntology(allbaseaxioms, ontiri);
+		
 	}
 	
 	@Override 
@@ -113,15 +118,20 @@ public class SemSimOWLwriter extends ModelWriter {
 	/** @return An OWL_API:OWLOntology object representing the SemSim model
 	 * @throws OWLException
 	 */
-	private OWLOntology createOWLOntologyFromModel() throws OWLException{	
-		getLocalDataStuctures();
-		addUnits();	
-		addEvents();
-		addSBMLinitialAssignments();
-		addDataStructures();
-		setRelations();
-		addSubModels();
-		addPhysicalComponentAnnotations();
+	private OWLOntology createOWLOntologyFromModel(){	
+		try {
+			getLocalDataStuctures();
+			addUnits();	
+			addEvents();
+			addSBMLinitialAssignments();
+			addDataStructures();
+			setRelations();
+			addSubModels();
+			addPhysicalComponentAnnotations();
+		} catch (OWLException e) {
+			e.printStackTrace();
+		}
+		
 		addModelAnnotations();
 		
 		return ont;
@@ -649,19 +659,39 @@ public class SemSimOWLwriter extends ModelWriter {
 	 * Add the model's curational metadata
 	 * @throws OWLException
 	 */
-	private void addModelAnnotations() throws OWLException {
+	private void addModelAnnotations() {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
-		
-		if(semsimmodel.getLegacyCodeLocation()!=null)
+
+		if(semsimmodel.getLegacyCodeLocation()!=null){
+			ModelAccessor legacyma = semsimmodel.getLegacyCodeLocation();
+			String fileloc = legacyma.getFullPath();
+			
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
-					semsimmodel.getLegacyCodeLocation().getFilePath().toString(), manager);
+					fileloc, manager);
+		}
+
+		if(semsimmodel.hasMetadataID()) 
+			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_METADATA_ID.getIRI(), semsimmodel.getMetadataID(), manager);
+
+		if(semsimmodel.hasDescription())
+			SemSimOWLFactory.addOntologyAnnotation(ont, OWLRDFVocabulary.RDFS_COMMENT.getIRI(), semsimmodel.getDescription(), manager);
 		
-		ArrayList<Annotation> anns = semsimmodel.getCurationalMetadata().getAnnotationList();
-		anns.addAll(semsimmodel.getAnnotations());
 		
-		for(Annotation ann : anns){
-				String str = (String)ann.getValue();
-				SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);
+		// Write out reference ontology annotations. Because we can't use the same relation as an annotation property
+		// and as a datatype property. So we limit the model-level annotations to bqmodel qualifiers.
+		for(Annotation ann : semsimmodel.getAnnotations()){
+			String str;
+			
+			if(ann instanceof ReferenceOntologyAnnotation){
+				Relation rel = ann.getRelation();
+				
+				rel = SemSimRelations.getSynonymousModelLevelRelationForSemSimOWLwriting(rel);// Make sure to use any necessary synonymous relations for ontology-level annotations
+				
+				str = ((ReferenceOntologyAnnotation)ann).getReferenceURI().toString();
+			}
+			else str = ann.getValue().toString();
+
+			SemSimOWLFactory.addOntologyAnnotation(ont, ann.getRelation().getURI().toString(), str, "en", manager);
 		}
 	}
 	

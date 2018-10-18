@@ -16,7 +16,6 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 
-import semgen.SemGen;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
@@ -231,11 +230,7 @@ public class ModelAccessor {
 			pwriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			SemGen.logfilewriter.println(getShortLocation() + " write failed.");
 		}
-		
-		SemGen.logfilewriter.println(getShortLocation() + " was saved");
-		
 	}
 
 

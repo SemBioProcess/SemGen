@@ -11,7 +11,7 @@ function Graph() {
 	this.h = $(window).height();
 	//Ensure the stage has a minimum size.
 	if ((this.w < 1280) || (this.h < 1024)) {
-		this.worldsize = [[-1280*5, -1024*5], [1280*5, 1024*5]];	
+		this.worldsize = [[-1280*5, -1024*5], [1280*5, 1024*5]];
 	}
 	else {
 		this.worldsize = [[-this.w*5, -this.h*5], [this.w*5, this.h*5]];
@@ -21,20 +21,20 @@ function Graph() {
 	this.doodads = [];
 	this.defaultcursor = 'move';
 	$('#stage').css('cursor', graph.defaultcursor);
-	
+
 	var svg = d3.select("#stage")
-	    .append("svg")	    
+	    .append("svg")
 	    .attr("id", "svg")
 	    .attr("pointer-events", "all")
 	    .attr("perserveAspectRatio", "xMinYMid");
-	
+
 	var vis = svg.append('g').attr("class", "canvas");
-	
+
 	var centerx = new StageDoodad(this, "trash", 0.0, 0.0, 2.0, 2.0, "label", "X");
 	this.doodads.push(centerx);
-	
+
 	this.drag = NodeDrag();
-	
+
     this.force = d3.forceSimulation()
         .alphaMin(0.07)
         .velocityDecay(0.2)
@@ -48,9 +48,9 @@ function Graph() {
             { return d.length; })
             .strength(0.1)
         );
-    
-		
-	var links = this.force.force("link").links(); 
+
+
+	var links = this.force.force("link").links();
 
 	this.nodecharge = defaultcharge;
 	this.linklength = defaultlinklength;
@@ -61,13 +61,13 @@ function Graph() {
 	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true];
 	this.showorphans = false;
-	
+
 	this.depBehaviors = [];
 	this.ghostBehaviors = [];
-	
+
 	var nodes;
 	this.contextMenu = new ContextMenu(this);
-	
+
 	this.setTaskNodes = function(tasknodes) {
 		nodes = tasknodes;
 		graph.update();
@@ -76,7 +76,7 @@ function Graph() {
 	$('#stage').click(function() {
 		graph.contextMenu.hideMenu();
 	});
-	
+
 	svg.call(d3.zoom()
 			.scaleExtent([0.1, 10])
 			.translateExtent(graph.worldsize)
@@ -86,11 +86,11 @@ function Graph() {
 	        .on("dblclick.zoom", null);
 
 	$('#toggleMoveStageButton').addClass('on');
-	
+
 	$('#toggleMoveStageButton').click(function() {
 		$('#toggleMoveStageButton').addClass('on');
 		$('#toggleSelectButton').removeClass('on');
-		
+
 		graph.defaultcursor = 'move';
 		$('#stage').css('cursor', 'move');
 		svg.on('mousedown.drag', null);
@@ -101,13 +101,13 @@ function Graph() {
 						vis.attr("transform", d3.event.transform);
 		        }))
 		        .on("dblclick.zoom", null);
-	
+
 	});
-	
+
 	$('#toggleSelectButton').click(function() {
 		$('#toggleSelectButton').addClass('on');
 		$('#toggleMoveStageButton').removeClass('on');
-		
+
 		$('#stage').css('cursor', 'auto');
 		graph.defaultcursor = 'auto';
         d3.selectAll('.node').on('mousedown.drag', null);
@@ -124,9 +124,9 @@ function Graph() {
             .on("touchmove.zoom", null)
             .on("touchend.zoom", null);
 	});
-	
 
-	
+
+
 	this.getVisibleNodes = function() {
 		return visibleNodes;
 	}
@@ -167,15 +167,17 @@ function Graph() {
 	// Hide all visibleNodes of the given type
 	this.showNodes = function (type) {
 		this.nodesVisible[NodeTypeMap[type].id] = true;
-		this.update();
+        graph.delayfixonupdate = false;
+        this.update();
 	}
 
 	// Hide all visibleNodes of the given type
 	this.hideNodes = function (type) {
 		this.nodesVisible[NodeTypeMap[type].id] = false;
+        graph.delayfixonupdate = false;
 		this.update();
 	}
-	
+
 	var ghost;
 	this.createGhostNodes = function(nodes) {
 		var ghosts = [];
@@ -188,10 +190,10 @@ function Graph() {
 
 	    ghost.enter().append("g")
 	        .each(function (d) { d.createVisualElement(this, graph); });
-	    
+
 		return ghosts;
 	}
-	
+
 	/**
 	 * Updates the graph
 	 */
@@ -208,7 +210,7 @@ function Graph() {
 		// Build the ghost nodes
 	    ghost = vis.selectAll(".ghost")
 	        .data([], function(d) { return d.id; });
-	    
+
 		// Add the links
 		path = vis.selectAll(".link")
 			.data(links, function(d) { return d.id; });
@@ -233,7 +235,7 @@ function Graph() {
             this.force
                 .nodes(nodesToUpdate)
                 .on("tick", this.tick)
-                .alpha(1)
+                .alpha(0)
                 .restart();
         }
 
@@ -248,16 +250,36 @@ function Graph() {
 
         $(this).triggerHandler("postupdate");
         if (graph.fixedMode) {
-            var delay = 7000;
+            var delay = 5000;
             if (!graph.delayfixonupdate) {
-                delay = 25;
+                delay = 10;
             }
-	    	setTimeout(function() {
-	    		graph.pause();
-	    	}, delay);
-	    }
-	    graph.delayfixonupdate = true;
-	};
+            setTimeout(function() {
+                graph.pause();
+            }, delay);
+        }
+        graph.delayfixonupdate = true;
+
+        d3.selection.prototype.moveToFront = function() {
+            return this.each(function(){
+                this.parentNode.appendChild(this);
+            });
+        };
+        d3.selection.prototype.moveToBack = function() {
+            return this.each(function() {
+                var firstChild = this.parentNode.firstChild;
+                if (firstChild) {
+                    this.parentNode.insertBefore(this, firstChild);
+                }
+            });
+        };
+
+        vis.selectAll('.submodelNode').moveToFront();
+        vis.selectAll('.dependencyNode').moveToFront();
+        vis.selectAll('.hullOpen').moveToBack();
+        vis.selectAll('.modelNode').moveToBack();
+
+    };
 
 	// Brute force redraw
 	// Motivation:
@@ -299,7 +321,7 @@ function Graph() {
 				return false;
 			});
 		}
-		
+
 		svg.append('text')
 		   .attr("y", 0)
 		   .attr("x", 0)
@@ -313,7 +335,7 @@ function Graph() {
 
 	this.tick = function () {
         graph.hoverPause();
-        
+
         // Execute the tick handler for each link
 		path.enter().each(function (d) {
 			d.tickHandler(this, graph);
@@ -335,7 +357,7 @@ function Graph() {
 	    ghost = vis.selectAll(".ghost")
 	    	.data([], function(d) { return d.id; });
 	}
-	
+
 	// Find a node by its id
 	this.findNode = function(id) {
 		var nodewithid = null;
@@ -350,7 +372,7 @@ function Graph() {
 		}
 	   return nodewithid;
 	};
-	
+
 	// Find a visible node by its id
 	this.findVisibleNode = function(id) {
 	    for (var i in visibleNodes) {
@@ -425,10 +447,10 @@ function Graph() {
 		this.h = $(window).height();
 		svg.attr("width", this.w)
 	    	.attr("height", this.h);
-		
+
 		vis.attr("width", this.w)
     	.attr("height", this.h);
-		
+
 	}
 
 	this.setNodeCharge = function(charge) {
@@ -441,33 +463,33 @@ function Graph() {
 				d.defaultcharge = charge;
 			});
 		};
-		
+
 		this.update();
 
 	}
-	
+
 	this.setLinkLength = function(length) {
 		if (isNaN(length)) return;
 		graph.linklength = length;
 		for (l in links) {
 			links[l].length = length;
 		};
-		
+
 		this.update();
 
 	}
-	
+
 	this.setChargeDistance = function(dist) {
 		if (isNaN(dist)) return;
 		this.force.force("charge").distanceMax(dist);
-		
+
 		this.update();
 
 	}
 
 	this.toggleFixedMode = function(setfixed) {
 		this.fixedMode = setfixed;
-		
+
 		if (setfixed) {
 			this.pause();
 		}
@@ -475,7 +497,7 @@ function Graph() {
 		    this.resume();
 		    this.tick();
 		}
-		
+
 	}
 
 	this.toggleGravity = function(enabled) {
@@ -503,7 +525,7 @@ function Graph() {
 	this.setFriction = function(friction) {
 		this.force.velocityDecay(friction);
 	}
-	
+
 	//Get the coordinates for the center of the graph
 	this.getCenter = function() {
 		return [this.w/2, this.h/2];
@@ -536,8 +558,8 @@ function Graph() {
     	.restart();
 		graph.paused = false;
 	}
-	
-	
+
+
 
 	this.isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 	this.cntrlIsPressed = false;
@@ -547,19 +569,24 @@ function Graph() {
 	//Bind keyboard events
 	$(document).keyup(function(event){
 		if(graph.isMac) {
-            if(event.which=="91")
+            if (event.which == "91" || event.which == "93") {
                 graph.cntrlIsPressed = false;
-		}
-        if(event.which=="17") {
-            graph.cntrlIsPressed = false;
-            graph.cntrlIsPressedOnMac = false;
-		}
-		if(event.which=="16") {
-			graph.shiftIsPressed = false;
-			$('#stage').css('cursor', graph.defaultcursor);
-		}
-			
-		if(event.which=="32") {
+            }
+            if (event.which == "17") {
+                graph.cntrlIsPressedOnMac = false;
+            }
+        }
+		else {
+            if (event.which == "17") {
+                graph.cntrlIsPressed = false;
+            }
+        }
+        if (event.which == "16") {
+            graph.shiftIsPressed = false;
+            $('#stage').css('cursor', graph.defaultcursor);
+        }
+
+        if (event.which == "32") {
             if (!$(event.target).closest(".searchString").length) {
                 graph.fixedMode = !graph.fixedMode;
                 $("#fixedNodes").attr('checked', graph.fixedMode);
@@ -568,13 +595,14 @@ function Graph() {
                 else graph.resume();
             }
         }
-	});
-	
-	
+    });
+
+
 	$(document).keydown(function(event){
         if(graph.isMac) {
-            if(event.metaKey)
+            if(event.which == "91" || event.which == "93") {
                 graph.cntrlIsPressed = true;
+            }
             if(event.which=="17") {
                 graph.cntrlIsPressedOnMac = true;
             }
@@ -582,13 +610,13 @@ function Graph() {
         else {
             if(event.which=="17")
                 graph.cntrlIsPressed = true;
-        }		
+        }
         if(event.which=="16") {
 			graph.shiftIsPressed = true;
 			$('#stage').css('cursor', 'crosshair');
         }
 	});
-		
+
 	this.updateHeightAndWidth();
 	// Run it
 	this.update();

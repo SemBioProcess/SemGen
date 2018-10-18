@@ -66,6 +66,8 @@ public class SemGenError {
 					if (e.isfatal) fatalerror = true;
 				}
 			}
+			
+			System.err.println(message);
 			JOptionPane.showMessageDialog(parent, message,
 				"SemSim Error", JOptionPane.ERROR_MESSAGE);
 			return fatalerror;
