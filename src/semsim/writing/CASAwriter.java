@@ -227,7 +227,9 @@ public class CASAwriter extends AbstractRDFwriter{
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
 		if(ds.hasPhysicalProperty()){
 			Property iccfprop = SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty();
-			Resource propres = rdf.getResource(ds.getPhysicalProperty().getPhysicalDefinitionURI().toString());
+			URI physpropuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
+			physpropuri = convertURItoIdentifiersDotOrgFormat(physpropuri);
+			Resource propres = rdf.getResource(physpropuri.toString());
 			Statement st = rdf.createStatement(ares, iccfprop, propres);
 			
 			addStatement(st);
