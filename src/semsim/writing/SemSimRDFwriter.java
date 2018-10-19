@@ -111,7 +111,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	
 	// Add model-level annotations 
 	@Override
-	protected void setRDFforModelLevelAnnotations(){
+	public void setRDFforModelLevelAnnotations(){
 		
 		String modelmetaid = semsimmodel.hasMetadataID() ?  semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
 		

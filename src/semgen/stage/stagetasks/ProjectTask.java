@@ -1,6 +1,5 @@
 package semgen.stage.stagetasks;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -14,6 +13,7 @@ import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.loadTask;
 import semgen.SemGenGUI.saveTask;
+import semgen.search.BioModelsSearch;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
@@ -28,6 +28,9 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
+import uk.ac.ebi.biomodels.ws.BioModelsWSException;
+
+import java.io.*;
 
 public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	
@@ -45,12 +48,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	 *
 	 */
 	public class ProjectCommandReceiver extends CommunicatingWebBrowserCommandReceiver {
-		
+
 		public void onInitialized(JSObject jstaskobj) {
 			jstask = jstaskobj;
 		}
-		
-		
+
+
 		/**
 		 * Receives the add model command
 		 */
@@ -59,7 +62,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 			for (ModelAccessor accessor : sgc.getSelectedFilesAsModelAccessors()) {
 				boolean alreadyopen = false;
-								
+
 				for (ModelInfo info : _modelinfos) {
 					if (info != null) {
 						if (info.accessor != null) {
@@ -74,12 +77,26 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				loadtask.execute();
 			}
 		}
-		
-		// For loading models in the examples folder
-		public void onAddModelByName(String source, String modelName) throws FileNotFoundException {
-			
-			if(source.equals(CompositeAnnotationSearch.SourceName)) {
-				ModelAccessor accessor = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+
+		public void onAddModelByName(String source, String modelName) throws IOException, BioModelsWSException {
+			ModelAccessor accessor = null;
+			if (source.equals(CompositeAnnotationSearch.SourceName)) {
+				accessor = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
+			}
+			else if (source.equals("BioModels")) {
+				System.out.println("Retrieving SBML file from BioModels...");
+
+				String tempPath = System.getProperty("java.io.tmpdir") + File.separator + modelName + ".xml";
+				File tempBioModelFile = new File(tempPath);
+				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
+				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
+
+				bw.write(bioModelString);
+				bw.close();
+				accessor = FileAccessorFactory.getModelAccessor(tempBioModelFile.getPath());
+				tempBioModelFile.deleteOnExit();
+			}
+			if (accessor != null) {
 				loadTask loadtask = new loadTask(accessor, ProjectTask.this);
 				loadtask.execute();
 			}
@@ -101,7 +118,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					saveModels(modelindex);
 					break;
 				case "export":
-					exportModels(modelindex);				
+					exportModels(modelindex);
 					break;
 				case "close":
 					closeModels(modelindex);					
@@ -112,41 +129,51 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 
 		}
-		
-		
-		
+
+
+
 		public void onCloseModels(JSArray modelindex) {
 			closeModels(modelindex);
 		}
 
-		public void onSearch(String searchString) throws FileNotFoundException {
+		public void onSearch(String searchString) throws Exception {
 			SearchResultSet[] resultSets = {
-					CompositeAnnotationSearch.compositeAnnotationSearch(searchString),
-					// PMR results here
+					CompositeAnnotationSearch.compositeAnnotationSearch(searchString)
 			};
-
 			_commandSender.search(resultSets);
 		}
-		
+
+		public void onBioModelsSearch(String searchString) throws Exception {
+			SearchResultSet[] resultSets = {
+					BioModelsSearch.bioModelsSearch(searchString)
+			};
+			_commandSender.search(resultSets);
+		}
+
+		public void onGetModelAbstract(String modelName) throws BioModelsWSException {
+			String bioModelAbstract = BioModelsSearch.findPubmedAbstract(modelName);
+			_commandSender.showModelAbstract(bioModelAbstract);
+		}
+
 		public void onMerge(JSArray model1, JSArray model2) {
 			createMerger(model1, model2);
 		}
-		
-		
+
+
 		public void onQueryModel(Integer modelindex, String query) {
 			ModelInfo modelInfo = _modelinfos.get(modelindex);
 			switch (query) {
-			case "hassubmodels":
-				Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
-				_commandSender.receiveReply(hassubmodels.toString());
-				break;
-			case "hasdependencies":
-				Boolean hasdependencies = !modelInfo.Model.getAssociatedDataStructures().isEmpty();
-				_commandSender.receiveReply(hasdependencies.toString());
-				break;
+				case "hassubmodels":
+					Boolean hassubmodels = !modelInfo.Model.getSubmodels().isEmpty();
+					_commandSender.receiveReply(hassubmodels.toString());
+					break;
+				case "hasdependencies":
+					Boolean hasdependencies = !modelInfo.Model.getAssociatedDataStructures().isEmpty();
+					_commandSender.receiveReply(hasdependencies.toString());
+					break;
 			}
 		}
-		
+
 		public void onRequestExtractions() {
 			ArrayList<ArrayList<ExtractionNode>> extractions = new ArrayList<ArrayList<ExtractionNode>>();
 			for (ModelExtractionGroup meg : extractnodeworkbenchmap) {
@@ -156,85 +183,85 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				else {
 					extractions.add(null);
 				}
-				
+
 			}
-				_commandSender.loadExtractions(extractions);
+			_commandSender.loadExtractions(extractions);
 		}
-		
+
 		//Each possible extraction task needs two methods, one for submodels and data structures and another
 		//for physiomap based extractions 
-		
+
 		public void onNewExtraction(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 			createNewExtraction(sourceindex.intValue(), jnodes, extractname);
 		}
-		
+
 		public void onNewPhysioExtraction(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			createNewExtraction(sourceindex.intValue(), jnodes, extractname);
 		}
-		
+
 		public void onCreateExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
 		}
-		
+
 		public void onCreatePhysioExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
 			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
 		}
-		
+
 		public void onRemoveNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes, sourceindex, extraction);
 			removeNodesfromExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
 		}
-		
+
 		public void onRemovePhysioNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
 			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes,sourceindex, extraction);
 			removeNodesfromExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
 		}
-		
+
 		public void onAddNodestoExtraction(Double sourceindex, Double extraction, JSArray nodes) {
 			ArrayList<Node<?>> jnodes = convertJSStageNodestoJava(nodes);
 			addNodestoExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
-			
+
 		}
-		
+
 		public void onAddPhysioNodestoExtraction(Double sourceindex, Double extraction, JSArray nodes) {
 			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
 			addNodestoExtraction(sourceindex.intValue(), extraction.intValue(), jnodes);
-			
+
 		}
-		
+
 		public void onSave(JSArray indicies) {
 			saveModels(indicies);
 		}
-		
+
 		public void onChangeTask(Double index) {
 			switchTask(index.intValue());
 		}
-		
+
 		public void onConsoleOut(String msg) {
 			System.out.println(msg);
 		}
-		
+
 		public void onConsoleOut(Double msg) {
 			System.out.println(msg.toString());
 		}
-		
+
 		public void onConsoleOut(boolean msg) {
 			System.out.println(msg);
 		}
 	}
-	
+
 	protected void annotateModels(JSArray indicies) {
 		for (int i=0; i < indicies.length(); i++) {
 			JSArray address = indicies.get(i).asArray();
 			int indexedtomodel = address.get(0).asNumber().getInteger();
 			int modelindex = address.get(1).asNumber().getInteger();
-			
-			
-			ModelAccessor accessor = null;	
+
+
+			ModelAccessor accessor = null;
 			if (indexedtomodel==-1) {
 				accessor = _modelinfos.get(modelindex).accessor;
 			}
@@ -248,27 +275,27 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			SemGen.gacts.NewAnnotatorTab(accessor);
 		}
 	}
-	
+
 	protected void exportModels(JSArray indicies) {
-		
+
 		for (int i=0; i < indicies.length(); i++) {
 			StageRootInfo<?> modelinfo = null;
 			JSArray address = indicies.get(i).asArray();
 			int indexedtomodel = address.get(0).asNumber().getInteger();
 			int modelindex = address.get(1).asNumber().getInteger();
-			
+
 			if (indexedtomodel==-1) {
 				modelinfo = this.getModel(modelindex);
 				String selectedtype = "owl";  // Default extension type
 				ModelType modtype = modelinfo.Model.getSourceModelType();
-				
+
 				if(modtype==ModelType.MML_MODEL_IN_PROJ || modtype==ModelType.MML_MODEL) selectedtype = "proj";
 				else if(modtype==ModelType.CELLML_MODEL) selectedtype = "cellml";
 				else if(modtype==ModelType.SBML_MODEL) selectedtype = "sbml";
-				
+
 				String suggestedparentfilename = FilenameUtils.removeExtension(modelinfo.accessor.getFileName());
 				String modelnameinarchive = modelinfo.accessor.getFileName();
-				
+
 				SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, selectedtype, modelnameinarchive, suggestedparentfilename);
 				ModelAccessor ma = filec.SaveAsAction(modelinfo.Model);
 			
@@ -285,14 +312,14 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}			
 	}
-	
+
 	protected void saveModels(JSArray indicies) {
 		for (int i = 0; i < indicies.length(); i++) {
 			JSArray saveset = indicies.get(i).asArray();
 			Integer basemodelindex = saveset.get(0).asNumber().getInteger();
 			Integer targetindex = saveset.get(1).asNumber().getInteger();
 			if (basemodelindex==-1) {
-				
+
 			}
 			else {
 				if (this.extractnodeworkbenchmap.get(basemodelindex)!=null) {
@@ -356,17 +383,17 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		return false;
 		
 	}
-	
+
 	@Override
 	public void addModeltoTask(ModelInfo info, boolean updatestage) {
 		extractnodeworkbenchmap.add(new ModelExtractionGroup(info));
 		super.addModeltoTask(info, updatestage);
 	}
-	
+
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+
 	}
 
 	@Override
@@ -382,10 +409,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 	@Override
 	public void closeTask() {
-		
+
 	}
-	
-	
+
+
 	//EXTRACTION FUNCTIONS
 	public void createNewExtraction(Integer infoindex, ArrayList<Node<?>> nodestoextract, String extractname) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
@@ -394,33 +421,33 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.newExtraction(infoindex, extraction);
 		}
 		else SemGenError.showError("Empty Model", "Attempted extraction results in an empty model");
-	}	
-	
+	}
+
 	//Create an extraction including all nodes except those selected
 	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.createExtractionExcluding(extractname, nodestoexclude);
 		_commandSender.newExtraction(infoindex, extraction);
 	}
-	
+
 	//Add nodes to an existing extraction
 	public void addNodestoExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.addNodestoExtraction(extractionindex, nodestoadd);
-		
+
 		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
 	}
-	
+
 	//Remove nodes from existing extraction
 	public void removeNodesfromExtraction(Integer infoindex, Integer extractionindex, ArrayList<Node<?>> nodestoremove) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.removeNodesfromExtraction(extractionindex, nodestoremove);
 		_commandSender.modifyExtraction(infoindex, extractionindex, extraction);
 	}
-	
+
 	//Close an extraction on the stage
-	protected void removeExtraction(Double sourceindex, Double indextoremove) {		
-		this.extractnodeworkbenchmap.get(sourceindex.intValue()).removeExtraction(indextoremove.intValue());	
+	protected void removeExtraction(Double sourceindex, Double indextoremove) {
+		this.extractnodeworkbenchmap.get(sourceindex.intValue()).removeExtraction(indextoremove.intValue());
 	}
 
 	//Convert Javascript Node objects to Java Node objects

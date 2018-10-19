@@ -14,6 +14,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 
 /**
@@ -26,10 +27,24 @@ public abstract class ModelWriter {
 	protected SemSimModel semsimmodel;
 	protected File srcfile;
 	public ModelAccessor writelocation;
+	// casa flag, set to true automatically when output
+	// is an omex or can be manually overridden
+	protected boolean useCASA = false;
 	
 	ModelWriter(SemSimModel model) {
 		semsimmodel = model;
 		if(sslib==null) sslib = new SemSimLibrary();
+		useCASA = false;
+	}
+
+	/**
+	 * Override the value of useCASA, to allow outputing CASA
+	 * even in the absence of an omex archive.
+	 */
+	ModelWriter(SemSimModel model, boolean CASA) {
+		semsimmodel = model;
+		if(sslib==null) sslib = new SemSimLibrary();
+		useCASA = CASA;
 	}
 	
 	/**
@@ -101,17 +116,28 @@ public abstract class ModelWriter {
 	
 	
 	/**
-	 * Set the location for writing the translated code
+	 * Set the location for writing the translated code.
+	 * If the location is an omex archive, enable CASA annotations.
 	 * @param ma Location to store the code
 	 */
 	public void setWriteLocation(ModelAccessor ma){
 		writelocation = ma;
+		if (ma instanceof OMEXAccessor) {
+			useCASA = true;
+		} else {
+			useCASA = false;
+		}
 	}
 	
 	
 	/** @return Location where the translated code will be stored */
 	public ModelAccessor getWriteLocation(){
 		return writelocation;
+	}
+
+	/** Returns true if the casa flag is enabled, false otherwise. */
+	public boolean CASAEnabled() {
+		return useCASA;
 	}
 	
 }

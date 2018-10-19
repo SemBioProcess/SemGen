@@ -37,7 +37,12 @@ function Stage(graph, stagestate) {
 	receiver.onAddModel(function (model) {
 		console.log("Adding model " + model.name);
 		var modelnode = stage.addModelNode(model, [DragToMerge]);
-		stage.extractions[modelnode.modelindex] = {modextractions: []};
+
+        if (modelnode.getAllChildNodes().length > 100) {
+            window.alert("This model contains over 100 elements. Visualizations may take longer to load.");
+        }
+
+        stage.extractions[modelnode.modelindex] = {modextractions: []};
 		stage.leftsidebar.addModeltoList(model);
 	});
 
@@ -89,10 +94,25 @@ function Stage(graph, stagestate) {
 		sender.addModel();
 	});
 
+    var timer;
+    $(".stageSearch").on("mouseover", function() {
+        clearTimeout(timer);
+        openSearch();
+    }).on("mouseleave", function() {
+        timer = setTimeout(
+            closeSearch
+            , 500);
+    });
+
 	// When you mouseover the search element show the search box and results
-	$(".stageSearch").mouseover(function (){
+	function openSearch() {
 		$(".stageSearch .searchValueContainer").css('display', 'inline-block');
-	});
+    }
+
+    // When you mouseout of the search element hide the search box and results
+	function closeSearch() {
+		$(".stageSearch .searchValueContainer").hide();
+    }
 
 	// Filter stuff for searching
     $(".dropdown-toggle").click(function(e) {
@@ -103,7 +123,9 @@ function Stage(graph, stagestate) {
 
     $("#checkAll").click(function () {
         $(".searchDropDownMenu input:checkbox").not(this).prop('checked', this.checked);
-        stage.stageSearch($(".searchString").val());
+        if($(".searchString".val())) {
+            stage.stageSearch($(".searchString").val());
+        }
     });
     $(".searchDropDownMenu input:checkbox:not(#checkAll)").change(function () {
         if ($(".searchDropDownMenu input:checkbox:not(#checkAll):checked").length ==
@@ -114,45 +136,49 @@ function Stage(graph, stagestate) {
 	});
 
     $(".searchDropDownMenu input:checkbox").change(function () {
-    	stage.stageSearch($(".searchString").val());
-	});
-
-	// When you mouseout of the search element hide the search box and results
-	$(".stageSearch").mouseout(function (){
-		$(".stageSearch .searchValueContainer").hide();
+        if($(".searchString".val())) {
+            stage.stageSearch($(".searchString").val());
+        }
 	});
 
 	$(".searchString").keyup(function() {
-		stage.stageSearch($(this).val());
-	});
-
-	this.stageSearch = function(searchString) {
-        if( searchString ) {
-            console.log("Showing search results");
-            $(".stageSearch .searchValueContainer .searchResults").show();
+        searchString = $(this).val();
+        if (searchString && event.keyCode === 13) {
             $(".searchResults").empty();
+            $(".stageSearch .searchValueContainer .searchResults").show();
 
-            // Check search filter
-            var modelSearchChecked = $("#checkModel").is(':checked');
-            var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
-            var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
-
-            if (modelSearchChecked) {
-                sender.search(searchString);
-            }
-
-            // Search for nodes in Project Tab
-            if (nodeNameSearchChecked) {
-                stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
-            }
-            if (nodeDescSearchChecked) {
-                stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
-            }
+            stage.stageSearch(searchString);
         }
         else {
             $(".stageSearch .searchValueContainer .searchResults").hide();
         }
-	}
+    });
+
+    this.stageSearch = function(searchString) {
+        console.log("Showing search results");
+
+        // Check search filter
+        var modelSearchChecked = $("#checkModel").is(':checked');
+        var bioModelSearchChecked = $("#checkBioModels").is(':checked');
+        var nodeNameSearchChecked = $("#checkNodeName").is(':checked');
+        var nodeDescSearchChecked = $("#checkNodeDesc").is(':checked');
+
+        if (modelSearchChecked) {
+            sender.search(searchString);
+        }
+
+        if (bioModelSearchChecked) {
+			sender.bioModelsSearch(searchString);
+        }
+
+        // Search for nodes in Project Tab
+        if (nodeNameSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "label");
+        }
+        if (nodeDescSearchChecked) {
+            stage.nodeSearch(graph.getVisibleNodes(), searchString, "description");
+        }
+    }
 
 	this.nodeSearch = function(visibleNodes, searchString, filter) {
         var nodeSearchResultSet = {};
@@ -468,6 +494,9 @@ function makeResultSet(searchResultSet, stage) {
         if (searchResultSet.source == "Example models") {
             item.appendChild(document.createTextNode(searchResultSet.results[i]));
         }
+        else if (searchResultSet.source == "BioModels") {
+        	item.appendChild(document.createTextNode(searchResultSet.results[i]));
+		}
         else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
         }
@@ -476,6 +505,23 @@ function makeResultSet(searchResultSet, stage) {
         $(item).data("source", searchResultSet.source);
         $(item).data("name", searchResultSet.results[i]);
         $(item).data("id", searchResultSet.results[i][2]);
+
+        var delay = 1000, setTimeoutConst;
+        $(item).hover(function() {
+            var source = $(this).data("source");
+            var name = $(this).data("name");
+            if (source == "BioModels") {
+                setTimeoutConst = setTimeout(function () {
+                    sender.getModelAbstract(name);
+                    receiver.onShowModelAbstract(function (bioModelAbstract) {
+                        window.alert(bioModelAbstract);
+                    });
+                }, delay);
+			}
+		}, function() {
+        	clearTimeout(setTimeoutConst);
+		});
+
         $(item).click(function() {
             var source = $(this).data("source");
             var name = $(this).data("name");
@@ -483,9 +529,12 @@ function makeResultSet(searchResultSet, stage) {
             if (source == "Example models") {
                 sender.addModelByName(source, name);
             }
+            else if (source == "BioModels") {
+				sender.addModelByName(source, name);
+            }
             else if (source.includes("Nodes in Project")) {
                 var visibleNodes = stage.graph.getVisibleNodes();
-                var node = visibleNodes.filter(function ( node ) {
+                var node = visibleNodes.filter(function (node) {
                     return node.id === id;
                 })[0];
 				node.onClick();
