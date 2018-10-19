@@ -156,7 +156,7 @@ public class OMEXArchiveWriter {
         
         Element root = doc.getRootElement();//.getChild("omexManifest");
         
-        Element newentry = new Element("content", "http://identifiers.org/combine.specifications/omex-manifest");
+        Element newentry = new Element("content", "https://identifiers.org/combine.specifications/omex-manifest");
         newentry.setAttribute("location", "./" + modelfile.toString());
         newentry.setAttribute("format", type.getFormat());
         

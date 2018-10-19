@@ -69,10 +69,10 @@ public class OMEXArchiveBuilder {
 	 * @return A basic OMEX manifest file as a JDOM Document object
 	 */
 	private Document buildManifest() {
-		Element root = new Element("omexManifest", "http://identifiers.org/combine.specifications/omex-manifest");
+		Element root = new Element("omexManifest", "https://identifiers.org/combine.specifications/omex-manifest");
 		
-		addManifestElement(root, ".", "http://identifiers.org/combine.specifications/omex");
-		addManifestElement(root, "./manifest.xml", "http://identifiers.org/combine.specifications/omex-manifest");
+		addManifestElement(root, ".", "https://identifiers.org/combine.specifications/omex");
+		addManifestElement(root, "./manifest.xml", "https://identifiers.org/combine.specifications/omex-manifest");
 				
 		Document manifest = new Document(root);
 		

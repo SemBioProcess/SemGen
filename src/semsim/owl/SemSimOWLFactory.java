@@ -794,7 +794,7 @@ public class SemSimOWLFactory {
 				result = iri.substring(iri.lastIndexOf("#") + 1, iri.length());
 			else if (iri.contains("/"))
 				result = iri.substring(iri.lastIndexOf("/") + 1, iri.length());
-			else if (iri.startsWith("http://identifiers.org"))
+			else if (iri.contains("://identifiers.org"))
 				result = iri.substring(iri.lastIndexOf("/") + 1, iri.length());
 			else if (iri.startsWith("urn:miriam:"))
 				result = iri.substring(iri.lastIndexOf(":") + 1, iri.length());

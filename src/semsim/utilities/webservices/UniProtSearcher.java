@@ -51,7 +51,7 @@ public class UniProtSearcher {
 			name = name + " (" + id + ")";
 			name = name.trim();
 			
-			String uristring = "http://identifiers.org/uniprot/" + id;
+			String uristring = "https://identifiers.org/uniprot/" + id;
 			idnamemap.put(name, uristring);
 		}
 		s.close();

@@ -426,7 +426,7 @@ public abstract class AbstractRDFwriter {
 		String namespace = SemSimOWLFactory.getNamespaceFromIRI(uri.toString());
 
 		// If we are looking at a URI that is NOT formatted according to identifiers.org
-		if( ! uri.toString().startsWith("http://identifiers.org") 
+		if( ! uri.toString().contains("://identifiers.org") 
 				&& ReferenceOntologies.getReferenceOntologyByNamespace(namespace) != ReferenceOntology.UNKNOWN){
 			
 			ReferenceOntology refont = ReferenceOntologies.getReferenceOntologyByNamespace(namespace);
@@ -435,7 +435,7 @@ public abstract class AbstractRDFwriter {
 			
 			// Look up identifiers.org namespace
 			for(String ns : refont.getNamespaces()){
-				if(ns.startsWith("http://identifiers.org") && ! ns.startsWith("http://identifiers.org/obo.")){
+				if(ns.contains("://identifiers.org") && ! ns.contains("://identifiers.org/obo.")){
 					newnamespace = ns;
 					break;
 				}

@@ -39,7 +39,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 				return;
 			}
 			// If an identifiers.org URI is used, just treat the identifier as the URL
-			if(termuri.toString().startsWith("http://identifiers.org")) BrowserLauncher.openURL(termuri.toString());
+			if(termuri.toString().contains("://identifiers.org")) BrowserLauncher.openURL(termuri.toString());
 
 			// ...else, if it's a UNIPROT term...
 			else if(ont == ReferenceOntology.UNIPROT.getAsOntology()){

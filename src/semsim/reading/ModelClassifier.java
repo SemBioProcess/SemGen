@@ -28,12 +28,12 @@ public class ModelClassifier {
 	 */
 	public static enum ModelType{
 		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
-		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
-		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml", "omex")), 
+		SBML_MODEL(".sbml", new String[]{"https://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
+		CELLML_MODEL(".cellml", new String[]{"https://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml", "omex")), 
 		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
 		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
-		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
-		CASA_FILE(".casa", new String[]{"http://identifiers.org/combine.specifications/omex-metadata"},null),
+		OMEX_ARCHIVE(".omex", new String[]{"https://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
+		CASA_FILE(".casa", new String[]{"https://identifiers.org/combine.specifications/omex-metadata"},null),
 		UNKNOWN("null", new String[]{"null/null"}, null);
 		
 		private String extension;
@@ -194,7 +194,7 @@ public class ModelClassifier {
 	 * Verify that a given file name ends with an extension that has a corresponding
 	 * OMEX format identifier
 	 * @param filename A filename
-	 * @param format An OMEX format (e.g. "http://identifiers.org/combine.specifications/sbml")
+	 * @param format An OMEX format (e.g. "https://identifiers.org/combine.specifications/sbml")
 	 * @return Whether the extension on the file name is associated with the input OMEX format
 	 */
 	public static boolean hasValidFileExtension(String filename, String format) {
@@ -211,7 +211,7 @@ public class ModelClassifier {
 	
 	
 	/**
-	 * @param formatstring An OMEX file format (e.g. "http://identifiers.org/combine.specifications/sbml")
+	 * @param formatstring An OMEX file format (e.g. "https://identifiers.org/combine.specifications/sbml")
 	 * @return The ModelType associated with the input format
 	 */
 	public static ModelType getTypebyFormat(String formatstring) {
@@ -260,6 +260,8 @@ public class ModelClassifier {
 	 * @return Whether the input file format is a valid OMEX annotation file format
 	 */
 	public static boolean hasValidOMEXannotationFileFormat(String format) {
-		return format.endsWith("casa") || format.equals("http://identifiers.org/combine.specifications/omex-metadata");
+		return format.endsWith("casa") || 
+				format.equals("http://identifiers.org/combine.specifications/omex-metadata") || 
+				format.equals("https://identifiers.org/combine.specifications/omex-metadata");
 	}
 }
