@@ -259,6 +259,17 @@ public abstract class SemSimCollection extends SemSimObject{
 	public ArrayList<DataStructure> getAssociatedDataStructures(){
 		return dataStructures;
 	}
+
+	/** @return The {@link DataStructure} corresponding to the given name,
+   *   or null if it does not exist. */
+	public DataStructure getDataStructureForName(String name){
+		for(DataStructure ds : getAssociatedDataStructures()) {
+			if (ds.getName().equals(name)) {
+				return ds;
+			}
+		}
+		return null;
+	}
 	
 	/** @return A set of all the names of DataStructures contained in the model. */
 	public Set<String> getDataStructureNames(){
