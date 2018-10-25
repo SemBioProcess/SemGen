@@ -150,7 +150,7 @@ public abstract class AbstractRDFwriter {
 	
 	
 	/** Add RDF statements that capture all annotations on all data structures in a SemSim model */
-	public void setRDFforDataStructureAnnotations(){
+	protected void setRDFforDataStructureAnnotations(){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			setRDFforDataStructureAnnotations(ds);
