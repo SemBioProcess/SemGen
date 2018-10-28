@@ -58,8 +58,8 @@ function Graph() {
 
 	this.fixedMode = false;
 	this.delayfixonupdate = true; //Overrides the graph's default behavior to run for a short period on update even when fixedMode is active.
-	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified
-	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true];
+	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified, force
+	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true, true];
 	this.showorphans = false;
 
 	this.depBehaviors = [];

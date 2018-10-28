@@ -14,7 +14,7 @@ function PreviewGraph(id) {
     this.nodecharge = -800;
     this.linklength =50;
 	this.depBehaviors = [];
-	this.nodesVisible = [true, true, true, true, true, true, true, true, true];
+    this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true, true];
 	this.active = true;
 	this.drag = NodeDrag();
 	

@@ -90,7 +90,7 @@ ModelNode.prototype.createVisualization = function (modeid, expand) {
         var dependencies = {};
 
         this.globalApply(function (node) {
-            if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE) {
+            if (node.nodeType == NodeType.STATE || node.nodeType == NodeType.RATE || node.nodeType == NodeType.CONSTITUTIVE || node.nodeType == NodeType.FORCE) {
                 dependencies[node.name] = node;
                 node.parent = modelnode;
             }
