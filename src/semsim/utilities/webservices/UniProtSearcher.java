@@ -2,6 +2,7 @@ package semsim.utilities.webservices;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,7 @@ public class UniProtSearcher {
 	public HashMap<String,String> search(String thestring) throws JDOMException, IOException{
 		HashMap<String,String> idnamemap = new HashMap<String,String>();
 		thestring = thestring.replace(" ", "%20");
-		URL url = new URL("http://www.uniprot.org/uniprot/?query=reviewed:yes+AND+name:" + thestring + "*&format=tab&columns=id,protein%20names");
+		URL url = new URL("https://www.uniprot.org/uniprot/?query=reviewed:yes+AND+name:" + thestring + "*&format=tab&columns=id,protein%20names,organism");
 		System.out.println(url.toString());
 		// Use +AND+created:[current TO *] ??? (created in the current UniProtKB/Swiss-Prot release)
 		
@@ -43,12 +44,18 @@ public class UniProtSearcher {
 		Scanner s = new Scanner(is);
 		s.useDelimiter("\\A");
 		while(s.hasNext()){
+			
 			String line = s.nextLine();
-			String id = line.substring(0,line.indexOf("\t"));
-			String name = line.substring(line.indexOf("\t"),line.length());
+			
+			StringTokenizer tokenizer = new StringTokenizer(line,"\t");
+			String id = tokenizer.nextToken();
+			String name = tokenizer.nextToken();
+			String organism = tokenizer.nextToken();
+			
+			if(id.equals("Entry")) continue;
 			
 			// append name with ID because sometimes UNIPROT names aren't unique
-			name = name + " (" + id + ")";
+			name = name + " | " + id + " | " + organism;
 			name = name.trim();
 			
 			String uristring = "https://identifiers.org/uniprot/" + id;
@@ -68,7 +75,7 @@ public class UniProtSearcher {
 	 */
 	public static String getPreferredNameForID(String ID) throws IOException, JDOMException{
 		String name = null;
-		URL url = new URL("http://www.uniprot.org/uniprot/" + ID + ".xml");
+		URL url = new URL("https://www.uniprot.org/uniprot/" + ID + ".xml");
 		BufferedReader in = new BufferedReader(new InputStreamReader(getInputStreamFromURL(url)));
 		Document doc = new SAXBuilder().build(in);
 		in.close();

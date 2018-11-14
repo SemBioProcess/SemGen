@@ -67,7 +67,6 @@ import semsim.fileaccessors.OMEXAccessor;
 import semsim.definitions.ReferenceOntologies.OntologyDomain;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.model.collection.SemSimModel;
-import semsim.model.collection.Submodel;
 import semsim.model.computational.EventAssignment;
 import semsim.model.computational.RelationalConstraint;
 import semsim.model.computational.SBMLInitialAssignment;
@@ -762,13 +761,16 @@ public class SBMLreader extends ModelReader{
 			else if (compartmentent!=null) { 
 				rellist.add(StructuralRelation.PART_OF);
 				entlist.add(compartmentent); 
-				}
+			}
 			
 			CompositePhysicalEntity compositeent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 			ds.setAssociatedPhysicalModelComponent(compositeent);
 			speciesAndEntitiesMap.put(species.getId(), compositeent);
-						
-			collectSBaseData(species, speciesent);
+			
+			if(speciesent instanceof ReferencePhysicalEntity)
+				// We don't add the notes here, because if the species is defined against a reference term, the description of the reference term should be used
+				addMetadataID(species, speciesent);
+			else collectSBaseData(species, speciesent);
 		}
 	}
 	
@@ -1289,7 +1291,7 @@ public class SBMLreader extends ModelReader{
 	 * @param sbmlobject An SBase SBML object
 	 * @param semsimobject The SemSimObject representing the SBase object
 	 */
-	private void addNotes(SBase sbmlobject, SemSimObject semsimobject){
+	protected void addNotes(SBase sbmlobject, SemSimObject semsimobject){
 				
 		if(sbmlobject.isSetNotes()){
 				
@@ -1297,6 +1299,9 @@ public class SBMLreader extends ModelReader{
 				String desc = sbmlobject.getNotesString();
 				desc = desc.replaceAll("<notes>\\s*<body xmlns=\"http://www.w3.org/1999/xhtml\">","");
 				desc = desc.replaceAll("</body>\\s*</notes>","");
+				desc = desc.replaceAll("<notes>\\s*<p xmlns=\"http://www.w3.org/1999/xhtml\">","");
+				desc = desc.replaceAll("</p>\\s*</notes>","");
+
 				desc = StringEscapeUtils.unescapeXml(desc.trim());				
 				semsimobject.setDescription(desc);
 			} catch (XMLStreamException e) {
@@ -1310,7 +1315,7 @@ public class SBMLreader extends ModelReader{
 	 * @param sbmlobject An SBase SBML object
 	 * @param semsimobject A SemSimObject representing the SBase object
 	 */
-	private void addMetadataID(SBase sbmlobject, SemSimObject semsimobject){
+	protected void addMetadataID(SBase sbmlobject, SemSimObject semsimobject){
 		semsimmodel.assignValidMetadataIDtoSemSimObject(sbmlobject.getMetaId(),semsimobject);
 	}
 	
@@ -1440,11 +1445,11 @@ public class SBMLreader extends ModelReader{
 			
 			// If there is a physical identity annotation, create reference physical component
 			if(annrelation.equals(SemSimRelation.HAS_PHYSICAL_DEFINITION) || annrelation.equals(SemSimRelation.BQB_IS)){
-				
 				// if entity, use reference term, but don't otherwise
-				if(isentity)
+				if(isentity){
 					pmc = semsimmodel.addReferencePhysicalEntity(
 							new ReferencePhysicalEntity(ann.getReferenceURI(), ann.getValueDescription())); 
+				}
 				
 				tempanns.remove(ann);
 				break;

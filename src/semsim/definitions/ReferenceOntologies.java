@@ -98,7 +98,7 @@ public class ReferenceOntologies {
 		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.PATO, 
 				ReferenceOntology.SBO, ReferenceOntology.SNOMED}),
 		PhysicalEntity(new ReferenceOntology[]{ReferenceOntology.CHEBI, ReferenceOntology.CL, ReferenceOntology.FMA, ReferenceOntology.GO,
-				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.PR}),
+				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.PR, ReferenceOntology.UNIPROT}),
 		PhysicalProcess(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.GO});
 		
 		private ArrayList<ReferenceOntology> domainontologies = new ArrayList<ReferenceOntology>();
@@ -190,7 +190,7 @@ public class ReferenceOntologies {
 				"phenotypes and traits not represented as properties in the OPB"),
 		PR("Protein Ontology", "PR", "http://purl.obolibrary.org/obo/PR",
 				new String[]{"http://purl.obolibrary.org/obo/PR","https://identifiers.org/pr/","http://identifiers.org/pr/"},
-				"proteins"),
+				"species-agnostic proteins"),
 		SBO("Systems Biology Ontology", "SBO", "http://purl.obolibrary.org/obo/SBO",
 				new String[]{"http://biomodels.net/SBO/", "http://purl.org/obo/owl/SBO#","https://identifiers.org/sbo/","http://identifiers.org/sbo/"},
 				"physical dependencies not in the OPB"),
@@ -199,7 +199,7 @@ public class ReferenceOntologies {
 				"clinical-domain physical properties not in the OPB"),
 		UNIPROT("Universal Protein Resource", "UNIPROT", "",
 				new String[]{"http://purl.uniprot.org/uniprot/", "https://identifiers.org/uniprot/", "http://identifiers.org/uniprot/","http://www.uniprot.org/uniprot/"},
-				"protein sequences and functions"),
+				"species-specific proteins"),
 		UNKNOWN("Unkown Ontology", "?", "", new String[]{}, "") ;
 		
 		private String fullname;

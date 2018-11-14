@@ -7,7 +7,6 @@ import org.semanticweb.owlapi.model.OWLException;
 
 import JSim.util.Xcept;
 import semgen.SemGen;
-import semgen.stage.stagetasks.ProjectTask;
 import semgen.utilities.SemGenJob;
 import semsim.annotation.AutoAnnotate;
 import semsim.fileaccessors.JSimProjectAccessor;
@@ -204,8 +203,8 @@ public class LoadModelJob extends SemGenJob {
 			}
 				ReferenceTermNamer.getNamesForReferenceTermsInModel(semsimmodel, SemGen.termcache.getOntTermsandNamesCache(), SemGen.semsimlib);
 //					SBMLAnnotator.setFreeTextDefinitionsForDataStructuresAndSubmodels(semsimmodel);
-			}
 		}
+	}
 	
 
 

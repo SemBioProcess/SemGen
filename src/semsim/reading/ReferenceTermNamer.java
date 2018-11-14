@@ -115,7 +115,7 @@ public class ReferenceTermNamer {
 						
 						// If we retrieved the name
 						if(name != null){
-							System.out.println("Found name for " + SemSimOWLFactory.getIRIfragment(uri.toString()) + ": " + name);
+							System.out.println("Found name for " + uri+ ": " + name);
 							URInameMap.put(uri.toString(), new String[]{name});
 						}
 						else{
