@@ -120,7 +120,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	/** @return An OWL_API:OWLOntology object representing the SemSim model
 	 * @throws OWLException
 	 */
-	private OWLOntology createOWLOntologyFromModel(){	
+	public OWLOntology createOWLOntologyFromModel(){	
 		try {
 			getLocalDataStuctures();
 			addUnits();	
