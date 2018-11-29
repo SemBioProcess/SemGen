@@ -36,7 +36,7 @@ import java.util.Observer;
 public class SemGen extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
-	public static String version = "4.1.0";
+	public static String version = "4.2.0";
 	public static PrintWriter logfilewriter;
 	public static File tempdir = new File(System.getProperty("java.io.tmpdir"));
 	public static final String logfileloc = tempdir.getAbsolutePath() + "/SemGen_log.txt";
