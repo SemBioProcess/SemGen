@@ -126,8 +126,8 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 	}
 	
 	private String displayImportMessageToUse(){
-		if (settings.showImports()) return "Show imports";
-		return "Hide imports";
+		if (settings.showImports()) return "Showing imports";
+		return "Hiding imports";
 	}
 	
 	@Override
