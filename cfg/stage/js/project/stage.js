@@ -496,6 +496,9 @@ function makeResultSet(searchResultSet, stage) {
         }
         else if (searchResultSet.source == "BioModels") {
         	item.appendChild(document.createTextNode(searchResultSet.results[i]));
+            var abstractButton = document.createElement('button');
+            abstractButton.innerHTML = "Abstract";
+            item.appendChild(abstractButton);
 		}
         else if (searchResultSet.source.includes("Nodes in Project")) {
             item.appendChild(document.createTextNode(searchResultSet.results[i][0] + " (" + searchResultSet.results[i][1] + ")"));
@@ -506,20 +509,16 @@ function makeResultSet(searchResultSet, stage) {
         $(item).data("name", searchResultSet.results[i]);
         $(item).data("id", searchResultSet.results[i][2]);
 
-        var delay = 1000, setTimeoutConst;
-        $(item).hover(function() {
-            var source = $(this).data("source");
-            var name = $(this).data("name");
+        $(item).find('button').click(function(e) {
+        	e.stopPropagation();
+            var source = $(this).parent().data("source");
+            var name = $(this).parent().data("name");
             if (source == "BioModels") {
-                setTimeoutConst = setTimeout(function () {
-                    sender.getModelAbstract(name);
-                    receiver.onShowModelAbstract(function (bioModelAbstract) {
-                        window.alert(bioModelAbstract);
-                    });
-                }, delay);
+                sender.getModelAbstract(name);
+                receiver.onShowModelAbstract(function (bioModelAbstract) {
+                    window.alert(bioModelAbstract);
+                });
 			}
-		}, function() {
-        	clearTimeout(setTimeoutConst);
 		});
 
         $(item).click(function() {

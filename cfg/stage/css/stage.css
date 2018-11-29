@@ -165,6 +165,24 @@ li.searchResultSet li:hover {
 	cursor: pointer;
 }
 
+li.searchResultSet button {
+	z-index: 3;
+	float: right;
+	height: 19px;
+	right: 10px;
+	border: hidden;
+	border-radius:2px;
+	color:#ffffff;
+	text-align:center;
+	background:#3b5998;
+	opacity: .8;
+}
+
+li.searchResultSet button:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
 .panel.panel-default.sidebar {
 	list-style-type:none;
 	position: absolute;
