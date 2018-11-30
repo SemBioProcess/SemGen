@@ -318,7 +318,7 @@ public class SemSimUtil {
 	 *  Collect all the variables in a block of MathML that are inputs for the mathematical expression
 	 * @param semsimmodel The source SemSim model
 	 * @param mathmlstring The MathML string to process for inputs
-	 * @param nameprefixanddelimiter Optional refix/delimiter pair to use for inputs that are local to a submodel
+	 * @param nameprefixanddelimiter Optional prefix/delimiter pair to use for inputs that are local to a submodel
 	 * @return All the variables in a block of MathML that are inputs for the MathML expression
 	 */
 	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, Pair<String,String> nameprefixanddelimiter){
