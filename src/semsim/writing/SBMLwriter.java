@@ -399,6 +399,8 @@ public class SBMLwriter extends ModelWriter {
 						
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
 
+			comp.setName(pmc.getName().replace("\"", ""));
+			
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
 			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);

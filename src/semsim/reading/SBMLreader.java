@@ -526,6 +526,7 @@ public class SBMLreader extends ModelReader{
 			// Collect the physical entity representation of the compartment
 			PhysicalEntity compartmentent = null;
 
+			boolean setEntityFromSBMLsource = false;
 			
 			// If we're reading in from an OMEX file, see if the CASA file contains any composite physical entity annotations 
 			// for the compartment. Single physical entity annotations should have already been picked up and attached
@@ -550,6 +551,7 @@ public class SBMLreader extends ModelReader{
 						ds.setAssociatedPhysicalModelComponent(compartmentent);
 					}
 				}
+				else setEntityFromSBMLsource = true;
 			}
 			// If the compartment is annotated with a SemSim annotation in a standalone SBML model, collect it
 			else if(rdfreader.hasPropertyAnnotationForDataStructure(ds)){
@@ -563,7 +565,9 @@ public class SBMLreader extends ModelReader{
 			}
 			// Otherwise we use the info in the SBML to get the physical entity 
 			// representation of the compartment
-			else{	
+			else setEntityFromSBMLsource = true;
+			
+			if(setEntityFromSBMLsource){
 				ds.setAssociatedPhysicalProperty(prop);
 				
 				PhysicalEntity singlecompartmentent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(sbmlc);
@@ -575,7 +579,6 @@ public class SBMLreader extends ModelReader{
 				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 				ds.setAssociatedPhysicalModelComponent(compartmentent);
 			}
-			
 			
 			compartmentAndEntitiesMap.put(compid, compartmentent);
 			
