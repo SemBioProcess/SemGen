@@ -117,9 +117,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	//*****************************OWL CREATION METHODS*************************//
 	
-	/** @return An OWL_API:OWLOntology object representing the SemSim model
-	 * @throws OWLException
-	 */
+	/** @return An OWL_API:OWLOntology object representing the SemSim model*/
 	public OWLOntology createOWLOntologyFromModel(){	
 		try {
 			getLocalDataStuctures();
