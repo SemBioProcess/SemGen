@@ -318,34 +318,52 @@ public class SemSimUtil {
 	 *  Collect all the variables in a block of MathML that are inputs for the mathematical expression
 	 * @param semsimmodel The source SemSim model
 	 * @param mathmlstring The MathML string to process for inputs
-	 * @param nameprefix Prefix to use for inputs that are local to a submodel
+	 * @param nameprefixanddelimiter Prefix and delimiter to use for inputs that are local to a submodel
 	 * @return All the variables in a block of MathML that are inputs for the MathML expression
 	 */
-	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, String nameprefix){
+	public static Set<DataStructure> getComputationalInputsFromMathML(SemSimModel semsimmodel, String mathmlstring, Pair<String,String> nameprefixanddelimiter){
 
 		Set<DataStructure> inputs = new HashSet<DataStructure>();
 
 		if(semsimmodel!=null && mathmlstring!=null){
 			
-			Map<String,String> inputnames = getInputNamesFromMathML(mathmlstring, nameprefix);
+			Map<String,String> inputnames = getInputNamesFromMathML(mathmlstring, nameprefixanddelimiter);
 			
 			// Go through all the input names we found, make sure they are in the model
 			// and if so, add them to the returned list of inputs
 			for(String inputname : inputnames.keySet()){
 				
+				System.out.println("Found input: " + inputname + " with prefixed ID " + inputnames.get(inputname));
+				
 				String theinputnametouse = inputname;
 				
-				if(! semsimmodel.containsDataStructure(inputname)){
-					
+				boolean foundinput = false;
+				boolean modelcontainsunprefixedname = semsimmodel.containsDataStructure(inputname);
+				
+				if(nameprefixanddelimiter==null){
+					foundinput = modelcontainsunprefixedname;
+					System.out.println("No prefix specified for " + inputname + foundinput);
+				}
+				else{
 					String prefixedinputname = inputnames.get(inputname);
 					
-					if(! semsimmodel.containsDataStructure(prefixedinputname)){
+					if(semsimmodel.containsDataStructure(prefixedinputname)){
+						foundinput = true;
+						theinputnametouse = prefixedinputname;
+						System.out.println(prefixedinputname  + " was found in the model ");
+
+					}
+					else if(modelcontainsunprefixedname){
+						foundinput = true;
+						System.out.println(inputname  + " was found in the model after looking for prefixed name");
+					}
+					else{
 						String errmsg = "SEMSIM ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
 						semsimmodel.addError(errmsg);
 						System.err.println(errmsg);
 						return new HashSet<DataStructure>();
 					}
-					else theinputnametouse = prefixedinputname;
+
 				}
 				
 				DataStructure inputds = semsimmodel.getAssociatedDataStructure(theinputnametouse);
@@ -362,16 +380,17 @@ public class SemSimUtil {
 	 * @param nameprefix Optional prefix for mapping an input name to a SemSim-formatted name
 	 * @return Names of inputs used in MathML mapped to option prefixed names
 	 */
-	public static Map<String,String> getInputNamesFromMathML(String mathmlstring, String nameprefix){
+	public static Map<String,String> getInputNamesFromMathML(String mathmlstring, Pair<String,String> nameprefixanddelimiter){
 		Map<String,String> inputnames = new HashMap<String,String>();
 		
+		String prefix = nameprefixanddelimiter==null ? "" : nameprefixanddelimiter.getLeft() + nameprefixanddelimiter.getRight();
 		Pattern p1 = Pattern.compile("<ci>.+</ci>");
 		Matcher m1 = p1.matcher(mathmlstring);
 		boolean result1 = m1.find();
 		
 		while(result1){
 			String inputname = mathmlstring.substring(m1.start()+4, m1.end()-5).trim();
-			inputnames.put(inputname, nameprefix + "." + inputname);
+			inputnames.put(inputname, prefix + inputname);
 			result1 = m1.find();
 		}	
 		
@@ -387,7 +406,7 @@ public class SemSimUtil {
 			// Store csymbol text as an input only if it's not the "delay" csymbol used in SBML
 			if( ! matchedstring.contains("definitionURL=\"http://www.sbml.org/sbml/symbols/delay\"")){
 				String inputname = matchedstring.substring(matchedstring.indexOf(">")+1, matchedstring.lastIndexOf("<")-1).trim();
-				inputnames.put(inputname, nameprefix + "." + inputname);
+				inputnames.put(inputname, prefix + inputname);
 			}
 			
 			result2 = m2.find();
@@ -400,16 +419,17 @@ public class SemSimUtil {
 	 * associated with any Event that effects the DataStructure's value.
 	 * @param semsimmodel The model containing the DataStructure
 	 * @param outputds The DataStructure that will have its computational inputs set
-	 * @param prefix An optional prefix to use for inputs that are local to a submodel
+	 * @param prefixanddelimiter An optional prefix and delimiter pair to use for inputs that are local
+	 *  to a submodel or function definition, etc.
 	 */
-	public static void setComputationInputsForDataStructure(SemSimModel semsimmodel, DataStructure outputds, String prefix){
+	public static void setComputationInputsForDataStructure(SemSimModel semsimmodel, DataStructure outputds, Pair<String,String> prefixanddelimiter){
 		
 		outputds.getComputation().getInputs().clear();
 		Set<DataStructure> allinputs = new HashSet<DataStructure>();
 		
 		// Collect the inputs from the data structure's main mathml block
 		String mathmlstring = outputds.getComputation().getMathML();
-		for(DataStructure input : SemSimUtil.getComputationalInputsFromMathML(semsimmodel, mathmlstring, prefix)){
+		for(DataStructure input : SemSimUtil.getComputationalInputsFromMathML(semsimmodel, mathmlstring, prefixanddelimiter)){
 			allinputs.add(input);
 		}
 		
@@ -418,19 +438,19 @@ public class SemSimUtil {
 			
 			// collect inputs for trigger
 			String triggermathml = event.getTriggerMathML();
-			Set<DataStructure> triggerinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, triggermathml, prefix);
+			Set<DataStructure> triggerinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, triggermathml, prefixanddelimiter);
 			allinputs.addAll(triggerinputs);
 			
 			// collect inputs from event assignment mathml
 			String assignmentmathml = event.getEventAssignmentForOutput(outputds).getMathML();
-			Set<DataStructure> assignmentinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
+			Set<DataStructure> assignmentinputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefixanddelimiter);
 			allinputs.addAll(assignmentinputs);
 		}
 		
 		// set inputs based on the SBML initial assignments that set the data structure's values
 		for(SBMLInitialAssignment sia : outputds.getComputation().getSBMLintialAssignments()){
 			String assignmentmathml = sia.getMathML();
-			Set<DataStructure> inputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefix);
+			Set<DataStructure> inputs = SemSimUtil.getComputationalInputsFromMathML(semsimmodel, assignmentmathml, prefixanddelimiter);
 			allinputs.addAll(inputs);
 		}
 		

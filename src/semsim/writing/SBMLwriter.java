@@ -63,7 +63,6 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
-import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;

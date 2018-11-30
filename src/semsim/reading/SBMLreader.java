@@ -193,6 +193,13 @@ public class SBMLreader extends ModelReader{
 		collectInitialAssignments();
 		setComputationalDependencyNetwork();
 	
+		for(SBMLFunctionOutput fd : semsimmodel.getSBMLFunctionOutputs()){
+			for(DataStructure ds : fd.getComputationInputs()){
+				System.out.println(fd.getName()  + " has input " + ds.getName());
+			}
+		}
+		
+		
 		return semsimmodel;
 	}
 	
@@ -954,17 +961,20 @@ public class SBMLreader extends ModelReader{
 			String mathml = sbmlfd.getMathMLString();
 			fd.getComputation().setMathML(mathml);
 			
-			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
+			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, Pair.of(FUNCTION_PREFIX + sbmlfd.getId(), "_"));
 			
+			System.out.println("Collecting info for " + fd.getName());
 			// Add parameters local to function
 			for(String input : inputs.keySet()){
-				
-				if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
+				System.out.println("Collecting input " + input);
+
+				//if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
 				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
 				semsimmodel.addDataStructure(internalpar); // Use prefixed name to create unique Decimal in SemSim model
+				System.out.println("Added " + internalpar.getName());
 			}
 		}
 	}
@@ -1219,16 +1229,21 @@ public class SBMLreader extends ModelReader{
 	public void setComputationalDependencyNetwork(){
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
-			String prefix = null;
+			Pair<String,String> prefixanddelimiter = null;
 			
 			// If we are looking at a reaction rate data structure, use reaction
 			// prefix so we can ID local parameters as inputs
 			if(sbmlmodel.getReaction(ds.getName())!=null)
-				prefix = REACTION_PREFIX + ds.getName();
+				prefixanddelimiter = Pair.of(REACTION_PREFIX + ds.getName(),".");
 			else if(sbmlmodel.getFunctionDefinition(ds.getName())!=null)
-				prefix = FUNCTION_PREFIX + ds.getName();
+				prefixanddelimiter = Pair.of(FUNCTION_PREFIX + ds.getName(),"_");
 			
-			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
+			System.out.println("Setting computational inputs for " + ds.getName());
+			
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefixanddelimiter);
+			
+			
+			
 		}
 	}
 	
