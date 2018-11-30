@@ -193,13 +193,6 @@ public class SBMLreader extends ModelReader{
 		collectInitialAssignments();
 		setComputationalDependencyNetwork();
 	
-		for(SBMLFunctionOutput fd : semsimmodel.getSBMLFunctionOutputs()){
-			for(DataStructure ds : fd.getComputationInputs()){
-				System.out.println(fd.getName()  + " has input " + ds.getName());
-			}
-		}
-		
-		
 		return semsimmodel;
 	}
 	
@@ -966,18 +959,12 @@ public class SBMLreader extends ModelReader{
 			
 			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, Pair.of(FUNCTION_PREFIX + sbmlfd.getId(), "_"));
 			
-			System.out.println("Collecting info for " + fd.getName());
 			// Add parameters local to function
 			for(String input : inputs.keySet()){
-				System.out.println("Collecting input " + input);
-
-				//if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
-				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
 				semsimmodel.addDataStructure(internalpar); // Use prefixed name to create unique Decimal in SemSim model
-				System.out.println("Added " + internalpar.getName());
 			}
 		}
 	}
@@ -1241,12 +1228,7 @@ public class SBMLreader extends ModelReader{
 			else if(sbmlmodel.getFunctionDefinition(ds.getName())!=null)
 				prefixanddelimiter = Pair.of(FUNCTION_PREFIX + ds.getName(),"_");
 			
-			System.out.println("Setting computational inputs for " + ds.getName());
-			
 			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefixanddelimiter);
-			
-			
-			
 		}
 	}
 	
