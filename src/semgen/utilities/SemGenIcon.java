@@ -53,8 +53,11 @@ public class SemGenIcon {
 	public static final ImageIcon officon = createImageIcon("icons/officon.gif");
 	public static final ImageIcon annotatemodelicon = createImageIcon("icons/annotatemodel.gif");
 	public static final ImageIcon checkmarkicon = createImageIcon("icons/passed.png");
-	public static final ImageIcon semgenbigicon = createImageIcon("icons/semgeniconbig.png");
-	public static final ImageIcon semgenicon = createImageIcon("icons/semgenicon.icns");
+	public static final ImageIcon semgenbigicon = createImageIcon("icons/semgenicon530x530.png");
+	public static final ImageIcon semgenicon24x24 = createImageIcon("icons/semgenicon24x24.png");
+	public static final ImageIcon semgenicon32x32 = createImageIcon("icons/semgenicon32x32.png");
+	public static final ImageIcon semgenicon64x64 = createImageIcon("icons/semgenicon64x64.png");
+	public static final ImageIcon semgeniconicns = createImageIcon("icons/semgenicon.icns");
 	public static final ImageIcon semgenwinicon = createImageIcon("icons/semgeniconWIN.ico");
 	public static final ImageIcon semgeninsert = createImageIcon("icons/insertabove2020.png");
 	
@@ -70,9 +73,9 @@ public class SemGenIcon {
 	
 	public static LinkedList<Image> getSemGenLogoList() {
 		LinkedList<Image> iconlist = new LinkedList<Image>();
-		iconlist.add(semgenicon.getImage());
-		iconlist.add(semgenbigicon.getImage());
-		iconlist.add(semgenwinicon.getImage());
+		iconlist.add(semgenicon64x64.getImage());
+		iconlist.add(semgenicon32x32.getImage());
+		iconlist.add(semgenicon24x24.getImage());
 		return  iconlist;
 	}
 }
