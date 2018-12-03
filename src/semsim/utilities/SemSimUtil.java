@@ -333,8 +333,6 @@ public class SemSimUtil {
 			// and if so, add them to the returned list of inputs
 			for(String inputname : inputnames.keySet()){
 				
-				System.out.println("Found input: " + inputname + " with prefixed ID " + inputnames.get(inputname));
-				
 				String theinputnametouse = inputname;
 				
 				boolean foundinput = false;
@@ -342,7 +340,6 @@ public class SemSimUtil {
 				
 				if(nameprefixanddelimiter==null){
 					foundinput = modelcontainsunprefixedname;
-					System.out.println("No prefix specified for " + inputname + foundinput);
 				}
 				else{
 					String prefixedinputname = inputnames.get(inputname);
@@ -350,12 +347,9 @@ public class SemSimUtil {
 					if(semsimmodel.containsDataStructure(prefixedinputname)){
 						foundinput = true;
 						theinputnametouse = prefixedinputname;
-						System.out.println(prefixedinputname  + " was found in the model ");
-
 					}
 					else if(modelcontainsunprefixedname){
 						foundinput = true;
-						System.out.println(inputname  + " was found in the model after looking for prefixed name");
 					}
 					else{
 						String errmsg = "SEMSIM ERROR: MathML content refers to " + inputname + " but that variable is not in the model.";
@@ -366,8 +360,10 @@ public class SemSimUtil {
 
 				}
 				
-				DataStructure inputds = semsimmodel.getAssociatedDataStructure(theinputnametouse);
-				inputs.add(inputds);
+				if(foundinput){
+					DataStructure inputds = semsimmodel.getAssociatedDataStructure(theinputnametouse);
+					inputs.add(inputds);
+				}
 			}
 		}
 		return inputs;
