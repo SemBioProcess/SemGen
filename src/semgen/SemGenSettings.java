@@ -13,7 +13,7 @@ import java.util.Observable;
  * be made for an object's private use.
  */
 public class SemGenSettings extends Observable{
-	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, cwsort, toggleproptype, autoannotatemapped}
+	public enum SettingChange {TOGGLETREE, SHOWIMPORTS, CWSORT, TOGGLEPROPTYPE, AUTOANNOTATEMAPPED}
 	private HashMap<String, String[]> startsettingstable;
 	private Boolean maximize = false;
 	private Boolean autoannmapped;
@@ -199,21 +199,21 @@ public class SemGenSettings extends Observable{
 		Boolean tog = !organizeByCompositeCompleteness();
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.cwsort);
+		notifyObservers(SettingChange.CWSORT);
 	}
 	
 	public void toggleByPropertyType() {
 		Boolean tog = !organizeByPropertyType();
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.cwsort);
+		notifyObservers(SettingChange.CWSORT);
 	}
 	
 	public void toggleDisplayMarkers() {
 		Boolean tog = !useDisplayMarkers();
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.toggleproptype);
+		notifyObservers(SettingChange.TOGGLEPROPTYPE);
 	}
 	
 	public void toggleTreeView() {
@@ -234,7 +234,7 @@ public class SemGenSettings extends Observable{
 		Boolean tog = !doAutoAnnotateMapped();
 		startsettingstable.put("autoAnnotateMapped", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.autoannotatemapped);
+		notifyObservers(SettingChange.AUTOANNOTATEMAPPED);
 	}
 	
 	public void toggleAutoAnnotate(Boolean tog) {
@@ -248,19 +248,19 @@ public class SemGenSettings extends Observable{
 	public void toggleCompositeCompleteness(Boolean tog) {
 		startsettingstable.put("sortbyCompositeCompleteness", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.cwsort);
+		notifyObservers(SettingChange.CWSORT);
 	}
 	
 	public void toggleByPropertyType(Boolean tog) {
 		startsettingstable.put("organizeByPropertyType", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.cwsort);
+		notifyObservers(SettingChange.CWSORT);
 	}
 	
 	public void toggleDisplayMarkers(Boolean tog) {
 		startsettingstable.put("displayMarkers", new String[]{tog.toString()});
 		setChanged();
-		notifyObservers(SettingChange.toggleproptype);
+		notifyObservers(SettingChange.TOGGLEPROPTYPE);
 	}
 	
 	public void toggleTreeView(Boolean tog) {
