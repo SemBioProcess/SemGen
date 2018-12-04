@@ -65,7 +65,7 @@ public class SemGen extends JFrame implements Observer{
 	public static String cfgwritepath = "cfg/";
 	public static String examplespath = "examples/";
 
-	private SemGenGUI contentpane = null; 
+	private static SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen 
 	 * @throws SecurityException 
@@ -278,6 +278,10 @@ public class SemGen extends JFrame implements Observer{
 				e.printStackTrace();
 			}
 		}
-		
+	}
+	
+	
+	public static SemGenGUI getSemGenGUI(){
+		return contentpane;
 	}
 }

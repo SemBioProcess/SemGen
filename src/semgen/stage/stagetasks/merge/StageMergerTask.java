@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 import org.apache.commons.lang3.tuple.Pair;
+
+import semgen.SemGen;
 import semgen.merging.DataStructureDescriptor;
 import semgen.merging.DataStructureDescriptor.Descriptor;
 import semgen.merging.Merger.ResolutionChoice;
@@ -164,7 +166,7 @@ public class StageMergerTask extends StageTask<MergerWebBrowserCommandSender> im
 			SemGenError.showError("SemGen can only merge two models at a time.", "Too many models");
 		}	
 		if (arg == MergeEvent.modelerrors) {
-			JOptionPane.showMessageDialog(null, "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
+			JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "Model " + ((MergeEvent)arg).getMessage() + " has errors.",
 					"Failed to analyze.", JOptionPane.ERROR_MESSAGE);
 		}
 		if (arg == MergeEvent.mergecompleted) {
@@ -339,7 +341,7 @@ public class StageMergerTask extends StageTask<MergerWebBrowserCommandSender> im
 			// Execute the proper task
 			switch(task) {
 				default:
-					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+					JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "Task: '" + task +"', coming soon :)");
 					break;
 			}
 		}

@@ -8,6 +8,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import semgen.SemGen;
 import semsim.reading.ModelClassifier.ModelType;
 
 
@@ -26,6 +27,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		super(currentdirectory);
 		setDialogTitle(title);
 		createMap();
+		createDialog(SemGen.getSemGenGUI()).setLocationRelativeTo(SemGen.getSemGenGUI());
 	}
 	
 	public SemGenFileChooser(String title, String[] filters) {
@@ -33,6 +35,7 @@ public abstract class SemGenFileChooser extends JFileChooser {
 		setDialogTitle(title);
 		addFilters(filters);
 		createMap();
+		createDialog(SemGen.getSemGenGUI()).setLocationRelativeTo(SemGen.getSemGenGUI());
 	}
 	
 	private void createMap() {

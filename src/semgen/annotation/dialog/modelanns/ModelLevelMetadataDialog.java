@@ -206,16 +206,6 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		}
 	}
 	
-	/**
-	 * Call when the dialog is ready for display
-	 */
-	protected void showDialog() {
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}
-	
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

@@ -261,7 +261,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		msg = msg + "\nRemove property bearer and apply property?";
 		
-		int confirm = JOptionPane.showConfirmDialog(null, msg);
+		int confirm = JOptionPane.showConfirmDialog(SemGen.getSemGenGUI(), msg);
 		return confirm==JOptionPane.YES_OPTION;
 	}
 	

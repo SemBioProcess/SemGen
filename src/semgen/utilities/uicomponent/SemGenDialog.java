@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import semgen.SemGen;
+
 public abstract class SemGenDialog extends JDialog{
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +38,10 @@ public abstract class SemGenDialog extends JDialog{
 	 */
 	protected void showDialog() {
 		pack();
-		setLocationRelativeTo(location);
+		
+		if(location==null) setLocationRelativeTo(SemGen.getSemGenGUI());
+		else setLocationRelativeTo(location);
+		
 		setVisible(true);
 	}
 }

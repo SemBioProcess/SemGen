@@ -124,7 +124,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 					closeModels(modelindex);					
 					break;
 				default:
-					JOptionPane.showMessageDialog(null, "Task: '" + task +"', coming soon :)");
+					JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "Task: '" + task +"', coming soon :)");
 					break;
 			}
 
@@ -360,7 +360,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			String name = exinfo.getModelName();
 			
 			if( ! exinfo.getChangesSaved()){
-				int returnval = JOptionPane.showConfirmDialog(null, 
+				int returnval = JOptionPane.showConfirmDialog(SemGen.getSemGenGUI(), 
 						"Save extraction " + name + "?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
 				if(returnval==JOptionPane.YES_OPTION){
 					ModelAccessor returnma = meg.saveExtraction(modelindex);
