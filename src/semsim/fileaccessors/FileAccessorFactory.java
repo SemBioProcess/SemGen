@@ -77,6 +77,18 @@ public class FileAccessorFactory {
 	}
 	
 	/**
+	 * Create a model accessor for the text content of a model, as opposed
+	 * to a model file
+	 * @param modelcode The model code
+	 * @param type The type of model
+	 * @return A {@link ModelAccessor} for accessing the model code
+	 */
+	public static ModelAccessor getModelAccessorForString(String modelcode, ModelType type){
+		return new ModelAccessor(modelcode, type);
+	}
+	
+	
+	/**
 	 * Create an {@link OMEXAccessor} instance for a model in a COMBINE archive
 	 * @param archive The archive file
 	 * @param file The model file within the archive
