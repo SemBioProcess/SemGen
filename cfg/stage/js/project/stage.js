@@ -76,7 +76,7 @@ function Stage(graph, stagestate) {
 				return a.toLowerCase().localeCompare(b.toLowerCase());
 			});
 
-			searchResultsList.append(makeResultSet(searchResultSet));
+			searchResultsList.append(makeResultSet(searchResultSet, stage));
 		});
 	});
 
@@ -528,12 +528,16 @@ function makeResultSet(searchResultSet, stage) {
             var source = $(this).parent().data("source");
             var name = $(this).parent().data("name");
             if (source == "BioModels") {
-                sender.getModelAbstract(name);
-                receiver.onShowModelAbstract(function (bioModelAbstract) {
-                    window.alert(bioModelAbstract);
-                });
-			}
-		});
+                stage.showLoader();
+                setTimeout(function() {
+                    sender.getModelAbstract(name);
+                    receiver.onShowModelAbstract(function (bioModelAbstract) {
+                        stage.hideLoader();
+                        window.alert(bioModelAbstract);
+                    });
+				}, 20);
+            }
+        });
 
         $(item).click(function() {
             var source = $(this).data("source");
