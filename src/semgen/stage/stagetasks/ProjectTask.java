@@ -9,6 +9,8 @@ import com.teamdev.jxbrowser.chromium.JSArray;
 import com.teamdev.jxbrowser.chromium.JSObject;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.output.FileWriterWithEncoding;
+
 import semgen.SemGen;
 import semgen.SemGenGUI;
 import semgen.SemGenGUI.loadTask;
@@ -88,7 +90,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 
 				String tempPath = System.getProperty("java.io.tmpdir") + File.separator + modelName + ".xml";
 				File tempBioModelFile = new File(tempPath);
-				BufferedWriter bw = new BufferedWriter(new FileWriter(tempBioModelFile));
+				BufferedWriter bw = new BufferedWriter(new FileWriterWithEncoding(tempBioModelFile, "UTF-8"));
 				String bioModelString = BioModelsSearch.getModelSBMLById(modelName);
 
 				bw.write(bioModelString);
