@@ -67,7 +67,7 @@ ParentNode.prototype.createChild = function(data) {
 		child = new SubmodelNode(node.graph, data, node);
 		child.createChildren();
 	}
-	else if (data.typeIndex==6) {
+	else if (data.typeIndex==7) {
 		child = new PhysioMapNode(node.graph, data, node);
 	}
 	else {
