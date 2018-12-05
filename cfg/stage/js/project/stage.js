@@ -142,17 +142,31 @@ function Stage(graph, stagestate) {
 	});
 
 	$(".searchString").keyup(function() {
-        searchString = $(this).val();
+        var searchString = $(this).val();
         if (searchString && event.keyCode === 13) {
+        	stage.showLoader();
             $(".searchResults").empty();
             $(".stageSearch .searchValueContainer .searchResults").show();
 
-            stage.stageSearch(searchString);
+            setTimeout(function() {
+                stage.stageSearch(searchString);
+                stage.hideLoader();
+            }, 20);
         }
         else {
             $(".stageSearch .searchValueContainer .searchResults").hide();
         }
     });
+
+	this.showLoader = function() {
+        $(".searchIcon").hide();
+        $(".loader").show();
+	};
+
+	this.hideLoader = function() {
+        $(".searchIcon").show();
+        $(".loader").hide();
+	};
 
     this.stageSearch = function(searchString) {
         console.log("Showing search results");
@@ -510,7 +524,7 @@ function makeResultSet(searchResultSet, stage) {
         $(item).data("id", searchResultSet.results[i][2]);
 
         $(item).find('button').click(function(e) {
-        	e.stopPropagation();
+            e.stopPropagation();
             var source = $(this).parent().data("source");
             var name = $(this).parent().data("name");
             if (source == "BioModels") {
