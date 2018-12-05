@@ -10,6 +10,7 @@ import semgen.menu.SemGenMenuBar;
 import semgen.utilities.OntologyCache;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
+import semgen.utilities.SemGenIcon;
 import semgen.utilities.file.SemGenFileChooser;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.SemSimLibrary;
@@ -64,7 +65,7 @@ public class SemGen extends JFrame implements Observer{
 	public static String cfgwritepath = "cfg/";
 	public static String examplespath = "examples/";
 
-	private SemGenGUI contentpane = null; 
+	private static SemGenGUI contentpane = null; 
 	
 	/** Main method for running an instance of SemGen 
 	 * @throws SecurityException 
@@ -131,8 +132,8 @@ public class SemGen extends JFrame implements Observer{
 		super("OSXAdapter");
 						
 		setTitle(":: S e m  G e n ::");
-		//this.setIconImage(SemGenIcon.semgenbigicon.getImage());
-		//this.setIconImages(SemGenIcon.getSemGenLogoList());
+		//this.setIconImage(SemGenIcon.semgenicon.getImage());
+		this.setIconImages(SemGenIcon.getSemGenLogoList());
 		
 		termcache = new OntologyCache();
 		
@@ -277,6 +278,10 @@ public class SemGen extends JFrame implements Observer{
 				e.printStackTrace();
 			}
 		}
-		
+	}
+	
+	
+	public static SemGenGUI getSemGenGUI(){
+		return contentpane;
 	}
 }

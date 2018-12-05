@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import semgen.GlobalActions;
+import semgen.SemGen;
 import semgen.SemGenSettings;
 import semgen.annotation.common.AnnotationClickableTextPane;
 import semgen.annotation.dialog.SemSimComponentSelectionDialog;
@@ -225,7 +226,7 @@ public class SubmodelAnnotationPanel extends AnnotationPanel<SubModelToolDrawer>
 					break;
 				}
 					
-				JOptionPane.showMessageDialog(null, "That name is either invalid or already taken");
+				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "That name is either invalid or already taken");
 			}
 		}
 	}

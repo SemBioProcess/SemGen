@@ -59,10 +59,10 @@ public class CodewordListPane extends AnnotatorListPane<CodewordButton, Codeword
 	
 	@Override
 	public void updateUnique(Object arg) {
-			if (arg==SettingChange.toggleproptype) {
+			if (arg==SettingChange.TOGGLEPROPTYPE) {
 				toggleMarkers();
 			}
-			if	(arg==ModelEdit.CODEWORD_CHANGED || arg==ModelEdit.CWLIST_CHANGED || arg==SettingChange.cwsort || 
+			if	(arg==ModelEdit.CODEWORD_CHANGED || arg==ModelEdit.CWLIST_CHANGED || arg==SettingChange.CWSORT || 
 					arg==SettingChange.SHOWIMPORTS) {
 				update();
 			}

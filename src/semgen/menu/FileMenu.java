@@ -143,7 +143,7 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			canSaveOut(this.globalactions.isModelLoaded());
 			
 			// Make the "Save", "Save As" and "Export" file items visible only 
-			// we're not on a Project Tab
+			// we're on an Annotator Tab
 			boolean currtabisproject = currenttab instanceof StageTab;
 			fileitemsave.setVisible( ! currtabisproject);
 			fileitemsaveas.setVisible( ! currtabisproject);
@@ -151,8 +151,14 @@ public class FileMenu extends SemGenMenu implements ActionListener, Observer {
 			writeseparator.setVisible( ! currtabisproject);
 			fileitemeditmetadata.setVisible( ! currtabisproject);
 		}
+		// If there are no tabs open, don't show "Save", "Save As", etc. menu items
 		else {
 			fileitemsave.setEnabled(false);
+			fileitemsave.setVisible(false);
+			fileitemsaveas.setVisible(false);
+			fileitemexport.setVisible(false);
+			writeseparator.setVisible(false);
+			fileitemeditmetadata.setVisible(false);
 		}
 	}	
 

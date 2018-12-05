@@ -519,6 +519,7 @@ public class SBMLreader extends ModelReader{
 			// Collect the physical entity representation of the compartment
 			PhysicalEntity compartmentent = null;
 
+			boolean setEntityFromSBMLsource = false;
 			
 			// If we're reading in from an OMEX file, see if the CASA file contains any composite physical entity annotations 
 			// for the compartment. Single physical entity annotations should have already been picked up and attached
@@ -543,6 +544,7 @@ public class SBMLreader extends ModelReader{
 						ds.setAssociatedPhysicalModelComponent(compartmentent);
 					}
 				}
+				else setEntityFromSBMLsource = true;
 			}
 			// If the compartment is annotated with a SemSim annotation in a standalone SBML model, collect it
 			else if(rdfreader.hasPropertyAnnotationForDataStructure(ds)){
@@ -556,7 +558,9 @@ public class SBMLreader extends ModelReader{
 			}
 			// Otherwise we use the info in the SBML to get the physical entity 
 			// representation of the compartment
-			else{	
+			else setEntityFromSBMLsource = true;
+			
+			if(setEntityFromSBMLsource){
 				ds.setAssociatedPhysicalProperty(prop);
 				
 				PhysicalEntity singlecompartmentent = (PhysicalEntity) createSingularPhysicalComponentForSBMLobject(sbmlc);
@@ -568,7 +572,6 @@ public class SBMLreader extends ModelReader{
 				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 				ds.setAssociatedPhysicalModelComponent(compartmentent);
 			}
-			
 			
 			compartmentAndEntitiesMap.put(compid, compartmentent);
 			
@@ -954,13 +957,10 @@ public class SBMLreader extends ModelReader{
 			String mathml = sbmlfd.getMathMLString();
 			fd.getComputation().setMathML(mathml);
 			
-			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, FUNCTION_PREFIX + sbmlfd.getId());
+			Map<String,String> inputs = SemSimUtil.getInputNamesFromMathML(mathml, Pair.of(FUNCTION_PREFIX + sbmlfd.getId(), "_"));
 			
 			// Add parameters local to function
 			for(String input : inputs.keySet()){
-				
-				if(semsimmodel.containsDataStructure(input)) continue; // If data structure already exists in the model, skip 
-				
 				String internalparname = inputs.get(input);
 				Decimal internalpar = new Decimal(internalparname, SemSimTypes.DECIMAL);
 				internalpar.setDeclared(false);
@@ -1219,16 +1219,16 @@ public class SBMLreader extends ModelReader{
 	public void setComputationalDependencyNetwork(){
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			
-			String prefix = null;
+			Pair<String,String> prefixanddelimiter = null;
 			
 			// If we are looking at a reaction rate data structure, use reaction
 			// prefix so we can ID local parameters as inputs
 			if(sbmlmodel.getReaction(ds.getName())!=null)
-				prefix = REACTION_PREFIX + ds.getName();
+				prefixanddelimiter = Pair.of(REACTION_PREFIX + ds.getName(),".");
 			else if(sbmlmodel.getFunctionDefinition(ds.getName())!=null)
-				prefix = FUNCTION_PREFIX + ds.getName();
+				prefixanddelimiter = Pair.of(FUNCTION_PREFIX + ds.getName(),"_");
 			
-			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefixanddelimiter);
 		}
 	}
 	

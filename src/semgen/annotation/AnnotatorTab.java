@@ -16,6 +16,7 @@ import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
 import semgen.annotation.workbench.AnnotatorWorkbench.WBEvent;
 import semgen.annotation.workbench.drawers.AnnotatorDrawer;
+import semgen.annotation.workbench.drawers.CodewordToolDrawer;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -165,6 +166,15 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		annotatorscrollpane.scrollToLeft();
 	}
 	
+	// Fires when the Auto-copy mapped annotations button is pressed
+	private void changeAutoCopyMappedAnnotations() {
+		if(annotatorpane.getDrawer() instanceof CodewordToolDrawer){
+			CodewordToolDrawer cd = workbench.openCodewordDrawer();
+			if(cd.getSelectedIndex() != -1)
+				cd.setSelectedIndex(cd.getSelectedIndex()); // refresh the currently selected codeword so the copy button appears
+		}
+	}
+	
 	// Refresh the display of codewords and submodels based on the view options selected in the Annotate menu
 	public void refreshAnnotatableElements(){
 		int divLoc = splitpane.getDividerLocation();
@@ -279,9 +289,16 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 				libdialog=null;
 			}
 		}
+		
 		if (arg0==settings) {
 			if (arg1==SettingChange.TOGGLETREE) {
 				changeComponentView();
+			}
+		}
+		
+		if (arg0==settings) {
+			if( arg1 == SettingChange.AUTOANNOTATEMAPPED){
+				changeAutoCopyMappedAnnotations();
 			}
 		}
 

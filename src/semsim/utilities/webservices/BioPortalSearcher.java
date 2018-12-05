@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -178,34 +176,5 @@ public class BioPortalSearcher {
 			}
 		}
 		return false;
-	}
-	
-	/**
-	 * @deprecated
-	 */
-	public static String getLatestVersionIDForBioPortalOntology(String bioportalID){
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = new Document();
-		String versionid = null;
-		try {
-			URL url = new URL(
-					"http://rest.bioontology.org/bioportal/virtual/ontology/" + bioportalID + "?apikey=" + BIOPORTAL_API_KEY);
-			URLConnection yc = url.openConnection();
-			yc.setReadTimeout(60000); // Tiemout after a minute
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					yc.getInputStream()));
-			doc = builder.build(in);
-			in.close();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Returned error: " + e.getLocalizedMessage()+ "\n\nPlease make sure you are online,\notherwise BioPortal may be experiencing problems",
-					"Problem searching BioPortal",JOptionPane.ERROR_MESSAGE);
-			return null;
-		} catch (JDOMException e) {e.printStackTrace();}
-
-		if (doc.hasRootElement()) {
-			versionid = doc.getRootElement().getChild("data").getChild("ontologyBean").getChildText("id");
-		}
-		return versionid;
 	}
 }

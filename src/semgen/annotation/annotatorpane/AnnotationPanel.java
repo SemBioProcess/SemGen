@@ -125,6 +125,10 @@ public abstract class AnnotationPanel<P extends AnnotatorDrawer<? extends SemSim
 		mainpanel.add(humandefpanel);
 	}
 	
+	public AnnotatorDrawer<? extends SemSimObject> getDrawer(){
+		return drawer;
+	}
+	
 	protected void refreshFreeText() {
 		humandefpane.setText(drawer.getHumanReadableDef());
 		if (drawer.hasHumanReadableDef()) {

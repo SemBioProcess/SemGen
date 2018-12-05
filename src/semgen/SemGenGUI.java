@@ -258,7 +258,8 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 			SemSimModel semsimmodel = lmj.getLoadedModel();
 
 			if (lmj.onStage && semsimmodel.hasImportedComponents) {
-				JOptionPane.showMessageDialog(null, "SemGen cannot load models with imported components into a Project Tab yet. Please try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), 
+						"SemGen cannot load models with imported components into a Project Tab yet. Please try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
@@ -279,7 +280,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public Boolean isOntologyOpenForEditing(URI uritocheck) {
 		for (SemGenTab at : opentabs) {
 			if (at.fileURIMatches(uritocheck)) {
-				JOptionPane.showMessageDialog(null,"Cannot create or load \n"+ uritocheck.toString()+
+				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(),"Cannot create or load \n"+ uritocheck.toString()+
 					"\n because the file is already open for editing.",null, JOptionPane.WARNING_MESSAGE);
 				return true;
 			}

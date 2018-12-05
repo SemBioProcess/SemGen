@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.semanticweb.owlapi.model.OWLException;
 
+import semgen.SemGen;
 import semgen.utilities.file.SemGenSaveFileChooser;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -66,7 +67,7 @@ public class CSVExporter {;
 				e.printStackTrace();
 			}
 			scanner.close();
-			JOptionPane.showMessageDialog(null, "Finished exporting .csv file");
+			JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "Finished exporting .csv file");
 		}
 	}
 }

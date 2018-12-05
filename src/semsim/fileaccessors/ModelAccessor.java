@@ -1,5 +1,6 @@
 package semsim.fileaccessors;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipException;
 
@@ -42,7 +44,9 @@ public class ModelAccessor {
 	protected String fragment = "";
 
 	public static final String separator = "#";
-	protected ModelType modeltype;	
+	protected ModelType modeltype;
+	
+	private String modelcode;
 
 	/**
 	 * Constructor for models that are stored as standalone files (not in archives)
@@ -90,6 +94,17 @@ public class ModelAccessor {
 		filepath = uri.toString();
 		modeltype = type;
 	}
+	
+	/**
+	 * Constructor for a model that is read in as a string as opposed to a file
+	 * @param code The model code
+	 * @param type The model type
+	 */
+	protected ModelAccessor(String code, ModelType type){
+		modeltype = type;
+		modelcode = code;
+	}
+	
 	
 	/** 
 	 * Copy constructor
@@ -174,8 +189,11 @@ public class ModelAccessor {
 	public InputStream modelInStream() throws IOException{
 		InputStream returnstring = null;
 		
+		if(modelcode != null)
+			return new ByteArrayInputStream(modelcode.getBytes(Charset.forName("UTF-8")));
+		
 		if(modelIsOnline()) return null;
-		else {
+		else{
 			try {
 				returnstring = new FileInputStream(file);
 			} 
@@ -241,7 +259,10 @@ public class ModelAccessor {
 	
 	/** @return A JDOM Document object read in from a modeling file */
 	public Document getJDOMDocument() {
-		return ModelReader.getJDOMdocumentFromFile(file);
+		if(modelcode != null) 
+			return ModelReader.getJDOMdocumentFromString(modelcode);
+		else 
+			return ModelReader.getJDOMdocumentFromFile(file);
 	}
 	
 	

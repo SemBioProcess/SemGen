@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -669,9 +670,9 @@ public class SemSimOWLreader extends ModelReader {
 			
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(name);
 			
-			String prefix = ds instanceof SBMLFunctionOutput ? SBMLreader.FUNCTION_PREFIX + ds.getName() : null;
+			Pair<String,String> prefixanddelimiter = ds instanceof SBMLFunctionOutput ? Pair.of(SBMLreader.FUNCTION_PREFIX + ds.getName(),"_") : null;
 			
-			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefix);
+			SemSimUtil.setComputationInputsForDataStructure(semsimmodel, ds, prefixanddelimiter);
 			
 			// set the data structure's solution domain
 			String soldom = SemSimOWLFactory.getFunctionalIndObjectPropertyObject(ont, dsind, SemSimRelation.HAS_SOLUTION_DOMAIN.getURIasString());

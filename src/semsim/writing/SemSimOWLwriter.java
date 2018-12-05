@@ -117,9 +117,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	//*****************************OWL CREATION METHODS*************************//
 	
-	/** @return An OWL_API:OWLOntology object representing the SemSim model
-	 * @throws OWLException
-	 */
+	/** @return An OWL_API:OWLOntology object representing the SemSim model*/
 	public OWLOntology createOWLOntologyFromModel(){	
 		try {
 			getLocalDataStuctures();
@@ -354,12 +352,12 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 				else 
 							
-				// Put the hasInput and hasRolePlayer data in the SemSim model
-				for(DataStructure inputds : ds.getComputation().getInputs()){
-					String inputuri = namespace + SemSimOWLFactory.URIencoding(inputds.getName());
-					SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, 
-							SemSimRelation.HAS_INPUT, SemSimRelation.IS_INPUT_FOR, manager);
-				}				
+					// Put the hasInput and hasRolePlayer data in the SemSim model
+					for(DataStructure inputds : ds.getComputation().getInputs()){
+						String inputuri = namespace + SemSimOWLFactory.URIencoding(inputds.getName());
+						SemSimOWLFactory.setIndObjectProperty(ont, dsuri + "_computation", inputuri, 
+								SemSimRelation.HAS_INPUT, SemSimRelation.IS_INPUT_FOR, manager);
+					}				
 			}
 			
 			// Store the solution domain info for the data structure
@@ -432,8 +430,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			
 			String dsuri = dswithphyscompsanduris.get(ds);
 
-			// Classify the physical property under its reference ontology class
-			// that it is annotated against
+			// Classify the physical property under its reference ontology class that it is annotated against
 			PhysicalPropertyInComposite dspp = ds.getPhysicalProperty();
 				
 			//Create empty property if one has not been assigned
@@ -531,10 +528,17 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 			}
 			
-			if(! sublevelimport){
+			if( ! sublevelimport){
 				
 				// Create the individual
 				String indstr = namespace + SemSimOWLFactory.URIencoding(sub.getName());
+				
+				Set<String> existinguris = SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.SEMSIM_COMPONENT.getURIasString());
+				
+				// Make sure the submodel uri isn't already used in the ontology 
+				if(existinguris.contains(indstr))
+					indstr = SemSimOWLFactory.generateUniqueIRIwithNumber(indstr, existinguris);
+
 				SemSimOWLFactory.createSemSimIndividual(ont, indstr, factory.getOWLClass(SemSimTypes.SUBMODEL.getIRI()), "", manager);
 				
 				// Set the name
@@ -595,7 +599,6 @@ public class SemSimOWLwriter extends ModelWriter {
 							makeAnnotationsForImport(((FunctionalSubmodel)sub)), manager);
 				}
 			}
-			
 		}
 		
 		// Assert the annotations needed for CellML component groupings

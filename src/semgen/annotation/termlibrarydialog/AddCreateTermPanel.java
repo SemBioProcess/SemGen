@@ -232,7 +232,8 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 		public void actionPerformed(ActionEvent arg0) {
 			Object obj = arg0.getSource();
 			if (obj==this.createbtn) {
-				createTerm();
+				int newindex = createTerm();
+				msgbox.setText(library.getComponentName(newindex) + " added as Custom Physical Entity.");
 				termindex=-1;
 			}
 			if (obj==this.cancelbtn) {

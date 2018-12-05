@@ -63,7 +63,6 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
-import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
@@ -400,6 +399,8 @@ public class SBMLwriter extends ModelWriter {
 						
 			entityCompartmentMap.put((CompositePhysicalEntity)pmc, comp);
 
+			comp.setName(pmc.getName().replace("\"", ""));
+			
 			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
 			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
 			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);

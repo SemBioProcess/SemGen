@@ -1,7 +1,10 @@
 package semsim.reading;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.jdom.Document;
@@ -52,6 +55,26 @@ public abstract class ModelReader {
 		}
 		return doc;
 	}
+	
+	
+	/**
+	 * Build document from an XML-encoded string
+	 * @param string A string of XML
+	 * @return JDOM Document representing the string
+	 */
+	public static Document getJDOMdocumentFromString(String string){
+		Document doc = null;
+		SAXBuilder builder = new SAXBuilder();
+		
+		try{ 
+			doc = builder.build(new ByteArrayInputStream(string.getBytes(Charset.forName("UTF-8"))));
+		}
+		catch(JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+		return doc;
+	}
+	
 	
 	/**
 	 * Convert the file referred to by this class's ModelAccessor into

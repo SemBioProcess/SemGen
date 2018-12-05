@@ -218,7 +218,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 			
 			else msg = msg + modelaccessor.getShortLocation() + "?";
 			
-			int returnval= JOptionPane.showConfirmDialog(null,
+			int returnval= JOptionPane.showConfirmDialog(SemGen.getSemGenGUI(),
 					msg, title,
 					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
