@@ -190,7 +190,7 @@ public class ModelAccessor {
 		InputStream returnstring = null;
 		
 		if(modelcode != null)
-			returnstring = new ByteArrayInputStream(modelcode.getBytes(Charset.forName("UTF-8")));
+			return new ByteArrayInputStream(modelcode.getBytes(Charset.forName("UTF-8")));
 		
 		if(modelIsOnline()) return null;
 		else{
@@ -259,7 +259,10 @@ public class ModelAccessor {
 	
 	/** @return A JDOM Document object read in from a modeling file */
 	public Document getJDOMDocument() {
-		return ModelReader.getJDOMdocumentFromFile(file);
+		if(modelcode != null) 
+			return ModelReader.getJDOMdocumentFromString(modelcode);
+		else 
+			return ModelReader.getJDOMdocumentFromFile(file);
 	}
 	
 	
