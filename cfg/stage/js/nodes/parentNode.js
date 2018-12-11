@@ -90,9 +90,13 @@ ParentNode.prototype.showChildren = function () {
 		if (this.graph.nodesVisible[NodeType.RATE.id]) {
 			visiblenodes += this.dependencytypecount[1];
 		}
-		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
+		if (this.graph.nodesVisible[NodeType.FORCE.id]) {
 			visiblenodes += this.dependencytypecount[2];
 		}
+		if (this.graph.nodesVisible[NodeType.CONSTITUTIVE.id]) {
+			visiblenodes += this.dependencytypecount[3];
+		}
+		
 		if (visiblenodes == 0) return;
     }
 
