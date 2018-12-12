@@ -230,10 +230,11 @@ public class JSimProjectFileWriter extends ModelWriter{
 	 */
 	private void flattenModelForMML(String MMLcode){
 		
+		SemSimModel modelcopy = semsimmodel.clone(); // Clone first so we don't alter the original model through flattening
 		Set<String> foundnamesinMML = new HashSet<String>();
 		
 		ArrayList<DataStructure> allds = new ArrayList<DataStructure>();
-		allds.addAll(semsimmodel.getAssociatedDataStructures());
+		allds.addAll(modelcopy.getAssociatedDataStructures());
 		
 		// For each data structure in model, see if its name is declared in the MML text
 		// If not, see if its local name is declared.
@@ -255,7 +256,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 				// If flattened name not found or if we've already found a
 				// codeword with the flattened name, remove from semsim model
 				if( ! m2.find() || foundnamesinMML.contains(flattenedname))
-					semsimmodel.removeDataStructure(ds);
+					modelcopy.removeDataStructure(ds);
 				else{
 					ds.setName(flattenedname);
 					ds.setMetadataID(flattenedname);
@@ -263,7 +264,9 @@ public class JSimProjectFileWriter extends ModelWriter{
 				}
 			}
 			else foundnamesinMML.add(name);
-		}		
+		}	
+		
+		semsimmodel = modelcopy;
 	}
 	
 	@Override

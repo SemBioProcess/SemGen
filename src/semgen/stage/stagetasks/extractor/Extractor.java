@@ -1,12 +1,16 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
+import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalProcess;
 
@@ -39,14 +43,36 @@ public abstract class Extractor {
 	
 	protected void collectDataStructureInputs() {
 		Set<DataStructure> smdatastructures = new HashSet<DataStructure>(this.datastructures.keySet());
+		
 		for (DataStructure smds : smdatastructures) {
+			
 			for (DataStructure input : smds.getComputationInputs()) {
-				if (!datastructures.keySet().contains(input)) {	
+				
+				if ( ! datastructures.keySet().contains(input)) {	
 					DataStructure newinput = input.copy();
+					
 					//Retain inputs which are constants
-					if (!newinput.getComputationInputs().isEmpty()) {
-						newinput.clearInputs();
-						newinput.setExternal(true);
+					boolean hasinputs = ! newinput.getComputationInputs().isEmpty();
+					boolean clearinputs = true;
+					
+					if(hasinputs){
+						
+						// Retain the data structure's dependency if it's mapped from
+						// a CellML model's temporal solution domain
+						if(newinput instanceof MappableVariable){
+							MappableVariable mv = (MappableVariable)newinput;
+							
+							if(mv.getMappedFrom() != null){
+								
+								if(mv.getMappedFrom().isSolutionDomain())
+									clearinputs = false;
+							}
+						}
+						
+						if (clearinputs) {
+							newinput.clearInputs();
+							newinput.setExternal(true);
+						}
 					}
 					datastructures.put(input, newinput);
 				}
@@ -76,10 +102,62 @@ public abstract class Extractor {
 	 * Adds data structures and submodels to the newly constructed model extraction
 	 */
 	protected void buildExtraction() {
+		
+		extraction.setSubmodels(submodels.values());
+		
 		for (DataStructure dstoadd : datastructures.values()) {
 			dstoadd.addToModel(extraction);
+			
+			// If the variable is part of a functional submodel that wasn't explicity included
+			// in the extraction, create a parent submodel for it. Reuse, if already created.
+			if(dstoadd instanceof MappableVariable){
+			
+				System.out.println(dstoadd.getName() + " is a mappable variable");
+
+				String parentname = dstoadd.getName().substring(0, dstoadd.getName().lastIndexOf("."));
+				MappableVariable dsasmv = (MappableVariable)dstoadd;
+				
+				// If the parent submodel for the variable has not being explicitly added to the extraction
+				if( ! submodels.values().contains(extraction.getSubmodel(parentname))){
+					
+					System.out.println(dstoadd.getName() + " doesn't have its parent explicitly included");
+
+					FunctionalSubmodel copyfs = null;
+					
+					// Copy in submodel if we haven't already
+					if(extraction.getSubmodel(parentname) == null){	
+						
+						System.out.println("Copying in new version of " + parentname);
+
+						copyfs = new FunctionalSubmodel(parentname, dstoadd);
+						copyfs.setLocalName(parentname);
+						copyfs.getComputation().setMathML(dstoadd.getComputation().getMathML());
+						extraction.addSubmodel(copyfs);
+					}
+					// Otherwise reuse existing submodel
+					else{
+						
+						System.out.println("Using existing version of " + parentname);
+						
+						copyfs = (FunctionalSubmodel)extraction.getSubmodel(parentname);
+						
+						// Add output to functional submodel's computation
+						if(dsasmv.getPublicInterfaceValue().equals("out")) copyfs.getComputation().addOutput(dstoadd);
+						
+						// Concat mathml
+						String oldmathml = copyfs.getComputation().getMathML();
+						
+						if(dstoadd.getComputation().getMathML() !=null)
+							copyfs.getComputation().setMathML(oldmathml + "\n" + dstoadd.getComputation().getMathML());
+					}
+					
+					copyfs.addDataStructure(dstoadd);
+				}
+			}
 		}
-		extraction.setSubmodels(submodels.values());
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		extraction.setDescription("Extracted from " + sourcemodel.getName() + " on " + sdf.format(new Date()));
+
 	}
 	
 	protected void includeSubModel(Submodel sourceobj) {
@@ -97,6 +175,7 @@ public abstract class Extractor {
 	protected void includeDependency(DataStructure sourceobj) {
 		if (!this.datastructures.containsKey(sourceobj)) {
 			datastructures.put(sourceobj, sourceobj.copy());
+			System.out.println("Added " + sourceobj.getName() + " to extraction");
 		}
 	}
 	

@@ -146,8 +146,11 @@ public class SBMLwriter extends ModelWriter {
 			sbmlmodel.setMetaId(semsimmodel.getMetadataID());
 
 		// If we're writing from a model with FunctionalSubmodels, flatten model first
-		if(semsimmodel.getFunctionalSubmodels().size() > 0)
+		if(semsimmodel.getFunctionalSubmodels().size() > 0){
+			SemSimModel modelcopy = semsimmodel.clone(); // Create a temporary clone because flattening changes model contents
+			semsimmodel = modelcopy;
 			SemSimUtil.flattenModel(semsimmodel);
+		}
 
 		// Initialize a CASA writer, if we're writing to an OMEX file
 		if(CASAEnabled()){
