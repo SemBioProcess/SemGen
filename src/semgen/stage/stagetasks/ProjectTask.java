@@ -271,6 +271,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
 				if (meg!=null) {
 					accessor = meg.getAccessorbyIndexAlways(modelindex);
+					
+					// If the extraction was saved, record that info in the ModelExtractionGroup's extraction node
+					if(accessor != null)
+					 meg.extractionnodes.get(modelindex).setChangesSaved(true);
 				}
 			}
 			if (accessor == null) continue;
