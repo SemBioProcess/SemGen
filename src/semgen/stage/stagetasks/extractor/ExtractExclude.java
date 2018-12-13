@@ -1,5 +1,6 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class ExtractExclude extends Extractor {
 		
 		// If no submodels were explicitly selected for inclusion or exclusion, exclude them all. 
 		// Otherwise we end up keeping a bunch of data structures we don't need because of their
-		// associatioin with submodels. If some submodels were explicitly excluded, retain the 
+		// association with submodels. If some submodels were explicitly excluded, retain the 
 		// correct ones.
 		if(smstoexclude.size() > 0){ 
 			for (Submodel smtokeep : smstokeep) {
@@ -39,18 +40,17 @@ public class ExtractExclude extends Extractor {
 			}
 		}
 		
-		Set<DataStructure> dsstokeep = sourcemodel.getDataStructuresWithProcessesandParticipants();	
+		ArrayList<DataStructure> dsstokeep = sourcemodel.getAssociatedDataStructures();	
 		for (DataStructure dstoexclude : dsstoexclude) {
+			
 			dsstokeep.remove(dstoexclude);
 		
-			for (DataStructure dstokeep : dsstokeep) {
+			for (DataStructure dstokeep : dsstokeep)
 				dstokeep.removeOutput(dstoexclude);
-			}
 		}
 		
-		for (DataStructure dstokeep : dsstokeep) {
+		for (DataStructure dstokeep : dsstokeep)
 			includeDependency(dstokeep);
-		}		
 	}
 	
 	@Override

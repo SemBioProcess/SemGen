@@ -112,23 +112,17 @@ public abstract class Extractor {
 			// in the extraction, create a parent submodel for it. Reuse, if already created.
 			if(dstoadd instanceof MappableVariable){
 			
-				System.out.println(dstoadd.getName() + " is a mappable variable");
-
 				String parentname = dstoadd.getName().substring(0, dstoadd.getName().lastIndexOf("."));
 				MappableVariable dsasmv = (MappableVariable)dstoadd;
 				
 				// If the parent submodel for the variable has not being explicitly added to the extraction
 				if( ! submodels.values().contains(extraction.getSubmodel(parentname))){
 					
-					System.out.println(dstoadd.getName() + " doesn't have its parent explicitly included");
-
 					FunctionalSubmodel copyfs = null;
 					
 					// Copy in submodel if we haven't already
 					if(extraction.getSubmodel(parentname) == null){	
 						
-						System.out.println("Copying in new version of " + parentname);
-
 						copyfs = new FunctionalSubmodel(parentname, dstoadd);
 						copyfs.setLocalName(parentname);
 						copyfs.getComputation().setMathML(dstoadd.getComputation().getMathML());
@@ -136,8 +130,6 @@ public abstract class Extractor {
 					}
 					// Otherwise reuse existing submodel
 					else{
-						
-						System.out.println("Using existing version of " + parentname);
 						
 						copyfs = (FunctionalSubmodel)extraction.getSubmodel(parentname);
 						
@@ -175,7 +167,6 @@ public abstract class Extractor {
 	protected void includeDependency(DataStructure sourceobj) {
 		if (!this.datastructures.containsKey(sourceobj)) {
 			datastructures.put(sourceobj, sourceobj.copy());
-			System.out.println("Added " + sourceobj.getName() + " to extraction");
 		}
 	}
 	
