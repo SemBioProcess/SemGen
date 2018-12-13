@@ -49,8 +49,19 @@ public class ExtractExclude extends Extractor {
 				dstokeep.removeOutput(dstoexclude);
 		}
 		
-		for (DataStructure dstokeep : dsstokeep)
+		for (DataStructure dstokeep : dsstokeep){
+			
+			// This statement excludes orphaned codewords that are not solution domains
+			// and are not CellML-type MappableVariables. Not sure if this exclusion approach
+			// will work for MappableVariables, too.
+			if(dstokeep.getComputationInputs().isEmpty() 
+					&& dstokeep.getUsedToCompute().isEmpty() 
+					&& ! (dstokeep instanceof MappableVariable)
+					&& ! dstokeep.isSolutionDomain()) 
+				continue; 
+			
 			includeDependency(dstokeep);
+		}
 	}
 	
 	@Override
