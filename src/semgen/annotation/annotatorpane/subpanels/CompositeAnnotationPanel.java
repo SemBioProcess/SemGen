@@ -410,6 +410,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			
 			ctd.setAsForceTermDialog(termlib, termindex);
 			showForceParticipants();
+			// We copy here because mapped variables may not all be pointing to same force object
+			// which is a bit different than what happens when modifying participants for processes.
+			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
 		
 		@Override
