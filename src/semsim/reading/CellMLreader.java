@@ -14,7 +14,6 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.JSBML;
 
 import semsim.annotation.Annotation;
@@ -723,14 +722,19 @@ public class CellMLreader extends ModelReader {
 	 * @param varmathml String representation of the MathML used to compute the
 	 * data structure's values
 	 * @param varname The name of the data structure
-	 * @return String representation of the right-hand side of the equation that solves for the given data structure
+	 * @return Infix string representation of the right-hand side of the equation that solves for the given data structure
 	 */
 	protected static String getRHSofDataStructureEquation(String varmathml, String varname){
 		
 		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
-		ASTNode ast_result = JSBML.readMathMLFromString(varmathmlRHS);
-		
-		return JSBML.formulaToString(ast_result);
+		if( ! varmathmlRHS.isEmpty()){
+			return JSBML.formulaToString(JSBML.readMathMLFromString(varmathmlRHS));
+		}
+		else{
+			if( (varmathml != null && ! varmathml.isEmpty()))
+				System.err.println("Failed to find right-hand-side of equation for " + varname + ". Printing the MathML:\n" + varmathml);
+			return null;
+		}
 	}
 	
 	

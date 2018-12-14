@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -522,16 +523,24 @@ public class SemSimUtil {
 	
 				while(eqparentelit.hasNext()){
 					Element nextel = (Element)eqparentelit.next();
-					Boolean iseqel = nextel.getName().equals("eq");
+					boolean iseqel = nextel.getName().equals("eq");
+					boolean isLHSdifferential = false;
 					
+					// Check if the element is a LHS differential term 
 					Iterator<?> nexteldescit = nextel.getDescendants(new ElementFilter("diff"));
+					if(nexteldescit.hasNext()) {
+						Element nextdiffel = (Element)nexteldescit.next();
+						String diffnumerator = getNumeratorOfDiffEq(nextdiffel.getParentElement());
+						isLHSdifferential =  (diffnumerator.equals(solvedvarlocalname));
+					}
 					
 					Boolean isLHS = (nextel.getName().equals("ci") && nextel.getText().trim().equals(solvedvarlocalname))
-									|| nexteldescit.hasNext();
-	
+									|| isLHSdifferential; // this line used to be just nexteldescit.hasNext();
+					
 					// If the element doesn't represent the LHS of the equation, or isn't the <eq> element,
 					// then we've found our RHS
 					if(! isLHS && ! iseqel){
+						
 						XMLOutputter outputter = new XMLOutputter();
 						outputter.setFormat(Format.getPrettyFormat());
 						Element newtopel = new Element("math");
@@ -574,7 +583,18 @@ public class SemSimUtil {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * @param parentofdiffelement The immediate parent element of a <diff/> element
+	 * @return The numerator variable of a differential expression (e.g. the "P" in dP/dt)
+	 */
+	private static String getNumeratorOfDiffEq(Element parentofdiffelement){
+		@SuppressWarnings("unchecked")
+		List<Element> diffsiblinglist = parentofdiffelement.getChildren("ci",Namespace.getNamespace(RDFNamespace.MATHML.getNamespaceAsString()));
 		
+		if(diffsiblinglist.size() != 1) return "";
+		else return diffsiblinglist.get(0).getText().trim();
 	}
 	
 
