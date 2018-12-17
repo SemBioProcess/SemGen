@@ -50,21 +50,22 @@ public class BioPortalSearcher {
 		boolean exactmatchbool = exactmatch==1; 
 		
 		URL url;
-		if (exactmatch==2) {
+		if (exactmatch==2) { // WHen using the "Ontology ID" option in SemGen
 			url = new URL(
 					"http://data.bioontology.org/search?q=" + bioportalNickName + ":"
 							+ text + "&ontologies="
 							+ bioportalNickName + "&format=xml" + "&include=prefLabel,synonym,definition,notation,cui,semanticType,properties"
+							+ "&pagesize=5000" // max results allowed per page is 5000
 							+ "&apikey=" + BIOPORTAL_API_KEY + "&also_search_properties=true");
 
 		}
-		else {
+		else { // When using either the "contains" or "exact match" option in SemGen
 					url = new URL(
 				"http://data.bioontology.org/search?q="
 						+ text + "&ontologies="
 						+ bioportalNickName + "&format=xml" + "&exact_match=" + exactmatchbool
+						+ "&pagesize=5000" // max results allowed per page is 5000
 						+ "&apikey=" + BIOPORTAL_API_KEY);
-
 		}
 		
 		System.out.println(url);
@@ -95,7 +96,6 @@ public class BioPortalSearcher {
 					if(ont.getNickName().equals(bioportalNickName) && preferredLabel != null){
 						rdflabelsanduris.put(preferredLabel, uri);
 					}
-
 				}
 			}
 		}
