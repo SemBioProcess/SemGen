@@ -463,6 +463,11 @@ function Stage(graph, stagestate) {
 	receiver.onModifyExtraction(function(sourceindex, index, extraction) {
 		stage.setExtractionNode(sourceindex, index, extraction);
 	});
+
+	receiver.onShowModelAbstract(function (bioModelAbstract) {
+		stage.hideLoader();
+		window.alert(bioModelAbstract);
+	});
 }
 
 //For objects that must be loaded after the rest of the stage is loaded
@@ -531,10 +536,6 @@ function makeResultSet(searchResultSet, stage) {
                 stage.showLoader();
                 setTimeout(function() {
                     sender.getModelAbstract(name);
-                    receiver.onShowModelAbstract(function (bioModelAbstract) {
-                        stage.hideLoader();
-                        window.alert(bioModelAbstract);
-                    });
 				}, 20);
             }
         });
