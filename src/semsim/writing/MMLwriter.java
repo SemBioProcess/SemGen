@@ -280,8 +280,10 @@ public class MMLwriter extends ModelWriter{
 				
 		for (String dsname : alldsarray) {
 			DataStructure ds = semsimmodel.getAssociatedDataStructure(dsname);
-						
-			if (ds.hasStartValue() && ds.hasSolutionDomain()) {
+			
+			if (ds.hasStartValue() && ds.hasSolutionDomain() 
+					&& ! ds.getComputation().getComputationalCode().isEmpty()) { // If there's an actual equation for the codeword
+				
 				output = output.concat("\twhen (" + ds.getSolutionDomain().getName()
 						+ " = " + ds.getSolutionDomain().getName() + ".min){ " 
 						+ getJSimFormattedName(ds) + " = " + ds.getStartValue() + "; }\n");
