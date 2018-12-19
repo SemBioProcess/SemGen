@@ -30,7 +30,13 @@ function NodeDrag() {
                 selections = virtualnodes;
             }
             selections.forEach(function(n) {
-                n.rootElement.selectAll("circle").attr("r", _node.r*2);
+                if (n.nodeType == NodeType.FUNCTION) {
+                    n.rootElement.selectAll("rect").attr("width", _node.r*4);
+                    n.rootElement.selectAll("rect").attr("height", _node.r*4);
+                }
+                else {
+                    n.rootElement.selectAll("circle").attr("r", _node.r * 2);
+                }
                 n.fx = _node.xpos();
                 n.fy = _node.ypos();
             });
@@ -93,7 +99,15 @@ function NodeDrag() {
         })
         .on("end", function (_node) {
             if (cntrlIsPressedBefore) {
-                _node.rootElement.selectAll("circle").attr("r", _node.r);
+                if (_node.nodeType == NodeType.FUNCTION) {
+                    _node.rootElement.selectAll("rect")
+                        .attr("width", _node.r*2)
+                        .attr("height", +node.r*2);
+                }
+                else {
+                    _node.rootElement.selectAll("circle").attr("r", _node.r);
+                }
+
                 return;
             }
             var selections = _node.multiDrag();
@@ -104,7 +118,14 @@ function NodeDrag() {
                 }
 
                 selections.forEach(function(n) {
-                    n.rootElement.selectAll("circle").attr("r", n.r);
+                    if (n.nodeType == NodeType.FUNCTION) {
+                        n.rootElement.selectAll("rect")
+                            .attr("width", n.r*2)
+                            .attr("height", n.r*2);
+                    }
+                    else {
+                        n.rootElement.selectAll("circle").attr("r", n.r);
+                    }
                     n.setLocation(n.fx, n.fy);
                 });
                 //Execute any drag behaviors unique to the node type

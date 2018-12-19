@@ -20,7 +20,8 @@ var NodeType = {
     MEDIATOR: {id: 8, nodeType: "Entity", color: "#1F77B4", canShowHide: true},
     NULLNODE: {id: 9, nodeType: "Null", color: "#FFFFFF", canShowHide: true},
     EXTRACTION: {id: 10, nodeType: "Extraction", color: "#118888", canShowHide: false},
-    UNSPECIFIED: {id: 11, nodeType: "Unspecified", color: "#FFFFFF", canShowHide:true}
+    UNSPECIFIED: {id: 11, nodeType: "Unspecified", color: "#FFFFFF", canShowHide:true},
+    FUNCTION: {id: 12, nodeType: "Function", color: "#FF7F0E", canShowHide:true},
 };
 
 var NodeTypeMap = {
@@ -35,7 +36,8 @@ var NodeTypeMap = {
     "Mediator": NodeType.MEDIATOR,
     "Null": NodeType.NULLNODE,
     "Extraction": NodeType.EXTRACTION,
-    "Unspecified": NodeType.UNSPECIFIED
+    "Unspecified": NodeType.UNSPECIFIED,
+    "Function": NodeType.FUNCTION
 };
 
 var NodeTypeArray = [
@@ -50,7 +52,8 @@ var NodeTypeArray = [
     NodeType.MEDIATOR,
     NodeType.NULLNODE,
     NodeType.EXTRACTION,
-    NodeType.UNSPECIFIED
+    NodeType.UNSPECIFIED,
+    NodeType.FUNCTION
 ];
 
 
@@ -59,8 +62,8 @@ var defaultlinklength = 50;
 var defaultchargedistance = 300;
 
 var DisplayModes = {
-    SHOWSUBMODELS: { id: 0, btnid: "showSubmodels", keys: [NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.FORCE, NodeType.CONSTITUTIVE]},
-    SHOWDEPENDENCIES: { id: 1, btnid: "showDependencies", keys: [NodeType.STATE, NodeType.RATE, NodeType.FORCE, NodeType.CONSTITUTIVE]},
+    SHOWSUBMODELS: { id: 0, btnid: "showSubmodels", keys: [NodeType.SUBMODEL, NodeType.STATE, NodeType.RATE, NodeType.FORCE, NodeType.CONSTITUTIVE, NodeType.FUNCTION]},
+    SHOWDEPENDENCIES: { id: 1, btnid: "showDependencies", keys: [NodeType.STATE, NodeType.RATE, NodeType.FORCE, NodeType.CONSTITUTIVE, NodeType.FUNCTION]},
     SHOWPHYSIOMAP: { id: 2, btnid: "showPhysiomap", keys: [NodeType.ENTITY, NodeType.PROCESS, NodeType.UNSPECIFIED]},
     SHOWMODEL: { id: 3, btnid: "showModel", keys: [NodeType.MODEL]}
 };

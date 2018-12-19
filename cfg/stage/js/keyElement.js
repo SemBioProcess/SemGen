@@ -60,10 +60,18 @@ function KeyElement (modDepKeys, physioKeys) {
             slash = '<line x1="18" y1="0" x2="2" y2="16" style="stroke:#000000; stroke-width:2"; />';
         }
 
-        keyElement.innerHTML = '<svg height="16" width="200">' +
-            '<circle transform="translate(10,8)" r="6" style="fill:' + keyInfo.color + '; stroke: #000000;" />' + slash +
-            '<text x="54" y="14" stroke="' + keyInfo.nodeType + '">'+ keyInfo.nodeType + '</text>' +
-            '</svg>';
+        if (keyInfo != NodeType.FUNCTION) {
+            keyElement.innerHTML = '<svg height="16" width="200">' +
+                '<circle transform="translate(10,8)" r="6" style="fill:' + keyInfo.color + '; stroke: #000000;" />' + slash +
+                '<text x="54" y="14" stroke="' + keyInfo.nodeType + '">' + keyInfo.nodeType + '</text>' +
+                '</svg>';
+        }
+        else if (keyInfo == NodeType.FUNCTION) {
+            keyElement.innerHTML = '<svg height="16" width="200">' +
+                '<rect transform="translate(4,2)" width="12" height="12" style="fill:' + keyInfo.color + '; stroke: #000000;" />' + slash +
+                '<text x="54" y="14" stroke="' + keyInfo.nodeType + '">' + keyInfo.nodeType + '</text>' +
+                '</svg>';
+        }
 
         // Put border around "Mediator" text for consistency with node border
         if(keyInfo.nodeType == "Mediator") {

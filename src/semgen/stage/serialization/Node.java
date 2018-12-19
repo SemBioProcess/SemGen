@@ -108,6 +108,7 @@ public abstract class Node<T extends SemSimObject> {
 		dtarray.add("Null");
 		dtarray.add("Extraction");
 		dtarray.add("Unspecified");
+		dtarray.add("Function");
 
 		nodetypes = dtarray;
 	}
@@ -124,6 +125,7 @@ public abstract class Node<T extends SemSimObject> {
 	static Number NULL = 9;
 	static Number EXTRACTION = 10;
 	static Number UNSPECIFIED = 11;
+	static Number FUNCTION = 12;
 	
 	public Node<? extends SemSimObject> getFirstAncestor() {
 		Node<? extends SemSimObject> par =  parent;

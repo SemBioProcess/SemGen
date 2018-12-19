@@ -40,10 +40,10 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	this.drag = [];
 	this.dragend = [];
 	this.ghostdragend = [];
-	
+
 	this.x = srcobj.xpos;
 	this.y = srcobj.ypos;
-	
+
 	this.xpos = function () {
 		return this.x;
 	}
@@ -54,7 +54,6 @@ function Node(graph, srcobj, parent, r, textSize, charge) {
 	
 	this.isOverlappedBy = function(overlapnode, proximityfactor) {
 		return (Math.sqrt(Math.pow(overlapnode.xpos()-this.xpos(), 2) + Math.pow(overlapnode.ypos()-this.ypos(), 2))+overlapnode.r*2 <= this.r*proximityfactor);
-
 	}
 	
 	this.deselect = function() {
@@ -108,7 +107,7 @@ Node.prototype.setLocation = function (x, y) {
 	y = Math.max(this.graph.worldsize[0][1] + this.r*3, Math.min(this.graph.worldsize[1][1] - this.r*3, y));
 	
 	this.x = x; this.y = y;
-	
+
 	this.srcobj.xpos = x;
 	this.srcobj.ypos = y;
 	if (this.fixed || this.fx !=null) {
@@ -138,20 +137,80 @@ Node.prototype.createVisualElement = function (element, graph) {
     	.style("fill", this.nodeType.color)
     	.attr("id", "Node;"+this.id);
 
-    var circleSelection = this.rootElement.append("circle")
-        .attr("r", this.r)
+	if(this.nodeType == NodeType.FUNCTION) {
+		var circleSelection = this.rootElement.append("rect")
+			.attr("width", this.r*2)
+			.attr("height", this.r*2)
+			.attr("class", "nodeStrokeClass")
+			.on("mouseover", function (d) {
+				graph.highlightMode(d);
+			})
+			.on("mouseout", function () {
+				graph.highlightMode(null);
+			});
 
-        .attr("class","nodeStrokeClass")
-        .on("mouseover", function (d) {
-            graph.highlightMode(d);
-        })
-        .on("mouseout", function () {
-            graph.highlightMode(null);
-        });
+
+		circleSelection.attr("stroke", "black")
+			.attr("stroke-width", 0.5);
+
+		//Append highlight
+		this.rootElement.append("rect")
+			.attr("class", "highlight")
+			.attr("width", this.r + 4)
+			.attr("height", this.r + 4)
+			.attr("stroke", "#fdc751")
+			.attr("stroke-width", "4")
+			.on("mouseover", function (d) {
+				graph.highlightMode(d);
+			})
+			.on("mouseout", function () {
+				graph.highlightMode(null);
+			});
+	}
+
+	else {
+		var circleSelection = this.rootElement.append("circle")
+			.attr("r", this.r)
+
+			.attr("class", "nodeStrokeClass")
+			.on("mouseover", function (d) {
+				graph.highlightMode(d);
+			})
+			.on("mouseout", function () {
+				graph.highlightMode(null);
+			});
 
 
-    circleSelection.attr("stroke", "black")
-        .attr("stroke-width", 0.5);
+		circleSelection.attr("stroke", "black")
+			.attr("stroke-width", 0.5);
+
+		//Append highlight circle
+		this.rootElement.append("circle")
+			.attr("class", "highlight")
+			.attr("r", this.r + 4)
+			.attr("stroke", "#fdc751")
+			.attr("stroke-width", "4")
+			.on("mouseover", function (d) {
+				graph.highlightMode(d);
+			})
+			.on("mouseout", function () {
+				graph.highlightMode(null);
+			});
+	}
+
+	if(this.nodeType == NodeType.NULLNODE || this.nodeType == NodeType.UNSPECIFIED) {
+		this.rootElement.append("svg:line")
+			.attr("x1", this.r)
+			.attr("x2", -this.r)
+			.attr("y1", -this.r)
+			.attr("y2", this.r)
+			.attr("stroke", "black")
+			.attr("stroke-width", 1);
+	} else {
+		//Create the text elements, but not for Null Nodes
+		this.createTextElement("shadow");
+		this.createTextElement("real");
+	}
 
     this.rootElement.on("click", function (node) {
     	if (d3.event.defaultPrevented || node.graph.cntrlIsPressed) return;
@@ -162,33 +221,6 @@ Node.prototype.createVisualElement = function (element, graph) {
     	d.graph.contextMenu.showMenu(d);
     });
 
-    
-    //Append highlight circle
-    this.rootElement.append("circle")
-        .attr("class", "highlight")
-        .attr("r", this.r + 4)
-        .attr("stroke", "#fdc751")
-        .attr("stroke-width", "4")
-        .on("mouseover", function (d) {
-            graph.highlightMode(d);
-        })
-        .on("mouseout", function () {
-            graph.highlightMode(null);
-        });
-
-    if(this.nodeType == NodeType.NULLNODE || this.nodeType == NodeType.UNSPECIFIED) {
-        this.rootElement.append("svg:line")
-            .attr("x1", this.r)
-            .attr("x2", -this.r)
-            .attr("y1", -this.r)
-            .attr("y2", this.r)
-            .attr("stroke", "black")
-            .attr("stroke-width", 1);
-    } else {
-        //Create the text elements, but not for Null Nodes
-        this.createTextElement("shadow");
-        this.createTextElement("real");
-    }
 
 	this.rootElement.attr("transform", "translate(" + -node.xpos() + "," + -node.ypos() + ")");
 	
@@ -214,7 +246,7 @@ Node.prototype.tickHandler = function (element, graph) {
 
 	}
 	this.setLocation(
-			this.xpos()+forcex, this.ypos()+forcey
+		this.xpos()+forcex, this.ypos()+forcey
 	)
 	
 	var root = d3.select(element);
@@ -241,8 +273,14 @@ Node.prototype.createTextElement = function (className) {
 
 
 Node.prototype.highlight = function () {
-	if (this.rootElement) 
-		this.rootElement.classed("selected", this.rootElement.select("circle").style("display")!="none");
+	if (this.rootElement) {
+		if (this.nodeType == NodeType.FUNCTION) {
+			this.rootElement.classed("selected", this.rootElement.select("rect").style("display") != "none");
+		}
+		else {
+			this.rootElement.classed("selected", this.rootElement.select("circle").style("display") != "none");
+		}
+	}
 }
 
 Node.prototype.removeHighlight = function () {
@@ -273,9 +311,17 @@ Node.prototype.onClick = function () {
 
 Node.prototype.pulse = function () {
     var nodeEnlarge = this.rootElement.select(".highlight");
-    nodeEnlarge = nodeEnlarge.transition()
-        .duration(2000)
-        .attr("r", 30);
+    if(this.nodeType != NodeType.FUNCTION) {
+		nodeEnlarge = nodeEnlarge.transition()
+			.duration(2000)
+			.attr("r", 30);
+	}
+    else {
+		nodeEnlarge = nodeEnlarge.transition()
+			.duration(2000)
+			.attr("width", 60)
+			.attr("height", 60);
+	}
 }
 
 Node.prototype.isVisible = function () {

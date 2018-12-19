@@ -48,18 +48,50 @@ function Link(graph, srclink, output, input, length, fade, interSubmodelLink) {
 	}
 	
 	this.draw = function (source, target) {
-		var dx = target.xpos() - source.xpos(),
-	    dy = target.ypos() - source.ypos(),
-	    dr = 0,
-	    arrow = this.drawArrow(dx, dy, source, target),
-	    biarrow = this.bidirectional ? 
-	    		this.drawArrow(source.xpos() - target.xpos(), source.ypos() - target.ypos(), target, source) : "";
+		if (source.nodeType == NodeType.FUNCTION) {
+			var dx = target.xpos() - source.xpos()-5,
+				dy = target.ypos() - source.ypos()-5,
+				dr = 0,
+				arrow = this.drawArrow(dx, dy, source, target),
+				biarrow = this.bidirectional ?
+					this.drawArrow(source.xpos()-5 - target.xpos(), source.ypos()-5 - target.ypos(), target, source) : "";
 
-		return "M" + source.xpos() + "," + source.ypos() +
+			return "M" + source.xpos() + "," + source.ypos() +
 				"A" + dr + "," + dr + " 0 0 1," + target.xpos() + "," + target.ypos() +
 				"A" + dr + "," + dr + " 0 0 0," + source.xpos() + "," + source.ypos() +
 				arrow + biarrow +
 				"z";
+		}
+		if (target.nodeType == NodeType.FUNCTION) {
+			{
+				var dx = target.xpos()-5 - source.xpos(),
+					dy = target.ypos()-5 - source.ypos(),
+					dr = 0,
+					arrow = this.drawArrow(dx, dy, source, target),
+					biarrow = this.bidirectional ?
+						this.drawArrow(source.xpos() - target.xpos()-5, source.ypos() - target.ypos()-5, target, source) : "";
+
+				return "M" + source.xpos() + "," + source.ypos() +
+					"A" + dr + "," + dr + " 0 0 1," + target.xpos() + "," + target.ypos() +
+					"A" + dr + "," + dr + " 0 0 0," + source.xpos() + "," + source.ypos() +
+					arrow + biarrow +
+					"z";
+			}
+		}
+		else {
+			var dx = target.xpos() - source.xpos(),
+				dy = target.ypos() - source.ypos(),
+				dr = 0,
+				arrow = this.drawArrow(dx, dy, source, target),
+				biarrow = this.bidirectional ?
+					this.drawArrow(source.xpos() - target.xpos(), source.ypos() - target.ypos(), target, source) : "";
+
+			return "M" + source.xpos() + "," + source.ypos() +
+				"A" + dr + "," + dr + " 0 0 1," + target.xpos() + "," + target.ypos() +
+				"A" + dr + "," + dr + " 0 0 0," + source.xpos() + "," + source.ypos() +
+				arrow + biarrow +
+				"z";
+		}
 	}
 
 }

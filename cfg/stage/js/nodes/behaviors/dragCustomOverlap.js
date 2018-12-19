@@ -37,8 +37,13 @@ function CreateCustomOverlap(_node) {
 						if (n.hasClassName("dependencyNode")) {
 							if (n.rootElement) {
 								if (n.submodelinput || n.nodeType != _node.nodeType || n.hasIntermodalLink()) {
-									invalidDepNodes.push(n); 
-									n.rootElement.selectAll("circle").attr("opacity", "0.1");
+									invalidDepNodes.push(n);
+									if (n.nodeType == NodeType.FUNCTION) {
+										n.rootElement.selectAll("rect").attr("opacity", "0.1");
+									}
+									else {
+										n.rootElement.selectAll("circle").attr("opacity", "0.1");
+									}
 								}
 								else {
 									validDepNodes.push(n);
@@ -63,11 +68,26 @@ function CreateCustomOverlap(_node) {
 		    	validDepNodes.forEach(function (node) {
 		    		if (node.isOverlappedBy(_node, 5)) {
 						mergeNode = node;
-						node.rootElement.selectAll("circle").attr("r", node.r*2);
+						if (node.nodeType == NodeType.FUNCTION) {
+							node.rootElement.selectAll("rect")
+								.attr("width", node.r*4)
+								.attr("height", node,r*4);
+						}
+						else {
+							node.rootElement.selectAll("circle").attr("r", node.r*2);
+						}
 					}
 					else {
-						node.rootElement.selectAll("circle").attr("r", node.r);
-						if(node == mergeNode) {							
+						if (node.nodeType == NodeType.FUNCTION) {
+							node.rootElement.selectAll("rect")
+								.attr("width", node.r*2)
+								.attr("height", node.r*2);
+						}
+						else {
+							node.rootElement.selectAll("circle").attr("r", node.r);
+						}
+
+						if(node == mergeNode) {
 							mergeNode = null;
 						}
 					}
@@ -79,11 +99,24 @@ function CreateCustomOverlap(_node) {
 		    	
 		    	// Remove any classes we may have set
 		        validDepNodes.forEach(function (node) {
-		        	node.rootElement.selectAll("circle").attr("r", _node.r);
+		        	if (node.nodeType == NodeType.FUNCTION) {
+						node.rootElement.selectAll("rect")
+							.attr("width", _node.r*2)
+							.attr("hegith", _node.r*2);
+					}
+		        	else {
+		        		node.rootElement.selectAll("circle").attr("r", _node.r);
+					}
 				});
 		        invalidDepNodes.forEach(function (node) {
 		        	if (node.rootElement) {
-		        		node.rootElement.selectAll("circle").attr("opacity", node.defaultopacity);
+						if (node.nodeType == NodeType.FUNCTION) {
+							node.rootElement.selectAll("rect").attr("opacity", node.defaultopacity);
+						}
+						else {
+							node.rootElement.selectAll("circle").attr("opacity", node.defaultopacity);
+
+						}
 		        	}
 				});
 		        if(mergeNode) {

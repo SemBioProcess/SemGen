@@ -451,8 +451,8 @@ public class SemSimOWLreader extends ModelReader {
 			
 			// If the data structure is an SBML function output
 			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.SBML_FUNCTION_OUTPUT.getURIasString(), ont))
-					ds = new SBMLFunctionOutput(name);
-			
+				ds = new SBMLFunctionOutput(name);
+
 			// If an integer
 			else if(SemSimOWLFactory.indExistsInClass(dsind, SemSimTypes.INTEGER.getURIasString(), ont))
 				ds = new SemSimInteger(name);
