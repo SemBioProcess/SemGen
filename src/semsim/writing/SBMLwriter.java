@@ -640,6 +640,8 @@ public class SBMLwriter extends ModelWriter {
 				
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
+				
+				System.out.println("ORIG mathml for " + ds.getName() + ": " + mathml);
 	
 				// Set reactants, products and modifiers based on SemSim sources, sinks and mediators.
 				// Sources first...
@@ -682,7 +684,6 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				// Find any local parameters associated with reaction and add them to kinetic law
-				
 				for(int s=0; s<globalParameters.size();s++){
 					
 					String fullnm = globalParameters.get(s);
@@ -705,8 +706,12 @@ public class SBMLwriter extends ModelWriter {
 					}
 				}
 				
-				kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
-				rxn.setKineticLaw(kl);
+				// It's invalid to specify an empty kinetic law, reactant, product or mediator in SBML.
+				// So skip adding the law to the reaction if there's no math (sometimes happens in extractions)
+				if( ! mathml.isEmpty() && mathml!=null){ 
+					kl.setMath(getASTNodeFromRHSofMathML(mathml, ds.getName()));
+					rxn.setKineticLaw(kl);
+				}
 				
 				addNotesAndMetadataID(process, rxn);	
 			}
