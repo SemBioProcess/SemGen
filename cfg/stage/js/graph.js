@@ -274,8 +274,8 @@ function Graph() {
             });
         };
 
-        vis.selectAll('.submodelNode').moveToFront();
-        vis.selectAll('.dependencyNode').moveToFront();
+		vis.selectAll('.dependencyNode').moveToBack();
+        vis.selectAll('.submodelNode').moveToBack();
         vis.selectAll('.hullOpen').moveToBack();
         vis.selectAll('.modelNode').moveToBack();
 
