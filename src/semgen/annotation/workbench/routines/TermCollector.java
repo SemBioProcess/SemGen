@@ -103,19 +103,21 @@ public class TermCollector {
 	private void collectforSingularEntity() {
 		collectCompositesContainingSingularEntity();
 		collectProcessesContainingCPEs();
-		collectCompositeContainingCodewords();
+		collectForcesContainingCPEs();
+		collectPhysicalModelComponentsOfDataStructures();
 	}
 	
 	private void collectforCompositeEntity() {
 		containingindicies.add(termindex);
 		collectProcessesContainingCPEs();
-		collectCompositeContainingCodewords();
+		collectForcesContainingCPEs();
+		collectPhysicalModelComponentsOfDataStructures();
 		containingindicies.remove(termindex);
 	}
 	
 	private void collectforProcess() {
 		containingindicies.add(termindex);
-		collectCompositeContainingCodewords();
+		collectPhysicalModelComponentsOfDataStructures();
 		containingindicies.remove(termindex);
 	}
 	
@@ -157,9 +159,13 @@ public class TermCollector {
 	
 	private void collectProcessesContainingCPEs() {
 		ArrayList<Integer> cpes = new ArrayList<Integer>(containingindicies);
+		
 		for (Integer proc : library.getSortedPhysicalProcessIndicies()) {
+			
 			ArrayList<Integer> parts = library.getAllProcessParticipantIndicies(proc);
+			
 			for (Integer cpe : cpes) {
+				
 				if (parts.contains(cpe)) {
 					containingindicies.add(proc);
 					break;
@@ -168,13 +174,29 @@ public class TermCollector {
 		}
 	}
 	
-	private void collectCompositeContainingCodewords() {
-		for (DataStructure ds : drawer.getCodewords()) {
-			collectDataStructureComposite(ds);
+	private void collectForcesContainingCPEs() {
+		ArrayList<Integer> cpes = new ArrayList<Integer>(containingindicies);
+		for (Integer force : library.getPhysicalForceIndicies()) {
+			
+			ArrayList<Integer> parts = library.getAllForceParticipantIndicies(force);
+			
+			for (Integer cpe : cpes) {
+				
+				if (parts.contains(cpe)) {
+					containingindicies.add(force);
+					break;
+				}
+			}
 		}
 	}
 	
-	private void collectDataStructureComposite(DataStructure ds) {
+	private void collectPhysicalModelComponentsOfDataStructures() {
+		for (DataStructure ds : drawer.getCodewords()) {
+			collectDataStructurePhysicalModelComponent(ds);
+		}
+	}
+	
+	private void collectDataStructurePhysicalModelComponent(DataStructure ds) {
 		if (ds.hasAssociatedPhysicalComponent()) {
 				Integer pmci = library.getComponentIndex(ds.getAssociatedPhysicalModelComponent(), true);
 				if (containingindicies.contains(pmci)) {

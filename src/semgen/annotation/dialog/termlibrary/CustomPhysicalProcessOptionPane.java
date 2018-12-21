@@ -64,7 +64,7 @@ public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPa
 	
 	@Override
 	protected Integer createTerm() {
-		termindex = library.createProcess(mantextfield.getText(), descriptionarea.getText());
+		termindex = library.createCustomProcess(mantextfield.getText(), descriptionarea.getText());
 		for (ObjectPropertyEditor ope : objecteditors) {
 			ope.setRelationships(termindex);
 		}

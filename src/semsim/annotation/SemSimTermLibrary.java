@@ -216,7 +216,7 @@ public class SemSimTermLibrary extends Observable {
 		return i;
 	}
 	
-	public int createProcess(String name, String desc) {
+	public int createCustomProcess(String name, String desc) {
 		int in = addPhysicalProcess(new CustomPhysicalProcess(name, desc));
 		notifyProcessChanged();
 		return in;
@@ -236,7 +236,9 @@ public class SemSimTermLibrary extends Observable {
 	
 	private int addPhysicalForce(PhysicalForce force) {
 		int i = getComponentIndex(force, false);
-		if (i != -1) return i; // do not add if already in master list
+		if (i != -1){
+			return i; // do not add if already in master list
+		}
 		
 		IndexCard<PhysicalForce> ic = new IndexCard<PhysicalForce>(force);
 		masterlist.add(ic);
@@ -300,7 +302,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndicies() {
-		return sortComponentIndicesbyName(ppccompindexer);
+		return sortComponentIndicesByName(ppccompindexer);
 	}
 	
 	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(PropertyType type) {
@@ -327,11 +329,11 @@ public class SemSimTermLibrary extends Observable {
 		default:
 			break;
 		}
-		return sortComponentIndicesbyName(results);
+		return sortComponentIndicesByName(results);
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalPropertyIndicies() {
-		return sortComponentIndicesbyName(singppindexer);
+		return sortComponentIndicesByName(singppindexer);
 	}
 
 	public ReferencePhysicalEntity getReferencePhysicalEntity(Integer index) {
@@ -339,7 +341,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public ArrayList<Integer> getSortedReferencePhysicalEntityIndicies() {
-		return sortComponentIndicesbyName(rpeindexer);
+		return sortComponentIndicesByName(rpeindexer);
 	}
 	
 	public int getIndexofReferencePhysicalEntity(ReferencePhysicalEntity rpe) {
@@ -378,11 +380,11 @@ public class SemSimTermLibrary extends Observable {
 		list.addAll(custpeindexer);
 		list.addAll(rpeindexer);
 		
-		return sortComponentIndicesbyName(list);
+		return sortComponentIndicesByName(list);
 	}
 	
 	public ArrayList<Integer> getSortedCompositePhysicalEntityIndicies() {
-		return sortComponentIndicesbyName(cpeindexer);
+		return sortComponentIndicesByName(cpeindexer);
 	}
 	
 	// Retrieving physical processes
@@ -396,6 +398,10 @@ public class SemSimTermLibrary extends Observable {
 			return (PhysicalForce)masterlist.get(index).getObject();
 		else return null;
 	}
+	
+	public ArrayList<Integer> getPhysicalForceIndicies() {
+		return forceindexer;
+	}
 		
 	public Integer getPhysicalProcessIndexByName(PhysicalProcess process) {
 		for (Integer i : procindexer) {
@@ -405,7 +411,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public ArrayList<Integer> getSortedPhysicalProcessIndicies() {
-		return sortComponentIndicesbyName(procindexer);
+		return sortComponentIndicesByName(procindexer);
 	}	
 	
 	public ArrayList<Integer> getSortedReferencePhysicalProcessIndicies() {
@@ -413,7 +419,7 @@ public class SemSimTermLibrary extends Observable {
 		for (Integer i : procindexer) {
 			if (masterlist.get(i).isReferenceTerm()) refprocs.add(i);
 		}
-		return sortComponentIndicesbyName(refprocs);
+		return sortComponentIndicesByName(refprocs);
 	}	
 	
 	public ArrayList<Integer> getAllReferenceTerms() {
@@ -455,7 +461,7 @@ public class SemSimTermLibrary extends Observable {
 				break;
 			}
 		}
-		return sortComponentIndicesbyName(list);
+		return sortComponentIndicesByName(list);
 	}
 
 	
@@ -631,7 +637,7 @@ public class SemSimTermLibrary extends Observable {
 		for (PhysicalEntity entity : process.getMediators()) {
 			mediators.add(getComponentIndex(entity, false));
 		}
-		return sortComponentIndicesbyName(mediators);
+		return sortComponentIndicesByName(mediators);
 	}
 	
 	public ArrayList<Integer> getAllProcessParticipantIndicies(Integer index) {
@@ -645,6 +651,9 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getAllForceParticipantIndicies(Integer forceindex){
 		ArrayList<Integer> parts = new ArrayList<Integer>();
 		for (PhysicalEntity entity : getPhysicalForce(forceindex).getParticipants()) {
+			
+			System.out.println("Found participant " + entity.getName());
+			
 			parts.add(getComponentIndex(entity, false));
 		}
 		return parts;
@@ -834,7 +843,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 
 //*************************************HELPER METHODS*************************************//
-	private ArrayList<Integer> sortComponentIndicesbyName(ArrayList<Integer> indicies) {
+	private ArrayList<Integer> sortComponentIndicesByName(ArrayList<Integer> indicies) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		for (Integer i : indicies) {
 			map.put(masterlist.get(i).getName(), i);

@@ -98,7 +98,7 @@ public class ReferenceOntologies {
 		PhysicalProperty(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.PATO, 
 				ReferenceOntology.SBO, ReferenceOntology.SNOMED}),
 		PhysicalEntity(new ReferenceOntology[]{ReferenceOntology.CHEBI, ReferenceOntology.CL, ReferenceOntology.FMA, ReferenceOntology.GO,
-				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.PR, ReferenceOntology.UNIPROT}),
+				ReferenceOntology.MA, ReferenceOntology.OBI, ReferenceOntology.OPB, ReferenceOntology.PR, ReferenceOntology.UNIPROT}),
 		PhysicalProcess(new ReferenceOntology[]{ReferenceOntology.OPB, ReferenceOntology.GO});
 		
 		private ArrayList<ReferenceOntology> domainontologies = new ArrayList<ReferenceOntology>();
