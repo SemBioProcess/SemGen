@@ -58,7 +58,7 @@ function Graph() {
 
 	this.fixedMode = false;
 	this.delayfixonupdate = true; //Overrides the graph's default behavior to run for a short period on update even when fixedMode is active.
-	//Node type visibility: model, submodel, state, rate, constitutive, entity, process, mediator, null, extraction, unspecified, force
+	//Node type visibility: model, submodel, state, rate, force, constitutive, entity, process, mediator, null, extraction, unspecified
 	this.nodesVisible = [true, true, true, true, true, true, true, true, true, true, true, true];
 	this.showorphans = false;
 
@@ -569,24 +569,24 @@ function Graph() {
 	//Bind keyboard events
 	$(document).keyup(function(event){
 		if(graph.isMac) {
-            if (event.which == "91" || event.which == "93") {
+            if (event.which == "91" || event.which == "93") { //left command and right command
                 graph.cntrlIsPressed = false;
             }
-            if (event.which == "17") {
+            if (event.which == "17") { //control
                 graph.cntrlIsPressedOnMac = false;
             }
         }
 		else {
-            if (event.which == "17") {
+            if (event.which == "17") { //control
                 graph.cntrlIsPressed = false;
             }
         }
-        if (event.which == "16") {
+        if (event.which == "16") { //shift
             graph.shiftIsPressed = false;
             $('#stage').css('cursor', graph.defaultcursor);
         }
 
-        if (event.which == "32") {
+        if (event.which == "32") { //space
             if (!$(event.target).closest(".searchString").length) {
                 graph.fixedMode = !graph.fixedMode;
                 $("#fixedNodes").attr('checked', graph.fixedMode);
@@ -600,18 +600,18 @@ function Graph() {
 
 	$(document).keydown(function(event){
         if(graph.isMac) {
-            if(event.which == "91" || event.which == "93") {
+            if(event.which == "91" || event.which == "93") { //left command and right command
                 graph.cntrlIsPressed = true;
             }
-            if(event.which=="17") {
+            if(event.which=="17") { //control
                 graph.cntrlIsPressedOnMac = true;
             }
         }
         else {
-            if(event.which=="17")
+            if(event.which=="17") //control
                 graph.cntrlIsPressed = true;
         }
-        if(event.which=="16") {
+        if(event.which=="16") { //shift
 			graph.shiftIsPressed = true;
 			$('#stage').css('cursor', 'crosshair');
         }
