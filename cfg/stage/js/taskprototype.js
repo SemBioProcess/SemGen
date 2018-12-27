@@ -22,6 +22,8 @@ function Task(graph, stagestate) {
 		optbehaviors.forEach(function(b){
 			modelNode.addBehavior(b);
 		});
+
+		$('#toggleMoveStageButton').trigger("click");
 		
 		task.nodes[model.id] = modelNode;
 		task.graph.update();
