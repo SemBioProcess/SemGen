@@ -50,3 +50,5 @@ out/
 /SemSimAPI.jar
 /build
 javadoc.xml
+/cellmlomextemp.omex
+/sbmlomextemp.omex
