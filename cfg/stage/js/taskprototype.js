@@ -127,8 +127,14 @@ function Task(graph, stagestate) {
 						}
 					}
 				}
-				
 				this.selectedNodes.push(node);
+
+				var parentModelID = node.id.split(".")[0];
+				var visibleNodes = node.graph.getVisibleNodes();
+				var modelNode = visibleNodes.filter(function (modelNode) {
+					return modelNode.id === parentModelID;
+				})[0];
+				this.onModelSelection(modelNode);
 			}
 			node.selected = true;
 			node.highlight();
@@ -153,6 +159,13 @@ function Task(graph, stagestate) {
 				});
 				this.selectedNodes = [];
 				this.selectedNodes.push(node);
+
+				var parentModelID = node.id.split(".")[0];
+				var visibleNodes = node.graph.getVisibleNodes();
+				var modelNode = visibleNodes.filter(function (modelNode) {
+					return modelNode.id === parentModelID;
+				})[0];
+				this.onModelSelection(modelNode);
 			}
 			node.selected = true;
 			node.highlight();
