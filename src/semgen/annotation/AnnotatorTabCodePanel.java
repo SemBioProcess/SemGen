@@ -71,7 +71,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				URL url = new URL(srccodema.getFilePath());
 				HttpURLConnection.setFollowRedirects(false);
 				HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-				httpcon.setReadTimeout(60000);
+				httpcon.setReadTimeout(30000);
 				httpcon.setRequestMethod("HEAD");
 				
 				Boolean online = true;
