@@ -4,12 +4,12 @@
 
 function BoundingBox(visnodes) {
 	
-	var boudingbox = this;
-	stage = d3.select("#svg"),
-	visiblenodes = visnodes,
-	origin = {x: 0, y: 0},
-	dim = {x: 0, y: 0},
-	box = null;
+	var boundingbox = this;
+	var stage = d3.select("#svg");
+	var visiblenodes = visnodes;
+	var origin = {x: 0, y: 0};
+	var dim = {x: 0, y: 0};
+	var box = null;
 	
 	var isOverlappedBy = function(overlapnode) {
 		var newOriginX, newOriginY, newDimX, newDimY;
@@ -54,20 +54,23 @@ function BoundingBox(visnodes) {
 
 			box.attr("width", Math.abs(d3.event.x-origin.x))
 			.attr("height", Math.abs(d3.event.y-origin.y));
-			
+
 		})
 		.on("end", function() {
+			if (d3.event.x-origin.x == 0 || d3.event.y-origin.y == 0) {
+				stage.selectAll("#boundrect").remove();
+				return;
+			}
 			var nodestoselect = [];
 			
 			visiblenodes.forEach(function(vn) {
 				if (vn.showchildren) return;
 				if (isOverlappedBy(vn)) {
-					
 					nodestoselect.push(vn);
 				}
 			});
 			
-			stage.select("#boundrect").remove();
+			stage.selectAll("#boundrect").remove();
 			main.task.selectNodes(nodestoselect);
 
 		});
