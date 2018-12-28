@@ -31,6 +31,11 @@ public class CustomPhysicalForce extends PhysicalForce{
 	}
 	
 	@Override
+	public String getName(){
+		return "anonymous force";
+	}
+	
+	@Override
 	public PhysicalModelComponent addToModel(SemSimModel model) {
 		Set<PhysicalEntity> sources = new HashSet<PhysicalEntity>();
 		for (PhysicalEntity entity : getSources()) {
