@@ -641,8 +641,6 @@ public class SBMLwriter extends ModelWriter {
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
 				
-				System.out.println("ORIG mathml for " + ds.getName() + ": " + mathml);
-	
 				// Set reactants, products and modifiers based on SemSim sources, sinks and mediators.
 				// Sources first...
 				for(PhysicalEntity source : process.getSourcePhysicalEntities()){

@@ -46,7 +46,7 @@ public class ExtractRemove extends Extractor {
 
 	private void collectStructures(SemSimModel receivermodel) {
 		for (Submodel sm : receivermodel.getSubmodels()) {
-			this.includeSubModel(sourcemodel.getSubmodel(sm.getName()));
+			includeSubModel(sourcemodel.getSubmodel(sm.getName()), new HashSet<Submodel>());
 		}
 		for (DataStructure ds : receivermodel.getAssociatedDataStructures()) {
 			if (!ds.isExternal()) {

@@ -22,7 +22,6 @@ public abstract class Extractor {
 
 	public Extractor(SemSimModel source, SemSimModel extractionmodel) {
 		sourcemodel = source;
-
 		extraction = extractionmodel;
 		includeSolutionDomains();
 	}
@@ -42,11 +41,11 @@ public abstract class Extractor {
 	public abstract SemSimModel run();
 	
 	protected void collectDataStructureInputs() {
-		Set<DataStructure> smdatastructures = new HashSet<DataStructure>(this.datastructures.keySet());
+		Set<DataStructure> datastructurestokeep = new HashSet<DataStructure>(this.datastructures.keySet());
 		
-		for (DataStructure smds : smdatastructures) {
+		for (DataStructure ds : datastructurestokeep) {
 			
-			for (DataStructure input : smds.getComputationInputs()) {
+			for (DataStructure input : ds.getComputationInputs()) {
 				
 				if ( ! datastructures.keySet().contains(input)) {	
 					DataStructure newinput = input.copy();
@@ -106,6 +105,7 @@ public abstract class Extractor {
 		extraction.setSubmodels(submodels.values());
 		
 		for (DataStructure dstoadd : datastructures.values()) {
+			
 			dstoadd.addToModel(extraction);
 			
 			// If the variable is part of a functional submodel that wasn't explicity included
@@ -152,15 +152,20 @@ public abstract class Extractor {
 
 	}
 	
-	protected void includeSubModel(Submodel sourceobj) {
-		submodels.put(sourceobj, sourceobj.clone());
-		for (Submodel submodel : sourceobj.getSubmodels()) {
-			this.includeSubModel(submodel);
+	protected void includeSubModel(Submodel sourcesubmodel, Set<Submodel> smstoignore) {
+		
+		if(smstoignore.contains(sourcesubmodel)) 
+			return;
+		
+		submodels.put(sourcesubmodel, sourcesubmodel.clone());
+		
+		for (Submodel subsubmodel : sourcesubmodel.getSubmodels()) {
+			includeSubModel(subsubmodel, smstoignore);
 		}
-		for (DataStructure ds : sourceobj.getAssociatedDataStructures()) {
-			if (!ds.isExternal()) {
-				includeDependency(ds);
-			}
+		
+		for (DataStructure ds : sourcesubmodel.getAssociatedDataStructures()) {
+			
+			if ( ! ds.isExternal()) includeDependency(ds);
 		}
 	}
 	

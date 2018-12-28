@@ -35,22 +35,14 @@ public class ExtractExclude extends Extractor {
 	private void collectElementstoKeep() {
 		Set<Submodel> smstokeep = new HashSet<Submodel>(sourcemodel.getSubmodels());
 		
-		for (Submodel smtoexclude : smstoexclude) {
-			smstokeep.remove(smtoexclude);
-			
-			for (DataStructure smds : smtoexclude.getAssociatedDataStructures()) {
-				dsstoexclude.add(smds);
-			}
-		}
+		smstokeep = getSubmodelsToKeep(smstoexclude, smstokeep);
 		
 		// If no submodels were explicitly selected for inclusion or exclusion, exclude them all. 
 		// Otherwise we end up keeping a bunch of data structures we don't need because of their
 		// association with submodels. If some submodels were explicitly excluded, retain the 
 		// correct ones.
 		if(smstoexclude.size() > 0){ 
-			for (Submodel smtokeep : smstokeep) {
-				includeSubModel(smtokeep);
-			}
+			for (Submodel smtokeep : smstokeep) includeSubModel(smtokeep, smstoexclude);
 		}
 		
 		ArrayList<DataStructure> dsstokeep = sourcemodel.getAssociatedDataStructures();	
@@ -76,6 +68,22 @@ public class ExtractExclude extends Extractor {
 			
 			includeDependency(dstokeep);
 		}
+	}
+	
+	
+	// Iteratively determines which submodels should be included in extraction based on which have
+	// been explicitly excluded
+	private Set<Submodel> getSubmodelsToKeep(Set<Submodel> submodelstoexclude, Set<Submodel> runningsmstokeep){
+	
+		for (Submodel smtoexclude : submodelstoexclude) {
+		
+			runningsmstokeep.remove(smtoexclude);
+			
+			for (DataStructure smds : smtoexclude.getAssociatedDataStructures()) dsstoexclude.add(smds);
+			
+			runningsmstokeep = getSubmodelsToKeep(new HashSet<Submodel>(smtoexclude.getSubmodels()),runningsmstokeep); // iterate through sub-submodels
+		}
+		return runningsmstokeep;
 	}
 	
 

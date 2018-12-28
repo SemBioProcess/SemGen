@@ -1,5 +1,7 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.HashSet;
+
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -27,7 +29,7 @@ public class ExtractNew extends Extractor {
 
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		includeSubModel(sourceobj);
+		includeSubModel(sourceobj, new HashSet<Submodel>());
 	}
 
 	//Stage a datastructure for inclusion. If an CellML input node is passed get it's output node instead.
