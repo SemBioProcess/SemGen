@@ -566,6 +566,8 @@ public class SemSimOWLwriter extends ModelWriter {
 						for(String rel : ((FunctionalSubmodel)sub).getRelationshipSubmodelMap().keySet()){
 							
 							for(FunctionalSubmodel subsub : ((FunctionalSubmodel)sub).getRelationshipSubmodelMap().get(rel)){
+								if(subsub == null) continue; // Sometimes the subsub value can be null due to extraction processes
+								
 								Subsumption subsumption = null;
 								
 								for(Subsumption g : cellmlsubsumptions){

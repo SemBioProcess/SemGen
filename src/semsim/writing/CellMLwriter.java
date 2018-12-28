@@ -53,46 +53,50 @@ public class CellMLwriter extends ModelWriter {
 	
 	@Override
 	public String encodeModel() {
+		
 		Document doc = null;
 		outputter.setFormat(Format.getPrettyFormat());
 		
-			mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
-			
-			createRDFBlock();
-			createRootElement();
-			SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);
-			
-			doc = new Document(root);
-			
-			rdfwriter.setRDFforModelLevelAnnotations();
-			
-			declareImports();
-			
-			// Add the documentation element
-			for(Annotation ann : semsimmodel.getAnnotations()){
-				if(ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION){
-					root.addContent(makeXMLContentFromString((String)ann.getValue()));
-				}
+		mainNS = Namespace.getNamespace(RDFNamespace.CELLML1_1.getNamespaceAsString());
+		
+		createRDFBlock();
+		createRootElement();
+		
+		SemSimUtil.createUnitNameMap(semsimmodel,oldAndNewUnitNameMap);
+		
+		doc = new Document(root);
+		
+		rdfwriter.setRDFforModelLevelAnnotations();
+		
+		declareImports();
+		
+		// Add the documentation element
+		for(Annotation ann : semsimmodel.getAnnotations()){
+			if(ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION){
+				root.addContent(makeXMLContentFromString((String)ann.getValue()));
 			}
+		}
+		
+		declareUnits();
+		declareSemSimSubmodels(); // this needs to go before we add variables to output b/c we may need to assign new metadata ID's to variables and components
+		declareComponentsandVariables();
+		declareGroupings();
+		declareConnections();
+		
+		// Add the RDF metadata, if we are writing to a standalone CellML file
+		if( ! rdfwriter.rdf.isEmpty() && ! (getWriteLocation() instanceof OMEXAccessor)){
 			
-			declareUnits();
-			declareSemSimSubmodels(); // this needs to go before we add variables to output b/c we may need to assign new metadata ID's to variables and components
-			declareComponentsandVariables();
-			declareGroupings();
-			declareConnections();
+			String rawrdf = AbstractRDFwriter.getRDFmodelAsString(rdfwriter.rdf, "RDF/XML-ABBREV");
+			Content newrdf = makeXMLContentFromString(rawrdf);
 			
-			// Add the RDF metadata, if we are writing to a standalone CellML file
-			if( ! rdfwriter.rdf.isEmpty() && ! (getWriteLocation() instanceof OMEXAccessor)){
-				String rawrdf = AbstractRDFwriter.getRDFmodelAsString(rdfwriter.rdf, "RDF/XML-ABBREV");
-				Content newrdf = makeXMLContentFromString(rawrdf);
-				if(newrdf!=null) root.addContent(newrdf);
-			}
+			if(newrdf!=null) root.addContent(newrdf);
+		}
 
         return outputter.outputString(doc);
 	}
 	
+	
 	//*************WRITE PROCEDURE********************************************//
-
 	
 	/**
 	 * Assign either a CASAwriter or SemSimRDFwriter for serializing the 
@@ -326,15 +330,22 @@ public class CellMLwriter extends ModelWriter {
 	/** Declare groupings between components in the model */
 	private void declareGroupings() {
 		Set<CellMLGrouping> groupings = new HashSet<CellMLGrouping>();
+		
 		for(Submodel parentsub : semsimmodel.getSubmodels()){
+			
 			if(parentsub.isFunctional()){
-				if(!((FunctionalSubmodel)parentsub).isImported()){
+				
+				if( ! ((FunctionalSubmodel)parentsub).isImported()){
+					
 					for(String rel : ((FunctionalSubmodel)parentsub).getRelationshipSubmodelMap().keySet()){
+						
 						// Find the grouping
 						CellMLGrouping group = null;
+						
 						for(CellMLGrouping g : groupings){
 							if(g.rel.equals(rel)) group = g;
 						}
+						
 						if(group==null){
 							group = new CellMLGrouping(rel);
 							groupings.add(group);
@@ -348,18 +359,30 @@ public class CellMLwriter extends ModelWriter {
 							group.submodelelementmap.put((FunctionalSubmodel) parentsub, parentel);
 						}
 						
-						// Link child elements to the parent
-						for(FunctionalSubmodel childsub : ((FunctionalSubmodel)parentsub).getRelationshipSubmodelMap().get(rel)){
-							Element childelement = group.submodelelementmap.get(childsub);
-							if(childelement==null) childelement = new Element("component_ref", mainNS);
-							childelement.setAttribute("component", childsub.getName());
-							parentel.addContent(childelement);
-							group.submodelelementmap.put((FunctionalSubmodel) childsub, childelement);
+						try{
+							// Link child elements to the parent
+							for(FunctionalSubmodel childsub : ((FunctionalSubmodel)parentsub).getRelationshipSubmodelMap().get(rel)){
+								
+								if(childsub != null){ // child submodel may have been set to null during extraction process
+									Element childelement = group.submodelelementmap.get(childsub);
+									if(childelement==null) childelement = new Element("component_ref", mainNS);
+									childelement.setAttribute("component", childsub.getName());
+									parentel.addContent(childelement);
+									group.submodelelementmap.put((FunctionalSubmodel) childsub, childelement);
+								}
+							}
 						}
+						catch(Exception ex){
+							ex.printStackTrace();
+						}
+						
+						
+						
 					}
 				}
 			}
 		}
+		
 		// Go through all the groupings we created and put them in the XML doc
 		for(CellMLGrouping group : groupings){
 			Element groupel = new Element("group", mainNS);

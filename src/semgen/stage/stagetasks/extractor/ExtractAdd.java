@@ -1,5 +1,7 @@
 package semgen.stage.stagetasks.extractor;
 
+import java.util.HashSet;
+
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -25,17 +27,17 @@ public class ExtractAdd extends Extractor {
 	
 	@Override
 	public void addSubmodel(Submodel sourceobj) {
-		includeSubModel(sourcemodel.getSubmodel(sourceobj.getName()));
+		includeSubModel(sourcemodel.getSubmodel(sourceobj.getName()), new HashSet<Submodel>());
 	}
 	
 	private void collectStructures(SemSimModel receivermodel) {
 		for (Submodel sm : receivermodel.getSubmodels()) {
-			this.includeSubModel(sourcemodel.getSubmodel(sm.getName()));
+			includeSubModel(sourcemodel.getSubmodel(sm.getName()), new HashSet<Submodel>());
 		}
 		for (DataStructure ds : receivermodel.getAssociatedDataStructures()) {
 			if (!ds.isExternal()) {
 				DataStructure existingds = sourcemodel.getAssociatedDataStructure(ds.getName());
-				this.includeDependency(existingds);
+				includeDependency(existingds);
 			}
 		}
 	}
