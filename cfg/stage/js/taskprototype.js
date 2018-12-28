@@ -134,7 +134,7 @@ function Task(graph, stagestate) {
 				var modelNode = visibleNodes.filter(function (modelNode) {
 					return modelNode.id === parentModelID;
 				})[0];
-				this.onModelSelection(modelNode);
+				this.selectNode(modelNode);
 			}
 			node.selected = true;
 			node.highlight();
@@ -165,7 +165,7 @@ function Task(graph, stagestate) {
 				var modelNode = visibleNodes.filter(function (modelNode) {
 					return modelNode.id === parentModelID;
 				})[0];
-				this.onModelSelection(modelNode);
+				this.selectNodeOnDrag(modelNode);
 			}
 			node.selected = true;
 			node.highlight();
