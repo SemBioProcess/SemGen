@@ -917,6 +917,8 @@ public class SemSimOWLreader extends ModelReader {
 											String LHS = ode ? "d(" + localvarname + ")/d" + soldomname + " = " : localvarname + " = ";
 											theds.getComputation().setComputationalCode(LHS + RHS);
 										}
+										else theds.getComputation().setComputationalCode("(error converting MathML to infix equation)");
+
 									}
 									
 									CellMLreader.whiteBoxFunctionalSubmodelEquation(varmathmlel, subname, semsimmodel, theds);
