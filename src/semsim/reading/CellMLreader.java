@@ -15,6 +15,7 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.JSBML;
+import org.sbml.jsbml.SBMLException;
 
 import semsim.annotation.Annotation;
 import semsim.definitions.RDFNamespace;
@@ -287,15 +288,17 @@ public class CellMLreader extends ModelReader {
 						String varmathml = xmloutputter.outputString(varmathmlel);
 												
 						cvar.getComputation().setMathML(varmathml);
-
-						String RHS = getRHSofDataStructureEquation(varmathml, varname);
 						
+						String RHS = null;
+
 						// formulaToString doesn't parse equal signs and differentials.
 						// Not the prettiest fix, but at least it'll make the equations look prettier.
-						if(RHS != null) {
-							String LHS = ode ? "d(" + varname + ")/dt = " : varname + " = ";
+						String LHS = ode ? "d(" + varname + ")/dt = " : varname + " = ";
+						RHS = getRHSofDataStructureEquation(varmathml, varname);
+						
+						if(RHS != null)
 							cvar.getComputation().setComputationalCode(LHS + RHS);
-						}
+						else cvar.getComputation().setComputationalCode("(error converting MathML to infix equation)");
 						
 						// Create the computational dependency network among the component variables
 						whiteBoxFunctionalSubmodelEquation(varmathmlel, compname, semsimmodel, cvar);
@@ -728,7 +731,15 @@ public class CellMLreader extends ModelReader {
 		
 		String varmathmlRHS = SemSimUtil.getRHSofMathML(varmathml, varname);
 		if( ! varmathmlRHS.isEmpty()){
-			return JSBML.formulaToString(JSBML.readMathMLFromString(varmathmlRHS));
+			
+			// Try/catch block here to catch cases where JSBML encounters a MathML element it's not familiar with
+			try{
+				return JSBML.formulaToString(JSBML.readMathMLFromString(varmathmlRHS));
+			}
+			catch(SBMLException ex){
+				ex.printStackTrace();
+				return null;
+			}
 		}
 		else{
 			if( (varmathml != null && ! varmathml.isEmpty()))
