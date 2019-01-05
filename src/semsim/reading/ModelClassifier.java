@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
@@ -119,30 +120,63 @@ public class ModelClassifier {
 	 */
 	public static ModelType classify(String file) throws JDOMException, IOException{
 		ModelType type = ModelType.UNKNOWN;
-				if (file.toLowerCase().endsWith(".omex")){
+		String filelc = file.toLowerCase();
+		
+				if (filelc.endsWith(".omex")){
 					type = ModelType.OMEX_ARCHIVE;
 				}
-				else if(file.toLowerCase().endsWith(".proj")){
+				else if(filelc.endsWith(".proj")){
 					type = ModelType.MML_MODEL_IN_PROJ;
 				}
-				else if (file.toLowerCase().endsWith(".mod")){
+				else if (filelc.endsWith(".mod")){
 					type = ModelType.MML_MODEL;
 				}
-				else if (file.toLowerCase().endsWith(".owl")) {
+				else if (filelc.endsWith(".owl")) {
 					type =  ModelType.SEMSIM_MODEL;
 				}
-				else if(file.toLowerCase().endsWith(".cellml")){
+				else if(filelc.endsWith(".cellml")){
 					type =  ModelType.CELLML_MODEL;
 				}
-				else if(file.toLowerCase().endsWith(".xml") || file.endsWith(".sbml")){
+				else if(filelc.endsWith(".xml")){
+					type = classifyXMLfile(file);
+				}
+				else if(filelc.endsWith(".sbml")){
 					type =  ModelType.SBML_MODEL;
 				}
-				else if(file.toLowerCase().endsWith(".rdf")){
+				else if(filelc.endsWith(".rdf")){
 					type = ModelType.CASA_FILE;
 				}
 
 		return type;
 	}
+
+	/**
+	 * Determine the modeling format used in an .xml file
+	 * @return The ModelType classification for the XML file
+	 */
+	public static ModelType classifyXMLfile(String filename){
+		// Convert to JDOM object, look at name of top-level element
+		// if "model", then CellML. If "sbml", then SBML, etc.
+		Document doc = ModelReader.getJDOMdocumentFromFile(new File(filename));
+		
+		if(doc==null) return ModelType.UNKNOWN;
+		
+		if(doc.hasRootElement()){
+			Element rootel = doc.getRootElement();
+			String elementname = rootel.getName();
+			
+			if(elementname.equals("sbml"))
+				return ModelType.SBML_MODEL;
+			
+			else if(elementname.equals("model"))
+				return ModelType.CELLML_MODEL;
+			
+			else if(elementname.equals("JSim"))
+				return ModelType.MML_MODEL_IN_PROJ;
+		}
+		return ModelType.UNKNOWN;
+	}
+	
 	
 	/**
 	 * Verifies whether the indicated document is well-formed SBML

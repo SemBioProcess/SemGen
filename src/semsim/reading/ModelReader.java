@@ -52,6 +52,7 @@ public abstract class ModelReader {
 		}
 		catch(JDOMException | IOException e) {
 			e.printStackTrace();
+			return doc;
 		}
 		return doc;
 	}
