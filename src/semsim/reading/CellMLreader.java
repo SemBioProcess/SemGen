@@ -17,6 +17,9 @@ import org.jdom.output.XMLOutputter;
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLException;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+
 import semsim.annotation.Annotation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
@@ -30,6 +33,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.utilities.SemSimUtil;
+import semsim.writing.AbstractRDFwriter;
 
 /**
  * Class for reading in a CellML model into a {@link SemSimModel} object.
@@ -39,7 +43,7 @@ import semsim.utilities.SemSimUtil;
 public class CellMLreader extends ModelReader {
 	private Namespace mainNS;
 	public AbstractRDFreader rdfreader;
-	private Element rdfreaderelement;
+	private List<Element> rdfelements;
 	private static XMLOutputter xmloutputter = new XMLOutputter();
 
 	/**
@@ -73,12 +77,18 @@ public class CellMLreader extends ModelReader {
 		getDocumentation(doc, semsimmodel);
 
 		// Get the main RDF block for the CellML model
-		rdfreaderelement = getRDFmarkupForElement(doc.getRootElement());
+		rdfelements = getListOfRDFchildrenInElement(doc.getRootElement());
 		
+		// merge the RDF content
 		String rdfstring = null;
 		
-		if(rdfreaderelement != null)
-			rdfstring = getUTFformattedString(xmloutputter.outputString(rdfreaderelement));
+		if(rdfelements != null) {
+			if(rdfelements.size()==1)
+				rdfstring = getUTFformattedString(xmloutputter.outputString(rdfelements));
+			else {
+				rdfstring = mergeMultipleRDFblocks(rdfelements);
+			}
+		}
 		
 		rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, rdfstring, sslib);
 		
@@ -751,10 +761,43 @@ public class CellMLreader extends ModelReader {
 	
 	/**
 	 * @param el A JDOM Element in an XML-based model
+	 * @return The list of RDF child Elements for the input Element
+	 */
+	@SuppressWarnings("unchecked")
+	protected static List<Element> getListOfRDFchildrenInElement(Element el){
+		return el.getChildren("RDF", RDFNamespace.RDF.createJdomNamespace());
+	}
+	
+	/**
+	 * @param el A JDOM Element in an XML-based model
 	 * @return The RDF child Element for the input Element
 	 */
-	protected static Element getRDFmarkupForElement(Element el){
+	protected static Element getFirstRDFchildInElement(Element el){
 		return el.getChild("RDF", RDFNamespace.RDF.createJdomNamespace());
+	}
+	
+	
+	/**
+	 * Merge the statements in multiple RDF blocks within a CellML model (rare)
+	 * @param rdfelements List of RDF blocks as XML elements
+	 * @return A string representing the merged RDF content in RDF/XML format
+	 */
+	protected String mergeMultipleRDFblocks(List<Element> rdfelements) {
+		Iterator<Element> elit = rdfelements.iterator();
+		
+		Model tempmodel = ModelFactory.createDefaultModel();
+		Model combinedmodel = ModelFactory.createDefaultModel();
+		
+		while(elit.hasNext()) {
+			Element nextrdfel = elit.next();
+			AbstractRDFreader.readStringToRDFmodel(tempmodel, getUTFformattedString(xmloutputter.outputString(nextrdfel)),"");
+			combinedmodel.add(tempmodel.listStatements());
+		}
+		
+		combinedmodel.setNsPrefix("sh", "http://www.cellml.org/metadata/simulation/solverhints/1.0#");
+		combinedmodel.setNsPrefix("bqs", "http://www.cellml.org/bqs/1.0#");
+		
+		return AbstractRDFwriter.getRDFmodelAsString(combinedmodel, "RDF/XML-ABBREV");
 	}
 	
 	

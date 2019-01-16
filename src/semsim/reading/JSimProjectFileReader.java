@@ -44,7 +44,7 @@ public class JSimProjectFileReader {
 				XMLOutputter xmloutputter = new XMLOutputter();
 				
 				// TODO: Move getRDFmarkup fxn somewhere else?
-				Element rdfel = CellMLreader.getRDFmarkupForElement(ssael);
+				Element rdfel = CellMLreader.getFirstRDFchildInElement(ssael);
 				
 				if(rdfel != null){
 					SemSimRDFreader rdfreader = new SemSimRDFreader(ma, semsimmodel, xmloutputter.outputString(rdfel), sslib);
