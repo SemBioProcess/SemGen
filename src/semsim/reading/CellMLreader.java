@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.jdom.Content;
 import org.jdom.Document;
@@ -791,11 +792,16 @@ public class CellMLreader extends ModelReader {
 		while(elit.hasNext()) {
 			Element nextrdfel = elit.next();
 			AbstractRDFreader.readStringToRDFmodel(tempmodel, getUTFformattedString(xmloutputter.outputString(nextrdfel)),"");
-			combinedmodel.add(tempmodel.listStatements());
+			
+			// Add all statements
+			combinedmodel.add(tempmodel);
+			
+			// Add all namespaces
+			Map<String,String> nsprefixmap = tempmodel.getNsPrefixMap();
+			
+			for(String prefix : nsprefixmap.keySet())
+				combinedmodel.setNsPrefix(prefix, nsprefixmap.get(prefix));
 		}
-		
-		combinedmodel.setNsPrefix("sh", "http://www.cellml.org/metadata/simulation/solverhints/1.0#");
-		combinedmodel.setNsPrefix("bqs", "http://www.cellml.org/bqs/1.0#");
 		
 		return AbstractRDFwriter.getRDFmodelAsString(combinedmodel, "RDF/XML-ABBREV");
 	}
