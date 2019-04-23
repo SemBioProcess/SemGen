@@ -39,7 +39,7 @@
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/jxbrowser-win-6.2.jar"/>
 	<classpathentry kind="lib" path="thirdParty/jxbrowser/licence.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/mneal1/git/SemGen/thirdParty/biomodels-wslib_standalone-1.21.jar"/>
-	<classpathentry kind="lib" path="/Users/mneal1/git/SemGen/thirdParty/py4j0.10.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mneal/git/SemGen/thirdParty/biomodels-wslib_standalone-1.21.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mneal/git/SemGen/thirdParty/py4j0.10.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
