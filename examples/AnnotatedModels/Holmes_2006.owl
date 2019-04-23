@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#"
-     xml:base="http://www.bhi.washington.edu/SemSim/21122018130020834m0800"
+<rdf:RDF xmlns="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#"
+     xml:base="http://www.bhi.washington.edu/SemSim/22042019210959794m0700"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:model-qualifiers="http://biomodels.net/model-qualifiers/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -8,8 +8,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:ro="http://www.obofoundry.org/ro/ro.owl#">
-    <owl:Ontology rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800">
-        <SemSim:legacyCodeURI xml:lang="en">/Users/mneal/Google Drive/holmes_2006.cellml</SemSim:legacyCodeURI>
+    <owl:Ontology rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700">
         <SemSim:SemSimVersion xml:lang="en">0.2</SemSim:SemSimVersion>
         <model-qualifiers:isDescribedBy xml:lang="en">16709736</model-qualifiers:isDescribedBy>
         <SemSim:hasCellMLdocumentation xml:lang="en">&lt;documentation xmlns=&quot;http://cellml.org/tmp-documentation&quot;&gt;
@@ -67,8 +66,9 @@
   &lt;/rdf:Description&gt;
 &lt;/rdf:RDF&gt;
 </SemSim:hasCellMLrdfMarkup>
-        <SemSim:modelMetadataID xml:lang="en">holmes_2006</SemSim:modelMetadataID>
+        <SemSim:legacyCodeURI xml:lang="en">\Users\mneal\Google Drive\holmes_2006.cellml</SemSim:legacyCodeURI>
         <SemSim:modelName xml:lang="en">holmes_2006</SemSim:modelName>
+        <SemSim:modelMetadataID xml:lang="en">holmes_2006</SemSim:modelMetadataID>
     </owl:Ontology>
     
 
@@ -956,76 +956,76 @@
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#Skeletal_muscle_contraction -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#Skeletal_muscle_contraction -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#Skeletal_muscle_contraction">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#Skeletal_muscle_contraction">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Custom_physical_process"/>
         <rdfs:label xml:lang="en">Skeletal muscle contraction</rdfs:label>
         <rdfs:comment xml:lang="en">Contraction of skeletal muscle</rdfs:comment>
-        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v_property"/>
-        <SemSim:hasSink rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0"/>
-        <SemSim:hasSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0"/>
+        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v_property"/>
+        <SemSim:hasSink rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0"/>
+        <SemSim:hasSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0"/>
     </owl:NamedIndividual>
-    <owl:Axiom>
-        <SemSim:hasMultiplier rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1.0</SemSim:hasMultiplier>
-        <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasSink"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#Skeletal_muscle_contraction"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0"/>
-    </owl:Axiom>
     <owl:Axiom>
         <SemSim:hasMultiplier rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1.0</SemSim:hasMultiplier>
         <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasSource"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#Skeletal_muscle_contraction"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#Skeletal_muscle_contraction"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0"/>
+    </owl:Axiom>
+    <owl:Axiom>
+        <SemSim:hasMultiplier rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1.0</SemSim:hasMultiplier>
+        <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasSink"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#Skeletal_muscle_contraction"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0"/>
     </owl:Axiom>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dimensionless</SemSim:hasComputationalCode>
         <SemSim:isFundamentalUnit rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</SemSim:isFundamentalUnit>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_o"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_o"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mNpermmsq</SemSim:hasComputationalCode>
-        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_metre"/>
-        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_newton"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.Po"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.a"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.alpha"/>
+        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_metre"/>
+        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_newton"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.Po"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.a"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.alpha"/>
     </owl:NamedIndividual>
-    <owl:Axiom>
-        <SemSim:hasUnitFactorPrefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">milli</SemSim:hasUnitFactorPrefix>
-        <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnitFactor"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_newton"/>
-    </owl:Axiom>
     <owl:Axiom>
         <SemSim:hasUnitFactorExponent rdf:datatype="http://www.w3.org/2001/XMLSchema#double">-2.0</SemSim:hasUnitFactorExponent>
         <SemSim:hasUnitFactorPrefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">milli</SemSim:hasUnitFactorPrefix>
         <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnitFactor"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_metre"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_metre"/>
+    </owl:Axiom>
+    <owl:Axiom>
+        <SemSim:hasUnitFactorPrefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">milli</SemSim:hasUnitFactorPrefix>
+        <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnitFactor"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_newton"/>
     </owl:Axiom>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_metre -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_metre -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_metre">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_metre">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">metre</SemSim:hasComputationalCode>
         <SemSim:isFundamentalUnit rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</SemSim:isFundamentalUnit>
@@ -1033,25 +1033,25 @@
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_ms -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_ms -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_ms">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_ms">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ms</SemSim:hasComputationalCode>
-        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
+        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
     </owl:NamedIndividual>
     <owl:Axiom>
         <SemSim:hasUnitFactorPrefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">milli</SemSim:hasUnitFactorPrefix>
         <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnitFactor"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_ms"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_ms"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
     </owl:Axiom>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_newton -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_newton -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_newton">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_newton">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">newton</SemSim:hasComputationalCode>
         <SemSim:isFundamentalUnit rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</SemSim:isFundamentalUnit>
@@ -1059,244 +1059,244 @@
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_pms -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_pms -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_pms">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_pms">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pms</SemSim:hasComputationalCode>
-        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.b"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v"/>
+        <SemSim:hasUnitFactor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.b"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v"/>
     </owl:NamedIndividual>
     <owl:Axiom>
         <SemSim:hasUnitFactorExponent rdf:datatype="http://www.w3.org/2001/XMLSchema#double">-1.0</SemSim:hasUnitFactorExponent>
         <SemSim:hasUnitFactorPrefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">milli</SemSim:hasUnitFactorPrefix>
         <owl:annotatedProperty rdf:resource="http://www.bhi.washington.edu/SemSim#hasUnitFactor"/>
-        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_pms"/>
-        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
+        <owl:annotatedSource rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_pms"/>
+        <owl:annotatedTarget rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
     </owl:Axiom>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Unit_of_measurement"/>
         <SemSim:hasComputationalCode rdf:datatype="http://www.w3.org/2001/XMLSchema#string">second</SemSim:hasComputationalCode>
         <SemSim:isFundamentalUnit rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</SemSim:isFundamentalUnit>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.time"/>
-        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.time"/>
+        <SemSim:unitFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Submodel"/>
         <SemSim:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">contraction</SemSim:name>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_o"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.Po"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.a"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.alpha"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.b"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.time"/>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v"/>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction_computation"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_o"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.Po"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.a"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.alpha"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.b"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.time"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction_computation"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <rdfs:comment xml:lang="en">Fraction of muscle length</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.7</SemSim:hasCellMLinitialValue>
         <SemSim:metadataID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">contraction_L_ce</SemSim:metadataID>
         <rdfs:comment xml:lang="en">Contribution of muscle contractile elements to fraction of muscle length</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless"/>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce_property"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce_property"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce_property -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce_property -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce_property">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce_property">
         <rdf:type rdf:resource="http://bhi.washington.edu/OPB#OPB_01064"/>
         <rdfs:label xml:lang="en">Span of spatial entity</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_01064</SemSim:hasPhysicalDefinition>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce"/>
-        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce"/>
+        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:metadataID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">contraction_L_se</SemSim:metadataID>
         <rdfs:comment xml:lang="en">Contribution of muscle elastic elements to fraction of muscle length</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless"/>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_property"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_property"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_o -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_o -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_o">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_o">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.3</SemSim:hasCellMLinitialValue>
         <rdfs:comment xml:lang="en">Initial contribution of muscle elastic elements to fraction of muscle length</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_dimensionless"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_dimensionless"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_property -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_property -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_property">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_property">
         <rdf:type rdf:resource="http://bhi.washington.edu/OPB#OPB_01064"/>
         <rdfs:label xml:lang="en">Span of spatial entity</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_01064</SemSim:hasPhysicalDefinition>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se"/>
-        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se"/>
+        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <rdfs:comment xml:lang="en">Steady-state force</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P_property"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P_property"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P_property -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P_property -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P_property">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P_property">
         <rdf:type rdf:resource="http://bhi.washington.edu/OPB#OPB_01097"/>
         <rdfs:label xml:lang="en">Surface normal tensile stress</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_01097</SemSim:hasPhysicalDefinition>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.P"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.P"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.Po -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.Po -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.Po">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.Po">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">144.9</SemSim:hasCellMLinitialValue>
         <rdfs:comment xml:lang="en">Maximal isometric tetanic force</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.a -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.a -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.a">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.a">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">37.24</SemSim:hasCellMLinitialValue>
         <rdfs:comment xml:lang="en">Slope of the relationship between the change in muscle length and excess heat.</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.alpha -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.alpha -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.alpha">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.alpha">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1449.027</SemSim:hasCellMLinitialValue>
         <rdfs:comment xml:lang="en">Spring constant for series elastic element</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_mNpermmsq"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_mNpermmsq"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.b -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.b -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.b">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.b">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <SemSim:hasCellMLinitialValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.325</SemSim:hasCellMLinitialValue>
         <rdfs:comment xml:lang="en">Slope excess energy rate and steady-state force relationship</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_pms"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_pms"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.time -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.time -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.time">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.time">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <rdfs:label xml:lang="en">Time</rdfs:label>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB01023</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_01023</SemSim:hasPhysicalDefinition>
         <SemSim:hasCellMLpublicInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#string">in</SemSim:hasCellMLpublicInterface>
         <rdfs:comment xml:lang="en">Time Domain</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <rdfs:comment xml:lang="en">Shortening velocity</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_pms"/>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v_property"/>
-        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_pms"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v_property"/>
+        <SemSim:hasSolutionDomain rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v_property -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v_property -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v_property">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v_property">
         <rdf:type rdf:resource="http://bhi.washington.edu/OPB#OPB_00251"/>
         <rdfs:label xml:lang="en">Lineal translational velocity</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_00251</SemSim:hasPhysicalDefinition>
-        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#Skeletal_muscle_contraction"/>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.v"/>
+        <SemSim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#Skeletal_muscle_contraction"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.v"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction_computation -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction_computation -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction_computation">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction_computation">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
         <SemSim:hasMathML rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;
   &lt;apply&gt;
@@ -1390,99 +1390,99 @@
     &lt;/apply&gt;
   &lt;/apply&gt;
 &lt;/math&gt;</SemSim:hasMathML>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Submodel"/>
         <SemSim:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">environment</SemSim:name>
-        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time"/>
-        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment_computation"/>
+        <SemSim:hasAssociatedDataStructure rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time"/>
+        <SemSim:hasComputationalComponent rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment_computation"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment.time">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment.time">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Decimal"/>
         <rdfs:label xml:lang="en">Time</rdfs:label>
         <SemSim:metadataID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">environment_time</SemSim:metadataID>
-        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB01023</SemSim:hasPhysicalDefinition>
+        <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://bhi.washington.edu/OPB#OPB_01023</SemSim:hasPhysicalDefinition>
         <SemSim:hasCellMLpublicInterface rdf:datatype="http://www.w3.org/2001/XMLSchema#string">out</SemSim:hasCellMLpublicInterface>
         <SemSim:isSolutionDomain rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</SemSim:isSolutionDomain>
         <rdfs:comment xml:lang="en">Time Domain</rdfs:comment>
-        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#UNIT_second"/>
-        <SemSim:mappedTo rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.time"/>
+        <SemSim:hasUnit rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#UNIT_second"/>
+        <SemSim:mappedTo rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.time"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment_computation -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment_computation -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment_computation">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment_computation">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Computation"/>
-        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#environment"/>
+        <SemSim:isComputationalComponentFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#environment"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0 -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0 -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0">
         <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma20113"/>
         <rdfs:label xml:lang="en">Elastic tissue</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma20113</SemSim:hasPhysicalDefinition>
-        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_se_property"/>
-        <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_part_of_fma67905"/>
-        <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma67905_0"/>
+        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_se_property"/>
+        <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_part_of_fma67905"/>
+        <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma67905_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_part_of_fma67905 -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_part_of_fma67905 -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_part_of_fma67905">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_part_of_fma67905">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
-        <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0"/>
+        <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0 -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0 -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0">
         <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma260657"/>
         <rdfs:label xml:lang="en">Set of skeletal muscle cells</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma260657</SemSim:hasPhysicalDefinition>
-        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#contraction.L_ce_property"/>
-        <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_part_of_fma67905"/>
-        <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma67905_0"/>
+        <SemSim:hasPhysicalProperty rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#contraction.L_ce_property"/>
+        <SemSim:isIndexEntityFor rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_part_of_fma67905"/>
+        <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma67905_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_part_of_fma67905 -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_part_of_fma67905 -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_part_of_fma67905">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_part_of_fma67905">
         <rdf:type rdf:resource="http://www.bhi.washington.edu/SemSim#Composite_physical_entity"/>
-        <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0"/>
+        <SemSim:hasIndexEntity rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma67905_0 -->
+    <!-- http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma67905_0 -->
 
-    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma67905_0">
+    <owl:NamedIndividual rdf:about="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma67905_0">
         <rdf:type rdf:resource="http://purl.org/sig/ont/fma/fma67905"/>
         <rdfs:label xml:lang="en">Striated muscle tissue</rdfs:label>
         <SemSim:hasPhysicalDefinition rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.org/sig/ont/fma/fma67905</SemSim:hasPhysicalDefinition>
-        <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma20113_0"/>
-        <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/21122018130020834m0800#fma260657_0"/>
+        <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma20113_0"/>
+        <ro:has_part rdf:resource="http://www.bhi.washington.edu/SemSim/22042019210959794m0700#fma260657_0"/>
     </owl:NamedIndividual>
 </rdf:RDF>
 
