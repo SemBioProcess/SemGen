@@ -411,7 +411,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 		SemSimTypes type = getPhysicalCompositeType();
 		
 		if ( ! hasPhysicalModelComponent() || 
-				(isprocess && type.equals(SemSimTypes.PHYSICAL_PROCESS) || 
+				(isprocess && (type.equals(SemSimTypes.CUSTOM_PHYSICAL_PROCESS) || type.equals(SemSimTypes.REFERENCE_PHYSICAL_PROCESS)) || 
 				(isforce && type.equals(SemSimTypes.CUSTOM_PHYSICAL_FORCE)) ||
 				( issomethingelse && type.equals(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)))) {
 			return true;
