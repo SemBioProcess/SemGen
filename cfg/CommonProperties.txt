@@ -1,15 +1,12 @@
-http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
-http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
+http://bhi.washington.edu/OPB#OPB_00340; Concentration of chemical
 http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
-http://bhi.washington.edu/OPB#OPB_01581; Nernst potential
-http://bhi.washington.edu/OPB#OPB_00506; Electrical potential
-http://bhi.washington.edu/OPB#OPB_00293; Temperature
+http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
 http://bhi.washington.edu/OPB#OPB_00593; Chemical concentration flow rate
 http://bhi.washington.edu/OPB#OPB_00592; Chemical molar flow rate
-http://bhi.washington.edu/OPB#OPB_00509; Fluid Pressure
-http://bhi.washington.edu/OPB#OPB_00299; Fluid Flow Rate
-http://bhi.washington.edu/OPB#OPB_00378; Chemical potential
-http://bhi.washington.edu/OPB#OPB_01364; Electrochemical potential
+http://bhi.washington.edu/OPB#OPB_00506; Electrical potential
+http://bhi.washington.edu/OPB#OPB_01581; Nernst reversal potential
+http://bhi.washington.edu/OPB#OPB_00293; Temperature
+http://bhi.washington.edu/OPB#OPB_00509; Fluid pressure
+http://bhi.washington.edu/OPB#OPB_00299; Fluid flow rate
 http://bhi.washington.edu/OPB#OPB_01097; Surface normal tensile stress
-http://bhi.washington.edu/OPB#OPB_01658; Tensile Velocity
 http://bhi.washington.edu/OPB#OPB_01001; Particle count
