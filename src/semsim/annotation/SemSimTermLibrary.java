@@ -311,7 +311,7 @@ public class SemSimTermLibrary extends Observable {
 		case PropertyOfPhysicalEntity:
 			for (Integer i : ppccompindexer) {
 				URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
-				if (semsimlib.OPBhasAmountProperty(ppc) || semsimlib.OPBhasForceProperty(ppc)) {
+				if (semsimlib.OPBhasAmountProperty(ppc) || semsimlib.OPBhasForceProperty(ppc)) { // TODO: this looks incorrect. Maybe should be OPBhasStateProperty?
 					results.add(i);
 				}
 			}

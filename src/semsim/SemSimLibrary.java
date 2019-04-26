@@ -69,7 +69,7 @@ public class SemSimLibrary {
 	private Set<String> OPBstateProperties = new HashSet<String>();
 	
 	public static URI OPB_PHYSICAL_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00147");
-	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00135"); // TODO: this ID changed in in OPB version 1.05, on
+	public static URI OPB_AMOUNT_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_01314");
 	public static URI OPB_FORCE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00574");
 	public static URI OPB_DYNAMICAL_STATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00569");
 	public static URI OPB_FLOW_RATE_PROPERTY_URI = URI.create(RDFNamespace.OPB.getNamespaceAsString() + "OPB_00573");
@@ -391,7 +391,7 @@ public class SemSimLibrary {
 	 * @return Whether the URI matches any OPB state property class
 	 */
 	public boolean OPBhasStateProperty(URI uri) {
-		return OPBstateProperties.contains(uri);
+		return OPBstateProperties.contains(uri.toString());
 	}
 	
 	/**
@@ -468,7 +468,7 @@ public class SemSimLibrary {
 	public PropertyType getPropertyinCompositeType(PhysicalPropertyInComposite pp) {
 		URI roa = (pp.getPhysicalDefinitionURI());
 		
-		if(OPBhasStateProperty(roa) || OPBhasAmountProperty(roa)){
+		if(OPBhasStateProperty(roa)){
 			return PropertyType.PropertyOfPhysicalEntity;
 		}
 		else if(OPBhasFlowProperty(roa) || OPBhasProcessProperty(roa)){
