@@ -3,6 +3,7 @@ package semsim.reading;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +47,7 @@ public class CellMLreader extends ModelReader {
 	public AbstractRDFreader rdfreader;
 	private List<Element> rdfelements;
 	private static XMLOutputter xmloutputter = new XMLOutputter();
+	private Map<String,FunctionalSubmodel> componentnameSubmodelMap = new HashMap<String,FunctionalSubmodel>();
 
 	/**
 	 * Constructor
@@ -211,13 +213,20 @@ public class CellMLreader extends ModelReader {
 			
 			Iterator<?> varit = comp.getChildren("variable", mainNS).iterator();
 			
+			FunctionalSubmodel submodel = new FunctionalSubmodel(submodelname, outputs);
+			
+			// If the submodel name needed to be changed to avoid collisions with data strutures
+			// or custom physical terms, store the mapping
+			if( ! submodelname.equals(compname)) componentnameSubmodelMap.put(compname, submodel);
+
+			
 			// Iterate through the variables that are included in the component
 			String publicinterface = null;
 			String privateinterface = null;
 			
 			while(varit.hasNext()){
 				Element var = (Element) varit.next();
-				String uniquevarname = compname + "." + var.getAttributeValue("name");
+				String uniquevarname = submodelname + "." + var.getAttributeValue("name");
 				publicinterface = var.getAttributeValue("public_interface");
 				privateinterface = var.getAttributeValue("private_interface");
 				
@@ -282,7 +291,7 @@ public class CellMLreader extends ModelReader {
 			while(varit.hasNext()){
 				Element var = (Element) varit.next();
 				String varname = var.getAttributeValue("name");
-				String uniquevarname = compname + "." + varname;
+				String uniquevarname = submodelname + "." + varname;
 				String initval = var.getAttributeValue("initial_value");
 				
 				DataStructure cvar = semsimmodel.getAssociatedDataStructure(uniquevarname);
@@ -312,7 +321,7 @@ public class CellMLreader extends ModelReader {
 						else cvar.getComputation().setComputationalCode("(error converting MathML to infix equation)");
 						
 						// Create the computational dependency network among the component variables
-						whiteBoxFunctionalSubmodelEquation(varmathmlel, compname, semsimmodel, cvar);
+						whiteBoxFunctionalSubmodelEquation(varmathmlel, submodelname, semsimmodel, cvar);
 					}
 				}
 				
@@ -320,7 +329,6 @@ public class CellMLreader extends ModelReader {
 					cvar.getComputation().setComputationalCode(varname + " = " + initval);
 			}
 			
-			FunctionalSubmodel submodel = new FunctionalSubmodel(submodelname, outputs);
 			
 			// Set inputs, outputs, etc. and the computational elements of the submodel component
 			submodel.setAssociatedDataStructures(allvars);;
@@ -360,8 +368,12 @@ public class CellMLreader extends ModelReader {
 		while(conit.hasNext()){
 			Element con = (Element) conit.next();
 			Element compmap = con.getChild("map_components", mainNS);
-			FunctionalSubmodel sub1 = (FunctionalSubmodel) semsimmodel.getSubmodel(compmap.getAttributeValue("component_1"));
-			FunctionalSubmodel sub2 = (FunctionalSubmodel) semsimmodel.getSubmodel(compmap.getAttributeValue("component_2"));
+			
+			String comp1name = compmap.getAttributeValue("component_1");
+			String comp2name = compmap.getAttributeValue("component_2");	
+			
+			FunctionalSubmodel sub1 = componentnameSubmodelMap.containsKey(comp1name) ? componentnameSubmodelMap.get(comp1name) : (FunctionalSubmodel) semsimmodel.getSubmodel(comp1name);
+			FunctionalSubmodel sub2 = componentnameSubmodelMap.containsKey(comp2name) ? componentnameSubmodelMap.get(comp2name) : (FunctionalSubmodel) semsimmodel.getSubmodel(comp2name);			
 			
 			Iterator<?> varconit = con.getChildren("map_variables", mainNS).iterator();
 			
