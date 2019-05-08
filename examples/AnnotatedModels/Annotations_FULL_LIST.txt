@@ -524,75 +524,75 @@ Calcium reversal potential; Hilgemann_1987
 Charge flow rate of Secondary Na channel inward current; Hilgemann_1987
 Sodium component of fast Ca current; Hilgemann_1987
 Charge flow rate of Sodium-Potassium Pump Current; Hilgemann_1987
-Fluid volume of Sarcoplasmic reticulum in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Volume of sarcoplasmic reticulum; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Calcium flow into the sarcoplasmic reticulum via SERCA pump; hinch_greenstein_tanskanen_xu_winslow_2004
-Calcium (2+) resequestering into the sarcoplasmic reticulum via the sarco/endoplasmic reticulum Ca2+ -ATPase (SERCA) pump; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Ionic flow through sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
-Sodium-calcium exchange current; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Intracellular calcium (2+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Sarcolemmal calcium leak flow; hinch_greenstein_tanskanen_xu_winslow_2004
-Sarcolemmal calcium leak current; hinch_greenstein_tanskanen_xu_winslow_2004
-Charge flow rate of Total calcium ion flow through L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
-Total whole-cell current through the L-type calcium channels (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of ?; hinch_greenstein_tanskanen_xu_winslow_2004
-Half saturation constant of calmodulin; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; hinch_greenstein_tanskanen_xu_winslow_2004
-Extracellular sodium (1+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Electrical potential of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
-Voltage across cell membrane; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of 	Calmodulin (CaM) (P62158) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Total cytosolic calmodulin concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Area of spatial entity of ?; hinch_greenstein_tanskanen_xu_winslow_2004
-Unknown. This is an orphan term in the model.; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Dissociation of calcium-bound Troponin C; hinch_greenstein_tanskanen_xu_winslow_2004
-Dissociation rate of calcium (2+)-bound troponin; hinch_greenstein_tanskanen_xu_winslow_2004
-Temperature of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
-Ambient temperature; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Calcium leak from sarcoplasmic reticulum to myoplasm; hinch_greenstein_tanskanen_xu_winslow_2004
-Calcium (2+) leak from the sarcoplasmic reticulum to the bulk myoplasm; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Total ionic flow through ryanodine receptor; hinch_greenstein_tanskanen_xu_winslow_2004
-Total whole-cell current through the ryanodine receptors; hinch_greenstein_tanskanen_xu_winslow_2004
 Fluid volume of Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
 Volume of myoplasm; hinch_greenstein_tanskanen_xu_winslow_2004
-Soldium (1+) half saturation of sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
-Particle count of "Calcium release unit" in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Number of calcium release units; hinch_greenstein_tanskanen_xu_winslow_2004
-Nernst potential of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
-Reversal potential for sarcolemmal leak current; hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of calcium (2+) in the dyadic space when the L-type calcium channel state is open and the ryanodine receptor state is open; hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of calcium (2+) in the dyadic space when the L-type calcium channel state is open and the ryanodine receptor state is closed; hinch_greenstein_tanskanen_xu_winslow_2004
-Half concentration of activation for ryanodine receptors; hinch_greenstein_tanskanen_xu_winslow_2004
-Charge flow rate of Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
-Sarcolemmal calcium-ATPase flow (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of 	Troponin C, slow skeletal and cardiac muscles (TN-C) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of troponin in cytosol; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of calcium(2+) in Sarcoplasmic reticulum in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Calcium (2+) concentration in sarcoplasmic reticulum; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
-Intracellular sodium (1+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of L-type calcium channels at inactivation; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; hinch_greenstein_tanskanen_xu_winslow_2004
-Extracellular calcium (2+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Calcium (2+) half saturation of sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Total calcium ion flow through L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
-Total whole-cell current through the L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
-Chemical concentration flow rate of Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
-Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of ?; hinch_greenstein_tanskanen_xu_winslow_2004
 Concentration of sarcoplasmic calcium normalized to cytosolic volume (presumably for comparing simulation results to Figure 7B of reference publication).; hinch_greenstein_tanskanen_xu_winslow_2004
+Calcium (2+) half saturation of sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
+Fluid volume of Sarcoplasmic reticulum in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Volume of sarcoplasmic reticulum; hinch_greenstein_tanskanen_xu_winslow_2004
 Chemical concentration of "Total bound and unbound troponin" in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
 Total cytosolic troponin concentration; hinch_greenstein_tanskanen_xu_winslow_2004
-Half saturation of sarco/endoplasmic reticulum Ca2+ -ATPase (SERCA) pump; hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of calcium (2+) in dyadic space when L-type calcium channel state is closed and when ryanodine receptor state is open; hinch_greenstein_tanskanen_xu_winslow_2004
-Charge flow rate of Sarcolemmal calcium leak flow; hinch_greenstein_tanskanen_xu_winslow_2004
-Sarcolemmal calcium leak current (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
-Concentration of calcium (2+) in dyadic space when both L-type calcium channel and ryanodine receptor states are closed; hinch_greenstein_tanskanen_xu_winslow_2004
-Half saturation of sarcolemmal pump; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Intracellular calcium (2+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
+Soldium (1+) half saturation of sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Dissociation of calcium-bound Troponin C; hinch_greenstein_tanskanen_xu_winslow_2004
+Dissociation rate of calcium (2+)-bound troponin; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of 	Troponin C, slow skeletal and cardiac muscles (TN-C) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of troponin in cytosol; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Total ionic flow through ryanodine receptor; hinch_greenstein_tanskanen_xu_winslow_2004
 Total whole-cell current through the ryanodine receptors (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
-Rate of formation of calcium (2+)-bound troponin; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Ionic flow through sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
+Sodium-calcium exchange current; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; hinch_greenstein_tanskanen_xu_winslow_2004
+Extracellular calcium (2+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; hinch_greenstein_tanskanen_xu_winslow_2004
+Extracellular sodium (1+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
+Total whole-cell current through the ryanodine receptors; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of calcium (2+) in dyadic space when L-type calcium channel state is closed and when ryanodine receptor state is open; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of calcium (2+) in the dyadic space when the L-type calcium channel state is open and the ryanodine receptor state is closed; hinch_greenstein_tanskanen_xu_winslow_2004
 Charge flow rate of Ionic flow through sodium-calcium exchanger; hinch_greenstein_tanskanen_xu_winslow_2004
 Sodium-calcium exchange current (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Sarcolemmal calcium leak flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Sarcolemmal calcium leak current; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of L-type calcium channels at inactivation; hinch_greenstein_tanskanen_xu_winslow_2004
+Temperature of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
+Ambient temperature; hinch_greenstein_tanskanen_xu_winslow_2004
+Half saturation constant of calmodulin; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of 	Calmodulin (CaM) (P62158) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Total cytosolic calmodulin concentration; hinch_greenstein_tanskanen_xu_winslow_2004
+Charge flow rate of Sarcolemmal calcium leak flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Sarcolemmal calcium leak current (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
+Half saturation of sarco/endoplasmic reticulum Ca2+ -ATPase (SERCA) pump; hinch_greenstein_tanskanen_xu_winslow_2004
+Nernst potential of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
+Reversal potential for sarcolemmal leak current; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of calcium(2+) in Sarcoplasmic reticulum in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Calcium (2+) concentration in sarcoplasmic reticulum; hinch_greenstein_tanskanen_xu_winslow_2004
+Electrical potential of anonymous force; hinch_greenstein_tanskanen_xu_winslow_2004
+Voltage across cell membrane; hinch_greenstein_tanskanen_xu_winslow_2004
+Rate of formation of calcium (2+)-bound troponin; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Half saturation of sarcolemmal pump; hinch_greenstein_tanskanen_xu_winslow_2004
+Charge flow rate of Sarcolemmal calcium-ATPase flow; hinch_greenstein_tanskanen_xu_winslow_2004
+Sarcolemmal calcium-ATPase flow (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Calcium flow into the sarcoplasmic reticulum via SERCA pump; hinch_greenstein_tanskanen_xu_winslow_2004
+Calcium (2+) resequestering into the sarcoplasmic reticulum via the sarco/endoplasmic reticulum Ca2+ -ATPase (SERCA) pump; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Intracellular sodium (1+) concentration; hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Calcium leak from sarcoplasmic reticulum to myoplasm; hinch_greenstein_tanskanen_xu_winslow_2004
+Calcium (2+) leak from the sarcoplasmic reticulum to the bulk myoplasm; hinch_greenstein_tanskanen_xu_winslow_2004
+Particle count of "Calcium release unit" in Cardiac myocyte; hinch_greenstein_tanskanen_xu_winslow_2004
+Number of calcium release units; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of calcium (2+) in dyadic space when both L-type calcium channel and ryanodine receptor states are closed; hinch_greenstein_tanskanen_xu_winslow_2004
+Half concentration of activation for ryanodine receptors; hinch_greenstein_tanskanen_xu_winslow_2004
+Charge flow rate of Total calcium ion flow through L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
+Total whole-cell current through the L-type calcium channels (in uA); hinch_greenstein_tanskanen_xu_winslow_2004
+Chemical concentration flow rate of Total calcium ion flow through L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
+Total whole-cell current through the L-type calcium channels; hinch_greenstein_tanskanen_xu_winslow_2004
+Area of spatial entity of ?; hinch_greenstein_tanskanen_xu_winslow_2004
+Unknown. This is an orphan term in the model.; hinch_greenstein_tanskanen_xu_winslow_2004
+Concentration of calcium (2+) in the dyadic space when the L-type calcium channel state is open and the ryanodine receptor state is open; hinch_greenstein_tanskanen_xu_winslow_2004
 Charge flow rate of Leak current across plasma membrane; Hodgkin_Huxley_1952
 Leakage current across the plasma membrane; Hodgkin_Huxley_1952
 Charge flow rate of Sodium current across plasma membrane; Hodgkin_Huxley_1952
@@ -699,254 +699,272 @@ Charge flow rate of Sodium/calcium exchanger current; iyer_mazhari_winslow_2004
 Sodium/calcium exchanger current; iyer_mazhari_winslow_2004
 Temperature of anonymous force; iyer_mazhari_winslow_2004
 Temperature of the cardiac myocyte and its surrounding environment; iyer_mazhari_winslow_2004
-Chemical molar amount of ?; MacKenzie_1996
-Chemical concentration of sodium(1+) in Portion of cytosol in oocyte; MacKenzie_1996
-Intracellular sodium concentration; MacKenzie_1996
-Chemical molar amount of "Internal Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
-Steady state internal CNaS concentration; MacKenzie_1996
 Chemical concentration of methyl alpha-D-glucopyranoside in culture medium; MacKenzie_1996
 Glucose concentration in experimental medium; MacKenzie_1996
-Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
-Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
-Chemical molar amount of "External Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
-Pre-steady state external Na bound cotransporter concentration; MacKenzie_1996
-Chemical molar amount of "External Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
-Pre-steady state external CNaS concentration; MacKenzie_1996
-Chemical concentration of sodium(1+) in culture medium; MacKenzie_1996
-Sodium concentration in cell culture medium; MacKenzie_1996
 Chemical molar amount of "Internal Unbound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
 Pre-steady state internal unbound cotransporter concentration; MacKenzie_1996
-Charge flow rate of Sodium ion flow into cytosol via SGLT2 cotransporter; MacKenzie_1996
-Sodium ion flow into the cytosol; MacKenzie_1996
+Chemical molar amount of "External Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external CNaS concentration; MacKenzie_1996
+Chemical molar amount of sodium-glucose transport protein subtype 2 inhibitor in Plasma membrane in oocyte; MacKenzie_1996
+Density of functional SGLT2 carriers in the oocyte membrane; MacKenzie_1996
 Electrical potential of anonymous force; MacKenzie_1996
 Electrical potential of the cell membrane; MacKenzie_1996
-Charge flow rate of Glucose transport across cell membrane via SGLT2 cotransporters; MacKenzie_1996
-Na-glucose pre-steady state current; MacKenzie_1996
+Chemical molar amount of "Internal Na and Substrate Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Steady state internal CNaS concentration; MacKenzie_1996
+Chemical concentration of sodium(1+) in culture medium; MacKenzie_1996
+Sodium concentration in cell culture medium; MacKenzie_1996
+Chemical molar amount of "External Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
+Pre-steady state external Na bound cotransporter concentration; MacKenzie_1996
+Area of spatial entity of ?; MacKenzie_1996
+Chemical molar amount of ?; MacKenzie_1996
 Chemical molar amount of "Internal Na Bound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
 Pre-steady state internal CNa concentration; MacKenzie_1996
-Area of spatial entity of ?; MacKenzie_1996
+Charge flow rate of Glucose transport across cell membrane via SGLT2 cotransporters; MacKenzie_1996
+Na-glucose pre-steady state current; MacKenzie_1996
+Chemical concentration of sodium(1+) in Portion of cytosol in oocyte; MacKenzie_1996
+Intracellular sodium concentration; MacKenzie_1996
 Chemical concentration of methyl alpha-D-glucopyranoside in Portion of cytosol in oocyte; MacKenzie_1996
 Intracellular glucose concentration; MacKenzie_1996
 Chemical molar amount of "External Unbound SGLT2 Cotransporter" in Plasma membrane in oocyte; MacKenzie_1996
 Pre-steady state external unbound cotransporter concentration; MacKenzie_1996
-Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
-Intracellular calcium (2+) concentration; niederer_hunter_smith_2006
+Charge flow rate of Sodium ion flow into cytosol via SGLT2 cotransporter; MacKenzie_1996
+Sodium ion flow into the cytosol; MacKenzie_1996
+Chemical concentration of 	Troponin C, slow skeletal and cardiac muscles (TN-C) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
+Intracellular troponin concentration; niederer_hunter_smith_2006
+Chemical concentration flow rate of Dissociation of troponin C bound to calcium; niederer_hunter_smith_2006
+Intracellular troponin flux; niederer_hunter_smith_2006
 Chemical concentration of ?; niederer_hunter_smith_2006
+Offset parameter for Ca_50 vs. lambda dependency; niederer_hunter_smith_2006
 Calcium (2+) bound to TnC at half-activation of maximum tension; niederer_hunter_smith_2006
-Chemical concentration of "Calcium (2+) bound to troponin C" in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
-Concentration of calcium (2+) bound to troponin C; niederer_hunter_smith_2006
 The maximum concentration of calcium ions that can bind to site II on troponin C; niederer_hunter_smith_2006
 Surface normal tensile stress of Cardiac myocyte; niederer_hunter_smith_2006
 Active tension of cardiac myocyte; niederer_hunter_smith_2006
-Chemical concentration of 	Troponin C, slow skeletal and cardiac muscles (TN-C) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
-Intracellular troponin concentration; niederer_hunter_smith_2006
-Offset parameter for Ca_50 vs. lambda dependency; niederer_hunter_smith_2006
-Chemical concentration flow rate of Dissociation of troponin C bound to calcium; niederer_hunter_smith_2006
-Intracellular troponin flux; niederer_hunter_smith_2006
 Concentration of free calcium (2+) at half-activation of maximum tension; niederer_hunter_smith_2006
-Chemical molar flow rate of Internal SR calcium transfer; pandit_clark_giles_demir_2001_endocardial
-Calcium flux between junctional and network sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Electrical potential of anonymous force; pandit_clark_giles_demir_2001_endocardial
-Voltage potential across the plasma membrane of the cardiomyocyte; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Total portion of high affinity troponin C binding sites" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Total concentration of high affinity troponin binding sites; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of potassium(1+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
-Concentration of potassium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Temperature of anonymous force; pandit_clark_giles_demir_2001_endocardial
-Temperature of the cardiac myocyte and its surrounding environment; pandit_clark_giles_demir_2001_endocardial
-Chemical molar flow rate of Sarcoplasmic reticulum calcium release flux; pandit_clark_giles_demir_2001_endocardial
-Calcium flux through sarcoplasmic reticulum RyR receptor ; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Concentration of sodium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
-Chemical molar flow rate of Sarcoplasmic reticulum calcium pump flux; pandit_clark_giles_demir_2001_endocardial
-Calcium flux through the sarcoplasmic reticulum calcium pump (SERCA2a); pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Steady-state outward potassium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the steady-state outward potassium channel; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Fast sodium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through fast sodium channel; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in "Diadic space" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Calcium concentration in diadic space; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
+Intracellular calcium (2+) concentration; niederer_hunter_smith_2006
+Chemical concentration of "Calcium (2+) bound to troponin C" in Portion of cytosol in Cardiac myocyte; niederer_hunter_smith_2006
+Concentration of calcium (2+) bound to troponin C; niederer_hunter_smith_2006
 Charge flow rate of Transient outward potassium channel current; pandit_clark_giles_demir_2001_endocardial
 Current through the transient outward potassium channel; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Concentration of potassium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Inward rectifier potassium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the inward rectifier potassium channel; pandit_clark_giles_demir_2001_endocardial
-Chemical molar flow rate of Calcium/troponin buffering; pandit_clark_giles_demir_2001_endocardial
-Flux of calcium binding to both low and high affinity sites on troponin C; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Calcium bound to high affinity troponin C binding sites" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Concentration of calcium bound to high affinity troponin C binding sites; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Hyperpolarization activated channel sodium current; pandit_clark_giles_demir_2001_endocardial
-Sodium current through the hyperpolarization activated channel; pandit_clark_giles_demir_2001_endocardial
-Chemical molar flow rate of Internal cytosolic calcium transfer; pandit_clark_giles_demir_2001_endocardial
-Calcium flux between the diadic subspace and blulk cytosol; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Concentration of calcium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Background sodium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the background sodium channel; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
-Concentration of sodium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Chemical molar flow rate of Troponin C low affinity binding site/calcium buffering; pandit_clark_giles_demir_2001_endocardial
 Binding of troponin C low affinity binding sites to calcium; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of ?; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in "Diadic space" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Calcium concentration in diadic space; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Concentration of potassium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Total portion of calsequestrin" in Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Total concentration of calmodulin in junctional sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Sarcoplasmic reticulum calcium pump flux; pandit_clark_giles_demir_2001_endocardial
+Calcium flux through the sarcoplasmic reticulum calcium pump (SERCA2a); pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Sodium/calcium exchanger current; pandit_clark_giles_demir_2001_endocardial
+Current through the sodium/calcium exchanger; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
+Concentration of sodium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Calcium bound to high affinity troponin C binding sites" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Concentration of calcium bound to high affinity troponin C binding sites; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Total portion of calmodulin" in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Total concentration of calmodulin in cytosol; pandit_clark_giles_demir_2001_endocardial
+Electrical potential of anonymous force; pandit_clark_giles_demir_2001_endocardial
+Voltage potential across the plasma membrane of the cardiomyocyte; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Concentration of calcium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Total portion of EGTA" in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Total concentration of EGTA in cytosol; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Background sodium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through the background sodium channel; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Calcium concentration of fluid inside the junctional region of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
+Concentration of calcium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Network sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Calcium concentration in the network regions of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Background calcium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through the background calcium channel; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Concentration of sodium in bulk cytosol; pandit_clark_giles_demir_2001_endocardial
+Temperature of anonymous force; pandit_clark_giles_demir_2001_endocardial
+Temperature of the cardiac myocyte and its surrounding environment; pandit_clark_giles_demir_2001_endocardial
+Nernst potential of anonymous force; pandit_clark_giles_demir_2001_endocardial
+Nernst potential for sodium across the plasma membrane; pandit_clark_giles_demir_2001_endocardial
 Charge flow rate of Background potassium channel current; pandit_clark_giles_demir_2001_endocardial
 Current through the background potassium channel
 ; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Network sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Calcium concentration in the network regions of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Nernst potential of anonymous force; pandit_clark_giles_demir_2001_endocardial
-Nernst potential for sodium across the plasma membrane; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Sodium/potassium pump current; pandit_clark_giles_demir_2001_endocardial
-Current through the sodium/potassium pump; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Sarcolemmal calcium pump current; pandit_clark_giles_demir_2001_endocardial
-Current through the sarcolemmal calcium pump; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Sarcoplasmic reticulum calcium release flux; pandit_clark_giles_demir_2001_endocardial
+Calcium flux through sarcoplasmic reticulum RyR receptor ; pandit_clark_giles_demir_2001_endocardial
 Charge flow rate of Hyperpolarization activated channel potassium current; pandit_clark_giles_demir_2001_endocardial
 Potassium current through the hyperpolarization activated channel; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of L-type calcium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through L-type calcium channel; pandit_clark_giles_demir_2001_endocardial
-Fluid volume of Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Volume of matrix of junctional sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
-Concentration of calcium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Calcium concentration of fluid inside the junctional region of the sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Hyperpolarization activated channel current; pandit_clark_giles_demir_2001_endocardial
-Total current through the hyperpolarization activated channel; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Calcium bound to low affinity troponin C binding site" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Concentration of calcium bound to low affinity troponin C binding sites; pandit_clark_giles_demir_2001_endocardial
-Fluid volume of Portion of cytosol in "Diadic space" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Volume of cytosol of the diadic space; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Total portion of calsequestrin" in Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Total concentration of calmodulin in junctional sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Sodium/calcium exchanger current; pandit_clark_giles_demir_2001_endocardial
-Current through the sodium/calcium exchanger; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Calcium/troponin buffering; pandit_clark_giles_demir_2001_endocardial
+Flux of calcium binding to both low and high affinity sites on troponin C; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Sodium/potassium pump current; pandit_clark_giles_demir_2001_endocardial
+Current through the sodium/potassium pump; pandit_clark_giles_demir_2001_endocardial
 Fluid volume of Cytoplasmic organelle matrix in "Network sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Volume of matrix of network sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
-Chemical molar flow rate of Troponin C high affinity binding site/calcium buffering; pandit_clark_giles_demir_2001_endocardial
-Binding of troponin C high affinity binding sites to calcium; pandit_clark_giles_demir_2001_endocardial
-Charge flow rate of Background calcium channel current; pandit_clark_giles_demir_2001_endocardial
-Current through the background calcium channel; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Total portion of EGTA" in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Total concentration of EGTA in cytosol; pandit_clark_giles_demir_2001_endocardial
-Nernst potential of calcium across the plasma membrane; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Hyperpolarization activated channel sodium current; pandit_clark_giles_demir_2001_endocardial
+Sodium current through the hyperpolarization activated channel; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Sarcolemmal calcium pump current; pandit_clark_giles_demir_2001_endocardial
+Current through the sarcolemmal calcium pump; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of potassium(1+) in Portion of extracellular matrix in Myocardium; pandit_clark_giles_demir_2001_endocardial
+Concentration of potassium external to the cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Total portion of high affinity troponin C binding sites" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Total concentration of high affinity troponin binding sites; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Internal SR calcium transfer; pandit_clark_giles_demir_2001_endocardial
+Calcium flux between junctional and network sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Internal cytosolic calcium transfer; pandit_clark_giles_demir_2001_endocardial
+Calcium flux between the diadic subspace and blulk cytosol; pandit_clark_giles_demir_2001_endocardial
+Fluid volume of Portion of cytosol in "Diadic space" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Volume of cytosol of the diadic space; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of L-type calcium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through L-type calcium channel; pandit_clark_giles_demir_2001_endocardial
 Chemical concentration of "Total portion of low affinity troponin C binding sites" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Total concentration of low affinity troponin binding sites; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of "Total portion of calmodulin" in Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Total concentration of calmodulin in cytosol; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Inward rectifier potassium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through the inward rectifier potassium channel; pandit_clark_giles_demir_2001_endocardial
+Chemical concentration of "Calcium bound to low affinity troponin C binding site" in Sarcomere in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Concentration of calcium bound to low affinity troponin C binding sites; pandit_clark_giles_demir_2001_endocardial
+Fluid volume of Cytoplasmic organelle matrix in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
+Volume of matrix of junctional sarcoplasmic reticulum; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Fast sodium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through fast sodium channel; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of ?; pandit_clark_giles_demir_2001_endocardial
+Charge flow rate of Steady-state outward potassium channel current; pandit_clark_giles_demir_2001_endocardial
+Current through the steady-state outward potassium channel; pandit_clark_giles_demir_2001_endocardial
+Nernst potential of calcium across the plasma membrane; pandit_clark_giles_demir_2001_endocardial
 Fluid volume of Portion of cytosol in Cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
 Volume of cytsol on cardiac myocyte; pandit_clark_giles_demir_2001_endocardial
-Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; rice_winslow_jafri_1999
-Extracellular calcium concentration; rice_winslow_jafri_1999
-Chemical concentration of ?; rice_winslow_jafri_1999
-Chemical concentration flow rate of ?; rice_winslow_jafri_1999
-Rate of calcium ion flux through dihydropyridine receptors; rice_winslow_jafri_1999
-Chemical concentration flow rate of Calcium ion flux through ryanodine receptors; rice_winslow_jafri_1999
-Rate of calcium flux through ryanodine receptors; rice_winslow_jafri_1999
-Chemical concentration flow rate of Calcium ion flux from the subspace to the myoplasm; rice_winslow_jafri_1999
-Rate of calcium ion flux from the subspace to the myoplasm; rice_winslow_jafri_1999
+Charge flow rate of Hyperpolarization activated channel current; pandit_clark_giles_demir_2001_endocardial
+Total current through the hyperpolarization activated channel; pandit_clark_giles_demir_2001_endocardial
+Chemical molar flow rate of Troponin C high affinity binding site/calcium buffering; pandit_clark_giles_demir_2001_endocardial
+Binding of troponin C high affinity binding sites to calcium; pandit_clark_giles_demir_2001_endocardial
 Chemical concentration of calcium(2+) in "Junctional sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
 Calcium ion concentration in the junctional sarcoplasmic reticulum; rice_winslow_jafri_1999
-Electrical potential of anonymous force; rice_winslow_jafri_1999
-Myocyte membrane potential; rice_winslow_jafri_1999
-Chemical concentration of calcium(2+) in "Diadic space for a single functional calcium release unit" in Cardiac myocyte; rice_winslow_jafri_1999
-Concentration of calcium in the diadic space; rice_winslow_jafri_1999
-Chemical concentration flow rate of Refilling of calcium ion in the JSR; rice_winslow_jafri_1999
-Rate of calcium ion refilling of the junctional saroplasmic reticulum; rice_winslow_jafri_1999
-Fluid volume of Portion of cytosol in Cardiac myocyte; rice_winslow_jafri_1999
-Volume of the myoplasm; rice_winslow_jafri_1999
-Fluid volume of "Diadic space for a single functional calcium release unit"; rice_winslow_jafri_1999
-Volume of the functional release unit subspace; rice_winslow_jafri_1999
+Chemical concentration of ?; rice_winslow_jafri_1999
 Chemical concentration of calcium(2+) in Portion of cytosol in Cardiac myocyte; rice_winslow_jafri_1999
 Concentration of calcium ion in the myoplasm; rice_winslow_jafri_1999
-Fluid volume of "Diadic space for a single functional calcium release unit" in Cardiac myocyte; rice_winslow_jafri_1999
-Charge flow rate of Calcium ion flux through dihydropyridine receptors; rice_winslow_jafri_1999
-Current through the open dihydropyridine receptor; rice_winslow_jafri_1999
-Chemical concentration of calcium(2+) in "Network sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
-Calcium ion concentration in the network sarcoplasmic reticulum; rice_winslow_jafri_1999
-Chemical concentration of "Generic calcium buffer" in "Network sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
-Concentration of calcium buffer in the (network?) sarcoplasmic reticulum; rice_winslow_jafri_1999
-Chemical concentration of "Generic calcium buffer" in Plasma membrane in Cardiac myocyte; rice_winslow_jafri_1999
-Concentration of calcium buffer in the sarcolemma; rice_winslow_jafri_1999
+Chemical concentration flow rate of Calcium ion flux through ryanodine receptors; rice_winslow_jafri_1999
+Rate of calcium flux through ryanodine receptors; rice_winslow_jafri_1999
 Fluid volume of "Junctional sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
 Volume of junctional sarcoplasmic reticulum; rice_winslow_jafri_1999
+Fluid volume of Portion of cytosol in Cardiac myocyte; rice_winslow_jafri_1999
+Volume of the myoplasm; rice_winslow_jafri_1999
+Chemical concentration of calcium(2+) in "Diadic space for a single functional calcium release unit" in Cardiac myocyte; rice_winslow_jafri_1999
+Concentration of calcium in the diadic space; rice_winslow_jafri_1999
+Electrical potential of anonymous force; rice_winslow_jafri_1999
+Myocyte membrane potential; rice_winslow_jafri_1999
+Chemical concentration of "Generic calcium buffer" in Plasma membrane in Cardiac myocyte; rice_winslow_jafri_1999
+Concentration of calcium buffer in the sarcolemma; rice_winslow_jafri_1999
+Fluid volume of "Diadic space for a single functional calcium release unit"; rice_winslow_jafri_1999
+Volume of the functional release unit subspace; rice_winslow_jafri_1999
+Chemical concentration of "Generic calcium buffer" in "Network sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
+Concentration of calcium buffer in the (network?) sarcoplasmic reticulum; rice_winslow_jafri_1999
+Fluid volume of "Diadic space for a single functional calcium release unit" in Cardiac myocyte; rice_winslow_jafri_1999
+Chemical concentration flow rate of Calcium ion flux from the subspace to the myoplasm; rice_winslow_jafri_1999
+Rate of calcium ion flux from the subspace to the myoplasm; rice_winslow_jafri_1999
+Chemical concentration of calcium(2+) in Portion of extracellular matrix in Myocardium; rice_winslow_jafri_1999
+Extracellular calcium concentration; rice_winslow_jafri_1999
+Chemical concentration flow rate of ?; rice_winslow_jafri_1999
+Rate of calcium ion flux through dihydropyridine receptors; rice_winslow_jafri_1999
+Chemical concentration of calcium(2+) in "Network sarcoplasmic reticulum" in Cardiac myocyte; rice_winslow_jafri_1999
+Calcium ion concentration in the network sarcoplasmic reticulum; rice_winslow_jafri_1999
+Charge flow rate of Calcium ion flux through dihydropyridine receptors; rice_winslow_jafri_1999
+Current through the open dihydropyridine receptor; rice_winslow_jafri_1999
+Chemical concentration flow rate of Refilling of calcium ion in the JSR; rice_winslow_jafri_1999
+Rate of calcium ion refilling of the junctional saroplasmic reticulum; rice_winslow_jafri_1999
 Tensile distortion velocity of Contraction of contractile element; siebert_CC_2008
 Velocity of contractile component; siebert_CC_2008
 Tensile distortion velocity of Contraction of contractile element; siebert_CC_SEC_2008
 Velocity of contractile component; siebert_CC_SEC_2008
-Fluid Pressure of anonymous force; Smith_2004
-Transmural blood Pressure in the Vena Cava; Smith_2004
-Thoracic cavity pressure; Smith_2004
-Fluid Flow Rate of Blood flow through pulmonary valve; Smith_2004
-Blood flow through pulmonary valve; Smith_2004
-Spatial volume of Wall of right ventricle; Smith_2004
-Right ventricular free wall volume; Smith_2004
-Chamber pressure of right ventricular blood; Smith_2004
-Fluid volume of ?; Smith_2004
-Pulmonary arterial blood volume at zero pressure; Smith_2004
-Fluid Flow Rate of Blood flow through aortic valve; Smith_2004
-Blood flow through atrial valve; Smith_2004
-Fluid Flow Rate of Blood flow through tricuspid valve; Smith_2004
-Blood flow across tricuspid valve; Smith_2004
-Fluid volume of Portion of blood in Cavity of right ventricle; Smith_2004
-Right ventricle blood volume; Smith_2004
-Pericardial chamber pressure; Smith_2004
-Spatial volume of Wall of left ventricle; Smith_2004
-Volume of the free wall of the left ventricle; Smith_2004
-Spatial volume of Cardiac septum; Smith_2004
-Septal wall volume; Smith_2004
-Fluid Flow Rate of Pulmonary circulatory blood flow; Smith_2004
-Pulmonary blood flow; Smith_2004
-Fluid Flow Rate of Systemic circulatory blood flow; Smith_2004
-Systemic circulatory blood flow; Smith_2004
-Transmural pressure in systemic arteries; Smith_2004
-Chamber pressure of pulmonary venous blood ; Smith_2004
-Septal wall volume at zero pressure; Smith_2004
+Fluid inertance of ?; Smith_2004
+Tricuspid valve fluid inertance; Smith_2004
+Fluid pressure of anonymous force; Smith_2004
+Transmural blood pressure in the vena cava; Smith_2004
+Fluid flow resistance of ?; Smith_2004
+Tricuspid valve fluid resistance; Smith_2004
+Pulmonary circulatory fluid resistance; Smith_2004
+Mitrial valve fluid resistance; Smith_2004
 Chamber pressure of blood in the pulmonary artery; Smith_2004
-Pressure across the pericardial wall; Smith_2004
-Fluid volume of Portion of blood in Lumen of pulmonary venous tree organ; Smith_2004
-Pulmonary venous blood volume; Smith_2004
-Fluid Flow Rate of Blood flow through mitral valve; Smith_2004
+Chamber pressure of left ventricular blood; Smith_2004
+Fluid volumetric elastance of ?; Smith_2004
+Aortic end systolic elastance; Smith_2004
+Fluid flow rate of Blood flow through pulmonary valve; Smith_2004
+Blood flow through pulmonary valve; Smith_2004
+Right ventricular free wall end systolic elastance; Smith_2004
+Chamber pressure of pulmonary venous blood ; Smith_2004
+Chamber pressure of right ventricular blood; Smith_2004
+Fluid flow rate of Blood flow through mitral valve; Smith_2004
 Blood flow through mitrial valve; Smith_2004
-Pressure across the left ventricular freewall; Smith_2004
+Transmural pressure in systemic arteries; Smith_2004
+Fluid flow rate of Pulmonary circulatory blood flow; Smith_2004
+Pulmonary blood flow; Smith_2004
+Fluid volume of Portion of blood in "Cavity of left ventricle not including septal compartment"; Smith_2004
+Volume of the free wall of the left ventricle; Smith_2004
 Fluid volume of Portion of blood in Cavity of left ventricle; Smith_2004
 Volume of blood contained in left ventricle; Smith_2004
-Chamber pressure of left ventricular blood; Smith_2004
-Septal wall volume at end diastolic pressure; Smith_2004
-Fluid volume of Portion of blood in Lumen of pulmonary arterial tree; Smith_2004
-Pulmonary arterial blood volume; Smith_2004
+Pulmonary valve fluid resistance; Smith_2004
+Atrial valve fluid resistance; Smith_2004
+Fluid flow rate of Systemic circulatory blood flow; Smith_2004
+Systemic circulatory blood flow; Smith_2004
+Fluid flow rate of Blood flow through tricuspid valve; Smith_2004
+Blood flow across tricuspid valve; Smith_2004
+Thoracic cavity pressure; Smith_2004
+Fluid volume of Portion of blood in "Cavity of right ventricle and septal compartment"; Smith_2004
+Right ventricular free wall volume; Smith_2004
 Fluid volume of Portion of blood in Lumen of aorta; Smith_2004
 Volume of blood contained in aorta; Smith_2004
-Fluid volume of Pericardium; Smith_2004
+Systemic circulatory fluid resistance; Smith_2004
+Fluid flow rate of Blood flow through aortic valve; Smith_2004
+Blood flow through atrial valve; Smith_2004
+Fluid volume of Portion of blood in Lumen of pulmonary trunk; Smith_2004
+Pulmonary arterial blood volume; Smith_2004
+Fluid volume of Portion of blood in Cavity of right ventricle; Smith_2004
+Right ventricle blood volume; Smith_2004
+Spatial volume of Pericardial cavity; Smith_2004
 Volume of the pericardium; Smith_2004
+Pressure across the right ventricular free wall; Smith_2004
+Fluid volume of Portion of blood in Lumen of pulmonary venous tree organ; Smith_2004
+Pulmonary venous blood volume; Smith_2004
+Fluid volume of Portion of blood in "Septal free wall compartment"; Smith_2004
+Septum free wall volume; Smith_2004
+Pericardial chamber pressure; Smith_2004
+Mitrial valve fluid inertance; Smith_2004
+Left ventricular free wall end systolic elastance; Smith_2004
+Vena cava end systolic elastance; Smith_2004
+Atrial valve fluid inertance; Smith_2004
+Pressure across the pericardial wall; Smith_2004
+Pulmonary valve fluid inertance; Smith_2004
 Fluid volume of Portion of blood in Set of lumens of vena cava trunks; Smith_2004
 Vena cava blood volume; Smith_2004
-Pressure across the right ventricular free wall; Smith_2004
-Chemical concentration of inorganic phosphate in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
-Intracellular concentration of inorganic phosphate ; smith_crampin_2004
-Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
-Intracellular potassium ion concentration; smith_crampin_2004
-Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
-Intracellular sodium ion concentration; smith_crampin_2004
-Chemical concentration of MgATP(2-) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
-Intracellular concentration of magnesium-bound ATP; smith_crampin_2004
-Temperature of anonymous force; smith_crampin_2004
-Ambient temperature; smith_crampin_2004
-Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; smith_crampin_2004
-Extracellular sodium ion concentration; smith_crampin_2004
+Pressure across the left ventricular freewall; Smith_2004
+Fluid volume of Portion of blood in Set of lumens of entire vasculature; Smith_2004
+Total blood volume in the body; Smith_2004
+Pulmonary arterial end systolic elastance; Smith_2004
+Septal end systolic elastance; Smith_2004
+End systolic pulmonary vein elastance; Smith_2004
 Chemical potential of anonymous force; smith_crampin_2004
-The free energy of MgATP hydrolysis; smith_crampin_2004
-Chemical concentration of potassium(1+) in Portion of extracellular matrix in Myocardium; smith_crampin_2004
-Extracellular potassium ion concentration; smith_crampin_2004
+The energy required to translocate a sodium ion from the intracellular cytosol to the extracellular environment; smith_crampin_2004
 Electrical potential of anonymous force; smith_crampin_2004
 Membrane potential; smith_crampin_2004
 The energy required to translocate a potassium ion from the extracellular environment to the intracellular cytosol ; smith_crampin_2004
-The energy required to translocate a sodium ion from the intracellular cytosol to the extracellular environment; smith_crampin_2004
 Chemical concentration of MgADP(1-) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
 Intracellular concentration of magnesium-bound ADP; smith_crampin_2004
-Chemical potential of ?; smith_crampin_2004
-Energy consumed for each pump cycle; smith_crampin_2004
+Chemical concentration of inorganic phosphate in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of inorganic phosphate ; smith_crampin_2004
 Chemical concentration of "Bound and unbound inorganic phosphate" in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
 Total intracellular concentration of bound and unbound inorganic phosphate ; smith_crampin_2004
+Chemical potential of ?; smith_crampin_2004
+Energy consumed for each pump cycle; smith_crampin_2004
+Chemical concentration of MgATP(2-) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular concentration of magnesium-bound ATP; smith_crampin_2004
+Chemical concentration of sodium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular sodium ion concentration; smith_crampin_2004
+Temperature of anonymous force; smith_crampin_2004
+Ambient temperature; smith_crampin_2004
+Chemical concentration of potassium(1+) in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
+Intracellular potassium ion concentration; smith_crampin_2004
+Chemical concentration of potassium(1+) in Portion of extracellular matrix in Myocardium; smith_crampin_2004
+Extracellular potassium ion concentration; smith_crampin_2004
+Chemical concentration of sodium(1+) in Portion of extracellular matrix in Myocardium; smith_crampin_2004
+Extracellular sodium ion concentration; smith_crampin_2004
+The free energy of MgATP hydrolysis; smith_crampin_2004
 Chemical concentration of proton in Portion of cytosol in Cardiac myocyte; smith_crampin_2004
 Intracellular proton concentration; smith_crampin_2004
 Charge flow rate of ?; terkildsen_niederer_crampin_hunter_smith_2008
