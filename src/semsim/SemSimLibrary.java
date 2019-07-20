@@ -146,7 +146,7 @@ public class SemSimLibrary {
 
 		// Load the local copy of the OPB and the SemSim base ontology, and other config files into memory
 		try {
-			InputStream opbin = getClass().getResourceAsStream("/semsim/owl/OPBv1.06.owl");
+			InputStream opbin = getClass().getResourceAsStream("/semsim/owl/OPBv1.07.owl");
 			OPB = manager.loadOntologyFromOntologyDocument(opbin);
 			InputStream ssbin = getClass().getResourceAsStream("/semsim/owl/SemSimBase.owl");			
 			manager.loadOntologyFromOntologyDocument(ssbin);
