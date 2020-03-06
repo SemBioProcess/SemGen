@@ -1,3 +1,4 @@
+![SemGen](http://sbp.bhi.washington.edu/_/rsrc/1472691287603/projects/semgen/semgenlogoNoText.png?width=50px)
 # SemGen
 
 SemGen is an experimental software tool for automating the modular composition and decomposition of biosimulation models.
@@ -216,7 +217,7 @@ SemGen development is currently supported by a grant from the [National Library 
 
 SEMGEN
 
-Copyright (c) 2010-2018 Maxwell Neal, University of Washington.
+Copyright (c) 2010-2020 Maxwell Neal, University of Washington.
 
 All rights reserved.
 
