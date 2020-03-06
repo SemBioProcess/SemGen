@@ -142,9 +142,14 @@ public class SemSimOWLreader extends ModelReader {
 	private boolean verifyModel() throws OWLException {
 		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_component"));
 		
-		if( ! ont.getClassesInSignature().contains(topclass))
-			semsimmodel.addError("Could not find root class 'SemSim_component'. Source file does not appear to be a valid SemSim model");
-		
+		if( ! ont.getClassesInSignature().contains(topclass)) {
+			// Maybe the model uses the old SemSim namespace
+			topclass = factory.getOWLClass(IRI.create("http://www.bhi.washington.edu/SemSim#SemSim_component"));
+			
+			if( ! ont.getClassesInSignature().contains(topclass)) {
+				semsimmodel.addError("Could not find root class 'SemSim_component'. Source file does not appear to be a valid SemSim model");
+			}
+		}
 		
 		// Test if the model actually has data structures
 		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString()).isEmpty()
@@ -159,8 +164,8 @@ public class SemSimOWLreader extends ModelReader {
 	 * to its physical definition. More recent models use the "hasPhysicalDefinition" relation.
 	 */
 	private void setPhysicalDefinitionURI(){
-		if(ont.containsDataPropertyInSignature(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo")))
-			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo");
+		if(ont.containsDataPropertyInSignature(IRI.create("http://www.bhi.washington.edu/SemSim#refersTo"))) // toLowerCase() needed to accommodate previous use of SemSim namespace that used some uppercase letters
+			physicaldefinitionURI = URI.create("http://www.bhi.washington.edu/SemSim#refersTo"); // toLowerCase() needed to accommodate previous use of SemSim namespace that used some uppercase letters
 		
 		else if(ont.containsDataPropertyInSignature(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI()))
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();

@@ -456,6 +456,7 @@ public abstract class AbstractRDFreader {
 			
 			// Flag any statement that uses a predicate with a semsim namespace for removal
 			if(rdfprop.startsWith(RDFNamespace.SEMSIM.getNamespaceAsString())
+					|| rdfprop.startsWith("http://www.bhi.washington.edu/SemSim#") // accommodate models with older SemSim namespace 
 					|| rdfprop.equals(StructuralRelation.PART_OF.getURIasString())
 					|| rdfprop.equals(StructuralRelation.HAS_PART.getURIasString())
 					|| rdfprop.equals(SemSimRelation.BQB_IS_VERSION_OF.getURIasString())
