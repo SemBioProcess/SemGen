@@ -32,6 +32,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.AbstractRDFreader;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.reading.SemSimRDFreader;
 import semsim.utilities.SemSimUtil;
 
@@ -44,7 +45,7 @@ import semsim.utilities.SemSimUtil;
  */
 public abstract class AbstractRDFwriter {
 	protected SemSimModel semsimmodel;
-	protected Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
+	public Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	protected Model rdf = ModelFactory.createDefaultModel();
 	protected String xmlbase;
 	protected Set<String> localids = new HashSet<String>();
@@ -279,19 +280,33 @@ public abstract class AbstractRDFwriter {
 		// Otherwise use the CPE already stored
 		else cpe = SemSimUtil.getEquivalentCompositeEntityIfAlreadyInMap(cpe, PMCandResourceURImap);
 		
-		URI indexuri = PMCandResourceURImap.get(cpe);
+		URI indexuri = null;
 		Resource indexresource = null;
 		
-		if(indexuri == null){
-			indexresource = getResourceForPMCandAnnotate(cpe);
-			indexuri = URI.create(indexresource.getURI());
+		// If the first entry in the array of singular entities that makes up
+		// the composite physical entity has a metadata ID (should only happen
+		// when writing an SBML model), use the metadata ID on that first entity
+		// in the RDF output.
+		// TODO: need to check if all works OK if we go from SBML to CellML with RDF annotations
+		if( cpe.getArrayListOfEntities().get(0).hasMetadataID() 
+				&& semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) {
+			indexuri = URI.create(cpe.getArrayListOfEntities().get(0).getMetadataID());
+			indexresource = rdf.getResource(indexuri.toString());
 		}
-		else indexresource = rdf.getResource(indexuri.toString());
+		else {
+			indexuri = PMCandResourceURImap.get(cpe);
+			
+			if(indexuri == null){
+				indexresource = getResourceForPMCandAnnotate(cpe);
+				indexuri = URI.create(indexresource.getURI());
+			}
+			else indexresource = rdf.getResource(indexuri.toString());
+			
+			PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
+			
+			setReferenceOrCustomResourceAnnotations(indexent, indexresource);
+		}
 		
-		PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
-		
-		setReferenceOrCustomResourceAnnotations(indexent, indexresource);
-
 		if (cpe.getArrayListOfEntities().size()==1) return indexuri;
 		
 		// Truncate the composite by one entity
@@ -324,8 +339,12 @@ public abstract class AbstractRDFwriter {
 		else {
 			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
 			
+			// Use metadataID on last entity for URI, if it has one
+			if( lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) 
+				nexturi = URI.create(lastent.getMetadataID());
+			
 			// If it's an entity we haven't processed yet
-			if(!PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
+			else if( ! PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
 				nexturi = URI.create(getResourceForPMCandAnnotate(lastent).getURI());
 				PMCandResourceURImap.put(lastent, nexturi);
 			}
@@ -365,7 +384,12 @@ public abstract class AbstractRDFwriter {
 		if (typeprefix.matches("submodel") || typeprefix.matches("dependency"))
 			typeprefix = "unknown";
 		
-		Resource res = createNewResourceForSemSimObject(typeprefix);
+		Resource res = null;
+		
+		// If metadata ID already assigned to physical component, use it
+		if(pmc.hasMetadataID()) res = rdf.createResource(xmlbase + pmc.getMetadataID());
+		// Otherwise make a new metadataID based on the physical model component's type
+		else res = createNewResourceForSemSimObject(typeprefix);
 				
 		if(! isphysproperty) PMCandResourceURImap.put(pmc, URI.create(res.getURI()));
 		
@@ -382,7 +406,7 @@ public abstract class AbstractRDFwriter {
 	protected Resource createNewResourceForSemSimObject(String typeprefix){
 		
 		//Use relative URIs
-		String resname = xmlbase;	
+		String resname = xmlbase;
 		int idnum = 0;
 		
 		while(localids.contains(resname + typeprefix + "_" + idnum)){

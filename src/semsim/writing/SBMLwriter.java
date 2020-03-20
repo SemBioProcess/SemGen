@@ -153,7 +153,7 @@ public class SBMLwriter extends ModelWriter {
 		}
 
 		// Initialize a CASA writer, if we're writing to an OMEX file
-		if(CASAEnabled()){
+		if(OMEXmetadataEnabled()){
 			rdfwriter = new CASAwriter(semsimmodel);
 			rdfwriter.setXMLbase("./" + xmlbase + "#");
 			rdfwriter.setRDFforModelLevelAnnotations();
@@ -175,7 +175,7 @@ public class SBMLwriter extends ModelWriter {
 		addSBMLinitialAssignments();
 		addConstraints();
 
-		Document doc = CASAEnabled() ? addCASArdf() : addSemSimRDF();
+		Document doc = OMEXmetadataEnabled() ? addCASArdf() : addSemSimRDF();
 
 		// If no errors, return the model.
 		// First catch errors
@@ -417,9 +417,13 @@ public class SBMLwriter extends ModelWriter {
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
 			// the RDF block or CASA file when adding parameter info
-			if(onerefentity || CASAEnabled()){
-				DSsToOmitFromCompositesRDF.add(ds);
+			if( onerefentity ){
+				
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);
+				
+				if( ! OMEXmetadataEnabled()) {
+					DSsToOmitFromCompositesRDF.add(ds);
+				}
 			}
 			
 			boolean hasinputs = ds.getComputationInputs().size()>0;
@@ -436,7 +440,8 @@ public class SBMLwriter extends ModelWriter {
 			// Add units if needed
 			setUnitsForModelComponent(comp, ds);
 			
-			addNotesAndMetadataID(pmc, comp);
+			if(oneentity) addNotesAndMetadataID(pmcAsCPE.getArrayListOfEntities().get(0), comp); // Put metadataID from physical entity within composite physical entity
+			else addNotesAndMetadataID(pmc, comp);
 		}
 	}
 	
@@ -525,8 +530,9 @@ public class SBMLwriter extends ModelWriter {
 					species.setName(indexent.getName());
 				
 				// Do not store the annotation for this data structure in the SemSim RDF
-				// Preserve semantics in <species> element
-				DSsToOmitFromCompositesRDF.add(ds);
+				// Preserve semantics in <species> element, unless writing to OMEX metadata file
+				if( ! OMEXmetadataEnabled() ) DSsToOmitFromCompositesRDF.add(ds);
+				
 				addRDFannotationForPhysicalSBMLelement(indexent, species);
 					
 				// In SBML Level 3 the hasSubstanceUnitsOnly must be set either way. In Level 2 the default is false.
@@ -635,9 +641,10 @@ public class SBMLwriter extends ModelWriter {
 				rxn.setReversible(true); // TODO: extend SemSim object model to include this "reversible" attribute somewhere
 				rxn.setFast(false); // TODO: extend SemSim object model to include this "fast" attribute somewhere
 				
-				DSsToOmitFromCompositesRDF.add(ds);
-				addRDFannotationForPhysicalSBMLelement(process, rxn);
+				if( ! OMEXmetadataEnabled() ) DSsToOmitFromCompositesRDF.add(ds);
 				
+				addRDFannotationForPhysicalSBMLelement(process, rxn);
+
 				KineticLaw kl = new KineticLaw();
 				String mathml = ds.getComputation().getMathML();
 				
@@ -1061,7 +1068,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		if(sso.hasDescription() && !CASAEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
+		if(sso.hasDescription() && !OMEXmetadataEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
 			try {
 				String desc = sso.getDescription();
 				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novere problem)
@@ -1136,7 +1143,8 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
 		
-		// If neither the SBML object nor the SemSim physical model component have a metadata ID, assign them both the same one
+		// If neither the SBML object nor the SemSim physical model component have a metadata ID, 
+		// assign them both the same one
 		if( ! sbmlobj.isSetMetaId() && ! pmc.hasMetadataID()){
 			String metaid = semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", pmc);
 			sbmlobj.setMetaId(metaid);
@@ -1150,7 +1158,7 @@ public class SBMLwriter extends ModelWriter {
 			oneent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1;
 		
 		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
-		if(CASAEnabled()){
+		if(OMEXmetadataEnabled()){
 			
 			// When the pmc is a one-entity composite physical entity, use the
 			// metadata ID on the pmc to link it to the SBML entity (this is used for compartments)
@@ -1165,39 +1173,42 @@ public class SBMLwriter extends ModelWriter {
 		
 		if(oneent) pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 		
-		// This is used when writing RDF-based semantic annotations within a standalone SBML file
-		if(pmc instanceof ReferenceTerm){
-			CVTerm cvterm = new CVTerm();
-			ReferenceTerm refterm = (ReferenceTerm)pmc;
-			cvterm.setQualifier(Qualifier.BQB_IS);
-			String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refterm.getPhysicalDefinitionURI()).toString();
-			cvterm.addResourceURI(uriasstring);
-			sbmlobj.addCVTerm(cvterm);
-		}
-		
-		// For custom physical components we do it this way
-		else{
-			// Preserve semantics on an sbml element
-			for(Annotation ann: pmc.getAnnotations()){
-								
-				if(ann instanceof ReferenceOntologyAnnotation){
-					CVTerm cvterm = new CVTerm();
-					Qualifier qualifier = null;
+		// This is used to add singular annotations to SBML elements
+		// when writing RDF-based semantic annotations within a standalone SBML file
+		if( ! OMEXmetadataEnabled()) {
+			
+			if(pmc instanceof ReferenceTerm){
+				CVTerm cvterm = new CVTerm();
+				ReferenceTerm refterm = (ReferenceTerm)pmc;
+				cvterm.setQualifier(Qualifier.BQB_IS);
+				String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refterm.getPhysicalDefinitionURI()).toString();
+				cvterm.addResourceURI(uriasstring);
+				sbmlobj.addCVTerm(cvterm);
+			}
+			// For custom physical components we do it this way
+			else{
+				// Preserve semantics on an sbml element
+				for(Annotation ann: pmc.getAnnotations()){
+									
+					if(ann instanceof ReferenceOntologyAnnotation){
+						CVTerm cvterm = new CVTerm();
+						Qualifier qualifier = null;
 
-					ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann; 
-					Relation relation = refann.getRelation();
-					
-					if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)
-							|| relation.equals(StructuralRelation.HAS_PART) 
-							|| relation.equals(StructuralRelation.BQB_HAS_PART)){
-						qualifier = SemSimRelations.getBiologicalQualifierFromRelation(relation);
+						ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann; 
+						Relation relation = refann.getRelation();
+						
+						if(relation.equals(SemSimRelation.BQB_IS_VERSION_OF)
+								|| relation.equals(StructuralRelation.HAS_PART) 
+								|| relation.equals(StructuralRelation.BQB_HAS_PART)){
+							qualifier = SemSimRelations.getBiologicalQualifierFromRelation(relation);
+						}
+						else continue;
+						
+						cvterm.setQualifier(qualifier);
+						String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refann.getReferenceURI()).toString();
+						cvterm.addResourceURI(uriasstring);
+						sbmlobj.addCVTerm(cvterm);
 					}
-					else continue;
-					
-					cvterm.setQualifier(qualifier);
-					String uriasstring = SemSimRDFwriter.convertURItoIdentifiersDotOrgFormat(refann.getReferenceURI()).toString();
-					cvterm.addResourceURI(uriasstring);
-					sbmlobj.addCVTerm(cvterm);
 				}
 			}
 		}
@@ -1310,12 +1321,11 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				Resource ares = rdfwriter.rdf.createResource(rdfwriter.xmlbase + metadataID);
-				
+								
 				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
 				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
 			}
 		}		
 	}
-
 }

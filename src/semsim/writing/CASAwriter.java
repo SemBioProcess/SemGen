@@ -225,6 +225,7 @@ public class CASAwriter extends AbstractRDFwriter{
 	
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
+		
 		if(ds.hasPhysicalProperty()){
 			Property iccfprop = SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty();
 			URI physpropuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -247,6 +248,7 @@ public class CASAwriter extends AbstractRDFwriter{
 	 * @param ares RDF Resource representing the data structure
 	 */
 	protected void setDataStructurePropertyOfAnnotation(DataStructure ds, Resource ares){		
+		
 		// Collect physical model components with properties
 		if( ! ds.isImportedViaSubmodel()){
 			
@@ -258,6 +260,7 @@ public class CASAwriter extends AbstractRDFwriter{
 				if(propof instanceof PhysicalEntity){
 					CompositePhysicalEntity cpe = (CompositePhysicalEntity)propof;
 					
+					// If there is more than one physical entity in the composite physical entity...
 					if (cpe.getArrayListOfEntities().size()>1) {
 						// Get the Resource corresponding to the index entity of the composite entity
 						URI indexuri = setCompositePhysicalEntityMetadata(cpe);
@@ -269,11 +272,13 @@ public class CASAwriter extends AbstractRDFwriter{
 						
 						addStatement(propofst);
 					}
+					
 					// else it's a singular physical entity
 					else{
-						Resource entity = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
-						Statement st = rdf.createStatement(
-								ares, 
+						PhysicalEntity pe = cpe.getArrayListOfEntities().get(0);
+						Resource entity = getResourceForPMCandAnnotate(pe);
+						
+						Statement st = rdf.createStatement(ares, 
 								SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
 								entity);
 						

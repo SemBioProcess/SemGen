@@ -136,7 +136,7 @@ public abstract class ModelWriter {
 	}
 
 	/** Returns true if the casa flag is enabled, false otherwise. */
-	public boolean CASAEnabled() {
+	public boolean OMEXmetadataEnabled() {
 		return useCASA;
 	}
 	

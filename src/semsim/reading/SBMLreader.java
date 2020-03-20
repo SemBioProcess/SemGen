@@ -571,11 +571,12 @@ public class SBMLreader extends ModelReader{
 				
 				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
 				ds.setAssociatedPhysicalModelComponent(compartmentent);
+				
+				collectSBaseData(sbmlc, singlecompartmentent); // Note that the compartment meta ID gets assigned to the singular physical entity here, not the composite
 			}
-			
+			else collectSBaseData(sbmlc, compartmentent); // Metadata ID gets assigned to singleton composite physical entity here (this might not be needed)
+
 			compartmentAndEntitiesMap.put(compid, compartmentent);
-			
-			collectSBaseData(sbmlc, compartmentent);
 		}
 	}
 	
@@ -771,7 +772,8 @@ public class SBMLreader extends ModelReader{
 			speciesAndEntitiesMap.put(species.getId(), compositeent);
 			
 			if(speciesent instanceof ReferencePhysicalEntity)
-				// We don't add the notes here, because if the species is defined against a reference term, the description of the reference term should be used
+				// We don't add the notes here, because if the species is defined against a reference term, 
+				// the description of the reference term should be used
 				addMetadataID(species, speciesent);
 			else collectSBaseData(species, speciesent);
 		}
