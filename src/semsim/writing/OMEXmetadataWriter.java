@@ -35,9 +35,9 @@ import semsim.reading.AbstractRDFreader;
  * @author mneal
  *
  */
-public class CASAwriter extends AbstractRDFwriter{
+public class OMEXmetadataWriter extends AbstractRDFwriter{
 
-	public CASAwriter(SemSimModel model) {
+	public OMEXmetadataWriter(SemSimModel model) {
 		super(model);	
 		initialize(model);
 	}
@@ -53,7 +53,6 @@ public class CASAwriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
-		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
 	}
 	
 	@Override

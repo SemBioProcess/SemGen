@@ -154,7 +154,7 @@ public class SBMLwriter extends ModelWriter {
 
 		// Initialize a CASA writer, if we're writing to an OMEX file
 		if(OMEXmetadataEnabled()){
-			rdfwriter = new CASAwriter(semsimmodel);
+			rdfwriter = new OMEXmetadataWriter(semsimmodel);
 			rdfwriter.setXMLbase("./" + xmlbase + "#");
 			rdfwriter.setRDFforModelLevelAnnotations();
 		}
@@ -1165,9 +1165,9 @@ public class SBMLwriter extends ModelWriter {
 			if(oneent){
 				String metaidtouse = pmc.getMetadataID();
 				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
-				((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc);
+				((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc);
 			}
-			else ((CASAwriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
+			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
 			return;
 		}
 		

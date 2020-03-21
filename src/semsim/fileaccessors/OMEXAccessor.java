@@ -22,7 +22,7 @@ import semsim.reading.CASAreader;
 import semsim.reading.OMEXmanifestReader;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
-import semsim.writing.CASAwriter;
+import semsim.writing.OMEXmetadataWriter;
 import semsim.writing.ModelWriter;
 import semsim.writing.OMEXArchiveWriter;
 
@@ -210,7 +210,7 @@ public class OMEXAccessor extends ModelAccessor {
 		OMEXArchiveWriter omexwriter;
 		
 		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
-			CASAwriter casawriter = new CASAwriter(model);
+			OMEXmetadataWriter casawriter = new OMEXmetadataWriter(model);
 			if (!this.hasCASAFile()) {
 
 				casaaccessor = new OMEXAccessor(file, new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);

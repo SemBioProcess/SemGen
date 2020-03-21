@@ -38,7 +38,7 @@ public class OMEXArchiveWriter {
 		this.writer = writer;
 	}
 	
-	public OMEXArchiveWriter(ModelWriter writer, CASAwriter casawriter) {		
+	public OMEXArchiveWriter(ModelWriter writer, OMEXmetadataWriter casawriter) {		
 		this.writer = writer;
 	}
 
