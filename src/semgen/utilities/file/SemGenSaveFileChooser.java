@@ -172,7 +172,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 					
 					if(omexdialog.approvedtowrite){
 						String name = omexdialog.getModelName();
-						ModelType archivedmodeltype = ModelClassifier.getTypebyExtension(omexdialog.getFormat());
+						ModelType archivedmodeltype = omexdialog.getModelType();
 						File modelfile = new File("model/" + name + archivedmodeltype.getExtension());
 						ma = FileAccessorFactory.getOMEXArchive(filetosave, modelfile, archivedmodeltype);
 						//TODO: need to deal with overwriting here 

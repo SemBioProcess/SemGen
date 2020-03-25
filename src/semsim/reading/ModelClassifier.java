@@ -29,7 +29,7 @@ public class ModelClassifier {
 	 */
 	public static enum ModelType{
 		SEMSIM_MODEL(".owl", new String[]{"http://www.bhi.washington.edu/semsim"}, new FileNameExtensionFilter("SemSim (*.owl)", "owl")), 
-		SBML_MODEL(".sbml", new String[]{"http://identifiers.org/combine.specifications/sbml","https://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
+		SBML_MODEL(".xml", new String[]{"http://identifiers.org/combine.specifications/sbml","https://identifiers.org/combine.specifications/sbml"}, new FileNameExtensionFilter("SBML (*.sbml, *.xml)", "sbml", "xml", "omex")), 
 		CELLML_MODEL(".cellml", new String[]{"http://identifiers.org/combine.specifications/cellml", "https://identifiers.org/combine.specifications/cellml"},new FileNameExtensionFilter("CellML (*.cellml, *.xml)", "cellml", "xml", "omex")), 
 		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
 		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 

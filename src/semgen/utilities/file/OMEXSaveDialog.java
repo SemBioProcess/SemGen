@@ -18,7 +18,6 @@ import semgen.SemGenSettings;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semsim.model.collection.SemSimModel;
-import semsim.reading.ModelClassifier;
 import semsim.reading.ModelClassifier.ModelType;
 
 public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListener{
@@ -28,11 +27,12 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 	private JComboBox<String> typechooser;
 	private JTextField modelnamefield = new JTextField();
 	private String modelname = "";
+	protected ModelType modeltype;
 	private Integer formatselection = -1;
 	private SemSimModel semsimmodel;
 	protected boolean approvedtowrite = false;
 	
-	private static String[] ALL_WRITABLE_TYPES = new String[]{".cellml", ".sbml"};
+	private static String[] ALL_WRITABLE_TYPES = new String[]{"CellML", "SBML"};
 	
 	public OMEXSaveDialog(SemSimModel ssm) {
 		super("Save to OMEX Archive As");
@@ -100,8 +100,17 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 			
 			if (value == "OK") {
 				formatselection = typechooser.getSelectedIndex();
-				modelname = this.modelnamefield.getText();
-				ModelType modeltype = ModelClassifier.getTypebyExtension(getFormat());
+				modelname = modelnamefield.getText();
+				
+				String modeltypestring = ALL_WRITABLE_TYPES[formatselection];
+				
+				modeltype = null;
+				if(modeltypestring.equals("CellML")) {
+					modeltype = ModelType.CELLML_MODEL;
+				}
+				else if(modeltypestring.equals("SBML")) {
+					modeltype = ModelType.SBML_MODEL;
+				}
 				
 				if(modelNameIsValid()){
 					
@@ -123,8 +132,8 @@ public class OMEXSaveDialog extends SemGenDialog implements PropertyChangeListen
 		}
 	}
 	
- public String getFormat() {
-	 return ALL_WRITABLE_TYPES[formatselection];
+ public ModelType getModelType() {
+	 return modeltype;
  }
  
  public String getModelName() {
