@@ -57,7 +57,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		this.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
 		
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		setPreferredSize(new Dimension(1000, 800));
+		setPreferredSize(new Dimension(900, 700));
 		setMaximumSize(getPreferredSize());
 		setMinimumSize(getPreferredSize());
 		setResizable(true);
