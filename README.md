@@ -205,13 +205,11 @@ Below is an step-by-step example of a merge between a cardiovascular dynamics an
 
 ## Authors
 
-**Dr. Maxwell Neal** originally developed the SemGen software as part of his dissertation research.
+**Dr. Maxwell Neal** originally developed the SemGen software as part of his dissertation research. Subsequently, he led a team of developers to further augment, test and evaluate SemGen under an R01 grant from the National Library of Medicine (PIs: **John Gennari** and **Brian Carlson**) that aimed to accelerate model-driven research. SemGen development has also been funded through the [Virtual Physiological Rat](http://www.virtualrat.org/) project.
 
-Currently, Dr. Neal leads a team of developers to further augment, test and evaluate SemGen under an R01 grant from the National Library of Medicine (PIs: **John Gennari** and **Brian Carlson**) that aims to accelerate model-driven research.
+Prior contributors to SemGen development include **Christopher Thompson**, **Graham Kim** and **Ryan James**.
 
-Contributors to SemGen development include **Christopher Thompson**, **Graham Kim** and **Ryan James**.
-
-SemGen development is currently supported by a grant from the [National Library of Medicine](http://www.nlm.nih.gov/) and through the [Virtual Physiological Rat](http://www.virtualrat.org/) project. 
+SemGen development is currently supported through the [Center for Reproducible Biomedical Modeling](https://reproduciblebiomodels.org/). 
 
 ## License
 
