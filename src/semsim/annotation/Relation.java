@@ -1,6 +1,6 @@
 package semsim.annotation;
 
-import com.hp.hpl.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Property;
 import org.semanticweb.owlapi.model.IRI;
 
 import java.net.URI;

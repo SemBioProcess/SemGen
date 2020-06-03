@@ -14,7 +14,7 @@ import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.reading.CASAreader;
+import semsim.reading.OMEXmetadataReader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
 import semsim.reading.MMLtoXMMLconverter;
@@ -95,7 +95,7 @@ public class LoadModelJob extends SemGenJob {
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
 				boolean previouslyannotated = (cellmlreader.rdfreader.rdf.getNsPrefixURI("semsim") != null
-						|| cellmlreader.rdfreader instanceof CASAreader);
+						|| cellmlreader.rdfreader instanceof OMEXmetadataReader);
 				
 				// If the model wasn't previously annotated in SemGen and autoannotate is turned on,
 				// perform auto-annotation

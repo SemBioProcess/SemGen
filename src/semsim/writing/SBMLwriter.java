@@ -50,7 +50,7 @@ import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.validator.SyntaxChecker;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;

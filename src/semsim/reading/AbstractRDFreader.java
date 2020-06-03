@@ -11,14 +11,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFReader;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.RDFParser;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
@@ -89,11 +91,30 @@ public abstract class AbstractRDFreader {
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring, String namespace){
 		
 		try {
-			InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-			RDFReader reader = rdf.getReader();
-			reader.setProperty("relativeURIs","same-document,relative");
-			reader.read(rdf, stream, namespace);
-			stream.close();
+			//InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
+			// See https://jena.apache.org/documentation/io/rdfxml_howto.html#arp-properties 
+			// for more on setting reader/writer properties
+			//RDFReader reader = rdf.getReader();
+			//reader.setProperty("relativeURIs","same-document,relative"); 
+			//reader.read(rdf, stream, "http://junk.org");
+			//reader.read(rdf, stream, ""); //read(rdf, stream, Lang.TURTLE.getName()); 
+			//rdf.read(stream, "", Lang.TURTLE.getName());
+			
+			System.out.println("Namespace: " + namespace);
+			try (InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"))) {
+		        RDFParser.create()
+		            .source(stream)
+		            //.resolveURIs(false) // should not be doing this. Need a temp namespace.
+		            .lang(RDFLanguages.RDFXML)
+		            //.errorHandler(ErrorHandlerFactory.errorHandlerWarning(null)) // change this
+		            .base(namespace)
+		            .parse(rdf);
+		        // TODO: annotations not being read in b/c of namespace issue. Maybe use default namespace all the time.
+//		        for(Statement st : rdf.listStatements().toList()) {
+//					System.out.println(st.toString());
+//				}
+				stream.close();
+		    }
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -140,7 +161,7 @@ public abstract class AbstractRDFreader {
 			default: resource = rdf.getResource(semsimmodel.getNamespace() + ds.getName());
 				break;
 		}
-				
+		
 		collectFreeTextAnnotation(ds, resource);
 		collectSingularBiologicalAnnotation(ds, resource);
 		collectCompositeAnnotation(ds, resource);

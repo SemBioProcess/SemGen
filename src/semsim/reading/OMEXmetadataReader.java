@@ -9,13 +9,13 @@ import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Model;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
@@ -45,7 +45,7 @@ import semsim.writing.SemSimRDFwriter;
  * @author mneal
  *
  */
-public class CASAreader extends AbstractRDFreader{
+public class OMEXmetadataReader extends AbstractRDFreader{
 
 	/**
 	 * Constructor
@@ -56,7 +56,7 @@ public class CASAreader extends AbstractRDFreader{
 	 * @param rdfstring Additional RDF content to include in the model's metadata
 	 * that is not contained in the CASA file (e.g. curatorial info in a CellML model.
 	 */
-	public CASAreader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
+	public OMEXmetadataReader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
 		super(ma, semsimmodel, lib);
 		
 		if(rdfstring!=null)

@@ -4,12 +4,12 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;

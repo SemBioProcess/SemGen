@@ -18,7 +18,7 @@ import org.jdom.input.SAXBuilder;
 import semsim.SemSimLibrary;
 import semsim.model.collection.SemSimModel;
 import semsim.reading.AbstractRDFreader;
-import semsim.reading.CASAreader;
+import semsim.reading.OMEXmetadataReader;
 import semsim.reading.OMEXmanifestReader;
 import semsim.reading.SemSimRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
@@ -142,7 +142,7 @@ public class OMEXAccessor extends ModelAccessor {
 						
 			if (casaaccessor != null){
 				String casardfstring = casaaccessor.getModelasString();
-				return new CASAreader(this, thesemsimmodel, sslib, casardfstring);
+				return new OMEXmetadataReader(this, thesemsimmodel, sslib, casardfstring);
 			}
 		}	
 		return new SemSimRDFreader(archivedfile, thesemsimmodel, curationalrdf, sslib);

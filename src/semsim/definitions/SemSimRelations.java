@@ -5,8 +5,8 @@ import java.net.URI;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.semanticweb.owlapi.model.IRI;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 import semsim.annotation.Relation;
 

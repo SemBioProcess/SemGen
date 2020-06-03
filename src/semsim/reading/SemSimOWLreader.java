@@ -37,8 +37,12 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+import org.semanticweb.owlapi.vocab.PrefixOWLOntologyFormat;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
@@ -94,7 +98,7 @@ public class SemSimOWLreader extends ModelReader {
 	private Map<String, PhysicalPropertyInComposite> idpropertymap = new HashMap<String, PhysicalPropertyInComposite>();
 	private OWLOntology ont;
 	private URI physicaldefinitionURI;
-
+	
 	public SemSimOWLreader(ModelAccessor accessor) {
 		super(accessor);
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
@@ -108,6 +112,35 @@ public class SemSimOWLreader extends ModelReader {
 		} catch (OWLOntologyCreationException | IOException e) {
 			e.printStackTrace();
 		}
+		
+		// Set the SemSim namespace (to accommodate older models that use SemSim#, not semsim#)
+		OWLClass topclassnew = factory.getOWLClass(IRI.create(SemSimTypes.SEMSIM_COMPONENT.getURIasString()));
+		OWLClass topclassold = factory.getOWLClass(IRI.create("http://www.bhi.washington.edu/SemSim#SemSim_component"));
+		
+		if( ont.getClassesInSignature().contains(topclassold) ) {
+			
+			//TODO:
+			// Replace all occurrences of old SemSim namespace with new one
+			// Also change SemSim:namespace mapping
+			// Change semsim namespace to the new one (lower case)
+			OWLOntologyFormat oof = manager.getOntologyFormat(ont);
+			oof.asPrefixOWLOntologyFormat().setPrefix("SemSim", RDFNamespace.SEMSIM.getNamespaceAsString());
+			manager.setOntologyFormat(ont, oof);
+			oof = manager.getOntologyFormat(ont);
+			Map<String,String> themap = oof.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
+
+			for(String key : themap.keySet()) {
+				System.out.println("Key and value: " + key + " : " + themap.get(key));
+			}
+			
+			for(OWLClass cls : ont.getClassesInSignature()) {
+				System.out.println(cls.getIRI());
+			}
+		}
+		else if( ! ont.getClassesInSignature().contains(topclassnew))
+			semsimmodel.addError("ERROR: Could not determine SemSim namespace for model");
+		
+		
 	}
 	
 	
@@ -140,21 +173,17 @@ public class SemSimOWLreader extends ModelReader {
 	 * @return Whether the SemSimModel is valid
 	 * @throws OWLException*/
 	private boolean verifyModel() throws OWLException {
-		OWLClass topclass = factory.getOWLClass(IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_component"));
-		
-		if( ! ont.getClassesInSignature().contains(topclass)) {
-			// Maybe the model uses the old SemSim namespace
-			topclass = factory.getOWLClass(IRI.create("http://www.bhi.washington.edu/SemSim#SemSim_component"));
-			
-			if( ! ont.getClassesInSignature().contains(topclass)) {
+		OWLClass topclass = factory.getOWLClass(IRI.create(SemSimTypes.SEMSIM_COMPONENT.getURIasString()));
+
+		if( ! ont.getClassesInSignature().contains(topclass))
 				semsimmodel.addError("Could not find root class 'SemSim_component'. Source file does not appear to be a valid SemSim model");
-			}
-		}
 		
 		// Test if the model actually has data structures
 		if(SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.DATASTRUCTURE.getURIasString()).isEmpty()
-				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROPERTY.getURIasString()).isEmpty())
+				&& SemSimOWLFactory.getIndividualsInTreeAsStrings(ont, SemSimTypes.PHYSICAL_PROPERTY.getURIasString()).isEmpty()) {
+			
 			semsimmodel.addError("Model contains no data structures or physical properties");
+		}
 		
 		return (semsimmodel.getErrors().size() > 0);
 	}
@@ -244,7 +273,7 @@ public class SemSimOWLreader extends ModelReader {
 	private void collectReferenceClasses() throws OWLException {
 		
 		// Collect physical properties
-		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.PHYSICAL_PROPERTY.getURIasString(),false)) {
+		for (String refuri : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.PHYSICAL_PROPERTY.getURIasString(), false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(refuri)))[0];
 			if (label.isEmpty()) continue;
 			
@@ -258,7 +287,7 @@ public class SemSimOWLreader extends ModelReader {
 		for (String rperef : SemSimOWLFactory.getAllSubclasses(ont,  SemSimTypes.REFERENCE_PHYSICAL_ENTITY.getURIasString(), false)) {
 			String label = SemSimOWLFactory.getRDFLabels(ont, factory.getOWLClass(IRI.create(rperef)))[0];
 			PhysicalEntity pe;
-			if( ! rperef.toString().startsWith("http://www.bhi.washington.edu/SemSim/")){  // Account for older models that used refersTo pointers to custom annotations
+			if( ! rperef.toString().toLowerCase().startsWith("http://www.bhi.washington.edu/semsim/")){  // Account for older models that used refersTo pointers to custom annotations
 				
 				// If an identical reference entity was already added to the model, this will return the original, 
 				// otherwise it creates a new physical entity

@@ -47,8 +47,8 @@ import org.sbml.jsbml.UnitDefinition;
 import org.sbml.jsbml.JSBML;
 import org.semanticweb.owlapi.model.OWLException;
 
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Resource;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
@@ -161,8 +161,8 @@ public class SBMLreader extends ModelReader{
 			
 			if(modelaccessor instanceof OMEXAccessor){
 				rdfreader = modelaccessor.createRDFreaderForModel(semsimmodel, null, sslib);
-				if (rdfreader instanceof CASAreader) {
-					((CASAreader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
+				if (rdfreader instanceof OMEXmetadataReader) {
+					((OMEXmetadataReader)rdfreader).getAnnotationsForPhysicalComponents(sbmlmodel);
 				}
 			}
 			else{

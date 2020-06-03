@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;

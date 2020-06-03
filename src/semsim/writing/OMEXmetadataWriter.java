@@ -5,10 +5,10 @@ import java.util.Set;
 
 import org.sbml.jsbml.CVTerm.Qualifier;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
 
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
