@@ -205,13 +205,11 @@ Below is an step-by-step example of a merge between a cardiovascular dynamics an
 
 ## Authors
 
-**Dr. Maxwell Neal** originally developed the SemGen software as part of his dissertation research.
+**Dr. Maxwell Neal** originally developed the SemGen software as part of his dissertation research. Subsequently, he led a team of developers to further augment, test and evaluate SemGen under an R01 grant from the National Library of Medicine (PIs: **John Gennari** and **Brian Carlson**) that aimed to accelerate model-driven research. SemGen development has also been funded through the [Virtual Physiological Rat](http://www.virtualrat.org/) project.
 
-Currently, Dr. Neal leads a team of developers to further augment, test and evaluate SemGen under an R01 grant from the National Library of Medicine (PIs: **John Gennari** and **Brian Carlson**) that aims to accelerate model-driven research.
+Prior contributors to SemGen development include **Christopher Thompson**, **Graham Kim** and **Ryan James**.
 
-Contributors to SemGen development include **Christopher Thompson**, **Graham Kim** and **Ryan James**.
-
-SemGen development is currently supported by a grant from the [National Library of Medicine](http://www.nlm.nih.gov/) and through the [Virtual Physiological Rat](http://www.virtualrat.org/) project. 
+SemGen development is currently supported through the [Center for Reproducible Biomedical Modeling](https://reproduciblebiomodels.org/). 
 
 ## License
 
@@ -232,3 +230,7 @@ The name of the author or the University of Washington may not be used to endors
 THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL MAXWELL NEAL, UNIVERSITY OF WASHINGTON, OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
 AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+
+SemGen uses JxBrowser, which is a proprietary software, owned by TeamDev Ltd. The use of JxBrowser is governed by JxBrowser Product License Agreement http://www.teamdev.com/jxbrowser-licence-agreement.
+You may not use JxBrowser separately from SemGen without a separate license from TeamDev Ltd.
+Use of JxBrowser as part of SemGen in any commercial software requires a commercial license from TeamDev Ltd.
