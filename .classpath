@@ -26,9 +26,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="thirdParty/biomodels-wslib_standalone-1.21.jar"/>
 	<classpathentry kind="lib" path="thirdParty/py4j0.10.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jsonld-java-0.12.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/libthrift-0.13.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/collection-0.7.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-cli-1.4.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-codec-1.13.jar"/>
