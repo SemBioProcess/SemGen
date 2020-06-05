@@ -1,7 +1,7 @@
-startDirectory; C:\Users\thomp\OneDrive\Documents\SemGen Test
-maximize; false
-screensize; 900x700
-screenpos; 0x0
+startDirectory; C:\Users\mneal\Desktop\misc\GoldStandardModels
+maximize; true
+screensize; 1366x754
+screenpos; -8x-8
 autoAnnotate; true
 showImports; true
 displayMarkers; true
