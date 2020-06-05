@@ -29,9 +29,6 @@
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jsonld-java-0.12.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/libthrift-0.13.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/slf4j-api-1.7.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/slf4j-log4j12-1.7.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/git/SemGen/thirdParty/arq-2.8.7.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/collection-0.7.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-cli-1.4.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-codec-1.13.jar"/>
@@ -67,5 +64,6 @@
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/slf4j-api-1.7.26.jar"/>
 	<classpathentry kind="lib" path="thirdParty/ApacheJena/slf4j-log4j12-1.7.26.jar"/>
+	<classpathentry kind="lib" path="thirdParty/arq-2.8.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
