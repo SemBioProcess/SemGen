@@ -101,11 +101,6 @@ public abstract class AbstractRDFreader {
 		            //.errorHandler(ErrorHandlerFactory.errorHandlerWarning(null)) // change this
 		            .base(TEMP_BASE)
 		            .parse(rdf);
-		        // TODO: fix things so that we always use temp namespace on read-in
-		        // do this for CellMl and SBML models
-		        for(Statement st : rdf.listStatements().toList()) {
-					System.out.println(st.toString());
-				}
 				stream.close();
 		    }
 		}
