@@ -1,6 +1,5 @@
 package semgen.annotation.dialog.termlibrary;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -37,12 +36,14 @@ public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPa
 		editors.add(new ParticipantEditor("Sink Participants", library, this));
 		editors.add(new ParticipantEditor("Mediator Participants", library, this));
 		
-		
 		setParticipantTableData();
 		
-		// PICK IT UP HERE!!!!!
-		if(library.getPhysicalProcess(termindex).isFromSBMLinOMEXarchive()) {
-			this.setBackground(Color.blue);
+		// If process is from an SBML model in an OMEX archive, don't allow
+		// users to change the participant info, since it's embedded in the SBML
+		if(library.getPhysicalProcess(termindex).isFromSBMLinOMEXarchive()) { 
+			for(ParticipantEditor ed : editors) {
+				ed.setEditable(false);
+			}
 		}
 	}
 	

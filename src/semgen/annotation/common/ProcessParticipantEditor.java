@@ -226,4 +226,11 @@ public abstract class ProcessParticipantEditor extends JPanel implements ActionL
 	public void addTableModelListener(TableModelListener l) {
 		table.getModel().addTableModelListener(l);
 	}
+	
+	public void setEditable(boolean editable) {
+		plusbutton.setEnabled(editable);
+		minusbutton.setEnabled(editable);
+		createbutton.setEnabled(editable);
+		table.setEnabled(editable);
+	}
 }
