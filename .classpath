@@ -26,41 +26,46 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="thirdParty/biomodels-wslib_standalone-1.21.jar"/>
 	<classpathentry kind="lib" path="thirdParty/py4j0.10.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/collection-0.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-cli-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-codec-1.13.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-compress-1.19.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-csv-1.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/commons-lang3-3.9.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/httpclient-4.5.10.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/httpclient-cache-4.5.10.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/httpcore-4.4.12.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jackson-annotations-2.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jackson-core-2.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jackson-databind-2.10.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/javax.annotation-api-1.3.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jcl-over-slf4j-1.7.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-arq-3.14.0.jar" sourcepath="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib-src/jena-arq-3.14.0-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-base-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-cmds-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-core-3.14.0.jar" sourcepath="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib-src/jena-core-3.14.0-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-dboe-base-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-dboe-index-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-dboe-storage-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-dboe-transaction-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-dboe-trans-data-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-iri-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-rdfconnection-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-shacl-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-shaded-guava-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-tdb2-3.14.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jena-tdb-3.14.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/jsonld-java-0.12.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/libthrift-0.13.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/slf4j-api-1.7.26.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/Desktop/Apache_Jena/apache-jena-3.14.0/lib/slf4j-log4j12-1.7.26.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mneal/git/SemGen/thirdParty/arq-2.8.7.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/collection-0.7.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-codec-1.13.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-compress-1.19.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-csv-1.7.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/commons-lang3-3.9.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/httpclient-4.5.10.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/httpclient-cache-4.5.10.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/httpcore-4.4.12.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jackson-annotations-2.10.1.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jackson-core-2.10.1.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jackson-databind-2.10.1.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/javax.annotation-api-1.3.2.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jcl-over-slf4j-1.7.26.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-arq-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-base-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-cmds-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-core-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-dboe-base-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-dboe-index-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-dboe-storage-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-dboe-trans-data-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-dboe-transaction-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-iri-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-rdfconnection-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-shacl-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-shaded-guava-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-tdb-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jena-tdb2-3.14.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/jsonld-java-0.12.5.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/libthrift-0.13.0.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/slf4j-api-1.7.26.jar"/>
+	<classpathentry kind="lib" path="thirdParty/ApacheJena/slf4j-log4j12-1.7.26.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
