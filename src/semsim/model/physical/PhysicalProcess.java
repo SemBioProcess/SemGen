@@ -20,6 +20,8 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	private LinkedHashMap<PhysicalEntity, Double> sinks = new LinkedHashMap<PhysicalEntity, Double>();
 	private Set<PhysicalEntity> mediators = new HashSet<PhysicalEntity>();	
 	
+	private boolean isFromSBMLinOMEX = false;
+
 	protected PhysicalProcess(SemSimTypes type) {
 		super(type);
 	}
@@ -282,5 +284,20 @@ public abstract class PhysicalProcess extends PhysicalModelComponent{
 	@Override
 	public String getComponentTypeAsString() {
 		return "process";
+	}
+	
+	/**
+	 * @return Whether the custom process is from an SBML model in an OMEX archive
+	 */
+	public boolean isFromSBMLinOMEXarchive() {
+		return isFromSBMLinOMEX;
+	}
+	
+	/**
+	 * Set whether the process is from an SBML model in an OMEX archive
+	 * @param val
+	 */
+	public void setIsFromSBMLinOMEXarchive(boolean val) {
+		isFromSBMLinOMEX = val;
 	}
 }

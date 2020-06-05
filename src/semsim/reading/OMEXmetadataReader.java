@@ -96,7 +96,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		
 		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
-		String ns = semsimmodel.getLegacyCodeLocation().getFileName();
+		String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource res = rdf.getResource(ns + "#" + metaid);
 		Qualifier[] qualifiers = Qualifier.values();
 				
@@ -131,7 +131,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 
 	@Override
 	public void getModelLevelAnnotations() {
-		String modeluri = semsimmodel.getLegacyCodeLocation().getFileName() + "#" + semsimmodel.getMetadataID();
+		String modeluri = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName() + "#" + semsimmodel.getMetadataID();
 		Resource modelresource = rdf.getResource(modeluri);
 		StmtIterator stmts = modelresource.listProperties();
 		
@@ -188,7 +188,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	public void getDataStructureAnnotations(DataStructure ds){
 		
 		String metaid = ds.getMetadataID(); // TODO: what if no metaid assigned? Just do nothing?
-		String ns = semsimmodel.getLegacyCodeLocation().getFileName();
+		String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource resource = rdf.getResource(ns + "#" + metaid);
 						
 		collectFreeTextAnnotation(ds, resource);

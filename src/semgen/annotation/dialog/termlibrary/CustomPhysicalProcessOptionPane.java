@@ -1,5 +1,6 @@
 package semgen.annotation.dialog.termlibrary;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -31,12 +32,18 @@ public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPa
 		editors = new ArrayList<ParticipantEditor>();
 		ArrayList<Integer> versionrels = library.getIndiciesofReferenceRelations(termindex, SemSimRelation.BQB_IS_VERSION_OF);
 		objecteditors.add(new ProcessEditor(library, SemSimRelation.BQB_IS_VERSION_OF, versionrels));
+		
 		editors.add(new ParticipantEditor("Source Participants", library, this));
 		editors.add(new ParticipantEditor("Sink Participants", library, this));
 		editors.add(new ParticipantEditor("Mediator Participants", library, this));
 		
 		
 		setParticipantTableData();
+		
+		// PICK IT UP HERE!!!!!
+		if(library.getPhysicalProcess(termindex).isFromSBMLinOMEXarchive()) {
+			this.setBackground(Color.blue);
+		}
 	}
 	
 	protected void setParticipantTableData() {

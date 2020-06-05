@@ -1050,6 +1050,10 @@ public class SBMLreader extends ModelReader{
 			}
 						
 			PhysicalProcess process = (PhysicalProcess) createSingularPhysicalComponentForSBMLobject(reaction);
+			
+			if(modelaccessor instanceof OMEXAccessor) {
+				process.setIsFromSBMLinOMEXarchive(true);
+			}
 						
 			// Set sources (reactants)
 			for(int s=0; s<reaction.getNumReactants(); s++){

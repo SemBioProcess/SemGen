@@ -171,7 +171,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 		if (urlbutton != null) urlbutton.setEnabled(!noselection); 
 	}
 	
-	protected void toggleCustom(boolean iscustom) {
+	public void toggleCustom(boolean iscustom) {
 		modifylabel.setEnabled(iscustom);
 		toggleWebSearch(!iscustom);
 	}

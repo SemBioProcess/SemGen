@@ -61,7 +61,7 @@ public abstract class AbstractRDFreader {
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	protected Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	protected ModelType modeltype;
-	public static String TEMP_NAMESPACE = "http://tempns.net/temp";
+	public static String TEMP_BASE = "http://tempns.net/";
 	protected String unnamedstring = "[unnamed!]";
 	protected boolean modelNamespaceIsSet = true;
 	protected SemSimLibrary sslib;
@@ -91,28 +91,21 @@ public abstract class AbstractRDFreader {
 	public static void readStringToRDFmodel(Model rdf, String rdfasstring, String namespace){
 		
 		try {
-			//InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"));
-			// See https://jena.apache.org/documentation/io/rdfxml_howto.html#arp-properties 
-			// for more on setting reader/writer properties
-			//RDFReader reader = rdf.getReader();
-			//reader.setProperty("relativeURIs","same-document,relative"); 
-			//reader.read(rdf, stream, "http://junk.org");
-			//reader.read(rdf, stream, ""); //read(rdf, stream, Lang.TURTLE.getName()); 
-			//rdf.read(stream, "", Lang.TURTLE.getName());
 			
-			System.out.println("Namespace: " + namespace);
+			System.out.println("Namespace: " + TEMP_BASE);
 			try (InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"))) {
 		        RDFParser.create()
 		            .source(stream)
 		            //.resolveURIs(false) // should not be doing this. Need a temp namespace.
 		            .lang(RDFLanguages.RDFXML)
 		            //.errorHandler(ErrorHandlerFactory.errorHandlerWarning(null)) // change this
-		            .base(namespace)
+		            .base(TEMP_BASE)
 		            .parse(rdf);
-		        // TODO: annotations not being read in b/c of namespace issue. Maybe use default namespace all the time.
-//		        for(Statement st : rdf.listStatements().toList()) {
-//					System.out.println(st.toString());
-//				}
+		        // TODO: fix things so that we always use temp namespace on read-in
+		        // do this for CellMl and SBML models
+		        for(Statement st : rdf.listStatements().toList()) {
+					System.out.println(st.toString());
+				}
 				stream.close();
 		    }
 		}
@@ -146,7 +139,7 @@ public abstract class AbstractRDFreader {
 			// If a CellML model and namespace is set, use namespace, otherwise use temp namespace and metadata ID.
 			// The former is to accommodate CellML models annotated using previous SG versions.
 			case CELLML_MODEL: resource = modelNamespaceIsSet ? rdf.getResource(semsimmodel.getNamespace() + ds.getName()) : 
-				rdf.getResource(TEMP_NAMESPACE + "#" + ds.getMetadataID());
+				rdf.getResource(TEMP_BASE + "#" + ds.getMetadataID());
 				 break;
 			 
 			// If an MML model in a JSim project file, use the model namespace (included in serialization) and 
@@ -491,7 +484,7 @@ public abstract class AbstractRDFreader {
 			
 			if(subject.getURI() != null){
 				
-				if(subject.getURI().contains(SemSimRDFreader.TEMP_NAMESPACE + "#")){
+				if(subject.getURI().contains(SemSimRDFreader.TEMP_BASE + "#")){
 					
 					// Look up the SemSimObject associated with the URI fragment (should be the metaid of the RDF Subject)
 					SemSimObject sso = thesemsimmodel.getModelComponentByMetadataID(subject.getLocalName());

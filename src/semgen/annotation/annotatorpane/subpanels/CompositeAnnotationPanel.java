@@ -140,16 +140,6 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		procbox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
 		fsp = new ForceSelectorPanel( ! drawer.isEditable());
-	    
-//		Integer forceindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
-		
-		// If no force associated with the data structure, immediately create one (this is different 
-		// than what we do with processes).
-//		if(forceindex == -1){
-//			int newforceindex = termlib.createForce();
-//			drawer.setDataStructureAssociatedPhysicalComponent(newforceindex);
-//		}
-
 		fsp.getComboBox().setModel(new DefaultComboBoxModel<String>(new String[]{"anonymous force"}));
 		fsp.setLibraryIndicies(new ArrayList<Integer>());
 		fsp.toggleNoneSelected(false);

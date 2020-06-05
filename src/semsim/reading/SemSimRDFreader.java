@@ -55,7 +55,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		super(accessor, semsimmodel, sslibrary);
 				
 		if(rdfasstring!=null){
-			readStringToRDFmodel(rdf, rdfasstring, TEMP_NAMESPACE);
+			readStringToRDFmodel(rdf, rdfasstring, TEMP_BASE);
 			createSemSimSubmodelURIandObjectMap();
 		}
 		
@@ -116,7 +116,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 		// If a CellML model and namespace is set, use namespace, otherwise use temp namespace and metadata ID.
 		// The former is to accommodate CellML models annotated using previous SG versions.
 		case CELLML_MODEL: modelres = modelNamespaceIsSet ? rdf.getResource(semsimmodel.getNamespace() + semsimmodel.getMetadataID()) : 
-			rdf.getResource(TEMP_NAMESPACE + "#" + semsimmodel.getMetadataID());
+			rdf.getResource(TEMP_BASE + "#" + semsimmodel.getMetadataID());
 			 break;
 		 
 		// If an MML model in a JSim project file, use the model namespace (included in serialization) and 

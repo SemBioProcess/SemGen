@@ -7,7 +7,7 @@ import semsim.annotation.SemSimTermLibrary;
 
 public class CustomTermDialog extends SemGenDialog {
 	private static final long serialVersionUID = 1L;
-	CustomTermOptionPane custompane;
+	public CustomTermOptionPane custompane;
 	
 	public CustomTermDialog() {
 		super("");

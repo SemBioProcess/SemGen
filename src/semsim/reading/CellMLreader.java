@@ -344,7 +344,7 @@ public class CellMLreader extends ModelReader {
 			
 			// Collect the free text annotation for the component
 			rdfreader.collectFreeTextAnnotation(submodel, 
-					rdfreader.rdf.getResource(SemSimRDFreader.TEMP_NAMESPACE + "#" + submodel.getMetadataID()));		
+					rdfreader.rdf.getResource(SemSimRDFreader.TEMP_BASE + "#" + submodel.getMetadataID()));		
 			semsimmodel.addSubmodel(submodel);
 		}
 		

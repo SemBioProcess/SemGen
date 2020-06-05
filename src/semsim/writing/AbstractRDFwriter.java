@@ -540,7 +540,7 @@ public abstract class AbstractRDFwriter {
 				writer.setProperty("blockRules", "idAttr");
 				writer.setProperty("relativeURIs","same-document,relative"); // this allows relative URIs
 				StringWriter out = new StringWriter();
-				writer.write(rdf, out, SemSimRDFreader.TEMP_NAMESPACE);
+				writer.write(rdf, out, SemSimRDFreader.TEMP_BASE);
 				String outstring = out.toString();
 				try {
 					out.close();

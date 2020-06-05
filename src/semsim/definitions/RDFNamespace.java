@@ -8,7 +8,7 @@ import org.jdom.Namespace;
  */
 public enum RDFNamespace  {
 	PKB("http://www.virtualrat.edu/physkb/", "physkb"),
-	SEMSIM("http://www.bhi.washington.edu/semsim#", "semsim"),
+	SEMSIM("http://www.bhi.washington.edu/SemSim#", "semsim"),
 	OPB("http://bhi.washington.edu/OPB#", "opb"),
 	RO("http://www.obofoundry.org/ro/ro.owl#", "ro"),
 	BQB("http://biomodels.net/biology-qualifiers/", "bqbiol"),
