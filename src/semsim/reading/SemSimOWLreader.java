@@ -39,10 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.PrefixManager;
-import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
-import org.semanticweb.owlapi.vocab.PrefixOWLOntologyFormat;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
@@ -127,15 +124,15 @@ public class SemSimOWLreader extends ModelReader {
 			oof.asPrefixOWLOntologyFormat().setPrefix("SemSim", RDFNamespace.SEMSIM.getNamespaceAsString());
 			manager.setOntologyFormat(ont, oof);
 			oof = manager.getOntologyFormat(ont);
-			Map<String,String> themap = oof.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
+//			Map<String,String> themap = oof.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
 
-			for(String key : themap.keySet()) {
-				System.out.println("Key and value: " + key + " : " + themap.get(key));
-			}
+//			for(String key : themap.keySet()) {
+//				System.out.println("Key and value: " + key + " : " + themap.get(key));
+//			}
 			
-			for(OWLClass cls : ont.getClassesInSignature()) {
-				System.out.println(cls.getIRI());
-			}
+//			for(OWLClass cls : ont.getClassesInSignature()) {
+//				System.out.println(cls.getIRI());
+//			}
 		}
 		else if( ! ont.getClassesInSignature().contains(topclassnew))
 			semsimmodel.addError("ERROR: Could not determine SemSim namespace for model");
