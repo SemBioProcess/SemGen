@@ -19,7 +19,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -37,7 +37,7 @@ import semsim.model.physical.object.ReferencePhysicalProcess;
 public class SemSimCopy {
 	HashMap<PhysicalEntity, PhysicalEntity> entitiesmap = new HashMap<PhysicalEntity, PhysicalEntity>();
 	HashMap<PhysicalProcess, PhysicalProcess> processesmap = new HashMap<PhysicalProcess, PhysicalProcess>();
-	HashMap<PhysicalForce, PhysicalForce> forcesmap = new HashMap<PhysicalForce,PhysicalForce>();
+	HashMap<PhysicalEnergyDifferential, PhysicalEnergyDifferential> forcesmap = new HashMap<PhysicalEnergyDifferential,PhysicalEnergyDifferential>();
 	HashMap<UnitOfMeasurement, UnitOfMeasurement> unitsmap = new HashMap<UnitOfMeasurement, UnitOfMeasurement>();
 	LinkedHashMap<DataStructure, DataStructure> dsmap = new LinkedHashMap<DataStructure, DataStructure>();
 	HashMap<Event, Event> eventsmap = new HashMap<Event, Event>();
@@ -61,7 +61,7 @@ public class SemSimCopy {
 		destmodel.setPhysicalProcesses(new HashSet<PhysicalProcess>(processesmap.values()));
 		
 		copyPhysicalForces(modeltocopy);
-		destmodel.setPhysicalForces(new HashSet<PhysicalForce>(forcesmap.values()));
+		destmodel.setPhysicalForces(new HashSet<PhysicalEnergyDifferential>(forcesmap.values()));
 		
 		copyUnits();
 		destmodel.setUnits(new HashSet<UnitOfMeasurement>(unitsmap.values()));

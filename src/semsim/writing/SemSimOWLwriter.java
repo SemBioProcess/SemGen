@@ -51,7 +51,7 @@ import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -493,7 +493,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	
 	
 	/** Add force's sources and sinks to the ontology */
-	private void setForceParticipants(PhysicalForce force) throws OWLException {
+	private void setForceParticipants(PhysicalEnergyDifferential force) throws OWLException {
 		for(PhysicalEntity source : force.getSources()){	
 			SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(force).toString(),
 					compositeEntitiesAndIndexes.get(source).toString(), SemSimRelation.HAS_SOURCE, null, manager);
@@ -749,7 +749,7 @@ public class SemSimOWLwriter extends ModelWriter {
 				}
 				// Otherwise we assume the associated physical model component is a force
 				else{
-					for(PhysicalEntity ent : ((PhysicalForce)pmc).getParticipants()){
+					for(PhysicalEntity ent : ((PhysicalEnergyDifferential)pmc).getParticipants()){
 						URI uri = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
 						
 						if (!compositeEntitiesAndIndexes.containsKey(ent))
@@ -766,7 +766,7 @@ public class SemSimOWLwriter extends ModelWriter {
 						SemSimRelation.PHYSICAL_PROPERTY_OF, SemSimRelation.HAS_PHYSICAL_PROPERTY, manager);
 				
 				if(pmc instanceof PhysicalProcess) setProcessParticipants((PhysicalProcess)pmc);
-				else if(pmc instanceof PhysicalForce) setForceParticipants((PhysicalForce)pmc);
+				else if(pmc instanceof PhysicalEnergyDifferential) setForceParticipants((PhysicalEnergyDifferential)pmc);
 			}
 			else {
 
@@ -899,7 +899,7 @@ public class SemSimOWLwriter extends ModelWriter {
 
 		if(pmc instanceof PhysicalProcess)
 			uri = URI.create(uritrunk + SemSimOWLFactory.URIencoding(pmc.getName()));
-		else if(pmc instanceof PhysicalForce){
+		else if(pmc instanceof PhysicalEnergyDifferential){
 			uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uritrunk + "Force_", existinguris));
 		}
 		else{
@@ -980,7 +980,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			
 			if(pmc instanceof PhysicalPropertyInComposite) 
 				parenturistring = SemSimTypes.PHYSICAL_PROPERTY.getURIasString();
-			else if(pmc instanceof PhysicalForce) parenturistring = SemSimTypes.PHYSICAL_FORCE.getURIasString();
+			else if(pmc instanceof PhysicalEnergyDifferential) parenturistring = SemSimTypes.PHYSICAL_FORCE.getURIasString();
 			else{
 				parenturistring = SemSimOWLFactory.getNamespaceFromIRI(uriforind) + SemSimOWLFactory.URIencoding(pmc.getName());
 				

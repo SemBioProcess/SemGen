@@ -11,12 +11,12 @@ import semsim.definitions.SemSimTypes;
  * @author mneal
  *
  */
-public abstract class PhysicalForce extends PhysicalModelComponent {
+public abstract class PhysicalEnergyDifferential extends PhysicalModelComponent {
 
 	private Set<PhysicalEntity> sources = new HashSet<PhysicalEntity>();
 	private Set<PhysicalEntity> sinks = new HashSet<PhysicalEntity>();
 	
-	protected PhysicalForce(SemSimTypes type) {
+	protected PhysicalEnergyDifferential(SemSimTypes type) {
 		super(type);
 	}
 	
@@ -24,7 +24,7 @@ public abstract class PhysicalForce extends PhysicalModelComponent {
 	 * Copy constructor
 	 * @param forcetocopy The PhysicalForce to copy
 	 */
-	public PhysicalForce(PhysicalForce forcetocopy) {
+	public PhysicalEnergyDifferential(PhysicalEnergyDifferential forcetocopy) {
 		super(forcetocopy);
 		setSources(forcetocopy.getSources());
 		setSinks(forcetocopy.getSinks());
@@ -95,7 +95,7 @@ public abstract class PhysicalForce extends PhysicalModelComponent {
 
 	@Override
 	public boolean isEquivalent(Object obj) {
-		PhysicalForce force = (PhysicalForce)obj;
+		PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)obj;
 		if (	(getParticipants().isEmpty() || force.getParticipants().isEmpty()) ||
 				(sources.size()!=force.getSources().size()) || 
 				(sinks.size()!=force.getSinks().size())) {

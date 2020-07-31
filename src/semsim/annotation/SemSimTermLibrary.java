@@ -19,7 +19,7 @@ import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -94,7 +94,7 @@ public class SemSimTermLibrary extends Observable {
 		for (PhysicalProcess proc : model.getPhysicalProcesses()) {
 			addPhysicalProcess(proc);
 		}
-		for (PhysicalForce force : model.getPhysicalForces()) {
+		for (PhysicalEnergyDifferential force : model.getPhysicalForces()) {
 			addPhysicalForce(force);
 		}
 	}
@@ -234,13 +234,13 @@ public class SemSimTermLibrary extends Observable {
 		return i;
 	}
 	
-	private int addPhysicalForce(PhysicalForce force) {
+	private int addPhysicalForce(PhysicalEnergyDifferential force) {
 		int i = getComponentIndex(force, false);
 		if (i != -1){
 			return i; // do not add if already in master list
 		}
 		
-		IndexCard<PhysicalForce> ic = new IndexCard<PhysicalForce>(force);
+		IndexCard<PhysicalEnergyDifferential> ic = new IndexCard<PhysicalEnergyDifferential>(force);
 		masterlist.add(ic);
 		
 		i = masterlist.indexOf(ic);
@@ -393,9 +393,9 @@ public class SemSimTermLibrary extends Observable {
 		return (PhysicalProcess)masterlist.get(index).getObject();
 	}
 	
-	public PhysicalForce getPhysicalForce(Integer index) {
-		if(masterlist.get(index).getObject() instanceof PhysicalForce)
-			return (PhysicalForce)masterlist.get(index).getObject();
+	public PhysicalEnergyDifferential getPhysicalForce(Integer index) {
+		if(masterlist.get(index).getObject() instanceof PhysicalEnergyDifferential)
+			return (PhysicalEnergyDifferential)masterlist.get(index).getObject();
 		else return null;
 	}
 	
@@ -605,7 +605,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public Set<Integer> getIndiciesOfForceSources(Integer forceindex){
-		PhysicalForce force = getPhysicalForce(forceindex);
+		PhysicalEnergyDifferential force = getPhysicalForce(forceindex);
 		
 		
 		Set<Integer> tempset = new HashSet<Integer>();
@@ -619,7 +619,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	public Set<Integer> getIndiciesOfForceSinks(Integer forceindex){
-		PhysicalForce force = getPhysicalForce(forceindex);
+		PhysicalEnergyDifferential force = getPhysicalForce(forceindex);
 		
 		Set<Integer> tempset = new HashSet<Integer>();
 		

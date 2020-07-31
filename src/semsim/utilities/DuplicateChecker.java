@@ -6,7 +6,7 @@ import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 
@@ -42,7 +42,7 @@ public class DuplicateChecker {
 			removeDuplicateProcessParticipants(proc, model2);
 		}
 		
-		for (PhysicalForce force : model2.getPhysicalForces()){
+		for (PhysicalEnergyDifferential force : model2.getPhysicalForces()){
 			removeDuplicateForceParticipants(force,model2);
 		}
 	}
@@ -67,10 +67,10 @@ public class DuplicateChecker {
 	/**
 	 * Make sure that force participants are not duplicates of {@link CompositePhysicalEntity}s
 	 * already in the model
-	 * @param force A {@link PhysicalForce} object
+	 * @param force A {@link PhysicalEnergyDifferential} object
 	 * @param model The {@link SemSimModel} containing the force
 	 */
-	private static void removeDuplicateForceParticipants(PhysicalForce force, SemSimModel model) {
+	private static void removeDuplicateForceParticipants(PhysicalEnergyDifferential force, SemSimModel model) {
 		for (PhysicalEntity part : force.getParticipants()) {
 			for (CompositePhysicalEntity proccpe : model.getCompositePhysicalEntities()) {
 				if (part.equals(proccpe)) {

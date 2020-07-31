@@ -20,7 +20,7 @@ import semsim.model.computational.Event;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalProcess;
 import semsim.utilities.SemSimUtil;
 import JSim.util.Xcept;
@@ -206,7 +206,7 @@ public class Merger {
 		for (PhysicalProcess pp : ssm2clone.getPhysicalProcesses())
 			pp.addToModel(mergedmodel);
 		
-		for (PhysicalForce pf : ssm2clone.getPhysicalForces())
+		for (PhysicalEnergyDifferential pf : ssm2clone.getPhysicalForces())
 			pf.addToModel(mergedmodel);
 		
 		//Create map with units from the cloned model

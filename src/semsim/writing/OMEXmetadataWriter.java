@@ -23,7 +23,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -325,7 +325,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					}
 				}
 				else{  // Otherwise we assume it's a property of a physical force
-					PhysicalForce force = (PhysicalForce)ds.getAssociatedPhysicalModelComponent();
+					PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)ds.getAssociatedPhysicalModelComponent();
 
 					Resource forcres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 					Statement st = rdf.createStatement(ares, SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), forcres);

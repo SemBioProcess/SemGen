@@ -28,7 +28,7 @@ import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
@@ -268,8 +268,8 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 						process.addMediator((PhysicalEntity) mediatorpmc);
 					}
 				}
-				else if(pmc instanceof PhysicalForce){
-					PhysicalForce force = (PhysicalForce)pmc;
+				else if(pmc instanceof PhysicalEnergyDifferential){
+					PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)pmc;
 					NodeIterator sourceit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty());
 					
 					// Read in the source participants

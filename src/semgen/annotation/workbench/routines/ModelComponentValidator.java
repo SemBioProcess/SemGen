@@ -8,7 +8,7 @@ import semsim.annotation.SemSimTermLibrary;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalProcess;
 
 public class ModelComponentValidator {
@@ -18,7 +18,7 @@ public class ModelComponentValidator {
 	
 	private HashSet<PhysicalEntity> ents = new HashSet<PhysicalEntity>();
 	private HashSet<PhysicalProcess> procs = new HashSet<PhysicalProcess>();
-	private HashSet<PhysicalForce> forces = new HashSet<PhysicalForce>();
+	private HashSet<PhysicalEnergyDifferential> forces = new HashSet<PhysicalEnergyDifferential>();
 	
 	public ModelComponentValidator(AnnotatorWorkbench wb, SemSimModel mod) {
 		library = wb.openTermLibrary();

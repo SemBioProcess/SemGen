@@ -33,7 +33,7 @@ import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.model.physical.PhysicalDependency;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
@@ -106,7 +106,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private Set<PhysicalProperty> physicalproperties = new HashSet<PhysicalProperty>();
 	private Set<PhysicalPropertyInComposite> associatephysicalproperties = new HashSet<PhysicalPropertyInComposite>();
 	private Set<PhysicalProcess> physicalprocesses = new HashSet<PhysicalProcess>();
-	private Set<PhysicalForce> physicalforces = new HashSet<PhysicalForce>();
+	private Set<PhysicalEnergyDifferential> physicalforces = new HashSet<PhysicalEnergyDifferential>();
 	private Set<PhysicalDependency> physicaldependencies = new HashSet<PhysicalDependency>();
 	
 	/** Constructor without namespace */
@@ -830,7 +830,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Set<CustomPhysicalForce> getCustomPhysicalForces(){
 		Set<CustomPhysicalForce> custs = new HashSet<CustomPhysicalForce>();
 		
-		for(PhysicalForce force : getPhysicalForces()){
+		for(PhysicalEnergyDifferential force : getPhysicalForces()){
 			
 			if(! force.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalForce) force);
 		}
@@ -845,7 +845,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public CustomPhysicalForce getCustomPhysicalForceByParticipants(CustomPhysicalForce forcepar){
 		
-		for(PhysicalForce force : getPhysicalForces()){
+		for(PhysicalEnergyDifferential force : getPhysicalForces()){
 			
 			if( ! force.hasPhysicalDefinitionAnnotation()){
 				if(((CustomPhysicalForce)force).isEquivalent(forcepar))
@@ -993,13 +993,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Specify the set of PhysicalForces in the model.
 	 * @param physicalforces The new set of PhysicalForces to include
 	 */
-	public void setPhysicalForces(Set<PhysicalForce> physicalforces) {
+	public void setPhysicalForces(Set<PhysicalEnergyDifferential> physicalforces) {
 		this.physicalforces.clear();
 		this.physicalforces.addAll(physicalforces);
 	}
 	
-	/** @return All {@link PhysicalForce}s in the model. */
-	public Set<PhysicalForce> getPhysicalForces() {
+	/** @return All {@link PhysicalEnergyDifferential}s in the model. */
+	public Set<PhysicalEnergyDifferential> getPhysicalForces() {
 		return physicalforces;
 	}
 	
@@ -1132,7 +1132,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * Remove a physical force from the model cache
 	 * @param force The physical force to remove
 	 */
-	public void removePhysicalForceFromCache(PhysicalForce force){
+	public void removePhysicalForceFromCache(PhysicalEnergyDifferential force){
 		if(physicalforces.contains(force))
 			physicalforces.remove(force);
 	}

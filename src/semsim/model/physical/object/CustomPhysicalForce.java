@@ -6,7 +6,7 @@ import java.util.Set;
 import semsim.definitions.SemSimTypes;
 import semsim.model.collection.SemSimModel;
 import semsim.model.physical.PhysicalEntity;
-import semsim.model.physical.PhysicalForce;
+import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 
 /**
@@ -15,7 +15,7 @@ import semsim.model.physical.PhysicalModelComponent;
  * @author mneal
  *
  */
-public class CustomPhysicalForce extends PhysicalForce{
+public class CustomPhysicalForce extends PhysicalEnergyDifferential{
 
 
 	public CustomPhysicalForce(){
