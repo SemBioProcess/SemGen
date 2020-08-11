@@ -39,7 +39,7 @@ import semsim.utilities.SemSimUtil;
 /**
  * Class for serializing SemSim annotations in RDF format,
  * either within XML-based modeling files such as SBML and CellML,
- * or in CASA files used within OMEX archives.
+ * or in OMEX metadata files used within OMEX archives.
  * @author mneal
  *
  */
@@ -531,7 +531,7 @@ public abstract class AbstractRDFwriter {
 	 * @param rdf An RDF Model object
 	 * @param rdfxmlformat The format to use when writing the Model to a String.
 	 * Use "RDF/XML-ABBREV" if writing a standalone model (CellML, SBML, JSim project file).
-     * Use "RDF/XML" for CASA files in OMEX archives.
+     * Use "RDF/XML" for metadata files in OMEX archives.
 	 * @return A String representation of an RDF Model
 	 */
 	public static String getRDFmodelAsString(Model rdf,String rdfxmlformat){

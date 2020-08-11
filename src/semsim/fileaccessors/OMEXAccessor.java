@@ -136,8 +136,8 @@ public class OMEXAccessor extends ModelAccessor {
 		
 		if (getModelType() == ModelType.SBML_MODEL || getModelType() == ModelType.CELLML_MODEL) {
 			
-			if(omexmetaaccessor == null){ // If the CASA file is not set for this archive, find the CASA file
-				getCASAaccessor();
+			if(omexmetaaccessor == null){ // If the OMEX metadata file is not set for this archive, find the OMEX metadata file
+				getOMEXmetadataAccessor();
 			}
 						
 			if (omexmetaaccessor != null){
@@ -150,8 +150,8 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	
-	/** If the model is a SBML or CellML model, check for a CASA file and read it in if one exists */
-	protected void getCASAaccessor() {
+	/** If the model is a SBML or CellML model, check for an OMEX metadata file and read it in if one exists */
+	protected void getOMEXmetadataAccessor() {
 
 		try {
 				ZipFile archive = new ZipFile(file);
@@ -160,7 +160,7 @@ public class OMEXAccessor extends ModelAccessor {
 
 				for(OMEXAccessor acc : accs){
 					//			String rdfincellml = "";
-					if(acc.getModelType()==ModelType.CASA_FILE){	
+					if(acc.getModelType()==ModelType.OMEX_METADATA_FILE){	
 					    this.omexmetaaccessor = acc;
 					    break;
 					}
@@ -186,9 +186,9 @@ public class OMEXAccessor extends ModelAccessor {
 		return this.archivedfile.getFileName();
 	}
 	
-	/** @return The name of the CASA file in the archive, if present */
-	public String getCASAFileName() {
-		if (hasCASAFile()) {
+	/** @return The name of the OMEX metadata file in the archive, if present */
+	public String getOMEXmetadataFileName() {
+		if (hasOMEXmetadataFile()) {
 			return omexmetaaccessor.getFileName();
 		}
 		return getModelName() + ".rdf";
@@ -210,12 +210,12 @@ public class OMEXAccessor extends ModelAccessor {
 		OMEXArchiveWriter omexwriter;
 		
 		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
-			OMEXmetadataWriter casawriter = new OMEXmetadataWriter(model);
-			if (!this.hasCASAFile()) {
+			OMEXmetadataWriter metadatawriter = new OMEXmetadataWriter(model);
+			if (!this.hasOMEXmetadataFile()) {
 
-				omexmetaaccessor = new OMEXAccessor(file, new File("model/" + getModelName() + ".rdf"), ModelType.CASA_FILE);
+				omexmetaaccessor = new OMEXAccessor(file, new File("model/" + getModelName() + ".rdf"), ModelType.OMEX_METADATA_FILE);
 			}
-			omexwriter = new OMEXArchiveWriter(writer, casawriter);
+			omexwriter = new OMEXArchiveWriter(writer, metadatawriter);
 		}
 		else {
 			omexwriter = new OMEXArchiveWriter(writer);
@@ -234,8 +234,8 @@ public class OMEXAccessor extends ModelAccessor {
 		 return archivedfile.makeWriter(semsimmodel);
 	}
 	
-	/** @return Whether a CASA file has been associated with this OMEXAccessor */
-	public boolean hasCASAFile() {
+	/** @return Whether an OMEX metadata file has been associated with this OMEXAccessor */
+	public boolean hasOMEXmetadataFile() {
 		return omexmetaaccessor != null;
 	}
 }

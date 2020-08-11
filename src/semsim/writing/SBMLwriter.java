@@ -128,8 +128,8 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
-	public SBMLwriter(SemSimModel model, boolean CASA) {
-		super(model, CASA);
+	public SBMLwriter(SemSimModel model, boolean OMEXmetadata) {
+		super(model, OMEXmetadata);
 	}
 
 	// JKM: generates and returns an XML document based on the SBML
@@ -152,7 +152,7 @@ public class SBMLwriter extends ModelWriter {
 			SemSimUtil.flattenModel(semsimmodel);
 		}
 
-		// Initialize a CASA writer, if we're writing to an OMEX file
+		// Initialize an OMEX metadata writer, if we're writing to an OMEX file
 		if(OMEXmetadataEnabled()){
 			rdfwriter = new OMEXmetadataWriter(semsimmodel);
 			rdfwriter.setXMLbase("./" + xmlbase + "#");
@@ -175,7 +175,7 @@ public class SBMLwriter extends ModelWriter {
 		addSBMLinitialAssignments();
 		addConstraints();
 
-		Document doc = OMEXmetadataEnabled() ? addCASArdf() : addSemSimRDF();
+		Document doc = OMEXmetadataEnabled() ? addOMEXmetadataRDF() : addSemSimRDF();
 
 		// If no errors, return the model.
 		// First catch errors
@@ -194,15 +194,15 @@ public class SBMLwriter extends ModelWriter {
 
 	@Override
 	public String encodeModel() {
-		// populate the SBML model, use CASA if output is OMEX
-		if (useCASA)
+		// populate the SBML model, use OMEX metadata if output is OMEX
+		if (useOMEXmetadata)
 			return new XMLOutputter().outputString(writerSBMLtoXML(getWriteLocation().getFileName()));
 		else
 			return new XMLOutputter().outputString(writerSBMLtoXML(""));
 	}
 
 	/**
-	 * Like encodeModel but forces use of CASA.
+	 * Like encodeModel but forces use of OMEX metadata.
 	 */
 	public String encodeModelWithXMLBase(String xmlbase) {
 		return new XMLOutputter().outputString(writerSBMLtoXML(xmlbase));
@@ -365,7 +365,7 @@ public class SBMLwriter extends ModelWriter {
 			// Go to next data structure if there isn't a physical property associated with the current one
 			// or if there is a multi-entity composite physical entity used in the data structure's
 			// composite annotation (even if there's a valid physical property, the full composite
-			// needs to be stored in either the SemSim RDF block or the CASA file)
+			// needs to be stored in either the SemSim RDF block or the OMEX metadata file)
 			if(propphysdefuri == null || ! (pmc instanceof CompositePhysicalEntity))
 				continue; // TODO: add to global parameters?
 			
@@ -411,12 +411,12 @@ public class SBMLwriter extends ModelWriter {
 			
 			// Store annotation for compartment
 			// If it's a singular entity and writing to standalone, annotate with CVTerm
-			// If it's a singular entity and writing to OMEX, annotate in CASA. Link metaid's
-			// of compartment and the entity with the annotations (the singular entity in the
-			// composite entity)
+			// If it's a singular entity and writing to OMEX, annotate in the metadata file. 
+			// Link metaid's of compartment and the entity with the annotations (the singular
+			// entity in the composite entity)
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
-			// the RDF block or CASA file when adding parameter info
+			// the RDF block or OMEX metadata file when adding parameter info
 			if( onerefentity ){
 				
 				addRDFannotationForPhysicalSBMLelement(pmc, comp);
@@ -939,10 +939,10 @@ public class SBMLwriter extends ModelWriter {
 	
 	/**
 	 * If storing the SBML model in an OMEX archive, write out all full
-	 * composite annotations in the CASA file
+	 * composite annotations in the OMEX metadata file
 	 * @return JDOM Document object representing the SBML model
 	 */
-	private Document addCASArdf(){
+	private Document addOMEXmetadataRDF(){
 		
 		writeFullCompositesInRDF();
 
@@ -1068,7 +1068,7 @@ public class SBMLwriter extends ModelWriter {
 	 */
 	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
 		
-		if(sso.hasDescription() && !OMEXmetadataEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in CASA file.
+		if(sso.hasDescription() && !OMEXmetadataEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in OMEX metadata file.
 			try {
 				String desc = sso.getDescription();
 				byte[] chars = desc.getBytes("UTF-8"); // Make sure to use UTF-8 formatting (the Le Novere problem)
@@ -1157,7 +1157,8 @@ public class SBMLwriter extends ModelWriter {
 		if(pmc instanceof CompositePhysicalEntity)
 			oneent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1;
 		
-		// This is used when writing RDF-based semantic annotations within a CASA file that is linked to the SBML file in a COMBINE archive
+		// This is used when writing RDF-based semantic annotations within a OMEX metadata file 
+		// that is linked to the SBML file in a COMBINE archive
 		if(OMEXmetadataEnabled()){
 			
 			// When the pmc is a one-entity composite physical entity, use the

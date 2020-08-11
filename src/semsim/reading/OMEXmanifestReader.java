@@ -94,10 +94,10 @@ public class OMEXmanifestReader {
 	}
 	
 	/**
-	 * Return all valid annotation files in archive, including CASA files
+	 * Return all valid annotation files in archive, including OMEX metadata files
 	 * @param archive ZipFile instance of the archive
 	 * @param omexfile Location of the archive
-	 * @return All valid annotation files in the archive, including CASA files
+	 * @return All valid annotation files in the archive, including OMEX metadata files
 	 * @throws JDOMException
 	 * @throws IOException
 	 */
@@ -110,9 +110,9 @@ public class OMEXmanifestReader {
 	        	String formvalue = format.getValue().toLowerCase();
         		Attribute location = content.getAttribute("location");
 
-	        	// Use format value and name of file to determine if it's a CASA file. Ignore the main metadata.rdf file
+	        	// Use format value and name of file to determine if it's an OMEX metadata file. Ignore the main metadata.rdf file
 	        	if (ModelClassifier.hasValidOMEXannotationFileFormat(formvalue) && ! location.getValue().endsWith("/metadata.rdf")){
-	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelType.CASA_FILE));
+	        		accessors.add(new OMEXAccessor(omexfile, new File(location.getValue()), ModelType.OMEX_METADATA_FILE));
 	        	}
 	        }
 

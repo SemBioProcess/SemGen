@@ -31,7 +31,7 @@ import semsim.reading.AbstractRDFreader;
 
 /**
  * Class for serializing RDF-formatted SemSim annotations in 
- * Combine Archive Semantic Annotation (CASA) files.
+ * COMBINE archive OMEX metadata files.
  * @author mneal
  *
  */
@@ -53,6 +53,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
+		rdf.setNsPrefix("myOMEX",  RDFNamespace.myOMEX.getNamespaceAsString());
 	}
 	
 	@Override
@@ -79,7 +80,8 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
 				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), rdf.createResource(refann.getReferenceURI().toString()));
 			}
-			//TODO: Need to decide how to handle annotations already in RDF block. Skip them all for now (some are read into SemSim object model and will be preserved in CASA file)
+			//TODO: Need to decide how to handle annotations already in RDF block. Skip them all for now (some are read into SemSim object model and will
+			// be preserved in OMEX metadata file)
 			else if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
 			else st = rdf.createStatement(modelresource, ann.getRelation().getRDFproperty(), ann.getValue().toString());
 			

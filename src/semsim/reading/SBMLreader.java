@@ -155,7 +155,7 @@ public class SBMLreader extends ModelReader{
 		if(semsimmodel.getErrors().size()>0) return semsimmodel;
 		
 		// If model is from an archive, read in the annotations on the SBML physical components using
-		// getAnnotationsForSBMLphysicalComponents() in CASAreader. Composites on parameters are read in 
+		// getAnnotationsForSBMLphysicalComponents() in OMEXmetadataReader. Composites on parameters are read in 
 		// in the collectReactions (for local reaction-specific parameters) and collectParameters functions.
 		try {
 			
@@ -521,14 +521,14 @@ public class SBMLreader extends ModelReader{
 
 			boolean setEntityFromSBMLsource = false;
 			
-			// If we're reading in from an OMEX file, see if the CASA file contains any composite physical entity annotations 
+			// If we're reading in from an OMEX file, see if the OMEX metadata file contains any composite physical entity annotations 
 			// for the compartment. Single physical entity annotations should have already been picked up and attached
 			// as CV terms.
 			if(modelaccessor instanceof OMEXAccessor && sbmlc.getCVTermCount()==0){
 				
 				ds.setAssociatedPhysicalProperty(prop);
 				
-				// TODO: collecting the RDF resource duplicates code in CASA reader. Put in one function.
+				// TODO: collecting the RDF resource duplicates code in OMEXmetadataReader. Put in one function.
 				String metaid = sbmlc.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
 				String ns = semsimmodel.getLegacyCodeLocation().getFileName();
 				Resource res = rdfreader.rdf.getResource(ns + "#" + metaid); // Don't use "./" + ns

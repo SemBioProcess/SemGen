@@ -34,7 +34,7 @@ public class ModelClassifier {
 		MML_MODEL(".m", new String[]{"MML"},new FileNameExtensionFilter("MML (*.mod)", "mod")), 
 		MML_MODEL_IN_PROJ(".proj",  new String[]{"proj"},new FileNameExtensionFilter("JSim project file model (*.proj)", "proj")), 
 		OMEX_ARCHIVE(".omex", new String[]{"http://identifiers.org/combine.specifications/omex","https://identifiers.org/combine.specifications/omex"},new FileNameExtensionFilter("Combine Archive (*.omex)", "omex")), 
-		CASA_FILE(".casa", new String[]{"http://identifiers.org/combine.specifications/omex-metadata","https://identifiers.org/combine.specifications/omex-metadata"},null),
+		OMEX_METADATA_FILE(".rdf", new String[]{"http://identifiers.org/combine.specifications/omex-metadata","https://identifiers.org/combine.specifications/omex-metadata"},null),
 		UNKNOWN("null", new String[]{"null/null"}, null);
 		
 		private String extension;
@@ -144,7 +144,7 @@ public class ModelClassifier {
 					type =  ModelType.SBML_MODEL;
 				}
 				else if(filelc.endsWith(".rdf")){
-					type = ModelType.CASA_FILE;
+					type = ModelType.OMEX_METADATA_FILE;
 				}
 
 		return type;
@@ -294,8 +294,7 @@ public class ModelClassifier {
 	 * @return Whether the input file format is a valid OMEX annotation file format
 	 */
 	public static boolean hasValidOMEXannotationFileFormat(String format) {
-		return format.endsWith("casa") || 
-				format.equals("http://identifiers.org/combine.specifications/omex-metadata") || 
+		return  format.equals("http://identifiers.org/combine.specifications/omex-metadata") || 
 				format.equals("https://identifiers.org/combine.specifications/omex-metadata");
 	}
 }

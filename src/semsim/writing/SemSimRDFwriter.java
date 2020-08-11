@@ -120,7 +120,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		// Add model description to RDF if we're writing to a CellML model or a JSim project file
 		// In SemSim OWL files, descriptions are stored as RDF:comments on the ontology
 		// In SBML files (non-OMEX), the description is stored in the model element's <notes> block
-		// In CellML and SBML files within OMEX archives, the description is stored in the CASA file
+		// In CellML and SBML files within OMEX archives, the description is stored in the OMEX metadata file
 		if(semsimmodel.hasDescription() && (modeltype==ModelType.CELLML_MODEL || modeltype==ModelType.MML_MODEL_IN_PROJ)){
 			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
 			Statement st = rdf.createStatement(modelres, prop, semsimmodel.getDescription());

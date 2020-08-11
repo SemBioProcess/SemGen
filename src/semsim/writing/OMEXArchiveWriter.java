@@ -21,6 +21,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
 import semsim.fileaccessors.OMEXAccessor;
@@ -38,7 +39,7 @@ public class OMEXArchiveWriter {
 		this.writer = writer;
 	}
 	
-	public OMEXArchiveWriter(ModelWriter writer, OMEXmetadataWriter casawriter) {		
+	public OMEXArchiveWriter(ModelWriter writer, OMEXmetadataWriter metadatawriter) {		
 		this.writer = writer;
 	}
 
@@ -86,9 +87,9 @@ public class OMEXArchiveWriter {
 	        if (!fileexists) {
 	        	createManifestEntry(fs, nf, archive.getModelType());
 	        }
-	        //Write out the casa file if the model should have one
-	        if (archive.hasCASAFile()) {
-	        	createCASA(fs, archive);
+	        //Write out the OMEX metadata file if the model should have one
+	        if (archive.hasOMEXmetadataFile()) {
+	        	createOMEXmetadata(fs, archive);
 	        }
 	        archive.closeStream();	        
 	        
@@ -100,19 +101,19 @@ public class OMEXArchiveWriter {
 	}
     
 	/**
-	 * Create a CASA file for a {@link semsim.model.collection.SemSimModel}
+	 * Create an OMEX annotation file for a {@link semsim.model.collection.SemSimModel}
 	 * @param fs A FileSystem object
 	 * @param archive Location of the OMEX archive
 	 * @throws IOException
 	 * @throws JDOMException
 	 */
-    private void createCASA(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
+    private void createOMEXmetadata(FileSystem fs, OMEXAccessor archive) throws IOException, JDOMException {
         Path nf = null;
         if (Files.exists(fs.getPath("model\\"))) {
-        	nf = fs.getPath("model\\" + archive.getCASAFileName());
+        	nf = fs.getPath("model\\" + archive.getOMEXmetadataFileName());
         }
         else {
-        	nf = fs.getPath(archive.getCASAFileName());
+        	nf = fs.getPath(archive.getOMEXmetadataFileName());
         }
         boolean fileexists = Files.exists(nf);
         
@@ -122,7 +123,7 @@ public class OMEXArchiveWriter {
         omexwriter.close(); 
         
         if (!fileexists) {
-        	createManifestEntry(fs, nf, ModelType.CASA_FILE);
+        	createManifestEntry(fs, nf, ModelType.OMEX_METADATA_FILE);
         }
     }
     
@@ -163,7 +164,9 @@ public class OMEXArchiveWriter {
         root.addContent(newentry);
         Writer zwriter = Files.newBufferedWriter(manifestpath, StandardCharsets.UTF_8, StandardOpenOption.CREATE);  
         
-        zwriter.write(new XMLOutputter().outputString(doc));
+        XMLOutputter xmloutputter = new XMLOutputter();
+        xmloutputter.setFormat(Format.getPrettyFormat());;
+        zwriter.write(xmloutputter.outputString(doc));
         zwriter.close();
 
 	}

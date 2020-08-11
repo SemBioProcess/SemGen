@@ -23,7 +23,8 @@ public enum RDFNamespace  {
 	BQS("http://www.cellml.org/bqs/1.0#", "bqs"),
 	CMETA("http://www.cellml.org/metadata/1.0#", "cmeta"),
 	DOC("http://cellml.org/tmp-documentation", "doc"),
-	VCARD("http://www.w3.org/2001/vcard-rdf/3.0#","vCard");
+	VCARD("http://www.w3.org/2001/vcard-rdf/3.0#","vCard"),
+	myOMEX("http://omex-library.org/mymodel.omex/","myOMEX");
 	
 	private String namespace;
 	private String owlid;

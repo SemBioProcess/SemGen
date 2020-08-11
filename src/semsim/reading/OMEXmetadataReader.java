@@ -38,10 +38,9 @@ import semsim.writing.SemSimRDFwriter;
 
 /**
  * Class for working with annotations stored in Combine Archive
- * semantic annotation (CASA) files. CASA files are standalone RDF
- * files stored in Combine (OMEX) Archives that are used to
- * house annotations on the SBML and CellML models stored in the 
- * archive.
+ * annotation (OMEX metadata) files. OMEX metadata files are standalone RDF
+ * files in COMBINE archives that are used to house annotations on models 
+ * within the archive.
  * @author mneal
  *
  */
@@ -49,12 +48,12 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 
 	/**
 	 * Constructor
-	 * @param ma A {@link ModelAccessor} indicating the location of the CASA file
+	 * @param ma A {@link ModelAccessor} indicating the location of the OMEX metadata file
 	 * @param semsimmodel The {@link SemSimModel} to annotate using the contents of
-	 * the CASA file
+	 * the OMEX metadata file
 	 * @param lib A {@link SemSimLibrary} instance
 	 * @param rdfstring Additional RDF content to include in the model's metadata
-	 * that is not contained in the CASA file (e.g. curatorial info in a CellML model.
+	 * that is not contained in the OMEX metadata file (e.g. curatorial info in a CellML model.
 	 */
 	public OMEXmetadataReader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
 		super(ma, semsimmodel, lib);
@@ -69,8 +68,8 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	/**
 	 * Apply annotations on the physical components of an input
 	 * SBML model (compartments, species, reactions) using 
-	 * info in the CASA file.
-	 * @param sbmlmodel The SBML model to annotate using the CASA file.
+	 * info in the OMEX metadata file.
+	 * @param sbmlmodel The SBML model to annotate using the OMEX metadata file.
 	 */
 	public void getAnnotationsForPhysicalComponents(Model sbmlmodel) {
 		List<AbstractNamedSBase> annotablestuff = new ArrayList<AbstractNamedSBase>();
@@ -89,12 +88,12 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	
 	/**
 	 * Apply annotations for a physical component from an input SBML model
-	 * (compartment, species, or reaction) using info in the CASA file. 
+	 * (compartment, species, or reaction) using info in the OMEX metadata file. 
 	 * @param sbaseobj The SBML object to annotate
 	 */
 	protected void getAnnotationsForPhysicalComponent(AbstractNamedSBase sbaseobj){
 		
-		// For reading in CASA-formatted annotations on SBML compartments, species, and reactions
+		// For reading in OMEX metadata-formatted annotations on SBML compartments, species, and reactions
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
 		String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource res = rdf.getResource(ns + "#" + metaid);

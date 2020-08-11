@@ -99,15 +99,15 @@ public class CellMLwriter extends ModelWriter {
 	//*************WRITE PROCEDURE********************************************//
 	
 	/**
-	 * Assign either a CASAwriter or SemSimRDFwriter for serializing the 
-	 * RDF content associated with the CellML model. The CASAwriter is used
+	 * Assign either an OMEXmetadataWriter or SemSimRDFwriter for serializing the 
+	 * RDF content associated with the CellML model. The OMEXmetadataWriter is used
 	 * if the CellML model is being written out as part of an OMEX archive,
 	 * and a SemSimRDFwriter is used if the model is being written out in a
 	 * standalone CellML file.
 	 */
 	private void createRDFBlock() {
 		
-		// If we're writing to an OMEX file, make the RDF writer a CASAwriter that follows COMBINE conventions
+		// If we're writing to an OMEX file, make the RDF writer an OMEXmetadataWriter that follows COMBINE conventions
 		if(getWriteLocation() instanceof OMEXAccessor){
 			rdfwriter = new OMEXmetadataWriter(semsimmodel);
 			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
