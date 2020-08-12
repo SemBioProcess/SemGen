@@ -79,9 +79,9 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		// Don't set model prefix for cellml models. They use relative IDs and ad-hoc namespaces.
 		if( ! modeltype.equals(ModelType.CELLML_MODEL)){
 			rdf.setNsPrefix("model", semsimmodel.getNamespace());
-			xmlbase = semsimmodel.getNamespace();
+			modelnamespace = semsimmodel.getNamespace();
 		}
-		else xmlbase = "#";
+		else modelnamespace = "#";
 				
 		createSubmodelURIandNameMap();
 		
@@ -115,7 +115,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 		String modelmetaid = semsimmodel.hasMetadataID() ?  semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
 		
-		Resource modelres = rdf.createResource(xmlbase + modelmetaid);
+		Resource modelres = rdf.createResource(modelnamespace + modelmetaid);
 				
 		// Add model description to RDF if we're writing to a CellML model or a JSim project file
 		// In SemSim OWL files, descriptions are stored as RDF:comments on the ontology
@@ -174,7 +174,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			String dsmetaid = dsinsub.hasMetadataID() ? dsinsub.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(dsinsub.getName(), dsinsub);
 			if(modeltype==ModelType.MML_MODEL_IN_PROJ) dsmetaid = dsinsub.getName();
 			
-			Resource dsres = rdf.getResource(xmlbase + dsmetaid);
+			Resource dsres = rdf.getResource(modelnamespace + dsmetaid);
 			Statement stds = rdf.createStatement(subres, 
 					SemSimRelation.HAS_ASSOCIATED_DATA_STRUCTURE.getRDFproperty(), 
 					dsres);

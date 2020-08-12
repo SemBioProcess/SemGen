@@ -186,6 +186,10 @@ public class OMEXAccessor extends ModelAccessor {
 		return this.archivedfile.getFileName();
 	}
 	
+	public String getArchiveFileName() {
+		return this.file.getName();
+	}
+	
 	/** @return The name of the OMEX metadata file in the archive, if present */
 	public String getOMEXmetadataFileName() {
 		if (hasOMEXmetadataFile()) {

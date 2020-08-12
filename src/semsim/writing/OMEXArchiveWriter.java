@@ -46,14 +46,14 @@ public class OMEXArchiveWriter {
 
 	/**
 	 * Add a new file within an omex archive or modify an existing one
-	 * @param archive Location of the archive
+	 * @param archiveaccessor Location of the archive
 	 */
-	public void appendOMEXArchive(OMEXAccessor archive) {
+	public void appendOMEXArchive(OMEXAccessor archiveaccessor) {
         
 
-        	if (!archive.isLocalFile()) {
+        	if (!archiveaccessor.isLocalFile()) {
         		 try{
-        	        OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archive);
+        	        OMEXArchiveBuilder builder = new OMEXArchiveBuilder(archiveaccessor);
         	        builder.build();
         		 }
     	      	catch (IOException e1) {
@@ -63,35 +63,35 @@ public class OMEXArchiveWriter {
         	
 	        Map<String, String> env = new HashMap<>(); 
 	        env.put("create", "false");
-	        Path path = Paths.get(archive.getDirectoryPath());
+	        Path path = Paths.get(archiveaccessor.getDirectoryPath());
 	        URI uri = URI.create("jar:" + path.toUri());
 	        
 	     //Create the omex file system
 	     try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
 	        Path nf = null;
 	        if (Files.exists(fs.getPath("model\\"))) {
-	        	nf = fs.getPath("model\\" + archive.getFileName());
+	        	nf = fs.getPath("model\\" + archiveaccessor.getFileName());
 	        }
 	        else {
-	        	nf = fs.getPath(archive.getFileName());
+	        	nf = fs.getPath(archiveaccessor.getFileName());
 	        }
 	        
 	        boolean fileexists = Files.exists(nf);
 	        //Write out the model
 	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-	        writer.setWriteLocation(archive);
+	        writer.setWriteLocation(archiveaccessor);
 	        String model = writer.encodeModel();
 	        zwriter.write(model);
 	        zwriter.close(); 	
 	        //Add an entry if the file doesn't already exist
 	        if (!fileexists) {
-	        	createManifestEntry(fs, nf, archive.getModelType());
+	        	createManifestEntry(fs, nf, archiveaccessor.getModelType());
 	        }
 	        //Write out the OMEX metadata file if the model should have one
-	        if (archive.hasOMEXmetadataFile()) {
-	        	createOMEXmetadata(fs, archive);
+	        if (archiveaccessor.hasOMEXmetadataFile()) {
+	        	createOMEXmetadata(fs, archiveaccessor);
 	        }
-	        archive.closeStream();	        
+	        archiveaccessor.closeStream();	        
 	        
         }
 		catch (IOException | JDOMException e1) {

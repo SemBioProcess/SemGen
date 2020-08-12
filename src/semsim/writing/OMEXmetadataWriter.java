@@ -53,15 +53,14 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
-		rdf.setNsPrefix("myOMEX",  RDFNamespace.myOMEX.getNamespaceAsString());
 	}
 	
 	@Override
 	public void setRDFforModelLevelAnnotations() {
 		
-		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
-			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
-		Resource modelresource = rdf.createResource(xmlbase + metaid);
+//		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
+//			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+		Resource modelresource = rdf.createResource(modelnamespace);
 
 		// Save model description
 		if(semsimmodel.hasDescription()){
@@ -78,12 +77,16 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 			
 			if(ann instanceof ReferenceOntologyAnnotation){
 				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
-				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), rdf.createResource(refann.getReferenceURI().toString()));
+				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), 
+						rdf.createResource(refann.getReferenceURI().toString()));
 			}
-			//TODO: Need to decide how to handle annotations already in RDF block. Skip them all for now (some are read into SemSim object model and will
+			//TODO: Need to decide how to handle annotations already in RDF block. 
+			// Skip them all for now (some are read into SemSim object model and will
 			// be preserved in OMEX metadata file)
 			else if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
-			else st = rdf.createStatement(modelresource, ann.getRelation().getRDFproperty(), ann.getValue().toString());
+			else st = rdf.createStatement(modelresource, 
+					ann.getRelation().getRDFproperty(), 
+					ann.getValue().toString());
 			
 			if(st!=null) addStatement(st);
 		}
@@ -92,24 +95,42 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	
 	/**
 	 * Used to write out annotations for SBML elements that represent physical 
-	 * entities (compartments, species, and reactions).
+	 * components (compartments, species, and reactions).
 	 * @param pmc An annotated physical model component
 	 */
 	protected void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
 		setAnnotationsForPhysicalComponent(pmc.getMetadataID(), pmc);
 	}
 	
-	
+	/**
+	 * Used to write out annotations for SBML elements that represent physical 
+	 * components (compartments, species, and reactions).
+	 * @param metaid Metadata ID to use in the URI for the resource in RDF
+	 * @param pmc An annotated physical model component
+	 */
 	protected void setAnnotationsForPhysicalComponent(String metaid, PhysicalModelComponent pmc){
+		setAnnotationsForPhysicalComponent(modelnamespace, metaid, pmc);
+	}
+	
+	/**
+	 * Used to write out annotations for SBML elements that represent physical 
+	 * components (compartments, species, and reactions).
+	 * @param namespace The RDF namespace to use in the URI for the resource
+	 * representing the physical component
+	 * @param metaid Metadata ID to use in the URI for the resource in RDF
+	 * @param pmc An annotated physical model component
+	 */
+	protected void setAnnotationsForPhysicalComponent(String namespace, String metaid, PhysicalModelComponent pmc) {
 		// TODO: what if no metaid assigned?
-		Resource res = rdf.createResource(xmlbase + metaid);
+		Resource res = rdf.createResource(namespace + "#" + metaid);
 		
 		Set<Annotation> anns = pmc.getAnnotations();
 		
 		// If it's a composite physical entity, write out the composite
 		if(pmc instanceof CompositePhysicalEntity){
 			URI enturi = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)pmc);
-			Statement st = rdf.createStatement(res, SemSimRelation.BQB_IS.getRDFproperty(), rdf.createResource(enturi.toString()));
+			Statement st = rdf.createStatement(res, SemSimRelation.BQB_IS.getRDFproperty(), 
+					rdf.createResource(enturi.toString()));
 			addStatement(st);
 		}
 		

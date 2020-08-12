@@ -24,7 +24,7 @@ public enum RDFNamespace  {
 	CMETA("http://www.cellml.org/metadata/1.0#", "cmeta"),
 	DOC("http://cellml.org/tmp-documentation", "doc"),
 	VCARD("http://www.w3.org/2001/vcard-rdf/3.0#","vCard"),
-	myOMEX("http://omex-library.org/mymodel.omex/","myOMEX");
+	OMEX_LIBRARY("http://omex-library.org/","OMEXlibrary");
 	
 	private String namespace;
 	private String owlid;

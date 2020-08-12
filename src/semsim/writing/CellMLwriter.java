@@ -110,7 +110,16 @@ public class CellMLwriter extends ModelWriter {
 		// If we're writing to an OMEX file, make the RDF writer an OMEXmetadataWriter that follows COMBINE conventions
 		if(getWriteLocation() instanceof OMEXAccessor){
 			rdfwriter = new OMEXmetadataWriter(semsimmodel);
-			rdfwriter.setXMLbase("./" + getWriteLocation().getFileName() + "#");
+			String archivefn = ((OMEXAccessor)getWriteLocation()).getArchiveFileName();
+			String modfn = getWriteLocation().getFileName();
+			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
+			rdfwriter.setModelNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
+			rdfwriter.setLocalNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);
+			rdfwriter.rdf.setNsPrefix("myOMEX", RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn);
+			rdfwriter.rdf.setNsPrefix("local", rdfwriter.getLocalNamespace());
+			System.out.println(rdfwriter.getModelNamespace());
+			System.out.println(rdfwriter.getLocalNamespace());
+			rdfwriter.setRDFforModelLevelAnnotations();
 		}
 		// Otherwise use a SemSimRDFwriter
 		else{

@@ -63,6 +63,7 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.Event;
@@ -128,12 +129,13 @@ public class SBMLwriter extends ModelWriter {
 		super(model);
 	}
 
-	public SBMLwriter(SemSimModel model, boolean OMEXmetadata) {
+	public SBMLwriter(SemSimModel model, boolean OMEXmetadata) { // Change this to include an OMEXarchiveWriter?
 		super(model, OMEXmetadata);
 	}
 
 	// JKM: generates and returns an XML document based on the SBML
-	private Document writerSBMLtoXML(String xmlbase) {
+	private Document writeSBMLtoXML() {
+		
 		sbmldoc = new SBMLDocument(sbmllevel, sbmlversion);
 		String sbmlmodname = semsimmodel.getName();
 
@@ -153,9 +155,17 @@ public class SBMLwriter extends ModelWriter {
 		}
 
 		// Initialize an OMEX metadata writer, if we're writing to an OMEX file
-		if(OMEXmetadataEnabled()){
+		if(getWriteLocation() instanceof OMEXAccessor){
 			rdfwriter = new OMEXmetadataWriter(semsimmodel);
-			rdfwriter.setXMLbase("./" + xmlbase + "#");
+			String archivefn = ((OMEXAccessor)getWriteLocation()).getArchiveFileName();
+			String modfn = getWriteLocation().getFileName();
+			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
+			rdfwriter.setModelNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
+			rdfwriter.setLocalNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);
+			rdfwriter.rdf.setNsPrefix("myOMEX", RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn);
+			rdfwriter.rdf.setNsPrefix("local", rdfwriter.getLocalNamespace());
+			System.out.println(rdfwriter.getModelNamespace());
+			System.out.println(rdfwriter.getLocalNamespace());
 			rdfwriter.setRDFforModelLevelAnnotations();
 		}
 		else addModelLevelCVTerms();
@@ -192,21 +202,12 @@ public class SBMLwriter extends ModelWriter {
 		}
 	}
 
+	
 	@Override
 	public String encodeModel() {
-		// populate the SBML model, use OMEX metadata if output is OMEX
-		if (useOMEXmetadata)
-			return new XMLOutputter().outputString(writerSBMLtoXML(getWriteLocation().getFileName()));
-		else
-			return new XMLOutputter().outputString(writerSBMLtoXML(""));
+		return new XMLOutputter().outputString(writeSBMLtoXML());
 	}
-
-	/**
-	 * Like encodeModel but forces use of OMEX metadata.
-	 */
-	public String encodeModelWithXMLBase(String xmlbase) {
-		return new XMLOutputter().outputString(writerSBMLtoXML(xmlbase));
-	}
+	
 
 	/**
 	 * Gets the RDF writer used by this SBMLwriter.
@@ -1166,9 +1167,9 @@ public class SBMLwriter extends ModelWriter {
 			if(oneent){
 				String metaidtouse = pmc.getMetadataID();
 				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
-				((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc);
+				((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			}
-			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc);
+			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			return;
 		}
 		
@@ -1321,7 +1322,7 @@ public class SBMLwriter extends ModelWriter {
 					usedmetaids.add(metadataID);
 				}
 				
-				Resource ares = rdfwriter.rdf.createResource(rdfwriter.xmlbase + metadataID);
+				Resource ares = rdfwriter.rdf.createResource(rdfwriter.getLocalNamespace() + "#" + metadataID);
 								
 				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
