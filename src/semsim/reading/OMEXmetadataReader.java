@@ -24,6 +24,7 @@ import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
@@ -45,7 +46,7 @@ import semsim.writing.SemSimRDFwriter;
  *
  */
 public class OMEXmetadataReader extends AbstractRDFreader{
-
+	
 	/**
 	 * Constructor
 	 * @param ma A {@link ModelAccessor} indicating the location of the OMEX metadata file
@@ -55,7 +56,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	 * @param rdfstring Additional RDF content to include in the model's metadata
 	 * that is not contained in the OMEX metadata file (e.g. curatorial info in a CellML model.
 	 */
-	public OMEXmetadataReader(ModelAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
+	public OMEXmetadataReader(OMEXAccessor ma, SemSimModel semsimmodel, SemSimLibrary lib, String rdfstring) {
 		super(ma, semsimmodel, lib);
 		
 		if(rdfstring!=null)
@@ -63,6 +64,13 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		
 		this.semsimmodel = semsimmodel;
 		this.modelNamespaceIsSet = false;
+		
+		String archivefn = ma.getArchiveFileName();
+		String modfn = ma.getFileName();
+		String rdffn = ma.getOMEXmetadataFileName();
+
+		setModelNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
+		setLocalNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);	
 	}
 
 	/**
@@ -95,7 +103,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		
 		// For reading in OMEX metadata-formatted annotations on SBML compartments, species, and reactions
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
-		String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
+		String ns = getModelNamespaceInRDF();
 		Resource res = rdf.getResource(ns + "#" + metaid);
 		Qualifier[] qualifiers = Qualifier.values();
 				
@@ -130,7 +138,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 
 	@Override
 	public void getModelLevelAnnotations() {
-		String modeluri = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName() + "#" + semsimmodel.getMetadataID();
+		String modeluri = getModelNamespaceInRDF();
 		Resource modelresource = rdf.getResource(modeluri);
 		StmtIterator stmts = modelresource.listProperties();
 		
@@ -184,10 +192,10 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	
 	
 	@Override
-	public void getDataStructureAnnotations(DataStructure ds){
+	public void getDataStructureAnnotations(DataStructure ds, String ns){
 		
-		String metaid = ds.getMetadataID(); // TODO: what if no metaid assigned? Just do nothing?
-		String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
+		String metaid = ds.getMetadataID();
+		//String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource resource = rdf.getResource(ns + "#" + metaid);
 						
 		collectFreeTextAnnotation(ds, resource);
@@ -300,5 +308,4 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	protected void getAllSemSimSubmodelAnnotations() {	
 		//TODO:
 	}
-
 }

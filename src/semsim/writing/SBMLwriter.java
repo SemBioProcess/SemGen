@@ -160,12 +160,10 @@ public class SBMLwriter extends ModelWriter {
 			String archivefn = ((OMEXAccessor)getWriteLocation()).getArchiveFileName();
 			String modfn = getWriteLocation().getFileName();
 			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
-			rdfwriter.setModelNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
-			rdfwriter.setLocalNamespace(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);
+			rdfwriter.setModelNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
+			rdfwriter.setLocalNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);
 			rdfwriter.rdf.setNsPrefix("myOMEX", RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn);
 			rdfwriter.rdf.setNsPrefix("local", rdfwriter.getLocalNamespace());
-			System.out.println(rdfwriter.getModelNamespace());
-			System.out.println(rdfwriter.getLocalNamespace());
 			rdfwriter.setRDFforModelLevelAnnotations();
 		}
 		else addModelLevelCVTerms();
@@ -1167,9 +1165,9 @@ public class SBMLwriter extends ModelWriter {
 			if(oneent){
 				String metaidtouse = pmc.getMetadataID();
 				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
-				((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(metaidtouse, pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
+				((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(metaidtouse, pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			}
-			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForPhysicalComponent(pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
+			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			return;
 		}
 		

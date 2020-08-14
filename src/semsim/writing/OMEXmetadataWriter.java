@@ -7,7 +7,6 @@ import org.sbml.jsbml.CVTerm.Qualifier;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 
 import semsim.annotation.Annotation;
@@ -60,7 +59,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		
 //		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
 //			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
-		Resource modelresource = rdf.createResource(modelnamespace);
+		Resource modelresource = rdf.createResource(modelnamespaceinRDF);
 
 		// Save model description
 		if(semsimmodel.hasDescription()){
@@ -75,31 +74,39 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 			
 			Statement st;
 			
+			Relation annrel = ann.getRelation();
+			
+			// Convert to BioModels.net qualifiers for use in OMEX metadata
+			if(annrel==StructuralRelation.HAS_PART)
+				annrel = StructuralRelation.BQB_HAS_PART;
+			else if(annrel==StructuralRelation.PART_OF)
+				annrel = StructuralRelation.BQB_IS_PART_OF;
+			
 			if(ann instanceof ReferenceOntologyAnnotation){
 				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
-				st = rdf.createStatement(modelresource, refann.getRelation().getRDFproperty(), 
+				st = rdf.createStatement(modelresource, annrel.getRDFproperty(), 
 						rdf.createResource(refann.getReferenceURI().toString()));
 			}
 			//TODO: Need to decide how to handle annotations already in RDF block. 
 			// Skip them all for now (some are read into SemSim object model and will
 			// be preserved in OMEX metadata file)
-			else if(ann.getRelation()==SemSimRelation.CELLML_RDF_MARKUP) continue;
+			else if(annrel==SemSimRelation.CELLML_RDF_MARKUP) continue;
 			else st = rdf.createStatement(modelresource, 
-					ann.getRelation().getRDFproperty(), 
+					annrel.getRDFproperty(), 
 					ann.getValue().toString());
 			
 			if(st!=null) addStatement(st);
 		}
 	}
 	
-	
+	//TODO: getting duplicate has_part statements for process Synthesis2 in BIOMD51
 	/**
 	 * Used to write out annotations for SBML elements that represent physical 
 	 * components (compartments, species, and reactions).
 	 * @param pmc An annotated physical model component
 	 */
-	protected void setAnnotationsForPhysicalComponent(PhysicalModelComponent pmc){
-		setAnnotationsForPhysicalComponent(pmc.getMetadataID(), pmc);
+	protected void setAnnotationsForSBMLphysicalComponent(PhysicalModelComponent pmc){
+		setAnnotationsForSBMLphysicalComponent(pmc.getMetadataID(), pmc);
 	}
 	
 	/**
@@ -108,8 +115,8 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	 * @param metaid Metadata ID to use in the URI for the resource in RDF
 	 * @param pmc An annotated physical model component
 	 */
-	protected void setAnnotationsForPhysicalComponent(String metaid, PhysicalModelComponent pmc){
-		setAnnotationsForPhysicalComponent(modelnamespace, metaid, pmc);
+	protected void setAnnotationsForSBMLphysicalComponent(String metaid, PhysicalModelComponent pmc){
+		setAnnotationsForSBMLphysicalComponent(modelnamespaceinRDF, metaid, pmc);
 	}
 	
 	/**
@@ -120,7 +127,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	 * @param metaid Metadata ID to use in the URI for the resource in RDF
 	 * @param pmc An annotated physical model component
 	 */
-	protected void setAnnotationsForPhysicalComponent(String namespace, String metaid, PhysicalModelComponent pmc) {
+	protected void setAnnotationsForSBMLphysicalComponent(String namespace, String metaid, PhysicalModelComponent pmc) {
 		// TODO: what if no metaid assigned?
 		Resource res = rdf.createResource(namespace + "#" + metaid);
 		
@@ -151,14 +158,18 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					if(ann instanceof ReferenceOntologyAnnotation){
 						
 						ReferenceOntologyAnnotation roa = (ReferenceOntologyAnnotation)ann;
-						Property rdfprop = roa.getRelation().getRDFproperty();						
+						Property rdfprop = roa.getRelation().getRDFproperty();
+						if(roa.getRelation()==StructuralRelation.HAS_PART)
+							rdfprop = StructuralRelation.BQB_HAS_PART.getRDFproperty();
+						else if(roa.getRelation()==StructuralRelation.PART_OF)
+							rdfprop = StructuralRelation.BQB_IS_PART_OF.getRDFproperty();
+						
 						Qualifier q = SemSimRelations.getBiologicalQualifierFromRelation(roa.getRelation());
 						
 						if (q!=null) {
 							
 							if(q.isBiologicalQualifier()){ // Only collect biological qualifiers
 								
-								ResourceFactory.createProperty(q.toString());
 								Resource objres = rdf.createResource(roa.getReferenceURI().toString());
 								Statement st = rdf.createStatement(res, rdfprop, objres);
 								addStatement(st);

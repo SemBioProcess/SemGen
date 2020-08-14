@@ -27,7 +27,7 @@ public class SemSimRelations {
 		case BQB_ENCODES:
 			return SemSimRelation.BQB_ENCODES;
 		case BQB_HAS_PART:
-			return StructuralRelation.HAS_PART; // Maybe this should be BQB_HAS_PART?
+			return StructuralRelation.HAS_PART;
 		case BQB_HAS_PROPERTY:
 			return SemSimRelation.BQB_HAS_PROPERTY;
 		case BQB_HAS_VERSION:
@@ -49,7 +49,7 @@ public class SemSimRelations {
 		case BQB_OCCURS_IN:
 			return SemSimRelation.BQB_OCCURS_IN;
 		case BQB_IS_PART_OF:
-			return StructuralRelation.PART_OF;	 // Maybe this should be BQB_PART_OF?
+			return StructuralRelation.PART_OF;
 		default:
 			return null;
 		}

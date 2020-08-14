@@ -67,6 +67,8 @@ public abstract class AbstractRDFreader {
 	protected SemSimLibrary sslib;
 	protected SemSimModel semsimmodel;
 	protected ModelAccessor modelaccessor;
+	protected String modelnamespaceinRDF = null;
+	protected String localnamespaceinRDF = null;
 	
 	
 	public AbstractRDFreader(ModelAccessor accessor,  SemSimModel model, SemSimLibrary sslibrary){
@@ -92,14 +94,13 @@ public abstract class AbstractRDFreader {
 		
 		try {
 			
-			System.out.println("Namespace: " + TEMP_BASE);
 			try (InputStream stream = new ByteArrayInputStream(rdfasstring.getBytes("UTF-8"))) {
 		        RDFParser.create()
 		            .source(stream)
 		            //.resolveURIs(false) // should not be doing this. Need a temp namespace.
 		            .lang(RDFLanguages.RDFXML)
 		            //.errorHandler(ErrorHandlerFactory.errorHandlerWarning(null)) // change this
-		            .base(TEMP_BASE)
+		           //.base(TEMP_BASE)
 		            .parse(rdf);
 				stream.close();
 		    }
@@ -110,12 +111,26 @@ public abstract class AbstractRDFreader {
 	}
 	
 	
+	/**
+	 * Collect all annotations, use default namespace
+	 */
+	public void getAllDataStructureAnnotations() {
+		String ns = AbstractRDFreader.TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
+		getAllDataStructureAnnotations(ns);
+	}
+	
 	/** Collect all annotations on {@link DataStructure}s */
-	public void getAllDataStructureAnnotations(){
+	public void getAllDataStructureAnnotations(String ns){
 		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
-			getDataStructureAnnotations(ds);
+			getDataStructureAnnotations(ds, ns);
 		}
+	}
+	
+	/** Collect annotations on {@link DataStructure}s, use default namespace*/
+	public void getDataStructureAnnotations(DataStructure ds) {
+		String ns = AbstractRDFreader.TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
+		getDataStructureAnnotations(ds, ns);
 	}
 	
 	
@@ -123,7 +138,7 @@ public abstract class AbstractRDFreader {
 	 * Get the annotations on an input {@link DataStructure}
 	 * @param ds The input {@link DataStructure}
 	 */
-	public void getDataStructureAnnotations(DataStructure ds){
+	public void getDataStructureAnnotations(DataStructure ds, String ns){
 		
 		// If we're reading a CellML model use a temp namespace
 		// otherwise use the namespace that was specified and assigned to the SemSim model
@@ -255,9 +270,9 @@ public abstract class AbstractRDFreader {
 				if(res.getPropertyResourceValue(StructuralRelation.CONTAINED_IN.getRDFproperty())!=null || 
 						res.getPropertyResourceValue(StructuralRelation.PART_OF.getRDFproperty())!=null ||
 						res.getPropertyResourceValue(StructuralRelation.BQB_IS_PART_OF.getRDFproperty())!=null
-						)
+						) {
 					pmc = semsimmodel.addCompositePhysicalEntity(buildCompositePhysicalEntityfromRDFresource(res));
-				
+				}
 				// If a singular entity
 				else {
 					ArrayList<PhysicalEntity> entlist = new ArrayList<PhysicalEntity>();
@@ -324,6 +339,8 @@ public abstract class AbstractRDFreader {
 		PhysicalEntity startent = createCompositeEntityComponentFromResourceAndAnnotate(firstentity);
 		entlist.add(startent); // index physical entity
 		
+		//TODO: maybe problem is that we need to read in BQB:PARTOF?
+
 		while(true){
 			Resource entityres = curres.getPropertyResourceValue(StructuralRelation.CONTAINED_IN.getRDFproperty());
 			
@@ -436,7 +453,7 @@ public abstract class AbstractRDFreader {
 
 	
 	/**
-	 * Remove all SemSim annotation statements from an RDF model. Used to separate 
+	 * Remove all SemSim annotation statements from an RDF block. Used to separate 
 	 * CellML-specific RDF annotations (curational metadata, e.g.) from SemSim
 	 * annotations.
 	 * @param rdf The RDF model containing the SemSim annotations
@@ -526,5 +543,45 @@ public abstract class AbstractRDFreader {
 	public static String getRDFmodelAsString(Model rdf, String rdfxmlformat){
 		return AbstractRDFwriter.getRDFmodelAsString(rdf, rdfxmlformat);
 	}
+	
+
+	/**
+	 * @return The namespace for RDF resources that do not refer to explicit
+	 * elements in the annotated model
+	 */
+	public String getLocalNamespaceInRDF() {
+		return this.localnamespaceinRDF;
+	}
+	
+	
+	/**
+	 * @return The namespace for RDF resources that refer to explicit
+	 * elements in the annotated model
+	 */
+	public String getModelNamespaceInRDF() {
+		return this.modelnamespaceinRDF;
+	}
+	
+	
+	/**
+	 * Set the namespace for resources that do not refer to explicit 
+	 * elements in the annotated model
+	 * @param ns
+	 */
+	public void setLocalNamespaceInRDF(String ns) {
+		this.localnamespaceinRDF = ns;
+	}
+	
+	
+	/**
+	 * Set the namespace for resources that refer to explicit 
+	 * elements in the annotated model
+	 * @param ns
+	 */
+	public void setModelNamespaceInRDF(String ns) {
+		this.modelnamespaceinRDF = ns;
+	}
+	
+	
 	
 }

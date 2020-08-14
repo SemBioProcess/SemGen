@@ -47,8 +47,8 @@ public abstract class AbstractRDFwriter {
 	protected SemSimModel semsimmodel;
 	public Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	protected Model rdf = ModelFactory.createDefaultModel();
-	protected String modelnamespace;
-	protected String localnamespace;
+	protected String modelnamespaceinRDF;
+	protected String localnamespaceinRDF;
 	protected Set<String> localids = new HashSet<String>();
 	protected Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
@@ -106,8 +106,8 @@ public abstract class AbstractRDFwriter {
 	 * that do not have corresponding elements in the annotated model
 	 * @param localnamespace The local namespace to use
 	 */
-	public void setLocalNamespace(String localnamespace) {
-		this.localnamespace = localnamespace;
+	public void setLocalNamespaceInRDF(String localnamespace) {
+		this.localnamespaceinRDF = localnamespace;
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public abstract class AbstractRDFwriter {
 	 * in the annotated model
 	 * @param modelnamespace Model namespace to use
 	 */
-	public void setModelNamespace(String modelnamespace){
-		this.modelnamespace = modelnamespace;
+	public void setModelNamespaceInRDF(String modelnamespace){
+		this.modelnamespaceinRDF = modelnamespace;
 	}
 
 	
@@ -195,7 +195,7 @@ public abstract class AbstractRDFwriter {
 	 */
 	protected Resource assignMetaIDandCreateResourceForDataStructure(DataStructure ds){
 		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
-		String resuri = modelnamespace + "#" + metaid;
+		String resuri = modelnamespaceinRDF + "#" + metaid;
 		Resource ares = rdf.createResource(resuri);
 		return ares;
 	}
@@ -300,7 +300,7 @@ public abstract class AbstractRDFwriter {
 		// TODO: need to check if all works OK if we go from SBML to CellML with RDF annotations
 		if( cpe.getArrayListOfEntities().get(0).hasMetadataID() 
 				&& semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) {
-			indexuri = URI.create(modelnamespace + "#" + cpe.getArrayListOfEntities().get(0).getMetadataID());
+			indexuri = URI.create(modelnamespaceinRDF + "#" + cpe.getArrayListOfEntities().get(0).getMetadataID());
 			indexresource = rdf.getResource(indexuri.toString());
 		}
 		else {
@@ -351,7 +351,7 @@ public abstract class AbstractRDFwriter {
 			
 			// Use metadataID on last entity for URI, if it has one
 			if( lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) 
-				nexturi = URI.create(modelnamespace + "#" + lastent.getMetadataID());
+				nexturi = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
 			
 			// If it's an entity we haven't processed yet
 			else if( ! PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
@@ -401,7 +401,7 @@ public abstract class AbstractRDFwriter {
 		// explicit model element and should use the model namespace, while
 		// any PMC without a metadata ID should be instantiated as a local
 		// resource in the RDF.
-		if(pmc.hasMetadataID()) res = rdf.createResource(modelnamespace + "#" + pmc.getMetadataID());
+		if(pmc.hasMetadataID()) res = rdf.createResource(modelnamespaceinRDF + "#" + pmc.getMetadataID());
 		// Otherwise make a new metadataID based on the physical model component's type
 		else res = createNewResourceForSemSimObject(typeprefix);
 				
@@ -419,10 +419,10 @@ public abstract class AbstractRDFwriter {
 	 */
 	protected Resource createNewResourceForSemSimObject(String typeprefix){
 		
-		String resname = localnamespace;
+		String resname = localnamespaceinRDF;
 		int idnum = 0;
 		
-		while(localids.contains(resname + typeprefix + "_" + idnum)){
+		while(localids.contains(resname + "#" + typeprefix + "_" + idnum)){
 			idnum++;
 		}
 		resname = resname + "#" + typeprefix + "_" + idnum;
@@ -520,7 +520,7 @@ public abstract class AbstractRDFwriter {
 	 * for annotation but do not refer to explicit elements in the annotated model
 	 */
 	public String getLocalNamespace() {
-		return localnamespace;
+		return localnamespaceinRDF;
 	}
 	
 	
@@ -529,7 +529,7 @@ public abstract class AbstractRDFwriter {
 	 * in the annotated model
 	 */
 	public String getModelNamespace(){
-		return modelnamespace;
+		return modelnamespaceinRDF;
 	}
 
 	

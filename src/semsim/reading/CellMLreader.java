@@ -183,6 +183,7 @@ public class CellMLreader extends ModelReader {
 			}
 		}
 
+
 		// Iterate through all the components, create new members of the SemSim "Submodel" class as we go
 		Iterator<?> componentit = doc.getRootElement().getChildren("component", mainNS).iterator();
 		while(componentit.hasNext()){
@@ -280,7 +281,8 @@ public class CellMLreader extends ModelReader {
 				semsimmodel.assignValidMetadataIDtoSemSimObject(varmetaID, cvar);
 
 				// Collect the biological annotations, if present
-				if(cvar.getMetadataID() != null) rdfreader.getDataStructureAnnotations(cvar);
+				if(cvar.getMetadataID() != null) rdfreader.getDataStructureAnnotations(cvar, 
+						rdfreader.getModelNamespaceInRDF());
 
 				semsimmodel.addDataStructure(cvar);
 			}

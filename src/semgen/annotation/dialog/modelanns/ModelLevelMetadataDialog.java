@@ -34,6 +34,7 @@ import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
 
 public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyChangeListener, ActionListener{
@@ -279,15 +280,20 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				
 				if(qual.isBiologicalQualifier())
 					relitem = SemSimRelations.getRelationFromBiologicalQualifier(qual);
+				
 				else if(qual.isModelQualifier())
 					relitem = SemSimRelations.getRelationFromModelQualifier(qual);
 					
 				if(relitem == null) continue;
 				
 				uri = relitem.getURIasString();
+				
 				label = qual.isBiologicalQualifier() ? uri.replace(RDFNamespace.BQB.getNamespaceAsString(),"bqbiol:") : 
 					uri.replace(RDFNamespace.BQM.getNamespaceAsString(),"bqmodel:");
-
+				
+				if(relitem==StructuralRelation.HAS_PART || relitem==StructuralRelation.PART_OF)
+					label = uri.replace(RDFNamespace.RO.getNamespaceAsString(), "ro:");
+				
 				relations.add(relitem);
 				items.add(label);
 				addItem(label);
