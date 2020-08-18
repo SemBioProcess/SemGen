@@ -34,7 +34,7 @@ public class CustomTermDialog extends SemGenDialog {
 		makeDialog();
 	}
 	
-	public void setAsForceTermDialog(SemSimTermLibrary lib, int termindex) {
+	public void setAsEnergyDiffTermDialog(SemSimTermLibrary lib, int termindex) {
 		custompane = new CustomForcePane(lib, termindex);
 		makeDialog();
 	}

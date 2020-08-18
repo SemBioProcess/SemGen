@@ -86,11 +86,11 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 			PropertyType type = getPropertyType(index);
 			
 			// Group according to physical property type
-			if(type  == PropertyType.PropertyOfPhysicalEntity)
+			if(type  == PropertyType.PROPERTY_OF_PHYSICAL_ENTITY)
 				entset.add(index);
-			else if(type == PropertyType.PropertyOfPhysicalProcess)
+			else if(type == PropertyType.PROPERTY_OF_PHYSICAL_PROCESS)
 				procset.add(index);
-			else if(type == PropertyType.PropertyOfPhysicalForce)
+			else if(type == PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL)
 				forceset.add(index);
 			else depset.add(index);
 		}
@@ -217,14 +217,14 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	}
 	
 	
-	public boolean isForce() {
+	public boolean isEnergyDifferential() {
 		PhysicalPropertyInComposite pp = getFocusAssociatedProperty();
 		if (pp == null && ! hasPhysicalModelComponent()) return false; 
 		if (pp==null) {
 			return getPhysicalCompositeType().equals(SemSimTypes.CUSTOM_PHYSICAL_FORCE);
 		}
 		
-		return SemGen.semsimlib.isOPBforceProperty(pp.getPhysicalDefinitionURI());
+		return SemGen.semsimlib.isOPBenergyDiffProperty(pp.getPhysicalDefinitionURI());
 	}
 
 	
@@ -406,7 +406,7 @@ public class CodewordToolDrawer extends AnnotatorDrawer<DataStructure> {
 	public boolean checkPropertyPMCCompatibility(Integer index) {
 		if (index == -1) return true;
 		boolean isprocess = SemGen.semsimlib.isOPBprocessProperty(termlib.getReferenceComponentURI(index));
-		boolean isforce = SemGen.semsimlib.isOPBforceProperty(termlib.getReferenceComponentURI(index));
+		boolean isforce = SemGen.semsimlib.isOPBenergyDiffProperty(termlib.getReferenceComponentURI(index));
 		boolean issomethingelse = ! isprocess && ! isforce;
 		SemSimTypes type = getPhysicalCompositeType();
 		

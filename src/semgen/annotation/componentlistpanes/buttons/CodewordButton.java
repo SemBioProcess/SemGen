@@ -63,15 +63,15 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 	public void refreshPropertyOfMarker(PropertyType ptype){
 		Color col =  constitutivecolor;
 		String tooltip;
-		if(ptype == PropertyType.PropertyOfPhysicalEntity){
+		if(ptype == PropertyType.PROPERTY_OF_PHYSICAL_ENTITY){
 			col = entitycolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>entity</i></html>";
 		}
-		else if(ptype == PropertyType.PropertyOfPhysicalProcess){
+		else if(ptype == PropertyType.PROPERTY_OF_PHYSICAL_PROCESS){
 			col = processcolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>process</i></html>";
 		}
-		else if(ptype == PropertyType.PropertyOfPhysicalForce){
+		else if(ptype == PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL){
 			col = forcecolor;
 			tooltip = "<html>Codeword identified as a property of a physical <i>force</i></html>";
 		}

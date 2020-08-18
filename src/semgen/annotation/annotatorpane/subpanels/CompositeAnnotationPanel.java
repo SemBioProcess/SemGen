@@ -39,14 +39,14 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	private int indent = 15;
 	private JButton addentbutton = new JButton("Add entity");
 	private JButton addprocbutton = new JButton("Add process");
-	private JButton addforcebutton = new JButton("Add force");
+	private JButton addenergydiffbutton = new JButton("Add energy differential");
 	private JEditorPane ptextpane;
 
 	private PropertySelectorPanel propsel;
 	private EntitySelectorGroup esg;
 	private Box pmcpanel;
 	private ProcessSelectorPanel psp;
-	private ForceSelectorPanel fsp;
+	private EnergyDiffSelectorPanel fsp;
 	
 	public CompositeAnnotationPanel(SemSimTermLibrary lib, CodewordToolDrawer bench, SemGenSettings sets, int orientation){
 		super(orientation);
@@ -61,7 +61,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		addentbutton.addActionListener(this);
 		addprocbutton.addActionListener(this);
-		addforcebutton.addActionListener(this);
+		addenergydiffbutton.addActionListener(this);
 		
 		validate();
 	}
@@ -89,7 +89,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
         onPropertyChange();
 	}
 	
-	private void showAddEntityProcessForceButtons() {
+	private void showAddEntityProcessEnergyDiffButtons() {
 		if (pmcpanel!=null) remove(pmcpanel);
 		if (esg!=null) esg = null;
 		Box btnbox = new Box(BoxLayout.X_AXIS);
@@ -97,11 +97,11 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		
 		addentbutton.setEnabled(drawer.isEditable());
 		addprocbutton.setEnabled(drawer.isEditable());
-		addforcebutton.setEnabled(drawer.isEditable());
+		addenergydiffbutton.setEnabled(drawer.isEditable());
 		
 		btnbox.add(addentbutton);
 		btnbox.add(addprocbutton);
-		btnbox.add(addforcebutton);
+		btnbox.add(addenergydiffbutton);
 		btnbox.add(Box.createHorizontalGlue());
 		pmcpanel = btnbox;
 		btnbox.setBorder(BorderFactory.createEmptyBorder(0, indent*2, 0, 0));
@@ -133,18 +133,18 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	}
 	
 	
-	private void setForceSelector() {
+	private void setEnergyDiffSelector() {
 		if (pmcpanel!=null) remove(pmcpanel);
 		if (esg!=null) esg = null;
 		Box procbox = new Box(BoxLayout.Y_AXIS);
 		procbox.setAlignmentX(Box.LEFT_ALIGNMENT);
 		
-		fsp = new ForceSelectorPanel( ! drawer.isEditable());
-		fsp.getComboBox().setModel(new DefaultComboBoxModel<String>(new String[]{"anonymous force"}));
+		fsp = new EnergyDiffSelectorPanel( ! drawer.isEditable());
+		fsp.getComboBox().setModel(new DefaultComboBoxModel<String>(new String[]{"anonymous energy differential"}));
 		fsp.setLibraryIndicies(new ArrayList<Integer>());
 		fsp.toggleNoneSelected(false);
 		
-		ptextpane = new JEditorPane("text/html",listForceParticipants());
+		ptextpane = new JEditorPane("text/html",listEnergyDifferentialParticipants());
 		ptextpane.setEditable(false);
 		ptextpane.setOpaque(false);
 		ptextpane.setBackground(new Color(0,0,0,0));
@@ -163,16 +163,16 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		ptextpane.setText(listProcessParticipants());
 	}
 	
-	private void showForceParticipants(){
-		ptextpane.setText(listForceParticipants());
+	private void showEnergyDifferentialParticipants(){
+		ptextpane.setText(listEnergyDifferentialParticipants());
 	}
 	
 	private String listProcessParticipants() {
 		return termlib.listProcessParticipants(drawer.getIndexOfAssociatedPhysicalModelComponent());
 	}
 	
-	private String listForceParticipants(){
-		return termlib.listForceParticipants(drawer.getIndexOfAssociatedPhysicalModelComponent());
+	private String listEnergyDifferentialParticipants(){
+		return termlib.listEnergyDifferentialParticipants(drawer.getIndexOfAssociatedPhysicalModelComponent());
 	}
 	
 	private void setCompositeSelector() {
@@ -188,14 +188,14 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		propsel.toggleNoneSelected(drawer.getIndexofPhysicalProperty()==-1);
 
 		if (!drawer.hasPhysicalModelComponent() && !(drawer.hasAssociatedPhysicalProperty())) {
-			showAddEntityProcessForceButtons();
+			showAddEntityProcessEnergyDiffButtons();
 		}
 		else {
 			if (drawer.isProcess() ) {
 				setProcessSelector();
 			}
-			else if(drawer.isForce()) {
-				setForceSelector();
+			else if(drawer.isEnergyDifferential()) {
+				setEnergyDiffSelector();
 			}
 			else {
 				setCompositeSelector();
@@ -212,8 +212,8 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		if (obj==addprocbutton) {
 			setProcessSelector();
 		}
-		if (obj==addforcebutton) {
-			setForceSelector();
+		if (obj==addenergydiffbutton) {
+			setEnergyDiffSelector();
 		}
 	}
 	
@@ -231,21 +231,21 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			psp.setComboList(termlib.getSortedPhysicalProcessIndicies(), drawer.getIndexOfAssociatedPhysicalModelComponent());
 			listProcessParticipants();
 		}
-		else if(fsp != null && evt.equals(LibraryEvent.FORCE_CHANGE)){
-			listForceParticipants();
+		else if(fsp != null && evt.equals(LibraryEvent.ENERGY_DIFFERENTIAL_CHANGE)){
+			listEnergyDifferentialParticipants();
 		}
 	}
 	
 	private boolean showIncompatiblePropertyMessage(PropertyType proptype) {
 		String msg;
-		if (proptype==PropertyType.PropertyOfPhysicalProcess) {
-			msg = new String("A property of a process cannot be applied to a physical entity or force.");
+		if (proptype==PropertyType.PROPERTY_OF_PHYSICAL_PROCESS) {
+			msg = new String("A property of a process cannot be applied to a physical entity or energy differential.");
 		}
-		else if(proptype==PropertyType.PropertyOfPhysicalEntity){
-			msg = new String("A property of a physical entity cannot be applied to a physical process or force.");
+		else if(proptype==PropertyType.PROPERTY_OF_PHYSICAL_ENTITY){
+			msg = new String("A property of a physical entity cannot be applied to a physical process or energy differential.");
 		}
-		else if(proptype==PropertyType.PropertyOfPhysicalForce){
-			msg = new String("A property of a physical force cannot be applied to a physical entity or process.");
+		else if(proptype==PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL){
+			msg = new String("A property of a physical energy differential cannot be applied to a physical entity or process.");
 		}
 		else msg = "Incompatible property selected.";
 		
@@ -272,9 +272,9 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 				if ( ! drawer.checkPropertyPMCCompatibility(getSelection())) {
 					
 					URI propuri = library.getReferenceComponentURI(getSelection());
-					PropertyType proptype = PropertyType.PropertyOfPhysicalEntity;
-					if(SemGen.semsimlib.isOPBprocessProperty(propuri)) proptype = PropertyType.PropertyOfPhysicalProcess;
-					else if(SemGen.semsimlib.isOPBforceProperty(propuri)) proptype = PropertyType.PropertyOfPhysicalForce;
+					PropertyType proptype = PropertyType.PROPERTY_OF_PHYSICAL_ENTITY;
+					if(SemGen.semsimlib.isOPBprocessProperty(propuri)) proptype = PropertyType.PROPERTY_OF_PHYSICAL_PROCESS;
+					else if(SemGen.semsimlib.isOPBenergyDiffProperty(propuri)) proptype = PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL;
 					
 					if ( ! showIncompatiblePropertyMessage(proptype)) {
 						setSelection(drawer.getIndexofPhysicalProperty());
@@ -366,15 +366,15 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 	}
 	
 	
-	// Force selector panel
+	// Energy differential selector panel
 	@SuppressWarnings("serial")
-	private class ForceSelectorPanel extends AnnotationChooserPanel {
-		protected ForceSelectorPanel(boolean isstatic) {
+	private class EnergyDiffSelectorPanel extends AnnotationChooserPanel {
+		protected EnergyDiffSelectorPanel(boolean isstatic) {
 			super(termlib);
 			if (isstatic) {
 				makeStaticPanel(drawer.getIndexOfAssociatedPhysicalModelComponent());
 			}
-			else makeForceSelector();
+			else makeEnergyDifferentialSelector();
 			constructSelector();
 		}
 
@@ -394,13 +394,13 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 			Integer termindex = drawer.getIndexOfAssociatedPhysicalModelComponent();
 			
 			if(termindex==-1){
-				termindex = library.createForce();
+				termindex = library.createEnergyDifferential();
 				drawer.setDataStructureAssociatedPhysicalComponent(termindex);
 			}
 			
-			ctd.setAsForceTermDialog(termlib, termindex);
-			showForceParticipants();
-			// We copy here because mapped variables may not all be pointing to same force object
+			ctd.setAsEnergyDiffTermDialog(termlib, termindex);
+			showEnergyDifferentialParticipants();
+			// We copy here because mapped variables may not all be pointing to same energy differential object
 			// which is a bit different than what happens when modifying participants for processes.
 			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
@@ -408,7 +408,7 @@ public class CompositeAnnotationPanel extends Box implements ActionListener {
 		@Override
 		public void eraseButtonClicked(){
 			drawer.setDataStructureAssociatedPhysicalComponent(-1);
-			showForceParticipants();
+			showEnergyDifferentialParticipants();
 			if (settings.doAutoAnnotateMapped()) drawer.copyToLocallyMappedVariables();
 		}
 	}

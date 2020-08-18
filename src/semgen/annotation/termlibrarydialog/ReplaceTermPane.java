@@ -242,10 +242,10 @@ public class ReplaceTermPane extends JPanel implements ActionListener{
 			super.performSearch();
 			if (domain==OntologyDomain.AssociatePhysicalProperty) {
 				PropertyType pt = library.getPropertyinCompositeType(affected.getTermLibraryIndex());
-				if (pt==PropertyType.PropertyOfPhysicalEntity) {
+				if (pt==PropertyType.PROPERTY_OF_PHYSICAL_ENTITY) {
 					rdflabelsanduris = SemGen.semsimlib.removeNonPropertiesofEntities(rdflabelsanduris);
 				}
-				else if (pt==PropertyType.PropertyOfPhysicalProcess) {
+				else if (pt==PropertyType.PROPERTY_OF_PHYSICAL_PROCESS) {
 					rdflabelsanduris = SemGen.semsimlib.removeNonProcessProperties(rdflabelsanduris);
 				}
 				String[] resultsarray = rdflabelsanduris.keySet().toArray(new String[] {});

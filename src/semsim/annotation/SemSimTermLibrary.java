@@ -57,7 +57,7 @@ public class SemSimTermLibrary extends Observable {
 	private ArrayList<IndexCard<?>> masterlist = new ArrayList<IndexCard<?>>();
 	public enum LibraryEvent {SINGULAR_TERM_REMOVED, SINGULAR_TERM_CREATED, SINGULAR_TERM_CHANGE, COMPOSITE_ENTITY_CHANGE,
 		PROCESS_CHANGE,
-		FORCE_CHANGE,
+		ENERGY_DIFFERENTIAL_CHANGE,
 		TERM_CHANGE};
 	
 	public SemSimTermLibrary(SemSimModel model, SemSimLibrary semsimlib) {
@@ -308,7 +308,7 @@ public class SemSimTermLibrary extends Observable {
 	public ArrayList<Integer> getSortedAssociatePhysicalPropertyIndiciesbyPropertyType(PropertyType type) {
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		switch (type) {
-		case PropertyOfPhysicalEntity:
+		case PROPERTY_OF_PHYSICAL_ENTITY:
 			for (Integer i : ppccompindexer) {
 				URI ppc = ((PhysicalPropertyInComposite)masterlist.get(i).getObject()).getPhysicalDefinitionURI();
 				if (semsimlib.OPBhasAmountProperty(ppc) || semsimlib.OPBhasForceProperty(ppc)) { // TODO: this looks incorrect. Maybe should be OPBhasStateProperty?
@@ -316,7 +316,7 @@ public class SemSimTermLibrary extends Observable {
 				}
 			}
 			break;
-		case PropertyOfPhysicalProcess:
+		case PROPERTY_OF_PHYSICAL_PROCESS:
 			for (Integer i : ppccompindexer) {
 				PhysicalPropertyInComposite ppc = (PhysicalPropertyInComposite)masterlist.get(i).getObject();
 				if (semsimlib.OPBhasFlowProperty(ppc.getPhysicalDefinitionURI())) {
@@ -324,7 +324,7 @@ public class SemSimTermLibrary extends Observable {
 				}
 			}
 			break;
-		case Unknown:
+		case UNKNOWN:
 			break;
 		default:
 			break;
@@ -691,7 +691,7 @@ public class SemSimTermLibrary extends Observable {
 	}
 	
 	
-	public String listForceParticipants(Integer force) {		
+	public String listEnergyDifferentialParticipants(Integer force) {		
 		if (force==-1) return "";
 		String pstring = "<html><body>";
 		
@@ -743,7 +743,7 @@ public class SemSimTermLibrary extends Observable {
 	
 	
 	// Store info for forces
-	public int createForce() {
+	public int createEnergyDifferential() {
 		int in = addPhysicalForce(new CustomPhysicalForce());
 		return in;
 	}
@@ -893,7 +893,7 @@ public class SemSimTermLibrary extends Observable {
 	
 	private void notifyForceChanged(){
 		setChanged();
-		notifyObservers(LibraryEvent.FORCE_CHANGE);
+		notifyObservers(LibraryEvent.ENERGY_DIFFERENTIAL_CHANGE);
 	}
 	
 	private void notifyCompositeEntityChanged() {

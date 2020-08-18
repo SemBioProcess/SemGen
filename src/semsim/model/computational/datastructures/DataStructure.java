@@ -403,17 +403,17 @@ public abstract class DataStructure extends ComputationalModelComponent implemen
 			}
 			// Otherwise, see if there is already an entity or process associated with the codeword
 			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalEntity){
-				return PropertyType.PropertyOfPhysicalEntity;
+				return PropertyType.PROPERTY_OF_PHYSICAL_ENTITY;
 			}
 			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalProcess){
-				return PropertyType.PropertyOfPhysicalProcess;
+				return PropertyType.PROPERTY_OF_PHYSICAL_PROCESS;
 			}
 			else if(getAssociatedPhysicalModelComponent() instanceof PhysicalEnergyDifferential){
-				return PropertyType.PropertyOfPhysicalForce;
+				return PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL;
 			}
-			else return PropertyType.Unknown;
+			else return PropertyType.UNKNOWN;
 		}
-		return PropertyType.Unknown;
+		return PropertyType.UNKNOWN;
 	}
 	
 	/**

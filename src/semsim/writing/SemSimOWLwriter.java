@@ -492,14 +492,14 @@ public class SemSimOWLwriter extends ModelWriter {
 	}
 	
 	
-	/** Add force's sources and sinks to the ontology */
-	private void setForceParticipants(PhysicalEnergyDifferential force) throws OWLException {
-		for(PhysicalEntity source : force.getSources()){	
-			SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(force).toString(),
+	/** Add differential's sources and sinks to the ontology */
+	private void setEnergyDifferentialParticipants(PhysicalEnergyDifferential diff) throws OWLException {
+		for(PhysicalEntity source : diff.getSources()){	
+			SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(diff).toString(),
 					compositeEntitiesAndIndexes.get(source).toString(), SemSimRelation.HAS_SOURCE, null, manager);
 		}
-		for(PhysicalEntity sink : force.getSinks()){
-			SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(force).toString(),
+		for(PhysicalEntity sink : diff.getSinks()){
+			SemSimOWLFactory.setIndObjectProperty(ont, singularPMCsAndUrisForDataStructures.get(diff).toString(),
 					compositeEntitiesAndIndexes.get(sink).toString(), SemSimRelation.HAS_SINK, null, manager);
 		}
 	}
@@ -747,7 +747,7 @@ public class SemSimOWLwriter extends ModelWriter {
 							compositeEntitiesAndIndexes.put((CompositePhysicalEntity) ent, uri);
 					}
 				}
-				// Otherwise we assume the associated physical model component is a force
+				// Otherwise we assume the associated physical model component is an energy differential
 				else{
 					for(PhysicalEntity ent : ((PhysicalEnergyDifferential)pmc).getParticipants()){
 						URI uri = processCompositePhysicalEntity((CompositePhysicalEntity) ent, namespace);
@@ -766,7 +766,7 @@ public class SemSimOWLwriter extends ModelWriter {
 						SemSimRelation.PHYSICAL_PROPERTY_OF, SemSimRelation.HAS_PHYSICAL_PROPERTY, manager);
 				
 				if(pmc instanceof PhysicalProcess) setProcessParticipants((PhysicalProcess)pmc);
-				else if(pmc instanceof PhysicalEnergyDifferential) setForceParticipants((PhysicalEnergyDifferential)pmc);
+				else if(pmc instanceof PhysicalEnergyDifferential) setEnergyDifferentialParticipants((PhysicalEnergyDifferential)pmc);
 			}
 			else {
 
@@ -900,7 +900,7 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(pmc instanceof PhysicalProcess)
 			uri = URI.create(uritrunk + SemSimOWLFactory.URIencoding(pmc.getName()));
 		else if(pmc instanceof PhysicalEnergyDifferential){
-			uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uritrunk + "Force_", existinguris));
+			uri = URI.create(SemSimOWLFactory.generateUniqueIRIwithNumber(uritrunk + "EnergyDiff_", existinguris));
 		}
 		else{
 			if(pmc instanceof CompositePhysicalEntity) uri = ((CompositePhysicalEntity)pmc).makeURI(namespace);
@@ -975,7 +975,7 @@ public class SemSimOWLwriter extends ModelWriter {
 			SemSimOWLFactory.setIndDatatypeProperty(ont, uriforind, 
 					SemSimRelation.HAS_PHYSICAL_DEFINITION, refterm.getPhysicalDefinitionURI().toString(), manager);
 		}
-		// Otherwise it's a custom entity, custom process, custom force or unspecified property
+		// Otherwise it's a custom entity, custom process, custom energy differential or unspecified property
 		else if (!(pmc instanceof CompositePhysicalEntity)){
 			
 			if(pmc instanceof PhysicalPropertyInComposite) 

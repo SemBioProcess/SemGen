@@ -95,7 +95,7 @@ public abstract class AnnotationChooserPanel extends JPanel implements ActionLis
 	}
 	
 	
-	public void makeForceSelector(){
+	public void makeEnergyDifferentialSelector(){
 		combobox.setFont(SemGenFont.defaultItalic());
 		addCustomButtons();
 		createlabel.setVisible(false);

@@ -19,10 +19,10 @@ package semsim.definitions;
  *  the fluid resistance term in an instance of Ohm's Law for fluids. 
  */
 public enum PropertyType {
-	PropertyOfPhysicalEntity ("State"),
-	PropertyOfPhysicalProcess ("Rate"),
-	PropertyOfPhysicalForce ("Force"),
-	Unknown ("Constitutive");
+	PROPERTY_OF_PHYSICAL_ENTITY ("State"),
+	PROPERTY_OF_PHYSICAL_PROCESS ("Rate"),
+	PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL ("Force"),
+	UNKNOWN ("Constitutive");
 	
 	// String representation of enum
 	private final String _name;

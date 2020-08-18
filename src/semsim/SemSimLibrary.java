@@ -433,7 +433,7 @@ public class SemSimLibrary {
 	 * @return Whether the URI matches an OPB property that is applicable 
 	 * for use in annotating a dynamical force variable
 	 */
-	public boolean isOPBforceProperty(URI u){
+	public boolean isOPBenergyDiffProperty(URI u){
 		return OPBhasForceProperty(u);
 	}
 	
@@ -469,15 +469,15 @@ public class SemSimLibrary {
 		URI roa = (pp.getPhysicalDefinitionURI());
 		
 		if(OPBhasStateProperty(roa)){
-			return PropertyType.PropertyOfPhysicalEntity;
+			return PropertyType.PROPERTY_OF_PHYSICAL_ENTITY;
 		}
 		else if(OPBhasFlowProperty(roa) || OPBhasProcessProperty(roa)){
-			return PropertyType.PropertyOfPhysicalProcess;
+			return PropertyType.PROPERTY_OF_PHYSICAL_PROCESS;
 		}
 		else if(OPBhasForceProperty(roa)){
-			return PropertyType.PropertyOfPhysicalForce;
+			return PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL;
 		}
-		else return PropertyType.Unknown;
+		else return PropertyType.UNKNOWN;
 	}
 	
 	/**
