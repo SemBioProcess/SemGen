@@ -604,7 +604,7 @@ public class SemSimTermLibrary extends Observable {
 		return getIndexMultiplierMap(process.getSinks());
 	}
 	
-	public Set<Integer> getIndiciesOfForceSources(Integer forceindex){
+	public Set<Integer> getIndicesOfEnergyDiffSources(Integer forceindex){
 		PhysicalEnergyDifferential force = getPhysicalForce(forceindex);
 		
 		
@@ -618,7 +618,7 @@ public class SemSimTermLibrary extends Observable {
 		return tempset;
 	}
 	
-	public Set<Integer> getIndiciesOfForceSinks(Integer forceindex){
+	public Set<Integer> getIndicesOfEnergyDiffSinks(Integer forceindex){
 		PhysicalEnergyDifferential force = getPhysicalForce(forceindex);
 		
 		Set<Integer> tempset = new HashSet<Integer>();
@@ -695,10 +695,10 @@ public class SemSimTermLibrary extends Observable {
 		if (force==-1) return "";
 		String pstring = "<html><body>";
 		
-		for(int source : getIndiciesOfForceSources(force)){
+		for(int source : getIndicesOfEnergyDiffSources(force)){
 			pstring = pstring + "<b>Source:</b> " + getComponentName(source) + "<br>";
 		}
-		for(int sink : getIndiciesOfForceSinks(force)) {
+		for(int sink : getIndicesOfEnergyDiffSinks(force)) {
 			pstring = pstring + "<b>Sink:</b> " + getComponentName(sink) + "<br>";
 		}
 		
@@ -748,11 +748,11 @@ public class SemSimTermLibrary extends Observable {
 		return in;
 	}
 	
-	public void editForce(Integer forceindex) {
+	public void editEnergyDifferential(Integer forceindex) {
 		notifyForceChanged();
 	}
 	
-	public void setForceSources(Integer forceindex, ArrayList<Integer> sources) {
+	public void setEnergyDifferentialSources(Integer forceindex, ArrayList<Integer> sources) {
 		Set<PhysicalEntity> entset = new HashSet<PhysicalEntity>();
 		for (int i=0; i<sources.size(); i++) {
 			entset.add(getCompositePhysicalEntity(sources.get(i)));
@@ -760,7 +760,7 @@ public class SemSimTermLibrary extends Observable {
 		getPhysicalForce(forceindex).setSources(entset);
 	}
 	
-	public void setForceSinks(Integer forceindex, ArrayList<Integer> sinks) {
+	public void setEnergyDifferentialSinks(Integer forceindex, ArrayList<Integer> sinks) {
 		Set<PhysicalEntity> entset = new HashSet<PhysicalEntity>();
 		for (int i=0; i<sinks.size(); i++) {
 			entset.add(getCompositePhysicalEntity(sinks.get(i)));

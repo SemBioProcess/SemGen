@@ -12,7 +12,8 @@ import semgen.annotation.common.CustomTermOptionPane;
 import semsim.annotation.SemSimTermLibrary;
 
 /**
- * CustomTermOptionPane subclass for specifying the sources and sinks for a physical force
+ * CustomTermOptionPane subclass for specifying the sources and sinks 
+ * for a physical energy differential
  * @author Christopher Thompson
  *
  */
@@ -40,7 +41,7 @@ public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implemen
 	
 	@Override
 	public String getTitle() {
-		return "Specify sources and sinks for force";
+		return "Specify sources and sinks for energy differential";
 	}
 	
 	
@@ -48,10 +49,10 @@ public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implemen
 		ArrayList<Integer> tempsrc = new ArrayList<Integer>();
 		ArrayList<Integer> tempsink = new ArrayList<Integer>();
 
-		for(Integer sourceint : library.getIndiciesOfForceSources(termindex)){
+		for(Integer sourceint : library.getIndicesOfEnergyDiffSources(termindex)){
 			tempsrc.add(sourceint);
 		}
-		for(Integer sinkint : library.getIndiciesOfForceSinks(termindex)){
+		for(Integer sinkint : library.getIndicesOfEnergyDiffSinks(termindex)){
 			tempsink.add(sinkint);
 		}
 		editors.get(0).setTableData(tempsrc); 
@@ -90,13 +91,13 @@ public class CustomPhysicalForceOptionPane extends CustomTermOptionPane implemen
 	
 	@Override
 	protected void modifyTerm() {
-		library.editForce(termindex);
-		setForceParticipants();
+		library.editEnergyDifferential(termindex);
+		setEnergyDifferentialParticipants();
 	}
 	
-	private void setForceParticipants() {
-		library.setForceSources(termindex, editors.get(0).getParticipants());
-		library.setForceSinks(termindex, editors.get(1).getParticipants());
+	private void setEnergyDifferentialParticipants() {
+		library.setEnergyDifferentialSources(termindex, editors.get(0).getParticipants());
+		library.setEnergyDifferentialSinks(termindex, editors.get(1).getParticipants());
 	}
 	
 	
