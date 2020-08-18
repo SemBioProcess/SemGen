@@ -38,7 +38,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalForce;
+import semsim.model.physical.object.CustomPhysicalEnergyDifferential;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -276,20 +276,16 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	
 	/**
-	 * Add a new {@link CustomPhysicalForce} to the model. 
+	 * Add a new {@link CustomPhysicalEnergyDifferential} to the model. 
 	 * @param custompf The CustomPhysicalForce to add
-	 * @return If an equivalent {@link CustomPhysicalForce} already exists in the model,
-	 * that object is returned, otherwise, the input {@link CustomPhysicalForce} is returned.
+	 * @return If an equivalent {@link CustomPhysicalEnergyDifferential} already exists in the model,
+	 * that object is returned, otherwise, the input {@link CustomPhysicalEnergyDifferential} is returned.
 	 */
-	public CustomPhysicalForce addCustomPhysicalForce(CustomPhysicalForce custompf){
+	public CustomPhysicalEnergyDifferential addCustomPhysicalForce(CustomPhysicalEnergyDifferential custompf){
 		
 		if(getCustomPhysicalForceByParticipants(custompf)!=null)
 			custompf = getCustomPhysicalForceByParticipants(custompf);
-		else{
-			assignValidMetadataIDtoSemSimObject("metaid0", custompf);
-			physicalforces.add(custompf);
-		}
-		
+		else physicalforces.add(custompf);
 		return custompf;
 	}
 	
@@ -594,7 +590,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		
 		// If the metadata ID is already used, create a new, unique ID
 		while(existingids.contains(newID)){
-			newID = "metaid" + num;
+			newID = "metaid_" + num;
 			num = num + 1;
 		}
 				
@@ -827,12 +823,12 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	
 	/** @return The set of all CustomPhysicalForces in the model. */
-	public Set<CustomPhysicalForce> getCustomPhysicalForces(){
-		Set<CustomPhysicalForce> custs = new HashSet<CustomPhysicalForce>();
+	public Set<CustomPhysicalEnergyDifferential> getCustomPhysicalForces(){
+		Set<CustomPhysicalEnergyDifferential> custs = new HashSet<CustomPhysicalEnergyDifferential>();
 		
 		for(PhysicalEnergyDifferential force : getPhysicalForces()){
 			
-			if(! force.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalForce) force);
+			if(! force.hasPhysicalDefinitionAnnotation()) custs.add((CustomPhysicalEnergyDifferential) force);
 		}
 		return custs;
 	}
@@ -843,13 +839,13 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 * @return The CustomPhysicalForce already in the model that is equivalent to 
 	 * the input force. If no equivalent found, null.
 	 */
-	public CustomPhysicalForce getCustomPhysicalForceByParticipants(CustomPhysicalForce forcepar){
+	public CustomPhysicalEnergyDifferential getCustomPhysicalForceByParticipants(CustomPhysicalEnergyDifferential forcepar){
 		
 		for(PhysicalEnergyDifferential force : getPhysicalForces()){
 			
 			if( ! force.hasPhysicalDefinitionAnnotation()){
-				if(((CustomPhysicalForce)force).isEquivalent(forcepar))
-					return (CustomPhysicalForce)force;
+				if(((CustomPhysicalEnergyDifferential)force).isEquivalent(forcepar))
+					return (CustomPhysicalEnergyDifferential)force;
 			}
 		}
 		return null;

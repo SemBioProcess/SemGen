@@ -290,7 +290,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 					}
 				}
 				else if(pmc instanceof PhysicalEnergyDifferential){
-					PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)pmc;
+					PhysicalEnergyDifferential ediff = (PhysicalEnergyDifferential)pmc;
 					NodeIterator sourceit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty());
 					
 					// Read in the source participants
@@ -299,7 +299,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 						Resource physentres = sourceres.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty());
 						PhysicalModelComponent sourcepmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						
-						force.addSource((PhysicalEntity) sourcepmc);
+						ediff.addSource((PhysicalEntity) sourcepmc);
 					}
 					// Read in the sink participants
 					NodeIterator sinkit = rdf.listObjectsOfProperty(propertyofres, SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty());
@@ -308,7 +308,7 @@ public class SemSimRDFreader extends AbstractRDFreader{
 						Resource physentres = sinkres.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_ENTITY_REFERENCE.getRDFproperty());
 						PhysicalModelComponent sinkpmc = getPMCfromRDFresourceAndAnnotate(physentres);
 						
-						force.addSink((PhysicalEntity) sinkpmc);
+						ediff.addSink((PhysicalEntity) sinkpmc);
 					}
 				}
 			}

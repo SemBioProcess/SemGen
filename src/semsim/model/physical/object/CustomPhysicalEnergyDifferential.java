@@ -15,10 +15,10 @@ import semsim.model.physical.PhysicalModelComponent;
  * @author mneal
  *
  */
-public class CustomPhysicalForce extends PhysicalEnergyDifferential{
+public class CustomPhysicalEnergyDifferential extends PhysicalEnergyDifferential{
 
 
-	public CustomPhysicalForce(){
+	public CustomPhysicalEnergyDifferential(){
 		super(SemSimTypes.CUSTOM_PHYSICAL_FORCE);
 	}
 	
@@ -26,7 +26,7 @@ public class CustomPhysicalForce extends PhysicalEnergyDifferential{
 	 * Copy constructor
 	 * @param force The CustomPhysicalForce to copy
 	 */
-	public CustomPhysicalForce(CustomPhysicalForce force) {
+	public CustomPhysicalEnergyDifferential(CustomPhysicalEnergyDifferential force) {
 		super(force);
 	}
 	

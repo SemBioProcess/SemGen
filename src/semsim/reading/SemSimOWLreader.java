@@ -71,7 +71,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalForce;
+import semsim.model.physical.object.CustomPhysicalEnergyDifferential;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -422,7 +422,7 @@ public class SemSimOWLreader extends ModelReader {
 
 			if(srcs.size()==0 && sinks.size()==0) continue;
 			
-			CustomPhysicalForce cpf = semsimmodel.addCustomPhysicalForce(new CustomPhysicalForce());
+			CustomPhysicalEnergyDifferential cpf = semsimmodel.addCustomPhysicalForce(new CustomPhysicalEnergyDifferential());
 			
 			// Capture the physical entity participants
 			// Enter source information first

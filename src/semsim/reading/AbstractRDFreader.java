@@ -39,7 +39,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalForce;
+import semsim.model.physical.object.CustomPhysicalEnergyDifferential;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -67,8 +67,8 @@ public abstract class AbstractRDFreader {
 	protected SemSimLibrary sslib;
 	protected SemSimModel semsimmodel;
 	protected ModelAccessor modelaccessor;
-	protected String modelnamespaceinRDF = null;
-	protected String localnamespaceinRDF = null;
+	protected String modelnamespaceinRDF = "";
+	protected String localnamespaceinRDF = "";
 	
 	
 	public AbstractRDFreader(ModelAccessor accessor,  SemSimModel model, SemSimLibrary sslibrary){
@@ -301,7 +301,7 @@ public abstract class AbstractRDFreader {
 				}
 			}
 			else if(isforce){
-				pmc = semsimmodel.addCustomPhysicalForce(new CustomPhysicalForce());
+				pmc = semsimmodel.addCustomPhysicalForce(new CustomPhysicalEnergyDifferential());
 			}
 			
 			Resource isversionofann = res.getPropertyResourceValue(SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty());

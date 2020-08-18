@@ -24,7 +24,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalForce;
+import semsim.model.physical.object.CustomPhysicalEnergyDifferential;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
@@ -155,9 +155,9 @@ public class SemSimCopy {
 	 * @param modeltocopy The SemSimModel containing processes to copy
 	 */
 	private void copyPhysicalForces(SemSimModel modeltocopy){
-		for (CustomPhysicalForce cpf : modeltocopy.getCustomPhysicalForces()) { 
+		for (CustomPhysicalEnergyDifferential cpf : modeltocopy.getCustomPhysicalForces()) { 
 
-			CustomPhysicalForce newcpf = new CustomPhysicalForce(cpf);
+			CustomPhysicalEnergyDifferential newcpf = new CustomPhysicalEnergyDifferential(cpf);
 			for (PhysicalEntity part : cpf.getParticipants()) {
 				
 				PhysicalEntity newpart = entitiesmap.get(part);

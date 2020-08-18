@@ -47,8 +47,8 @@ public abstract class AbstractRDFwriter {
 	protected SemSimModel semsimmodel;
 	public Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	protected Model rdf = ModelFactory.createDefaultModel();
-	protected String modelnamespaceinRDF;
-	protected String localnamespaceinRDF;
+	protected String modelnamespaceinRDF = "";
+	protected String localnamespaceinRDF = "";
 	protected Set<String> localids = new HashSet<String>();
 	protected Map<URI, Resource> refURIsandresources = new HashMap<URI,Resource>();
 	private Map<DataStructure, URI> variablesAndPropertyResourceURIs = new HashMap<DataStructure, URI>();
@@ -401,6 +401,8 @@ public abstract class AbstractRDFwriter {
 		// explicit model element and should use the model namespace, while
 		// any PMC without a metadata ID should be instantiated as a local
 		// resource in the RDF.
+		System.out.println(pmc.getMetadataID() + pmc.getClass());
+		
 		if(pmc.hasMetadataID()) res = rdf.createResource(modelnamespaceinRDF + "#" + pmc.getMetadataID());
 		// Otherwise make a new metadataID based on the physical model component's type
 		else res = createNewResourceForSemSimObject(typeprefix);

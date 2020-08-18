@@ -24,7 +24,7 @@ import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
-import semsim.model.physical.object.CustomPhysicalForce;
+import semsim.model.physical.object.CustomPhysicalEnergyDifferential;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.model.physical.object.PhysicalProperty;
 import semsim.model.physical.object.PhysicalPropertyInComposite;
@@ -744,7 +744,7 @@ public class SemSimTermLibrary extends Observable {
 	
 	// Store info for forces
 	public int createEnergyDifferential() {
-		int in = addPhysicalForce(new CustomPhysicalForce());
+		int in = addPhysicalForce(new CustomPhysicalEnergyDifferential());
 		return in;
 	}
 	

@@ -81,7 +81,6 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 			rdf.setNsPrefix("model", semsimmodel.getNamespace());
 			modelnamespaceinRDF = semsimmodel.getNamespace();
 		}
-		else modelnamespaceinRDF = "#";
 				
 		createSubmodelURIandNameMap();
 		
@@ -256,7 +255,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					}
 					// If it's a property of a process
 					else if(propof instanceof PhysicalProcess){
-						PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
+						PhysicalProcess process = (PhysicalProcess)propof;
 
 						Resource processres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 						Statement st = rdf.createStatement(
@@ -296,7 +295,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 					}
 					// Otherwise we assume it's a property of a force
 					else{
-						PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)ds.getAssociatedPhysicalModelComponent();
+						PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)propof;
 
 						Resource forceres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
 						Statement st = rdf.createStatement(
