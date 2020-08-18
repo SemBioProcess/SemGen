@@ -100,7 +100,7 @@ public abstract class AbstractRDFreader {
 		            //.resolveURIs(false) // should not be doing this. Need a temp namespace.
 		            .lang(RDFLanguages.RDFXML)
 		            //.errorHandler(ErrorHandlerFactory.errorHandlerWarning(null)) // change this
-		           //.base(TEMP_BASE)
+		            .base(TEMP_BASE) // Used if relative URIs encountered
 		            .parse(rdf);
 				stream.close();
 		    }
