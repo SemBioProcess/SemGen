@@ -73,7 +73,7 @@ public abstract class CodewordButton extends AnnotationObjectButton {
 		}
 		else if(ptype == PropertyType.PROPERTY_OF_PHYSICAL_ENERGY_DIFFERENTIAL){
 			col = forcecolor;
-			tooltip = "<html>Codeword identified as a property of a physical <i>force</i></html>";
+			tooltip = "<html>Codeword identified as a property of a physical <i>energy differential</i></html>";
 		}
 		else{
 			tooltip = "<html>Codeword identified as a property of a <i>constitutive</i> relation.</htm>";

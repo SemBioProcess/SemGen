@@ -358,7 +358,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 								SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
 					}
 				}
-				else{  // Otherwise we assume it's a property of a physical force
+				else{  // Otherwise we assume it's a property of a physical energy differential
 					PhysicalEnergyDifferential force = (PhysicalEnergyDifferential)ds.getAssociatedPhysicalModelComponent();
 
 					Resource forcres = getResourceForPMCandAnnotate(ds.getAssociatedPhysicalModelComponent());
