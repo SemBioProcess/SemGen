@@ -192,12 +192,20 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	
 	
 	@Override
+	/**
+	 * Only called when reading in SBML models in OMEX archives
+	 */
+	public void getDataStructureAnnotations(DataStructure ds) {
+		getDataStructureAnnotations(ds, getModelNamespaceInRDF());
+	}
+	
+	@Override
 	public void getDataStructureAnnotations(DataStructure ds, String ns){
 		
 		String metaid = ds.getMetadataID();
 		//String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource resource = rdf.getResource(ns + "#" + metaid);
-						
+					
 		collectFreeTextAnnotation(ds, resource);
 		collectSingularBiologicalAnnotation(ds, resource);
 		collectCompositeAnnotation(ds, resource);

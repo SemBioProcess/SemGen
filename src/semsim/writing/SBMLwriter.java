@@ -1316,11 +1316,14 @@ public class SBMLwriter extends ModelWriter {
 				// but it can be time-consuming for larger models
 				if(ds.hasMetadataID()) metadataID = ds.getMetadataID();
 				else{
-					metadataID = semsimmodel.generateUniqueMetadataID("metaid0", usedmetaids);
+					metadataID = semsimmodel.generateUniqueMetadataID("metaid_0", usedmetaids);
 					usedmetaids.add(metadataID);
 				}
 				
-				Resource ares = rdfwriter.rdf.createResource(rdfwriter.getLocalNamespace() + "#" + metadataID);
+				String resuri = rdfwriter.getModelNamespace() + "#" + metadataID;
+				resuri = resuri.replaceAll("##", "#"); // In case model namespace ends in #
+				Resource ares = rdfwriter.rdf.createResource(resuri);
+				
 								
 				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);

@@ -1,5 +1,7 @@
 package semsim.reading;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -12,6 +14,12 @@ import java.util.Set;
 import java.util.zip.ZipException;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.Result;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,7 +29,9 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
+import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
+import org.jdom.transform.JDOMSource;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
 import org.sbml.jsbml.Compartment;
@@ -119,10 +129,38 @@ public class SBMLreader extends ModelReader{
 
 	@Override
 	public SemSimModel read() throws IOException, InterruptedException,
-			OWLException, XMLStreamException {
+			OWLException, XMLStreamException, JDOMException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError {
 		
 		// Load the SBML file into a new SBML model
 		InputStream instream = modelaccessor.modelInStream();
+		
+		// Strip out semsim-formatted annotations if present
+		// because JSBML chokes on them now
+		// TODO: think about how to make this more efficient
+		// maybe use the collectSemSimRDF earlier?
+		Document xmldoc = modelaccessor.getJDOMDocument();
+		Element rootNode = xmldoc.getRootElement();
+		
+		Namespace ns = rootNode.getNamespace();
+
+		if(rootNode.getChild("model",ns)!=null) {
+			Element modelel = rootNode.getChild("model", ns);
+			
+			if(modelel.getChild("annotation", ns)!=null) {
+				Element annel = modelel.getChild("annotation", ns);
+				
+				if(annel.getChild("semsimAnnotation", ns)!=null) {
+					modelel.removeChild("annotation", ns);
+					
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				    JDOMSource xmlSource = new JDOMSource(xmldoc);
+				    Result outputTarget= new StreamResult(outputStream);
+				    TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
+				    InputStream newinputstream = new ByteArrayInputStream(outputStream.toByteArray());
+				    instream = newinputstream;
+				}
+			}
+		}
 		sbmldoc = new SBMLReader().readSBMLFromStream(instream);
 		instream.close();
 		

@@ -6,7 +6,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
+import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -56,6 +60,14 @@ public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 			assertTrue(!newModelFile.getModelasString().isEmpty());
 		} catch (IOException | InterruptedException | OWLException | XMLStreamException e) {
 			fail();
+		} catch (TransformerConfigurationException e) {
+			fail();
+		} catch (JDOMException e) {
+			fail();
+		} catch (TransformerException e) {
+			fail();
+		} catch (TransformerFactoryConfigurationError e) {
+			fail();
 		}
 	}
 	
@@ -80,12 +92,12 @@ public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 			newOMEXArchive.writetoFile(model);
 			String text = newOMEXArchive.getModelasString();
 			assertTrue(!text.isEmpty());
-		} catch (IOException | InterruptedException | OWLException | XMLStreamException e) {
+		} catch (IOException | InterruptedException | OWLException | XMLStreamException | JDOMException | TransformerException | TransformerFactoryConfigurationError e) {
 			e.printStackTrace();
 			fail();
 			
 			_tempFolder.delete();
-		}
+		} 
 		_tempFolder.delete();
 	}
 	

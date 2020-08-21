@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -87,6 +90,9 @@ public abstract class ModelReader {
 	 * @throws CloneNotSupportedException
 	 * @throws XMLStreamException
 	 * @throws JDOMException
+	 * @throws TransformerFactoryConfigurationError 
+	 * @throws TransformerException 
+	 * @throws TransformerConfigurationException 
 	 */
-	public abstract SemSimModel read() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException, JDOMException;
+	public abstract SemSimModel read() throws IOException, InterruptedException, OWLException, CloneNotSupportedException, XMLStreamException, JDOMException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError;
 }

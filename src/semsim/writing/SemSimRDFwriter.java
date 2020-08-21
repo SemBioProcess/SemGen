@@ -114,7 +114,9 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		
 		String modelmetaid = semsimmodel.hasMetadataID() ?  semsimmodel.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(semsimmodel.getName(), semsimmodel);
 		
-		Resource modelres = rdf.createResource(modelnamespaceinRDF + modelmetaid);
+		String modeluri = modelnamespaceinRDF + "#" + modelmetaid;
+		modeluri = modeluri.replaceAll("##", "#"); // in case model namespace ends with #
+		Resource modelres = rdf.createResource(modeluri);
 				
 		// Add model description to RDF if we're writing to a CellML model or a JSim project file
 		// In SemSim OWL files, descriptions are stored as RDF:comments on the ontology

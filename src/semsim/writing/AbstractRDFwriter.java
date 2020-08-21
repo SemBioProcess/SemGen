@@ -196,6 +196,7 @@ public abstract class AbstractRDFwriter {
 	protected Resource assignMetaIDandCreateResourceForDataStructure(DataStructure ds){
 		String metaid = (ds.hasMetadataID()) ? ds.getMetadataID() : semsimmodel.assignValidMetadataIDtoSemSimObject(ds.getName(), ds);
 		String resuri = modelnamespaceinRDF + "#" + metaid;
+		resuri = resuri.replaceAll("##", "#"); // In case modelnamespaceinRDF ends in #
 		Resource ares = rdf.createResource(resuri);
 		return ares;
 	}
@@ -401,9 +402,12 @@ public abstract class AbstractRDFwriter {
 		// explicit model element and should use the model namespace, while
 		// any PMC without a metadata ID should be instantiated as a local
 		// resource in the RDF.
-		System.out.println(pmc.getMetadataID() + pmc.getClass());
-		
-		if(pmc.hasMetadataID()) res = rdf.createResource(modelnamespaceinRDF + "#" + pmc.getMetadataID());
+		// TODO: But this does not work correctly if we go from SBML to OWL to OMEX CellML
+		if(pmc.hasMetadataID()) {
+			String resuri = modelnamespaceinRDF + "#" + pmc.getMetadataID();
+			resuri = resuri.replaceAll("##", "#"); // In case modelnamespaceinRDF ends in #
+			res = rdf.createResource(resuri);
+		}
 		// Otherwise make a new metadataID based on the physical model component's type
 		else res = createNewResourceForSemSimObject(typeprefix);
 				
