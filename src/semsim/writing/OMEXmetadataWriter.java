@@ -16,6 +16,7 @@ import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.model.collection.SemSimModel;
@@ -36,8 +37,8 @@ import semsim.reading.AbstractRDFreader;
  */
 public class OMEXmetadataWriter extends AbstractRDFwriter{
 
-	public OMEXmetadataWriter(SemSimModel model) {
-		super(model);	
+	public OMEXmetadataWriter(ModelAccessor accessor, SemSimModel model) {
+		super(accessor, model);	
 		initialize(model);
 	}
 

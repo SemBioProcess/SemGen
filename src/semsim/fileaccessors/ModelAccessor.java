@@ -219,13 +219,13 @@ public class ModelAccessor {
 				writer = new SemSimOWLwriter(semsimmodel);
 			}
 			else if(modeltype==ModelType.SBML_MODEL){
-				writer = new SBMLwriter(semsimmodel);
+				writer = new SBMLwriter(this, semsimmodel);
 			}
 			else if(modeltype==ModelType.CELLML_MODEL){
-				writer = new CellMLwriter(semsimmodel);
+				writer = new CellMLwriter(this, semsimmodel);
 			}
 			else if(modeltype==ModelType.MML_MODEL){
-				writer = new MMLwriter(semsimmodel);
+				writer = new MMLwriter(this, semsimmodel);
 			}
 		} 
 		catch (Exception e) {

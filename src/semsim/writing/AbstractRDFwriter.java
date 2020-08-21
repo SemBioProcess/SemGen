@@ -20,6 +20,7 @@ import org.apache.jena.rdf.model.Statement;
 import semsim.SemSimObject;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
@@ -44,6 +45,7 @@ import semsim.utilities.SemSimUtil;
  *
  */
 public abstract class AbstractRDFwriter {
+	protected ModelAccessor modelaccessor;
 	protected SemSimModel semsimmodel;
 	public Map<PhysicalModelComponent, URI> PMCandResourceURImap = new HashMap<PhysicalModelComponent,URI>();
 	protected Model rdf = ModelFactory.createDefaultModel();
@@ -55,7 +57,8 @@ public abstract class AbstractRDFwriter {
 
 
 
-	protected AbstractRDFwriter(SemSimModel model) {
+	protected AbstractRDFwriter(ModelAccessor accessor, SemSimModel model) {
+		setModelAccessor(accessor);
 		semsimmodel = model;
 	}
 	
@@ -397,13 +400,9 @@ public abstract class AbstractRDFwriter {
 		
 		Resource res = null;
 		
-		// If metadata ID already assigned to physical component, use it.
-		// This assumes that any PMC with a metadata ID corresponds to an
-		// explicit model element and should use the model namespace, while
-		// any PMC without a metadata ID should be instantiated as a local
-		// resource in the RDF.
-		// TODO: But this does not work correctly if we go from SBML to OWL to OMEX CellML
-		if(pmc.hasMetadataID()) {
+		// If there is a metadata ID on the PMC and we're writing out annotations on an SBML model,
+		// then we presume there is an explicit element in the SBML model that will have that metadata ID
+		if(pmc.hasMetadataID() && getModelAccessor().getModelType()==ModelType.SBML_MODEL) {
 			String resuri = modelnamespaceinRDF + "#" + pmc.getMetadataID();
 			resuri = resuri.replaceAll("##", "#"); // In case modelnamespaceinRDF ends in #
 			res = rdf.createResource(resuri);
@@ -548,7 +547,7 @@ public abstract class AbstractRDFwriter {
 	}
 
 	/**
-	 * Instsance-level method for getting the RDF content as a string.
+	 * Instance-level method for getting the RDF content as a string.
 	 * @return A string containing the RDF content.
 	 */
 	public String getRDFString(String rdfxmlformat) {
@@ -586,6 +585,19 @@ public abstract class AbstractRDFwriter {
 					e.printStackTrace();
 				}
 				return outstring;
+	}
+	
+	/** @return The {@link ModelAccessor} associated with this object */
+	protected ModelAccessor getModelAccessor() {
+		return modelaccessor;
+	}
+	
+	/**
+	 * Assign the {@link ModelAccessor} to this object
+	 * @param accessor
+	 */
+	protected void setModelAccessor(ModelAccessor accessor) {
+		this.modelaccessor = accessor;
 	}
 	
 	

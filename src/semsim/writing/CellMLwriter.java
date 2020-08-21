@@ -18,6 +18,7 @@ import org.jdom.output.XMLOutputter;
 import semsim.annotation.Annotation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.Importable;
 import semsim.model.collection.FunctionalSubmodel;
@@ -28,7 +29,6 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
@@ -48,6 +48,11 @@ public class CellMLwriter extends ModelWriter {
 	
 	public CellMLwriter(SemSimModel model) {
 		super(model);
+	}
+	
+	public CellMLwriter(ModelAccessor accessor, SemSimModel model) {
+		super(model);
+		setWriteLocation(accessor);
 	}
 	
 	
@@ -109,7 +114,7 @@ public class CellMLwriter extends ModelWriter {
 		
 		// If we're writing to an OMEX file, make the RDF writer an OMEXmetadataWriter that follows COMBINE conventions
 		if(getWriteLocation() instanceof OMEXAccessor){
-			rdfwriter = new OMEXmetadataWriter(semsimmodel);
+			rdfwriter = new OMEXmetadataWriter(getWriteLocation(), semsimmodel);
 			String archivefn = ((OMEXAccessor)getWriteLocation()).getArchiveFileName();
 			String modfn = getWriteLocation().getFileName();
 			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
@@ -129,7 +134,7 @@ public class CellMLwriter extends ModelWriter {
 				}
 			}
 			
-			rdfwriter = new SemSimRDFwriter(semsimmodel, rdfstring, ModelType.CELLML_MODEL);
+			rdfwriter = new SemSimRDFwriter(getWriteLocation(), semsimmodel, rdfstring);
 		}
 	}
 	

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
+import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
 import semsim.model.computational.RelationalConstraint;
@@ -15,6 +17,7 @@ import semsim.model.computational.datastructures.Decimal;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.datastructures.SemSimInteger;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 import JSim.aserver.ASModel;
@@ -37,6 +40,11 @@ public class MMLwriter extends ModelWriter{
 		super(model);
 	}
 	
+	public MMLwriter(ModelAccessor accessor, SemSimModel model) {
+		super(model);
+		setWriteLocation(accessor);
+	}
+	
 	@Override
 	public String encodeModel() {
 		String output = "";
@@ -46,7 +54,8 @@ public class MMLwriter extends ModelWriter{
 		// NEED BETTER ERROR HANDLING FOR CellML 1.1 models
 		if(semsimmodel.getFunctionalSubmodels().size()>0){
 			System.out.println("Using CellML as intermediary language");
-			String tempcontent = new CellMLwriter(semsimmodel).encodeModel();
+			ModelAccessor tempaccessor = FileAccessorFactory.getModelAccessorForString("", ModelType.CELLML_MODEL);
+			String tempcontent = new CellMLwriter(tempaccessor, semsimmodel).encodeModel();
 			String srcText = UtilIO.readText(tempcontent.getBytes());
 			int srcType = ASModel.TEXT_CELLML;
 		    int destType = ASModel.TEXT_MML;

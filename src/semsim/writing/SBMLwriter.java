@@ -63,6 +63,7 @@ import semsim.definitions.SBMLconstants;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.Computation;
@@ -84,7 +85,6 @@ import semsim.model.physical.object.CompositePhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalEntity;
 import semsim.model.physical.object.CustomPhysicalProcess;
 import semsim.reading.SBMLreader;
-import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.ErrorLog;
 import semsim.utilities.SemSimUtil;
 
@@ -128,6 +128,11 @@ public class SBMLwriter extends ModelWriter {
 	public SBMLwriter(SemSimModel model) {
 		super(model);
 	}
+	
+	public SBMLwriter(ModelAccessor accessor, SemSimModel model) {
+		super(model);
+		setWriteLocation(accessor);
+	}
 
 	public SBMLwriter(SemSimModel model, boolean OMEXmetadata) { // Change this to include an OMEXarchiveWriter?
 		super(model, OMEXmetadata);
@@ -156,7 +161,7 @@ public class SBMLwriter extends ModelWriter {
 
 		// Initialize an OMEX metadata writer, if we're writing to an OMEX file
 		if(getWriteLocation() instanceof OMEXAccessor){
-			rdfwriter = new OMEXmetadataWriter(semsimmodel);
+			rdfwriter = new OMEXmetadataWriter(getWriteLocation(), semsimmodel);
 			String archivefn = ((OMEXAccessor)getWriteLocation()).getArchiveFileName();
 			String modfn = getWriteLocation().getFileName();
 			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
@@ -956,7 +961,7 @@ public class SBMLwriter extends ModelWriter {
 	 */ 
 	private Document addSemSimRDF(){
 		
-		rdfwriter = new SemSimRDFwriter(semsimmodel, ModelType.SBML_MODEL);
+		rdfwriter = new SemSimRDFwriter(getWriteLocation(), semsimmodel);
 		
 		rdfwriter.setRDFforModelLevelAnnotations(); // This just makes an RDF resource for the model. Model-level info is stored within SBML <model> element, not SemSim RDF block.
 		

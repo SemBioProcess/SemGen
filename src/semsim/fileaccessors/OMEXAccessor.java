@@ -214,9 +214,9 @@ public class OMEXAccessor extends ModelAccessor {
 		OMEXArchiveWriter omexwriter;
 		
 		if (this.getModelType()==ModelType.SBML_MODEL || this.getModelType()==ModelType.CELLML_MODEL) {
-			OMEXmetadataWriter metadatawriter = new OMEXmetadataWriter(model);
-			if (!this.hasOMEXmetadataFile()) {
-
+			OMEXmetadataWriter metadatawriter = new OMEXmetadataWriter(this, model);
+			
+			if ( ! this.hasOMEXmetadataFile()) {
 				omexmetaaccessor = new OMEXAccessor(file, new File("model/" + getModelName() + ".rdf"), ModelType.OMEX_METADATA_FILE);
 			}
 			omexwriter = new OMEXArchiveWriter(writer, metadatawriter);
@@ -224,7 +224,6 @@ public class OMEXAccessor extends ModelAccessor {
 		else {
 			omexwriter = new OMEXArchiveWriter(writer);
 		}
-		
 		omexwriter.appendOMEXArchive(this);
 	 }
 	

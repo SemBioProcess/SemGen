@@ -119,7 +119,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		// a metaid in their URI fragments).
 		semsimmodel.setName(modelName);
 				
-		rdfwriter = new SemSimRDFwriter(semsimmodel,ModelType.MML_MODEL_IN_PROJ);
+		rdfwriter = new SemSimRDFwriter(projaccessor, semsimmodel);
 		
 		// Write out model-level annotations
 		rdfwriter.setRDFforModelLevelAnnotations();

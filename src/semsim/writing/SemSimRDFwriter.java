@@ -11,6 +11,7 @@ import org.apache.jena.rdf.model.Statement;
 import semsim.definitions.SemSimRelations.SemSimRelation;
 import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.definitions.SemSimTypes;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.annotation.Annotation;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -41,10 +42,11 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	private ModelType modeltype;
 	
 	// Constructor without existing RDF block
-	public SemSimRDFwriter(SemSimModel semsimmodel, ModelType modeltype){
-		super(null);
+	public SemSimRDFwriter(ModelAccessor accessor, SemSimModel semsimmodel){
+		super(accessor, null);
 		
-		this.modeltype = modeltype;
+		setModelAccessor(accessor);
+		this.modeltype = accessor.getModelType();
 		initialize(semsimmodel);
 	}
 	
@@ -54,10 +56,11 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	 * @param rdfasstring Existing RDF content to add to SemSim-related RDF content
 	 * @param modeltype The type of model being written out
 	 */
-	public SemSimRDFwriter(SemSimModel semsimmodel, String rdfasstring, ModelType modeltype){	
-		super(null);
+	public SemSimRDFwriter(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring){	
+		super(accessor, null);
 		
-		this.modeltype = modeltype;
+		setModelAccessor(accessor);
+		this.modeltype = accessor.getModelType();
 		initialize(semsimmodel);
 		
 		if(rdfasstring!=null){
