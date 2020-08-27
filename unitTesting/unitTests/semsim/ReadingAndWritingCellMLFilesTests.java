@@ -51,7 +51,7 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 		} catch (IOException | JDOMException e) {
 			fail();
 		}
@@ -71,12 +71,12 @@ public class ReadingAndWritingCellMLFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 			
 			OMEXAccessor newOMEXArchive =  FileAccessorFactory.getOMEXArchive(new File("cellmlomextemp.omex"), new File("model/cellmltemp.cellml"), ModelType.CELLML_MODEL);
 			//assert
 			newOMEXArchive.writetoFile(model);
-			String text = newOMEXArchive.getModelasString();
+			String text = newOMEXArchive.getModelAsString();
 			assertTrue(!text.isEmpty());
 		} catch (IOException | JDOMException e) {
 			e.printStackTrace();

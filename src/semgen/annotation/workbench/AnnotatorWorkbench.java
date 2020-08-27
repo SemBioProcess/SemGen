@@ -187,7 +187,7 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 	
 	public void exportModel(Integer index){
 		
-		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFullPath());
+		String suggestedfilename = FilenameUtils.removeExtension(modelaccessor.getFullPathToModel());
 		SemGenSaveFileChooser filec = new SemGenSaveFileChooser(SemGenSaveFileChooser.ALL_WRITABLE_TYPES, "owl", semsimmodel.getName(), suggestedfilename);
 		
 		ModelAccessor ma = filec.SaveAsAction(semsimmodel);

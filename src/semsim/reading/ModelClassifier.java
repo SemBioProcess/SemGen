@@ -1,7 +1,10 @@
 package semsim.reading;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -212,6 +215,29 @@ public class ModelClassifier {
 		SAXBuilder builder = new SAXBuilder();
 		try{
 			Document doc = builder.build(file);
+			String nsuri = doc.getRootElement().getNamespace().getURI();
+			if(nsuri.contains("http://www.cellml.org/cellml/")){
+				return true;
+			}
+		}
+		catch(JDOMParseException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Verifies whether the input string is well-formed CellML
+	 * @param modelcode An input string
+	 * @return Whether the string is a well-formed CellML model
+	 * @throws JDOMException
+	 * @throws IOException
+	 */
+	public static Boolean isValidCellMLmodel(String modelcode) throws JDOMException, IOException{
+		SAXBuilder builder = new SAXBuilder();
+		try{
+			InputStream stream = new ByteArrayInputStream(modelcode.getBytes(StandardCharsets.UTF_8));
+			Document doc = builder.build(stream);
 			String nsuri = doc.getRootElement().getNamespace().getURI();
 			if(nsuri.contains("http://www.cellml.org/cellml/")){
 				return true;

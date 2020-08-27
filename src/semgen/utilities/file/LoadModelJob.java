@@ -150,14 +150,15 @@ public class LoadModelJob extends SemGenJob {
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else
-			ErrorLog.addError("Could not load " + modelaccessor.getFileName() + "\nCheck that model encoding is valid.", true, false);
+			ErrorLog.addError("Could not load " + modelaccessor.getFileName() 
+			+ "\nCheck that model encoding is valid.", true, false);
 		
 	}
 
 
 	private SemSimModel loadMML(ModelAccessor ma) throws Xcept, IOException, InterruptedException, OWLException{
 		
-		String srcText = ma.getModelasString();
+		String srcText = ma.getModelAsString();
 		Document xmmldoc = MMLtoXMMLconverter.convert(srcText, ma.getFileName());
 		
 		if (ErrorLog.hasErrors()) return null;

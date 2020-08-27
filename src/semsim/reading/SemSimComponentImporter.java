@@ -9,6 +9,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import semsim.SemSimLibrary;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
+import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.FunctionalSubmodel;
 import semsim.model.collection.SemSimModel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -26,7 +27,7 @@ public class SemSimComponentImporter {
 
 	/**
 	 * Import a FunctionalSubmodel (AKA a CellML component element) into a SemSimModel
-	 * @param supplyingmodelfile Location of the model containing the FunctionalSubmodel to import
+	 * @param receivingmodelaccessor Location of the model containing the FunctionalSubmodel that is imported
 	 * @param receivingmodel The SemSimModel to which the FunctionalSubmodel will be added
 	 * @param localcompname The name of the imported FunctionalSubmodel to use in the SemSimModel
 	 * @param origcompname The original name of the imported FunctionalSubmodel used in the supplying model
@@ -36,24 +37,16 @@ public class SemSimComponentImporter {
 	 * @throws JDOMException
 	 * @throws IOException
 	 */
-	protected static FunctionalSubmodel importFunctionalSubmodel(ModelAccessor supplyingmodelfile, SemSimModel receivingmodel,
+	protected static FunctionalSubmodel importFunctionalSubmodel(ModelAccessor receivingmodelaccessor, SemSimModel receivingmodel,
 			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib) throws JDOMException, IOException{
 		
-		String supplyingmodelfilepath = getPathToSupplyingModel(supplyingmodelfile, receivingmodel, hrefValue);
-		if(supplyingmodelfilepath==null){
+		ModelAccessor importedmodelaccessor = getAccessorOfSupplyingModel(receivingmodelaccessor, receivingmodel, hrefValue);
+		if(importedmodelaccessor==null){
 			return null;
 		}
 		
-		File importedmodelfile = new File(supplyingmodelfilepath);
-		if(!importedmodelfile.exists()){
-			String error = "ERROR: Could not import from...\n\n\t" + hrefValue + "\n\n...because file was not found.";
-			receivingmodel.addError(error);
-			System.err.println(error);
-			return null;
-		}
-		ModelAccessor importedmodelaccessor = FileAccessorFactory.getModelAccessor(importedmodelfile);
 		SemSimModel importedmodel = null;
-		ModelType modeltype = supplyingmodelfile.getModelType();
+		ModelType modeltype = receivingmodelaccessor.getModelType();
 		if(modeltype == ModelType.SEMSIM_MODEL){
 			try {
 				importedmodel = new SemSimOWLreader(importedmodelaccessor).read();
@@ -61,9 +54,9 @@ public class SemSimComponentImporter {
 				e.printStackTrace();
 			}
 		}
-		else if(modeltype == ModelType.CELLML_MODEL){
+		else if(modeltype == ModelType.CELLML_MODEL) {
 			try {
-				if (!ModelClassifier.isValidCellMLmodel(importedmodelfile)) return null;
+				if (! ModelClassifier.isValidCellMLmodel(receivingmodelaccessor.getModelAsString())) return null;
 				importedmodel = new CellMLreader(importedmodelaccessor).read();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -194,13 +187,14 @@ public class SemSimComponentImporter {
 	
 	/**
 	 * Get the file path to a model from which an object is imported
-	 * @param modelfile Location of the model referencing an imported object
+	 * @param receivingmodelaccessor Location of the model referencing an imported object
 	 * @param receivingmodel The SemSimModel that will receive the import, if the import can be found
 	 * @param hrefValue Attribute equal to the Uniform Resource Identifier that identifies the location of 
 	 * model supplying the imported object
 	 * @return The file path to the model supplying an imported object
 	 */
-	private static String getPathToSupplyingModel(ModelAccessor modelfile, SemSimModel receivingmodel, String hrefValue){
+	private static ModelAccessor getAccessorOfSupplyingModel(ModelAccessor receivingmodelaccessor, SemSimModel receivingmodel, String hrefValue){
+		
 		String supplyingmodelfilepath = null;
 		if(hrefValue.startsWith("http")){
 			String error = "ERROR: Cannot import components from...\n\n\t" + hrefValue + "\n\n...because it is not a local file.";
@@ -211,7 +205,30 @@ public class SemSimComponentImporter {
 		else if(hrefValue.startsWith("/") || hrefValue.startsWith("\\"))
 			hrefValue = hrefValue.substring(1);
 		
-		supplyingmodelfilepath = modelfile.getFile().getParent() + "/" + hrefValue;
-		return supplyingmodelfilepath;
+		supplyingmodelfilepath = receivingmodelaccessor.getFile().getParent() + "/" + hrefValue;
+		
+		ModelAccessor supplyingmodelaccessor = null; 
+		
+		File importedmodelfile = new File(supplyingmodelfilepath);
+		
+		if(importedmodelfile.exists()){
+			supplyingmodelaccessor = FileAccessorFactory.getModelAccessor(importedmodelfile);
+		}
+		else if(receivingmodelaccessor instanceof OMEXAccessor) {
+			OMEXAccessor omexacc = ((OMEXAccessor) receivingmodelaccessor);
+			String pathtoreferencedmodel = omexacc.getAccessorForArchivedModel().getFilePath().replace(omexacc.getFileName(), hrefValue);
+			
+			supplyingmodelaccessor = FileAccessorFactory.getOMEXArchive(omexacc.getFile(),
+						new File(pathtoreferencedmodel), ModelType.CELLML_MODEL);
+		}
+		
+		if(supplyingmodelaccessor==null) {
+			String error = "ERROR: Could not import from...\n\n\t" + hrefValue + "\n\n...because file could not be found.";
+			receivingmodel.addError(error);
+			System.err.println(error);
+			return null;
+		}
+		
+		return supplyingmodelaccessor;
 	}
 }

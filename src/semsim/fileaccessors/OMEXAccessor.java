@@ -39,7 +39,7 @@ public class OMEXAccessor extends ModelAccessor {
 	/**
 	 * Constructor for pointing to a CellML or SBML model in an archive
 	 * @param omexarchive A File pointing to the OMEX archive
-	 * @param file A File pointing to a model within the OMEX archive
+	 * @param file A File pointing to the model's location relative to the archive's location (e.g. ./model/ArchivedModel.xml)
 	 * @param type The type of the model within the OMEX archive
 	 */
 	public OMEXAccessor(File omexarchive, File file, ModelType type) {
@@ -93,7 +93,7 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	@Override
-	public String getModelasString() throws IOException {
+	public String getModelAsString() throws IOException {
 		StringWriter writer = new StringWriter();
 		
 		IOUtils.copy(modelInStream(), writer, StandardCharsets.UTF_8);
@@ -141,7 +141,7 @@ public class OMEXAccessor extends ModelAccessor {
 			}
 						
 			if (omexmetaaccessor != null){
-				String omexmetardfstring = omexmetaaccessor.getModelasString();
+				String omexmetardfstring = omexmetaaccessor.getModelAsString();
 				return new OMEXmetadataReader(this, thesemsimmodel, sslib, omexmetardfstring);
 			}
 		}	
@@ -173,7 +173,7 @@ public class OMEXAccessor extends ModelAccessor {
 	
 	@Override
 	public String getShortLocation(){
-		return getFileName() + '>'  + getModelName();
+		return getModelName() + " > "  + getFileName();
 	}
 
 	@Override
@@ -182,6 +182,9 @@ public class OMEXAccessor extends ModelAccessor {
 	}
 	
 	@Override
+	/**
+	 * Returns name of archived file within OMEX archive
+	 */
 	public String getFileName() {
 		return this.archivedfile.getFileName();
 	}
@@ -240,5 +243,12 @@ public class OMEXAccessor extends ModelAccessor {
 	/** @return Whether an OMEX metadata file has been associated with this OMEXAccessor */
 	public boolean hasOMEXmetadataFile() {
 		return omexmetaaccessor != null;
+	}
+	
+	/** 
+	 * @return A {@link ModelAccessor} for the archived model in the OMEX archive
+	 */
+	public ModelAccessor getAccessorForArchivedModel() {
+		return archivedfile;
 	}
 }

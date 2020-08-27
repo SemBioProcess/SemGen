@@ -682,7 +682,7 @@ public class SemSimOWLwriter extends ModelWriter {
 
 		if(semsimmodel.getLegacyCodeLocation()!=null){
 			ModelAccessor legacyma = semsimmodel.getLegacyCodeLocation();
-			String fileloc = legacyma.getFullPath();
+			String fileloc = legacyma.getFullPathToModel();
 			
 			SemSimOWLFactory.addOntologyAnnotation(ont, SemSimModel.LEGACY_CODE_LOCATION_IRI, 
 					fileloc, manager);

@@ -43,8 +43,10 @@ import semsim.writing.SemSimRDFwriter;
  * files in COMBINE archives that are used to house annotations on models 
  * within the archive.
  * @author mneal
- *
  */
+
+//TODO: Make this backwards-compatible with 1.0 spec. Could use myOMEX prefix as 1.1 indicator.
+
 public class OMEXmetadataReader extends AbstractRDFreader{
 	
 	/**

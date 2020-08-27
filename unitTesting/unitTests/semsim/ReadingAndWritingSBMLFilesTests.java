@@ -57,7 +57,7 @@ public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 		} catch (IOException | InterruptedException | OWLException | XMLStreamException e) {
 			fail();
 		} catch (TransformerConfigurationException e) {
@@ -85,12 +85,12 @@ public class ReadingAndWritingSBMLFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 			
 			OMEXAccessor newOMEXArchive =  FileAccessorFactory.getOMEXArchive(new File("sbmlomextemp.omex"), new File("model/sbmltemp.sbml"), ModelType.SBML_MODEL);
 			//assert
 			newOMEXArchive.writetoFile(model);
-			String text = newOMEXArchive.getModelasString();
+			String text = newOMEXArchive.getModelAsString();
 			assertTrue(!text.isEmpty());
 		} catch (IOException | InterruptedException | OWLException | XMLStreamException | JDOMException | TransformerException | TransformerFactoryConfigurationError e) {
 			e.printStackTrace();

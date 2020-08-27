@@ -129,7 +129,7 @@ public class ModelAccessor {
 	 * a JSim project file, the path takes the form [path to archive/.proj file]#[name of model].
 	 * Otherwise, this returns the same path as getFilePath().
 	 */
-	public String getFullPath() {
+	public String getFullPathToModel() {
 		if (!fragment.isEmpty()) return new String(filepath + separator + fragment);
 		return new String(filepath);
 	}
@@ -170,7 +170,7 @@ public class ModelAccessor {
 	/** @return The model as a String
 	 * @throws IOException
 	 */
-	public String getModelasString() throws IOException {
+	public String getModelAsString() throws IOException {
 		StringWriter writer = new StringWriter();
 		InputStream instream = modelInStream();
 		

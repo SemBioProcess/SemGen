@@ -80,7 +80,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 				} catch (Exception e) {
 					e.printStackTrace();
 					SemGenError.showWarning("Legacy code for " + workbench.getModelAccessor().getShortLocation() + " could not be found at address\n" +
-							srccodema.getFullPath(), "404 Not Found");
+							srccodema.getFullPathToModel(), "404 Not Found");
 					online = false;
 				}
 				if (online) {
@@ -125,7 +125,7 @@ public class AnnotatorTabCodePanel extends SemGenTextArea implements Observer {
 						srccodema = FileAccessorFactory.getModelAccessor(workbench.getModelAccessor().getDirectoryPath() + "/" + srcfilename);
 				}
 				
-				String modelcode = srccodema.getModelasString();
+				String modelcode = srccodema.getModelAsString();
 				
 				if (modelcode != null && ! modelcode.equals("")){
 					append(modelcode);

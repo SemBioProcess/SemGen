@@ -55,7 +55,7 @@ public class JSimProjectAccessor extends ModelAccessor {
 	
 
 	@Override
-	public String getFullPath() {
+	public String getFullPathToModel() {
 		return new String(filepath + separator + fragment);
 	}
 	

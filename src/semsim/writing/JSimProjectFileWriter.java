@@ -208,7 +208,7 @@ public class JSimProjectFileWriter extends ModelWriter{
 		
 		if(semsimmodel.getSourceModelType()==ModelType.MML_MODEL && ! sourceCodeLocation.modelIsOnline())
 			try {
-				modelText = sourceCodeLocation.getModelasString();
+				modelText = sourceCodeLocation.getModelAsString();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

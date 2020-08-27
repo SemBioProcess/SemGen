@@ -50,7 +50,7 @@ public class ReadingAndWritingOWLFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 		} catch (IOException | JDOMException | OWLException e) {
 			fail();
 		}

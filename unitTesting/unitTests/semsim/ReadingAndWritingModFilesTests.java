@@ -52,7 +52,7 @@ public class ReadingAndWritingModFilesTests extends UnitTestBase {
 		semsim.model.collection.SemSimModel model;
 		
 		try {
-			String srcText = validModFile.getModelasString();
+			String srcText = validModFile.getModelAsString();
 			Document xmmldoc = MMLtoXMMLconverter.convert(srcText, validModFile.getFileName());
 			
 			if (ErrorLog.hasErrors()) fail();
@@ -63,7 +63,7 @@ public class ReadingAndWritingModFilesTests extends UnitTestBase {
 			newModelFile.writetoFile(model);
 			
 			//assert
-			assertTrue(!newModelFile.getModelasString().isEmpty());
+			assertTrue(!newModelFile.getModelAsString().isEmpty());
 		} catch (IOException | Xcept | InterruptedException | OWLException e) {
 			fail();
 		}

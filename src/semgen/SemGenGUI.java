@@ -259,7 +259,8 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 
 			if (lmj.onStage && semsimmodel.hasImportedComponents) {
 				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), 
-						"SemGen cannot load models with imported components into a Project Tab yet. Please try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
+						"SemGen cannot load models with imported components into a Project Tab yet. "
+						+ "\nPlease try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
