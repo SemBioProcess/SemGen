@@ -44,6 +44,10 @@ public abstract class WorkbenchFactory<T extends Workbench> extends SemGenJob  i
 		return status;
 	}
 	
+	public ArrayList<ModelAccessor> getModelAccessors(){
+		return modelaccessors;
+	}
+	
 
 	public void addFileMenuasBenchObserver(FileMenu menu) {
 		for (T wb : workbenches) {

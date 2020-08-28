@@ -25,7 +25,6 @@ import semgen.utilities.uicomponent.TabFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 
-import java.net.URI;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
@@ -73,8 +72,11 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate());
 		if (factory.isValid()) {
 			int i = 0;
-			for (URI uri : factory.getFileURIs()) {
-				if (isOntologyOpenForEditing(uri)) {
+			
+			for (ModelAccessor accessor : factory.getModelAccessors()) {
+				
+				if (isModelOpenForEditing(accessor)) {
+					
 					if (factory.removeFilebyIndex(i)) return;
 				}
 				i++;
@@ -87,7 +89,7 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	public void startNewAnnotatorTask(final ModelAccessor existingaccessor){
 		AnnotatorFactory factory = new AnnotatorFactory(settings.doAutoAnnotate(), existingaccessor);
 		
-		if (isOntologyOpenForEditing(existingaccessor.getFileThatContainsModelAsURI())) return;
+		if (isModelOpenForEditing(existingaccessor)) return;
 		
 		AnnotationTabFactory tabfactory = new AnnotationTabFactory(settings, globalactions);
 		addTab(factory, tabfactory, true);
@@ -277,10 +279,10 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 	
 	/** Runs through the annotator tabs and checks if the requested file is already open for annotation.
 	* Only one instance of a file can be annotated at a time. */
-	public Boolean isOntologyOpenForEditing(URI uritocheck) {
-		for (SemGenTab at : opentabs) {
-			if (at.fileURIMatches(uritocheck)) {
-				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(),"Cannot create or load \n"+ uritocheck.toString()+
+	public Boolean isModelOpenForEditing(ModelAccessor accessor) {
+		for (SemGenTab sgtab : opentabs) {
+			if (sgtab.modelAccessorMatches(accessor)) {
+				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(),"Cannot create or load \n"+ accessor.getFullPathToModel() +
 					"\n because the file is already open for editing.",null, JOptionPane.WARNING_MESSAGE);
 				return true;
 			}

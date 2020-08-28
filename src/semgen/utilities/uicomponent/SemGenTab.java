@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URI;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,6 +14,7 @@ import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.utilities.GenericWorker;
 import semgen.utilities.SemGenJob;
+import semsim.fileaccessors.ModelAccessor;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.SemGenIcon;
 
@@ -80,7 +80,7 @@ public abstract class SemGenTab extends JPanel {
 	
 	abstract public void requestEditModelLevelMetadata();
 	
-	public boolean fileURIMatches(URI uri) {
+	public boolean modelAccessorMatches(ModelAccessor accessor) {
 		return false;
 	}
 	

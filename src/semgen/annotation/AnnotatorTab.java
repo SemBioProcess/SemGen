@@ -24,7 +24,6 @@ import semgen.utilities.uicomponent.SemGenTab;
 import semsim.SemSimObject;
 import semsim.fileaccessors.ModelAccessor;
 
-import java.net.URI;
 import java.awt.*;
 
 import javax.swing.*;
@@ -203,8 +202,8 @@ public class AnnotatorTab extends SemGenTab implements Observer {
 		libdialog.toFront();
 	}
 	
-	public boolean fileURIMatches(URI uri) {
-		return (uri.toString().equals(modelaccessor.getFileThatContainsModelAsURI().toString()));
+	public boolean modelAccessorMatches(ModelAccessor accessor) {
+		return accessor.getFullPathToModel().equals(modelaccessor.getFullPathToModel());
 	}
 
 	public boolean closeTab() {

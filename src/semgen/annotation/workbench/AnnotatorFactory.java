@@ -3,9 +3,6 @@
  */
 package semgen.annotation.workbench;
 
-import java.net.URI;
-import java.util.ArrayList;
-
 import semgen.utilities.WorkbenchFactory;
 import semgen.utilities.file.LoadModelJob;
 import semgen.utilities.file.SemGenOpenFileChooser;
@@ -40,14 +37,6 @@ public class AnnotatorFactory extends WorkbenchFactory<AnnotatorWorkbench>{
 		wb.initialize();
 		workbenches.add(wb);
 	}	
-	
-	public ArrayList<URI> getFileURIs() {
-		ArrayList<URI> uris = new ArrayList<URI>();
-		for (ModelAccessor modelaccessor : modelaccessors) {
-			uris.add(modelaccessor.getFileThatContainsModelAsURI());
-		}
-		return uris;
-	}
 	
 	public boolean removeFilebyIndex(int index) {
 		modelaccessors.remove(index);
