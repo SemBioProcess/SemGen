@@ -12,6 +12,7 @@ import semgen.GlobalActions;
 import semgen.SemGenSettings;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.DropDownCheckList;
 import semgen.utilities.uicomponent.SemGenTabToolbar;
@@ -151,9 +152,15 @@ public class AnnotatorToolBar extends SemGenTabToolbar implements ActionListener
 		}
 		if (o == stagebutton) {
 			try {
-				if(workbench.unsavedChanges()){
-					globalactions.NewStageTab(workbench.getModelAccessor());
-				}
+					if(workbench.getSemSimModel().hasImportedComponents())
+						SemGenError.showModelsWithImportsNotViewableInProjectTabError(false);
+					
+					else {
+						
+						if(workbench.unsavedChanges())
+							globalactions.NewStageTab(workbench.getModelAccessor());
+						
+					}
 			} catch (Exception e1) {
 				e1.printStackTrace();}
 		}

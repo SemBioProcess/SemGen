@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import semgen.SemGen;
 import semsim.utilities.ErrorEntry;
 import semsim.utilities.ErrorLog;
 
@@ -51,6 +52,14 @@ public class SemGenError {
 	public static void showInvalidOPBpropertyError(JDialog target){
 		JOptionPane.showMessageDialog(target, "That physical property is not valid for the physical entity\n or process specified in this composite annotation.",
 				"Invalid annotation", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void showModelsWithImportsNotViewableInProjectTabError(boolean suggestannotator) {
+		String msg = "SemGen cannot load models with imported components into a Project Tab yet. ";
+		
+		if(suggestannotator) msg = msg + "\nPlease try opening in the Annotator.";
+		
+		JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), msg, null, JOptionPane.WARNING_MESSAGE);
 	}
 	
 	public static boolean showSemSimErrors() {

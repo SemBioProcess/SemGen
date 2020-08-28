@@ -14,6 +14,7 @@ import semgen.stage.StageTabFactory;
 import semgen.stage.StageWorkbenchFactory;
 import semgen.stage.stagetasks.ModelInfo;
 import semgen.stage.stagetasks.ProjectTask;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenTask;
 import semgen.utilities.Workbench;
 import semgen.utilities.WorkbenchFactory;
@@ -257,10 +258,8 @@ public class SemGenGUI extends JTabbedPane implements Observer{
 		public void endTask(){
 			SemSimModel semsimmodel = lmj.getLoadedModel();
 
-			if (lmj.onStage && semsimmodel.hasImportedComponents) {
-				JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), 
-						"SemGen cannot load models with imported components into a Project Tab yet. "
-						+ "\nPlease try opening in the Annotator.", null, JOptionPane.WARNING_MESSAGE);
+			if (lmj.onStage && semsimmodel.hasImportedComponents()) {
+				SemGenError.showModelsWithImportsNotViewableInProjectTabError(true);
 				return;
 			}
 

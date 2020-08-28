@@ -12,8 +12,6 @@ import semsim.annotation.AutoAnnotate;
 import semsim.fileaccessors.JSimProjectAccessor;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
-import semsim.model.collection.Submodel;
-import semsim.model.computational.units.UnitOfMeasurement;
 import semsim.reading.OMEXmetadataReader;
 import semsim.reading.CellMLreader;
 import semsim.reading.JSimProjectFileReader;
@@ -76,22 +74,6 @@ public class LoadModelJob extends SemGenJob {
 				CellMLreader cellmlreader = new CellMLreader(modelaccessor);
 				semsimmodel = cellmlreader.read();
 
-				// Check for imported components before opening
-				if (onStage) {
-					boolean importedComponent = false;
-					for (Submodel submodel : semsimmodel.getSubmodels()) {
-						importedComponent = submodel.isImported();
-						if (importedComponent) break;
-					}
-					if (!importedComponent) {
-						for (UnitOfMeasurement unit : semsimmodel.getUnits()) {
-							importedComponent = unit.isImported();
-							if (importedComponent) break;
-						}
-					}
-					semsimmodel.hasImportedComponents = importedComponent;
-				}
-				
 				// If the semsim namespace is prefixed in the RDF, then we assume it was previously annotated
 				// and we don't perform automatic OPB annotation based on units
 				boolean previouslyannotated = (cellmlreader.rdfreader.rdf.getNsPrefixURI("semsim") != null
@@ -141,10 +123,7 @@ public class LoadModelJob extends SemGenJob {
 				}
 				return;
 			}
-			else if (semsimmodel.hasImportedComponents) {
-				System.out.println("This model has imported components, which are not yet supported in SemGen.");
-				return;
-			}
+
 			semsimmodel.setName(modelaccessor.getModelName());
 			semsimmodel.setSourceModelType(modeltype);
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);

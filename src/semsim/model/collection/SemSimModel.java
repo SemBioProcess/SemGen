@@ -89,7 +89,6 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private String namespace;
 	private ModelType sourceModelType;
 	private ModelAccessor sourcefilelocation;
-	public boolean hasImportedComponents;
 	private double semsimversion;
 	
 	// Model-specific data
@@ -551,6 +550,20 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
   		}
   		return null;
   	}
+ 	
+ 	
+ 	/**
+ 	 * @return Whether there are any imported components in the model
+ 	 */
+ 	public boolean hasImportedComponents() {
+		for (Submodel submodel : getSubmodels()) {
+			if (submodel.isImported()) return true;
+		}
+		for (UnitOfMeasurement unit : getUnits()) {
+			if (unit.isImported()) return true;
+		}
+		return false;
+ 	}
  	
  	
  	/**

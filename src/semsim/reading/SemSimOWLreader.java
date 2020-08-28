@@ -615,11 +615,12 @@ public class SemSimOWLreader extends ModelReader {
 			if(uom == null){
 				String importedfromval = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, unitind, SemSimRelation.IMPORTED_FROM.getURIasString());
 				
-				// If the unit is imported, collect import info
+				// If unit not imported
 				if(importedfromval.isEmpty() || importedfromval == null){
 					uom = new UnitOfMeasurement(unitcode);
 					semsimmodel.addUnit(uom);
 				}
+				// If the unit is imported, collect import info
 				else{
 					String referencename = getStringValueFromAnnotatedDataPropertyAxiom(ont, unitind, SemSimRelation.IMPORTED_FROM.getURI(),
 							importedfromval, SemSimRelation.REFERENCE_NAME_OF_IMPORT.getURI());
