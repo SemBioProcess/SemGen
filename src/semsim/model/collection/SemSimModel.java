@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.IRI;
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
 import semsim.annotation.Annotation;
+import semsim.annotation.Person;
 import semsim.annotation.Annotatable;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
@@ -90,6 +91,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private ModelType sourceModelType;
 	private ModelAccessor sourcefilelocation;
 	private double semsimversion;
+	
+	private Person creator;
 	
 	// Model-specific data
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -1282,8 +1285,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	public Boolean hasPhysicalDefinitionAnnotation() {
 		return false;
 	}
-		
 	// End of methods required by Annotatable interface	
+	
 	
 	public String getFirstAnnotationObjectForRelationAsString(Relation rel){
 		for(Annotation ann : getAnnotations()){
@@ -1352,6 +1355,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		this.physicalproperties.remove(pp);
 	}
 	
+	
 	@Override
 	public void replaceDataStructures(HashMap<DataStructure, DataStructure> dsmap) {
 		for (Submodel sm : submodels) {
@@ -1362,4 +1366,18 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		}
 	}
 
+	
+	/** @return The model creator */
+	public Person getCreator() {
+		return creator;
+	}
+
+	
+	/**
+	 * Set the model creator
+	 * @param creator The model creator
+	 */
+	public void setCreator(Person creator) {
+		this.creator = creator;
+	}
 }
