@@ -3,13 +3,13 @@ package semsim.annotation;
 import java.net.URI;
 
 /**
- * Class for working with identifying data on individual humans.
+ * Class for working with identifying data on humans.
  * @author mneal
  *
  */
 public class Person {
 
-	private String name = "";
+	private String name = ""; // e.g. "John Smith"
 	private String email = "";
 	private URI accountName = null; // ORCIDs would go here
 	private URI accountServiceHomepage = null;
@@ -38,6 +38,11 @@ public class Person {
 		this.name = name;
 	}
 	
+	// Constructor to initialize empty person
+	public Person() {
+		
+	}
+	
 	
 	/** @return The person's name */
 	public String getName() {
@@ -51,6 +56,14 @@ public class Person {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+	/**
+	 * @return Whether the name has been set
+	 */
+	public boolean hasName() {
+		return (getName() != null && ! getName().equals(""));
 	}
 	
 	
@@ -69,6 +82,14 @@ public class Person {
 	}
 	
 	
+	/**
+	 * @return Whether the email address has been set
+	 */
+	public boolean hasEmail() {
+		return (getEmail() != null && ! getEmail().equals(""));
+	}
+	
+	
 	/** @return The account name identifier for the person */
 	public URI getAccountName() {
 		return accountName;
@@ -84,6 +105,14 @@ public class Person {
 	}
 	
 	
+	/**
+	 * @return Whether the account name has been set for this Person
+	 */
+	public boolean hasAccountName() {
+		return getAccountName() != null;
+	}
+	
+	
 	/** @return The service homepage for the person's account name */
 	public URI getAccountServiceHomepage() {
 		return accountServiceHomepage;
@@ -96,5 +125,13 @@ public class Person {
 	 */
 	public void setAccountServiceHomepage(URI accountServiceHomepage) {
 		this.accountServiceHomepage = accountServiceHomepage;
+	}
+	
+	
+	/**
+	 * @return Whether the account service homepage has been set for this Person
+	 */
+	public boolean hasAccountServicesHomepage() {
+		return getAccountServiceHomepage() != null;
 	}
 }

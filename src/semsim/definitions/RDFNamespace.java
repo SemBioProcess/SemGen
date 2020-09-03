@@ -14,7 +14,7 @@ public enum RDFNamespace  {
 	BQB("http://biomodels.net/biology-qualifiers/", "bqbiol"),
 	BQM("http://biomodels.net/model-qualifiers/", "bqm"),
 	RDF("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf"),
-	DCTERMS("http://purl.org/dc/terms/", "dcterms"),
+	DCTERMS("https://dublincore.org/specifications/dublin-core/dcmi-terms/", "dc"),
 	DCTERMS11("http://purl.org/dc/elements/1.1/", "dcterms11"),
 	MATHML("http://www.w3.org/1998/Math/MathML", "mathml"),
 	XLINK("http://www.w3.org/1999/xlink", "xlink"),

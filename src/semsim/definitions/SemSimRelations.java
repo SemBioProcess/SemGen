@@ -239,7 +239,9 @@ public class SemSimRelations {
 	}
 	
 	public enum SemSimRelation implements Relation {
-		//Model level Relations
+		
+		//Model level relations
+		MODEL_CREATOR("creator", RDFNamespace.DCTERMS.getNamespaceAsString(), "a semsim model has some creator", RDFNamespace.DCTERMS.getOWLid()),
 		
 		// Separate relation for model-level metadata ID needed b/c OWL Annotation properties used to annotate the ontology as a whole are disjoint 
 		// from Datatype properties used to annotate, say, a data structure in a model

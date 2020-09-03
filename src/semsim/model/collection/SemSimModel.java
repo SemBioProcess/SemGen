@@ -92,7 +92,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private ModelAccessor sourcefilelocation;
 	private double semsimversion;
 	
-	private Person creator;
+	private ArrayList<Person> creators = new ArrayList<Person>();
 	
 	// Model-specific data
 	private Set<Annotation> annotations = new HashSet<Annotation>();
@@ -1367,17 +1367,27 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	}
 
 	
-	/** @return The model creator */
-	public Person getCreator() {
-		return creator;
+	/** @return The model creators */
+	public ArrayList<Person> getCreators() {
+		return creators;
 	}
 
 	
 	/**
-	 * Set the model creator
-	 * @param creator The model creator
+	 * Set the model creators
+	 * @param creatorlist The model creators
 	 */
-	public void setCreator(Person creator) {
-		this.creator = creator;
+	public void setCreators(ArrayList<Person> creatorlist) {
+		this.creators.clear();
+		this.creators.addAll(creatorlist);
+	}
+	
+	
+	/**
+	 * Add a creator to the creator list
+	 * @param creator The creator to add
+	 */
+	public void addCreator(Person creator) {
+		this.creators.add(creator);
 	}
 }

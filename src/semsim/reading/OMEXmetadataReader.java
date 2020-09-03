@@ -19,6 +19,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
+import semsim.annotation.Person;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
@@ -153,6 +154,13 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 				semsimmodel.setDescription(stmt.getObject().asLiteral().getString());
 				continue;
 			}
+			else if(prop.getURI().equals(AbstractRDFreader.dcterms_creator.getURI())) {
+				// Collect identifying info here
+				// Follow anonymous resource, if present
+				//Person aperson = new Person();
+				//semsimmodel.setCreator(creator);
+			}
+			
 			
 			Relation rel = SemSimRelations.getRelationFromURI(URI.create(stmt.getPredicate().getURI()));
 			RDFNode obj = stmt.getObject();

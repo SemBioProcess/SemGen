@@ -51,7 +51,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		// Add namespaces here
 		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("dc", RDFNamespace.DCTERMS.getNamespaceAsString());
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
 	}
 	

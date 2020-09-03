@@ -94,7 +94,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("opb", RDFNamespace.OPB.getNamespaceAsString());
 		rdf.setNsPrefix("ro", RDFNamespace.RO.getNamespaceAsString());
-		rdf.setNsPrefix("dcterms", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("dc", RDFNamespace.DCTERMS.getNamespaceAsString());
 	}	
 
 	

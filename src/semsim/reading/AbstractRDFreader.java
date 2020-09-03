@@ -59,6 +59,8 @@ public abstract class AbstractRDFreader {
 
 	public Model rdf = ModelFactory.createDefaultModel();
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
+	public static Property dcterms_creator = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "creator");
+
 	protected Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	protected ModelType modeltype;
 	public static String TEMP_BASE = "http://tempns.net/";
