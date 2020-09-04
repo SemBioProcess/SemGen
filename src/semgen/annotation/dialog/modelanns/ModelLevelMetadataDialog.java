@@ -1,9 +1,12 @@
 package semgen.annotation.dialog.modelanns;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -19,8 +22,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 import org.sbml.jsbml.CVTerm.Qualifier;
 
@@ -101,6 +106,8 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		// Add individual creator entries as
 		creatorlistpanel = new JPanel();
 		creatorlistpanel.setLayout(new BoxLayout(creatorlistpanel, BoxLayout.Y_AXIS));
+		creatorlistpanel.setAlignmentY(TOP_ALIGNMENT);
+		
 		creatorsscroller = new SemGenScrollPane(creatorlistpanel);
 		creatorsscroller.setPreferredSize(new Dimension(530,222));
 		creatorspanel.setMinimumSize(creatorsscroller.getPreferredSize());
@@ -118,6 +125,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			}
 		}
 		
+		creatorlistpanel.add(Box.createVerticalGlue());
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.setBorder(BorderFactory.createTitledBorder("Description"));
@@ -164,6 +172,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		
 		annlistpanel = new JPanel();
 		annlistpanel.setLayout(new BoxLayout(annlistpanel, BoxLayout.Y_AXIS));
+		annlistpanel.setAlignmentY(TOP_ALIGNMENT);
 		
 		// Add the individual reference ontology annotations
 		for(ReferenceOntologyAnnotation ann : semsimmodel.getReferenceOntologyAnnotations()){
@@ -301,15 +310,19 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if (o == addrefannbutton) {
-			this.annlistpanel.add(new ReferenceAnnotationTriplePanel(new ReferenceOntologyAnnotation(SemSimRelation.UNKNOWN,URI.create(""),"",SemGen.semsimlib)));
+			int numcomponents = annlistpanel.getComponentCount();
+			this.annlistpanel.add(new ReferenceAnnotationTriplePanel(
+					new ReferenceOntologyAnnotation(SemSimRelation.UNKNOWN,URI.create(""),"",SemGen.semsimlib)), 
+					numcomponents-1); // So that the panel is placed above the vertical glue at the bottom of annlistpanel
 			refannscroller.scrollToBottom();
 			refannscroller.validate();
 			refannscroller.repaint();
 		}
 		
 		else if(o == addcreatorbutton) {
-			this.creatorlistpanel.add(new JSeparator());
-			this.creatorlistpanel.add(new CreatorEntry(new Person()));
+			int numcomponents = creatorlistpanel.getComponentCount();
+			this.creatorlistpanel.add(new CreatorEntry(new Person()), 
+					numcomponents-1); // So that panel is placed above vertical glue in creatorlistpanel
 			creatorsscroller.scrollToBottom();
 			creatorsscroller.validate();
 			creatorsscroller.repaint();
@@ -329,7 +342,8 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		private ReferenceAnnotationTriplePanel(ReferenceOntologyAnnotation ann){
 			jcb = new AnnotationComboBox(ann.getRelation());
 			jta = new JTextArea();
-			jta.setPreferredSize(new Dimension(310,30));
+			jta.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+			//jta.setMinimumSize(new Dimension(350,100));
 			jta.setText(ann.getReferenceURI().toString());
 			
 			removelabel = new ComponentPanelLabel(SemGenIcon.eraseicon,"Remove annotation") {
@@ -338,8 +352,16 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				}
 			};
 			
+			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+			setAlignmentX(LEFT_ALIGNMENT);
+			setMaximumSize(new Dimension(530, 40));
+			//setMinimumSize(new Dimension(, 40));
+			setBorder(BorderFactory.createEmptyBorder(3, 3, 0, 3));
 			add(jcb);
-			add(jta);
+			JScrollPane scroller = new JScrollPane(jta);
+			scroller.setPreferredSize(new Dimension(350,40));
+			scroller.setMinimumSize(new Dimension(300, 40));
+			add(scroller, BorderLayout.PAGE_START);
 			add(removelabel);
 		}
 		
@@ -364,13 +386,14 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			private ComponentPanelLabel accountnameremovelabel;
 			private ComponentPanelLabel accounthomepageremovelabel;
 
-			private int textboxwidth = 160;
+			private int textboxwidth = 175;
 			
 			@SuppressWarnings("serial")
 			private CreatorEntry(Person person){
 				
 				setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				setAlignmentY(TOP_ALIGNMENT);
+				setMaximumSize(new Dimension(530, 160));
 				
 				nameremovelabel = new ComponentPanelLabel(SemGenIcon.eraseicon,"Remove annotation") {
 					public void onClick() {
@@ -396,21 +419,10 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 					}
 				};
 				
-				namejta = new JTextArea(person.getName());
-				namejta.setPreferredSize(new Dimension(textboxwidth,25));
-				namejta.setMaximumSize(new Dimension(textboxwidth,25));
-
-				emailjta = new JTextArea(person.getEmail());
-				emailjta.setPreferredSize(new Dimension(textboxwidth,25));
-				emailjta.setMaximumSize(new Dimension(textboxwidth,25));
-
-				accountnamejta = new JTextArea();
-				accountnamejta.setPreferredSize(new Dimension(textboxwidth,25));
-				accountnamejta.setMaximumSize(new Dimension(textboxwidth,25));
-
-				accounthomepagejta = new JTextArea();
-				accounthomepagejta.setPreferredSize(new Dimension(textboxwidth,25));
-				accounthomepagejta.setMaximumSize(new Dimension(textboxwidth,25));
+				namejta = makeTextArea(person.getName());
+				emailjta = makeTextArea(person.getEmail());
+				accountnamejta = makeTextArea("");
+				accounthomepagejta = makeTextArea("");
 
 				if(person.hasAccountName()) 
 					accountnamejta.setText(person.getAccountName().toString());
@@ -422,43 +434,50 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				else
 					accounthomepagejta.setText("");
 				
-				JPanel toppanel = new JPanel();
-				toppanel.setLayout(new BoxLayout(toppanel, BoxLayout.X_AXIS));
-				toppanel.setAlignmentX(LEFT_ALIGNMENT);
-				toppanel.setPreferredSize(new Dimension(400,25));
-				toppanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));;
+				JPanel namepanel = makeFieldPanel("Name", namejta, nameremovelabel);
+				JPanel emailpanel = makeFieldPanel("Email", emailjta, emailremovelabel);
+				JPanel accountnamepanel = makeFieldPanel("Account name", accountnamejta, accountnameremovelabel);
+				JPanel accounthomepagepanel = makeFieldPanel("Account homepage", accounthomepagejta, accounthomepageremovelabel);
 
-				toppanel.add(new JLabel("Name"));
-				toppanel.add(namejta);
-				toppanel.add(nameremovelabel);
-				toppanel.add(Box.createHorizontalStrut(15));
-				toppanel.add(new JLabel("Account name"));
-				toppanel.add(accountnamejta);
-				toppanel.add(accountnameremovelabel);
+				add(namepanel);
+				add(emailpanel);
+				add(accountnamepanel);
+				add(accounthomepagepanel);
 				
-				JPanel bottompanel = new JPanel();
-				bottompanel.setLayout(new BoxLayout(bottompanel, BoxLayout.X_AXIS));
-				bottompanel.setAlignmentX(LEFT_ALIGNMENT);
-				toppanel.setPreferredSize(new Dimension(400,25));
-				bottompanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));;
-				
-				bottompanel.add(new JLabel("Email"));
-				bottompanel.add(emailjta);
-				bottompanel.add(emailremovelabel);
-				bottompanel.add(Box.createHorizontalStrut(15));
-				bottompanel.add(new JLabel("Account homepage"));
-				bottompanel.add(accounthomepagejta);
-				bottompanel.add(accounthomepageremovelabel);
-				
-				add(toppanel);
-				add(bottompanel);
-				add(Box.createVerticalGlue());
+				setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
 			}
 			
 			private void eraseButtonClicked(JTextArea area){
 				area.setText("");
 				area.validate();
 				area.repaint();
+			}
+			
+			private JTextArea makeTextArea(String text) {
+				JTextArea ta = new JTextArea();
+				ta.setMargin(new Insets(0,0,0,0));
+				ta.setText(text);
+				ta.setPreferredSize(new Dimension(textboxwidth,35));
+				ta.setMaximumSize(ta.getPreferredSize());
+				ta.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+				ta.setLineWrap(true);
+				
+				return ta;
+			}
+			
+			private JPanel makeFieldPanel(String labeltext, JTextArea ta, ComponentPanelLabel removelabel) {
+				JPanel apanel = new JPanel();
+				apanel.setLayout(new BoxLayout(apanel, BoxLayout.X_AXIS));
+				apanel.setAlignmentX(LEFT_ALIGNMENT);
+				apanel.setPreferredSize(new Dimension(520,30));
+				apanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));
+				JLabel label = new JLabel(labeltext);
+				label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+				apanel.add(label);
+				apanel.add(Box.createHorizontalStrut(5));
+				apanel.add(new JScrollPane(ta), BorderLayout.PAGE_START);
+				apanel.add(removelabel);
+				return apanel;
 			}
 			
 			private boolean hasSomeData() {
@@ -477,6 +496,8 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		private Relation selectedrelation = null;
 		
 		private AnnotationComboBox(Relation rel){
+			this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+			this.setMaximumSize(new Dimension(100,30));
 			this.selectedrelation = rel;
 			initialize();
 		}
