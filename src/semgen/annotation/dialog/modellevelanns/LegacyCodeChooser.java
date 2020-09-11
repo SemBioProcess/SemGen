@@ -1,4 +1,4 @@
-package semgen.annotation.dialog.modelanns;
+package semgen.annotation.dialog.modellevelanns;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

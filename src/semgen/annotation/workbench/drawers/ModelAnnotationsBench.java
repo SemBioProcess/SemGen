@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.openjena.atlas.lib.Pair;
 
-import semgen.annotation.dialog.modelanns.LegacyCodeChooser;
+import semgen.annotation.dialog.modellevelanns.LegacyCodeChooser;
 import semsim.annotation.Annotation;
 import semsim.annotation.CurationalMetadata;
 import semsim.annotation.CurationalMetadata.Metadata;

@@ -1,4 +1,4 @@
-package semgen.annotation.dialog.modelanns;
+package semgen.annotation.dialog.modellevelanns;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

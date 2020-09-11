@@ -2,12 +2,15 @@ package semsim.annotation;
 
 import java.net.URI;
 
+import semsim.SemSimObject;
+import semsim.definitions.SemSimTypes;
+
 /**
  * Class for working with identifying data on humans.
  * @author mneal
  *
  */
-public class Person {
+public class Person extends SemSimObject {
 
 	private String name = ""; // e.g. "John Smith"
 	private String email = "";
@@ -16,6 +19,7 @@ public class Person {
 	
 	// Constructor to use if entering values for all identifier fields
 	public Person(String name, String email, URI accountName, URI accountServiceHomepage) {
+		super(SemSimTypes.PERSON);
 		this.name = name;
 		this.email = email;
 		this.accountName = accountName;
@@ -24,27 +28,31 @@ public class Person {
 	
 	// Constructor to use if only an ORCID is used to identify a person
 	public Person(URI accountName) {
+		super(SemSimTypes.PERSON);
 		this.accountName = accountName;
 	}
 	
 	// Constructor to use if only using name and email identifiers
 	public Person(String name, String email) {
+		super(SemSimTypes.PERSON);
 		this.name = name;
 		this.email = email;
 	}
 	
 	// Constructor to use if only using name identifier
 	public Person(String name) {
+		super(SemSimTypes.PERSON);
 		this.name = name;
 	}
 	
 	// Constructor to initialize empty person
 	public Person() {
-		
+		super(SemSimTypes.PERSON);
 	}
 	
 	
 	/** @return The person's name */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -109,7 +117,8 @@ public class Person {
 	 * @return Whether the account name has been set for this Person
 	 */
 	public boolean hasAccountName() {
-		return getAccountName() != null;
+		if(getAccountName()==null) return false;
+		else return ! getAccountName().toString().trim().equals("");
 	}
 	
 	
@@ -132,6 +141,24 @@ public class Person {
 	 * @return Whether the account service homepage has been set for this Person
 	 */
 	public boolean hasAccountServicesHomepage() {
-		return getAccountServiceHomepage() != null;
+		if(getAccountServiceHomepage()==null) return false;
+		else return ! getAccountServiceHomepage().toString().trim().equals("");
+	}
+	
+	
+	/**
+	 * Overrides SemSimObject method and returns an empty string
+	 */
+	@Override
+	public String getDescription() {
+		return "";
+	}
+	
+	
+	/**
+	 * @return True if only account name for the Person has been set.
+	 */
+	public boolean onlyAccountNameIsSet() {
+		return (hasAccountName() && ! hasName() && ! hasEmail() && ! hasAccountServicesHomepage());
 	}
 }

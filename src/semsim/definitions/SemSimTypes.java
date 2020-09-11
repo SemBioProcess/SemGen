@@ -13,6 +13,7 @@ public enum SemSimTypes {
 	SEMSIM_COMPONENT("SemSim Component", RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_component", "", ""),
 	MODEL("SemSim Model", RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSim_Model", "", "SemSim:SemSim_Model"),
 	SUBMODEL("Submodel", RDFNamespace.SEMSIM.getNamespaceAsString() + "Submodel", "", "SemSim:Submodel"),
+	PERSON("Person", RDFNamespace.SEMSIM.getNamespaceAsString() + "Person","","SemSim:Person"),
 	PHYSICAL_MODEL_COMPONENT("Physical Model Component", RDFNamespace.SEMSIM.getNamespaceAsString() + "Physical_model_component", "", ""),
 	PHYSICAL_PROPERTY("Singular Physical Property", RDFNamespace.SEMSIM.getNamespaceAsString() + "Physical_property", 
 			"A reference term that precisely defines a biophysical property simulated in the model.", "SemSim:Physical_property"),

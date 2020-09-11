@@ -489,6 +489,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getComputationalModelComponents());
 		set.addAll(getPhysicalModelComponents());
 		set.addAll(getSubmodels());
+		set.addAll(getCreators());
 		return set;
 	}
 	

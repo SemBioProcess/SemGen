@@ -10,7 +10,7 @@ import semgen.annotation.annotatorpane.SubmodelAnnotationPanel;
 import semgen.annotation.componentlistpanes.AnnotatorButtonTree;
 import semgen.annotation.componentlistpanes.CodewordListPane;
 import semgen.annotation.componentlistpanes.SubmodelListPane;
-import semgen.annotation.dialog.modelanns.ModelLevelMetadataDialog;
+import semgen.annotation.dialog.modellevelanns.ModelLevelMetadataDialog;
 import semgen.annotation.termlibrarydialog.ReferenceLibraryDialog;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.AnnotatorWorkbench.LibraryRequest;

@@ -242,6 +242,10 @@ public class SemSimRelations {
 		
 		//Model level relations
 		MODEL_CREATOR("creator", RDFNamespace.DCTERMS.getNamespaceAsString(), "a semsim model has some creator", RDFNamespace.DCTERMS.getOWLid()),
+		FOAF_NAME("name", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some name", RDFNamespace.FOAF.getOWLid()),
+		FOAF_MBOX("mbox", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some email address", RDFNamespace.FOAF.getOWLid()),
+		FOAF_ACCOUNT_NAME("accountName", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some online account name", RDFNamespace.FOAF.getOWLid()),
+		FOAF_ACCOUNT_SERVICE_HOMEPAGE("accountServiceHomepage", RDFNamespace.FOAF.getNamespaceAsString(), "a person's online account name has some associated website", RDFNamespace.FOAF.getOWLid()),
 		
 		// Separate relation for model-level metadata ID needed b/c OWL Annotation properties used to annotate the ontology as a whole are disjoint 
 		// from Datatype properties used to annotate, say, a data structure in a model

@@ -16,6 +16,7 @@ public enum RDFNamespace  {
 	RDF("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf"),
 	DCTERMS("https://dublincore.org/specifications/dublin-core/dcmi-terms/", "dc"),
 	DCTERMS11("http://purl.org/dc/elements/1.1/", "dcterms11"),
+	FOAF("http://xmlns.com/foaf/0.1/", "foaf"),
 	MATHML("http://www.w3.org/1998/Math/MathML", "mathml"),
 	XLINK("http://www.w3.org/1999/xlink", "xlink"),
 	CELLML1_0("http://www.cellml.org/cellml/1.0#", "cellml"),

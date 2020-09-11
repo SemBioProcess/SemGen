@@ -10,6 +10,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 
 import semsim.annotation.Annotation;
+import semsim.annotation.Person;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
@@ -52,6 +53,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		rdf.setNsPrefix("bqbiol", RDFNamespace.BQB.getNamespaceAsString());
 		rdf.setNsPrefix("bqmodel", RDFNamespace.BQM.getNamespaceAsString());
 		rdf.setNsPrefix("dc", RDFNamespace.DCTERMS.getNamespaceAsString());
+		rdf.setNsPrefix("foaf", RDFNamespace.FOAF.getNamespaceAsString());
 		rdf.setNsPrefix("semsim", RDFNamespace.SEMSIM.getNamespaceAsString());
 	}
 	
@@ -62,6 +64,45 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 //			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
 		Resource modelresource = rdf.createResource(modelnamespaceinRDF);
 
+		
+		// Save model creator information
+		for(Person creator : semsimmodel.getCreators()) {
+			
+			// If only the account name is set (e.g. an ORCID), use a single triple to indicate the creator
+			if(creator.onlyAccountNameIsSet()) {
+				Resource idres = rdf.createResource(creator.getAccountName().toString());
+				Statement st = rdf.createStatement(modelresource, SemSimRelation.MODEL_CREATOR.getRDFproperty(), idres);
+				addStatement(st);
+			}
+			// Otherwise create a local resource representing the creator and link identifying into to it
+			else {
+				
+				// Create local resource for creator
+				if( ! creator.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", creator);
+				Resource creatorres = rdf.createResource(localnamespaceinRDF + "#" + creator.getMetadataID());
+				Statement creatorst = rdf.createStatement(modelresource, SemSimRelation.MODEL_CREATOR.getRDFproperty(), creatorres);
+				addStatement(creatorst);
+				
+				if(creator.hasName()) {
+					Statement namest = rdf.createStatement(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty(), creator.getName());
+					addStatement(namest);
+				}
+				if(creator.hasEmail()) {
+					Statement emailst = rdf.createStatement(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty(), rdf.createResource("mailto:" + creator.getEmail()));
+					addStatement(emailst);
+				}
+				if(creator.hasAccountName()) {
+					Statement acctnamest = rdf.createStatement(creatorres,  SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty(), rdf.createResource(creator.getAccountName().toString()));
+					addStatement(acctnamest);
+				}
+				if(creator.hasAccountServicesHomepage()) {
+					Statement accthpst = rdf.createStatement(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty(),
+							rdf.createResource(creator.getAccountServiceHomepage().toString()));
+					addStatement(accthpst);
+				}
+			}
+		}
+		
 		// Save model description
 		if(semsimmodel.hasDescription()){
 			Property prop = rdf.createProperty(AbstractRDFreader.dcterms_description.getURI());
