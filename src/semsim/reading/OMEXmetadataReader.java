@@ -154,21 +154,54 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 				semsimmodel.setDescription(stmt.getObject().asLiteral().getString());
 				continue;
 			}
+			// If it's a statement about a model creator, collect the info
 			else if(prop.getURI().equals(AbstractRDFreader.dcterms_creator.getURI())) {
-				// Collect identifying info here
-				// Follow anonymous resource, if present
-				//Person aperson = new Person();
-				//semsimmodel.setCreator(creator);
+				
+				Resource creatorres = stmt.getObject().asResource();
+				Person creator = new Person();
+				
+				// If the object in the <creator> triple is a local resource
+				if(creatorres.getURI().startsWith(localnamespaceinRDF)) {
+					
+					// Set name
+					NodeIterator nameit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty());
+					
+					if( nameit.hasNext() ) creator.setName(nameit.next().asLiteral().toString());
+					
+					// Set email
+					NodeIterator emailit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty());
+					
+					if( emailit.hasNext() )	creator.setEmail(emailit.next().asResource().getURI().replace("mailto:", ""));
+					
+					// Set account name
+					NodeIterator acctnameit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty());
+					
+					if( acctnameit.hasNext() ) creator.setAccountName(URI.create(acctnameit.next().asResource().getURI()));
+					
+					// Set account service homepage
+					NodeIterator accthpit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty());
+					
+					if( accthpit.hasNext() ) creator.setAccountServiceHomepage(URI.create(accthpit.next().asResource().getURI()));
+				}
+				
+				// Otherwise we assume that the object in the statement is an account name
+				else {
+					creator.setAccountName(URI.create(creatorres.getURI()));
+				}
+				
+				semsimmodel.addCreator(creator);
 			}
 			
-			
-			Relation rel = SemSimRelations.getRelationFromURI(URI.create(stmt.getPredicate().getURI()));
-			RDFNode obj = stmt.getObject();
-			
-			if(obj.isResource() && rel!=null)
-				semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj.asResource().getURI()), "", sslib);
-			else if(rel!=null)
-				semsimmodel.addAnnotation(new Annotation(rel,obj.asLiteral().getString()));
+			else {
+				// Collect model-level annotation that is not the description or a creator
+				Relation rel = SemSimRelations.getRelationFromURI(URI.create(stmt.getPredicate().getURI()));
+				RDFNode obj = stmt.getObject();
+				
+				if(obj.isResource() && rel!=null)
+					semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj.asResource().getURI()), "", sslib);
+				else if(rel!=null)
+					semsimmodel.addAnnotation(new Annotation(rel,obj.asLiteral().getString()));
+			}
 		}
 	}
 	

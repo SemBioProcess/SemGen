@@ -127,6 +127,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		descriptionarea = new JTextArea();
 		descriptionarea.setWrapStyleWord(true);
 		descriptionarea.setLineWrap(true);
+		descriptionarea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 
 		SemGenScrollPane descriptionscroller = new SemGenScrollPane(descriptionarea);
 		descriptionscroller.setPreferredSize(new Dimension(530,222));
@@ -143,6 +144,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		cellmldocumentationarea = new JTextArea();
 		cellmldocumentationarea.setWrapStyleWord(true);
 		cellmldocumentationarea.setLineWrap(true);
+		cellmldocumentationarea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 
 		SemGenScrollPane cellmldocumentationscroller = new SemGenScrollPane(cellmldocumentationarea);
 		cellmldocumentationscroller.setPreferredSize(new Dimension(530,222));
@@ -413,7 +415,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				
 				JPanel namepanel = makeFieldPanel("Name", namejta, nameremovelabel);
 				JPanel emailpanel = makeFieldPanel("Email", emailjta, emailremovelabel);
-				JPanel accountnamepanel = makeFieldPanel("Account name", accountnamejta, accountnameremovelabel);
+				JPanel accountnamepanel = makeFieldPanel("Account name (e.g. ORCID)", accountnamejta, accountnameremovelabel);
 				JPanel accounthomepagepanel = makeFieldPanel("Account homepage", accounthomepagejta, accounthomepageremovelabel);
 
 				add(Box.createVerticalStrut(4));
