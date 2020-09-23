@@ -29,6 +29,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
+import semsim.annotation.Person;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.ReferenceTerm;
 import semsim.annotation.Relation;
@@ -128,11 +129,11 @@ public class SemSimOWLwriter extends ModelWriter {
 			setRelations();
 			addSubModels();
 			addAnnotationsOnCustomPhysicalComponents();
+			addModelLevelAnnotations();
 		} catch (OWLException e) {
 			e.printStackTrace();
 		}
 		
-		addModelAnnotations();
 		
 		return ont;
 	}
@@ -677,7 +678,7 @@ public class SemSimOWLwriter extends ModelWriter {
 	 * Add the model's curational metadata
 	 * @throws OWLException
 	 */
-	private void addModelAnnotations() {
+	private void addModelLevelAnnotations() throws OWLException {
 		SemSimOWLFactory.addOntologyAnnotation(ont, SemSimLibrary.SEMSIM_VERSION_IRI, Double.toString(SemSimLibrary.SEMSIM_VERSION), manager);
 
 		if(semsimmodel.getLegacyCodeLocation()!=null){
@@ -694,6 +695,39 @@ public class SemSimOWLwriter extends ModelWriter {
 		if(semsimmodel.hasDescription())
 			SemSimOWLFactory.addOntologyAnnotation(ont, OWLRDFVocabulary.RDFS_COMMENT.getIRI(), semsimmodel.getDescription(), manager);
 		
+		for(Person creator : semsimmodel.getCreators()) {
+			// If only the account name is set (e.g. an ORCID), use a single statement to indicate the creator
+			if(creator.onlyAccountNameIsSet()) {
+				String acctname = creator.getAccountName().toString();
+				SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_CREATOR.getIRI(), acctname, manager);
+			}
+			// Otherwise create a local resource representing the creator and link identifying into to it
+			else {
+				// Create OWL individual representing creator
+				if( ! creator.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", creator);
+
+				String creatorind = namespace + creator.getMetadataID();
+				IRI creatoriri = IRI.create(creatorind);
+				SemSimOWLFactory.createSemSimIndividual(ont, creatorind, 
+						factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);
+				
+				SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_CREATOR.getURIasString(), 
+						factory.getOWLNamedIndividual(creatoriri), manager);
+				
+				if(creator.hasName())
+					SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_NAME, creator.getName(), manager);
+
+				if(creator.hasEmail())
+					SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_MBOX, creator.getEmail(), manager);
+				
+				if(creator.hasAccountName())
+					SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_ACCOUNT_NAME, creator.getAccountName().toString(), manager);
+				
+				if(creator.hasAccountServicesHomepage())
+					SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE, creator.getAccountServiceHomepage().toString(), manager);
+				
+			}
+		}
 		
 		// Write out reference ontology annotations. Because we can't use the same relation as an annotation property
 		// and as a datatype property. So we limit the model-level annotations to bqmodel qualifiers.
