@@ -252,7 +252,9 @@ public class SBMLreader extends ModelReader{
 				Qualifier qual = cv.getQualifier();
 				Relation rel = qual.isBiologicalQualifier() ? SemSimRelations.getRelationFromBiologicalQualifier(qual) :
 					SemSimRelations.getRelationFromModelQualifier(qual);
-				semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj), "", sslib);
+				
+				if(rel!=null) // Some BioModels use bqmodel:hasProperty, which is not a Qualifier in JSBML
+					semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(obj), "", sslib);
 			}
 		}
 	}
