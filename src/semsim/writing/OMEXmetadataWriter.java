@@ -342,7 +342,8 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					if (cpe.getArrayListOfEntities().size()>1) {
 						
 						// Get the Resource corresponding to the index entity of the composite entity
-						Resource indexresource = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
+						URI indexuri = setCompositePhysicalEntityMetadata(cpe);
+						Resource indexresource = rdf.getResource(indexuri.toString());
 						Statement propofst = rdf.createStatement(
 								ares, 
 								SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
