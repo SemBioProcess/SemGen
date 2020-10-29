@@ -528,11 +528,6 @@ public class SBMLwriter extends ModelWriter {
 				
 				PhysicalEntity indexent = fullcpe.getArrayListOfEntities().get(0);
 				
-				System.out.println(ds.getName());
-				System.out.println("MetaID on fullcpe: " + fullcpe.getMetadataID());
-				System.out.println("MetaID on indexpmc: " + fullcpe.getArrayListOfEntities().get(0).getMetadataID());
-
-				
 				Species species = sbmlmodel.createSpecies(ds.getName(), cptmt);
 				
 				if(indexent instanceof CustomPhysicalEntity)
