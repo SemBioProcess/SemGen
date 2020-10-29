@@ -125,7 +125,7 @@ public class LoadModelJob extends SemGenJob {
 			}
 
 			semsimmodel.setName(modelaccessor.getModelName());
-			semsimmodel.setSourceModelType(modeltype);
+			semsimmodel.setSourceModelType(modeltype); // TODO: Already set for SBML and CellML models in their readers, do same for other model types
 			SemSimUtil.regularizePhysicalProperties(semsimmodel, SemGen.semsimlib);
 		}
 		else

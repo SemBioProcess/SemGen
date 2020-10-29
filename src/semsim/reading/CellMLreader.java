@@ -34,6 +34,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.computational.datastructures.MappableVariable;
 import semsim.model.computational.units.UnitFactor;
 import semsim.model.computational.units.UnitOfMeasurement;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.AbstractRDFwriter;
 
@@ -59,6 +60,9 @@ public class CellMLreader extends ModelReader {
 	
 	@Override
 	public SemSimModel read() throws IOException, JDOMException {
+		
+		semsimmodel.setSourceModelType(ModelType.CELLML_MODEL);
+		
 		xmloutputter.setFormat(Format.getPrettyFormat());
 		
 		Document doc = modelaccessor.getJDOMDocument();

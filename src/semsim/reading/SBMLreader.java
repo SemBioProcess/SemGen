@@ -98,6 +98,7 @@ import semsim.model.physical.object.ReferencePhysicalDependency;
 import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.model.physical.object.ReferencePhysicalProcess;
 import semsim.owl.SemSimOWLFactory;
+import semsim.reading.ModelClassifier.ModelType;
 import semsim.utilities.SemSimUtil;
 import semsim.writing.SBMLwriter;
 
@@ -131,6 +132,8 @@ public class SBMLreader extends ModelReader{
 	public SemSimModel read() throws IOException, InterruptedException,
 			OWLException, XMLStreamException, JDOMException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError {
 		
+		semsimmodel.setSourceModelType(ModelType.SBML_MODEL);
+
 		// Load the SBML file into a new SBML model
 		InputStream instream = modelaccessor.modelInStream();
 		
@@ -230,7 +233,7 @@ public class SBMLreader extends ModelReader{
 		collectEvents();
 		collectInitialAssignments();
 		setComputationalDependencyNetwork();
-	
+			
 		return semsimmodel;
 	}
 	
