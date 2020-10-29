@@ -528,6 +528,11 @@ public class SBMLwriter extends ModelWriter {
 				
 				PhysicalEntity indexent = fullcpe.getArrayListOfEntities().get(0);
 				
+				System.out.println(ds.getName());
+				System.out.println("MetaID on fullcpe: " + fullcpe.getMetadataID());
+				System.out.println("MetaID on indexpmc: " + fullcpe.getArrayListOfEntities().get(0).getMetadataID());
+
+				
 				Species species = sbmlmodel.createSpecies(ds.getName(), cptmt);
 				
 				if(indexent instanceof CustomPhysicalEntity)
@@ -1308,6 +1313,28 @@ public class SBMLwriter extends ModelWriter {
 		
 		if(semsimmodel.hasMetadataID()) usedmetaids.add(semsimmodel.getMetadataID());
 		
+		// Collect all metadata IDs on global and local parameters so we can determine
+		// whether to use the local namespace or model namespace when writing out
+		// OMEX metadata
+		Set<String> parmetaids = new HashSet<String>();
+		
+		// Go through global parameters first
+		for(int i=0; i<sbmlmodel.getParameterCount(); i++) {
+			Parameter par = sbmlmodel.getParameter(i);
+			
+			if(par.isSetMetaId()) parmetaids.add(par.getMetaId());
+		}
+		
+		// Then do local parameters in reactions
+		for(int j=0; j<sbmlmodel.getReactionCount(); j++) {
+			
+			for(int k=0; k<sbmlmodel.getReaction(j).getKineticLaw().getLocalParameterCount(); k++) {
+				LocalParameter lpar = sbmlmodel.getReaction(j).getKineticLaw().getLocalParameter(k);
+				
+				if(lpar.isSetMetaId()) parmetaids.add(lpar.getMetaId());
+			}
+		}
+		
 		for(DataStructure ds : semsimmodel.getAssociatedDataStructures()){
 			// Only the info for parameters are stored (i.e. not compartments, species or reactions)
 			// because the <species> and <reaction> elements already contain the needed info, and 
@@ -1325,7 +1352,12 @@ public class SBMLwriter extends ModelWriter {
 					usedmetaids.add(metadataID);
 				}
 				
-				String resuri = rdfwriter.getModelNamespace() + "#" + metadataID;
+				// Use local namespace unless the data structure is linked to an SBML parameter
+				String resuri = rdfwriter.getLocalNamespace() + "#" + metadataID;
+				
+				if( parmetaids.contains(metadataID) ) 
+					resuri = rdfwriter.getModelNamespace() + "#" + metadataID;
+				
 				resuri = resuri.replaceAll("##", "#"); // In case model namespace ends in #
 				Resource ares = rdfwriter.rdf.createResource(resuri);
 				

@@ -696,17 +696,30 @@ public class SemSimOWLwriter extends ModelWriter {
 			SemSimOWLFactory.addOntologyAnnotation(ont, OWLRDFVocabulary.RDFS_COMMENT.getIRI(), semsimmodel.getDescription(), manager);
 		
 		for(Person creator : semsimmodel.getCreators()) {
-			// If only the account name is set (e.g. an ORCID), use a single statement to indicate the creator
+			
+			if( ! creator.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", creator);
+
+			// If only the account name is set (e.g. an ORCID), we still create an individual from the orcid ID
 			if(creator.onlyAccountNameIsSet()) {
-				String acctname = creator.getAccountName().toString();
-				SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_CREATOR.getIRI(), acctname, manager);
+				
+				String creatorind = creator.getAccountName().toString();
+				IRI creatoriri = IRI.create(creatorind);
+				SemSimOWLFactory.createSemSimIndividual(ont, creatorind, 
+						factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);
+				
+				SemSimOWLFactory.addOntologyAnnotation(ont, SemSimRelation.MODEL_CREATOR.getURIasString(), 
+						factory.getOWLNamedIndividual(creatoriri), manager);
+				
+				SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_ACCOUNT_NAME, 
+						creator.getAccountName().toString(), manager);
 			}
 			// Otherwise create a local resource representing the creator and link identifying into to it
 			else {
 				// Create OWL individual representing creator
-				if( ! creator.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", creator);
-
 				String creatorind = namespace + creator.getMetadataID();
+				
+				if(creator.hasAccountName()) creatorind = creator.getAccountName().toString();
+
 				IRI creatoriri = IRI.create(creatorind);
 				SemSimOWLFactory.createSemSimIndividual(ont, creatorind, 
 						factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);

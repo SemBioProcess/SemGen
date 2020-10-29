@@ -148,7 +148,7 @@ public class SemSimOWLreader extends ModelReader {
 		if (verifyModel()) return semsimmodel;
 		
 		setPhysicalDefinitionURI();
-		collectModelAnnotations();
+		collectModelLevelAnnotations();
 		collectReferenceClasses();
 		collectCompositeEntities();
 		collectProcesses();
@@ -203,7 +203,7 @@ public class SemSimOWLreader extends ModelReader {
 	 * @throws JDOMException
 	 * @throws IOException
 	 */
-	private void collectModelAnnotations() throws JDOMException, IOException {
+	private void collectModelLevelAnnotations() throws JDOMException, IOException {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
 		
@@ -236,7 +236,16 @@ public class SemSimOWLreader extends ModelReader {
 			if(named.getProperty().getIRI().equals(OWLRDFVocabulary.RDFS_COMMENT.getIRI())){
 				semsimmodel.setDescription(((OWLLiteral)named.getValue()).getLiteral());
 				annstoremove.add(named);
-			}	
+			}
+			
+			if(named.getProperty().getIRI().equals(SemSimRelation.MODEL_CREATOR.getIRI())) {
+				// Collect info associated with the creator individual
+				IRI creatoriri = (IRI)named.getValue();
+				
+//				System.out.println(named.getValue().getClass()); IRI
+//				System.out.println(named.isDeprecatedIRIAnnotation()); false
+
+			}
 		}
 		
 		anns.removeAll(annstoremove);

@@ -301,6 +301,9 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
 		
+		// Creates the isVersionOf statement linking the data structure to an OPB term.
+		// Then creates statements linking the data structure to what it's a property of.
+		// Note: data structures and physical property instances get conflated in OMEX metadata.
 		if(ds.hasPhysicalProperty()){
 			Property iccfprop = SemSimRelation.BQB_IS_VERSION_OF.getRDFproperty();
 			URI physpropuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -337,9 +340,9 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					
 					// If there is more than one physical entity in the composite physical entity...
 					if (cpe.getArrayListOfEntities().size()>1) {
+						
 						// Get the Resource corresponding to the index entity of the composite entity
-						URI indexuri = setCompositePhysicalEntityMetadata(cpe);
-						Resource indexresource = rdf.getResource(indexuri.toString());
+						Resource indexresource = getResourceForPMCandAnnotate(cpe.getArrayListOfEntities().get(0));
 						Statement propofst = rdf.createStatement(
 								ares, 
 								SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
