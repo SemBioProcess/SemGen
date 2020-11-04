@@ -40,9 +40,13 @@ public abstract class CustomPhysicalProcessOptionPane extends CustomTermOptionPa
 		
 		// If process is from an SBML model in an OMEX archive, don't allow
 		// users to change the participant info, since it's embedded in the SBML
-		if(library.getPhysicalProcess(termindex).isFromSBMLinOMEXarchive()) { 
-			for(ParticipantEditor ed : editors) {
-				ed.setEditable(false);
+		if(termindex != -1) {
+			
+			if(library.getPhysicalProcess(termindex).isFromSBMLinOMEXarchive()) { 
+				
+				for(ParticipantEditor ed : editors) {
+					ed.setEditable(false);
+				}
 			}
 		}
 	}
