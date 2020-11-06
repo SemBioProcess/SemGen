@@ -1,9 +1,9 @@
-http://bhi.washington.edu/OPB#OPB_00340; Concentration of chemical
+http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
 http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
 http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
 http://bhi.washington.edu/OPB#OPB_00593; Chemical concentration flow rate
 http://bhi.washington.edu/OPB#OPB_00592; Chemical molar flow rate
-http://bhi.washington.edu/OPB#OPB_00506; Electrical potential
+http://bhi.washington.edu/OPB#OPB_00506; Voltage
 http://bhi.washington.edu/OPB#OPB_01581; Nernst reversal potential
 http://bhi.washington.edu/OPB#OPB_00293; Temperature
 http://bhi.washington.edu/OPB#OPB_00509; Fluid pressure
