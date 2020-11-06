@@ -1,4 +1,4 @@
-http://bhi.washington.edu/OPB#OPB_00340; Chemical concentration
+http://bhi.washington.edu/OPB#OPB_00340; Concentration of chemical
 http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
 http://bhi.washington.edu/OPB#OPB_00318; Charge flow rate
 http://bhi.washington.edu/OPB#OPB_00593; Chemical concentration flow rate
