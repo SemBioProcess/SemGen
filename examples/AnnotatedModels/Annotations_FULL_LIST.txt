@@ -360,7 +360,7 @@ Reaction R14 flux; cooling_hunter_crampin_2007
 Chemical flow rate of Binding of ligand to receptor; cooling_hunter_crampin_2007
 Reaction R1 flux; cooling_hunter_crampin_2007
 Chemical concentration of "G-alpha-GDP" in Plasma membrane in Regular atrial cardiac myocyte; cooling_hunter_crampin_2007
-Area density of free inactive G-protein. "...represents the densities of a species required to form that mobile messenger—the amount of free G-alpha-GDP."; cooling_hunter_crampin_2007
+Area density of free inactive G-protein. "...represents the densities of a species required to form that mobile messengerï¿½the amount of free G-alpha-GDP."; cooling_hunter_crampin_2007
 Chemical flow rate of Binding of calcium to G-alpha-GTP-bound PLC-beta; cooling_hunter_crampin_2007
 Reaction R11 flux; cooling_hunter_crampin_2007
 Chemical flow rate of Binding of calcium to PLC-beta; cooling_hunter_crampin_2007
