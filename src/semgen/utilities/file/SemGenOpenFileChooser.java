@@ -52,7 +52,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	}
 		
 	private void openFile(Set<ModelAccessor> modelaccessors) {
-		if (showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+		if (showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
 			modelaccessors.addAll(getSelectedFilesAsModelAccessors());
 		}
@@ -63,7 +63,7 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	}
 	
 	private void openFile() {	
-		int choice = showOpenDialog(this);
+		int choice = showOpenDialog(null);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			currentdirectory = getCurrentDirectory();
 		}

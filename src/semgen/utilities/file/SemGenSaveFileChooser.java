@@ -129,7 +129,7 @@ public class SemGenSaveFileChooser extends SemGenFileChooser implements Property
 		ModelAccessor ma = null;
 		
 		while(true) {
-			int returnVal = showSaveDialog(this);
+			int returnVal = showSaveDialog(null);
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				setFileExtension();
