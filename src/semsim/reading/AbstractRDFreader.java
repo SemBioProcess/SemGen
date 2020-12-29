@@ -257,13 +257,16 @@ public abstract class AbstractRDFreader {
 		PhysicalModelComponent pmc = null;
 		if(ResourceURIandPMCmap.containsKey(res.getURI()))
 			pmc = ResourceURIandPMCmap.get(res.getURI());
+		
 		else{
 			Resource isannres = res.getPropertyResourceValue(SemSimRelation.BQB_IS.getRDFproperty());
 			if(isannres==null) isannres = res.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
 			
-			boolean isentity = res.getLocalName().startsWith("entity_");
+			boolean isproperty = res.getLocalName().startsWith("OPB_");
 			boolean isprocess = res.getLocalName().startsWith("process_");
 			boolean isforce = res.getLocalName().startsWith("force_");
+			boolean isentity = res.getLocalName().startsWith("entity_") || (isannres==null && ! isproperty && ! isprocess && ! isforce); // Assume that if there's no identity annotation, it's a reference URI to a physical entity
+
 			
 			// If a physical entity
 			if(isentity){
@@ -379,22 +382,34 @@ public abstract class AbstractRDFreader {
 	 * it to the model, and if it is a custom entity, add its annotations.
 	 * @param res An RDF resource corresponding to a physical entity
 	 * @return A {@link PhysicalEntity} object created within the SemSim model
-	 * that corresponds to the intput RDF resource
+	 * that corresponds to the input RDF resource
 	 */
 	private PhysicalEntity createCompositeEntityComponentFromResourceAndAnnotate(Resource res){	
 		Resource isannres = res.getPropertyResourceValue(SemSimRelation.BQB_IS.getRDFproperty());
 		
-		if(isannres==null) isannres = res.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
+		if(isannres==null) 
+			isannres = res.getPropertyResourceValue(SemSimRelation.HAS_PHYSICAL_DEFINITION.getRDFproperty());
 		
 		// If a reference entity
 		// Create a singular physical entity from a component in a composite physical entity
 		PhysicalEntity returnent = null;
 		
+		// If it's a physical entity with an identity statement on it...
 		if(isannres!=null)
-			 returnent = semsimmodel.addReferencePhysicalEntity(new ReferencePhysicalEntity(URI.create(isannres.getURI()), isannres.getURI()));
+			 returnent = semsimmodel.addReferencePhysicalEntity(
+					 new ReferencePhysicalEntity(
+							 URI.create(isannres.getURI()), isannres.getURI()));
 		
-		// If a custom entity
-		else returnent = addCustomPhysicalEntityToModel(res);
+		// Else if it's a custom physical entity...
+		else if( res.getNameSpace().startsWith(getModelNamespaceInRDF())
+				|| res.getNameSpace().startsWith(getLocalNamespaceInRDF()))
+			returnent = addCustomPhysicalEntityToModel(res);
+		
+		// Else it's a URI for a reference knowledge resource (concise format used in OMEX metadata)
+		else
+			 returnent = semsimmodel.addReferencePhysicalEntity(
+					 new ReferencePhysicalEntity(
+							 URI.create(res.getURI()), res.getURI()));
 		
 		return returnent;
 	}

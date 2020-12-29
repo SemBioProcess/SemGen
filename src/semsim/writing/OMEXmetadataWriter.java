@@ -28,6 +28,7 @@ import semsim.model.physical.PhysicalEnergyDifferential;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.PhysicalProcess;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.reading.AbstractRDFreader;
 
 /**
@@ -355,16 +356,27 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					// else it's a singular physical entity
 					else{
 						PhysicalEntity pe = cpe.getArrayListOfEntities().get(0);
-						Resource entity = getResourceForPMCandAnnotate(pe);
 						
-						Statement st = rdf.createStatement(ares, 
-								SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
-								entity);
+						Statement st = null;
+						
+						// If it's a reference physical entity, use the reference URI (concise form)
+						if(pe instanceof ReferencePhysicalEntity) {
+							URI refuri = ((ReferencePhysicalEntity)pe).getPhysicalDefinitionURI();
+							st = rdf.createStatement(ares, 
+									SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
+									rdf.createResource(refuri.toString()));
+						}
+						else {
+							Resource entity = getResourceForPMCandAnnotate(pe);
+							st = rdf.createStatement(ares, 
+									SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
+									entity);
+						}
 						
 						addStatement(st);
 					}
 				}
-				// Of it's a property of a process
+				// Else if it's a property of a process...
 				else if(propof instanceof PhysicalProcess){
 					PhysicalProcess process = (PhysicalProcess)ds.getAssociatedPhysicalModelComponent();
 

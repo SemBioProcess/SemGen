@@ -31,6 +31,7 @@ import semsim.model.computational.datastructures.DataStructure;
 import semsim.model.physical.PhysicalEntity;
 import semsim.model.physical.PhysicalModelComponent;
 import semsim.model.physical.object.CompositePhysicalEntity;
+import semsim.model.physical.object.ReferencePhysicalEntity;
 import semsim.owl.SemSimOWLFactory;
 import semsim.reading.AbstractRDFreader;
 import semsim.reading.ModelClassifier.ModelType;
@@ -353,17 +354,24 @@ public abstract class AbstractRDFwriter {
 		else {
 			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
 			
-			// Use metadataID on last entity for URI, if it has one
-			if( lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) 
-				nexturi = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
+			// If we're writing to an OMEX metadata file and the last physical entity has a reference URI, just 
+			// use the reference URI in the statement, not the instantiated local entity's URI (more concise)
+			if(lastent instanceof ReferencePhysicalEntity && this instanceof OMEXmetadataWriter)
+				nexturi = ((ReferencePhysicalEntity)lastent).getPhysicalDefinitionURI();
 			
-			// If it's an entity we haven't processed yet
-			else if( ! PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
-				nexturi = URI.create(getResourceForPMCandAnnotate(lastent).getURI());
-				PMCandResourceURImap.put(lastent, nexturi);
+			else {
+				// Use metadataID on last entity for URI, if it has one
+				if( lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) 
+					nexturi = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
+				
+				// If it's an entity we haven't processed yet
+				else if( ! PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))){
+					nexturi = URI.create(getResourceForPMCandAnnotate(lastent).getURI());
+					PMCandResourceURImap.put(lastent, nexturi);
+				}
+				// Otherwise get the terminal entity that we logged previously
+				else nexturi = PMCandResourceURImap.get(lastent);
 			}
-			// Otherwise get the terminal entity that we logged previously
-			else nexturi = PMCandResourceURImap.get(lastent);
 		}
 		
 		Property structprop = getPartOfPropertyForComposites();
