@@ -350,6 +350,7 @@ public abstract class AbstractRDFwriter {
 			
 			nexturi = setCompositePhysicalEntityMetadata(nextcpe);
 		}
+		
 		// If we're at the end of the composite
 		else {
 			PhysicalEntity lastent = nextcpe.getArrayListOfEntities().get(0);
@@ -363,7 +364,7 @@ public abstract class AbstractRDFwriter {
 				// make sure we assert the identity annotation to link the SBML element to its definition.
 				// This must be done if we are to use the "concise" form for writing RDF for composite physical
 				// entities.
-				if(lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) {
+				if(lastent.hasMetadataID() && getModelAccessor().getModelType() == ModelType.SBML_MODEL) {
 					URI uriusingmetaid = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
 					Property isprop = SemSimRelation.BQB_IS.getRDFproperty();
 					Statement idst = rdf.createStatement(
@@ -376,7 +377,7 @@ public abstract class AbstractRDFwriter {
 			
 			else {
 				// Use metadataID on last entity for URI, if it has one
-				if( lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) 
+				if( lastent.hasMetadataID() && getModelAccessor().getModelType() == ModelType.SBML_MODEL) 
 					nexturi = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
 				
 				// If it's an entity we haven't processed yet
