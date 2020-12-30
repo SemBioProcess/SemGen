@@ -177,12 +177,8 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		Set<Annotation> anns = pmc.getAnnotations();
 		
 		// If it's a composite physical entity, write out the composite
-		if(pmc instanceof CompositePhysicalEntity){
-			URI enturi = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)pmc);
-			Statement st = rdf.createStatement(res, SemSimRelation.BQB_IS.getRDFproperty(), 
-					rdf.createResource(enturi.toString()));
-			addStatement(st);
-		}
+		if(pmc instanceof CompositePhysicalEntity)
+			setCompositePhysicalEntityMetadata((CompositePhysicalEntity)pmc);
 		
 		// If it's a singular physical component, write out the singular annotation(s)
 		else{

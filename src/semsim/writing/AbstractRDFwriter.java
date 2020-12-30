@@ -356,8 +356,23 @@ public abstract class AbstractRDFwriter {
 			
 			// If we're writing to an OMEX metadata file and the last physical entity has a reference URI, just 
 			// use the reference URI in the statement, not the instantiated local entity's URI (more concise)
-			if(lastent instanceof ReferencePhysicalEntity && this instanceof OMEXmetadataWriter)
+			if(lastent instanceof ReferencePhysicalEntity && this instanceof OMEXmetadataWriter) {
 				nexturi = ((ReferencePhysicalEntity)lastent).getPhysicalDefinitionURI();
+				
+				// If there's a metadata ID on the reference entity, and we're writing to an SBML model
+				// make sure we assert the identity annotation to link the SBML element to its definition.
+				// This must be done if we are to use the "concise" form for writing RDF for composite physical
+				// entities.
+				if(lastent.hasMetadataID() && semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) {
+					URI uriusingmetaid = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
+					Property isprop = SemSimRelation.BQB_IS.getRDFproperty();
+					Statement idst = rdf.createStatement(
+							rdf.getResource(uriusingmetaid.toString()), 
+							isprop, 
+							rdf.getResource(nexturi.toString()));
+					addStatement(idst);
+				}
+			}
 			
 			else {
 				// Use metadataID on last entity for URI, if it has one

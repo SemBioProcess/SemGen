@@ -817,8 +817,8 @@ public class SBMLreader extends ModelReader{
 			if(speciesent instanceof ReferencePhysicalEntity)
 				// We don't add the notes here, because if the species is defined against a reference term, 
 				// the description of the reference term should be used
-				addMetadataID(species, speciesent);
-			else collectSBaseData(species, speciesent);
+				addMetadataID(species, compositeent);
+			else collectSBaseData(species, compositeent);
 		}
 	}
 	

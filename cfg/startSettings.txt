@@ -1,7 +1,7 @@
-startDirectory; C:\Users\thomp\OneDrive\Documents\SemGen Test
+startDirectory; /Users/maxneal/temp
 maximize; false
-screensize; 900x700
-screenpos; 0x0
+screensize; 1307x795
+screenpos; 54x39
 autoAnnotate; true
 showImports; true
 displayMarkers; true

@@ -423,7 +423,7 @@ public class SBMLwriter extends ModelWriter {
 			// the RDF block or OMEX metadata file when adding parameter info
 			if( onerefentity ){
 				
-				addRDFannotationForPhysicalSBMLelement(pmc, comp);
+				addRDFannotationForPhysicalSBMLelement(pmcAsCPE.getArrayListOfEntities().get(0), comp);
 				
 				if( ! OMEXmetadataEnabled()) {
 					DSsToOmitFromCompositesRDF.add(ds);
@@ -537,7 +537,7 @@ public class SBMLwriter extends ModelWriter {
 				// Preserve semantics in <species> element, unless writing to OMEX metadata file
 				if( ! OMEXmetadataEnabled() ) DSsToOmitFromCompositesRDF.add(ds);
 				
-				addRDFannotationForPhysicalSBMLelement(indexent, species);
+				addRDFannotationForPhysicalSBMLelement(fullcpe, species);
 					
 				// In SBML Level 3 the hasSubstanceUnitsOnly must be set either way. In Level 2 the default is false.
 				URI physdefprop = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -609,7 +609,7 @@ public class SBMLwriter extends ModelWriter {
 				}
 				
 				entitySpeciesMap.put(fullcpe, species);
-				addNotesAndMetadataID(indexent, species);
+				addNotesAndMetadataID(fullcpe, species);
 			}
 			
 			// Otherwise the data structure is not associated with a physical entity and we 

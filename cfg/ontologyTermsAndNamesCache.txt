@@ -243,6 +243,7 @@ http://identifiers.org/obo.chebi/CHEBI:16414; L-valine
 http://identifiers.org/obo.chebi/CHEBI:32902; gibberellin A4
 http://identifiers.org/go/GO:0032147; activation of protein kinase activity
 http://identifiers.org/obo.go/GO:0009570; chloroplast stroma
+http://purl.org/sig/ont/fma/fma67945; Intercellular junction
 http://identifiers.org/chebi/CHEBI:57524; O-phosphonato-L-serine(2-)
 urn:miriam:obo.chebi:CHEBI%3A16001; 3-phospho-D-glyceroyl dihydrogen phosphate
 http://identifiers.org/go/GO:0008054; negative regulation of cyclin-dependent protein serine/threonine kinase by cyclin degradation
@@ -938,6 +939,7 @@ http://identifiers.org/chebi/CHEBI:71236; feruloylacetyl-CoA
 http://identifiers.org/go/GO:0006402; mRNA catabolic process
 http://identifiers.org/go/GO:0006886; intracellular protein transport
 http://identifiers.org/fma/FMA:72448; Matrix of endoplasmic reticulum
+https://identifiers.org/chebi/CHEBI:39124; calcium ion
 http://purl.obolibrary.org/obo/PR_000005057; calsequestrin-2
 http://identifiers.org/go/GO:0016209; antioxidant activity
 http://identifiers.org/obo.chebi/CHEBI:30011; L-glutamine residue
@@ -972,6 +974,7 @@ http://identifiers.org/go/GO:0016651; oxidoreductase activity, acting on NAD(P)H
 http://identifiers.org/obo.go/GO:0004001; adenosine kinase activity
 http://identifiers.org/obo.go/GO:0019908; nuclear cyclin-dependent protein kinase holoenzyme complex
 http://identifiers.org/obo.go/GO:0047130; saccharopine dehydrogenase (NADP+, L-lysine-forming) activity
+http://purl.obolibrary.org/obo/CL_0002064; pancreatic acinar cell
 http://identifiers.org/go/GO:0002028; regulation of sodium ion transport
 http://identifiers.org/chebi/CHEBI:30744; oxaloacetic acid
 http://identifiers.org/go/GO:0043412; macromolecule modification
@@ -1467,6 +1470,7 @@ http://identifiers.org/obo.go/GO:0018117; protein adenylylation
 http://identifiers.org/obo.go/GO:0045736; negative regulation of cyclin-dependent protein serine/threonine kinase activity
 http://identifiers.org/obo.chebi/CHEBI:16236; ethanol
 http://identifiers.org/obo.go/GO:0034604; pyruvate dehydrogenase (NAD+) activity
+http://identifiers.org/uniprot/P11216; Glycogen phosphorylase, brain form
 http://identifiers.org/fma/FMA:280059; Set of lumens of vena cava trunks
 http://identifiers.org/obo.go/GO:0051169; nuclear transport
 urn:miriam:kegg.compound:C00279; D-Erythrose 4-phosphate
