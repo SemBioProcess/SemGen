@@ -481,6 +481,14 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 			this.setMaximumSize(new Dimension(100,30));
 			this.selectedrelation = rel;
+			
+			// Use RO structural relations internally
+			if(selectedrelation == StructuralRelation.BQB_HAS_PART)
+				selectedrelation = StructuralRelation.HAS_PART;
+			
+			else if(selectedrelation == StructuralRelation.BQB_IS_PART_OF)
+				selectedrelation = StructuralRelation.PART_OF;
+			
 			initialize();
 		}
 		
