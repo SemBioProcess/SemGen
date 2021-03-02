@@ -110,6 +110,30 @@ public abstract class AbstractRDFreader {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		// Check for use of older semsim namespaces and replace them (assumes they would only appear in predicates)
+		StmtIterator stit = rdf.listStatements();
+		Set<Statement> ststoremove = new HashSet<Statement>();
+		Set<Statement> ststoadd = new HashSet<Statement>();
+		
+		while(stit.hasNext()) {
+			Statement st = stit.next();
+			if(st.getPredicate().getURI().startsWith("http://www.bhi.washington.edu/SemSim#")) {
+				Property newprop = rdf.getProperty(RDFNamespace.SEMSIM.getNamespaceAsString() + st.getPredicate().getLocalName());
+				Statement newst = rdf.createStatement(st.getSubject(), newprop, st.getObject());
+				ststoadd.add(newst);
+				ststoremove.add(st);
+			}
+		}
+		
+		// Remove old statements
+		for(Statement stold : ststoremove) rdf.remove(stold);
+		// Add replacement statements
+		for(Statement stnew : ststoadd) rdf.add(stnew);
+		
+		// Replace namespace mapping
+		rdf.getNsPrefixMap().remove("http://www.bhi.washington.edu/SemSim#");
+		rdf.getNsPrefixMap().put(RDFNamespace.SEMSIM.getNamespaceAsString(), "semsim");
 	}
 	
 	

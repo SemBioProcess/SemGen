@@ -39,6 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimLibrary;
@@ -94,7 +95,7 @@ public class SemSimOWLreader extends ModelReader {
 
 	private Map<String, PhysicalPropertyInComposite> idpropertymap = new HashMap<String, PhysicalPropertyInComposite>();
 	private OWLOntology ont;
-	private URI physicaldefinitionURI;
+	private URI physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
 	
 	public SemSimOWLreader(ModelAccessor accessor) {
 		super(accessor);
@@ -110,33 +111,36 @@ public class SemSimOWLreader extends ModelReader {
 			e.printStackTrace();
 		}
 		
-		// Set the SemSim namespace (to accommodate older models that use SemSim#, not semsim#)
+		// Look at top class. If it uses an old SemSim namespace, rename OWL entities so they use new namespace
 		OWLClass topclassnew = factory.getOWLClass(IRI.create(SemSimTypes.SEMSIM_COMPONENT.getURIasString()));
 		OWLClass topclassold = factory.getOWLClass(IRI.create("http://www.bhi.washington.edu/SemSim#SemSim_component"));
 		
 		if( ont.getClassesInSignature().contains(topclassold) ) {
 			
+			setPhysicalDefinitionURI(); // Only need to accomodate older refersTo identity relation if old semsim namespace is used. Deal with that here.
+
+			// Set the SemSim namespace (to accommodate older models that use SemSim#, not semsim/)
+			OWLEntityRenamer renamer = new OWLEntityRenamer(manager, Collections.singleton(ont));
+
+			// Rename object and data properties
+			for(OWLEntity entity: ont.getSignature()) {
+				IRI oldiri = entity.getIRI();
+				
+				if(oldiri.toString().startsWith("http://www.bhi.washington.edu/SemSim#"))
+					manager.applyChanges(renamer.changeIRI(oldiri, IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + oldiri.getFragment())));
+			}
+			
 			//TODO:
 			// Replace all occurrences of old SemSim namespace with new one
-			// Also change SemSim:namespace mapping
-			// Change semsim namespace to the new one (lower case)
+			// This ensures that SemSim prefix mapping is up-to-date
 			OWLOntologyFormat oof = manager.getOntologyFormat(ont);
 			oof.asPrefixOWLOntologyFormat().setPrefix("SemSim", RDFNamespace.SEMSIM.getNamespaceAsString());
 			manager.setOntologyFormat(ont, oof);
 			oof = manager.getOntologyFormat(ont);
-//			Map<String,String> themap = oof.asPrefixOWLOntologyFormat().getPrefixName2PrefixMap();
-
-//			for(String key : themap.keySet()) {
-//				System.out.println("Key and value: " + key + " : " + themap.get(key));
-//			}
 			
-//			for(OWLClass cls : ont.getClassesInSignature()) {
-//				System.out.println(cls.getIRI());
-//			}
 		}
 		else if( ! ont.getClassesInSignature().contains(topclassnew))
 			semsimmodel.addError("ERROR: Could not determine SemSim namespace for model");
-		
 		
 	}
 	
@@ -147,7 +151,6 @@ public class SemSimOWLreader extends ModelReader {
 	public SemSimModel read() throws OWLException, JDOMException, IOException{	
 		if (verifyModel()) return semsimmodel;
 		
-		setPhysicalDefinitionURI();
 		collectModelLevelAnnotations();
 		collectReferenceClasses();
 		collectCompositeEntities();
@@ -191,7 +194,7 @@ public class SemSimOWLreader extends ModelReader {
 	 */
 	private void setPhysicalDefinitionURI(){
 		if(ont.containsDataPropertyInSignature(IRI.create("http://www.bhi.washington.edu/SemSim#refersTo"))) // toLowerCase() needed to accommodate previous use of SemSim namespace that used some uppercase letters
-			physicaldefinitionURI = URI.create("http://www.bhi.washington.edu/SemSim#refersTo"); // toLowerCase() needed to accommodate previous use of SemSim namespace that used some uppercase letters
+			physicaldefinitionURI = URI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "refersTo"); // toLowerCase() needed to accommodate previous use of SemSim namespace that used some uppercase letters
 		
 		else if(ont.containsDataPropertyInSignature(SemSimRelation.HAS_PHYSICAL_DEFINITION.getIRI()))
 			physicaldefinitionURI = SemSimRelation.HAS_PHYSICAL_DEFINITION.getURI();
