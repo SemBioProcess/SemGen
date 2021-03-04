@@ -957,7 +957,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	
 	/** @return A new SemSim model namespace from the current date and time */
 	public String generateNamespaceFromDateAndTime(){
-		namespace = RDFNamespace.SEMSIM.getNamespaceAsString().replace("#", "/" + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#");
+		namespace = RDFNamespace.SEMSIM.getNamespaceAsString() + sdf.format(new Date()).replace("-", "m").replace("+", "p") + "#";
 		return namespace;
 	}
 
