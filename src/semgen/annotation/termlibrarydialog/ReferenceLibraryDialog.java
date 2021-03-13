@@ -24,7 +24,7 @@ public class ReferenceLibraryDialog extends JFrame {
 	AddCreateTermPanel createaddpane;
 	SemGenSettings settings;
 	int prefwidth = 1100;
-	int prefheight = 850;
+	int prefheight = 800;
 	
 	public ReferenceLibraryDialog(SemGenSettings sets, AnnotatorWorkbench wb) {
 		super("Annotation Reference Library");

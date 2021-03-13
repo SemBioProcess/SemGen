@@ -8,7 +8,10 @@ import org.jdom.JDOMException;
 import semgen.SemGen;
 import semgen.utilities.SemGenJob;
 import semgen.utilities.file.LoadModelJob;
+import semsim.annotation.Annotation;
 import semsim.annotation.AnnotationCopier;
+import semsim.annotation.Person;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimTermLibrary;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.model.collection.SemSimModel;
@@ -16,8 +19,8 @@ import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
 
 public class AnnotationImporter extends SemGenJob {
-	SemSimModel importedmodel;
-	SemSimModel importingmodel;
+	SemSimModel importedmodel; // The model providing the data
+	SemSimModel importingmodel; // The model receiving the data
 	SemSimTermLibrary library;
 	
 	private Boolean[] options;
@@ -54,7 +57,7 @@ public class AnnotationImporter extends SemGenJob {
 		library.addTermsinModel(importedmodel);
 		boolean changed = false;
 		if (options[0]) {
-			//importingmodel.importCurationalMetadatafromModel(importedmodel, true);
+			if (importModelLevelAnnotations()) changed = true;
 			changed = true;
 		}
 		if (options[1]) {
@@ -64,6 +67,41 @@ public class AnnotationImporter extends SemGenJob {
 		if (options[2]) {
 			if (copySubmodels()) changed = true;
 		}
+		return changed;
+	}
+	
+	
+	private boolean importModelLevelAnnotations() {
+		Boolean changed = importedmodel.hasDescription() || 
+				importedmodel.getAnnotations().size()>0 || 
+				importedmodel.getCreators().size()>0;
+		
+		// Overwrite description
+		if(importedmodel.hasDescription())
+			importingmodel.setDescription(importedmodel.getDescription());
+		
+		
+		// Add in annotations (we do not overwrite existing annotations on importingmodel)
+		for(Annotation ann : importedmodel.getAnnotations()) {
+			
+			if(ann instanceof ReferenceOntologyAnnotation) {
+				ReferenceOntologyAnnotation refann = (ReferenceOntologyAnnotation)ann;
+				importingmodel.addReferenceOntologyAnnotation(refann.getRelation(), 
+						refann.getReferenceURI(), refann.getValueDescription(), SemGen.semsimlib);
+			}
+			else {
+				Annotation newann = new Annotation(ann.getRelation(), ann.getValue(), ann.getValueDescription());
+				importingmodel.addAnnotation(newann);
+			}
+		}
+		
+		// Add the creator info - we do not overwrite existing creator info
+		System.out.println("Num creators: " + importedmodel.getCreators().size());
+		for(Person creator : importedmodel.getCreators()) {
+			Person newcreator = new Person(creator.getName(), creator.getEmail(), creator.getAccountName(), creator.getAccountServiceHomepage());
+			importingmodel.addCreator(newcreator);
+		}
+		
 		return changed;
 	}
 	

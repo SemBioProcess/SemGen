@@ -44,6 +44,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
+import semsim.annotation.Person;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
@@ -205,8 +206,9 @@ public class SemSimOWLreader extends ModelReader {
 	 * Collect all the annotations that are at the level of the whole model.
 	 * @throws JDOMException
 	 * @throws IOException
+	 * @throws OWLException 
 	 */
-	private void collectModelLevelAnnotations() throws JDOMException, IOException {
+	private void collectModelLevelAnnotations() throws JDOMException, IOException, OWLException {
 		// Get model-level annotations
 		Set<OWLAnnotation> anns = ont.getAnnotations();
 		
@@ -245,9 +247,18 @@ public class SemSimOWLreader extends ModelReader {
 				// Collect info associated with the creator individual
 				IRI creatoriri = (IRI)named.getValue();
 				
-//				System.out.println(named.getValue().getClass()); IRI
-//				System.out.println(named.isDeprecatedIRIAnnotation()); false
-
+				String name = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(), 
+						SemSimRelation.FOAF_NAME.getURIasString());
+				String mbox = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(), 
+						SemSimRelation.FOAF_MBOX.getURIasString());
+				String accountname = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(), 
+						SemSimRelation.FOAF_ACCOUNT_NAME.getURIasString());
+				String accounthp = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(), 
+						SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getURIasString());
+				
+				semsimmodel.addCreator(new Person(name, mbox, URI.create(accountname), URI.create(accounthp)));
+				
+				annstoremove.add(named);
 			}
 		}
 		
