@@ -79,11 +79,15 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	public ArrayList<ModelAccessor> convertFileToModelAccessorList(File file) throws ParserConfigurationException, SAXException, URISyntaxException, JDOMException{
 		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
 		
+		
+		
 		if (file.exists() && file.getName().toLowerCase().endsWith(".omex")) {
+			
 			try {
 				ZipFile zfile = new ZipFile(file);
 
 				ArrayList<ModelAccessor> models = OMEXmanifestReader.getModelsInArchive(zfile, file);
+				
 				if (models.size()==1) {
 					modelaccessors.add(models.get(0));
 					return modelaccessors;
@@ -128,12 +132,19 @@ public class SemGenOpenFileChooser extends SemGenFileChooser {
 	}
 	
 	
+	// NEED TO SEE HOW SEMGENOPENFILECHOOSER gets selected files set
 	public ArrayList<ModelAccessor> getSelectedFilesAsModelAccessors(){
+		
 		ArrayList<ModelAccessor> modelaccessors = new ArrayList<ModelAccessor>();
+
 		try {
-		for (File file : getSelectedFiles())
-			
-				modelaccessors.addAll(convertFileToModelAccessorList(file));
+
+			if(isMultiSelectionEnabled())
+				for (File file : getSelectedFiles()) {
+					modelaccessors.addAll(convertFileToModelAccessorList(file));
+				}
+			else
+				modelaccessors.addAll(convertFileToModelAccessorList(getSelectedFile()));
 			} catch (ParserConfigurationException | SAXException | URISyntaxException | JDOMException e) {
 				e.printStackTrace();
 			}

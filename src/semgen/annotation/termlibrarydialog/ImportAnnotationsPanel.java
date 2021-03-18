@@ -22,6 +22,7 @@ import semgen.utilities.SemGenJob;
 import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenFont;
 import semgen.utilities.file.SemGenOpenFileChooser;
+import semsim.fileaccessors.ModelAccessor;
 
 /**
  * Allows the importation of annotations from another model. The user can choose to only import the annotations into the library 
@@ -37,6 +38,7 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 	JButton importbtn = new JButton("Import");
 	File file = null;
 	JFrame parent;
+	ModelAccessor sourcemodelaccessor = null;
 	
 	public ImportAnnotationsPanel(AnnotatorWorkbench wb, JFrame par) {
 		workbench = wb;
@@ -89,23 +91,29 @@ public class ImportAnnotationsPanel extends JPanel implements ActionListener {
 
 	}
 
+	
 	private void selectModelFile() {
 		SemGenOpenFileChooser sgc = new SemGenOpenFileChooser("Select SemSim model containing annotations", new String[]{"owl"}, false);
-		File sourcefile = sgc.getSelectedFile();
-		if (sourcefile != null) {
-			file = sourcefile;
-			modellabel.setText(file.getName());
+		
+		ArrayList<ModelAccessor> sourceaccs = sgc.getSelectedFilesAsModelAccessors();
+		
+		if (sourceaccs.size() == 1 ) {
+			sourcemodelaccessor = sourceaccs.get(0);
+			File thefile = sourcemodelaccessor.getFile();
+			modellabel.setText(thefile.getName());
 			modellabel.setForeground(Color.blue);
 			importbtn.setEnabled(true);
 		}
 	}
 	
+	
 	private void doCopy() {
+		
 		Boolean[] options = new Boolean[checklist.size()];
 		for (int i = 0; i < checklist.size(); i++) {
 			options[i] = checklist.get(i).isSelected();
 		}
-		SemGenJob sgt = workbench.importModelAnnotations(file, options);
+		SemGenJob sgt = workbench.importModelAnnotations(sourcemodelaccessor, options);
 		if (sgt == null) {
 			SemGenError.showError("There were errors associated with the selected model. Not copying.", "Copy Model Failed");
 		}

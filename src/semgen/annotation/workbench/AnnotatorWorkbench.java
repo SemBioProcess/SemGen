@@ -254,9 +254,9 @@ public class AnnotatorWorkbench extends Workbench implements Observer {
 		setModelSaved(false);
 	}
 	
-	public AnnotationImporter importModelAnnotations(File file, Boolean[] options) {
+	public AnnotationImporter importModelAnnotations(ModelAccessor sourceaccessor, Boolean[] options) {
 		validateModelComposites();
-		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel, file, options);
+		AnnotationImporter copier = new AnnotationImporter(termlib, semsimmodel, sourceaccessor, options);
 	
 		return copier;
 	}

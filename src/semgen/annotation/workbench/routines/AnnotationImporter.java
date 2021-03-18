@@ -1,6 +1,5 @@
 package semgen.annotation.workbench.routines;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.jdom.JDOMException;
@@ -13,7 +12,7 @@ import semsim.annotation.AnnotationCopier;
 import semsim.annotation.Person;
 import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.SemSimTermLibrary;
-import semsim.fileaccessors.FileAccessorFactory;
+import semsim.fileaccessors.ModelAccessor;
 import semsim.model.collection.SemSimModel;
 import semsim.model.collection.Submodel;
 import semsim.model.computational.datastructures.DataStructure;
@@ -24,10 +23,10 @@ public class AnnotationImporter extends SemGenJob {
 	SemSimTermLibrary library;
 	
 	private Boolean[] options;
-	private File sourcefile;
+	private ModelAccessor sourceaccessor;
 	
-	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel, File file, Boolean[] opts) {
-		sourcefile = file;
+	public AnnotationImporter(SemSimTermLibrary lib, SemSimModel currentmodel, ModelAccessor sourceaccessor, Boolean[] opts) {
+		this.sourceaccessor = sourceaccessor;
 		library = lib;
 		importingmodel = currentmodel;
 		options = opts;
@@ -44,7 +43,8 @@ public class AnnotationImporter extends SemGenJob {
 	}
 	
 	private void loadSourceModel() throws JDOMException, IOException {
-		LoadModelJob loader = new LoadModelJob(FileAccessorFactory.getModelAccessor(sourcefile), this);
+		
+		LoadModelJob loader = new LoadModelJob(sourceaccessor, this);
 		loader.run();
 		if (!loader.isValid()) {
 			abort();
@@ -96,7 +96,6 @@ public class AnnotationImporter extends SemGenJob {
 		}
 		
 		// Add the creator info - we do not overwrite existing creator info
-		System.out.println("Num creators: " + importedmodel.getCreators().size());
 		for(Person creator : importedmodel.getCreators()) {
 			Person newcreator = new Person(creator.getName(), creator.getEmail(), creator.getAccountName(), creator.getAccountServiceHomepage());
 			importingmodel.addCreator(newcreator);
