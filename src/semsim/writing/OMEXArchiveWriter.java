@@ -24,6 +24,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
@@ -68,36 +69,46 @@ public class OMEXArchiveWriter {
 	        
 	     //Create the omex file system
 	     try (FileSystem fs = FileSystems.newFileSystem(uri, env)) {
-	        Path nf = null;
-	        if (Files.exists(fs.getPath("model\\"))) {
-	        	nf = fs.getPath("model\\" + archiveaccessor.getFileName());
-	        }
-	        else {
-	        	nf = fs.getPath(archiveaccessor.getFileName());
-	        }
+	        Path modelpath = null;
 	        
-	        boolean fileexists = Files.exists(nf);
+	        if (Files.exists(fs.getPath("model\\"))) modelpath = fs.getPath("model\\" + archiveaccessor.getFileName());
+	        else modelpath = fs.getPath(archiveaccessor.getFileName());
+	        
+	        boolean fileexists = Files.exists(modelpath);
+	        
 	        //Write out the model
-	        Writer zwriter = Files.newBufferedWriter(nf, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+	        Writer zwriter = Files.newBufferedWriter(modelpath, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
 	        writer.setWriteLocation(archiveaccessor);
-	        String model = writer.encodeModel();
-	        zwriter.write(model);
+	        
+	        // Have to encodeModel() whether we're generating the code anew or copying it in from a legacy location
+	        // because encodeModel() populates the RDF with the annotations
+	        String modelcode = writer.encodeModel(); 
+
+	        // If the modeling format we're writing out is the same as the legacy code format
+	        // we just copy the legacy code and put it in the archive
+	        if( writer.getWriteLocation().getModelType() == writer.semsimmodel.getSourceModelType()) {
+		        ModelAccessor legacyaccessor = writer.semsimmodel.getLegacyCodeLocation();
+	        	zwriter.write(legacyaccessor.getModelAsString());
+	        }
+	        // Otherwise we generate the model code anew
+	        else zwriter.write(modelcode);
+
 	        zwriter.close(); 	
+	        
 	        //Add an entry if the file doesn't already exist
-	        if (!fileexists) {
-	        	createManifestEntry(fs, nf, archiveaccessor.getModelType());
+	        if ( ! fileexists) {
+	        	createManifestEntry(fs, modelpath, archiveaccessor.getModelType());
 	        }
 	        //Write out the OMEX metadata file if the model should have one
-	        if (archiveaccessor.hasOMEXmetadataFile()) {
+	        if (archiveaccessor.hasOMEXmetadataFile())
 	        	createOMEXmetadata(fs, archiveaccessor);
-	        }
+	        
 	        archiveaccessor.closeStream();	        
 	        
         }
 		catch (IOException | JDOMException e1) {
 				e1.printStackTrace();
 		}
-	        
 	}
     
 	/**
