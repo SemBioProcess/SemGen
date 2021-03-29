@@ -30,7 +30,6 @@ import semgen.visualizations.CommunicatingWebBrowserCommandReceiver;
 import semsim.fileaccessors.FileAccessorFactory;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.reading.ModelClassifier.ModelType;
-import uk.ac.ebi.biomodels.ws.BioModelsWSException;
 
 import java.io.*;
 
@@ -80,14 +79,12 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			}
 		}
 
-		public void onAddModelByName(String source, String modelName) throws IOException, BioModelsWSException {
+		public void onAddModelByName(String source, String modelName) throws IOException {
 			ModelAccessor accessor = null;
 			if (source.equals(CompositeAnnotationSearch.SourceName)) {
 				accessor = FileAccessorFactory.getModelAccessor(SemGen.examplespath + "AnnotatedModels/" + modelName + ".owl");
 			}
 			else if (source.equals("BioModels")) {
-				System.out.println("Retrieving SBML file from BioModels...");
-
 				String tempPath = System.getProperty("java.io.tmpdir") + File.separator + modelName + ".xml";
 				File tempBioModelFile = new File(tempPath);
 				BufferedWriter bw = new BufferedWriter(new FileWriterWithEncoding(tempBioModelFile, "UTF-8"));
@@ -152,7 +149,7 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			_commandSender.search(resultSets);
 		}
 
-		public void onGetModelAbstract(String modelName) throws BioModelsWSException {
+		public void onGetModelAbstract(String modelName) {
 			String bioModelAbstract = BioModelsSearch.findPubmedAbstract(modelName);
 			_commandSender.showModelAbstract(bioModelAbstract);
 		}

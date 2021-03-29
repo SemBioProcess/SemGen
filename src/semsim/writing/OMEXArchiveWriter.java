@@ -24,7 +24,6 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.reading.ModelClassifier.ModelType;
 
@@ -84,15 +83,21 @@ public class OMEXArchiveWriter {
 	        // because encodeModel() populates the RDF with the annotations
 	        String modelcode = writer.encodeModel(); 
 
-	        // If the modeling format we're writing out is the same as the legacy code format
-	        // we just copy the legacy code and put it in the archive
-	        if( writer.getWriteLocation().getModelType() == writer.semsimmodel.getSourceModelType()) {
-		        ModelAccessor legacyaccessor = writer.semsimmodel.getLegacyCodeLocation();
-	        	zwriter.write(legacyaccessor.getModelAsString());
-	        }
+	        // For now we always generate the code anew. This is because it's possible that the user has
+	        // added an annotation on a model element that doesn't have a metadata id attribute set
+	        // and we will have to generate new code that adds the metadata id
+	        zwriter.write(modelcode);
+	        
+	        // TODO: If the modeling format we're writing out is the same as the legacy code format
+	        // and we don't need to add metadta id's to the original code, we should
+	        // just copy the legacy code and put it in the archive
+//	        if( writer.getWriteLocation().getModelType() == writer.semsimmodel.getSourceModelType()) {
+//		        ModelAccessor legacyaccessor = writer.semsimmodel.getLegacyCodeLocation();
+//	        	zwriter.write(legacyaccessor.getModelAsString());
+//	        }
 	        // Otherwise we generate the model code anew
-	        else zwriter.write(modelcode);
-
+//	        else 
+	        
 	        zwriter.close(); 	
 	        
 	        //Add an entry if the file doesn't already exist
