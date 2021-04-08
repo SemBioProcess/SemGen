@@ -54,7 +54,7 @@ public class ExternalURLButton extends JLabel implements MouseListener{
 				String abbrev = ont.getNickName();
 				
 				if(abbrev.equals("BRENDA")) abbrev = "BTO";
-				String urlstring = "http://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
+				String urlstring = "https://bioportal.bioontology.org/ontologies/" + abbrev + "/?p=classes&conceptid=" + SemSimOWLFactory.URIencoding(termuri.toString());
 				BrowserLauncher.openURL(urlstring);
 			}
 			// ...otherwise the knowledge resource is not known or not available online
