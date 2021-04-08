@@ -130,9 +130,9 @@ public class SemGen extends JFrame implements Observer{
 	//Launch application
 	public SemGen() throws NoSuchMethodException, SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		super("OSXAdapter");
-						
+				
 		setTitle(":: S e m  G e n ::");
-		//this.setIconImage(SemGenIcon.semgenicon.getImage());
+		
 		this.setIconImages(SemGenIcon.getSemGenLogoList());
 		
 		termcache = new OntologyCache();
@@ -159,9 +159,13 @@ public class SemGen extends JFrame implements Observer{
 		
 		this.pack();
 		
-		//Maximize screen
+		//Set frame size
 		if (settings.maximizeScreen()) {
-			setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+			
+			// Frame maximization sometimes causes issues with JxBrowser initialization on Mac, 
+			// so we only maximize on non-Mac
+			if( ! OSValidator.isMac())
+				setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 		else {
 			setSize(settings.getAppSize());
