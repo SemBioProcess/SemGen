@@ -249,11 +249,14 @@ public class SemGen extends JFrame implements Observer{
 		
 		if(contentpane.quit()){
 			try {
-				settings.setIsMaximized(getExtendedState()==JFrame.MAXIMIZED_BOTH);
+				
+				if( ! OSValidator.isMac()) {
+					settings.setIsMaximized(getExtendedState()==JFrame.MAXIMIZED_BOTH);
+				}
 				
 				// If we haven't set up the user preferences location on Mac, do so
-				if(OSValidator.isMac()){
-										
+				else {
+						
 					File cfgwritefolder = new File(cfgwritepath);
 					
 					if( ! cfgwritefolder.exists()){
@@ -266,6 +269,8 @@ public class SemGen extends JFrame implements Observer{
 				settings.storeSettings();
 				termcache.storeCachedOntologyTerms();
 				dispose();
+				System.exit(0);
+
 				return true;
 			} 
 			catch (URISyntaxException e) {e.printStackTrace();}
