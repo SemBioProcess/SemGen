@@ -21,6 +21,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFParser;
+import org.apache.jena.riot.RiotException;
 
 import semsim.SemSimLibrary;
 import semsim.SemSimObject;
@@ -109,6 +110,10 @@ public abstract class AbstractRDFreader {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+		}
+		catch (RiotException re) { // This is the exception you get with BugBuster model due to errors in RDF code. If that error is thrown, we just set the RDF to an empty model.
+			re.printStackTrace();
+			rdf = ModelFactory.createDefaultModel();
 		}
 		
 		// Check for use of older semsim namespaces and replace them (assumes they would only appear in predicates)

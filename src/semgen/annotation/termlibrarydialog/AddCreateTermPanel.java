@@ -170,7 +170,7 @@ public class AddCreateTermPanel extends JPanel implements ListSelectionListener,
 			toggleOptionVisibility(false);
 			break;
 		case REFERENCE_PHYSICAL_PROCESS:
-			title = "Create Referance Physical Process";
+			title = "Create Reference Physical Process";
 			creatorpane = new SearchPane(library, OntologyDomain.PhysicalProcess);
 			break;
 		default:

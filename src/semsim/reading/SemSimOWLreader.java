@@ -45,6 +45,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import semsim.SemSimLibrary;
 import semsim.annotation.Annotation;
 import semsim.annotation.Person;
+import semsim.annotation.ReferenceOntologyAnnotation;
 import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
@@ -259,6 +260,20 @@ public class SemSimOWLreader extends ModelReader {
 				semsimmodel.addCreator(new Person(name, mbox, URI.create(accountname), URI.create(accounthp)));
 				
 				annstoremove.add(named);
+			}
+			
+			// Read in annotations that use BQB or BQM namespace
+			if(named.getProperty().getIRI().toString().startsWith(RDFNamespace.BQB.toString()) ||
+				named.getProperty().getIRI().toString().startsWith(RDFNamespace.BQM.toString())	) {
+				
+				// TODO: If use reference ontology ann, plain strings aren't read in right
+				// If use regular ann, Model-level dialog only looks at reference ontology terms
+				// Try to make it a reference ontology annotation here and see if we can use bad URIs
+				Relation therel = SemSimRelations.getRelationFromURI(named.getProperty().getIRI().toURI());
+				String thevalue = ((OWLLiteral)named.getValue()).getLiteral().toString();
+//				ReferenceOntologyAnnotation refann = new ReferenceOntologyAnnotation(therel, theuri, "", sslib);
+				Annotation theann = new Annotation(therel, thevalue);
+				semsimmodel.addAnnotation(theann);
 			}
 		}
 		

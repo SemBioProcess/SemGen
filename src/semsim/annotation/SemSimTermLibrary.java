@@ -652,8 +652,6 @@ public class SemSimTermLibrary extends Observable {
 		ArrayList<Integer> parts = new ArrayList<Integer>();
 		for (PhysicalEntity entity : getPhysicalForce(forceindex).getParticipants()) {
 			
-			System.out.println("Found participant " + entity.getName());
-			
 			parts.add(getComponentIndex(entity, false));
 		}
 		return parts;

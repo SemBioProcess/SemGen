@@ -101,6 +101,7 @@ public class OMEXArchiveWriter {
 	        zwriter.close(); 	
 	        
 	        //Add an entry if the file doesn't already exist
+	        
 	        if ( ! fileexists) {
 	        	createManifestEntry(fs, modelpath, archiveaccessor.getModelType());
 	        }

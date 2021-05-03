@@ -40,6 +40,8 @@ public class SemSimComponentImporter {
 	protected static FunctionalSubmodel importFunctionalSubmodel(ModelAccessor receivingmodelaccessor, SemSimModel receivingmodel,
 			String localcompname, String origcompname, String hrefValue, SemSimLibrary sslib) throws JDOMException, IOException{
 		
+		System.out.println("Importing " + localcompname + " from " + hrefValue);
+		
 		ModelAccessor importedmodelaccessor = getAccessorOfSupplyingModel(receivingmodelaccessor, receivingmodel, hrefValue);
 		if(importedmodelaccessor==null){
 			return null;
