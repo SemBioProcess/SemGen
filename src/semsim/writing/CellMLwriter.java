@@ -120,7 +120,7 @@ public class CellMLwriter extends ModelWriter {
 			String rdffn = modfn.replaceFirst("\\..*$", ".rdf");
 			rdfwriter.setModelNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
 			rdfwriter.setLocalNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);
-			rdfwriter.rdf.setNsPrefix("myOMEX", RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn);
+			rdfwriter.rdf.setNsPrefix("OMEXmodel", RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn);
 			rdfwriter.rdf.setNsPrefix("local", rdfwriter.getLocalNamespace());
 			rdfwriter.setRDFforModelLevelAnnotations();
 		}
