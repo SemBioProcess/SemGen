@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -34,6 +36,7 @@ import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.LocalParameter;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
+import org.sbml.jsbml.NamedSBase;
 import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.QuantityWithUnit;
 import org.sbml.jsbml.RateRule;
@@ -187,6 +190,7 @@ public class SBMLwriter extends ModelWriter {
 		addEvents();
 		addSBMLinitialAssignments();
 		addConstraints();
+		sortElements();
 
 		Document doc = OMEXmetadataEnabled() ? addOMEXmetadataRDF() : addSemSimRDF();
 
@@ -939,6 +943,37 @@ public class SBMLwriter extends ModelWriter {
 			c.setMath(getASTNodeFromRHSofMathML(rc.getMathML(), ""));
 		}
 	}
+	
+	
+	/**
+	 * Sort SBML model elements by ID
+	 */
+	private void sortElements() {
+		Collections.sort(sbmlmodel.getListOfCompartments(), new IDcomparator());
+		Collections.sort(sbmlmodel.getListOfSpecies(), new IDcomparator());
+		Collections.sort(sbmlmodel.getListOfParameters(), new IDcomparator());
+		Collections.sort(sbmlmodel.getListOfFunctionDefinitions(), new IDcomparator());
+		Collections.sort(sbmlmodel.getListOfReactions(), new IDcomparator());
+		
+		for(int i=0; i<sbmlmodel.getListOfReactions().size(); i++) {
+			Collections.sort(sbmlmodel.getReaction(i).getListOfModifiers(), new IDcomparator());
+			Collections.sort(sbmlmodel.getReaction(i).getListOfReactants(), new IDcomparator());
+			Collections.sort(sbmlmodel.getReaction(i).getListOfProducts(), new IDcomparator());
+		}
+	}	
+	
+	    
+	/**
+	 * Comparator for SBML elements with IDs
+	 * @author maxneal
+	 *
+	 */
+	class IDcomparator implements Comparator<NamedSBase>{
+		public int compare(NamedSBase el1, NamedSBase el2){
+          return el1.getId().compareTo(el2.getId());
+        }
+	}
+	
 	
 	
 	/**
