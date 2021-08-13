@@ -80,7 +80,7 @@ public class CellMLreader extends ModelReader {
 		mainNS = doc.getRootElement().getNamespace();
 		
 		// Get curatorial information
-		getModelNameAndIDAndPubMedId(doc, semsimmodel);
+		getModelNameAndMetaIDAndPubMedId(doc, semsimmodel);
 		getDocumentation(doc, semsimmodel);
 
 		// Get the main RDF block for the CellML model
@@ -524,15 +524,17 @@ public class CellMLreader extends ModelReader {
 	 * @param doc JDOM Document representing the CellML XML
 	 * @param semsimmodel The {@link SemSimModel} representing the model
 	 */
-	private void getModelNameAndIDAndPubMedId(Document doc, SemSimModel semsimmodel){
+	private void getModelNameAndMetaIDAndPubMedId(Document doc, SemSimModel semsimmodel){
 		String ab = "";
 		if(doc.getRootElement()!=null){
 			String name = doc.getRootElement().getAttributeValue("name");
 			String id = doc.getRootElement().getAttributeValue("id", RDFNamespace.CMETA.createJdomNamespace());
+			
 			if(name!=null && !name.equals("")){
 				semsimmodel.addAnnotation(new Annotation(SemSimRelation.MODEL_NAME, name));
 				semsimmodel.setName(name);
 			}
+			
 			if(id!=null && !id.equals(""))
 				semsimmodel.setMetadataID(id);
 			

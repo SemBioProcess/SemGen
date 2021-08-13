@@ -141,8 +141,16 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 
 	@Override
 	public void getModelLevelAnnotations() {
-		String modeluri = getModelNamespaceInRDF();
+		String modeluri = getModelNamespaceInRDF() + "#" + semsimmodel.getMetadataID();
+		
 		Resource modelresource = rdf.getResource(modeluri);
+		
+		// If there's no resource with the model URI in OMEX metadata spec 1.2 format,
+		// see if there is one with 1.0 formatting (just model namespace) and use that instead.
+		if ( ! rdf.contains( modelresource, null, (RDFNode) null )) {
+			  modelresource = rdf.getResource(getModelNamespaceInRDF());
+			}
+		
 		StmtIterator stmts = modelresource.listProperties();
 		
 		while(stmts.hasNext()){
