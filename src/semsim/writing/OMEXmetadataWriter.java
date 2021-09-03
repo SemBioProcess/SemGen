@@ -65,45 +65,14 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
 		
 		Resource modelresource = rdf.createResource(modelnamespaceinRDF + "#" + metaid);
-
 		
 		// Save model creator information
-		for(Person creator : semsimmodel.getCreators()) {
-			
-			// If only the account name is set (e.g. an ORCID), use a single triple to indicate the creator
-			if(creator.onlyAccountNameIsSet()) {
-				Resource idres = rdf.createResource(creator.getAccountName().toString());
-				Statement st = rdf.createStatement(modelresource, SemSimRelation.MODEL_CREATOR.getRDFproperty(), idres);
-				addStatement(st);
-			}
-			// Otherwise create a local resource representing the creator and link identifying into to it
-			else {
-				
-				// Create local resource for creator
-				if( ! creator.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", creator);
-				Resource creatorres = rdf.createResource(localnamespaceinRDF + "#" + creator.getMetadataID());
-				Statement creatorst = rdf.createStatement(modelresource, SemSimRelation.MODEL_CREATOR.getRDFproperty(), creatorres);
-				addStatement(creatorst);
-				
-				if(creator.hasName()) {
-					Statement namest = rdf.createStatement(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty(), creator.getName());
-					addStatement(namest);
-				}
-				if(creator.hasEmail()) {
-					Statement emailst = rdf.createStatement(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty(), rdf.createResource("mailto:" + creator.getEmail()));
-					addStatement(emailst);
-				}
-				if(creator.hasAccountName()) {
-					Statement acctnamest = rdf.createStatement(creatorres,  SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty(), rdf.createResource(creator.getAccountName().toString()));
-					addStatement(acctnamest);
-				}
-				if(creator.hasAccountServicesHomepage()) {
-					Statement accthpst = rdf.createStatement(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty(),
-							rdf.createResource(creator.getAccountServiceHomepage().toString()));
-					addStatement(accthpst);
-				}
-			}
-		}
+		for(Person creator : semsimmodel.getCreators())
+			addModelLevelCreatorOrContributor(modelresource, creator, SemSimRelation.MODEL_CREATOR);
+		
+		// Save model contributor information
+		for(Person contributor : semsimmodel.getContributors())
+			addModelLevelCreatorOrContributor(modelresource, contributor, SemSimRelation.MODEL_CONTRIBUTOR);
 		
 		// Save model description
 		if(semsimmodel.hasDescription()){
@@ -142,6 +111,50 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 			if(st!=null) addStatement(st);
 		}
 	}
+	
+	/**
+	 * Add model-level annotation for a creator or contributor
+	 * @param personresource The RDF resource representing the creator or contributor
+	 * @param person A {@link Person} object containing details about the creator or contributor
+	 * @param relation The role the person had in making the model
+	 */
+	private void addModelLevelCreatorOrContributor(Resource personresource, Person person, SemSimRelation relation) {
+
+		// If only the account name is set (e.g. an ORCID), use a single triple to indicate the creator
+		if(person.onlyAccountNameIsSet()) {
+			Resource idres = rdf.createResource(person.getAccountName().toString());
+			Statement st = rdf.createStatement(personresource, relation.getRDFproperty(), idres);
+			addStatement(st);
+		}
+		// Otherwise create a local resource representing the creator and link identifying into to it
+		else {
+			
+			// Create local resource for creator
+			if( ! person.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", person);
+			Resource creatorres = rdf.createResource(localnamespaceinRDF + "#" + person.getMetadataID());
+			Statement creatorst = rdf.createStatement(personresource, relation.getRDFproperty(), creatorres);
+			addStatement(creatorst);
+			
+			if(person.hasName()) {
+				Statement namest = rdf.createStatement(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty(), person.getName());
+				addStatement(namest);
+			}
+			if(person.hasEmail()) {
+				Statement emailst = rdf.createStatement(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty(), rdf.createResource("mailto:" + person.getEmail()));
+				addStatement(emailst);
+			}
+			if(person.hasAccountName()) {
+				Statement acctnamest = rdf.createStatement(creatorres,  SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty(), rdf.createResource(person.getAccountName().toString()));
+				addStatement(acctnamest);
+			}
+			if(person.hasAccountServicesHomepage()) {
+				Statement accthpst = rdf.createStatement(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty(),
+						rdf.createResource(person.getAccountServiceHomepage().toString()));
+				addStatement(accthpst);
+			}
+		}
+	}
+	
 	
 	//TODO: getting duplicate has_part statements for process Synthesis2 in BIOMD51
 	/**

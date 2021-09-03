@@ -242,6 +242,10 @@ public class SemSimRelations {
 		
 		//Model level relations
 		MODEL_CREATOR("creator", RDFNamespace.DCTERMS.getNamespaceAsString(), "a semsim model has some creator", RDFNamespace.DCTERMS.getOWLid()),
+		MODEL_CONTRIBUTOR("contributor", RDFNamespace.DCTERMS.getNamespaceAsString(), "a semsim model has some contributor", RDFNamespace.DCTERMS.getOWLid()),
+
+		MODEL_CREATED("created", RDFNamespace.DCTERMS.getNamespaceAsString(), "a semsim model has some creation date/time", RDFNamespace.DCTERMS.getOWLid()),
+
 		FOAF_NAME("name", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some name", RDFNamespace.FOAF.getOWLid()),
 		FOAF_MBOX("mbox", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some email address", RDFNamespace.FOAF.getOWLid()),
 		FOAF_ACCOUNT_NAME("accountName", RDFNamespace.FOAF.getNamespaceAsString(), "a person has some online account name", RDFNamespace.FOAF.getOWLid()),

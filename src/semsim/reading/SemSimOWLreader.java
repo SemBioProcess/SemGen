@@ -297,18 +297,16 @@ public class SemSimOWLreader extends ModelReader {
 			if(named.getProperty().getIRI().equals(SemSimRelation.MODEL_CREATOR.getIRI())) {
 				// Collect info associated with the creator individual
 				IRI creatoriri = (IRI)named.getValue();
-
-				String name = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(),
-						SemSimRelation.FOAF_NAME.getURIasString());
-				String mbox = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(),
-						SemSimRelation.FOAF_MBOX.getURIasString());
-				String accountname = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(),
-						SemSimRelation.FOAF_ACCOUNT_NAME.getURIasString());
-				String accounthp = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, creatoriri.toURI().toString(),
-						SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getURIasString());
-
-				semsimmodel.addCreator(new Person(name, mbox, URI.create(accountname), URI.create(accounthp)));
-
+				Person person = instantiatePerson(creatoriri);
+				semsimmodel.addCreator(person);
+				annstoremove.add(named);
+			}
+			
+			if(named.getProperty().getIRI().equals(SemSimRelation.MODEL_CONTRIBUTOR.getIRI())) {
+				// Collect info associated with the creator individual
+				IRI contributoriri = (IRI)named.getValue();
+				Person person = instantiatePerson(contributoriri);
+				semsimmodel.addContributor(person);
 				annstoremove.add(named);
 			}
 
@@ -351,6 +349,26 @@ public class SemSimOWLreader extends ModelReader {
 	}
 
 
+	/**
+	 * Collect information about a person in the ontology and generate a new {@link Person}
+	 * @param iri An IRI representing the person in the ontology
+	 * @return A {@link Person} object containing information about the person
+	 * @throws OWLException
+	 */
+	private Person instantiatePerson(IRI iri) throws OWLException {
+		String name = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, iri.toURI().toString(),
+				SemSimRelation.FOAF_NAME.getURIasString());
+		String mbox = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, iri.toURI().toString(),
+				SemSimRelation.FOAF_MBOX.getURIasString());
+		String accountname = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, iri.toURI().toString(),
+				SemSimRelation.FOAF_ACCOUNT_NAME.getURIasString());
+		String accounthp = SemSimOWLFactory.getFunctionalIndDatatypePropertyValues(ont, iri.toURI().toString(),
+				SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getURIasString());
+		
+		return new Person(name, mbox, URI.create(accountname), URI.create(accounthp));
+	}
+	
+	
 	/**
 	 * Collect all classes in the OWL file that are terms from reference ontologies.
 	 * @throws OWLException

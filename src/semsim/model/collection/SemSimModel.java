@@ -93,7 +93,8 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	private double semsimversion;
 	
 	private ArrayList<Person> creators = new ArrayList<Person>();
-	
+	private ArrayList<Person> contributors = new ArrayList<Person>();
+
 	// Model-specific data
 	private Set<Annotation> annotations = new HashSet<Annotation>();
 	private Set<String> errors = new HashSet<String>();
@@ -490,6 +491,7 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 		set.addAll(getPhysicalModelComponents());
 		set.addAll(getSubmodels());
 		set.addAll(getCreators());
+		set.addAll(getContributors());
 		return set;
 	}
 	
@@ -1390,5 +1392,31 @@ public class SemSimModel extends SemSimCollection implements Annotatable  {
 	 */
 	public void addCreator(Person creator) {
 		this.creators.add(creator);
+	}
+	
+	
+	
+	/** @return The model contributors */
+	public ArrayList<Person> getContributors() {
+		return contributors;
+	}
+
+	
+	/**
+	 * Set the model contributors
+	 * @param contributorlist The model contributors
+	 */
+	public void setContributors(ArrayList<Person> contributorlist) {
+		this.contributors.clear();
+		this.contributors.addAll(contributorlist);
+	}
+	
+	
+	/**
+	 * Add a contributor to the contributor list
+	 * @param contributor The contributor to add
+	 */
+	public void addContributor(Person contributor) {
+		this.contributors.add(contributor);
 	}
 }

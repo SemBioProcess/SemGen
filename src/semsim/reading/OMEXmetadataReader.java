@@ -162,44 +162,17 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 				semsimmodel.setDescription(stmt.getObject().asLiteral().getString());
 				continue;
 			}
-			// If it's a statement about a model creator, collect the info
+			// If it's a statement about a model creator or contributor, collect the info
 			else if(prop.getURI().equals(AbstractRDFreader.dcterms_creator.getURI())) {
-				
-				Resource creatorres = stmt.getObject().asResource();
-				Person creator = new Person();
-				
-				// If the object in the <creator> triple is a local resource
-				if(creatorres.getURI().startsWith(localnamespaceinRDF)) {
-					
-					// Set name
-					NodeIterator nameit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty());
-					
-					if( nameit.hasNext() ) creator.setName(nameit.next().asLiteral().toString());
-					
-					// Set email
-					NodeIterator emailit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty());
-					
-					if( emailit.hasNext() )	creator.setEmail(emailit.next().asResource().getURI().replace("mailto:", ""));
-					
-					// Set account name
-					NodeIterator acctnameit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty());
-					
-					if( acctnameit.hasNext() ) creator.setAccountName(URI.create(acctnameit.next().asResource().getURI()));
-					
-					// Set account service homepage
-					NodeIterator accthpit = rdf.listObjectsOfProperty(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty());
-					
-					if( accthpit.hasNext() ) creator.setAccountServiceHomepage(URI.create(accthpit.next().asResource().getURI()));
-				}
-				
-				// Otherwise we assume that the object in the statement is an account name
-				else {
-					creator.setAccountName(URI.create(creatorres.getURI()));
-				}
-				
+				Resource personres = stmt.getObject().asResource();
+				Person creator = collectPersonInfo(personres);
 				semsimmodel.addCreator(creator);
 			}
-			
+			else if(prop.getURI().equals(AbstractRDFreader.dcterms_contributor.getURI())) {
+				Resource personres = stmt.getObject().asResource();
+				Person contributor = collectPersonInfo(personres);
+				semsimmodel.addContributor(contributor);
+			}
 			else {
 				// Collect model-level annotation that is not the description or a creator
 				Relation rel = SemSimRelations.getRelationFromURI(URI.create(stmt.getPredicate().getURI()));
@@ -211,6 +184,46 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 					semsimmodel.addAnnotation(new Annotation(rel,obj.asLiteral().getString()));
 			}
 		}
+	}
+	
+	/**
+	 * Collect name, email, etc. for an RDF resource representing a person
+	 * @param personres The RDF resource representing a person
+	 * @return A {@link Person} object containing the person's info
+	 */
+	private Person collectPersonInfo(Resource personres) {
+		Person creator = new Person();
+		
+		// If the object in the <creator> triple is a local resource
+		if(personres.getURI().startsWith(localnamespaceinRDF)) {
+			
+			// Set name
+			NodeIterator nameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_NAME.getRDFproperty());
+			
+			if( nameit.hasNext() ) creator.setName(nameit.next().asLiteral().toString());
+			
+			// Set email
+			NodeIterator emailit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_MBOX.getRDFproperty());
+			
+			if( emailit.hasNext() )	creator.setEmail(emailit.next().asResource().getURI().replace("mailto:", ""));
+			
+			// Set account name
+			NodeIterator acctnameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty());
+			
+			if( acctnameit.hasNext() ) creator.setAccountName(URI.create(acctnameit.next().asResource().getURI()));
+			
+			// Set account service home page
+			NodeIterator accthpit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty());
+			
+			if( accthpit.hasNext() ) creator.setAccountServiceHomepage(URI.create(accthpit.next().asResource().getURI()));
+		}
+		
+		// Otherwise we assume that the object in the statement is an account name
+		else {
+			creator.setAccountName(URI.create(personres.getURI()));
+		}
+		
+		return creator;
 	}
 	
 	

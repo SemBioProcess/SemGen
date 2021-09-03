@@ -50,18 +50,23 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	private AnnotatorWorkbench workbench;
 	private JOptionPane optionPane;
 	private SemSimModel semsimmodel;
-	private SemGenScrollPane creatorsscroller;
-	private JPanel creatorspanel;
-	private JPanel creatorlistpanel;
+	private SemGenScrollPane personscroller;
+	private JPanel personpanel;
+	private JPanel personlistpanelinscroller;
 	private JTextArea descriptionarea;
 	private JTextArea cellmldocumentationarea;
 	private SemGenScrollPane refannscroller;
 	private JPanel outerrefannpanel;
 	private JPanel annlistpanel;
 	private JButton addrefannbutton;
-	private JButton addcreatorbutton;
+	private JButton addpersonbutton;
 	private int panelwidth = 1200;
 	private int panelheight = 700;
+	
+	private enum Role {
+		CREATOR,
+		CONTRIBUTOR;
+	}
 	
 	public ModelLevelMetadataDialog(AnnotatorWorkbench wb) {
 		super("Model-level annotations");
@@ -84,41 +89,43 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		addbuttonpanel.add(addrefannbutton);
 		addbuttonpanel.add(Box.createHorizontalGlue());
 		
-		JPanel addcreatorpanel = new JPanel();
-		addcreatorpanel.setLayout(new BoxLayout(addcreatorpanel,BoxLayout.X_AXIS));
-		addcreatorpanel.setAlignmentY(LEFT_ALIGNMENT);
+		JPanel addpersonpanel = new JPanel();
+		addpersonpanel.setLayout(new BoxLayout(addpersonpanel,BoxLayout.X_AXIS));
+		addpersonpanel.setAlignmentY(LEFT_ALIGNMENT);
 		
-		addcreatorbutton = new JButton("Add creator");
-		addcreatorbutton.addActionListener(this);
-		addcreatorpanel.add(addcreatorbutton);
-		addcreatorpanel.add(Box.createHorizontalGlue());
+		addpersonbutton = new JButton("Add creator/contributor");
+		addpersonbutton.addActionListener(this);
+		addpersonpanel.add(addpersonbutton);
+		addpersonpanel.add(Box.createHorizontalGlue());
 
-		creatorspanel = new JPanel();
-		creatorspanel.setBorder(BorderFactory.createTitledBorder("Creator(s)"));
-		creatorspanel.setLayout(new BoxLayout(creatorspanel, BoxLayout.Y_AXIS));
+		personpanel = new JPanel();
+		personpanel.setBorder(BorderFactory.createTitledBorder("Creators/Contributors"));
+		personpanel.setLayout(new BoxLayout(personpanel, BoxLayout.Y_AXIS));
 
-		// Add individual creator entries as
-		creatorlistpanel = new JPanel();
-		creatorlistpanel.setLayout(new BoxLayout(creatorlistpanel, BoxLayout.Y_AXIS));
-		creatorlistpanel.setAlignmentY(TOP_ALIGNMENT);
+		// Add individual person entries
+		personlistpanelinscroller = new JPanel();
+		personlistpanelinscroller.setLayout(new BoxLayout(personlistpanelinscroller, BoxLayout.Y_AXIS));
+		personlistpanelinscroller.setAlignmentY(TOP_ALIGNMENT);
 		
-		creatorsscroller = new SemGenScrollPane(creatorlistpanel);
-		creatorsscroller.setPreferredSize(new Dimension(530,222));
-		creatorspanel.setMinimumSize(creatorsscroller.getPreferredSize());
+		personscroller = new SemGenScrollPane(personlistpanelinscroller);
+		personscroller.setPreferredSize(new Dimension(530,222));
+		personpanel.setMinimumSize(personscroller.getPreferredSize());
 
-		creatorspanel.add(addcreatorpanel);
-		creatorspanel.add(creatorsscroller);
+		personpanel.add(addpersonpanel);
+		personpanel.add(personscroller);
 		
-		if(semsimmodel.getCreators().size()==0) 
-			creatorlistpanel.add(new CreatorEntry(new Person()));
+		if(semsimmodel.getCreators().size()==0 && semsimmodel.getContributors().size()==0) 
+			personlistpanelinscroller.add(new PersonPanel(new Person(), Role.CREATOR));
 		else {
-			// Get the model creator info and put it in the interface
-			for(Person creator : semsimmodel.getCreators()) {
-				creatorlistpanel.add(new CreatorEntry(creator));
-			}
+			// Get the model creator and contributor info and put it in the interface
+			for(Person creator : semsimmodel.getCreators())
+				personlistpanelinscroller.add(new PersonPanel(creator, Role.CREATOR));
+			
+			for(Person contributor : semsimmodel.getContributors())
+				personlistpanelinscroller.add(new PersonPanel(contributor, Role.CONTRIBUTOR));
 		}
 		
-		creatorlistpanel.add(Box.createVerticalGlue());
+		personlistpanelinscroller.add(Box.createVerticalGlue());
 		
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.setBorder(BorderFactory.createTitledBorder("Description"));
@@ -188,13 +195,13 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			refannscroller.setMinimumSize(refannscroller.getPreferredSize());
 		}
 		
-		// Left side of dialog contains creators, description
+		// Left side of dialog contains creators/contributors, description
 		// Right side contains reference ontology annotation triples, cellml documentation if present
 		JPanel leftpanel = new JPanel();
 		leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
 		leftpanel.setAlignmentX(LEFT_ALIGNMENT);
 		leftpanel.setAlignmentY(TOP_ALIGNMENT);
-		leftpanel.add(creatorspanel);
+		leftpanel.add(personpanel);
 		leftpanel.add(descriptionpanel);
 		
 		JPanel rightpanel = new JPanel();
@@ -238,22 +245,29 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			if (value.equals("Apply")) {
 				
 				// Changes are saved here
-				// Save creator(s) info
+				// Save creator/contributor info
 				ArrayList<Person> newcreators = new ArrayList<Person>();
-				for(Component c : creatorlistpanel.getComponents()) {
+				ArrayList<Person> newcontributors = new ArrayList<Person>();
+
+				for(Component c : personlistpanelinscroller.getComponents()) {
 					
-					if(c instanceof CreatorEntry) {
-						CreatorEntry ce = (CreatorEntry)c;
+					if(c instanceof PersonPanel) {
+						PersonPanel ce = (PersonPanel)c;
 
 						if(ce.hasSomeData()) {
-							newcreators.add(new Person(ce.namejta.getText(), 
-														ce.emailjta.getText(), 
-														URI.create(ce.accountnamejta.getText()),
-														URI.create(ce.accounthomepagejta.getText())));
+							Person persontoadd = new Person(ce.namejta.getText(), 
+									ce.emailjta.getText(), 
+									URI.create(ce.accountnamejta.getText()),
+									URI.create(ce.accounthomepagejta.getText()));
+							
+							if(ce.roleselector.getSelectedIndex()==0)
+								newcreators.add(persontoadd);
+							else newcontributors.add(persontoadd);
 						}
 					}
 				}
 				semsimmodel.setCreators(newcreators);
+				semsimmodel.setContributors(newcontributors);
 				
 				// Store description
 				semsimmodel.setDescription(descriptionarea.getText());
@@ -302,14 +316,14 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			refannscroller.repaint();
 		}
 		
-		// If "Add creator" button clicked
-		else if(o == addcreatorbutton) {
-			int numcomponents = creatorlistpanel.getComponentCount();
-			this.creatorlistpanel.add(new CreatorEntry(new Person()), 
+		// If "Add creator/contributor" button clicked
+		else if(o == addpersonbutton) {
+			int numcomponents = personlistpanelinscroller.getComponentCount();
+			this.personlistpanelinscroller.add(new PersonPanel(new Person(), Role.CREATOR), 
 					numcomponents-1); // So that panel is placed above vertical glue in creatorlistpanel
-			creatorsscroller.scrollToBottom();
-			creatorsscroller.validate();
-			creatorsscroller.repaint();
+			personscroller.scrollToBottom();
+			personscroller.validate();
+			personscroller.repaint();
 		}
 	}
 	
@@ -354,9 +368,11 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	}
 	
 	
-	// Nested class for dialog-specific panels that correspond to the creators of the model
-		private class CreatorEntry extends JPanel{
+	// Nested class for dialog-specific panels that correspond to the creators/contributors of the model
+		private class PersonPanel extends JPanel{
 			private static final long serialVersionUID = 8599058171666528014L;
+			
+			private JComboBox<String> roleselector = new JComboBox<String>(new String[] {"Creator","Contributor"});
 			private JTextArea namejta;
 			private JTextArea emailjta;
 			private JTextArea accountnamejta;
@@ -368,7 +384,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			private ComponentPanelLabel accounthomepageremovelabel;
 
 			@SuppressWarnings("serial")
-			private CreatorEntry(Person person){
+			private PersonPanel(Person person, Role therole){
 				
 				setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				setAlignmentY(TOP_ALIGNMENT);
@@ -413,19 +429,40 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				else
 					accounthomepagejta.setText("");
 				
+				// Make role panel that sits on top of the person's info and allows user to select role
+				int roleindex = therole==Role.CREATOR ? 0 : 1;
+				roleselector.setPreferredSize(new Dimension(100,25));
+				roleselector.setMaximumSize(new Dimension(100,25));
+				roleselector.setSelectedIndex(roleindex);
+				roleselector.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+				
+				JPanel rolepanel = new JPanel();
+				rolepanel.setLayout(new BoxLayout(rolepanel, BoxLayout.X_AXIS));
+				rolepanel.setBorder(BorderFactory.createEmptyBorder(1, 4, 0, 2));
+				JLabel rolelabel = new JLabel("Role");
+				rolelabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+
+				rolepanel.add(rolelabel);
+				rolepanel.add(Box.createHorizontalStrut(9));
+				rolepanel.add(roleselector);
+				rolepanel.add(Box.createHorizontalGlue());
+				rolepanel.setAlignmentX(LEFT_ALIGNMENT);
+
+				// Add the panels that store info about the person
 				JPanel namepanel = makeFieldPanel("Name", namejta, nameremovelabel);
 				JPanel emailpanel = makeFieldPanel("Email", emailjta, emailremovelabel);
 				JPanel accountnamepanel = makeFieldPanel("Account name (e.g. ORCID)", accountnamejta, accountnameremovelabel);
 				JPanel accounthomepagepanel = makeFieldPanel("Account homepage", accounthomepagejta, accounthomepageremovelabel);
 
 				add(Box.createVerticalStrut(4));
+				add(rolepanel);
 				add(namepanel);
 				add(emailpanel);
 				add(accountnamepanel);
 				add(accounthomepagepanel);
 				add(Box.createVerticalStrut(5));
 				
-				setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+				setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.DARK_GRAY));
 			}
 			
 			private void eraseButtonClicked(JTextArea area){
@@ -448,7 +485,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				apanel.setLayout(new BoxLayout(apanel, BoxLayout.X_AXIS));
 				apanel.setAlignmentX(LEFT_ALIGNMENT);
 				apanel.setPreferredSize(new Dimension(520,40));
-				apanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 2));
+				apanel.setBorder(BorderFactory.createEmptyBorder(1, 4, 0, 2));
 				JLabel label = new JLabel(labeltext);
 				label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 				apanel.add(label);
@@ -461,7 +498,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				return apanel;
 			}
 			
-			// Returns whether there's any info entered for the creator
+			// Returns whether there's any info entered for the creator/contributor
 			private boolean hasSomeData() {
 				return ! (namejta.getText() + emailjta.getText() + accountnamejta.getText() + accounthomepagejta.getText()).equals("");
 			}
@@ -497,7 +534,11 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			relations.add(SemSimRelation.UNKNOWN);
 			items.add("UNKNOWN");
 			addItem("UNKNOWN");
-			
+
+			relations.add(SemSimRelation.MODEL_CREATED);
+			items.add("dc:created");
+			addItem("dc:created");
+
 			// Add available predicates
 			for(Qualifier qual : Qualifier.values()){
 				

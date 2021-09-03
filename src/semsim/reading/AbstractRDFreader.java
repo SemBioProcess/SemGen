@@ -61,6 +61,7 @@ public abstract class AbstractRDFreader {
 	public Model rdf = ModelFactory.createDefaultModel();
 	public static Property dcterms_description = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "description");
 	public static Property dcterms_creator = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "creator");
+	public static Property dcterms_contributor = ResourceFactory.createProperty(RDFNamespace.DCTERMS.getNamespaceAsString(), "contributor");
 
 	protected Map<String, PhysicalModelComponent> ResourceURIandPMCmap = new HashMap<String, PhysicalModelComponent>();
 	protected ModelType modeltype;
