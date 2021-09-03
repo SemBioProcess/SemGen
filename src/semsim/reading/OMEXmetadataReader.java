@@ -192,38 +192,29 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	 * @return A {@link Person} object containing the person's info
 	 */
 	private Person collectPersonInfo(Resource personres) {
-		Person creator = new Person();
+		Person person = new Person();
 		
-		// If the object in the <creator> triple is a local resource
-		if(personres.getURI().startsWith(localnamespaceinRDF)) {
-			
-			// Set name
-			NodeIterator nameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_NAME.getRDFproperty());
-			
-			if( nameit.hasNext() ) creator.setName(nameit.next().asLiteral().toString());
-			
-			// Set email
-			NodeIterator emailit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_MBOX.getRDFproperty());
-			
-			if( emailit.hasNext() )	creator.setEmail(emailit.next().asResource().getURI().replace("mailto:", ""));
-			
-			// Set account name
-			NodeIterator acctnameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty());
-			
-			if( acctnameit.hasNext() ) creator.setAccountName(URI.create(acctnameit.next().asResource().getURI()));
-			
-			// Set account service home page
-			NodeIterator accthpit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty());
-			
-			if( accthpit.hasNext() ) creator.setAccountServiceHomepage(URI.create(accthpit.next().asResource().getURI()));
-		}
+		// Set name
+		NodeIterator nameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_NAME.getRDFproperty());
 		
-		// Otherwise we assume that the object in the statement is an account name
-		else {
-			creator.setAccountName(URI.create(personres.getURI()));
-		}
+		if( nameit.hasNext() ) person.setName(nameit.next().asLiteral().toString());
 		
-		return creator;
+		// Set email
+		NodeIterator emailit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_MBOX.getRDFproperty());
+		
+		if( emailit.hasNext() )	person.setEmail(emailit.next().asResource().getURI().replace("mailto:", ""));
+		
+		// Set account name
+		NodeIterator acctnameit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty());
+		
+		if( acctnameit.hasNext() ) person.setAccountName(URI.create(acctnameit.next().asResource().getURI()));
+		
+		// Set account service home page
+		NodeIterator accthpit = rdf.listObjectsOfProperty(personres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty());
+		
+		if( accthpit.hasNext() ) person.setAccountServiceHomepage(URI.create(accthpit.next().asResource().getURI()));
+		
+		return person;
 	}
 	
 	

@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -31,6 +32,7 @@ import semgen.SemGen;
 import semgen.annotation.common.ComponentPanelLabel;
 import semgen.annotation.workbench.AnnotatorWorkbench;
 import semgen.annotation.workbench.drawers.ModelAnnotationsBench.ModelChangeEnum;
+import semgen.utilities.SemGenError;
 import semgen.utilities.SemGenIcon;
 import semgen.utilities.uicomponent.SemGenDialog;
 import semgen.utilities.uicomponent.SemGenScrollPane;
@@ -255,10 +257,30 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 						PersonPanel ce = (PersonPanel)c;
 
 						if(ce.hasSomeData()) {
+							
+							String accountnametext = ce.accountnamejta.getText().trim();
+							if ( ! validateAccountURI(accountnametext) && ! accountnametext.isEmpty()) {
+								SemGenError.showError(this, 
+										"The account name " + accountnametext + " is not a valid URI.\nPlease enter a valid URI.", "Invalid account name");
+								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+								setVisible(true);
+								return;
+							}
+							
+							String accounthptext = ce.accounthomepagejta.getText();
+							if ( ! validateAccountURI(accounthptext) && ! accounthptext.isEmpty()) {
+								SemGenError.showError(this, 
+										"The account homepage " + accounthptext + " is not a valid URI.\nPlease enter a valid URI.", "Invalid account homepage");
+								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+								setVisible(true);
+								return;
+							}
+							
+							// If we're here, the account name and homepage fields are OK
 							Person persontoadd = new Person(ce.namejta.getText(), 
 									ce.emailjta.getText(), 
-									URI.create(ce.accountnamejta.getText()),
-									URI.create(ce.accounthomepagejta.getText()));
+									URI.create(ce.accountnamejta.getText().trim()),
+									URI.create(ce.accounthomepagejta.getText().trim()));
 							
 							if(ce.roleselector.getSelectedIndex()==0)
 								newcreators.add(persontoadd);
@@ -298,6 +320,19 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 			setVisible(false);
 			optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
 		}
+	}
+	
+	/**
+	 * Test whether an account name or account homepage is a valid URI
+	 * @param text
+	 * @return
+	 */
+	private boolean validateAccountURI(String text) {
+		try {
+            new URL(text).toURI();
+            return true;
+        }
+        catch (Exception e) { return false; }
 	}
 	
 	

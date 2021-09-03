@@ -730,46 +730,30 @@ public class SemSimOWLwriter extends ModelWriter {
 		
 		if( ! person.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", person);
 
-		// If only the account name is set (e.g. an ORCID), we still create an individual from the orcid ID
-		if(person.onlyAccountNameIsSet()) {
-			
-			String creatorind = person.getAccountName().toString();
-			IRI creatoriri = IRI.create(creatorind);
-			SemSimOWLFactory.createSemSimIndividual(ont, creatorind, 
-					factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);
-			
-			SemSimOWLFactory.addOntologyAnnotation(ont, relation.getURIasString(), 
-					factory.getOWLNamedIndividual(creatoriri), manager);
-			
-			SemSimOWLFactory.setIndDatatypeProperty(ont, creatorind, SemSimRelation.FOAF_ACCOUNT_NAME, 
-					person.getAccountName().toString(), manager);
-		}
-		// Otherwise create a local resource representing the creator and link identifying info to it
-		else {
-			// Create OWL individual representing creator
-			String personind = namespace + person.getMetadataID();
-			
-			if(person.hasAccountName()) personind = person.getAccountName().toString();
+		// Create a local resource representing the person and link identifying info to it
+		String personind = namespace + person.getMetadataID();
+		
+		// Use account name for the IRI, if it's present
+		if(person.hasAccountName()) personind = person.getAccountName().toString();
 
-			IRI creatoriri = IRI.create(personind);
-			SemSimOWLFactory.createSemSimIndividual(ont, personind, 
-					factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);
-			
-			SemSimOWLFactory.addOntologyAnnotation(ont, relation.getURIasString(), 
-					factory.getOWLNamedIndividual(creatoriri), manager);
-			
-			if(person.hasName())
-				SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_NAME, person.getName(), manager);
+		IRI personiri = IRI.create(personind);
+		SemSimOWLFactory.createSemSimIndividual(ont, personind, 
+				factory.getOWLClass(SemSimTypes.PERSON.getIRI()), "", manager);
+		
+		SemSimOWLFactory.addOntologyAnnotation(ont, relation.getURIasString(), 
+				factory.getOWLNamedIndividual(personiri), manager);
+		
+		if(person.hasName())
+			SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_NAME, person.getName(), manager);
 
-			if(person.hasEmail())
-				SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_MBOX, person.getEmail(), manager);
-			
-			if(person.hasAccountName())
-				SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_ACCOUNT_NAME, person.getAccountName().toString(), manager);
-			
-			if(person.hasAccountServicesHomepage())
-				SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE, person.getAccountServiceHomepage().toString(), manager);
-		}
+		if(person.hasEmail())
+			SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_MBOX, person.getEmail(), manager);
+		
+		if(person.hasAccountName())
+			SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_ACCOUNT_NAME, person.getAccountName().toString(), manager);
+		
+		if(person.hasAccountServicesHomepage())
+			SemSimOWLFactory.setIndDatatypeProperty(ont, personind, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE, person.getAccountServiceHomepage().toString(), manager);
 	}
 	
 	//********************************************************************//

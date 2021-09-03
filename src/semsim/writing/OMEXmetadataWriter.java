@@ -1,6 +1,7 @@
 package semsim.writing;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.Set;
 
 import org.sbml.jsbml.CVTerm.Qualifier;
@@ -114,44 +115,57 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	
 	/**
 	 * Add model-level annotation for a creator or contributor
-	 * @param personresource The RDF resource representing the creator or contributor
+	 * @param modelresource The RDF resource representing the model as a whole
 	 * @param person A {@link Person} object containing details about the creator or contributor
 	 * @param relation The role the person had in making the model
 	 */
-	private void addModelLevelCreatorOrContributor(Resource personresource, Person person, SemSimRelation relation) {
+	private void addModelLevelCreatorOrContributor(Resource modelresource, Person person, SemSimRelation relation) {
 
-		// If only the account name is set (e.g. an ORCID), use a single triple to indicate the creator
-		if(person.onlyAccountNameIsSet()) {
-			Resource idres = rdf.createResource(person.getAccountName().toString());
-			Statement st = rdf.createStatement(personresource, relation.getRDFproperty(), idres);
-			addStatement(st);
+		// If there is an account name, see if it is a valid URI
+		// If so, use it as the resource. Otherwise, assign local resource URI.
+		Resource personres = null;
+		boolean useaccountnameforuri = false;
+		
+		if(person.hasAccountName()) {
+	        try {
+	            new URL(person.getAccountName().toString()).toURI();
+	            useaccountnameforuri = true;
+	        }
+	        catch (Exception e) { }
 		}
-		// Otherwise create a local resource representing the creator and link identifying into to it
+		
+		if(useaccountnameforuri)
+			personres = rdf.createResource(person.getAccountName().toString());
+		
+		// Otherwise create a local resource representing the person and link identifying into to it
 		else {
+			// Assign metadata ID if the Person doesn't have one yet
+			if( ! person.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", person);
 			
 			// Create local resource for creator
-			if( ! person.hasMetadataID() ) semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", person);
-			Resource creatorres = rdf.createResource(localnamespaceinRDF + "#" + person.getMetadataID());
-			Statement creatorst = rdf.createStatement(personresource, relation.getRDFproperty(), creatorres);
-			addStatement(creatorst);
-			
-			if(person.hasName()) {
-				Statement namest = rdf.createStatement(creatorres, SemSimRelation.FOAF_NAME.getRDFproperty(), person.getName());
-				addStatement(namest);
-			}
-			if(person.hasEmail()) {
-				Statement emailst = rdf.createStatement(creatorres, SemSimRelation.FOAF_MBOX.getRDFproperty(), rdf.createResource("mailto:" + person.getEmail()));
-				addStatement(emailst);
-			}
-			if(person.hasAccountName()) {
-				Statement acctnamest = rdf.createStatement(creatorres,  SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty(), rdf.createResource(person.getAccountName().toString()));
-				addStatement(acctnamest);
-			}
-			if(person.hasAccountServicesHomepage()) {
-				Statement accthpst = rdf.createStatement(creatorres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty(),
-						rdf.createResource(person.getAccountServiceHomepage().toString()));
-				addStatement(accthpst);
-			}
+			personres = rdf.createResource(localnamespaceinRDF + "#" + person.getMetadataID());
+		}
+		
+		Statement personst = rdf.createStatement(modelresource, relation.getRDFproperty(), personres);
+		addStatement(personst);
+		
+		// Add info to RDF 
+		if(person.hasName()) {
+			Statement namest = rdf.createStatement(personres, SemSimRelation.FOAF_NAME.getRDFproperty(), person.getName());
+			addStatement(namest);
+		}
+		if(person.hasEmail()) {
+			Statement emailst = rdf.createStatement(personres, SemSimRelation.FOAF_MBOX.getRDFproperty(), rdf.createResource("mailto:" + person.getEmail()));
+			addStatement(emailst);
+		}
+		if(person.hasAccountName()) {
+			Statement acctnamest = rdf.createStatement(personres,  SemSimRelation.FOAF_ACCOUNT_NAME.getRDFproperty(), rdf.createResource(person.getAccountName().toString()));
+			addStatement(acctnamest);
+		}
+		if(person.hasAccountServicesHomepage()) {
+			Statement accthpst = rdf.createStatement(personres, SemSimRelation.FOAF_ACCOUNT_SERVICE_HOMEPAGE.getRDFproperty(),
+					rdf.createResource(person.getAccountServiceHomepage().toString()));
+			addStatement(accthpst);
 		}
 	}
 	
