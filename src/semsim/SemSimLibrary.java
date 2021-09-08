@@ -39,7 +39,7 @@ import semsim.utilities.ResourcesManager;
 /** Class for holding OPB reference properties, physical unit settings and other data required
  *  for reading and writing models**/
 public class SemSimLibrary {
-	public static final double SEMSIM_VERSION = 0.2;
+	public static final double SEMSIM_VERSION = 0.3;
 	public static final IRI SEMSIM_VERSION_IRI = IRI.create(RDFNamespace.SEMSIM.getNamespaceAsString() + "SemSimVersion");
 
 	public static final String DEFAULT_CFG_PATH = "semsim/cfg_default/";

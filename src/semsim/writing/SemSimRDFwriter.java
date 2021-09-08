@@ -54,7 +54,7 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	 * Constructor with an existing RDF block
 	 * @param semsimmodel The SemSim model whose annotations will be written out as RDF
 	 * @param rdfasstring Existing RDF content to add to SemSim-related RDF content
-	 * @param modeltype The type of model being written out
+	 * @param accessor The {@link ModelAccessor} indicating the write location, type of model to write, etc.
 	 */
 	public SemSimRDFwriter(ModelAccessor accessor, SemSimModel semsimmodel, String rdfasstring){	
 		super(accessor, null);
