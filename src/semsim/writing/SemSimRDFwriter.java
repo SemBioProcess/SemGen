@@ -285,17 +285,17 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						// Set the sources
 						for(PhysicalEntity source : process.getSourcePhysicalEntities()){
 							setRDFstatementsForEntityParticipation(process, source, 
-									SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), process.getSourceStoichiometry(source));
+									SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), process.getSourceStoichiometry(source), null);
 						}
 						// Set the sinks
 						for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
 							setRDFstatementsForEntityParticipation(process, sink,
-									SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), process.getSinkStoichiometry(sink));
+									SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), process.getSinkStoichiometry(sink), null);
 						}
 						// Set the mediators
 						for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
 							setRDFstatementsForEntityParticipation(process, mediator,
-									SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
+									SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null, null);
 						}
 					}
 					// Otherwise we assume it's a property of a force
@@ -325,12 +325,12 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 						// Set the sources
 						for(PhysicalEntity source : force.getSources()){
 							setRDFstatementsForEntityParticipation(force, source, 
-									SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), null);
+									SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), null, null);
 						}
 						// Set the sinks
 						for(PhysicalEntity sink : force.getSinks()){
 							setRDFstatementsForEntityParticipation(force, sink,
-									SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), null);
+									SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), null, null);
 						}
 					}
 				}

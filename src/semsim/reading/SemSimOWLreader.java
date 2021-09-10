@@ -314,9 +314,6 @@ public class SemSimOWLreader extends ModelReader {
 			if(named.getProperty().getIRI().toString().startsWith(RDFNamespace.BQB.toString()) ||
 				named.getProperty().getIRI().toString().startsWith(RDFNamespace.BQM.toString())	) {
 
-				// TODO: If use reference ontology ann, plain strings aren't read in right
-				// If use regular ann, Model-level dialog only looks at reference ontology terms
-				// Try to make it a reference ontology annotation here and see if we can use bad URIs
 				Relation therel = SemSimRelations.getRelationFromURI(named.getProperty().getIRI().toURI());
 				String thevalue = ((OWLLiteral)named.getValue()).getLiteral().toString();
 //				ReferenceOntologyAnnotation refann = new ReferenceOntologyAnnotation(therel, theuri, "", sslib);

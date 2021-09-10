@@ -18,6 +18,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 
 import semsim.SemSimObject;
+import semsim.annotation.ReferenceTerm;
 import semsim.definitions.ReferenceOntologies;
 import semsim.definitions.SemSimTypes;
 import semsim.fileaccessors.ModelAccessor;
@@ -235,7 +236,8 @@ public abstract class AbstractRDFwriter {
 	 * or mediator in the process
 	 * @param multiplier Stoichiometry for the entity's participation in the process
 	 */ 
-	protected void setRDFstatementsForEntityParticipation(PhysicalModelComponent pmc, PhysicalEntity physent, Property relationship, Double multiplier){
+	protected void setRDFstatementsForEntityParticipation(PhysicalModelComponent pmc, 
+			PhysicalEntity physent, Property relationship, Double multiplier, Set<String> metaidsinsbml){
 		
 		Resource pmcres = getResourceForPMCandAnnotate(pmc);
 		
@@ -255,7 +257,7 @@ public abstract class AbstractRDFwriter {
 		
 		// Create link between participant and the physical entity it references
 		if(physent.isType(SemSimTypes.COMPOSITE_PHYSICAL_ENTITY)){
-			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent);
+			URI physentrefuri = setCompositePhysicalEntityMetadata((CompositePhysicalEntity)physent, metaidsinsbml);
 			physentrefres = rdf.getResource(physentrefuri.toString());
 		}
 		else physentrefres = getResourceForPMCandAnnotate(physent);
@@ -280,12 +282,21 @@ public abstract class AbstractRDFwriter {
 	
 	
 	/**
-	 * Add statements that describe a composite physical entity in the model.
-	 * Uses recursion to store all composite physical entities that make it up, too.
-	 * @param cpe A CompositePhysicalEntity
+	 * @param cpe A {@link CompositePhysicalEntity}
 	 * @return RDF URI of the index (first) entity in the composite physical entity
 	 */
 	protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe){
+		return setCompositePhysicalEntityMetadata(cpe, null);
+	}
+
+	
+	/**
+	 * Add statements that describe a composite physical entity in the model.
+	 * Uses recursion to store all composite physical entities that make it up, too.
+	 * @param cpe A {@link CompositePhysicalEntity}
+	 * @return RDF URI of the index (first) entity in the composite physical entity
+	 */
+	protected URI setCompositePhysicalEntityMetadata(CompositePhysicalEntity cpe, Set<String> metaidsinsbml){
 		
 		// Get the Resource corresponding to the index entity of the composite entity
 		// If we haven't added this composite entity before, log it
@@ -303,10 +314,27 @@ public abstract class AbstractRDFwriter {
 		// when writing an SBML model), use the metadata ID on that first entity
 		// in the RDF output.
 		// TODO: need to check if all works OK if we go from SBML to CellML with RDF annotations
-		if( cpe.getArrayListOfEntities().get(0).hasMetadataID() 
+		
+		PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
+		
+		if( indexent.hasMetadataID() 
 				&& semsimmodel.getSourceModelType() == ModelType.SBML_MODEL) {
-			indexuri = URI.create(modelnamespaceinRDF + "#" + cpe.getArrayListOfEntities().get(0).getMetadataID());
+			
+			String metaid = indexent.getMetadataID();
+			String namespacetouse = modelnamespaceinRDF;
+
+			if(metaidsinsbml != null) {
+				if( ! metaidsinsbml.contains(metaid))
+					namespacetouse = localnamespaceinRDF;
+			}
+			
+			indexuri = URI.create(namespacetouse + "#" + metaid);
 			indexresource = rdf.getResource(indexuri.toString());
+			
+			// If a custom term, store its annotations, name, description, etc.
+			// If a ReferenceTerm, annotations should have already been stored
+			if( ! ( indexent instanceof ReferenceTerm) )
+				setReferenceOrCustomResourceAnnotations(indexent, indexresource);
 		}
 		else {
 			indexuri = PMCandResourceURImap.get(cpe);
@@ -317,12 +345,13 @@ public abstract class AbstractRDFwriter {
 			}
 			else indexresource = rdf.getResource(indexuri.toString());
 			
-			PhysicalEntity indexent = cpe.getArrayListOfEntities().get(0);
-			
 			setReferenceOrCustomResourceAnnotations(indexent, indexresource);
 		}
 		
+		
 		if (cpe.getArrayListOfEntities().size()==1) return indexuri;
+		
+		
 		
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
@@ -631,5 +660,11 @@ public abstract class AbstractRDFwriter {
 	 */
 	protected void addStatement(Statement st){
 		if( ! rdf.contains(st)) rdf.add(st);
+	}
+
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares,
+			Set<String> metaidsinsbml) {
+		// TODO Auto-generated method stub
+		
 	}
 }

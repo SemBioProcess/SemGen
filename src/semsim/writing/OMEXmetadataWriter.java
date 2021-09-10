@@ -40,6 +40,8 @@ import semsim.reading.AbstractRDFreader;
  */
 public class OMEXmetadataWriter extends AbstractRDFwriter{
 
+	public String versionCompliance = "1.2";
+	
 	public OMEXmetadataWriter(ModelAccessor accessor, SemSimModel model) {
 		super(accessor, model);	
 		initialize(model);
@@ -199,6 +201,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	 * @param pmc An annotated physical model component
 	 */
 	protected void setAnnotationsForSBMLphysicalComponent(String namespace, String metaid, PhysicalModelComponent pmc) {
+		
 		// TODO: what if no metaid assigned?
 		Resource res = rdf.createResource(namespace + "#" + metaid);
 		
@@ -324,7 +327,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 
 	
 	@Override
-	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares, Set<String> metaidsinsbml) {
 		
 		// Creates the isVersionOf statement linking the data structure to an OPB term.
 		// Then creates statements linking the data structure to what it's a property of.
@@ -338,7 +341,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 			
 			addStatement(st);
 			
-			setDataStructurePropertyOfAnnotation((DataStructure)ds, ares);
+			setDataStructurePropertyOfAnnotation((DataStructure)ds, ares, metaidsinsbml);
 		}		
 	}
 	
@@ -349,8 +352,9 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	 * data structure's composite annotation.
 	 * @param ds The annotated data structure
 	 * @param ares RDF Resource representing the data structure
+	 * @param metaidsinsbml List of metadata IDs used in the model file, if SBML
 	 */
-	protected void setDataStructurePropertyOfAnnotation(DataStructure ds, Resource ares){		
+	protected void setDataStructurePropertyOfAnnotation(DataStructure ds, Resource ares, Set<String> metaidsinsbml){		
 		
 		// Collect physical model components with properties
 		if( ! ds.isImportedViaSubmodel()){
@@ -367,7 +371,8 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					if (cpe.getArrayListOfEntities().size()>1) {
 						
 						// Get the Resource corresponding to the index entity of the composite entity
-						URI indexuri = setCompositePhysicalEntityMetadata(cpe);
+						URI indexuri = setCompositePhysicalEntityMetadata(cpe, metaidsinsbml);
+						
 						Resource indexresource = rdf.getResource(indexuri.toString());
 						Statement propofst = rdf.createStatement(
 								ares, 
@@ -427,17 +432,20 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					// Set the sources
 					for(PhysicalEntity source : process.getSourcePhysicalEntities()){
 						setRDFstatementsForEntityParticipation(process, source, 
-								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), process.getSourceStoichiometry(source));
+								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), 
+								process.getSourceStoichiometry(source), metaidsinsbml);
 					}
 					// Set the sinks
 					for(PhysicalEntity sink : process.getSinkPhysicalEntities()){
 						setRDFstatementsForEntityParticipation(process, sink,
-								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), process.getSinkStoichiometry(sink));
+								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), 
+								process.getSinkStoichiometry(sink), metaidsinsbml);
 					}
 					// Set the mediators
 					for(PhysicalEntity mediator : process.getMediatorPhysicalEntities()){
 						setRDFstatementsForEntityParticipation(process, mediator,
-								SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), null);
+								SemSimRelation.HAS_MEDIATOR_PARTICIPANT.getRDFproperty(), 
+								null, metaidsinsbml);
 					}
 				}
 				else{  // Otherwise we assume it's a property of a physical energy differential
@@ -463,12 +471,14 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 					// Set the sources
 					for(PhysicalEntity source : force.getSources()){
 						setRDFstatementsForEntityParticipation(force, source, 
-								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), null);
+								SemSimRelation.HAS_SOURCE_PARTICIPANT.getRDFproperty(), 
+								null, metaidsinsbml);
 					}
 					// Set the sinks
 					for(PhysicalEntity sink : force.getSinks()){
 						setRDFstatementsForEntityParticipation(force, sink,
-								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), null);
+								SemSimRelation.HAS_SINK_PARTICIPANT.getRDFproperty(), 
+								null, metaidsinsbml);
 					}
 				}
 			}
@@ -491,6 +501,12 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	@Override
 	protected Property getPartOfPropertyForComposites(){
 		return StructuralRelation.BQB_IS_PART_OF.getRDFproperty();
+	}
+
+
+	@Override
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
+		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares, null);
 	}
 	
 }

@@ -296,6 +296,7 @@ public abstract class AbstractRDFreader {
 		// Instantiate, if not present
 
 		PhysicalModelComponent pmc = null;
+		
 		if(ResourceURIandPMCmap.containsKey(res.getURI()))
 			pmc = ResourceURIandPMCmap.get(res.getURI());
 
@@ -306,7 +307,8 @@ public abstract class AbstractRDFreader {
 			boolean isproperty = res.getLocalName().startsWith("OPB_");
 			boolean isprocess = res.getLocalName().startsWith("process_");
 			boolean isforce = res.getLocalName().startsWith("force_");
-			boolean isentity = res.getLocalName().startsWith("entity_") || (isannres==null && ! isproperty && ! isprocess && ! isforce); // Assume that if there's no identity annotation, it's a reference URI to a physical entity
+//			boolean isentity = res.getLocalName().startsWith("entity_") || (isannres==null && ! isproperty && ! isprocess && ! isforce); // Assume that if there's no identity annotation, it's a reference URI to a physical entity
+			boolean isentity = res.getLocalName().startsWith("entity_") || (! isproperty && ! isprocess && ! isforce); // Assume that if there's no identity annotation, it's a reference URI to a physical entity
 
 
 			// If a physical entity
@@ -426,6 +428,7 @@ public abstract class AbstractRDFreader {
 	 * that corresponds to the input RDF resource
 	 */
 	private PhysicalEntity createCompositeEntityComponentFromResourceAndAnnotate(Resource res){
+		
 		Resource isannres = res.getPropertyResourceValue(SemSimRelation.BQB_IS.getRDFproperty());
 
 		if(isannres==null)

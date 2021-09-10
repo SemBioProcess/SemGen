@@ -7,6 +7,7 @@ import java.util.List;
 import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.CVTerm.Qualifier;
+import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.Model;
 
 import org.apache.jena.rdf.model.Literal;
@@ -24,6 +25,7 @@ import semsim.annotation.Relation;
 import semsim.definitions.RDFNamespace;
 import semsim.definitions.SemSimRelations;
 import semsim.definitions.SemSimRelations.SemSimRelation;
+import semsim.definitions.SemSimRelations.StructuralRelation;
 import semsim.fileaccessors.ModelAccessor;
 import semsim.fileaccessors.OMEXAccessor;
 import semsim.model.collection.SemSimModel;
@@ -50,6 +52,8 @@ import semsim.writing.SemSimRDFwriter;
 
 public class OMEXmetadataReader extends AbstractRDFreader{
 	
+	public String versionCompliance = "1.2";
+
 	/**
 	 * Constructor
 	 * @param ma A {@link ModelAccessor} indicating the location of the OMEX metadata file
@@ -72,8 +76,18 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		String modfn = ma.getFileName();
 		String rdffn = ma.getOMEXmetadataFileName();
 
-		setModelNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
-		setLocalNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);	
+		// If the old semsim namespace is used (http://www.bhi.washington.edu/SemSim#)
+		// then it's a 1.0-formatted metadata file and we should use "./[model name]" for the 
+		// namespace
+		if(rdf.getNsPrefixURI("semsim").equals("http://www.bhi.washington.edu/SemSim#")) {
+			setModelNamespaceInRDF(AbstractRDFreader.TEMP_BASE + modfn);
+			setLocalNamespaceInRDF(AbstractRDFreader.TEMP_BASE + modfn);
+			setVersionCompliance("1.0");
+		}
+		else {
+			setModelNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + modfn);
+			setLocalNamespaceInRDF(RDFNamespace.OMEX_LIBRARY.getNamespaceAsString() + archivefn + "/" + rdffn);	
+		}
 	}
 
 	/**
@@ -106,8 +120,20 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		
 		// For reading in OMEX metadata-formatted annotations on SBML compartments, species, and reactions
 		String metaid = sbaseobj.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
-		String ns = getModelNamespaceInRDF();
-		Resource res = rdf.getResource(ns + "#" + metaid);
+		String modelns = getModelNamespaceInRDF();
+		String localns = getLocalNamespaceInRDF();
+
+		Resource res = rdf.getResource(modelns + "#" + metaid);
+
+		// If we're looking at a <compartment>, and this is a 1.2-formatted OMEX metadata file 
+		// and there is an <is> annotation as well as an <isPartOf> annotation, we treat this is
+		// a composite physical entity annotation on the compartment (not a singular annotation)
+		// and we don't collect the other annotations
+		boolean hasis = rdf.listObjectsOfProperty(res, SemSimRelation.BQB_IS.getRDFproperty()).hasNext();
+		boolean haspartof = rdf.listObjectsOfProperty(res, StructuralRelation.BQB_IS_PART_OF.getRDFproperty()).hasNext();
+		if(sbaseobj instanceof Compartment && getVersionCompliance()=="1.2" && hasis && haspartof) return;
+		
+		// Otherwise we process the singular annotations on the 
 		Qualifier[] qualifiers = Qualifier.values();
 				
 		for(int i=0;i<qualifiers.length;i++){
@@ -127,7 +153,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 						CVTerm cvterm = new CVTerm();
 						cvterm.setQualifier(q);
 						
-						if(objres.getURI().contains(ns + "#")) break; // If the annotation is the start of a composite physical entity, break while loop
+						if(objres.getURI().contains(modelns + "#") || objres.getURI().contains(localns + "#")) break; // If the annotation is the start of a composite physical entity, break while loop
 
 						String uriasstring = AbstractRDFwriter.convertURItoIdentifiersDotOrgFormat(URI.create(objres.getURI())).toString();
 						cvterm.addResourceURI(uriasstring);
@@ -260,7 +286,7 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		String metaid = ds.getMetadataID();
 		//String ns = TEMP_BASE + semsimmodel.getLegacyCodeLocation().getFileName();
 		Resource resource = rdf.getResource(ns + "#" + metaid);
-					
+		
 		collectFreeTextAnnotation(ds, resource);
 		collectSingularBiologicalAnnotation(ds, resource);
 		collectCompositeAnnotation(ds, resource);
@@ -370,5 +396,21 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 	@Override
 	protected void getAllSemSimSubmodelAnnotations() {	
 		//TODO:
+	}
+	
+	
+	/**
+	 * @return The OMEX metadata specification version of the metadata
+	 */
+	public String getVersionCompliance() {
+		return versionCompliance;
+	}
+	
+	
+	/**
+	 * @param version The OMEX metadata specification version
+	 */
+	private void setVersionCompliance(String version) {
+		this.versionCompliance = version;
 	}
 }

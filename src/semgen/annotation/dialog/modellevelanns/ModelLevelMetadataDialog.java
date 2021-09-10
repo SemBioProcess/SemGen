@@ -14,6 +14,8 @@ import java.beans.PropertyChangeListener;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -62,6 +64,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	private JPanel annlistpanel;
 	private JButton addrefannbutton;
 	private JButton addpersonbutton;
+	private Set<Relation> hiddenrelationsfortriples = new HashSet<Relation>();
 	private int panelwidth = 1200;
 	private int panelheight = 700;
 	
@@ -75,6 +78,10 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		this.workbench = wb;
 		this.semsimmodel = wb.getSemSimModel();
 		this.setModalExclusionType(Dialog.ModalExclusionType.NO_EXCLUDE);
+		
+		hiddenrelationsfortriples.add(SemSimRelation.MODEL_NAME);
+		hiddenrelationsfortriples.add(SemSimRelation.CELLML_RDF_MARKUP);
+		hiddenrelationsfortriples.add(SemSimRelation.CELLML_DOCUMENTATION);
 		
 		outerrefannpanel = new JPanel();
 		outerrefannpanel.setBorder(BorderFactory.createTitledBorder("Knowledge resource annotations"));
@@ -91,6 +98,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		addbuttonpanel.add(addrefannbutton);
 		addbuttonpanel.add(Box.createHorizontalGlue());
 		
+		// Set up creator/contributor panel
 		JPanel addpersonpanel = new JPanel();
 		addpersonpanel.setLayout(new BoxLayout(addpersonpanel,BoxLayout.X_AXIS));
 		addpersonpanel.setAlignmentY(LEFT_ALIGNMENT);
@@ -129,6 +137,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		
 		personlistpanelinscroller.add(Box.createVerticalGlue());
 		
+		// Set up model description panel
 		JPanel descriptionpanel = new JPanel();
 		descriptionpanel.setBorder(BorderFactory.createTitledBorder("Description"));
 		
@@ -144,6 +153,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				
 		descriptionarea.setText(semsimmodel.getDescription());
 		
+		// Set up CellML documentation panel
 		JPanel cellmldocumentationpanel = new JPanel();
 		cellmldocumentationpanel.setBorder(BorderFactory.createTitledBorder("CellML documentation"));
 		
@@ -168,11 +178,11 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		annlistpanel.setAlignmentY(TOP_ALIGNMENT);
 		
 		// Add the individual reference ontology annotations
-		for(ReferenceOntologyAnnotation ann : semsimmodel.getReferenceOntologyAnnotations()){
+		for(Annotation ann : semsimmodel.getAnnotations()){
 			
-			if(ann.getRelation()==null) continue;
+			if(ann.getRelation()==null || hiddenrelationsfortriples.contains(ann.getRelation())) continue;
 
-			ReferenceAnnotationTriplePanel newpanel = new ReferenceAnnotationTriplePanel(ann);
+			ModelLevelAnnotationTriplePanel newpanel = new ModelLevelAnnotationTriplePanel(ann);
 			annlistpanel.add(newpanel);
 		}
 		
@@ -259,7 +269,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 						if(ce.hasSomeData()) {
 							
 							String accountnametext = ce.accountnamejta.getText().trim();
-							if ( ! validateAccountURI(accountnametext) && ! accountnametext.isEmpty()) {
+							if ( ! validateURI(accountnametext) && ! accountnametext.isEmpty()) {
 								SemGenError.showError(this, 
 										"The account name " + accountnametext + " is not a valid URI.\nPlease enter a valid URI.", "Invalid account name");
 								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
@@ -268,7 +278,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 							}
 							
 							String accounthptext = ce.accounthomepagejta.getText();
-							if ( ! validateAccountURI(accounthptext) && ! accounthptext.isEmpty()) {
+							if ( ! validateURI(accounthptext) && ! accounthptext.isEmpty()) {
 								SemGenError.showError(this, 
 										"The account homepage " + accounthptext + " is not a valid URI.\nPlease enter a valid URI.", "Invalid account homepage");
 								optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
@@ -294,25 +304,35 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 				// Store description
 				semsimmodel.setDescription(descriptionarea.getText());
 				
-				// store cellml documentation edits
-				for(Annotation ann : semsimmodel.getAnnotations()){
-					if(ann.getRelation()==SemSimRelation.CELLML_DOCUMENTATION){
-						ann.setValue(cellmldocumentationarea.getText());
-					}
-				}
-				
 				// store annotations
-				semsimmodel.removeAllReferenceAnnotations();
+				semsimmodel.removeAllAnnotations();
+				
+				// store cellml documentation edits
+				String cellmldoctext = cellmldocumentationarea.getText().trim();
+				
+				if( ! cellmldoctext.isEmpty())
+					semsimmodel.addAnnotation(
+							new Annotation(SemSimRelation.CELLML_DOCUMENTATION, cellmldoctext));
+				
+				// Store the annotation triples
 				for(Component c : annlistpanel.getComponents()){
-					if(c instanceof ReferenceAnnotationTriplePanel){
-						ReferenceAnnotationTriplePanel annpanel = (ReferenceAnnotationTriplePanel)c;
+					
+					if(c instanceof ModelLevelAnnotationTriplePanel){
+						ModelLevelAnnotationTriplePanel annpanel = (ModelLevelAnnotationTriplePanel)c;
 						AnnotationComboBox acb = annpanel.jcb;
 						Integer index = acb.items.indexOf(acb.getSelectedItem());
 						Relation rel = acb.relations.get(index);
-						String objval = annpanel.jta.getText();
+						String objval = annpanel.jta.getText().trim();
 						
-						if(rel != SemSimRelation.UNKNOWN && ! objval.trim().isEmpty())
-							semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(objval), "", SemGen.semsimlib);
+						if(rel != SemSimRelation.UNKNOWN && ! objval.isEmpty()) {
+							
+							// If the object of the triple is a valid URI, create a ReferenceOntologyAnnotation
+							if(validateURI(objval))
+								semsimmodel.addReferenceOntologyAnnotation(rel, URI.create(objval), "", SemGen.semsimlib);
+							// Otherwise create a plain annotation with object as a string
+							else
+								semsimmodel.addAnnotation(new Annotation(rel, objval));
+						}
 					}
 				}
 				workbench.update(null, ModelChangeEnum.METADATACHANGED);
@@ -327,7 +347,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	 * @param text
 	 * @return
 	 */
-	private boolean validateAccountURI(String text) {
+	private boolean validateURI(String text) {
 		try {
             new URL(text).toURI();
             return true;
@@ -343,7 +363,7 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 		// If "Add annotation" button clicked
 		if (o == addrefannbutton) {
 			int numcomponents = annlistpanel.getComponentCount();
-			this.annlistpanel.add(new ReferenceAnnotationTriplePanel(
+			this.annlistpanel.add(new ModelLevelAnnotationTriplePanel(
 					new ReferenceOntologyAnnotation(SemSimRelation.UNKNOWN,URI.create(""),"",SemGen.semsimlib)), 
 					numcomponents-1); // So that the panel is placed above the vertical glue at the bottom of annlistpanel
 			refannscroller.scrollToBottom();
@@ -364,18 +384,19 @@ public class ModelLevelMetadataDialog extends SemGenDialog implements PropertyCh
 	
 	
 	// Nested class for dialog-specific panels that correspond to the annotations on the model
-	private class ReferenceAnnotationTriplePanel extends JPanel{
+	private class ModelLevelAnnotationTriplePanel extends JPanel{
 		private static final long serialVersionUID = 8599058171666528014L;
 		private AnnotationComboBox jcb;
 		private JTextArea jta;
 		private ComponentPanelLabel removelabel;
 		
 		@SuppressWarnings("serial")
-		private ReferenceAnnotationTriplePanel(ReferenceOntologyAnnotation ann){
+		private ModelLevelAnnotationTriplePanel(Annotation ann){
+			
 			jcb = new AnnotationComboBox(ann.getRelation());
 			jta = new JTextArea();
 			jta.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-			jta.setText(ann.getReferenceURI().toString());
+			jta.setText(ann.getValue().toString());
 			
 			removelabel = new ComponentPanelLabel(SemGenIcon.eraseicon,"Remove annotation") {
 				public void onClick() {

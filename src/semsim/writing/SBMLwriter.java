@@ -125,7 +125,7 @@ public class SBMLwriter extends ModelWriter {
 	private ArrayList<String> globalParameters = new ArrayList<String>();
 	
 	private AbstractRDFwriter rdfwriter;
-	private Set<String> metaIDsUsed = new HashSet<String>();
+	public Set<String> metaIDsUsed = new HashSet<String>();
 	public static String semsimAnnotationElementName = "semsimAnnotation";
 	
 	public SBMLwriter(SemSimModel model) {
@@ -391,13 +391,14 @@ public class SBMLwriter extends ModelWriter {
 			else if(propphysdefuri.equals(SemSimLibrary.OPB_SPAN_OF_SPATIAL_ENTITY_URI))
 				compdim = 1;
 			
-			
-			if(compdim!=-1 && ((CompositePhysicalEntity)pmc).getArrayListOfEntities().size()==1){
+			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
+			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
+
+			if(compdim != -1){
 				comp = sbmlmodel.createCompartment(ds.getName());
 				comp.setSpatialDimensions(compdim);
 			}
 			// Go to next data structure if we didn't find an appropriate OPB property
-			// or if there's a composite physical entity
 			else{
 				globalParameters.add(ds.getName());
 				continue;
@@ -412,10 +413,8 @@ public class SBMLwriter extends ModelWriter {
 
 			comp.setName(pmc.getName().replace("\"", ""));
 			
-			CompositePhysicalEntity pmcAsCPE = (CompositePhysicalEntity)pmc;
-			boolean oneentity =  pmcAsCPE.getArrayListOfEntities().size() == 1;
-			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);
-			boolean onerefentity = oneentity && indexent.hasPhysicalDefinitionAnnotation();			
+//			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);
+//			boolean onerefentity = oneentity && indexent.hasPhysicalDefinitionAnnotation();			
 			
 			// Store annotation for compartment
 			// If it's a singular entity and writing to standalone, annotate with CVTerm
@@ -425,14 +424,13 @@ public class SBMLwriter extends ModelWriter {
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
 			// the RDF block or OMEX metadata file when adding parameter info
-			if( onerefentity ){
-				
+			if( oneentity )
 				addRDFannotationForPhysicalSBMLelement(pmcAsCPE.getArrayListOfEntities().get(0), comp);
-				
-				if( ! OMEXmetadataEnabled()) {
-					DSsToOmitFromCompositesRDF.add(ds);
-				}
-			}
+			else
+				addRDFannotationForPhysicalSBMLelement(pmcAsCPE, comp);
+			
+			if( ! OMEXmetadataEnabled())
+				DSsToOmitFromCompositesRDF.add(ds);
 			
 			boolean hasinputs = ds.getComputationInputs().size()>0;
 			boolean hasIC = ds.hasStartValue();
@@ -1189,6 +1187,7 @@ public class SBMLwriter extends ModelWriter {
 			sbmlobj.setMetaId(metaid);
 		}
 		
+		
 		// Check if the physical model component is a composite physical entity
 		// containing only one physical entity component
 		boolean oneent = false;
@@ -1394,7 +1393,7 @@ public class SBMLwriter extends ModelWriter {
 								
 				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
-				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares, this.metaIDsUsed);
 			}
 		}		
 	}
