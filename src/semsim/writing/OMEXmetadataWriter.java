@@ -325,8 +325,12 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	}
 	
 
-	
-	@Override
+	/**
+	 * 
+	 * @param ds
+	 * @param ares
+	 * @param metaidsinsbml
+	 */
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares, Set<String> metaidsinsbml) {
 		
 		// Creates the isVersionOf statement linking the data structure to an OPB term.

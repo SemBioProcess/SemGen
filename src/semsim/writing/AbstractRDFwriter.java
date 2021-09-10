@@ -78,6 +78,17 @@ public abstract class AbstractRDFwriter {
 	
 	
 	/**
+	 * Write out a data structure's composite annotation in RDF. Used for OMEX metadata spec 1.2-compliance.
+	 * Ensures that local RDF namespaces are used for physical entities/processes if they are not explicitly represented
+	 * in the SBML model being written out. 
+	 * @param ds The annotated data structure
+	 * @param ares The RDF Resource representing the data structure
+	 * @param metaidsinsbml The list of metadata IDs used in an SBML being written out
+	 */
+	abstract protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares, Set<String> metaidsinsbml);
+
+	
+	/**
 	 * Write out RDF statements about a data structure's associated physical component.
 	 * That is, the physical component that bears the physical property used in the 
 	 * data structure's composite annotation.
@@ -662,9 +673,4 @@ public abstract class AbstractRDFwriter {
 		if( ! rdf.contains(st)) rdf.add(st);
 	}
 
-	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares,
-			Set<String> metaidsinsbml) {
-		// TODO Auto-generated method stub
-		
-	}
 }

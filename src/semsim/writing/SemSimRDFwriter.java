@@ -3,6 +3,7 @@ package semsim.writing;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -207,6 +208,15 @@ public class SemSimRDFwriter extends AbstractRDFwriter{
 	}
 	
 		
+	
+	@Override
+	// SemSimRDFwriter ignores the metaidsinsbml parameter because it's not needed to determine what namespace to use
+	// for physical entities used in the RDF (same namespace used across the board)
+	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares, Set<String> metaidsinsbml) {
+		setDataStructurePropertyAndPropertyOfAnnotations(ds, ares);
+	}
+	
+	
 	@Override
 	protected void setDataStructurePropertyAndPropertyOfAnnotations(DataStructure ds, Resource ares) {
 		if(ds.hasPhysicalProperty()){
