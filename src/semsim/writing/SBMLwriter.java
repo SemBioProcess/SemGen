@@ -322,7 +322,7 @@ public class SBMLwriter extends ModelWriter {
 				if(oldAndNewUnitNameMap.containsKey(unitname)) unitname = oldAndNewUnitNameMap.get(unitname);
 				UnitDefinition ud = sbmlmodel.createUnitDefinition(unitname);
 				
-				addNotesAndMetadataID(uom, ud);
+				addNotesAndMetadataID(uom, ud, true);
 				
 				Set<UnitFactor> ufset = SemSimUtil.recurseBaseUnits(uom, 1.0, ModelWriter.sslib);
 				
@@ -424,10 +424,15 @@ public class SBMLwriter extends ModelWriter {
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
 			// the RDF block or OMEX metadata file when adding parameter info
+			boolean sbometaassigned = false;
+			
 			if( oneentity )
 				addRDFannotationForPhysicalSBMLelement(pmcAsCPE.getArrayListOfEntities().get(0), comp);
 			else
-				addRDFannotationForPhysicalSBMLelement(pmcAsCPE, comp);
+				sbometaassigned = addRDFannotationForPhysicalSBMLelement(pmcAsCPE, comp);
+			
+			if(sbometaassigned)
+				this.metaIDsUsed.add(comp.getMetaId());
 			
 			if( ! OMEXmetadataEnabled())
 				DSsToOmitFromCompositesRDF.add(ds);
@@ -447,7 +452,7 @@ public class SBMLwriter extends ModelWriter {
 			setUnitsForModelComponent(comp, ds);
 			
 			if(oneentity) addNotesAndMetadataID(pmcAsCPE.getArrayListOfEntities().get(0), comp); // Put metadataID from physical entity within composite physical entity
-			else addNotesAndMetadataID(pmc, comp);
+			else addNotesAndMetadataID(pmc, comp, false);
 		}
 	}
 	
@@ -1099,11 +1104,24 @@ public class SBMLwriter extends ModelWriter {
 	
 	
 	/**
+	 * 
+	 * Fill in "name" and "metadataID" attributes on an SBase object
+	 * Copies SemSim object metadata ID onto SBML object
+	 * @param sso
+	 * @param sbo
+	 */
+	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo) {
+		addNotesAndMetadataID(sso, sbo, true);
+	}
+	
+	
+	/**
 	 *  Fill in "name" and "metadataID" attributes on an SBase object
 	 * @param sso The SemSimObject that contains the name and metadataID to be copied
 	 * @param sbo The AbstractNamedSBase object that the name and metadataID will be copied to
+	 * @param copySSOmetaToSBOmeta Whether to copy the SemSim object's metadata ID to the SBML object
 	 */
-	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo){
+	private void addNotesAndMetadataID(SemSimObject sso, AbstractSBase sbo, boolean copySSOmetaToSBOmeta){
 		
 		if(sso.hasDescription() && !OMEXmetadataEnabled()){ // Don't store model description in notes if writing to OMEX file. It will be stored in OMEX metadata file.
 			try {
@@ -1124,7 +1142,7 @@ public class SBMLwriter extends ModelWriter {
 			if( metaIDsUsed.contains(sso.getMetadataID()))
 				System.err.println("Warning: attempt to assign metadataID " + sso.getMetadataID() + " to two or more SBase objects: ");
 			
-			else{
+			else if(copySSOmetaToSBOmeta){
 				sbo.setMetaId(sso.getMetadataID());
 				metaIDsUsed.add(sso.getMetadataID());
 			}
@@ -1177,8 +1195,13 @@ public class SBMLwriter extends ModelWriter {
 	 * Add semantic annotations on an SBML compartment, species or reaction element encoded as RDF
 	 * @param pmc {@link PhysicalModelComponent} corresponding to the SBML element
 	 * @param sbmlobj The SBML element to annotate
+	 * @return Whether the SBML object's metadata ID was specified as differnet from SemSim object
+	 * (happens when writing composite entities in OMEX metadata sometimes)
 	 */
-	private void addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
+	private boolean addRDFannotationForPhysicalSBMLelement(PhysicalModelComponent pmc, SBase sbmlobj){
+		
+
+		boolean sbometadifferent = false;
 		
 		// If neither the SBML object nor the SemSim physical model component have a metadata ID, 
 		// assign them both the same one
@@ -1186,7 +1209,6 @@ public class SBMLwriter extends ModelWriter {
 			String metaid = semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", pmc);
 			sbmlobj.setMetaId(metaid);
 		}
-		
 		
 		// Check if the physical model component is a composite physical entity
 		// containing only one physical entity component
@@ -1206,8 +1228,24 @@ public class SBMLwriter extends ModelWriter {
 				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 				((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(metaidtouse, pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			}
-			else ((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
-			return;
+			else {
+				// If we're writing out OMEX 1.2 metadata for a composite physical entity
+				// with multiple entities and the index has a metadata ID, use it for the
+				// SBML object, not the metadata ID on the composite entity as a whole.
+				// These is needed for situations where a singular entity for a compartment
+				// gets changed to a multi-entity composite physical entity.
+				if(pmc instanceof CompositePhysicalEntity) {
+					PhysicalEntity indexent = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
+
+					if(indexent.hasMetadataID()) {
+						sbmlobj.setMetaId(indexent.getMetadataID());
+						sbometadifferent = true;
+					}
+				}
+				
+				((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
+			}
+			return sbometadifferent;
 		}
 		
 		if(oneent) pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
@@ -1251,6 +1289,7 @@ public class SBMLwriter extends ModelWriter {
 				}
 			}
 		}
+		return sbometadifferent;
 	}
 	
 	

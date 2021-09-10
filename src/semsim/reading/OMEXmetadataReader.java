@@ -126,12 +126,11 @@ public class OMEXmetadataReader extends AbstractRDFreader{
 		Resource res = rdf.getResource(modelns + "#" + metaid);
 
 		// If we're looking at a <compartment>, and this is a 1.2-formatted OMEX metadata file 
-		// and there is an <is> annotation as well as an <isPartOf> annotation, we treat this is
-		// a composite physical entity annotation on the compartment (not a singular annotation)
-		// and we don't collect the other annotations
-		boolean hasis = rdf.listObjectsOfProperty(res, SemSimRelation.BQB_IS.getRDFproperty()).hasNext();
+		// and there is an <isPartOf> annotation, we treat this is a composite physical entity
+		// annotation on the compartment (not a singular annotation) and we don't collect the other annotations
+		// for placement as CV terms. We let SBMLreader bring in the composite entity in the collectCompartments() function.
 		boolean haspartof = rdf.listObjectsOfProperty(res, StructuralRelation.BQB_IS_PART_OF.getRDFproperty()).hasNext();
-		if(sbaseobj instanceof Compartment && getVersionCompliance()=="1.2" && hasis && haspartof) return;
+		if(sbaseobj instanceof Compartment && getVersionCompliance()=="1.2" && haspartof) return;
 		
 		// Otherwise we process the singular annotations on the 
 		Qualifier[] qualifiers = Qualifier.values();

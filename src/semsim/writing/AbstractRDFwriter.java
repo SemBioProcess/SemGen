@@ -16,6 +16,7 @@ import org.apache.jena.rdf.model.RDFWriter;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
+import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
 
 import semsim.SemSimObject;
 import semsim.annotation.ReferenceTerm;

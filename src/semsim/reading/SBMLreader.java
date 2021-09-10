@@ -568,6 +568,9 @@ public class SBMLreader extends ModelReader{
 			// for the compartment. Single physical entity annotations should have already been picked up and attached
 			// as CV terms through the getAnnotationsForPhysicalComponents() function near start of read routine.
 			
+			// If the sbmlc has CV terms, we assume it's a singular ref entity or custom entity with some ref anns
+			// If it has no terms, it's a composite entity or a singular custom term with no anns
+			
 			if(modelaccessor instanceof OMEXAccessor && sbmlc.getCVTermCount()==0){
 				
 				ds.setAssociatedPhysicalProperty(prop);
@@ -577,47 +580,44 @@ public class SBMLreader extends ModelReader{
 				// annotated as a composite physical entity. Sneyd model uses a composite physical entity
 				// for the compartment. It's probably not working right b/c the namespace used for the 
 				// representation of the compartment is wrong.
-				// TODO: no metadata ID on sneyd compartment when write it out
 				String metaid = sbmlc.getMetaId(); // TODO: what if no metaid assigned? Just do nothing?
-//				String ns = semsimmodel.getLegacyCodeLocation().getFileName();
 				String ns = rdfreader.getModelNamespaceInRDF();
 				Resource res = rdfreader.rdf.getResource(ns + "#" + metaid); // Don't use "./" + ns
 				
 				// See if the compartment has an IS annotation that links to a composite physical entity
-				NodeIterator nodeit = rdfreader.rdf.listObjectsOfProperty(res, SemSimRelation.BQB_IS.getRDFproperty());
+				// If we're reading from OMEX metadata 1.2-formatted RDF and the compartment is annotated
+				// with a composite entity that starts with a custom term, there won't be an <is> annotation
 				
-				if(nodeit.hasNext()){
+				// For 1.2-formatted anns, see if there's an <isPartOf> statement on the compartment resource
+				// We assume this indicates a composite physical entity. BIOMD00000000498 has an annotation on
+				// the LiverCell compartment that says it's part of hepatocyte homeostasis. I'm not sure this annotation 
+				// makes sense, but this logic will read it in as a part of the composite entity describing
+				// the compartment anyway.
+				String omexmetaversion = ((OMEXmetadataReader)rdfreader).getVersionCompliance();
+				
+				if(omexmetaversion == "1.2") {
 					
-					Resource entityres = nodeit.next().asResource();
+					// If we see that the RDF resource representing the compartment is connected to another resource
+					// via <isPartOf>, we follow the <isPartOf> links to build a composite physical entity representing
+					// the compartment.
+					compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(res);
+					ds.setAssociatedPhysicalModelComponent(compartmentent);
+				}
+				else if(omexmetaversion == "1.0") {
+				
+					NodeIterator nodeit = rdfreader.rdf.listObjectsOfProperty(res, SemSimRelation.BQB_IS.getRDFproperty());
 					
-					// For OMEXmetdata 1.0 models that use a composite physical entity for a compartment
-					// statements go
-					// metaidInSBML <is> model:entity0
-					// model:entity0 <is> FMA:1111
-					// model:entity0 <isPartOf> model:entity1
-					// model:entity1 <is> FMA:22222
-					
-					// For 1.2 spec they go
-					// model:metaidInSBML <is> FMA:1111
-					// model:metaidInSBML <isPartOf> FMA:22222
-					// 
-					// The <is> statement may also have a <partOf>
-					// TODO: Need to make this local namespace???
-					// TODO: this doesn't work when a composite physical entity is used
-					// that starts with a custom term
-					
-					// If 1.0-compliant OMEX metadata, we follow the local resource that
-					// the compartment resource <is>
-					if(entityres.getURI().contains(rdfreader.getLocalNamespaceInRDF() + "#") ) {
-						compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(entityres);
-						ds.setAssociatedPhysicalModelComponent(compartmentent);
-					}
-					// Otherwise, if there's an <isPartOf> annotation as well as an <is>
-					// that means we're using the concise 1.2-compliant format and the index
-					// entity is the compartment resource itself
-					else if(rdfreader.rdf.listObjectsOfProperty(res, StructuralRelation.BQB_IS_PART_OF.getRDFproperty()).hasNext()) {
-						compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(res);
-						ds.setAssociatedPhysicalModelComponent(compartmentent);
+					if(nodeit.hasNext()){
+						
+						Resource entityres = nodeit.next().asResource();
+						
+						// If 1.0-compliant OMEX metadata, we follow the local resource that
+						// the compartment resource <is>. Use of local namespace versus model
+						// namespace not consequential here.
+						if(entityres.getURI().contains(rdfreader.getLocalNamespaceInRDF() + "#") ) {
+							compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(entityres);
+							ds.setAssociatedPhysicalModelComponent(compartmentent);
+						}
 					}
 				}
 				else setEntityFromSBMLsource = true;
