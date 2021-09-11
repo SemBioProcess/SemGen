@@ -619,6 +619,8 @@ public class SBMLreader extends ModelReader{
 							ds.setAssociatedPhysicalModelComponent(compartmentent);
 						}
 					}
+					// If there are no <is> annotations, use the data in the SBML file to create the compartment
+					else setEntityFromSBMLsource = true;
 				}
 				else setEntityFromSBMLsource = true;
 			}
