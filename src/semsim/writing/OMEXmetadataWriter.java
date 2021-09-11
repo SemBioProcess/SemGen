@@ -395,6 +395,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 						// If it's a reference physical entity, use the reference URI (concise form)
 						if(pe instanceof ReferencePhysicalEntity) {
 							URI refuri = ((ReferencePhysicalEntity)pe).getPhysicalDefinitionURI();
+							refuri = convertURItoIdentifiersDotOrgFormat(refuri);
 							st = rdf.createStatement(ares, 
 									SemSimRelation.BQB_IS_PROPERTY_OF.getRDFproperty(), 
 									rdf.createResource(refuri.toString()));

@@ -400,6 +400,7 @@ public abstract class AbstractRDFwriter {
 			// use the reference URI in the statement, not the instantiated local entity's URI (more concise)
 			if(lastent instanceof ReferencePhysicalEntity && this instanceof OMEXmetadataWriter) {
 				nexturi = ((ReferencePhysicalEntity)lastent).getPhysicalDefinitionURI();
+				nexturi = convertURItoIdentifiersDotOrgFormat(nexturi);
 				
 				// If there's a metadata ID on the reference entity, and we're writing to an SBML model
 				// make sure we assert the identity annotation to link the SBML element to its definition.
@@ -436,6 +437,8 @@ public abstract class AbstractRDFwriter {
 		StructuralRelation rel = cpe.getArrayListOfStructuralRelations().get(0);
 		if(rel==StructuralRelation.CONTAINED_IN) structprop = StructuralRelation.CONTAINED_IN.getRDFproperty();
 		
+		// This makes sure to apply identifiers.org formatting to reference ontology terms (happens when using
+		// concise format of OMEX metadata spec 1.2)
 		Statement structst = rdf.createStatement(indexresource, structprop, rdf.getResource(nexturi.toString()));
 		
 		addStatement(structst);
