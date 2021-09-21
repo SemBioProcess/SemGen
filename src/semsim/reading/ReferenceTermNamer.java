@@ -177,7 +177,7 @@ public class ReferenceTermNamer {
 			
 			if (ont==ReferenceOntology.FMA.getAsOntology()) {
 				edittedid = edittedid.replace("FMA%3A", "");
-				edittedid = ns + edittedid.replace("FMA:", "fma");
+				edittedid = ns + edittedid.replaceAll("FMA:|FMA_", "fma");
 			}
 			else if (ont==ReferenceOntology.OPB.getAsOntology()) {
 				edittedid = edittedid.replace("OPB%3A", "");

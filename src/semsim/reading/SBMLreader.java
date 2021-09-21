@@ -1449,8 +1449,14 @@ public class SBMLreader extends ModelReader{
 								// If we're looking at an identity relation...
 								if(relation==SemSimRelation.HAS_PHYSICAL_DEFINITION || relation==SemSimRelation.BQB_IS){
 									
-									// And we haven't added one yet, add it
-									if(numidentityanns==0){
+									// If we're reading from a non-SemSim originating file (where the <is> relation is not
+									// necessarily used for reactions that have matching participants to the ontology term)
+									// change <is> annotation on process to <isVersionOf>
+									if( ! isEntity(sbmlobject) && ! rdfreader.rdf.listStatements().hasNext()) {
+										anns.add(new ReferenceOntologyAnnotation(SemSimRelation.BQB_IS_VERSION_OF, URI.create(uristring), uristring, sslib));
+									}
+									// Else if we haven't added an identity annotation yet, add it
+									else if(numidentityanns==0){
 										anns.add(new ReferenceOntologyAnnotation(relation, URI.create(uristring), uristring, sslib));
 										numidentityanns++;
 									}
@@ -1521,6 +1527,7 @@ public class SBMLreader extends ModelReader{
 		PhysicalModelComponent pmc = isentity ? new CustomPhysicalEntity(semsimname, "") : new CustomPhysicalProcess(semsimname, "");
 	
 		Set<ReferenceOntologyAnnotation> tempanns = new HashSet<ReferenceOntologyAnnotation>();
+		
 		tempanns.addAll(getBiologicalQualifierAnnotations(sbmlobject));
 		
 		for(ReferenceOntologyAnnotation ann : getBiologicalQualifierAnnotations(sbmlobject)){
@@ -1529,6 +1536,7 @@ public class SBMLreader extends ModelReader{
 			
 			// If there is a physical identity annotation, create reference physical component
 			if(annrelation.equals(SemSimRelation.HAS_PHYSICAL_DEFINITION) || annrelation.equals(SemSimRelation.BQB_IS)){
+				
 				// if entity, use reference term, but don't otherwise
 				if(isentity){
 					pmc = semsimmodel.addReferencePhysicalEntity(
