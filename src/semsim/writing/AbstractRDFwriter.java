@@ -573,7 +573,7 @@ public abstract class AbstractRDFwriter {
 			else if(refont==ReferenceOntology.FMA){
 				// assumes that FMA IDs are formatted
 				// like http://purl.org/sig/ont/fma/fma70586
-				String newfragment = fragment.replace("fma","FMA:");
+				String newfragment = fragment.replaceAll("fma|FMA_","FMA:");
 				newuri = URI.create(newnamespace + newfragment);
 			}
 			else if(refont==ReferenceOntology.MA){
