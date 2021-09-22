@@ -319,7 +319,6 @@ public abstract class AbstractRDFreader {
 						res.getPropertyResourceValue(StructuralRelation.PART_OF.getRDFproperty())!=null ||
 						res.getPropertyResourceValue(StructuralRelation.BQB_IS_PART_OF.getRDFproperty())!=null
 						) {
-					System.out.println("Building a composite physical entity");
 
 					pmc = semsimmodel.addCompositePhysicalEntity(buildCompositePhysicalEntityfromRDFresource(res));
 				}
@@ -407,8 +406,6 @@ public abstract class AbstractRDFreader {
 			// If the physical entity is linked to another as part of a composite physical entity
 			if(entityres!=null){
 				
-				System.out.println("Linking to next entity: " + entityres);
-
 				PhysicalEntity nextent = createCompositeEntityComponentFromResourceAndAnnotate(entityres);
 				entlist.add(nextent);
 				if(containedinlink) rellist.add(StructuralRelation.CONTAINED_IN);
@@ -459,8 +456,6 @@ public abstract class AbstractRDFreader {
 			 returnent = semsimmodel.addReferencePhysicalEntity(
 					 new ReferencePhysicalEntity(
 							 URI.create(res.getURI()), res.getURI()));
-
-		System.out.println("Returning " + returnent.getName() + " from createCompositeEntityComponentFromResourceAndAnnotate");
 
 		return returnent;
 	}
