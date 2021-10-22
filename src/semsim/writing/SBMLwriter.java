@@ -374,8 +374,10 @@ public class SBMLwriter extends ModelWriter {
 			// or if there is a multi-entity composite physical entity used in the data structure's
 			// composite annotation (even if there's a valid physical property, the full composite
 			// needs to be stored in either the SemSim RDF block or the OMEX metadata file)
-			if(propphysdefuri == null || ! (pmc instanceof CompositePhysicalEntity))
-				continue; // TODO: add to global parameters?
+			if(propphysdefuri == null || ! ds.hasAssociatedPhysicalComponent() || ! (pmc instanceof CompositePhysicalEntity)) {
+				globalParameters.add(ds.getName());
+				continue;
+			}
 			
 			int compdim = -1;
 			
