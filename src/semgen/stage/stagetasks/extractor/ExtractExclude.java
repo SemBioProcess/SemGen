@@ -95,7 +95,6 @@ public class ExtractExclude extends Extractor {
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
 		
-		System.out.println("HERE in addDataStructure of ExtractExclude" + sourceobj.getName());
 		if (sourceobj instanceof MappableVariable) {
 			if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
 				sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
