@@ -39,9 +39,12 @@ public class ModelExtractionGroup {
 		Extractor extractor = workbench.makeNewExtractionExclude(extractname);
 		
 		SemSimModel extractedmodel = doExtraction(extractor, nodestoexclude);
-		ExtractionInfo extraction = new ExtractionInfo(sourcemodelinfo.Model, extractedmodel, extractionnodes.size());
-		extractionnodes.add(extraction);
-		return extraction.modelnode;
+		
+		if (extractedmodel==null) return null;
+
+		ExtractionInfo newextract = new ExtractionInfo(sourcemodelinfo.Model, extractedmodel, extractionnodes.size());
+		extractionnodes.add(newextract);
+		return newextract.modelnode;
 	}
 	
 	public ExtractionNode addNodestoExtraction(Integer extractionindex, ArrayList<Node<?>> nodestoadd) {
@@ -102,7 +105,13 @@ public class ModelExtractionGroup {
 			node.collectforExtraction(extractor);
 		}
 		//Ensure the model contains data structures to avoid creating an empty model
+		
+		// Do this so that the ExtractExclude object sets the list of data structures to INclude from the ones specified to exclude
+		if( extractor instanceof ExtractExclude) 
+			((ExtractExclude) extractor).collectElementstoKeep(); 
+		
 		if (!extractor.containsDataStructures()) return null;
+		
 		SemSimModel result = extractor.run();
 		return result;
 	}

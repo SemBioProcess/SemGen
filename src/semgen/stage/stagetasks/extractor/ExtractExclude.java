@@ -32,7 +32,7 @@ public class ExtractExclude extends Extractor {
 	}
 	
 	
-	private void collectElementstoKeep() {
+	protected void collectElementstoKeep() {
 		Set<Submodel> smstokeep = new HashSet<Submodel>(sourcemodel.getSubmodels());
 		
 		smstokeep = getSubmodelsToKeep(smstoexclude, smstokeep);
@@ -94,11 +94,13 @@ public class ExtractExclude extends Extractor {
 
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
-			if (sourceobj instanceof MappableVariable) {
-				if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
-					sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
-				}
+		
+		System.out.println("HERE in addDataStructure of ExtractExclude" + sourceobj.getName());
+		if (sourceobj instanceof MappableVariable) {
+			if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
+				sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
 			}
+		}
 		dsstoexclude.add(sourceobj);
 	}
 

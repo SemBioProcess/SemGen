@@ -430,7 +430,10 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	public void createNewExtractionExcluding(Integer infoindex, ArrayList<Node<?>> nodestoexclude, String extractname) {
 		ModelExtractionGroup group = this.extractnodeworkbenchmap.get(infoindex);
 		ExtractionNode extraction = group.createExtractionExcluding(extractname, nodestoexclude);
-		_commandSender.newExtraction(infoindex, extraction);
+		if(extraction != null) {
+			_commandSender.newExtraction(infoindex, extraction);
+		}
+		else SemGenError.showError("Empty Model", "Attempted extraction results in an empty model");
 	}
 
 	//Add nodes to an existing extraction

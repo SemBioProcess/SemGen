@@ -358,11 +358,12 @@ function Stage(graph, stagestate) {
 		//Don't create extraction if user cancels
 		if (name==null) return;
 		
+		var baserootindex = root.modelindex;
 		if (root.displaymode==DisplayModes.SHOWPHYSIOMAP) {
-			sender.createPhysioExtractionExclude(root.modelindex, extractarray, name);
+			sender.createPhysioExtractionExclude(baserootindex, extractarray, name);
 		}
 		else {
-			sender.createExtractionExclude(root.modelindex, extractarray, name);
+			sender.createExtractionExclude(baserootindex, extractarray, name);
 		}
 	}
 	
