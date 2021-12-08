@@ -19,6 +19,8 @@ import semgen.search.BioModelsSearch;
 import semgen.search.CompositeAnnotationSearch;
 import semgen.stage.serialization.ExtractionNode;
 import semgen.stage.serialization.Node;
+import semgen.stage.serialization.PhysioMapEntityNode;
+import semgen.stage.serialization.PhysioMapNode;
 import semgen.stage.serialization.SearchResultSet;
 import semgen.stage.serialization.StageState;
 import semgen.stage.stagetasks.extractor.ExtractionInfo;
@@ -206,8 +208,23 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 		}
 
 		public void onCreatePhysioExtractionExclude(Double sourceindex, JSArray nodes, String extractname) {
-			ArrayList<Node<?>> jnodes = convertJSStagePhysioNodestoJava(nodes);
-			createNewExtractionExcluding(sourceindex.intValue(), jnodes, extractname);
+			
+			// Works differently than onCreateExtractionExclude because we need to make sure
+			// that everything except the UNselected nodes gets left out of extraction.
+			// We identify the nodes that were UNselected and include them in a regular
+			// extraction (not an ExtractExclude)
+			ArrayList<Node<?>> excludednodes = convertJSStagePhysioNodestoJava(nodes);
+			ArrayList<Node<?>> nodestokeep = new ArrayList<Node<?>>();
+
+			// Collect all physiomap nodes, remove the ones being excluded
+			ArrayList<PhysioMapEntityNode> entitynodes = _modelinfos.get(sourceindex.intValue()).modelnode.physionetwork.entities;
+			ArrayList<PhysioMapNode> processnodes = _modelinfos.get(sourceindex.intValue()).modelnode.physionetwork.processes;
+
+			nodestokeep.addAll(entitynodes);
+			nodestokeep.addAll(processnodes);
+			nodestokeep.removeAll(excludednodes);
+			
+			createNewExtraction(sourceindex.intValue(), nodestokeep, extractname);
 		}
 
 		public void onRemoveNodesFromExtraction(Double sourceindex, Double extraction, JSArray nodes) {
@@ -254,11 +271,11 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 	}
 
 	protected void annotateModels(JSArray indicies) {
+		
 		for (int i=0; i < indicies.length(); i++) {
 			JSArray address = indicies.get(i).asArray();
 			int indexedtomodel = address.get(0).asNumber().getInteger();
 			int modelindex = address.get(1).asNumber().getInteger();
-
 
 			ModelAccessor accessor = null;
 			if (indexedtomodel==-1) {
@@ -267,14 +284,29 @@ public class ProjectTask extends StageTask<ProjectWebBrowserCommandSender> {
 			else {
 				ModelExtractionGroup meg = this.extractnodeworkbenchmap.get(indexedtomodel);
 				if (meg!=null) {
-					accessor = meg.getAccessorbyIndexAlways(modelindex);
+					accessor = meg.getAccessorbyIndexAlways(modelindex); // This prompts for saving the file
 					
 					// If the extraction was saved, record that info in the ModelExtractionGroup's extraction node
 					if(accessor != null)
 					 meg.extractionnodes.get(modelindex).setChangesSaved(true);
+					
+					// Wait for write process to finish
+					if(meg.workbench.savetask != null) {
+						long delay = 100;
+						
+						while( ! meg.workbench.savetask.isDone()) {
+							try {
+							    Thread.sleep(delay);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
 				}
 			}
+			
 			if (accessor == null) continue;
+			
 			SemGen.gacts.NewAnnotatorTab(accessor);
 		}
 	}

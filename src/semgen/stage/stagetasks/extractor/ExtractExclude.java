@@ -95,11 +95,11 @@ public class ExtractExclude extends Extractor {
 	@Override
 	public void addDataStructure(DataStructure sourceobj) {
 		
-		if (sourceobj instanceof MappableVariable) {
-			if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
-				sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
-			}
-		}
+//		if (sourceobj instanceof MappableVariable) {
+//			if (((MappableVariable)sourceobj).getMappedFrom()!=null) {
+//				sourceobj = ((MappableVariable)sourceobj).getMappedFrom();
+//			}
+//		}
 		dsstoexclude.add(sourceobj);
 	}
 

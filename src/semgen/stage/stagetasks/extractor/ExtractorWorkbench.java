@@ -15,6 +15,7 @@ public class ExtractorWorkbench extends Workbench {
 	private SemSimModel sourcemodel;
 	private ArrayList<SemSimModel> extractions= new ArrayList<SemSimModel>();
 	private ArrayList<ModelAccessor> modelaccessorlist = new ArrayList<ModelAccessor>();
+	public saveTask savetask = null;
 
 	public ExtractorWorkbench(SemSimModel model) {
 		sourcemodel = model;
@@ -83,7 +84,7 @@ public class ExtractorWorkbench extends Workbench {
 		if (ma != null) {
 			model.setName(ma.getModelName());
 			model.setSourceFileLocation(ma);
-			saveTask savetask = new SemGenGUI.saveTask(ma, model);
+			savetask = new SemGenGUI.saveTask(ma, model);
 			savetask.execute();
 		}
 

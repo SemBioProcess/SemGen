@@ -13,7 +13,7 @@ import semsim.model.collection.SemSimModel;
 public class ModelExtractionGroup {
 	@Expose public Integer sourcemodelindex;
 	protected ModelInfo sourcemodelinfo;
-	protected ExtractorWorkbench workbench;
+	public ExtractorWorkbench workbench;
 	
 	@Expose public ArrayList<ExtractionInfo> extractionnodes = new ArrayList<ExtractionInfo>();
 	
