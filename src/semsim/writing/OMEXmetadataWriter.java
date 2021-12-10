@@ -65,7 +65,7 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	public void setRDFforModelLevelAnnotations() {
 		
 		String metaid = semsimmodel.hasMetadataID() ? semsimmodel.getMetadataID() : 
-			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid0", semsimmodel);
+			semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", semsimmodel);
 		
 		Resource modelresource = rdf.createResource(modelnamespaceinRDF + "#" + metaid);
 		
