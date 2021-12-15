@@ -29,7 +29,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMSource;
 import org.sbml.jsbml.CVTerm;
@@ -601,6 +600,7 @@ public class SBMLreader extends ModelReader{
 					// via <isPartOf>, we follow the <isPartOf> links to build a composite physical entity representing
 					// the compartment.
 					compartmentent = (PhysicalEntity) rdfreader.getPMCfromRDFresourceAndAnnotate(res);
+
 					ds.setAssociatedPhysicalModelComponent(compartmentent);
 				}
 				else if(omexmetaversion == "1.0") {
@@ -634,8 +634,7 @@ public class SBMLreader extends ModelReader{
 					compartmentent = (PhysicalEntity)pmc;
 				
 			}
-			// Otherwise we use the info in the SBML to get the physical entity 
-			// representation of the compartment
+			// Otherwise we use the info in the SBML to get the physical entity representation of the compartment
 			else setEntityFromSBMLsource = true;
 			
 			if(setEntityFromSBMLsource){
@@ -648,11 +647,11 @@ public class SBMLreader extends ModelReader{
 				ArrayList<StructuralRelation> rellist = new ArrayList<StructuralRelation>();
 				
 				compartmentent = semsimmodel.addCompositePhysicalEntity(entlist, rellist); // this also adds the singular physical entities to the model
-				ds.setAssociatedPhysicalModelComponent(compartmentent);
 				
-				collectSBaseData(sbmlc, singlecompartmentent); // Note that the compartment meta ID gets assigned to the singular physical entity here, not the composite
+				ds.setAssociatedPhysicalModelComponent(compartmentent);
 			}
-			else collectSBaseData(sbmlc, compartmentent); // Metadata ID gets assigned to singleton composite physical entity here (this might not be needed)
+			
+			collectSBaseData(sbmlc, compartmentent); // Metadata ID from SBML is stored on composite physical entity, not index entity
 
 			compartmentAndEntitiesMap.put(compid, compartmentent);
 		}

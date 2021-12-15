@@ -16,7 +16,6 @@ import org.apache.jena.rdf.model.RDFWriter;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
-import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
 
 import semsim.SemSimObject;
 import semsim.annotation.ReferenceTerm;
@@ -364,7 +363,6 @@ public abstract class AbstractRDFwriter {
 		if (cpe.getArrayListOfEntities().size()==1) return indexuri;
 		
 		
-		
 		// Truncate the composite by one entity
 		ArrayList<PhysicalEntity> nextents = new ArrayList<PhysicalEntity>();
 		ArrayList<StructuralRelation> nextrels = new ArrayList<StructuralRelation>();
@@ -407,6 +405,7 @@ public abstract class AbstractRDFwriter {
 				// This must be done if we are to use the "concise" form for writing RDF for composite physical
 				// entities.
 				if(lastent.hasMetadataID() && getModelAccessor().getModelType() == ModelType.SBML_MODEL) {
+//					System.out.println("AbstractRDFwriter:setCompositePhysicalEntity...AT last ent and it has a metadataID and we're writing to an SBML model" );
 					URI uriusingmetaid = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
 					Property isprop = SemSimRelation.BQB_IS.getRDFproperty();
 					Statement idst = rdf.createStatement(
@@ -419,6 +418,10 @@ public abstract class AbstractRDFwriter {
 			
 			else {
 				// Use metadataID on last entity for URI, if it has one
+//				System.out.println("Last ent has metadata ID? " + lastent.hasMetadataID() + " : " + lastent.getMetadataID());
+//				System.out.println("SBML model: " + (getModelAccessor().getModelType() == ModelType.SBML_MODEL));
+//				System.out.println("PMCmap contains last ent? " + (! PMCandResourceURImap.containsKey(nextcpe.getArrayListOfEntities().get(0))));
+
 				if( lastent.hasMetadataID() && getModelAccessor().getModelType() == ModelType.SBML_MODEL) 
 					nexturi = URI.create(modelnamespaceinRDF + "#" + lastent.getMetadataID());
 				
@@ -428,7 +431,10 @@ public abstract class AbstractRDFwriter {
 					PMCandResourceURImap.put(lastent, nexturi);
 				}
 				// Otherwise get the terminal entity that we logged previously
-				else nexturi = PMCandResourceURImap.get(lastent);
+				else {
+					nexturi = PMCandResourceURImap.get(lastent);
+//					System.out.println("The last URI is " + nexturi);
+				}
 			}
 		}
 		
@@ -468,6 +474,9 @@ public abstract class AbstractRDFwriter {
 		
 		Resource res = null;
 		
+//		System.out.println(pmc.getClass() + " " + pmc.getName() + " has metadata ID " + pmc.getMetadataID());
+//		System.out.println(getModelAccessor().getModelType()==ModelType.SBML_MODEL);
+
 		// If there is a metadata ID on the PMC and we're writing out annotations on an SBML model,
 		// then we presume there is an explicit element in the SBML model that will have that metadata ID
 		if(pmc.hasMetadataID() && getModelAccessor().getModelType()==ModelType.SBML_MODEL) {

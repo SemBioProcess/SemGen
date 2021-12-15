@@ -499,7 +499,7 @@ public abstract class AbstractRDFreader {
 		CustomPhysicalEntity returnent = new CustomPhysicalEntity(name, description);
 		semsimmodel.addCustomPhysicalEntity(returnent);
 
-		returnent.setMetadataID(res.getLocalName());
+		//returnent.setMetadataID(res.getLocalName());
 
 		// Iterate through annotations against reference ontology terms and add them to SemSim model
 		for(Statement st : allannstatements){
