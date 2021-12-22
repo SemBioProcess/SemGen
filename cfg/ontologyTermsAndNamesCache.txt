@@ -1,12 +1,15 @@
 http://identifiers.org/kegg.reaction/R00756; ATP:D-fructose-6-phosphate 1-phosphotransferase
+http://identifiers.org/fma/FMA:84666; Apical plasma membrane
 https://identifiers.org/chebi/CHEBI:29103; potassium(1+)
 http://bhi.washington.edu/OPB#OPB_01097; Surface normal tensile stress
 https://identifiers.org/chebi/CHEBI:29101; sodium(1+)
+https://identifiers.org/opb/OPB_00446; Electrical capacitance
 http://identifiers.org/go/GO:0051220; cytoplasmic sequestering of protein
 http://identifiers.org/fma/FMA:62871; Immunoglobulin
 http://identifiers.org/kegg.reaction/R00754; ethanol:NAD+ oxidoreductase
 http://identifiers.org/go/GO:0004477; methenyltetrahydrofolate cyclohydrolase activity
 https://identifiers.org/chebi/CHEBI:29108; calcium(2+)
+http://identifiers.org/uniprot/P48454; Serine/threonine-protein phosphatase 2B catalytic subunit gamma isoform
 http://identifiers.org/uniprot/O14832; Phytanoyl-CoA dioxygenase, peroxisomal
 http://identifiers.org/go/GO:0006661; phosphatidylinositol biosynthetic process
 http://identifiers.org/uniprot/O95822; Malonyl-CoA decarboxylase, mitochondrial
@@ -37,21 +40,27 @@ http://identifiers.org/go/GO:0043623; cellular protein complex assembly
 http://identifiers.org/uniprot/Q6QHF9; Peroxisomal N(1)-acetyl-spermine/spermidine oxidase
 http://identifiers.org/go/GO:0043624; cellular protein complex disassembly
 http://identifiers.org/chebi/CHEBI:15343; acetaldehyde
+http://purl.obolibrary.org/obo/FMA_63841; Plasma membrane
 http://identifiers.org/ec-code/4.1.2.13; fructose-bisphosphate aldolase
 http://identifiers.org/chebi/CHEBI:17526; 1-phosphatidyl-1D-myo-inositol 4-phosphate
+http://purl.obolibrary.org/obo/CHEBI_15422; ATP
+http://identifiers.org/fma/FMA_84666; Apical plasma membrane
 http://identifiers.org/chebi/CHEBI:15345; acetoacetyl-CoA
 http://identifiers.org/go/GO:0005790; smooth endoplasmic reticulum
 http://identifiers.org/chebi/CHEBI:15346; coenzyme A
 http://identifiers.org/kegg.compound/C05345; beta-D-Fructose 6-phosphate
 http://identifiers.org/obo.go/GO:0005992; trehalose biosynthetic process
+https://identifiers.org/uniprot/Q6P6Q9; Calcium uptake protein 1, mitochondrial
 urn:miriam:kegg.reaction:R00842; sn-Glycerol-3-phosphate:NAD+ 2-oxidoreductase
 http://identifiers.org/go/GO:0051259; protein oligomerization
 http://identifiers.org/uniprot/Q63484; RAC-gamma serine/threonine-protein kinase
+http://identifiers.org/fma/FMA_70022; Extracellular space
 http://identifiers.org/uniprot/Q14032; Bile acid-CoA:amino acid N-acyltransferase
 http://identifiers.org/obo.go/GO:0022900; electron transport chain
 http://identifiers.org/go/GO:0005794; Golgi apparatus
 http://identifiers.org/obo.go/GO:0005509; calcium ion binding
 http://identifiers.org/chebi/CHEBI:17990; 1-O-(indol-3-ylacetyl)-beta-D-glucose
+http://identifiers.org/go/GO:0035189; Rb-E2F complex
 urn:miriam:obo.chebi:CHEBI%3A16905; -bisphosphate
 http://identifiers.org/chebi/CHEBI:17514; cyanide
 http://identifiers.org/fma/FMA:70022; Extracellular space
@@ -65,6 +74,8 @@ http://identifiers.org/chebi/CHEBI:15361; pyruvate
 http://identifiers.org/go/GO:0005764; lysosome
 http://identifiers.org/go/GO:0006611; protein export from nucleus
 http://identifiers.org/chebi/CHEBI:15366; acetic acid
+http://purl.obolibrary.org/obo/FMA_11350; Pericardial cavity
+http://purl.obolibrary.org/obo/FMA_279935; Set of all systemic capillaries
 http://identifiers.org/go/GO:0015562; efflux transmembrane transporter activity
 http://identifiers.org/kegg.compound/C00074; Phosphoenolpyruvate
 http://identifiers.org/chebi/CHEBI:17549; 5-aminolevulinic acid
@@ -82,10 +93,12 @@ http://identifiers.org/go/GO:0004445; inositol-polyphosphate 5-phosphatase activ
 http://identifiers.org/go/GO:0006622; protein targeting to lysosome
 http://identifiers.org/chebi/CHEBI:15354; choline
 http://identifiers.org/chebi/CHEBI:15355; acetylcholine
+http://purl.obolibrary.org/obo/FMA_279921; Set of all epicardial branches of all coronary arteries
 http://identifiers.org/uniprot/P49753; Acyl-coenzyme A thioesterase 2, mitochondrial
 http://identifiers.org/uniprot/P03508; Nuclear export protein
 http://identifiers.org/uniprot/O00623; Peroxisome assembly protein 12
 http://identifiers.org/uniprot/O00628; Peroxisomal targeting signal 2 receptor
+http://purl.obolibrary.org/obo/FMA_9556; Wall of left ventricle
 http://identifiers.org/chebi/CHEBI:26034; phosphatidylinositol 3-phosphate
 http://identifiers.org/obo.go/GO:0006889; obsolete regulation of calcium in ER
 http://identifiers.org/obo.go/GO:0006402; mRNA catabolic process
@@ -103,15 +116,19 @@ http://identifiers.org/chebi/CHEBI:16236; ethanol
 http://identifiers.org/go/GO:0000060; protein import into nucleus, translocation
 http://identifiers.org/go/GO:0019902; phosphatase binding
 http://identifiers.org/uniprot/Q05116; Dual specificity mitogen-activated protein kinase kinase 1
+https://identifiers.org/opb/OPB_00015; Electrical conductance
 http://identifiers.org/go/GO:0006606; protein import into nucleus
 http://identifiers.org/go/GO:0005759; mitochondrial matrix
 http://identifiers.org/go/GO:0005758; mitochondrial intermembrane space
 http://identifiers.org/uniprot/P38615; Serine/threonine-protein kinase RIM11/MSD1
 http://identifiers.org/obo.go/GO:0005546; phosphatidylinositol-4,5-bisphosphate binding
+http://purl.obolibrary.org/obo/FMA_9531; Wall of left atrium
 http://bhi.washington.edu/OPB#OPB_01061; van't Hoff law
+https://identifiers.org/chebi/CHEBI:64338; K-ATP channel agonist
 http://identifiers.org/go/GO:0045858; positive regulation of molecular function, epigenetic
 http://identifiers.org/go/GO:0045857; negative regulation of molecular function, epigenetic
 http://identifiers.org/go/GO:0043679; axon terminus
+http://identifiers.org/chebi/CHEBI:22902; bisphosphoglyceric acid
 http://identifiers.org/chebi/CHEBI:15377; water
 http://identifiers.org/chebi/CHEBI:17553; O-phosphoethanolamine
 http://identifiers.org/chebi/CHEBI:17552; GDP
@@ -121,6 +138,7 @@ http://identifiers.org/chebi/CHEBI:15379; dioxygen
 http://identifiers.org/obo.go/GO:0004693; cyclin-dependent protein serine/threonine kinase activity
 http://identifiers.org/kegg.compound/C00084; Acetaldehyde
 http://identifiers.org/obo.go/GO:0004691; cAMP-dependent protein kinase activity
+http://purl.obolibrary.org/obo/FMA_9533; Wall of right ventricle
 http://identifiers.org/go/GO:0016887; ATPase activity
 http://identifiers.org/uniprot/P08397; Porphobilinogen deaminase
 http://identifiers.org/kegg.compound/C00027; Hydrogen peroxide
@@ -128,11 +146,14 @@ http://identifiers.org/obo.chebi/CHEBI:17230; homocysteine
 http://identifiers.org/obo.go/GO:0006469; negative regulation of protein kinase activity
 http://identifiers.org/obo.go/GO:0006468; protein phosphorylation
 http://identifiers.org/go/GO:0045860; positive regulation of protein kinase activity
+http://identifiers.org/chebi/CHEBI:25523; NADP
 http://identifiers.org/obo.chebi/CHEBI:17234; glucose
 http://identifiers.org/go/GO:0004872; receptor activity
 urn:miriam:obo.chebi:CHEBI%3A16077; D-glucopyranose 1-phosphate
+https://identifiers.org/opb/OPB_00045; Event rate
 http://identifiers.org/go/GO:0043205; fibril
 http://identifiers.org/chebi/CHEBI:71417; procarbazine
+https://identifiers.org/chebi/CHEBI:82182; Hexaflurate
 http://identifiers.org/chebi/CHEBI:15721; sedoheptulose 7-phosphate
 http://identifiers.org/obo.go/GO:0006464; cellular protein modification process
 http://identifiers.org/obo.go/GO:0006461; protein complex assembly
@@ -140,6 +161,7 @@ urn:miriam:kegg.compound:C00117; D-Ribose 5-phosphate
 http://identifiers.org/kegg.compound/C00031; D-Glucose
 http://identifiers.org/go/GO:0005737; cytoplasm
 http://identifiers.org/obo.go/GO:0005128; erythropoietin receptor binding
+http://identifiers.org/go/GO:0004889; GO_0004889
 http://identifiers.org/obo.go/GO:0031435; mitogen-activated protein kinase kinase kinase binding
 http://identifiers.org/fma/FMA:226050; Cytosol of cardiac myocyte
 http://identifiers.org/obo.go/GO:0031434; mitogen-activated protein kinase kinase binding
@@ -170,8 +192,10 @@ http://identifiers.org/obo.go/GO:0005102; receptor binding
 http://identifiers.org/go/GO:0004861; cyclin-dependent protein serine/threonine kinase inhibitor activity
 http://identifiers.org/go/GO:0043234; protein complex
 http://identifiers.org/go/GO:0043235; receptor complex
+http://identifiers.org/fma/FMA_66836; Portion of cytosol
 http://identifiers.org/go/GO:0004862; cAMP-dependent protein kinase inhibitor activity
 http://identifiers.org/uniprot/P43155; Carnitine O-acetyltransferase
+http://purl.obolibrary.org/obo/FMA_279902; Set of epicardial tributaries of all cardiac veins
 http://identifiers.org/obo.go/GO:0032774; RNA biosynthetic process
 http://identifiers.org/chebi/CHEBI:15734; primary alcohol
 http://identifiers.org/obo.go/GO:0006430; lysyl-tRNA aminoacylation
@@ -183,6 +207,7 @@ http://identifiers.org/obo.chebi/CHEBI:4170; D-glucopyranose 6-phosphate
 http://identifiers.org/go/GO:0043245; extraorganismal space
 http://identifiers.org/obo.go/GO:0016233; telomere capping
 http://identifiers.org/fma/FMA:9533; Wall of right ventricle
+https://identifiers.org/opb/OPB_00089; Faraday constant
 http://identifiers.org/obo.go/GO:0015381; high-affinity sulfate transmembrane transporter activity
 http://identifiers.org/go/GO:0009299; mRNA transcription
 http://identifiers.org/obo.chebi/CHEBI:17268; myo-inositol
@@ -191,12 +216,15 @@ http://identifiers.org/chebi/CHEBI:16618; 1-phosphatidyl-1D-myo-inositol 3,4,5-t
 http://identifiers.org/uniprot/Q9UNE7; E3 ubiquitin-protein ligase CHIP
 http://identifiers.org/obo.go/GO:0030528; obsolete transcription regulator activity
 http://identifiers.org/obo.chebi/CHEBI:4167; D-glucopyranose
+http://identifiers.org/uniprot/P10686; 1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase gamma-1
 http://identifiers.org/chebi/CHEBI:27732; caffeine
 http://identifiers.org/go/GO:0004842; ubiquitin-protein transferase activity
+https://identifiers.org/opb/OPB_00076; Fluid volumetric elastance
 http://purl.obolibrary.org/obo/CHEBI_16761; ADP
 urn:miriam:obo.go:GO%3A0006002; fructose 6-phosphate metabolic process
 http://identifiers.org/obo.go/GO:0005160; transforming growth factor beta receptor binding
 http://identifiers.org/kegg.compound/C00004; NADH
+http://purl.obolibrary.org/obo/FMA_54537; Astrocyte
 http://identifiers.org/kegg.compound/C00005; NADPH
 http://identifiers.org/kegg.compound/C00002; ATP
 http://identifiers.org/kegg.compound/C00003; NAD+
@@ -216,6 +244,7 @@ http://identifiers.org/go/GO:0007092; activation of APC-Cdc20 complex activity
 http://purl.obolibrary.org/obo/PR_000015064; solute carrier family 2, facilitated glucose transporter member 2
 http://identifiers.org/uniprot/P13716; Delta-aminolevulinic acid dehydratase
 http://identifiers.org/uniprot/O75874; Isocitrate dehydrogenase [NADP] cytoplasmic
+https://identifiers.org/chebi/CHEBI:17544; hydrogencarbonate
 http://identifiers.org/chebi/CHEBI:36229; allolactose
 urn:miriam:kegg.compound:C00197; 3-Phospho-D-glycerate
 http://identifiers.org/chebi/CHEBI:50510; potassium channel modulator
@@ -232,6 +261,7 @@ http://identifiers.org/fma/FMA:67225; Sarcoplasmic reticulum
 http://identifiers.org/chebi/CHEBI:30915; 2-oxoglutaric acid
 http://identifiers.org/uniprot/O15254; Peroxisomal acyl-coenzyme A oxidase 3
 http://identifiers.org/obo.go/GO:0006470; protein dephosphorylation
+https://identifiers.org/chebi/CHEBI:15379; dioxygen
 http://identifiers.org/obo.chebi/CHEBI:32906; gibberellin A24
 http://identifiers.org/uniprot/P06132; Uroporphyrinogen decarboxylase
 http://identifiers.org/go/GO:0043161; proteasome-mediated ubiquitin-dependent protein catabolic process
@@ -249,6 +279,7 @@ http://identifiers.org/go/GO:0032147; activation of protein kinase activity
 http://identifiers.org/obo.go/GO:0009570; chloroplast stroma
 http://purl.org/sig/ont/fma/fma67945; Intercellular junction
 http://identifiers.org/chebi/CHEBI:57524; O-phosphonato-L-serine(2-)
+http://identifiers.org/chebi/CHEBI:17050; 3-phosphoglyceric acid
 urn:miriam:obo.chebi:CHEBI%3A16001; 3-phospho-D-glyceroyl dihydrogen phosphate
 http://purl.org/sig/ont/fma/fma52455; Lumen of pulmonary venous tree organ
 http://identifiers.org/go/GO:0008054; negative regulation of cyclin-dependent protein serine/threonine kinase by cyclin degradation
@@ -270,6 +301,7 @@ http://identifiers.org/uniprot/P42212; Green fluorescent protein
 http://identifiers.org/uniprot/Q13608; Peroxisome assembly factor 2
 http://identifiers.org/obo.chebi/CHEBI:17720; 2,3-bisphospho-D-glyceric acid
 http://identifiers.org/obo.chebi/CHEBI:16891; glyoxylic acid
+http://identifiers.org/go/GO:0043197; dendritic spine
 urn:miriam:obo.chebi:CHEBI%3A17797; D-ribose 5-phosphate
 http://identifiers.org/go/GO:0048408; epidermal growth factor binding
 http://identifiers.org/obo.go/GO:0008219; cell death
@@ -287,12 +319,15 @@ http://identifiers.org/uniprot/P09601; Heme oxygenase 1
 http://identifiers.org/obo.chebi/CHEBI:17794; 3-phospho-D-glyceric acid
 http://bhi.washington.edu/OPB#OPB_00523; Spatial volume
 http://identifiers.org/chebi/CHEBI:24636; proton
+http://purl.obolibrary.org/obo/PR_000007840; glyceraldehyde-3-phosphate dehydrogenase
 http://identifiers.org/uniprot/Q9SQI2; Protein GIGANTEA
 http://identifiers.org/obo.chebi/CHEBI:30769; citric acid
 http://identifiers.org/obo.go/GO:0008283; cell proliferation
 http://identifiers.org/uniprot/Q7Z412; Peroxisome assembly protein 26
 http://identifiers.org/obo.chebi/CHEBI:16474; NADPH
+http://purl.obolibrary.org/obo/CHEBI_29108; calcium(2+)
 http://identifiers.org/uniprot/P39001; Transcriptional regulatory protein UME6
+http://purl.obolibrary.org/obo/CHEBI_29101; sodium(1+)
 http://identifiers.org/go/GO:0008013; beta-catenin binding
 http://bhi.washington.edu/OPB#OPB_00509; Fluid pressure
 http://bhi.washington.edu/OPB#OPB_00506; Electrical potential
@@ -330,6 +365,7 @@ http://identifiers.org/obo.go/GO:0003872; 6-phosphofructokinase activity
 http://identifiers.org/go/GO:0070389; chaperone cofactor-dependent protein refolding
 http://identifiers.org/go/GO:0016063; rhodopsin biosynthetic process
 http://identifiers.org/uniprot/O75381; Peroxisomal membrane protein PEX14
+http://identifiers.org/chebi/CHEBI:33942; ribose
 http://bhi.washington.edu/OPB#OPB_00160; Fluid flow resistance
 http://identifiers.org/uniprot/P03023; Lactose operon repressor
 http://identifiers.org/go/GO:0007588; excretion
@@ -339,10 +375,12 @@ http://identifiers.org/fma/FMA:66835; Cytoplasm
 http://identifiers.org/go/GO:0031690; adrenergic receptor binding
 http://identifiers.org/obo.go/GO:0015867; ATP transport
 http://identifiers.org/uniprot/P28328; Peroxisome biogenesis factor 2
+http://identifiers.org/go/GO:0008443; phosphofructokinase activity
 http://identifiers.org/chebi/CHEBI:16134; ammonia
 http://identifiers.org/obo.chebi/CHEBI:15961; O-phospho-L-homoserine
 http://identifiers.org/go/GO:0031697; beta-1 adrenergic receptor binding
 urn:miriam:obo.go:GO%3A0044275; cellular carbohydrate catabolic process
+http://identifiers.org/uniprot/Q08209; Serine/threonine-protein phosphatase 2B catalytic subunit alpha isoform
 http://bhi.washington.edu/OPB#OPB_00154; Fluid volume
 http://bhi.washington.edu/OPB#OPB_01001; Particle count
 http://identifiers.org/obo.go/GO:0004713; protein tyrosine kinase activity
@@ -370,8 +408,8 @@ http://identifiers.org/chebi/CHEBI:16152; 1-phosphatidyl-1D-myo-inositol 3,4-bis
 http://identifiers.org/chebi/CHEBI:17489; 3',5'-cyclic AMP
 http://identifiers.org/go/GO:0005391; P-type sodium:potassium-exchanging ATPase activity
 http://identifiers.org/ec-code/4.2.1.11; phosphopyruvate hydratase
-http://identifiers.org/go/GO:0016037; light absorption
 http://identifiers.org/go/GO:0034705; potassium channel complex
+http://identifiers.org/go/GO:0016037; light absorption
 http://identifiers.org/go/GO:0034704; calcium channel complex
 urn:miriam:kegg.reaction:R01641; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
 http://identifiers.org/obo.chebi/CHEBI:15946; keto-D-fructose 6-phosphate
@@ -392,15 +430,18 @@ http://identifiers.org/chebi/CHEBI:25094; lysine
 http://identifiers.org/go/GO:0016049; cell growth
 http://identifiers.org/obo.go/GO:0005615; extracellular space
 http://identifiers.org/chebi/CHEBI:57955; 6-O-phosphonato-D-glucono-1,5-lactone(2-)
+https://identifiers.org/chebi/CHEBI:131186; IP3 receptor antagonist
 http://identifiers.org/go/GO:0031659; positive regulation of cyclin-dependent protein serine/threonine kinase activity involved in G1/S transition of mitotic cell cycle
 http://identifiers.org/go/GO:0016020; membrane
 http://identifiers.org/uniprot/P03466; Nucleoprotein
 http://identifiers.org/chebi/CHEBI:16174; dADP
 http://identifiers.org/uniprot/Q9UJM8; Hydroxyacid oxidase 1
 http://identifiers.org/obo.chebi/CHEBI:17709; 5'-adenylyl sulfate
+http://identifiers.org/uniprot/Q9GRG6; 6-phosphogluconolactonase
 http://identifiers.org/go/GO:0032986; protein-DNA complex disassembly
 http://identifiers.org/ma/MA:0000696; tail bone
 urn:miriam:kegg.reaction:R00771; D-glucose-6-phosphate aldose-ketose-isomerase
+http://purl.obolibrary.org/obo/FMA_279896; Set of all pulmonary arterioles
 http://identifiers.org/obo.chebi/CHEBI:16856; glutathione
 http://identifiers.org/go/GO:0032984; macromolecular complex disassembly
 http://identifiers.org/obo.chebi/CHEBI:16857; L-threonine
@@ -426,6 +467,7 @@ http://identifiers.org/go/GO:0032961; negative regulation of inositol trisphosph
 http://identifiers.org/obo.go/GO:0003887; DNA-directed DNA polymerase activity
 http://identifiers.org/obo.go/GO:0006913; nucleocytoplasmic transport
 http://identifiers.org/go/GO:0016491; oxidoreductase activity
+https://identifiers.org/opb/OPB_00410; Ideal gas constant
 http://identifiers.org/go/GO:0032959; inositol trisphosphate biosynthetic process
 http://identifiers.org/chebi/CHEBI:18361; diphosphate(4-)
 http://identifiers.org/go/GO:0004022; alcohol dehydrogenase (NAD) activity
@@ -476,6 +518,7 @@ http://identifiers.org/chebi/CHEBI:15435; protoporphyrinogen
 http://identifiers.org/go/GO:0004372; glycine hydroxymethyltransferase activity
 http://identifiers.org/go/GO:0005220; inositol 1,4,5-trisphosphate-sensitive calcium-release channel activity
 http://identifiers.org/chebi/CHEBI:15439; coproporphyrinogen III
+https://identifiers.org/opb/OPB_00318; Charge flow rate
 http://identifiers.org/chebi/CHEBI:15437; uroporphyrinogen III
 http://identifiers.org/uniprot/P81172; Hepcidin
 http://identifiers.org/obo.chebi/CHEBI:28087; glycogen
@@ -489,19 +532,25 @@ http://identifiers.org/obo.go/GO:0000186; activation of MAPKK activity
 http://identifiers.org/obo.go/GO:0000187; activation of MAPK activity
 http://identifiers.org/obo.go/GO:0000188; inactivation of MAPK activity
 http://identifiers.org/go/GO:0004332; fructose-bisphosphate aldolase activity
+http://purl.org/sig/ont/fma/fma70441; Anterior segmental hepatic artery
+http://identifiers.org/go/GO:0005667; transcription regulator complex
 http://identifiers.org/go/GO:0006513; protein monoubiquitination
+https://identifiers.org/opb/OPB_00340; Concentration of chemical
 http://identifiers.org/chebi/CHEBI:16796; melatonin
 http://identifiers.org/obo.go/GO:0042866; pyruvate biosynthetic process
 http://identifiers.org/obo.go/GO:0042867; pyruvate catabolic process
 http://identifiers.org/go/GO:0016310; phosphorylation
 http://identifiers.org/go/GO:0032800; receptor biosynthetic process
+http://identifiers.org/uniprot/P17612; cAMP-dependent protein kinase catalytic subunit alpha
 http://identifiers.org/go/GO:0032801; receptor catabolic process
 http://identifiers.org/go/GO:0016311; dephosphorylation
+http://identifiers.org/uniprot/P02591; Troponin C, slow skeletal and cardiac muscles
 http://identifiers.org/go/GO:0016314; phosphatidylinositol-3,4,5-trisphosphate 3-phosphatase activity
 http://identifiers.org/go/GO:0008705; methionine synthase activity
 http://identifiers.org/chebi/CHEBI:28766; uroporphyrinogen I
 http://identifiers.org/go/GO:0004347; glucose-6-phosphate isomerase activity
 http://identifiers.org/obo.go/GO:0050473; arachidonate 15-lipoxygenase activity
+https://identifiers.org/opb/OPB_00331; Volumetric capacitance
 urn:miriam:obo.go:GO%3A0019683; glyceraldehyde-3-phosphate catabolic process
 http://identifiers.org/go/GO:0004345; glucose-6-phosphate dehydrogenase activity
 http://identifiers.org/chebi/CHEBI:17632; nitrate
@@ -523,10 +572,13 @@ http://identifiers.org/uniprot/Q9UKG9; Peroxisomal carnitine O-octanoyltransfera
 http://identifiers.org/go/GO:0004329; formate-tetrahydrofolate ligase activity
 http://identifiers.org/obo.go/GO:0046395; carboxylic acid catabolic process
 http://identifiers.org/uniprot/P13678; Protein kinase C
+http://purl.obolibrary.org/obo/FMA_9672; Portion of extracellular matrix
 http://identifiers.org/uniprot/Q15067; Peroxisomal acyl-coenzyme A oxidase 1
+http://purl.obolibrary.org/obo/FMA_9673; Portion of tissue fluid
 http://identifiers.org/uniprot/Q8N7R0; Putative homeobox protein NANOG2
 http://identifiers.org/obo.go/GO:0004112; cyclic-nucleotide phosphodiesterase activity
 http://identifiers.org/go/GO:0016791; phosphatase activity
+http://purl.obolibrary.org/obo/FMA_9670; Portion of blood
 urn:miriam:kegg.compound:C05345; beta-D-Fructose 6-phosphate
 http://identifiers.org/uniprot/Q96A00; Protein phosphatase 1 regulatory subunit 14A
 http://identifiers.org/uniprot/Q30201; Hereditary hemochromatosis protein
@@ -534,6 +586,7 @@ http://identifiers.org/go/GO:0015459; potassium channel regulator activity
 http://identifiers.org/go/GO:0034199; activation of protein kinase A activity
 http://identifiers.org/obo.chebi/CHEBI:16905; keto-D-fructose 1,6-bisphosphate
 http://identifiers.org/obo.chebi/CHEBI:16908; NADH
+http://identifiers.org/fma/FMA:14476; Anterior surface of liver
 http://identifiers.org/chebi/CHEBI:17659; UDP
 http://identifiers.org/go/GO:0016303; 1-phosphatidylinositol-3-kinase activity
 http://identifiers.org/obo.go/GO:0030817; regulation of cAMP biosynthetic process
@@ -554,10 +607,13 @@ http://identifiers.org/chebi/CHEBI:17202; IMP
 http://identifiers.org/chebi/CHEBI:17200; UDP-alpha-D-glucuronic acid
 https://identifiers.org/uniprot/P12830; Cadherin-1
 http://identifiers.org/go/GO:0031904; endosome lumen
+https://identifiers.org/opb/OPB_00378; Chemical potential
+http://purl.obolibrary.org/obo/FMA_74653; Wall of arteriole
 http://identifiers.org/obo.go/GO:0006754; ATP biosynthetic process
 http://identifiers.org/go/GO:0004784; superoxide dismutase activity
 http://identifiers.org/go/GO:0045732; positive regulation of protein catabolic process
 http://identifiers.org/go/GO:0043559; insulin binding
+http://identifiers.org/opb/OPB_00509; Fluid pressure
 http://identifiers.org/go/GO:0005634; nucleus
 http://identifiers.org/go/GO:0045737; positive regulation of cyclin-dependent protein serine/threonine kinase activity
 http://identifiers.org/fma/FMA:9465; Cavity of left atrium
@@ -567,6 +623,7 @@ http://identifiers.org/obo.go/GO:0042813; Wnt-activated receptor activity
 http://identifiers.org/cl/CL:0002068; Purkinje myocyte
 http://identifiers.org/fma/FMA:70586; Type B cell of pancreatic islet
 http://identifiers.org/fma/FMA:9462; Myocardium
+http://identifiers.org/opb/OPB_00506; Electrical potential
 http://identifiers.org/chebi/CHEBI:16349; L-citrulline
 http://identifiers.org/chebi/CHEBI:32816; pyruvic acid
 http://identifiers.org/uniprot/P10113; Ras-related protein Rap-1A
@@ -583,6 +640,7 @@ http://identifiers.org/go/GO:0015881; creatine transport
 http://identifiers.org/chebi/CHEBI:15846; NAD(+)
 http://identifiers.org/obo.chebi/CHEBI:28013; beta-D-fructofuranose 1,6-bisphosphate
 http://identifiers.org/obo.chebi/CHEBI:16015; L-glutamic acid
+http://purl.obolibrary.org/obo/CHEBI_17544; hydrogencarbonate
 http://purl.org/sig/ont/fma/fma9291; Cavity of right ventricle
 http://identifiers.org/uniprot/Q62636; Ras-related protein Rap-1b
 http://identifiers.org/obo.go/GO:0051389; inactivation of MAPKK activity
@@ -610,6 +668,7 @@ urn:miriam:kegg.compound:C00022; Pyruvate
 http://identifiers.org/obo.chebi/CHEBI:16001; 3-phospho-D-glyceroyl dihydrogen phosphate
 http://identifiers.org/obo.chebi/CHEBI:20506; 5,6,7,8-tetrahydrofolic acid
 http://identifiers.org/obo.go/GO:0019683; glyceraldehyde-3-phosphate catabolic process
+http://purl.obolibrary.org/obo/FMA_321896; Vena cava
 http://identifiers.org/go/GO:0015867; ATP transport
 http://identifiers.org/cl/CL:0000771; eosinophil
 http://identifiers.org/go/GO:0015866; ADP transport
@@ -618,7 +677,9 @@ http://identifiers.org/chebi/CHEBI:16710; D-ribulose 1,5-bisphosphate
 http://identifiers.org/cl/CL:0000775; neutrophil
 http://identifiers.org/obo.chebi/CHEBI:36080; protein
 http://identifiers.org/go/GO:0004743; pyruvate kinase activity
+https://identifiers.org/chebi/CHEBI:456216; ADP(3-)
 http://identifiers.org/ec-code/2.7.1.11; 6-phosphofructokinase
+http://purl.obolibrary.org/obo/CHEBI_15378; hydron
 http://identifiers.org/go/GO:0052064; induction by symbiont of defense-related host reactive oxygen species production
 http://identifiers.org/chebi/CHEBI:15858; bromide
 http://identifiers.org/chebi/CHEBI:16708; adenine
@@ -626,9 +687,11 @@ http://identifiers.org/go/GO:0004715; non-membrane spanning protein tyrosine kin
 http://identifiers.org/go/GO:0004713; protein tyrosine kinase activity
 http://identifiers.org/go/GO:0004716; receptor signaling protein tyrosine kinase activity
 http://identifiers.org/chebi/CHEBI:58121; D-ribulose 5-phosphate(2-)
+https://identifiers.org/opb/OPB_01298; State fraction of chemical
 http://identifiers.org/ec-code/2.7.1.2; glucokinase
 http://identifiers.org/uniprot/P09560; RAF proto-oncogene serine/threonine-protein kinase
 http://identifiers.org/go/GO:0004725; protein tyrosine phosphatase activity
+https://identifiers.org/chebi/CHEBI:51342; ampicillin potassium
 http://identifiers.org/uniprot/P14920; D-amino-acid oxidase
 http://identifiers.org/fma/FMA:11359; Cavity of right atrium
 http://identifiers.org/obo.chebi/CHEBI:16077; D-glucopyranose 1-phosphate
@@ -668,7 +731,10 @@ http://identifiers.org/obo.go/GO:0007204; positive regulation of cytosolic calci
 http://identifiers.org/obo.go/GO:0006357; regulation of transcription from RNA polymerase II promoter
 http://purl.org/sig/ont/fma/fma16016; Pancreatic islet
 urn:miriam:kegg.compound:C00074; Phosphoenolpyruvate
+http://identifiers.org/chebi/CHEBI:35490; trypanothione disulfide
 http://identifiers.org/chebi/CHEBI:15414; S-adenosyl-L-methionine
+http://purl.obolibrary.org/obo/CHEBI_17996; chloride
+http://purl.obolibrary.org/obo/FMA_45842; Pulmonary arterial tree
 http://identifiers.org/obo.go/GO:0010843; obsolete promoter binding
 http://identifiers.org/obo.go/GO:0006355; regulation of transcription, DNA-templated
 http://identifiers.org/obo.go/GO:0007202; activation of phospholipase C activity
@@ -682,11 +748,14 @@ http://identifiers.org/chebi/CHEBI:57634; beta-D-fructofuranose 6-phosphate(2-)
 http://identifiers.org/obo.chebi/CHEBI:16541; protein polypeptide chain
 http://identifiers.org/obo.go/GO:0032234; obsolete regulation of calcium ion transport via store-operated calcium channel activity
 http://identifiers.org/obo.go/GO:0031387; MPF complex
+http://identifiers.org/uniprot/P16298; Serine/threonine-protein phosphatase 2B catalytic subunit beta isoform
 http://identifiers.org/chebi/CHEBI:18035; diglyceride
 http://identifiers.org/obo.go/GO:0009451; RNA modification
 http://identifiers.org/go/GO:0015925; galactosidase activity
 http://identifiers.org/obo.chebi/CHEBI:38322; oxotremorine M
 http://identifiers.org/fma/FMA:67895; Sarcomere
+http://identifiers.org/chebi/CHEBI:43474; hydrogenphosphate
+http://purl.bioontology.org/ontology/SNOMEDCT/250932006; Left ventricular end-diastolic cavity size
 http://identifiers.org/go/GO:0034205; beta-amyloid formation
 http://identifiers.org/go/GO:0004802; transketolase activity
 http://identifiers.org/go/GO:0004801; sedoheptulose-7-phosphate:D-glyceraldehyde-3-phosphate glyceronetransferase activity
@@ -702,6 +771,7 @@ http://identifiers.org/obo.chebi/CHEBI:15699; L-homoserine
 http://identifiers.org/obo.go/GO:0010467; gene expression
 http://identifiers.org/obo.go/GO:0005087; Ran guanyl-nucleotide exchange factor activity
 http://identifiers.org/obo.chebi/CHEBI:48153; D-erythrose 4-phosphate
+http://identifiers.org/opb/OPB_01097; Surface normal tensile stress
 http://identifiers.org/go/GO:0051924; regulation of calcium ion transport
 http://identifiers.org/go/GO:0003924; GTPase activity
 http://identifiers.org/go/GO:0051928; positive regulation of calcium ion transport
@@ -725,6 +795,7 @@ http://identifiers.org/go/GO:0020015; glycosome
 http://identifiers.org/uniprot/P00734; Prothrombin
 http://identifiers.org/uniprot/P00742; Coagulation factor X
 http://identifiers.org/go/GO:0060401; cytosolic calcium ion transport
+https://identifiers.org/chebi/CHEBI:61553; D-fructofuranose 6-phosphate
 urn:miriam:obo.chebi:CHEBI%3A16108; glycerone phosphate
 http://identifiers.org/go/GO:0032470; positive regulation of endoplasmic reticulum calcium ion concentration
 http://identifiers.org/obo.go/GO:0009423; chorismate biosynthetic process
@@ -746,13 +817,17 @@ http://identifiers.org/go/GO:0032460; negative regulation of protein oligomeriza
 http://identifiers.org/uniprot/Q9NP59; Solute carrier family 40 member 1
 http://identifiers.org/uniprot/P34913; Bifunctional epoxide hydrolase 2
 http://identifiers.org/obo.chebi/CHEBI:30887; isocitric acid
+http://identifiers.org/go/GO:0035976; transcription factor AP-1 complex
 http://identifiers.org/obo.go/GO:0003700; transcription factor activity, sequence-specific DNA binding
+http://identifiers.org/fma/FMA_54537; Astrocyte
+http://purl.obolibrary.org/obo/PR_P23562; band 3 anion transport protein (rat)
 http://identifiers.org/obo.chebi/CHEBI:16595; 1D-myo-inositol 1,4,5-trisphosphate
 http://identifiers.org/go/GO:0019022; RNA viral genome
 http://identifiers.org/chebi/CHEBI:33699; messenger RNA
 http://identifiers.org/chebi/CHEBI:10112; zileuton
 http://identifiers.org/obo.chebi/CHEBI:13086; L-aspartate 4-semialdehyde
 http://identifiers.org/obo.go/GO:0017053; transcriptional repressor complex
+http://identifiers.org/go/GO:0048306; calcium-dependent protein binding
 http://identifiers.org/chebi/CHEBI:18066; UDP-D-glucose
 http://identifiers.org/chebi/CHEBI:29191; hydroxyl
 http://identifiers.org/go/GO:0006198; cAMP catabolic process
@@ -761,10 +836,14 @@ http://identifiers.org/go/GO:0006196; AMP catabolic process
 http://identifiers.org/uniprot/P0CG47; Polyubiquitin-B
 http://identifiers.org/obo.chebi/CHEBI:16108; glycerone phosphate
 http://identifiers.org/uniprot/P40380; Cyclin-dependent kinase inhibitor rum1
+http://purl.obolibrary.org/obo/PR_P20020; plasma membrane calcium-transporting ATPase 1 (human)
 http://identifiers.org/chebi/CHEBI:27803; cis-2-enoyl-CoA
 http://identifiers.org/chebi/CHEBI:55474; N-acyl-L-homoserine lactone
+http://purl.obolibrary.org/obo/FMA_18644; Oocyte
 http://identifiers.org/go/GO:0031594; neuromuscular junction
+http://identifiers.org/fma/FMA:83085; Set of lumens of systemic venous tree
 urn:miriam:obo.go:GO%3A0046395; carboxylic acid catabolic process
+https://identifiers.org/chebi/CHEBI:14314; D-glucose 6-phosphate
 http://identifiers.org/go/GO:0008349; MAP kinase kinase kinase kinase activity
 http://identifiers.org/go/GO:0006167; AMP biosynthetic process
 http://identifiers.org/obo.go/GO:0031371; ubiquitin conjugating enzyme complex
@@ -787,6 +866,8 @@ http://identifiers.org/go/GO:1901799; negative regulation of proteasomal protein
 http://identifiers.org/uniprot/P30519; Heme oxygenase 2
 http://identifiers.org/obo.go/GO:0009056; catabolic process
 http://identifiers.org/obo.chebi/CHEBI:16938; 6-O-phosphono-D-glucono-1,5-lactone
+http://identifiers.org/fma/FMA:17552; Anterior surface of left lobe of liver
+http://purl.obolibrary.org/obo/FMA_280556; Portion of body fluid
 http://identifiers.org/obo.go/GO:0009058; biosynthetic process
 http://identifiers.org/opb/OPB_01023; Time
 http://identifiers.org/go/GO:0051503; adenine nucleotide transport
@@ -813,6 +894,8 @@ http://identifiers.org/chebi/CHEBI:17126; carnitine
 http://identifiers.org/go/GO:0032403; protein complex binding
 http://identifiers.org/uniprot/O00116; Alkyldihydroxyacetonephosphate synthase, peroxisomal
 http://identifiers.org/chebi/CHEBI:29101; sodium(1+)
+http://identifiers.org/opb/OPB_01001; Particle count
+http://identifiers.org/opb/OPB_00154; Fluid volume
 http://identifiers.org/ec-code/5.3.1.1; triose-phosphate isomerase
 http://identifiers.org/go/GO:0051525; NFAT protein binding
 http://bhi.washington.edu/OPB#OPB_00295; Area of spatial entity
@@ -836,8 +919,10 @@ http://identifiers.org/go/GO:0018106; peptidyl-histidine phosphorylation
 http://identifiers.org/obo.go/GO:0005978; glycogen biosynthetic process
 http://identifiers.org/uniprot/Q9BTZ2; Dehydrogenase/reductase SDR family member 4
 urn:miriam:kegg.reaction:R00658; 2-phospho-D-glycerate hydro-lyase (phosphoenolpyruvate-forming)
+http://purl.obolibrary.org/obo/FMA_7088; Heart
 http://identifiers.org/go/GO:0005245; voltage-gated calcium channel activity
 http://identifiers.org/go/GO:0004396; hexokinase activity
+https://identifiers.org/chebi/CHEBI:16908; NADH
 http://identifiers.org/go/GO:0005248; voltage-gated sodium channel activity
 urn:miriam:obo.go:GO%3A0005829; cytosol
 http://identifiers.org/obo.chebi/CHEBI:15647; leukotriene B4
@@ -847,6 +932,7 @@ http://identifiers.org/go/GO:0005251; delayed rectifier potassium channel activi
 http://identifiers.org/fma/FMA:74531; Intermediate
 http://identifiers.org/uniprot/O94810; Regulator of G-protein signaling 11
 http://identifiers.org/obo.go/GO:0009097; isoleucine biosynthetic process
+http://purl.obolibrary.org/obo/FMA_7096; Right atrium
 http://identifiers.org/obo.go/GO:0006814; sodium ion transport
 urn:miriam:kegg.reaction:R01512; ATP:3-phospho-D-glycerate 1-phosphotransferase
 http://identifiers.org/obo.go/GO:0000279; M phase
@@ -855,6 +941,8 @@ http://identifiers.org/obo.go/GO:0004634; phosphopyruvate hydratase activity
 http://identifiers.org/obo.go/GO:0001121; transcription from bacterial-type RNA polymerase promoter
 http://identifiers.org/obo.go/GO:0006810; transport
 http://identifiers.org/obo.chebi/CHEBI:16991; deoxyribonucleic acid
+http://purl.obolibrary.org/obo/FMA_7098; Right ventricle
+http://purl.obolibrary.org/obo/FMA_7097; Left atrium
 http://bhi.washington.edu/OPB#OPB_00237; Chemical flow rate
 urn:miriam:kegg.reaction:R01518; -phosphomutase
 http://identifiers.org/obo.go/GO:0006816; calcium ion transport
@@ -865,14 +953,19 @@ http://identifiers.org/obo.go/GO:0009089; lysine biosynthetic process via diamin
 http://identifiers.org/go/GO:0042605; peptide antigen binding
 http://identifiers.org/chebi/CHEBI:17138; glyceraldehyde 3-phosphate
 http://identifiers.org/obo.chebi/CHEBI:15651; leukotriene A4
+http://identifiers.org/uniprot/P49593; Protein phosphatase 1F
 http://identifiers.org/obo.go/GO:0044257; cellular protein catabolic process
 http://purl.org/sig/ont/fma/fma67225; Sarcoplasmic reticulum
 http://identifiers.org/obo.chebi/CHEBI:17835; 2-phospho-D-glyceric acid
 http://identifiers.org/go/GO:0019899; enzyme binding
+http://purl.obolibrary.org/obo/GO_1990454; L-type voltage-gated calcium channel complex
 http://identifiers.org/go/GO:0031517; red light photoreceptor activity
 http://identifiers.org/obo.go/GO:0004623; phospholipase A2 activity
 http://identifiers.org/go/GO:0031516; far-red light photoreceptor activity
+http://purl.obolibrary.org/obo/PR_Q9JI66; electrogenic sodium bicarbonate cotransporter 1 (rat)
+http://purl.obolibrary.org/obo/PR_P11507; sarcoplasmic/endoplasmic reticulum calcium ATPase 2 (rat)
 http://identifiers.org/go/GO:0015031; protein transport
+http://purl.obolibrary.org/obo/PR_P11505; plasma membrane calcium-transporting ATPase 1 (rat)
 http://identifiers.org/go/GO:0005227; calcium activated cation channel activity
 http://identifiers.org/obo.chebi/CHEBI:15625; S-adenosylmethioninamine
 http://identifiers.org/uniprot/P50542; Peroxisomal targeting signal 1 receptor
@@ -882,6 +975,7 @@ http://identifiers.org/uniprot/P29992; Guanine nucleotide-binding protein subuni
 http://identifiers.org/fma/FMA:14067; Cardiac myocyte
 http://identifiers.org/obo.chebi/CHEBI:15628; 15(S)-HPETE
 http://identifiers.org/obo.chebi/CHEBI:15627; thromboxane A2
+http://identifiers.org/opb/OPB_00593; Chemical concentration flow rate
 http://identifiers.org/obo.chebi/CHEBI:15626; 12(S)-HPETE
 http://bhi.washington.edu/OPB#OPB_01581; Nernst potential
 http://identifiers.org/obo.go/GO:0004619; phosphoglycerate mutase activity
@@ -889,10 +983,12 @@ http://identifiers.org/chebi/CHEBI:30120; chlorine(1+)
 http://identifiers.org/obo.go/GO:0004618; phosphoglycerate kinase activity
 http://identifiers.org/obo.chebi/CHEBI:28938; ammonium
 http://identifiers.org/obo.chebi/CHEBI:15636; (6R)-5,10-methylenetetrahydrofolate(2-)
+http://purl.obolibrary.org/obo/CHEBI_131186; IP3 receptor antagonist
 http://identifiers.org/go/GO:0060047; heart contraction
 http://identifiers.org/chebi/CHEBI:17158; methylglyoxal
 http://identifiers.org/obo.chebi/CHEBI:15634; 10-formyldihydrofolic acid
 http://identifiers.org/obo.chebi/CHEBI:15633; dihydrofolic acid
+https://identifiers.org/chebi/CHEBI:21008; glucose phosphate
 http://identifiers.org/obo.chebi/CHEBI:15632; 5(S)-HPETE
 http://identifiers.org/chebi/CHEBI:18009; NADP(+)
 http://identifiers.org/chebi/CHEBI:22984; calcium atom
@@ -902,8 +998,10 @@ http://identifiers.org/go/GO:0030529; GO_0030529
 http://identifiers.org/chebi/CHEBI:28874; phosphatidylinositol
 http://identifiers.org/go/GO:0006417; regulation of translation
 http://identifiers.org/uniprot/P12259; Coagulation factor V
+http://purl.obolibrary.org/obo/FMA_9740; Pleural cavity
 http://identifiers.org/obo.go/GO:0000086; G2/M transition of mitotic cell cycle
 http://identifiers.org/uniprot/P62993; Growth factor receptor-bound protein 2
+http://identifiers.org/uniprot/P62994; Growth factor receptor-bound protein 2
 http://identifiers.org/obo.go/GO:0004445; inositol-polyphosphate 5-phosphatase activity
 http://identifiers.org/obo.go/GO:0000087; mitotic M phase
 http://identifiers.org/go/GO:0006412; translation
@@ -945,6 +1043,7 @@ http://identifiers.org/obo.chebi/CHEBI:29052; D-glyceraldehyde 3-phosphate
 http://identifiers.org/go/GO:0002039; p53 binding
 http://identifiers.org/obo.chebi/CHEBI:17053; L-aspartic acid
 http://identifiers.org/go/GO:0051488; activation of anaphase-promoting complex activity
+http://purl.bioontology.org/ontology/SNOMEDCT/364075005; Heart rate
 http://identifiers.org/go/GO:0051001; negative regulation of nitric-oxide synthase activity
 http://identifiers.org/go/GO:0051482; positive regulation of cytosolic calcium ion concentration involved in phospholipase C-activating G-protein coupled signaling pathway
 http://identifiers.org/go/GO:0051481; negative regulation of cytosolic calcium ion concentration
@@ -974,10 +1073,12 @@ http://identifiers.org/uniprot/P50993; Sodium/potassium-transporting ATPase subu
 http://identifiers.org/fma/FMA:72444; Cytoplasmic organelle matrix
 http://identifiers.org/chebi/CHEBI:58273; aldehydo-D-ribose 5-phosphate(2-)
 http://identifiers.org/chebi/CHEBI:58272; 3-phosphonato-D-glycerate(3-)
+https://identifiers.org/chebi/CHEBI:70817; EC 1.2.1.12 [glyceraldehyde-3-phosphate dehydrogenase (phosphorylating)] inhibitor
 http://identifiers.org/chebi/CHEBI:17754; glycerol
 http://identifiers.org/fma/FMA:72441; Portion of organelle substance
 http://identifiers.org/chebi/CHEBI:16427; mono(glucosyluronic acid)bilirubin
 http://identifiers.org/go/GO:0051019; mitogen-activated protein kinase binding
+https://identifiers.org/chebi/CHEBI:16027; adenosine 5'-monophosphate
 http://bhi.washington.edu/OPB#OPB_01298; State fraction of chemical
 http://identifiers.org/go/GO:0006858; extracellular transport
 http://identifiers.org/chebi/CHEBI:30751; formic acid
@@ -1002,9 +1103,11 @@ http://identifiers.org/go/GO:0016651; oxidoreductase activity, acting on NAD(P)H
 http://identifiers.org/obo.go/GO:0004001; adenosine kinase activity
 http://identifiers.org/obo.go/GO:0019908; nuclear cyclin-dependent protein kinase holoenzyme complex
 http://identifiers.org/obo.go/GO:0047130; saccharopine dehydrogenase (NADP+, L-lysine-forming) activity
+http://purl.obolibrary.org/obo/PR_B0LPN4; ryanodine receptor 2 (rat)
 http://purl.obolibrary.org/obo/CL_0002064; pancreatic acinar cell
 http://identifiers.org/go/GO:0002028; regulation of sodium ion transport
 http://identifiers.org/chebi/CHEBI:30744; oxaloacetic acid
+https://identifiers.org/opb/OPB_00237; Chemical flow rate
 http://identifiers.org/go/GO:0043412; macromolecule modification
 http://identifiers.org/obo.chebi/CHEBI:24636; proton
 http://identifiers.org/chebi/CHEBI:14261; feruloyl-CoA
@@ -1013,23 +1116,29 @@ http://identifiers.org/chebi/CHEBI:17775; 7,9-dihydro-1H-purine-2,6,8(3H)-trione
 http://identifiers.org/chebi/CHEBI:16444; 2-acetyllactic acid
 http://identifiers.org/obo.go/GO:0016887; ATPase activity
 http://identifiers.org/fma/FMA:7180; Cardiac septum
+http://purl.obolibrary.org/obo/CHEBI_28938; ammonium
 http://identifiers.org/go/GO:0005509; calcium ion binding
 http://identifiers.org/go/GO:0006839; mitochondrial transport
 http://identifiers.org/fma/FMA:83517; Erythroid progenitor cell
 http://identifiers.org/chebi/CHEBI:16474; NADPH
 http://identifiers.org/obo.go/GO:0004463; leukotriene-A4 hydrolase activity
+http://identifiers.org/uniprot/Q9UD71; Protein phosphatase 1 regulatory subunit 1B
 http://identifiers.org/uniprot/P21190; Meiosis-inducing protein 1
+http://purl.obolibrary.org/obo/FMA_7101; Left ventricle
 http://identifiers.org/obo.go/GO:0005790; smooth endoplasmic reticulum
 http://identifiers.org/chebi/CHEBI:30769; citric acid
+http://purl.obolibrary.org/obo/FMA_74793; Epithelial cell of trachea
 http://identifiers.org/obo.go/GO:0004459; L-lactate dehydrogenase activity
 http://purl.org/sig/ont/fma/fma63841; Plasma membrane
 http://identifiers.org/chebi/CHEBI:28445; vincristine
 http://identifiers.org/go/GO:0005515; protein binding
 http://purl.org/sig/ont/fma/fma63842; Endoplasmic reticulum
+https://identifiers.org/opb/OPB_01581; Nernst reversal potential
 http://identifiers.org/go/GO:0042588; zymogen granule
 http://identifiers.org/go/GO:0005992; trehalose biosynthetic process
 http://identifiers.org/go/GO:0034061; DNA polymerase activity
 http://identifiers.org/go/GO:0006843; mitochondrial citrate transport
+http://identifiers.org/fma/FMA:85704; Beta cell
 http://identifiers.org/chebi/CHEBI:17797; aldehydo-D-ribose 5-phosphate
 http://identifiers.org/chebi/CHEBI:17794; 3-phospho-D-glyceric acid
 http://identifiers.org/chebi/CHEBI:16467; L-arginine
@@ -1050,6 +1159,7 @@ http://identifiers.org/obo.chebi/CHEBI:17482; L-cystathionine
 http://identifiers.org/go/GO:0005978; glycogen biosynthetic process
 urn:miriam:obo.chebi:CHEBI%3A18021; phosphoenolpyruvate
 http://identifiers.org/chebi/CHEBI:25750; oxime
+http://identifiers.org/go/GO:1990513; CLOCK-BMAL transcription complex
 http://identifiers.org/chebi/CHEBI:50730; montelukast
 http://identifiers.org/chebi/CHEBI:37736; D-fructofuranose 1,6-bisphosphate
 http://identifiers.org/obo.go/GO:0030346; protein phosphatase 2B binding
@@ -1060,8 +1170,10 @@ http://identifiers.org/go/GO:0000287; magnesium ion binding
 http://identifiers.org/kegg.reaction/R00127; ATP:AMP phosphotransferase
 http://identifiers.org/go/GO:0043458; ethanol biosynthetic process involved in glucose fermentation to ethanol
 http://identifiers.org/go/GO:0004643; phosphoribosylaminoimidazolecarboxamide formyltransferase activity
+http://identifiers.org/fma/FMA:67488; Dendritic spine
 http://identifiers.org/obo.go/GO:0016049; cell growth
 http://identifiers.org/chebi/CHEBI:15954; aldehydo-D-glucose 6-phosphate
+http://purl.obolibrary.org/obo/PR_Q01728; sodium/calcium exchanger 1 (rat)
 http://identifiers.org/uniprot/P11345; RAF proto-oncogene serine/threonine-protein kinase
 http://identifiers.org/go/GO:0004616; phosphogluconate dehydrogenase (decarboxylating) activity
 http://identifiers.org/obo.go/GO:0004029; aldehyde dehydrogenase (NAD) activity
@@ -1078,16 +1190,20 @@ http://identifiers.org/obo.go/GO:0004022; alcohol dehydrogenase (NAD) activity
 http://identifiers.org/obo.go/GO:0006200; obsolete ATP catabolic process
 http://identifiers.org/obo.go/GO:0004020; adenylylsulfate kinase activity
 http://identifiers.org/uniprot/P50904; Ras GTPase-activating protein 1
+https://identifiers.org/chebi/CHEBI:13389; NAD
 http://identifiers.org/uniprot/P36630; G2/mitotic-specific cyclin cig2
+https://identifiers.org/opb/OPB_00299; Fluid flow rate
 http://identifiers.org/obo.go/GO:0004017; adenylate kinase activity
 http://identifiers.org/go/GO:0046983; protein dimerization activity
 http://identifiers.org/go/GO:0005955; calcineurin complex
 http://identifiers.org/obo.go/GO:0004016; adenylate cyclase activity
 http://identifiers.org/go/GO:0004629; phospholipase C activity
+https://identifiers.org/opb/OPB_00293; Temperature
 http://identifiers.org/obo.go/GO:0008856; exodeoxyribonuclease X activity
 http://identifiers.org/obo.go/GO:0019572; L-arabinose catabolic process
 http://identifiers.org/go/GO:0006800; obsolete oxygen and reactive oxygen species metabolic process
 http://identifiers.org/go/GO:0005952; cAMP-dependent protein kinase complex
+https://identifiers.org/opb/OPB_00295; Spatial area
 http://identifiers.org/go/GO:0051091; positive regulation of sequence-specific DNA binding transcription factor activity
 http://identifiers.org/go/GO:0015758; glucose transport
 http://identifiers.org/chebi/CHEBI:15978; sn-glycerol 3-phosphate
@@ -1100,6 +1216,7 @@ http://identifiers.org/obo.chebi/CHEBI:18367; phosphate(3-)
 http://identifiers.org/obo.chebi/CHEBI:16189; sulfate
 http://identifiers.org/obo.go/GO:0009777; photosynthetic phosphorylation
 http://identifiers.org/go/GO:0045668; negative regulation of osteoblast differentiation
+https://identifiers.org/chebi/CHEBI:5656; deoxyhemoglobin
 http://identifiers.org/go/GO:0045669; positive regulation of osteoblast differentiation
 http://identifiers.org/go/GO:0009056; catabolic process
 http://identifiers.org/go/GO:0009059; macromolecule biosynthetic process
@@ -1114,6 +1231,7 @@ http://identifiers.org/uniprot/Q03114; Cyclin-dependent-like kinase 5
 http://identifiers.org/uniprot/Q03113; Guanine nucleotide-binding protein subunit alpha-12
 urn:miriam:kegg.reaction:R01067; D-Fructose 6-phosphate:D-glyceraldehyde-3-phosphate glycolaldehyde transferase
 http://identifiers.org/go/GO:0045671; negative regulation of osteoclast differentiation
+http://identifiers.org/go/GO:0042166; acetylcholine binding
 http://identifiers.org/go/GO:0045672; positive regulation of osteoclast differentiation
 http://identifiers.org/go/GO:0042169; SH2 domain binding
 urn:miriam:obo.chebi:CHEBI%3A17138; glyceraldehyde 3-phosphate
@@ -1150,6 +1268,7 @@ http://identifiers.org/chebi/CHEBI:17713; dAMP
 http://identifiers.org/obo.go/GO:0043624; cellular protein complex disassembly
 http://identifiers.org/chebi/CHEBI:17712; 9H-xanthine
 http://identifiers.org/chebi/CHEBI:16863; 6-phospho-D-gluconate
+http://purl.obolibrary.org/obo/FMA_87209; Distal zone of aorta
 http://identifiers.org/obo.go/GO:0042775; mitochondrial ATP synthesis coupled electron transport
 http://identifiers.org/chebi/CHEBI:17716; lactose
 http://identifiers.org/obo.go/GO:0004053; arginase activity
@@ -1162,6 +1281,8 @@ http://identifiers.org/go/GO:0003824; catalytic activity
 http://identifiers.org/go/GO:0001646; cAMP receptor activity
 http://identifiers.org/chebi/CHEBI:58601; alpha-D-glucose 1-phosphate(2-)
 http://identifiers.org/obo.chebi/CHEBI:17992; sucrose
+https://identifiers.org/opb/OPB_01097; Surface normal tensile stress
+http://purl.org/sig/ont/fma/fma17552; Anterior surface of left lobe of liver
 http://identifiers.org/go/GO:0044257; cellular protein catabolic process
 http://identifiers.org/chebi/CHEBI:18153; ethene
 http://identifiers.org/chebi/CHEBI:78697; D-fructose 6-phosphate
@@ -1199,6 +1320,7 @@ http://identifiers.org/fma/FMA:63179; Liver cell
 http://identifiers.org/obo.go/GO:0001828; inner cell mass cellular morphogenesis
 http://identifiers.org/go/GO:0009115; xanthine catabolic process
 http://identifiers.org/obo.go/GO:0009780; photosynthetic NADP+ reduction
+http://purl.obolibrary.org/obo/FMA_70827; Set of pulmonary veins
 http://identifiers.org/go/GO:0035861; site of double-strand break
 http://identifiers.org/obo.go/GO:0046777; protein autophosphorylation
 http://identifiers.org/cl/CL:0000129; microglial cell
@@ -1212,6 +1334,7 @@ http://identifiers.org/go/GO:0009570; chloroplast stroma
 http://identifiers.org/go/GO:0030163; protein catabolic process
 http://identifiers.org/chebi/CHEBI:24875; iron cation
 http://identifiers.org/obo.go/GO:0043211; carbohydrate-transporting ATPase activity
+http://purl.obolibrary.org/obo/FMA_256135; Body
 http://purl.obolibrary.org/obo/PR_000014378; ryanodine receptor 2
 http://identifiers.org/obo.chebi/CHEBI:17561; L-cysteine
 http://identifiers.org/go/GO:0002947; tumor necrosis factor receptor superfamily complex
@@ -1248,8 +1371,10 @@ urn:miriam:kegg.compound:C00354; D-Fructose 1
 http://identifiers.org/chebi/CHEBI:57305; glycine zwitterion
 http://identifiers.org/go/GO:1990454; L-type voltage-gated calcium channel complex
 http://identifiers.org/obo.chebi/CHEBI:16695; UMP
+http://purl.org/sig/ont/fma/fma14476; Anterior surface of liver
 http://purl.obolibrary.org/obo/PR_000015207; sodium/calcium exchanger 1
 http://identifiers.org/obo.chebi/CHEBI:15361; pyruvate
+http://purl.obolibrary.org/obo/FMA_67225; Sarcoplasmic reticulum
 http://identifiers.org/chebi/CHEBI:57783; NADPH(4-)
 http://identifiers.org/go/GO:0008233; peptidase activity
 http://identifiers.org/uniprot/P22830; Ferrochelatase, mitochondrial
@@ -1257,25 +1382,35 @@ http://identifiers.org/uniprot/Q9NQ66; 1-phosphatidylinositol 4,5-bisphosphate p
 http://identifiers.org/obo.chebi/CHEBI:17535; L-arabinopyranose
 http://identifiers.org/go/GO:0032795; heterotrimeric G-protein binding
 http://identifiers.org/go/GO:0070141; response to UV-A
+https://identifiers.org/cl/CL:0000182; hepatocyte
 http://identifiers.org/go/GO:0010519; negative regulation of phospholipase activity
 http://identifiers.org/uniprot/P39210; Protein Mpv17
 http://identifiers.org/obo.chebi/CHEBI:15721; sedoheptulose 7-phosphate
+http://purl.obolibrary.org/obo/PR_P28482; mitogen-activated protein kinase 1 (human)
 http://identifiers.org/go/GO:0017147; Wnt-protein binding
+http://identifiers.org/opb/OPB_00299; Fluid flow rate
 http://identifiers.org/uniprot/P28562; Dual specificity protein phosphatase 1
 http://identifiers.org/fma/FMA:14167; Lumen of pulmonary trunk
 http://identifiers.org/obo.chebi/CHEBI:15729; L-ornithine
+http://identifiers.org/opb/OPB_00295; Spatial area
+https://identifiers.org/chebi/CHEBI:87194; MgADP
 http://identifiers.org/go/GO:0051879; Hsp90 protein binding
+http://identifiers.org/opb/OPB_00293; Temperature
 http://identifiers.org/obo.go/GO:0000115; obsolete regulation of transcription involved in S phase of mitotic cell cycle
 http://identifiers.org/go/GO:0030119; AP-type membrane coat adaptor complex
 urn:miriam:kegg.pathway:eco02060; Phosphotransferase system (PTS) - Escherichia coli K-12 MG1655
+http://purl.obolibrary.org/obo/FMA_14156; Wall of aorta
 http://identifiers.org/go/GO:0030111; regulation of Wnt signaling pathway
 http://identifiers.org/obo.go/GO:0046356; acetyl-CoA catabolic process
 http://identifiers.org/go/GO:0071498; cellular response to fluid shear stress
+https://identifiers.org/uniprot/Q62976; Calcium-activated potassium channel subunit alpha-1
 http://identifiers.org/chebi/CHEBI:29223; bromate
 http://identifiers.org/chebi/CHEBI:30212; photon
+http://identifiers.org/go/GO:0009507; chloroplast
 http://identifiers.org/go/GO:0009986; cell surface
 http://identifiers.org/chebi/CHEBI:17245; carbon monoxide
 http://identifiers.org/go/GO:0005154; epidermal growth factor receptor binding
+http://purl.obolibrary.org/obo/FMA_14121; Pulmonary capillary
 http://identifiers.org/go/GO:0006001; fructose catabolic process
 http://identifiers.org/go/GO:0031434; mitogen-activated protein kinase kinase binding
 http://identifiers.org/go/GO:0019787; ubiquitin-like protein transferase activity
@@ -1310,8 +1445,10 @@ http://identifiers.org/uniprot/P04551; Cyclin-dependent kinase 1
 http://identifiers.org/obo.go/GO:0004527; exonuclease activity
 http://identifiers.org/chebi/CHEBI:18110; 3-phosphonatooxypyruvate(3-)
 http://identifiers.org/chebi/CHEBI:17268; myo-inositol
+https://identifiers.org/chebi/CHEBI:88003; fructose 6-phosphate
 http://identifiers.org/go/GO:0008641; small protein activating enzyme activity
 http://identifiers.org/go/GO:0006461; protein complex assembly
+https://identifiers.org/chebi/CHEBI:37736; D-fructofuranose 1,6-bisphosphate
 http://identifiers.org/obo.chebi/CHEBI:16610; spermidine
 http://purl.obolibrary.org/obo/PR_000004978; calmodulin
 http://identifiers.org/obo.go/GO:0000162; tryptophan biosynthetic process
@@ -1352,8 +1489,11 @@ http://identifiers.org/go/GO:0016236; macroautophagy
 http://bhi.washington.edu/OPB#OPB_01220; Material flow rate
 http://identifiers.org/go/GO:0038020; insulin receptor recycling
 http://identifiers.org/obo.go/GO:0005829; cytosol
+http://bhi.washington.edu/OPB#OPB_00378; Chemical potential
 http://identifiers.org/go/GO:0042508; tyrosine phosphorylation of Stat1 protein
 http://identifiers.org/uniprot/Q9QYV3; C3G protein
+http://identifiers.org/uniprot/Q5M824; SHC-transforming protein 1
+http://purl.obolibrary.org/obo/PR_000012582; ATP-dependent 6-phosphofructokinase, liver type
 http://identifiers.org/obo.go/GO:0005656; nuclear pre-replicative complex
 http://identifiers.org/chebi/CHEBI:28997; 2'-deoxyinosine
 http://identifiers.org/uniprot/P62873; Guanine nucleotide-binding protein G(I)/G(S)/G(T) subunit beta-1
@@ -1368,8 +1508,10 @@ http://identifiers.org/chebi/CHEBI:15688; acetoin
 http://identifiers.org/obo.go/GO:0016311; dephosphorylation
 http://identifiers.org/cl/CL:0000911; effector T cell
 http://identifiers.org/fma/FMA:9291; Cavity of right ventricle
+http://purl.obolibrary.org/obo/FMA_9869; Pericardium
 http://identifiers.org/obo.go/GO:0032800; receptor biosynthetic process
 http://identifiers.org/obo.go/GO:0032801; receptor catabolic process
+http://purl.obolibrary.org/obo/FMA_279851; Set of proximal epicardial branches of coronary arteries
 http://identifiers.org/go/GO:0016579; protein deubiquitination
 http://identifiers.org/uniprot/P15659; Polymerase acidic protein
 http://identifiers.org/go/GO:0006308; DNA catabolic process
@@ -1388,10 +1530,13 @@ http://identifiers.org/go/GO:0030877; beta-catenin destruction complex
 http://identifiers.org/obo.chebi/CHEBI:18021; phosphoenolpyruvate
 http://identifiers.org/obo.go/GO:0005634; nucleus
 http://identifiers.org/uniprot/P16511; RNA-directed RNA polymerase catalytic subunit
+http://purl.obolibrary.org/obo/FMA_84669; Basolateral plasma membrane
 urn:miriam:kegg.reaction:R00959; alpha-D-Glucose 1-phosphate 1
+http://purl.obolibrary.org/obo/FMA_84666; Apical plasma membrane
 http://identifiers.org/go/GO:0006757; ATP generation from ADP
 http://identifiers.org/go/GO:0042416; dopamine biosynthetic process
 http://identifiers.org/go/GO:0006754; ATP biosynthetic process
+http://identifiers.org/opb/OPB_00318; Charge flow rate
 http://identifiers.org/obo.chebi/CHEBI:29160; Ile-tRNA(Ile)
 http://identifiers.org/chebi/CHEBI:16551; alpha,alpha-trehalose
 http://identifiers.org/obo.go/GO:0042623; ATPase activity, coupled
@@ -1406,9 +1551,12 @@ http://identifiers.org/go/GO:0005432; calcium:sodium antiporter activity
 http://identifiers.org/obo.go/GO:0071159; NF-kappaB complex
 http://identifiers.org/chebi/CHEBI:16541; protein polypeptide chain
 http://identifiers.org/obo.go/GO:0019855; calcium channel inhibitor activity
+http://identifiers.org/uniprot/P24135; 1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase gamma-2
 http://identifiers.org/go/GO:0016563; obsolete transcription activator activity
 http://identifiers.org/chebi/CHEBI:456216; ADP(3-)
 http://identifiers.org/go/GO:0016567; protein ubiquitination
+https://identifiers.org/chebi/CHEBI:17234; glucose
+http://purl.obolibrary.org/obo/FMA_70022; Extracellular space
 http://identifiers.org/obo.go/GO:0047066; phospholipid-hydroperoxide glutathione peroxidase activity
 http://identifiers.org/obo.go/GO:0005219; ryanodine-sensitive calcium-release channel activity
 http://bhi.washington.edu/OPB#OPB_00089; Faraday constant
@@ -1432,6 +1580,8 @@ http://identifiers.org/go/GO:0005892; acetylcholine-gated channel complex
 http://identifiers.org/go/GO:0005899; insulin receptor complex
 http://identifiers.org/go/GO:0051390; inactivation of MAPKKK activity
 http://identifiers.org/go/GO:0004565; beta-galactosidase activity
+https://identifiers.org/opb/OPB_00592; Chemical molar flow rate
+https://identifiers.org/opb/OPB_00593; Chemical concentration flow rate
 http://identifiers.org/go/GO:0015217; ADP transmembrane transporter activity
 http://identifiers.org/uniprot/P02787; Serotransferrin
 http://identifiers.org/uniprot/P02786; Transferrin receptor protein 1
@@ -1446,8 +1596,10 @@ http://identifiers.org/go/GO:0016516; interleukin-4 receptor complex
 http://identifiers.org/chebi/CHEBI:16595; 1D-myo-inositol 1,4,5-trisphosphate
 http://identifiers.org/obo.chebi/CHEBI:33697; ribonucleic acid
 http://identifiers.org/uniprot/P02792; Ferritin light chain
+http://purl.obolibrary.org/obo/PR_P29994; inositol 1,4,5-trisphosphate receptor type 1 (rat)
 http://identifiers.org/obo.chebi/CHEBI:33699; messenger RNA
 http://identifiers.org/obo.go/GO:0046187; acetaldehyde catabolic process
+http://purl.obolibrary.org/obo/FMA_9892; Surface of fibrous pericardium
 http://identifiers.org/chebi/CHEBI:30887; isocitric acid
 http://identifiers.org/chebi/CHEBI:48153; D-erythrose 4-phosphate
 http://identifiers.org/obo.go/GO:0005667; transcription factor complex
@@ -1469,6 +1621,7 @@ http://identifiers.org/chebi/CHEBI:16108; glycerone phosphate
 http://identifiers.org/obo.go/GO:0016308; 1-phosphatidylinositol-4-phosphate 5-kinase activity
 http://identifiers.org/go/GO:0000159; protein phosphatase type 2A complex
 https://identifiers.org/uniprot/Q13309; S-phase kinase-associated protein 2
+https://identifiers.org/chebi/CHEBI:30616; ATP(4-)
 http://identifiers.org/obo.go/GO:0006105; succinate metabolic process
 http://identifiers.org/obo.chebi/CHEBI:17111; 5-O-phosphono-alpha-D-ribofuranosyl diphosphate
 http://identifiers.org/obo.chebi/CHEBI:16265; succinic semialdehyde
@@ -1476,17 +1629,21 @@ http://identifiers.org/obo.go/GO:0006103; 2-oxoglutarate metabolic process
 http://identifiers.org/go/GO:0046835; carbohydrate phosphorylation
 http://identifiers.org/go/GO:0005840; ribosome
 http://identifiers.org/obo.go/GO:0030693; obsolete caspase activity
+https://identifiers.org/opb/OPB_00160; Fluid flow resistance
 http://identifiers.org/chebi/CHEBI:35681; secondary alcohol
 http://identifiers.org/obo.go/GO:0019427; acetyl-CoA biosynthetic process from acetate
 http://purl.obolibrary.org/obo/CHEBI_17306; maltose
 http://identifiers.org/obo.chebi/CHEBI:29101; sodium(1+)
 http://identifiers.org/obo.go/GO:0032403; protein complex binding
 http://identifiers.org/kegg.compound/C00391; Calmodulin
+http://identifiers.org/fma/FMA:280033; Set of lumens of entire vasculature
 http://identifiers.org/chebi/CHEBI:16938; 6-O-phosphono-D-glucono-1,5-lactone
 http://identifiers.org/uniprot/P0C024; Peroxisomal coenzyme A diphosphatase NUDT7
 http://identifiers.org/chebi/CHEBI:16919; creatine
 http://identifiers.org/go/GO:0000162; tryptophan biosynthetic process
 http://identifiers.org/chebi/CHEBI:57483; sedoheptulose 7-phosphate(2-)
+https://identifiers.org/opb/OPB_00154; Fluid volume
+https://identifiers.org/opb/OPB_01001; Particle count
 https://identifiers.org/uniprot/O14757; Serine/threonine-protein kinase Chk1
 http://identifiers.org/go/GO:0003675; obsolete protein
 http://identifiers.org/chebi/CHEBI:28907; 2,3-bisphosphoglyceric acid
@@ -1505,8 +1662,10 @@ http://identifiers.org/chebi/CHEBI:35224; effector
 http://identifiers.org/chebi/CHEBI:35222; inhibitor
 http://identifiers.org/obo.go/GO:0051170; nuclear import
 http://identifiers.org/fma/FMA:9672; Portion of extracellular matrix
+http://purl.obolibrary.org/obo/FMA_66836; Portion of cytosol
 http://identifiers.org/fma/FMA:9670; Portion of blood
 http://identifiers.org/obo.go/GO:0045737; positive regulation of cyclin-dependent protein serine/threonine kinase activity
+http://identifiers.org/uniprot/Q9UQM7; Calcium/calmodulin-dependent protein kinase type II subunit alpha
 http://identifiers.org/obo.go/GO:0018117; protein adenylylation
 http://identifiers.org/obo.go/GO:0045736; negative regulation of cyclin-dependent protein serine/threonine kinase activity
 http://purl.org/sig/ont/fma/fma280033; Set of lumens of entire vasculature
@@ -1537,11 +1696,14 @@ http://identifiers.org/go/GO:0004968; gonadotropin-releasing hormone receptor ac
 http://identifiers.org/obo.chebi/CHEBI:18012; fumaric acid
 http://identifiers.org/obo.go/GO:0015031; protein transport
 http://identifiers.org/go/GO:0005811; lipid particle
+https://identifiers.org/opb/OPB_01043; Surface area
 http://identifiers.org/fma/FMA:9641; Portion of muscle tissue
 http://identifiers.org/uniprot/Q9P0Z9; Peroxisomal sarcosine oxidase
+http://purl.obolibrary.org/obo/FMA_45626; Systemic venous system
 http://identifiers.org/chebi/CHEBI:15633; dihydrofolic acid
 http://identifiers.org/obo.go/GO:0019877; diaminopimelate biosynthetic process
 http://identifiers.org/obo.go/GO:0009642; response to light intensity
+http://purl.obolibrary.org/obo/FMA_45623; Systemic arterial system
 http://identifiers.org/obo.chebi/CHEBI:30111; tetrafluoroaluminate(1-)
 http://identifiers.org/obo.chebi/CHEBI:33625; dibromophenol
 http://identifiers.org/chebi/CHEBI:15637; 10-formyltetrahydrofolic acid
@@ -1566,6 +1728,8 @@ http://identifiers.org/chebi/CHEBI:16990; bilirubin
 http://identifiers.org/chebi/CHEBI:114785; erlotinib
 http://identifiers.org/uniprot/P00533; Epidermal growth factor receptor
 http://identifiers.org/chebi/CHEBI:16991; deoxyribonucleic acid
+http://identifiers.org/chebi/CHEBI:14336; glycerol 1-phosphate
+http://identifiers.org/chebi/CHEBI:17842; trypanothione
 http://identifiers.org/chebi/CHEBI:25450; myo-inositol trisphosphate
 http://identifiers.org/obo.go/GO:0006119; oxidative phosphorylation
 http://identifiers.org/obo.chebi/CHEBI:29108; calcium(2+)
@@ -1645,12 +1809,14 @@ http://identifiers.org/obo.go/GO:0031586; negative regulation of inositol 1,4,5-
 http://identifiers.org/go/GO:0005089; Rho guanyl-nucleotide exchange factor activity
 http://identifiers.org/obo.go/GO:0004807; triose-phosphate isomerase activity
 http://identifiers.org/uniprot/P53438; Protein SOK2
+http://purl.obolibrary.org/obo/FMA_14067; Cardiac myocyte
 http://identifiers.org/obo.go/GO:0044424; intracellular part
 http://identifiers.org/chebi/CHEBI:24996; lactate
 http://identifiers.org/go/GO:0005096; GTPase activator activity
 http://identifiers.org/obo.go/GO:0043575; detection of osmotic stimulus
 http://identifiers.org/obo.chebi/CHEBI:17665; alpha-D-glucose 6-phosphate
 http://identifiers.org/uniprot/P61077; Ubiquitin-conjugating enzyme E2 D3
+https://identifiers.org/chebi/CHEBI:15422; ATP
 http://identifiers.org/uniprot/P28482; Mitogen-activated protein kinase 1
 http://identifiers.org/uniprot/P04040; Catalase
 http://identifiers.org/obo.chebi/CHEBI:32816; pyruvic acid
@@ -1663,8 +1829,10 @@ http://identifiers.org/fma/FMA:62390; Sarcoplasmic reticulum of cardiac muscle c
 http://identifiers.org/go/GO:0008134; transcription factor binding
 http://identifiers.org/obo.go/GO:0045741; positive regulation of epidermal growth factor-activated receptor activity
 http://identifiers.org/go/GO:0050868; negative regulation of T cell activation
+https://identifiers.org/chebi/CHEBI:16761; ADP
 http://identifiers.org/chebi/CHEBI:16908; NADH
 http://identifiers.org/go/GO:0051726; regulation of cell cycle
+http://purl.bioontology.org/ontology/SNOMEDCT/250966002; Right ventricular end-diastolic cavity size
 http://identifiers.org/chebi/CHEBI:26710; sodium chloride
 http://identifiers.org/obo.go/GO:0000428; DNA-directed RNA polymerase complex
 http://identifiers.org/go/GO:0005068; transmembrane receptor protein tyrosine kinase adaptor activity
@@ -1676,6 +1844,7 @@ http://identifiers.org/obo.go/GO:0008384; IkappaB kinase activity
 http://identifiers.org/go/GO:0008584; male gonad development
 http://identifiers.org/kegg.reaction/R01061; D-glyceraldehyde-3-phosphate:NAD+ oxidoreductase (phosphorylating)
 http://identifiers.org/go/GO:0005070; SH3/SH2 adaptor activity
+http://purl.obolibrary.org/obo/FMA_17555; Interstitial space
 http://identifiers.org/uniprot/P63231; Matrix protein 2
 http://identifiers.org/obo.go/GO:0032469; endoplasmic reticulum calcium ion homeostasis
 http://identifiers.org/chebi/CHEBI:61902; hydroxy fatty acyl-CoA
@@ -1695,11 +1864,15 @@ http://identifiers.org/go/GO:0017057; 6-phosphogluconolactonase activity
 http://identifiers.org/go/GO:0019236; response to pheromone
 http://purl.obolibrary.org/obo/CHEBI_17234; glucose
 http://identifiers.org/obo.go/GO:0006198; cAMP catabolic process
+http://purl.obolibrary.org/obo/FMA_70981; Epithelial cell of distal tubule
 http://identifiers.org/obo.chebi/CHEBI:17659; UDP
 http://identifiers.org/chebi/CHEBI:16905; keto-D-fructose 1,6-bisphosphate
+http://purl.obolibrary.org/obo/FMA_9462; Myocardium
 http://bhi.washington.edu/OPB#OPB_00045; Event rate
+http://purl.obolibrary.org/obo/PR_O14234; calcium-channel protein cch1 (Schizosaccharomyces pombe 972h-)
 http://identifiers.org/uniprot/P06652; M-phase inducer phosphatase
 http://identifiers.org/chebi/CHEBI:30796; (R)-malic acid
+https://identifiers.org/uniprot/Q9QXD6; Fructose-1,6-bisphosphatase 1
 http://identifiers.org/go/GO:0009401; phosphoenolpyruvate-dependent sugar phosphotransferase system
 http://identifiers.org/obo.go/GO:0032075; positive regulation of nuclease activity
 http://identifiers.org/obo.go/GO:0003999; adenine phosphoribosyltransferase activity
@@ -1707,6 +1880,7 @@ http://identifiers.org/chebi/CHEBI:17345; GMP
 http://identifiers.org/obo.chebi/CHEBI:15843; arachidonic acid
 http://identifiers.org/chebi/CHEBI:16497; dGTP
 http://identifiers.org/obo.go/GO:0009299; mRNA transcription
+http://purl.obolibrary.org/obo/FMA_17530; Surface of lung
 http://identifiers.org/go/GO:0031334; positive regulation of protein complex assembly
 http://identifiers.org/uniprot/P63211; Guanine nucleotide-binding protein G(T) subunit gamma-T1
 http://identifiers.org/obo.chebi/CHEBI:15846; NAD(+)
@@ -1715,6 +1889,7 @@ http://identifiers.org/chebi/CHEBI:30788; FADH(.)
 http://identifiers.org/uniprot/P04483; Tetracycline repressor protein class B from transposon Tn10
 http://identifiers.org/chebi/CHEBI:16480; nitric oxide
 http://identifiers.org/chebi/CHEBI:16000; ethanolamine
+http://purl.obolibrary.org/obo/FMA_280791; Portion of renal filtrate in distal convoluted tubule
 http://identifiers.org/go/GO:0009898; cytoplasmic side of plasma membrane
 http://identifiers.org/chebi/CHEBI:16001; 3-phospho-D-glyceroyl dihydrogen phosphate
 http://identifiers.org/go/GO:0042803; protein homodimerization activity
@@ -1740,6 +1915,8 @@ http://identifiers.org/obo.go/GO:0032092; positive regulation of protein binding
 http://identifiers.org/obo.go/GO:0032091; negative regulation of protein binding
 http://identifiers.org/chebi/CHEBI:16038; phosphatidylethanolamine
 http://identifiers.org/go/GO:0016155; formyltetrahydrofolate dehydrogenase activity
+https://identifiers.org/opb/OPB_00506; Electrical potential
+https://identifiers.org/opb/OPB_00509; Fluid pressure
 http://identifiers.org/obo.chebi/CHEBI:15824; D-fructose
 http://identifiers.org/chebi/CHEBI:33839; macromolecule
 http://identifiers.org/obo.go/GO:0004812; aminoacyl-tRNA ligase activity
@@ -1751,6 +1928,7 @@ http://identifiers.org/go/GO:0017016; Ras GTPase binding
 http://identifiers.org/obo.go/GO:0007089; traversing start control point of mitotic cell cycle
 http://identifiers.org/uniprot/P47196; RAC-alpha serine/threonine-protein kinase
 http://identifiers.org/obo.chebi/CHEBI:15836; 4-phospho-L-aspartic acid
+http://purl.obolibrary.org/obo/FMA_9457; Wall of right atrium
 http://identifiers.org/go/GO:0017017; MAP kinase tyrosine/serine/threonine phosphatase activity
 http://identifiers.org/uniprot/P47197; RAC-beta serine/threonine-protein kinase
 http://identifiers.org/obo.go/GO:0004889; acetylcholine-activated cation-selective channel activity
@@ -1767,8 +1945,10 @@ http://identifiers.org/uniprot/P51659; Peroxisomal multifunctional enzyme type 2
 http://identifiers.org/chebi/CHEBI:17387; O-acylcarnitine
 http://identifiers.org/go/GO:0051787; misfolded protein binding
 http://identifiers.org/obo.chebi/CHEBI:26536; retinoic acid
+http://purl.bioontology.org/ontology/SNOMEDCT/251207006; PR interval duration
 http://identifiers.org/uniprot/Q90W58; Dual specificity protein phosphatase 1-B
 http://identifiers.org/uniprot/P05777; Matrix protein 1
+http://purl.obolibrary.org/obo/FMA_80352; Wall of smooth endoplasmic reticulum
 http://identifiers.org/uniprot/P51668; Ubiquitin-conjugating enzyme E2 D1
 http://identifiers.org/obo.chebi/CHEBI:16749; 1-phosphatidyl-1D-myo-inositol
 http://identifiers.org/uniprot/P50336; Protoporphyrinogen oxidase
@@ -1794,6 +1974,7 @@ http://identifiers.org/obo.chebi/CHEBI:16710; D-ribulose 1,5-bisphosphate
 http://identifiers.org/obo.go/GO:0043197; dendritic spine
 http://purl.bioontology.org/ontology/SNOMEDCT/428586009; Heart rate increased, within normal range
 urn:miriam:kegg.compound:C00631; 2-Phospho-D-glycerate
+http://identifiers.org/fma/FMA:74793; Epithelial cell of trachea
 http://identifiers.org/go/GO:0005477; pyruvate secondary active transmembrane transporter activity
 http://identifiers.org/go/GO:0004146; dihydrofolate reductase activity
 http://identifiers.org/uniprot/Q93WK5; Two-component response regulator-like APRR7
