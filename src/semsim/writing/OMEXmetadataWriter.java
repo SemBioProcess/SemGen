@@ -202,7 +202,6 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 	 */
 	protected void setAnnotationsForSBMLphysicalComponent(String namespace, String metaid, PhysicalModelComponent pmc) {
 		
-//		System.out.println("OMEXmetadataWriter:setAnnotationsForSBMLphysicalComponent for " + pmc.getName() + " " + namespace + "#" + metaid);
 		
 		// TODO: what if no metaid assigned?
 		Resource res = rdf.createResource(namespace + "#" + metaid);
@@ -211,7 +210,6 @@ public class OMEXmetadataWriter extends AbstractRDFwriter{
 		
 		// If it's a composite physical entity, write out the composite
 		if(pmc instanceof CompositePhysicalEntity) {
-//			System.out.println("OMEXmetadataWriter:setAnnotationsForSBMLphysicalComponent: the pmc is a composite physical entity");
 			setCompositePhysicalEntityMetadata((CompositePhysicalEntity)pmc);
 		}
 		

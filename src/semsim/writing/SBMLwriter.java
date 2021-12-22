@@ -366,8 +366,6 @@ public class SBMLwriter extends ModelWriter {
 		
 		for(DataStructure ds : candidateDSsForCompartments){
 			
-//			System.out.println("Adding compartment " + ds.getName());
-			
 			PhysicalModelComponent pmc = ds.getAssociatedPhysicalModelComponent();
 			
 			URI propphysdefuri = ds.getPhysicalProperty().getPhysicalDefinitionURI();
@@ -376,9 +374,6 @@ public class SBMLwriter extends ModelWriter {
 			// or if there is a multi-entity composite physical entity used in the data structure's
 			// composite annotation (even if there's a valid physical property, the full composite
 			// needs to be stored in either the SemSim RDF block or the OMEX metadata file)
-//			System.out.println("Propphysdefuri = null? " + (propphysdefuri==null));
-//			System.out.println("no associated phys. component? " + !ds.hasAssociatedPhysicalComponent());
-//			System.out.println("Instance of singular entity ? " + ! (pmc instanceof CompositePhysicalEntity));
 
 
 			if(propphysdefuri == null || ! ds.hasAssociatedPhysicalComponent() || ! (pmc instanceof CompositePhysicalEntity)) {
@@ -422,8 +417,6 @@ public class SBMLwriter extends ModelWriter {
 			
 			comp.setName(pmc.getName().replace("\"", ""));
 			
-//			System.out.println("Added " + pmc.getName() + ":" + comp.getName() + " to entityCompartmentMap");
-
 			
 			PhysicalEntity indexent = pmcAsCPE.getArrayListOfEntities().get(0);
 //			boolean onerefentity = oneentity && indexent.hasPhysicalDefinitionAnnotation();			
@@ -435,8 +428,6 @@ public class SBMLwriter extends ModelWriter {
 			
 			// If it's a composite entity then we capture the semantics using a full composite in
 			// the RDF block or OMEX metadata file when adding parameter info
-//			addRDFannotationForPhysicalSBMLelement(pmcAsCPE, comp);
-//			System.out.println("Compartment CPE has metadata ID " + pmcAsCPE.getMetadataID() + " and index has metadata ID " + indexent.getMetadataID());
 			addRDFannotationForPhysicalSBMLelement(pmcAsCPE, comp);
 
 			
@@ -467,8 +458,6 @@ public class SBMLwriter extends ModelWriter {
 	private void addSpecies(){
 		
 		for(DataStructure ds : candidateDSsForSpecies){
-			
-//			System.out.println("Adding species " + ds.getName());
 			
 			Computation dscomputation = ds.getComputation();
 			
@@ -511,7 +500,6 @@ public class SBMLwriter extends ModelWriter {
 				
 				// .. if we don't have a compartment for the species, create a new one and add to entity-compartment map
 				if(cptmt == null){
-//					System.out.println("Couldn't find cptmt so making new one for " + fullcpe.getName());
 					int c = 0;
 					String newcidstart = "compartment_";
 					
@@ -1215,7 +1203,6 @@ public class SBMLwriter extends ModelWriter {
 		if( ! sbmlobj.isSetMetaId() && ! pmc.hasMetadataID()){
 			String metaid = semsimmodel.assignValidMetadataIDtoSemSimObject("metaid_0", pmc);
 			sbmlobj.setMetaId(metaid);
-//			System.out.println("SBML writing:addRDFannotation...Assigning metadata ID b/c neither pmc nor sbmlobj have one: " + metaid);
 		}
 		
 		// Check if the physical model component is a composite physical entity
@@ -1234,9 +1221,7 @@ public class SBMLwriter extends ModelWriter {
 			// When the pmc is a one-entity composite physical entity, use the
 			// metadata ID on the pmc to link it to the SBML entity (this is used for compartments)
 			if(oneent && sbmlobj instanceof Compartment){
-//				System.out.println("SBML writer:addRDFannotation...We're writing to OMEX, we're looking at a 1-entity compartment");
 				String metaidtouse = pmc.getMetadataID();
-//				pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 				((OMEXmetadataWriter)rdfwriter).setAnnotationsForSBMLphysicalComponent(metaidtouse, pmc); // uses model-specific namespace (not local RDF namespace) when creating RDF resources here
 			}
 			else {
