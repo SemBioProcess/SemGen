@@ -57,7 +57,7 @@ public class HelpMenu extends SemGenMenu implements ActionListener {
 		String COPYRIGHT = "\u00a9";
 		JOptionPane.showMessageDialog(SemGen.getSemGenGUI(), "SemGen\nVersion " + SemGen.version + "\n"
 						+ COPYRIGHT
-						+ "2010-2020\n\n"
+						+ "2010-2022\n\n"
 						+ "Contributors:\n" 
 						+ "  Maxwell L. Neal\n"
 						+ "  Christopher T. Thompson\n"
