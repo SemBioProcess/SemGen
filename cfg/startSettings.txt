@@ -8,6 +8,6 @@ displayMarkers; true
 organizeByPropertyType; true
 sortbyCompositeCompleteness; true
 treeView; false
-helpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp
-annotatorHelpURL; http://sbp.bhi.washington.edu/projects/semgen/semgenhelp/annotator-tutorial
+helpURL; https://sites.google.com/site/semanticsofbiologicalprocesses/projects/semgen/semgenhelp?authuser=0
+annotatorHelpURL; https://sites.google.com/site/semanticsofbiologicalprocesses/projects/semgen/semgenhelp/annotator-tutorial?authuser=0
 autoAnnotateMapped; true
