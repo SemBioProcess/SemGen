@@ -3,7 +3,7 @@
 
 SemGen is an experimental software tool for automating the modular composition and decomposition of biosimulation models.
 
-SemGen facilitates the construction of complex, integrated models, and the swift extraction of reusable submodels from larger ones. SemGen relies on the semantically-rich [SemSim model description format](http://sbp.bhi.washington.edu/projects/semsim) to help automate these modeling tasks. 
+SemGen facilitates the construction of complex, integrated models, and the swift extraction of reusable submodels from larger ones. SemGen relies on the semantically-rich [SemSim model description format](https://sites.google.com/site/semanticsofbiologicalprocesses/projects/semsim) to help automate these modeling tasks. 
 
 With SemGen, users can:
 
