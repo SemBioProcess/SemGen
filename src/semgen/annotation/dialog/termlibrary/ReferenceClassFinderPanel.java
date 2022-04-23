@@ -243,7 +243,7 @@ public class ReferenceClassFinderPanel extends JPanel implements
 		if (selected != ReferenceOntology.UNIPROT) {
 			BioPortalSearcher bps = new BioPortalSearcher();
 			try {
-				rdflabelsanduris = bps.search(SemGen.semsimlib, text, bioportalNickName, findchooser.getSelectedIndex());
+				rdflabelsanduris = bps.search(text, bioportalNickName, findchooser.getSelectedIndex());
 			} catch (IOException e) {
 				e.printStackTrace();
 				SemGenError.showWebConnectionWarning("BioPortal web service");

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -19,8 +20,8 @@ import org.jdom.input.SAXBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import semsim.SemSimLibrary;
-import semsim.annotation.Ontology;
+import semsim.definitions.ReferenceOntologies;
+import semsim.definitions.ReferenceOntologies.ReferenceOntology;
 
 /**
  * Class for connecting to the BioPortal search service
@@ -44,7 +45,7 @@ public class BioPortalSearcher {
 	 * @throws IOException
 	 * @throws JDOMException
 	 */
-	public HashMap<String,String> search(SemSimLibrary lib, String text, String bioportalNickName, int exactmatch) throws IOException, JDOMException{
+	public HashMap<String,String> search(String text, String bioportalNickName, int exactmatch) throws IOException, JDOMException{
 		text = text.replace(" ", "+");
 		
 		boolean exactmatchbool = exactmatch==1; 
@@ -91,7 +92,7 @@ public class BioPortalSearcher {
 					String uri = nextel.getChildText("id");
 	
 					// Only collect terms from the queried ontology; don't show terms imported from other ontologies
-					Ontology ont = lib.getOntologyfromTermURI(uri);
+					ReferenceOntology ont = ReferenceOntologies.getReferenceOntologyByURI(URI.create(uri));
 					
 					if(ont.getNickName().equals(bioportalNickName) && preferredLabel != null){
 						rdflabelsanduris.put(preferredLabel, uri);

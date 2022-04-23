@@ -555,7 +555,9 @@ public class SemSimLibrary {
 	}
 	
 	/**
-	 * @param namespace The namespace of an ontology
+	 * @param namespace The namespace of an ontology. This includes local ontologies
+	 * that users may want to use, not just the searchable reference ontologies available
+	 * in SemGen.
 	 * @return The {@link Ontology} identified by the namespace
 	 */
 	private Ontology getOntologyByNamespace(String namespace) {
