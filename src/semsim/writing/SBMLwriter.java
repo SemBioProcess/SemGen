@@ -1243,7 +1243,12 @@ public class SBMLwriter extends ModelWriter {
 			return ;
 		}
 		
-		if(oneent) 
+		// For writing to a stand-alone SBML file and we're processing a composite physical entity,
+		// get the first entity entry and store the annotations on it in the SBML code.
+		// This is to preserve annotations on compartments and species using CV terms in the SBML code.
+		// Annotations on reactions are also preserved here but no need to check the size of the pmc
+		// because processes are always a single component.
+		if(oneent || sbmlobj instanceof Species) 
 			pmc = ((CompositePhysicalEntity)pmc).getArrayListOfEntities().get(0);
 		
 		// This is used to add singular annotations to SBML elements
@@ -1369,9 +1374,11 @@ public class SBMLwriter extends ModelWriter {
 	
 	/** Write out composite annotations in the SemSim RDF associated with the model */
 	private void writeFullCompositesInRDF(){
-		
+
 		Map<String,SemSimObject> metamap = semsimmodel.getMetadataIDcomponentMap();
+
 		Set<String> usedmetaids = new HashSet<String>(); 
+
 		usedmetaids.addAll(metamap.keySet());
 		
 		if(semsimmodel.hasMetadataID()) usedmetaids.add(semsimmodel.getMetadataID());
@@ -1387,14 +1394,16 @@ public class SBMLwriter extends ModelWriter {
 			
 			if(par.isSetMetaId()) parmetaids.add(par.getMetaId());
 		}
-		
+
 		// Then do local parameters in reactions
 		for(int j=0; j<sbmlmodel.getReactionCount(); j++) {
 			
-			for(int k=0; k<sbmlmodel.getReaction(j).getKineticLaw().getLocalParameterCount(); k++) {
-				LocalParameter lpar = sbmlmodel.getReaction(j).getKineticLaw().getLocalParameter(k);
-				
-				if(lpar.isSetMetaId()) parmetaids.add(lpar.getMetaId());
+			if(sbmlmodel.getReaction(j).isSetKineticLaw()) {
+				for(int k=0; k<sbmlmodel.getReaction(j).getKineticLaw().getLocalParameterCount(); k++) {
+					LocalParameter lpar = sbmlmodel.getReaction(j).getKineticLaw().getLocalParameter(k);
+					
+					if(lpar.isSetMetaId()) parmetaids.add(lpar.getMetaId());
+				}
 			}
 		}
 		
@@ -1424,7 +1433,6 @@ public class SBMLwriter extends ModelWriter {
 				resuri = resuri.replaceAll("##", "#"); // In case model namespace ends in #
 				Resource ares = rdfwriter.rdf.createResource(resuri);
 				
-								
 				rdfwriter.setFreeTextAnnotationForObject(ds, ares);
 				rdfwriter.setSingularAnnotationForDataStructure(ds, ares);
 				rdfwriter.setDataStructurePropertyAndPropertyOfAnnotations(ds, ares, this.metaIDsUsed);
