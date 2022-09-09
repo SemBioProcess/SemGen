@@ -36,9 +36,10 @@ public class UniProtSearcher {
 	public HashMap<String,String> search(String thestring) throws JDOMException, IOException{
 		HashMap<String,String> idnamemap = new HashMap<String,String>();
 		thestring = thestring.replace(" ", "%20");
-		URL url = new URL("https://www.uniprot.org/uniprot/?query=reviewed:yes+AND+name:" + thestring + "*&format=tab&columns=id,protein%20names,organism");
+				
+		URL url = new URL("https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+protein_name:" + 
+				thestring + "*&format=tsv&fields=accession,protein_name,organism_name");
 		System.out.println(url.toString());
-		// Use +AND+created:[current TO *] ??? (created in the current UniProtKB/Swiss-Prot release)
 		
 		InputStream is = getInputStreamFromURL(url);
 		Scanner s = new Scanner(is);
