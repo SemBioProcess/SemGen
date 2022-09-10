@@ -581,7 +581,8 @@ public abstract class AbstractRDFwriter {
 				newuri = URI.create(newnamespace + newfragment);
 			}
 			else if(refont==ReferenceOntology.PR){
-				// how to replace correctly?
+				String newfragment = fragment.replace("_", ":");
+				newuri = URI.create(newnamespace + newfragment);
 			}
 		}
 		return newuri;
