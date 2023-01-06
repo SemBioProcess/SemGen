@@ -215,7 +215,7 @@ SemGen development is currently supported through the [Center for Reproducible B
 
 SEMGEN
 
-Copyright (c) 2010-2022 Maxwell Neal, University of Washington.
+Copyright (c) 2010-2023 Maxwell Neal, University of Washington.
 
 All rights reserved.
 
