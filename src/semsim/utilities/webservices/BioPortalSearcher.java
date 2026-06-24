@@ -53,7 +53,7 @@ public class BioPortalSearcher {
 		URL url;
 		if (exactmatch==2) { // WHen using the "Ontology ID" option in SemGen
 			url = new URL(
-					"http://data.bioontology.org/search?q=" + bioportalNickName + ":"
+					"https://data.bioontology.org/search?q=" + bioportalNickName + ":"
 							+ text + "&ontologies="
 							+ bioportalNickName + "&format=xml" + "&include=prefLabel,synonym,definition,notation,cui,semanticType,properties"
 							+ "&pagesize=5000" // max results allowed per page is 5000
@@ -62,7 +62,7 @@ public class BioPortalSearcher {
 		}
 		else { // When using either the "contains" or "exact match" option in SemGen
 					url = new URL(
-				"http://data.bioontology.org/search?q="
+				"https://data.bioontology.org/search?q="
 						+ text + "&ontologies="
 						+ bioportalNickName + "&format=xml" + "&exact_match=" + exactmatchbool
 						+ "&pagesize=5000" // max results allowed per page is 5000
@@ -116,7 +116,7 @@ public class BioPortalSearcher {
 		try {
 			System.out.println("Looking up " + encodeduri);
 			URL url = new URL(
-					"http://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + encodeduri);
+					"https://data.bioontology.org/ontologies/" + bioportalontID + "/classes/" + encodeduri);
 			System.out.println(url);
 	        HttpURLConnection conn;
 	        BufferedReader rd;
@@ -154,7 +154,7 @@ public class BioPortalSearcher {
 		Document doc = null;
 		try {
 			URL url = new URL(
-					"http://data.bioontology.org/ontologies/OPB?q&format=xml&apikey=" + BIOPORTAL_API_KEY);
+					"https://data.bioontology.org/ontologies/OPB?q&format=xml&apikey=" + BIOPORTAL_API_KEY);
 			System.out.println("Testing: " + url);
 			URLConnection yc = url.openConnection();
 			yc.setRequestProperty("Accept", "application/xml");
